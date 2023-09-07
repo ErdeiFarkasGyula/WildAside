@@ -1,6 +1,7 @@
 package net.gyula.wildaside;
 
 import com.mojang.logging.LogUtils;
+import net.gyula.wildaside.block.ModBlocks;
 import net.gyula.wildaside.item.ModCreativeModeTabs;
 import net.gyula.wildaside.item.ModItems;
 import net.minecraftforge.api.distmarker.Dist;
@@ -26,6 +27,7 @@ public class WildAside
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         ModCreativeModeTabs.register(modEventBus);
+        ModBlocks.register(modEventBus);
         ModItems.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
