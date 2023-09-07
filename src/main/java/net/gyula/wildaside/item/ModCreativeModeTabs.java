@@ -21,9 +21,25 @@ public class ModCreativeModeTabs {
                     .displayItems((pParameters, pOutput) -> {
 
                         pOutput.accept(ModItems.VIBRION.get());
+
+                        pOutput.accept(ModItems.ENTORIUM.get());
+                        pOutput.accept(ModItems.ENTORIUM_PILL.get());
+                        pOutput.accept(ModItems.ENTORIUM_SPOREBOMB.get());
+                        pOutput.accept(ModItems.ENTORIUM_GAUNTLET.get());
+
                         pOutput.accept(ModItems.HICKORY_NUT.get());
 
+                        pOutput.accept(ModItems.RED_GLOWING_ESSENCE.get());
+                        pOutput.accept(ModItems.BROWN_GLOWING_ESSENCE.get());
+                        pOutput.accept(ModItems.YELLOW_GLOWING_ESSENCE.get());
+                        pOutput.accept(ModItems.GREEN_GLOWING_ESSENCE.get());
+
+
                         pOutput.accept(ModBlocks.VIBRION_BLOCK.get());
+                        pOutput.accept(ModBlocks.VIBRION_GEL.get());
+                        pOutput.accept(ModBlocks.VIBRION_GEL.get());
+                        pOutput.accept(ModBlocks.LIT_VIBRION_GLASS.get());
+
                         pOutput.accept(ModBlocks.SUBSTILIUM_SOIL.get());
 
                     })
