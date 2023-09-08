@@ -4,6 +4,8 @@ import com.mojang.logging.LogUtils;
 import net.gyula.wildaside.block.ModBlocks;
 import net.gyula.wildaside.item.ModCreativeModeTabs;
 import net.gyula.wildaside.item.ModItems;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -39,7 +41,9 @@ public class WildAside
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
-
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.VIBRION_GEL.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.VIBRION_GLASS.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.LIT_VIBRION_GLASS.get(), RenderType.translucent());
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event)

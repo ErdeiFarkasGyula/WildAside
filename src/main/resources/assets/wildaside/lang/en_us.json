@@ -4,6 +4,8 @@
 
   "block.wildaside.vibrion_block": "Vibrion Block",
   "block.wildaside.substilium_soil": "Substilium Soil",
+  "block.wildaside.vibrion_glass_pane": "Vibrion Glass Pane",
+  "block.wildaside.lit_vibrion_glass_pane": "Lit Vibrion Glass Pane",
 
   "creativetab.wildaside_tab": "Wild Aside"
 }
