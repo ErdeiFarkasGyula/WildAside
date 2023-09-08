@@ -8,6 +8,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.IronBarsBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -29,9 +30,13 @@ public class ModBlocks {
             () -> new VibrionGel(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.SHROOMLIGHT).strength(0.1f).explosionResistance(0f).jumpFactor(0.6f).speedFactor(0.2f).mapColor(MapColor.COLOR_YELLOW).noCollission().noOcclusion()));
 
     public static final RegistryObject<Block> VIBRION_GLASS = registerBlock("vibrion_glass",
-            () -> new VibrionGlass(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.SHROOMLIGHT).strength(0.4f).explosionResistance(0.4f).mapColor(MapColor.COLOR_YELLOW).noOcclusion()));
+            () -> new VibrionGlass(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.GLASS).strength(0.4f).explosionResistance(0.4f).mapColor(MapColor.COLOR_YELLOW).noOcclusion()));
     public static final RegistryObject<Block> LIT_VIBRION_GLASS = registerBlock("lit_vibrion_glass",
-            () -> new VibrionGlass(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.SHROOMLIGHT).strength(0.4f).explosionResistance(0.4f).mapColor(MapColor.COLOR_YELLOW).noOcclusion().lightLevel(s -> 7)));
+            () -> new VibrionGlass(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.GLASS).strength(0.4f).explosionResistance(0.4f).mapColor(MapColor.COLOR_YELLOW).noOcclusion().lightLevel(s -> 7)));
+    public static final RegistryObject<Block> VIBRION_GLASS_PANE = registerBlock("vibrion_glass_pane",
+            () -> new IronBarsBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.GLASS).strength(0.4f).explosionResistance(0.4f).mapColor(MapColor.COLOR_YELLOW).noOcclusion()));
+    public static final RegistryObject<Block> LIT_VIBRION_GLASS_PANE = registerBlock("lit_vibrion_glass_pane",
+            () -> new IronBarsBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.GLASS).strength(0.4f).explosionResistance(0.4f).mapColor(MapColor.COLOR_YELLOW).noOcclusion().lightLevel(s -> 7)));
 
     public static final RegistryObject<Block> SUBSTILIUM_SOIL = registerBlock("substilium_soil",
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.SOUL_SOIL).noLootTable()));

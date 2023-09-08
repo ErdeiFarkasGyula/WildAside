@@ -33,6 +33,10 @@ public class ModBlockLootTables extends BlockLootSubProvider {
                 block -> createCopperLikeOreDrops(ModBlocks.VIBRION_GLASS.get(), Item.byBlock(Blocks.AIR)));
         this.add(ModBlocks.LIT_VIBRION_GLASS.get(),
                 block -> createCopperLikeOreDrops(ModBlocks.LIT_VIBRION_GLASS.get(), Item.byBlock(Blocks.AIR)));
+        this.add(ModBlocks.VIBRION_GLASS_PANE.get(),
+                block -> createCopperLikeOreDrops(ModBlocks.LIT_VIBRION_GLASS.get(), Item.byBlock(Blocks.AIR)));
+        this.add(ModBlocks.LIT_VIBRION_GLASS_PANE.get(),
+                block -> createCopperLikeOreDrops(ModBlocks.LIT_VIBRION_GLASS.get(), Item.byBlock(Blocks.AIR)));
     }
 
     protected LootTable.Builder createCopperLikeOreDrops(Block pBlock, Item item) {

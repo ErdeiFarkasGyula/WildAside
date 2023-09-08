@@ -18,6 +18,7 @@ public class ModItemModelProvider extends ItemModelProvider {
     @Override
     protected void registerModels() {
         simpleItem(ModItems.VIBRION);
+        simpleItem(ModItems.VIBRION);
 
         simpleItem(ModItems.ENTORIUM);
         simpleItem(ModItems.ENTORIUM_GAUNTLET);

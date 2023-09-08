@@ -37,7 +37,7 @@ public class ModCreativeModeTabs {
 
                         pOutput.accept(ModBlocks.VIBRION_BLOCK.get());
                         pOutput.accept(ModBlocks.VIBRION_GEL.get());
-                        pOutput.accept(ModBlocks.VIBRION_GEL.get());
+                        pOutput.accept(ModBlocks.VIBRION_GLASS.get());
                         pOutput.accept(ModBlocks.LIT_VIBRION_GLASS.get());
 
                         pOutput.accept(ModBlocks.SUBSTILIUM_SOIL.get());
