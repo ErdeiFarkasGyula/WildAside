@@ -47,8 +47,8 @@ public class OvergrownEntoriumOre extends EntoriumOre {
 
     @Override
     public void animateTick(BlockState pState, Level pLevel, BlockPos pPos, RandomSource pRandom) {
-        if (Math.random() < 0.2) {
-            pLevel.addParticle(ModParticles.ENTORIUM_PARTICLE.get(), pPos.getX() + Math.random(), pPos.getY() + 1, pPos.getZ() + Math.random(), 0, 0, 0);
+        if (pRandom.nextFloat() < 0.2) {
+            pLevel.addParticle(ModParticles.ENTORIUM_PARTICLE.get(), pPos.getX() + pRandom.nextFloat(), pPos.getY() + 1, pPos.getZ() + pRandom.nextFloat(), 0, 0, 0);
             super.animateTick(pState, pLevel, pPos, pRandom);
         }
     }

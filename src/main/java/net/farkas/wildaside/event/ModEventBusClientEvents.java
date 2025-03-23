@@ -5,6 +5,7 @@ import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.ModBlockEntities;
 import net.farkas.wildaside.entity.client.ModModelLayers;
 import net.farkas.wildaside.particle.*;
+import net.farkas.wildaside.particle.custom.*;
 import net.minecraft.client.model.BoatModel;
 import net.minecraft.client.model.ChestBoatModel;
 import net.minecraft.client.renderer.BiomeColors;
@@ -17,7 +18,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
-import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -40,10 +40,15 @@ public class ModEventBusClientEvents {
 
     @SubscribeEvent
     public static void registerParticleFactories(RegisterParticleProvidersEvent event) {
-        event.registerSpriteSet(ModParticles.ENTORIUM_PARTICLE.get(), EntoriumParticle.Provider::new);
+        event.registerSpriteSet(ModParticles.ENTORIUM_PARTICLE.get(), HickoryParticle.Provider::new);
         event.registerSpriteSet(ModParticles.SUBSTILIUM_PARTICLE.get(), SubstiliumParticle.Provider::new);
         event.registerSpriteSet(ModParticles.STILL_SUBSTILIUM_PARTICLE.get(), StillSubstiliumParticle.Provider::new);
         event.registerSpriteSet(ModParticles.VIBRION_PARTICLE.get(), VibrionParticle.Provider::new);
+        event.registerSpriteSet(ModParticles.HICKORY_PARTICLE.get(), HickoryParticle.Provider::new);
+        event.registerSpriteSet(ModParticles.RED_GLOWING_HICKORY_PARTICLE.get(), HickoryParticle.Provider::new);
+        event.registerSpriteSet(ModParticles.BROWN_GLOWING_HICKORY_PARTICLE.get(), HickoryParticle.Provider::new);
+        event.registerSpriteSet(ModParticles.YELLOW_GLOWING_HICKORY_PARTICLE.get(), HickoryParticle.Provider::new);
+        event.registerSpriteSet(ModParticles.GREEN_GLOWING_HICKORY_PARTICLE.get(), HickoryParticle.Provider::new);
     }
 
     @SubscribeEvent

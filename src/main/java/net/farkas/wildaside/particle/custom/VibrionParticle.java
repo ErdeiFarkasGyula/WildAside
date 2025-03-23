@@ -1,4 +1,4 @@
-package net.farkas.wildaside.particle;
+package net.farkas.wildaside.particle.custom;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;

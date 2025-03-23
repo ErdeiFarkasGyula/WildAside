@@ -60,7 +60,7 @@ public class SporeAir extends AirBlock {
     @Override
     public void animateTick(BlockState pState, Level pLevel, BlockPos pPos, RandomSource pRandom) {
         for (int i = 0; i < pRandom.nextInt(5, 10); i++) {
-            pLevel.addParticle(ModParticles.VIBRION_PARTICLE.get(), (pPos.getX() + Math.random()), (pPos.getY() + Math.random()), (pPos.getZ() + Math.random()), 0, 0, 0);
+            pLevel.addParticle(ModParticles.VIBRION_PARTICLE.get(), (pPos.getX() + pRandom.nextFloat()), (pPos.getY() + pRandom.nextFloat()), (pPos.getZ() + pRandom.nextFloat()), 0, 0, 0);
         }
         super.animateTick(pState, pLevel, pPos, pRandom);
     }

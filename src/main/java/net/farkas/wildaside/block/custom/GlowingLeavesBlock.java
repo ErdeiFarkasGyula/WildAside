@@ -1,16 +1,19 @@
 package net.farkas.wildaside.block.custom;
 
+import net.farkas.wildaside.block.ModBlocks;
+import net.farkas.wildaside.particle.ModParticles;
+import net.farkas.wildaside.particle.ParticleUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraftforge.fml.common.Mod;
 import org.joml.Math;
 
 public class GlowingLeavesBlock extends LeavesBlock {
@@ -59,5 +62,29 @@ public class GlowingLeavesBlock extends LeavesBlock {
         int distance = pLevel.getBlockState(pPos).getValue(DISTANCE);
         pLevel.scheduleTick(pPos, this, 20 + (distance * 10));
 
+    }
+
+    @Override
+    public void animateTick(BlockState pState, Level pLevel, BlockPos pPos, RandomSource pRandom) {
+        super.animateTick(pState, pLevel, pPos, pRandom);
+        if (!pLevel.getBlockState(pPos.below()).isAir()) return;
+        if (pRandom.nextFloat() < 0.02f) {
+            SimpleParticleType particle;
+
+            if (pState.is(ModBlocks.RED_GLOWING_HICKORY_LEAVES.get())) {
+                particle = ModParticles.RED_GLOWING_HICKORY_PARTICLE.get();
+            } else
+            if (pState.is(ModBlocks.BROWN_GLOWING_HICKORY_LEAVES.get())) {
+                particle = ModParticles.BROWN_GLOWING_HICKORY_PARTICLE.get();
+            } else
+            if (pState.is(ModBlocks.YELLOW_GLOWING_HICKORY_LEAVES.get())) {
+                particle = ModParticles.YELLOW_GLOWING_HICKORY_PARTICLE.get();
+            } else {
+                particle = ModParticles.GREEN_GLOWING_HICKORY_PARTICLE.get();
+            }
+
+            pLevel.addParticle(particle, (pPos.getX() + pRandom.nextFloat()), (pPos.getY() - 0.5), (pPos.getZ() + pRandom.nextFloat()),
+                    pRandom.nextFloat() / 10, 0, pRandom.nextFloat() / 10);
+        }
     }
 }

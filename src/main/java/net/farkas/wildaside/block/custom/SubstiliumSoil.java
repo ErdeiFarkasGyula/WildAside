@@ -35,7 +35,7 @@ public class SubstiliumSoil extends Block {
     public void animateTick(BlockState pState, Level pLevel, BlockPos pPos, RandomSource pRandom) {
         if (!pLevel.getBlockState(pPos.above()).isCollisionShapeFullBlock(pLevel, pPos.above())) {
             for (int i = 0; i < Mth.nextInt(pRandom, 1, 3); i++) {
-                pLevel.addParticle(ModParticles.SUBSTILIUM_PARTICLE.get(), (pPos.getX() + Math.random()), (pPos.getY() + 1), (pPos.getZ() + Math.random()),
+                pLevel.addParticle(ModParticles.SUBSTILIUM_PARTICLE.get(), (pPos.getX() + pRandom.nextFloat()), (pPos.getY() + 1), (pPos.getZ() + pRandom.nextFloat()),
                         0, (Mth.nextInt(pRandom, 7, 13) / 1000), 0);
             }
         }

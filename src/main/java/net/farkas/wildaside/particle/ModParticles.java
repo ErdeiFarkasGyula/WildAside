@@ -21,6 +21,16 @@ public class ModParticles {
     public static final RegistryObject<SimpleParticleType> STILL_SUBSTILIUM_PARTICLE =
             PARTICLE_TYPES.register("still_substilium_particle", () -> new SimpleParticleType(true));
 
+    public static final RegistryObject<SimpleParticleType> HICKORY_PARTICLE =
+            PARTICLE_TYPES.register("hickory_particle", () -> new SimpleParticleType(true));
+    public static final RegistryObject<SimpleParticleType> RED_GLOWING_HICKORY_PARTICLE =
+            PARTICLE_TYPES.register("red_glowing_hickory_particle", () -> new SimpleParticleType(true));
+    public static final RegistryObject<SimpleParticleType> BROWN_GLOWING_HICKORY_PARTICLE =
+            PARTICLE_TYPES.register("brown_glowing_hickory_particle", () -> new SimpleParticleType(true));
+    public static final RegistryObject<SimpleParticleType> YELLOW_GLOWING_HICKORY_PARTICLE =
+            PARTICLE_TYPES.register("yellow_glowing_hickory_particle", () -> new SimpleParticleType(true));
+    public static final RegistryObject<SimpleParticleType> GREEN_GLOWING_HICKORY_PARTICLE =
+            PARTICLE_TYPES.register("green_glowing_hickory_particle", () -> new SimpleParticleType(true));
 
     public static void register(IEventBus eventBus) {
         PARTICLE_TYPES.register(eventBus);
