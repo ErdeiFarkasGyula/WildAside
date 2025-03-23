@@ -56,7 +56,7 @@ public class ModBlocks {
                     .lightLevel(l -> 7),  UniformInt.of(1, 2)));
 
     public static final RegistryObject<Block> COMPRESSED_VIBRION_BLOCK = registerBlock("compressed_vibrion_block",
-            () ->  new DropExperienceBlock(BlockBehaviour.Properties.copy(VIBRION_BLOCK.get())));
+            () ->  new DropExperienceBlock(BlockBehaviour.Properties.copy(VIBRION_BLOCK.get()).lightLevel(s -> 15)));
 
     public static final RegistryObject<Block> VIBRION_GEL = registerBlock("vibrion_gel",
             () ->  new VibrionGel(BlockBehaviour.Properties.of()
@@ -112,7 +112,7 @@ public class ModBlocks {
             () ->  new Sporeholder(new SubstiliumMushroomGrower(), BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_YELLOW)
                     .sound(SoundType.FUNGUS)
-                    .lightLevel(l -> 5)
+                    .lightLevel(l -> 3)
                     .noCollission()
                     .noOcclusion()
                     .strength(1.5f,  2f)

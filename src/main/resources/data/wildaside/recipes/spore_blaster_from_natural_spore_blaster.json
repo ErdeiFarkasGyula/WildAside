@@ -2,10 +2,10 @@
   "type": "wildaside:bioengineering",
   "ingredients": [
     { "item": "wildaside:natural_spore_blaster" },
+    { "item": "wildaside:vibrion_block" },
+    { "item": "wildaside:compressed_substilium_soil" },
     { "item": "minecraft:redstone" },
-    { "item": "minecraft:redstone" },
-    { "item": "minecraft:redstone" },
-    { "item": "minecraft:redstone" }
+    { "item": "wildaside:compressed_substilium_soil" }
   ],
   "output": {
     "count": 1,

@@ -44,10 +44,22 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .unlockedBy(getHasName(ModItems.VIBRION.get()), has(ModItems.VIBRION.get()))
                 .save(pWriter);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.COMPRESSED_VIBRION_BLOCK.get())
+                .pattern("SS")
+                .pattern("SS")
+                .define('S', ModBlocks.VIBRION_BLOCK.get())
+                .unlockedBy(getHasName(ModBlocks.VIBRION_BLOCK.get()), has(ModBlocks.VIBRION_BLOCK.get()))
+                .save(pWriter);
+
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.VIBRION.get(), 4)
                 .requires(ModBlocks.VIBRION_BLOCK.get())
                 .unlockedBy(getHasName(ModBlocks.VIBRION_BLOCK.get()), has(ModBlocks.VIBRION_BLOCK.get()))
                 .save(pWriter);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModBlocks.VIBRION_BLOCK.get(), 4)
+                .requires(ModBlocks.COMPRESSED_VIBRION_BLOCK.get())
+                .unlockedBy(getHasName(ModBlocks.COMPRESSED_VIBRION_BLOCK.get()), has(ModBlocks.COMPRESSED_VIBRION_BLOCK.get()))
+                .save(pWriter, WildAside.MOD_ID + ":vibrion_block_from_compressed_vibrion_block");
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.VIBRION_GLASS_PANE.get(), 16)
                 .pattern("SS")
@@ -64,6 +76,17 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .save(pWriter);
 
         //ENTORIUM
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.BIOENGINEERING_WORKSTATION.get())
+                .pattern("ECE")
+                .pattern("VQV")
+                .pattern("QQQ")
+                .define('Q', Blocks.QUARTZ_BLOCK)
+                .define('C', Blocks.CRAFTING_TABLE)
+                .define('V', ModBlocks.VIBRION_BLOCK.get())
+                .define('E', ModItems.ENTORIUM.get())
+                .unlockedBy(getHasName(ModBlocks.VIBRION_BLOCK.get()), has(ModBlocks.VIBRION_BLOCK.get()))
+                .save(pWriter);
 
         //SUBSTILIUM
 //        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SPORE_BLASTER.get())

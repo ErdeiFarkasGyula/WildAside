@@ -23,7 +23,7 @@ public class ModVibrionHiveRegion extends Region {
             ResourceKey<Biome>>> mapper) {
 
         this.addModifiedVanillaOverworldBiomes(mapper, modifiedVanillaOverworldBuilder -> {
-            modifiedVanillaOverworldBuilder.replaceBiome(Biomes.LUSH_CAVES, ModBiomes.VIBRION_HIVE);
+            modifiedVanillaOverworldBuilder.replaceBiome(Biomes.DRIPSTONE_CAVES, ModBiomes.VIBRION_HIVE);
         });
     }
 }

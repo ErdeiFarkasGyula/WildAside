@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "wildaside:bioengineering_workstation"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_vibrion_block": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "wildaside:vibrion_block"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_vibrion_block",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "wildaside:bioengineering_workstation"
+    ]
+  },
+  "sends_telemetry_event": false
+}
