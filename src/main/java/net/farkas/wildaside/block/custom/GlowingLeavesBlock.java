@@ -63,7 +63,7 @@ public class GlowingLeavesBlock extends LeavesBlock {
         }
 
         int distance = pLevel.getBlockState(pPos).getValue(DISTANCE);
-        pLevel.scheduleTick(pPos, this, 20 + (distance * 10));
+        pLevel.scheduleTick(pPos, this, pRandom.nextInt(10, 20) + (distance * 40));
 
     }
 
