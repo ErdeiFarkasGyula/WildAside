@@ -12,17 +12,22 @@ import net.farkas.wildaside.block.custom.vibrion.hanging_vines.HangingVibrionVin
 import net.farkas.wildaside.block.custom.vibrion.SporeBlaster;
 import net.farkas.wildaside.block.custom.BioengineeringWorkstation;
 import net.farkas.wildaside.item.ModItems;
+import net.farkas.wildaside.particle.ModParticles;
+import net.farkas.wildaside.particle.ParticleUtils;
 import net.farkas.wildaside.util.ModWoodTypes;
 import net.farkas.wildaside.worldgen.feature.tree.substilium.SubstiliumMushroomGrower;
 import net.farkas.wildaside.worldgen.feature.tree.hickory.HickoryTreeGrower;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -339,7 +344,16 @@ public class ModBlocks {
 
 
     public static final RegistryObject<Block> HICKORY_LEAVES = registerBlock("hickory_leaves",
-            () ->  new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)));
+            () ->  new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)) {
+                @Override
+                public void animateTick(BlockState pState, Level pLevel, BlockPos pPos, RandomSource pRandom) {
+                    super.animateTick(pState, pLevel, pPos, pRandom);
+                    if (!pLevel.getBlockState(pPos.below()).isAir()) return;
+                    if (pRandom.nextFloat() < 0.02f) {
+                        ParticleUtils.spawnHickoryParticles(pLevel, pPos, pRandom, ModParticles.HICKORY_PARTICLE.get());
+                    }
+                }
+            });
     public static final RegistryObject<Block> RED_GLOWING_HICKORY_LEAVES = registerBlock("red_glowing_hickory_leaves",
             () ->  new GlowingLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)));
     public static final RegistryObject<Block> BROWN_GLOWING_HICKORY_LEAVES = registerBlock("brown_glowing_hickory_leaves",

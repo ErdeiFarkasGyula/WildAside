@@ -52,6 +52,8 @@ public class HickoryParticle extends TextureSheetParticle {
         this.oRoll = this.roll;
         this.roll += this.angularVelocity;
         this.angularVelocity += this.angularAcceleration;
+        this.xd *= 1.01f;
+        this.zd *= 1.01f;
 
         if (onGround) {
             this.angularVelocity = 0;

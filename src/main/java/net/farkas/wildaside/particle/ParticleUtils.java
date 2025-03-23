@@ -1,19 +1,13 @@
 package net.farkas.wildaside.particle;
 
-import net.farkas.wildaside.block.ModBlocks;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.RegistryObject;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-import java.util.Map;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
 
 public class ParticleUtils {
-    public static final Map<Block, SimpleParticleType> glowingHickoryParticleMap = Map.of(
-            ModBlocks.RED_GLOWING_HICKORY_LEAVES.get(), ModParticles.RED_GLOWING_HICKORY_PARTICLE.get(),
-            ModBlocks.BROWN_GLOWING_HICKORY_LEAVES.get(), ModParticles.BROWN_GLOWING_HICKORY_PARTICLE.get(),
-            ModBlocks.YELLOW_GLOWING_HICKORY_LEAVES.get(), ModParticles.YELLOW_GLOWING_HICKORY_PARTICLE.get(),
-            ModBlocks.GREEN_GLOWING_HICKORY_SAPLING.get(), ModParticles.GREEN_GLOWING_HICKORY_PARTICLE.get()
-    );
+    public static void spawnHickoryParticles(Level level, BlockPos pos, RandomSource random, SimpleParticleType particle) {
+        level.addParticle(particle, (pos.getX() + random.nextFloat()), (pos.getY() - 0.5f), (pos.getZ() + random.nextFloat()),
+                random.nextFloat() / 15, 0, random.nextFloat() / 15);
+    }
 }
