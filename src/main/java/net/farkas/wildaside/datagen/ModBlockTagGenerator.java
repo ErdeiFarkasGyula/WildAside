@@ -110,12 +110,6 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 .add(ModBlocks.SUBSTILIUM_SIGN.get())
                 .add(ModBlocks.SUBSTILIUM_HANGING_SIGN.get());
 
-        this.tag(ModTags.Blocks.ENTORIUM_PICKAXE_BREAKABLE)
-                .addTags(BlockTags.MINEABLE_WITH_PICKAXE)
-                .addTags(BlockTags.MINEABLE_WITH_AXE)
-                .addTags(BlockTags.MINEABLE_WITH_SHOVEL)
-                .addTags(BlockTags.MINEABLE_WITH_SHOVEL);
-
         //
 
         this.tag(BlockTags.FENCES)
@@ -132,6 +126,12 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 .add(ModBlocks.STRIPPED_SUBSTILIUM_STEM.get())
                 .add(ModBlocks.SUBSTILIUM_WOOD.get())
                 .add(ModBlocks.STRIPPED_SUBSTILIUM_WOOD.get())
+                .add(ModBlocks.HICKORY_LOG.get())
+                .add(ModBlocks.STRIPPED_HICKORY_LOG.get())
+                .add(ModBlocks.HICKORY_WOOD.get())
+                .add(ModBlocks.STRIPPED_HICKORY_WOOD.get());
+
+        this.tag(BlockTags.OVERWORLD_NATURAL_LOGS)
                 .add(ModBlocks.HICKORY_LOG.get())
                 .add(ModBlocks.STRIPPED_HICKORY_LOG.get())
                 .add(ModBlocks.HICKORY_WOOD.get())

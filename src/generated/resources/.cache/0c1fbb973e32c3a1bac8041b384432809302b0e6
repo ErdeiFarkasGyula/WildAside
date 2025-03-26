@@ -1,4 +1,4 @@
-// 1.20.1	2025-03-21T23:05:51.0676229	Tags for minecraft:block mod id wildaside
+// 1.20.1	2025-03-26T17:16:05.9248373	Tags for minecraft:block mod id wildaside
 d1f85e88be042254e820879eaaf2cffeedd7706d data/minecraft/tags/blocks/fences.json
 91a3e6d389cd000ab12cedc46ba98c4026da8887 data/minecraft/tags/blocks/fence_gates.json
 1a6ca65cc7729f3e05799bc6055ee7ceee68f7be data/minecraft/tags/blocks/leaves.json
@@ -9,9 +9,9 @@ d1f85e88be042254e820879eaaf2cffeedd7706d data/minecraft/tags/blocks/fences.json
 fa64fafb4dc100540ede16d1bbc7e8464069a5ec data/minecraft/tags/blocks/mineable/shovel.json
 8efebeeb6ffd595c82f4508677f9439e5c89c3f6 data/minecraft/tags/blocks/mushroom_grow_block.json
 9b16a9cb86ee45825b4a238098eac40cb696a4f2 data/minecraft/tags/blocks/needs_iron_tool.json
+74bf2f8f2becd0dc41875b171a95e95dd8698f57 data/minecraft/tags/blocks/overworld_natural_logs.json
 8834804abd83952ec74c55a2254f2f0a04901cfc data/minecraft/tags/blocks/planks.json
 547fae9aa3760825065e09d29c048a1b7e5d6d68 data/minecraft/tags/blocks/walls.json
-acdf7326473e3a84443ba1bee3108d9047449a70 data/wildaside/tags/blocks/entorium_pickaxe_breakable.json
 c80c0997cc1ded4279d5c1f06cf5261e99a42d10 data/wildaside/tags/blocks/substilium_woodset.json
 90860656b872f340e1f6298b9f0a10b63c956387 data/wildaside/tags/blocks/vibrion_full_glasses.json
 11bf3fcfd93bfa959ca08451d04147319f01bbae data/wildaside/tags/blocks/vibrion_gels.json

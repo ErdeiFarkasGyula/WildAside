@@ -21,7 +21,7 @@ public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, WildAside.MOD_ID);
 
     public static final RegistryObject<Item> VIBRION = ITEMS.register("vibrion",
-            () ->  new Item(new Item.Properties().food(ModFoods.VIBRION)));
+            () ->  new FuelItem(new Item.Properties().food(ModFoods.VIBRION), 400));
     public static final RegistryObject<Item> ENTORIUM = ITEMS.register("entorium",
             () ->  new Item(new Item.Properties()));
 
@@ -51,7 +51,7 @@ public class ModItems {
             () ->  new ModBoatItem(true, ModBoatEntity.Type.HICKORY, new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> HICKORY_NUT = ITEMS.register("hickory_nut",
-            () ->  new Item(new Item.Properties()));
+            () ->  new FuelItem(new Item.Properties(), 100));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
