@@ -29,16 +29,6 @@ public class SubstiliumSoil extends Block implements BonemealableBlock {
     }
 
     @Override
-    public void onPlace(BlockState pState, Level pLevel, BlockPos pPos, BlockState pOldState, boolean pMovedByPiston) {
-        super.onPlace(pState, pLevel, pPos, pOldState, pMovedByPiston);
-    }
-
-    @Override
-    public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
-        super.onNeighborChange(state, level, pos, neighbor);
-    }
-
-    @Override
     public void animateTick(BlockState pState, Level pLevel, BlockPos pPos, RandomSource pRandom) {
         if (!pLevel.getBlockState(pPos.above()).isCollisionShapeFullBlock(pLevel, pPos.above())) {
             for (int i = 0; i < Mth.nextInt(pRandom, 1, 3); i++) {
@@ -72,12 +62,9 @@ public class SubstiliumSoil extends Block implements BonemealableBlock {
         List<BlockState> blocks = List.of(
                 ModBlocks.SUBSTILIUM_SPROUTS.get().defaultBlockState(),
                 ModBlocks.SUBSTILIUM_SPROUTS.get().defaultBlockState(),
-                ModBlocks.SUBSTILIUM_SPROUTS.get().defaultBlockState(),
-                ModBlocks.VIBRION_GROWTH.get().defaultBlockState(),
                 ModBlocks.VIBRION_GROWTH.get().defaultBlockState(),
                 ModBlocks.VIBRION_GROWTH.get().defaultBlockState(),
                 ModBlocks.VIBRION_SPOREHOLDER.get().defaultBlockState()
-
         );
 
         label49:
