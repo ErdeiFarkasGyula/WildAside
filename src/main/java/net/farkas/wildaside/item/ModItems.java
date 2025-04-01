@@ -3,10 +3,7 @@ package net.farkas.wildaside.item;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.entity.custom.ModBoatEntity;
-import net.farkas.wildaside.item.custom.EntoriumPickaxe;
-import net.farkas.wildaside.item.custom.EntoriumPill;
-import net.farkas.wildaside.item.custom.ModBoatItem;
-import net.farkas.wildaside.item.custom.SporeBomb;
+import net.farkas.wildaside.item.custom.*;
 import net.farkas.wildaside.util.ModTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.HangingSignItem;
@@ -21,7 +18,7 @@ public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, WildAside.MOD_ID);
 
     public static final RegistryObject<Item> VIBRION = ITEMS.register("vibrion",
-            () ->  new FuelItem(new Item.Properties().food(ModFoods.VIBRION), 400));
+            () ->  new Vibrion(new Item.Properties().food(ModFoods.VIBRION)));
     public static final RegistryObject<Item> ENTORIUM = ITEMS.register("entorium",
             () ->  new Item(new Item.Properties()));
 

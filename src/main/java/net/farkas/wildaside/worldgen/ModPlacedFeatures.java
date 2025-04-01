@@ -53,9 +53,9 @@ public class ModPlacedFeatures {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
         register(context, REDLIKE_SUBSTILIUM_MUSHROOM_PLACED, configuredFeatures.getOrThrow(ModConfiguredFeatures.REDLIKE_SUBSTILIUM_MUSHROOM),
-                List.of(PlacementUtils.countExtra(128, 1, 128), InSquarePlacement.spread(), PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT, BiomeFilter.biome()));
+                List.of(PlacementUtils.countExtra(128, 1, 32), InSquarePlacement.spread(), PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT, BiomeFilter.biome()));
         register(context, BROWNLIKE_SUBSTILIUM_MUSHROOM_PLACED, configuredFeatures.getOrThrow(ModConfiguredFeatures.BROWNLIKE_SUBSTILIUM_MUSHROOM),
-                List.of(PlacementUtils.countExtra(128, 1, 128), InSquarePlacement.spread(), PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT, BiomeFilter.biome()));
+                List.of(PlacementUtils.countExtra(128, 1, 32), InSquarePlacement.spread(), PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT, BiomeFilter.biome()));
 
         register(context, VIBRION_GROWTH_PLACED, configuredFeatures.getOrThrow(ModConfiguredFeatures.VIBRION_GROWTH),
                 List.of(PlacementUtils.countExtra(128, 1f, 16), InSquarePlacement.spread(), PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT, BiomeFilter.biome()));
