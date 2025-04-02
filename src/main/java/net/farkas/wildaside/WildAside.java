@@ -123,7 +123,6 @@ public class WildAside
 
     }
 
-
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event)
     {

@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "wildaside:natural_spore_blaster"
+    },
+    "title": {
+      "translate": "advancements.danger_eliminated.title"
+    },
+    "description": {
+      "translate": "advancements.danger_eliminated.descr"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "danger_eliminated": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "experience": 5
+  },
+  "parent": "wildaside:unsafe_haven"
+}

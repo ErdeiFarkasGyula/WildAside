@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "wildaside:overgrown_entorium_ore"
+    },
+    "title": {
+      "translate": "advancements.its_shearing_time.title"
+    },
+    "description": {
+      "translate": "advancements.its_shearing_time.descr"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "its_shearing_time": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "experience": 5
+  },
+  "parent": "wildaside:unsafe_haven"
+}

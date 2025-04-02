@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "wildaside:bioengineer_workspace"
+    },
+    "title": {
+      "translate": "advancements.we_need_to_cook.title"
+    },
+    "description": {
+      "translate": "advancements.we_need_to_cook.descr"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "we_need_to_cook": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "experience": 10
+  },
+  "parent": "wildaside:petrified_antibiotic"
+}

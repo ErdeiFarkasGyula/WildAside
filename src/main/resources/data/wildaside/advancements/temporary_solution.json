@@ -1,0 +1,33 @@
+{
+  "display": {
+    "icon": {
+      "item": "wildaside:entorium_pill"
+    },
+    "title": {
+      "translate": "advancements.temporary_solution.title"
+    },
+    "description": {
+      "translate": "advancements.temporary_solution.descr"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "temporary_solution": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "items": [
+            "wildaside:entorium_pill"
+          ]
+        }
+      }
+    }
+  },
+  "rewards": {
+    "experience": 4
+  },
+  "parent": "wildaside:petrified_antibiotic"
+}

@@ -1,0 +1,39 @@
+{
+  "criteria": {
+    "hickory_planks_hidden": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "wildaside:hickory_planks"
+            ],
+            "count": {
+              "min": 1,
+              "max": 64
+            }
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "experience": 0,
+    "recipes": [
+      "wildaside:hickory_trapdoor_craft",
+      "wildaside:hickory_door_craft",
+      "wildaside:hickory_button_craft",
+      "wildaside:hickory_pressure_plate_craft",
+      "wildaside:hickory_planks_craft",
+      "wildaside:hickory_planks_craft_2",
+      "wildaside:hickory_planks_craft_3",
+      "wildaside:hickory_planks_craft_4",
+      "wildaside:hickory_block_craft",
+      "wildaside:hickory_stairs_craft",
+      "wildaside:hickory_slab_craft",
+      "wildaside:hickory_fence_craft",
+      "wildaside:hickory_fence_gate_craft"
+    ]
+  },
+  "parent": "wildaside:wild_wilder_wildest"
+}

@@ -1,0 +1,45 @@
+{
+  "display": {
+    "icon": {
+      "item": "wildaside:entorium"
+    },
+    "title": {
+      "translate": "advancements.petrified_antibiotic.title"
+    },
+    "description": {
+      "translate": "advancements.petrified_antibiotic.descr"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "petrified_antibiotic": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "wildaside:entorium"
+            ],
+            "count": {
+              "min": 1,
+              "max": 64
+            }
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "experience": 5,
+    "recipes": [
+      "wildaside:entorium_pill",
+      "wildaside:spore_blaster",
+      "wildaside:deleted_mod_element",
+      "wildaside:entorium_gauntlet"
+    ]
+  },
+  "parent": "wildaside:useful_finding"
+}

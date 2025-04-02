@@ -1,0 +1,34 @@
+{
+  "display": {
+    "background": "wildaside:textures/block/compressed_vibrion_block.png",
+    "icon": {
+      "item": "wildaside:vibrion_block"
+    },
+    "title": {
+      "translate": "advancements.wildaside.wild_wilder_wildest.title"
+    },
+    "description": {
+      "translate": "advancements.wildaside.wild_wilder_wildest.descr"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "player": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "biomes": [
+              "wildaside:vibrion_hive",
+              "wildaside:hickory_forest",
+              "wildaside:lit_hickory_forest"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "criteria": {
+    "substilium_stem_hidden": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "wildaside:substilium_stem"
+            ],
+            "count": {
+              "min": 1,
+              "max": 64
+            }
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "experience": 0,
+    "recipes": [
+      "wildaside:substilium_planks",
+      "wildaside:substilium_planks_2",
+      "wildaside:substilium_planks_3",
+      "wildaside:substilium_planks_4",
+      "wildaside:substilium_block"
+    ]
+  },
+  "parent": "wildaside:wild_wilder_wildest"
+}

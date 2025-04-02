@@ -1,0 +1,44 @@
+{
+  "display": {
+    "icon": {
+      "item": "wildaside:vibrion"
+    },
+    "title": {
+      "translate": "advancements.through_hundreds_of_mutations.title"
+    },
+    "description": {
+      "translate": "advancements.through_hundreds_of_mutations.descr"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "through_hundreds_of_mutations": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "wildaside:vibrion"
+            ],
+            "count": {
+              "min": 1,
+              "max": 64
+            }
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "experience": 3,
+    "recipes": [
+      "wildaside:vibrion_block",
+      "wildaside:vibrion_to_dye",
+      "wildaside:wildaside_lexion_craft_1"
+    ]
+  },
+  "parent": "wildaside:unsafe_haven"
+}

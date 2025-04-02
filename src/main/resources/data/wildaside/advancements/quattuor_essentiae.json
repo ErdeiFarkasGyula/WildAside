@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "wildaside:red_glowing_essence"
+    },
+    "title": {
+      "translate": "advancements.quattuor_essentiae.title"
+    },
+    "description": {
+      "translate": "advancements.quattuor_essentiae.descr"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "quattuor_essentiae": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "experience": 8
+  },
+  "parent": "wildaside:glowing_wonder"
+}

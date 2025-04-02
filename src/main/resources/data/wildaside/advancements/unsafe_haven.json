@@ -1,0 +1,33 @@
+{
+  "display": {
+    "icon": {
+      "item": "wildaside:substilium_soil"
+    },
+    "title": {
+      "translate": "advancements.unsafe_haven.title"
+    },
+    "description": {
+      "translate": "advancements.unsafe_haven.descr"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "player": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "biomes": "wildaside:vibrion_hive"
+          }
+        }
+      }
+    }
+  },
+  "rewards": {
+    "experience": 2
+  },
+  "parent": "wildaside:wild_wilder_wildest"
+}
