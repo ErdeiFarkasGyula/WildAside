@@ -15,8 +15,8 @@ import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.particle.ParticleUtils;
 import net.farkas.wildaside.util.ModWoodTypes;
+import net.farkas.wildaside.worldgen.feature.tree.hickory.*;
 import net.farkas.wildaside.worldgen.feature.tree.substilium.SubstiliumMushroomGrower;
-import net.farkas.wildaside.worldgen.feature.tree.hickory.HickoryTreeGrower;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -366,14 +366,14 @@ public class ModBlocks {
     public static final RegistryObject<Block> HICKORY_SAPLING = registerBlock("hickory_sapling",
             () ->  new SaplingBlock(new HickoryTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING)));
     public static final RegistryObject<Block> RED_GLOWING_HICKORY_SAPLING = registerBlock("red_glowing_hickory_sapling",
-            () ->  new SaplingBlock(new HickoryTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING)
+            () ->  new SaplingBlock(new RedGlowingHickoryTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING)
                     .lightLevel(l -> 3)));
     public static final RegistryObject<Block> BROWN_GLOWING_HICKORY_SAPLING = registerBlock("brown_glowing_hickory_sapling",
-            () ->  new SaplingBlock(new HickoryTreeGrower(), BlockBehaviour.Properties.copy(RED_GLOWING_HICKORY_SAPLING.get())));
+            () ->  new SaplingBlock(new BrownGlowingHickoryTreeGrower(), BlockBehaviour.Properties.copy(RED_GLOWING_HICKORY_SAPLING.get())));
     public static final RegistryObject<Block> YELLOW_GLOWING_HICKORY_SAPLING = registerBlock("yellow_glowing_hickory_sapling",
-            () ->  new SaplingBlock(new SubstiliumMushroomGrower(), BlockBehaviour.Properties.copy(RED_GLOWING_HICKORY_SAPLING.get())));
+            () ->  new SaplingBlock(new YellowGlowingHickoryTreeGrower(), BlockBehaviour.Properties.copy(RED_GLOWING_HICKORY_SAPLING.get())));
     public static final RegistryObject<Block> GREEN_GLOWING_HICKORY_SAPLING = registerBlock("green_glowing_hickory_sapling",
-            () ->  new SaplingBlock(new SubstiliumMushroomGrower(), BlockBehaviour.Properties.copy(RED_GLOWING_HICKORY_SAPLING.get())));
+            () ->  new SaplingBlock(new GreenGlowingHickoryTreeGrower(), BlockBehaviour.Properties.copy(RED_GLOWING_HICKORY_SAPLING.get())));
 
 
 
