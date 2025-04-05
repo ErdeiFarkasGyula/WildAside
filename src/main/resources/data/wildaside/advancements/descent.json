@@ -15,7 +15,7 @@
     "hidden": false
   },
   "criteria": {
-    "vibrion_hive": {
+    "descent": {
       "trigger": "minecraft:location",
       "conditions": {
         "player": [

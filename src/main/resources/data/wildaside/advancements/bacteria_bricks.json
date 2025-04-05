@@ -4,10 +4,10 @@
       "item": "wildaside:compressed_substilium_soil"
     },
     "title": {
-      "translate": "advancements.organic_building_materials.title"
+      "translate": "advancements.bacteria_bricks.title"
     },
     "description": {
-      "translate": "advancements.organic_building_materials.descr"
+      "translate": "advancements.bacteria_bricks.descr"
     },
     "frame": "task",
     "show_toast": true,
@@ -15,7 +15,7 @@
     "hidden": false
   },
   "criteria": {
-    "organic_building_materials": {
+    "bacteria_bricks": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
@@ -33,7 +33,7 @@
     }
   },
   "rewards": {
-    "experience": 6,
+    "experience": 3,
     "recipes": [
       "wildaside:compressed_substilium_soil",
       "wildaside:substilium_soil_tiles",
@@ -73,5 +73,5 @@
       "wildaside:cracked_substilium_soil_tile_pressure_plate_craft"
     ]
   },
-  "parent": "wildaside:unsafe_haven"
+  "parent": "wildaside:descent"
 }

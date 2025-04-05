@@ -47,14 +47,14 @@ public class SporeBlaster extends Block {
 
     @Override
     public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
-        spawnSporeAir(pLevel, pPos, pRandom);
+        int power = pLevel.getBestNeighborSignal(pPos);
+        spawnSporeAir(pLevel, pPos, pRandom, power);
         pLevel.scheduleTick(pPos, this, 5);
         super.tick(pState, pLevel, pPos, pRandom);
     }
 
-    public void spawnSporeAir(ServerLevel level, BlockPos pos, RandomSource random) {
+    public void spawnSporeAir(ServerLevel level, BlockPos pos, RandomSource random, int power) {
         Direction direction = level.getBlockState(pos).getValue(FACING);
-        int power = level.getBestNeighborSignal(pos);
 
         for (int i = 1; i <= power; i++) {
             var position = pos.relative(direction, i);

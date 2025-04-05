@@ -111,12 +111,26 @@
 
   "entity.wildaside.mod_chest_boat": "Boat with Chest",
 
+  "enchantment.wildaside.extensive_research": "Extensive Research",
+
   "advancements.wildaside.wild_wilder_wildest.title": "Wild, Wilder, Wildest!",
   "advancements.wildaside.wild_wilder_wildest.descr": "Obtain a Vibrion",
   "advancements.descent.title": "Descent",
   "advancements.descent.descr": "Enter the Vibrion Hive",
+  "advancements.bacteria_bricks.title":  "Bacteria Bricks",
+  "advancements.bacteria_bricks.descr":  "Obtain an Overgrown Substilium Soil",
+  "advancements.through_hundreds_of_mutations.title": "Through Hundreds of Mutations",
+  "advancements.through_hundreds_of_mutations.descr": "Obtain a Vibrion",
   "advancements.glimmering_glass.title":  "Glimmering Glass",
   "advancements.glimmering_glass.descr":  "Place down a Lit Vibrion Glass Block or Pane",
+  "advancements.we_need_to_cook.title":  "We Need To Cook",
+  "advancements.we_need_to_cook.descr":  "Fabricate something using the Bioengineering Workstation",
+  "advancements.its_shearing_time.title":  "It's Shearing Time",
+  "advancements.its_shearing_time.descr":  "Spot an Overgrown Entorium Ore",
+  "advancements.petrified_prescription.title":  "Petrified Prescription",
+  "advancements.petrified_prescription.descr":  "Obtain an Entorium",
+  "advancements.extensive_research.title":  "Extensive Research",
+  "advancements.extensive_research.descr":  "Reveal Entorium Ores using a Shears with the Extensive Research enchantment",
 
   "advancements.colourful_innit.title": "Colourful, Innit?",
   "advancements.colourful_innit.descr": "Enter the Glowing Hickory Forest",

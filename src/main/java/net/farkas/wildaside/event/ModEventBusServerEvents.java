@@ -1,15 +1,21 @@
 package net.farkas.wildaside.event;
 
+import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.worldgen.biome.ModBiomes;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.client.telemetry.events.WorldLoadEvent;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -34,21 +40,24 @@ public class ModEventBusServerEvents {
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        glowUpAdvancement(event);
+        itsShearingTimeAdvancement(event);
+        extensiveResearchAdvancement(event);
+    }
+
+    private static void glowUpAdvancement(TickEvent.PlayerTickEvent event) {
         if (event.phase == TickEvent.Phase.END && !event.player.level().isClientSide) {
             ServerPlayer player = (ServerPlayer) event.player;
             ServerLevel world = player.serverLevel();
 
             long time = world.getDayTime();
 
-            // Check for nighttime
             if (time >= 18000 && time <= 22000) {
 
-                // Get biome at player location
                 Holder<Biome> biomeHolder = world.getBiome(player.blockPosition());
                 ResourceKey<Biome> biomeKey = biomeHolder.unwrapKey().orElse(null);
 
                 if (biomeKey != null && biomeKey.location().equals(GLOWING_FOREST)) {
-                    // Now grant the advancement
                     ResourceLocation advancementID = new ResourceLocation("wildaside", "glow_up");
                     Advancement advancement = player.server.getAdvancements().getAdvancement(advancementID);
                     if (advancement != null) {
@@ -62,5 +71,58 @@ public class ModEventBusServerEvents {
                 }
             }
         }
+    }
+
+    private static void itsShearingTimeAdvancement(TickEvent.PlayerTickEvent event) {
+        if (!event.player.level().isClientSide) {
+            ServerPlayer player = (ServerPlayer) event.player;
+            ServerLevel level = player.serverLevel();
+
+            ClipContext clipContext = new ClipContext(player.getEyePosition(1f),
+                    player.getEyePosition(1f).add(player.getViewVector(1f).scale(5)),
+                    ClipContext.Block.OUTLINE,
+                    ClipContext.Fluid.NONE,
+                    player);
+
+            BlockPos blockPos = level.clip(clipContext).getBlockPos();
+
+            if (level.getBlockState(blockPos).getBlock() == ModBlocks.OVERGROWN_ENTORIUM_ORE.get()) {
+                Advancement advancement = player.server.getAdvancements().getAdvancement(new ResourceLocation("wildaside", "its_shearing_time"));
+                AdvancementProgress progress = player.getAdvancements().getOrStartProgress(advancement);
+
+                if (!progress.isDone()) {
+                    for (String criteria : progress.getRemainingCriteria()) {
+                        player.getAdvancements().award(advancement, criteria);
+                    }
+                }
+            }
+        }
+    }
+
+    private static void extensiveResearchAdvancement(TickEvent.PlayerTickEvent event) {
+        if (!event.player.level().isClientSide) {
+            ServerPlayer player = (ServerPlayer) event.player;
+            ServerLevel level = player.serverLevel();
+
+            ClipContext clipContext = new ClipContext(player.getEyePosition(1f),
+                    player.getEyePosition(1f).add(player.getViewVector(1f).scale(5)),
+                    ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player);
+
+            BlockPos blockPos = level.clip(clipContext).getBlockPos();
+
+            BlockState blockState = level.getBlockState(blockPos);
+            if (blockState.getBlock() == ModBlocks.SPORE_BLASTER.get() && level.getBestNeighborSignal(blockPos) > 0) {
+                Advancement advancement = player.server.getAdvancements().getAdvancement(new ResourceLocation("wildaside", "bacteria_bricks"));
+                AdvancementProgress progress = player.getAdvancements().getOrStartProgress(advancement);
+
+                    // Award the advancement if not done yet
+                if (!progress.isDone()) {
+                    for (String criteria : progress.getRemainingCriteria()) {
+                        player.getAdvancements().award(advancement, criteria);
+                    }
+                }
+            }
+        }
+
     }
 }

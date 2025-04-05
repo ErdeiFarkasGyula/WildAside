@@ -4,10 +4,10 @@
       "item": "wildaside:spore_blaster"
     },
     "title": {
-      "translate": "advancements.barrier_of_bacteria.title"
+      "translate": "advancements.bacteria_beacon.title"
     },
     "description": {
-      "translate": "advancements.barrier_of_bacteria.descr"
+      "translate": "advancements.bacteria_beacon.descr"
     },
     "frame": "challenge",
     "show_toast": true,

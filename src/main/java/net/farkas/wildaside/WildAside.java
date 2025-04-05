@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.ModBlockEntities;
 import net.farkas.wildaside.effect.ModMobEffects;
+import net.farkas.wildaside.enchantment.ModEnchantments;
 import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.entity.client.ModBoatRenderer;
 import net.farkas.wildaside.item.ModCreativeModeTabs;
@@ -60,6 +61,8 @@ public class WildAside
 
         ModEntities.register(modEventBus);
         ModBlockEntities.register(modEventBus);
+
+        ModEnchantments.register(modEventBus);
 
         ModMenuTypes.register(modEventBus);
         ModRecipes.register(modEventBus);

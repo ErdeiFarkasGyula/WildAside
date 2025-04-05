@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "item": "wildaside:bioengineer_workspace"
+      "item": "wildaside:bioengineering_workstation"
     },
     "title": {
       "translate": "advancements.we_need_to_cook.title"
@@ -22,5 +22,5 @@
   "rewards": {
     "experience": 10
   },
-  "parent": "wildaside:petrified_antibiotic"
+  "parent": "wildaside:descent"
 }
