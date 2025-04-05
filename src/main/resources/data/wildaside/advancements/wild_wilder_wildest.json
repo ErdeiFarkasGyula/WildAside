@@ -1,6 +1,6 @@
 {
   "display": {
-    "background": "wildaside:textures/block/compressed_vibrion_block.png",
+    "background": "wildaside:textures/gui/compressed_vibrion_block.png",
     "icon": {
       "item": "wildaside:vibrion_block"
     },

@@ -109,6 +109,18 @@
   "particle.wildaside.substilium_particle": "Substilium Particle",
   "particle.wildaside.still_substilium_particle": "Still Substilium Particle",
 
-  "entity.wildaside.mod_chest_boat": "Boat with Chest"
+  "entity.wildaside.mod_chest_boat": "Boat with Chest",
+
+  "advancements.wildaside.wild_wilder_wildest.title": "Wild, Wilder, Wildest!",
+  "advancements.wildaside.wild_wilder_wildest.descr": "Obtain a Vibrion",
+  "advancements.descent.title": "Descent",
+  "advancements.descent.descr": "Enter the Vibrion Hive",
+  "advancements.glimmering_glass.title":  "Glimmering Glass",
+  "advancements.glimmering_glass.descr":  "Place down a Lit Vibrion Glass Block or Pane",
+
+  "advancements.colourful_innit.title": "Colourful, Innit?",
+  "advancements.colourful_innit.descr": "Enter the Glowing Hickory Forest",
+  "advancements.glow_up.title": "Glow Up",
+  "advancements.glow_up.descr": "Witness the Glowing Hickory Forest in its full glory during the night"
 
 }
