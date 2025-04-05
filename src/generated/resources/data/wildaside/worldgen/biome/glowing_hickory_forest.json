@@ -86,7 +86,11 @@
       "wildaside:red_glowing_hickory_tree_placed",
       "wildaside:brown_glowing_hickory_tree_placed",
       "wildaside:yellow_glowing_hickory_tree_placed",
-      "wildaside:green_glowing_hickory_tree_placed"
+      "wildaside:green_glowing_hickory_tree_placed",
+      "wildaside:red_glowing_hickory_sapling_placed",
+      "wildaside:brown_glowing_hickory_sapling_placed",
+      "wildaside:yellow_glowing_hickory_sapling_placed",
+      "wildaside:green_glowing_hickory_sapling_placed"
     ]
   ],
   "has_precipitation": true,

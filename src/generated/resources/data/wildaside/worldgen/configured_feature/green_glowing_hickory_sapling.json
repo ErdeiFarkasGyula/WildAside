@@ -8,7 +8,11 @@
           "to_place": {
             "type": "minecraft:simple_state_provider",
             "state": {
-              "Name": "wildaside:spotted_wintergreen"
+              "Name": "wildaside:green_glowing_hickory_sapling",
+              "Properties": {
+                "light": "0",
+                "stage": "0"
+              }
             }
           }
         }
@@ -23,7 +27,7 @@
         }
       ]
     },
-    "tries": 32,
+    "tries": 16,
     "xz_spread": 16,
     "y_spread": 2
   }

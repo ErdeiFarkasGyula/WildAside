@@ -55,6 +55,12 @@ public class ModConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> YELLOW_GLOWING_HICKORY_TREE = registerKey("yellow_glowing_hickory_tree");
     public static final ResourceKey<ConfiguredFeature<?, ?>> GREEN_GLOWING_HICKORY_TREE = registerKey("green_glowing_hickory_tree");
 
+    public static final ResourceKey<ConfiguredFeature<?, ?>> HICKORY_SAPLING = registerKey("hickory_sapling");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> RED_GLOWING_HICKORY_SAPLING = registerKey("red_glowing_hickory_sapling");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> BROWN_GLOWING_HICKORY_SAPLING = registerKey("brown_glowing_hickory_sapling");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> YELLOW_GLOWING_HICKORY_SAPLING = registerKey("yellow_glowing_hickory_sapling");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GREEN_GLOWING_HICKORY_SAPLING = registerKey("green_glowing_hickory_sapling");
+
 
     public static void bootstrap(BootstapContext<ConfiguredFeature<?, ?>> context) {
         RuleTest overgrown_entorium_ore_replaceables = new BlockMatchTest(ModBlocks.SUBSTILIUM_SOIL.get());
@@ -108,11 +114,11 @@ public class ModConfiguredFeatures {
                 BlockStateProvider.simple(ModBlocks.ENTORIUM_SHROOM.get()), BlockStateProvider.simple(ModBlocks.SUBSTILIUM_STEM.get()), 3));
 
         register(context, SPOTTED_EVERGREEN, Feature.FLOWER,
-                new RandomPatchConfiguration(64, 16, 2, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
+                new RandomPatchConfiguration(32, 16, 2, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
                         new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.SPOTTED_WINTERGREEN.get())))));
 
         register(context, PINKSTER_FLOWER, Feature.FLOWER,
-                new RandomPatchConfiguration(64, 16, 2, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
+                new RandomPatchConfiguration(32, 16, 2, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
                         new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.PINKSTER_FLOWER.get())))));
 
         register(context, HICKORY_TREE, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
@@ -146,6 +152,22 @@ public class ModConfiguredFeatures {
                 BlockStateProvider.simple(ModBlocks.GREEN_GLOWING_HICKORY_LEAVES.get()),
                 new HickoryTreeFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 12),
                 new TwoLayersFeatureSize(1, 0, 2)).build());
+
+        register(context, HICKORY_SAPLING, Feature.FLOWER,
+                new RandomPatchConfiguration(32, 16, 2, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.HICKORY_SAPLING.get())))));
+        register(context, RED_GLOWING_HICKORY_SAPLING, Feature.FLOWER,
+                new RandomPatchConfiguration(16, 16, 2, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.RED_GLOWING_HICKORY_SAPLING.get())))));
+        register(context, BROWN_GLOWING_HICKORY_SAPLING, Feature.FLOWER,
+                new RandomPatchConfiguration(16, 16, 2, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.BROWN_GLOWING_HICKORY_SAPLING.get())))));
+        register(context, YELLOW_GLOWING_HICKORY_SAPLING, Feature.FLOWER,
+                new RandomPatchConfiguration(16, 16, 2, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.YELLOW_GLOWING_HICKORY_SAPLING.get())))));
+        register(context, GREEN_GLOWING_HICKORY_SAPLING, Feature.FLOWER,
+                new RandomPatchConfiguration(16, 16, 2, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.GREEN_GLOWING_HICKORY_SAPLING.get())))));
     }
 
     public static ResourceKey<ConfiguredFeature<?, ?>> registerKey(String name) {

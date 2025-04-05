@@ -1,9 +1,9 @@
 {
-  "feature": "wildaside:spotted_evergreen",
+  "feature": "wildaside:green_glowing_hickory_sapling",
   "placement": [
     {
       "type": "minecraft:rarity_filter",
-      "chance": 16
+      "chance": 8
     },
     {
       "type": "minecraft:in_square"

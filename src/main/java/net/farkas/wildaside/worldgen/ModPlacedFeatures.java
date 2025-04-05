@@ -49,6 +49,12 @@ public class ModPlacedFeatures {
     public static final ResourceKey<PlacedFeature> YELLOW_GLOWING_HICKORY_TREE_PLACED = registerKey("yellow_glowing_hickory_tree_placed");
     public static final ResourceKey<PlacedFeature> GREEN_GLOWING_HICKORY_TREE_PLACED = registerKey("green_glowing_hickory_tree_placed");
 
+    public static final ResourceKey<PlacedFeature> HICKORY_SAPLING_PLACED = registerKey("hickory_sapling_placed");
+    public static final ResourceKey<PlacedFeature> RED_GLOWING_HICKORY_SAPLING_PLACED = registerKey("red_glowing_hickory_sapling_placed");
+    public static final ResourceKey<PlacedFeature> BROWN_GLOWING_HICKORY_SAPLING_PLACED = registerKey("brown_glowing_hickory_sapling_placed");
+    public static final ResourceKey<PlacedFeature> YELLOW_GLOWING_HICKORY_SAPLING_PLACED = registerKey("yellow_glowing_hickory_sapling_placed");
+    public static final ResourceKey<PlacedFeature> GREEN_GLOWING_HICKORY_SAPLING_PLACED = registerKey("green_glowing_hickory_sapling_placed");
+
     public static void bootstrap(BootstapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
@@ -93,9 +99,9 @@ public class ModPlacedFeatures {
                 ModOrePlacement.commonOrePlacement(128, HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80))));
 
         register(context, SPOTTED_WINTERGREEN_PLACED, configuredFeatures.getOrThrow(ModConfiguredFeatures.SPOTTED_EVERGREEN),
-                List.of(RarityFilter.onAverageOnceEvery(32), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
+                List.of(RarityFilter.onAverageOnceEvery(16), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
         register(context, PINKSTER_FLOWER_PLACED, configuredFeatures.getOrThrow(ModConfiguredFeatures.PINKSTER_FLOWER),
-                List.of(RarityFilter.onAverageOnceEvery(32), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
+                List.of(RarityFilter.onAverageOnceEvery(16), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
 
         register(context, HICKORY_TREE_PLACED, configuredFeatures.getOrThrow(ModConfiguredFeatures.HICKORY_TREE),
                 VegetationPlacements.treePlacement(PlacementUtils.countExtra(8, 0.1f, 2), ModBlocks.HICKORY_SAPLING.get()));
@@ -107,6 +113,17 @@ public class ModPlacedFeatures {
                 VegetationPlacements.treePlacement(PlacementUtils.countExtra(2, 0.1f, 2), ModBlocks.YELLOW_GLOWING_HICKORY_SAPLING.get()));
         register(context, GREEN_GLOWING_HICKORY_TREE_PLACED, configuredFeatures.getOrThrow(ModConfiguredFeatures.GREEN_GLOWING_HICKORY_TREE),
                 VegetationPlacements.treePlacement(PlacementUtils.countExtra(2, 0.1f, 2), ModBlocks.GREEN_GLOWING_HICKORY_SAPLING.get()));
+
+        register(context, HICKORY_SAPLING_PLACED, configuredFeatures.getOrThrow(ModConfiguredFeatures.HICKORY_SAPLING),
+                List.of(RarityFilter.onAverageOnceEvery(2), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
+        register(context, RED_GLOWING_HICKORY_SAPLING_PLACED, configuredFeatures.getOrThrow(ModConfiguredFeatures.RED_GLOWING_HICKORY_SAPLING),
+                List.of(RarityFilter.onAverageOnceEvery(8), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
+        register(context, BROWN_GLOWING_HICKORY_SAPLING_PLACED, configuredFeatures.getOrThrow(ModConfiguredFeatures.BROWN_GLOWING_HICKORY_SAPLING),
+                List.of(RarityFilter.onAverageOnceEvery(8), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
+        register(context, YELLOW_GLOWING_HICKORY_SAPLING_PLACED, configuredFeatures.getOrThrow(ModConfiguredFeatures.YELLOW_GLOWING_HICKORY_SAPLING),
+                List.of(RarityFilter.onAverageOnceEvery(8), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
+        register(context, GREEN_GLOWING_HICKORY_SAPLING_PLACED, configuredFeatures.getOrThrow(ModConfiguredFeatures.GREEN_GLOWING_HICKORY_SAPLING),
+                List.of(RarityFilter.onAverageOnceEvery(8), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
     }
 
     private static ResourceKey<PlacedFeature> registerKey(String name) {
