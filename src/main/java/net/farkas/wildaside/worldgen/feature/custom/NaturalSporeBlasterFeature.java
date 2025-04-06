@@ -44,14 +44,6 @@ public class NaturalSporeBlasterFeature extends ReplaceBlockFeature {
 
                     boolean foundFreeAxis = false;
 
-                    System.out.println("[Debug] Axis: " + candidate +
-                            " | Offset (x: " + x + ", y: " + y + ", z: " + z + ")" +
-                            " | Pos1: " + pos1 +
-                            " | Pos2: " + pos2 +
-                            " | isFree1: " + isFree1 +
-                            " | isFree2: " + isFree2 +
-                            " | returned: " + (isFree1 && isFree2));
-
                     if (isFree1 || isFree2) {
                         freeAxes.add(candidate);
                     }

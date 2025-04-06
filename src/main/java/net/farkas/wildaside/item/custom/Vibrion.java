@@ -75,6 +75,7 @@ public class Vibrion extends Item {
                 if (pLevel instanceof ServerLevel) {
                     if (bonemealableblock.isBonemealSuccess(pLevel, pLevel.random, pPos, blockstate)) {
                         bonemealableblock.performBonemeal((ServerLevel)pLevel, pLevel.random, pPos, blockstate);
+                        bonemealableblock.performBonemeal((ServerLevel)pLevel, pLevel.random, pPos, blockstate);
                     }
 
                     pStack.shrink(1);
@@ -95,7 +96,7 @@ public class Vibrion extends Item {
                 RandomSource randomsource = pLevel.getRandom();
 
                 label78:
-                for(int i = 0; i < 128; ++i) {
+                for (int i = 0; i < 128; ++i) {
                     BlockPos blockpos = pPos;
                     BlockState blockstate = Blocks.SEAGRASS.defaultBlockState();
 
@@ -129,7 +130,7 @@ public class Vibrion extends Item {
                     if (blockstate.is(BlockTags.WALL_CORALS, (p_204093_) -> {
                         return p_204093_.hasProperty(BaseCoralWallFanBlock.FACING);
                     })) {
-                        for(int k = 0; !blockstate.canSurvive(pLevel, blockpos) && k < 4; ++k) {
+                        for (int k = 0; !blockstate.canSurvive(pLevel, blockpos) && k < 4; ++k) {
                             blockstate = blockstate.setValue(BaseCoralWallFanBlock.FACING, Direction.Plane.HORIZONTAL.getRandomDirection(randomsource));
                         }
                     }
