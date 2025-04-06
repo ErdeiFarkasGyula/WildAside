@@ -18,7 +18,7 @@ public class UpdateReplaceSingleBlockFeature extends ReplaceBlockFeature {
         BlockPos blockpos = context.origin();
         ReplaceBlockConfiguration replaceblockconfiguration = context.config();
 
-        for(OreConfiguration.TargetBlockState oreconfiguration$targetblockstate : replaceblockconfiguration.targetStates) {
+        for (OreConfiguration.TargetBlockState oreconfiguration$targetblockstate : replaceblockconfiguration.targetStates) {
             if (oreconfiguration$targetblockstate.target.test(worldgenlevel.getBlockState(blockpos), context.random())) {
                 worldgenlevel.setBlock(blockpos, oreconfiguration$targetblockstate.state, 3);
                 worldgenlevel.scheduleTick(blockpos, worldgenlevel.getBlockState(blockpos).getBlock(), 10);

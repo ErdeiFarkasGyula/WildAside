@@ -38,13 +38,10 @@ public class ModConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> HANGING_LIT_VIBRION_GEL = registerKey("hanging_lit_vibrion_gel");
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> OVERGROWN_ENTORIUM_ORE = registerKey("overgrown_entorium_ore");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> ENTORIUM_ORE = registerKey("entorium_ore");
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> COMPRESSED_SUBSTILIUM_SOIL = registerKey("compressed_substilium_soil");
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> NATURAL_SPORE_BLASTER_X = registerKey("natural_spore_blaster_x");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> NATURAL_SPORE_BLASTER_Y = registerKey("natural_spore_blaster_y");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> NATURAL_SPORE_BLASTER_Z = registerKey("natural_spore_blaster_z");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> NATURAL_SPORE_BLASTER = registerKey("natural_spore_blaster");
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> SPOTTED_EVERGREEN = registerKey("spotted_evergreen");
     public static final ResourceKey<ConfiguredFeature<?, ?>> PINKSTER_FLOWER = registerKey("pinkster_flower");
@@ -64,21 +61,16 @@ public class ModConfiguredFeatures {
 
     public static void bootstrap(BootstapContext<ConfiguredFeature<?, ?>> context) {
         RuleTest overgrown_entorium_ore_replaceables = new BlockMatchTest(ModBlocks.SUBSTILIUM_SOIL.get());
-        RuleTest entorium_ore_replaceables = new BlockMatchTest(ModBlocks.OVERGROWN_ENTORIUM_ORE.get());
         RuleTest compressed_substilium_soil_replaceables = new BlockMatchTest(ModBlocks.SUBSTILIUM_SOIL.get());
 
         List<OreConfiguration.TargetBlockState> overgrown_entorium_ore = List.of(OreConfiguration.target(overgrown_entorium_ore_replaceables, ModBlocks.OVERGROWN_ENTORIUM_ORE.get().defaultBlockState()));
-        List<OreConfiguration.TargetBlockState> entorium_ore = List.of(OreConfiguration.target(entorium_ore_replaceables, ModBlocks.ENTORIUM_ORE.get().defaultBlockState()));
         List<OreConfiguration.TargetBlockState> compressed_substilium_soil = List.of(OreConfiguration.target(compressed_substilium_soil_replaceables, ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get().defaultBlockState()));
 
-        register(context, OVERGROWN_ENTORIUM_ORE, Feature.ORE, new OreConfiguration(overgrown_entorium_ore, 9));
-        register(context, ENTORIUM_ORE, Feature.ORE, new OreConfiguration(entorium_ore, 6));
+        register(context, OVERGROWN_ENTORIUM_ORE, Feature.ORE, new OreConfiguration(overgrown_entorium_ore, 16));
 
         register(context, COMPRESSED_SUBSTILIUM_SOIL, Feature.ORE, new OreConfiguration(compressed_substilium_soil, 36));
 
-        register(context, NATURAL_SPORE_BLASTER_X, ModFeatures.TICK_REPLACE_SINGLE_BLOCK.get(), new ReplaceBlockConfiguration(ModBlocks.SUBSTILIUM_SOIL.get().defaultBlockState(), ModBlocks.NATURAL_SPORE_BLASTER.get().defaultBlockState().setValue(NaturalSporeBlaster.AXIS, Direction.Axis.X)));
-        register(context, NATURAL_SPORE_BLASTER_Y, ModFeatures.TICK_REPLACE_SINGLE_BLOCK.get(), new ReplaceBlockConfiguration(ModBlocks.SUBSTILIUM_SOIL.get().defaultBlockState(), ModBlocks.NATURAL_SPORE_BLASTER.get().defaultBlockState().setValue(NaturalSporeBlaster.AXIS, Direction.Axis.Y)));
-        register(context, NATURAL_SPORE_BLASTER_Z, ModFeatures.TICK_REPLACE_SINGLE_BLOCK.get(), new ReplaceBlockConfiguration(ModBlocks.SUBSTILIUM_SOIL.get().defaultBlockState(), ModBlocks.NATURAL_SPORE_BLASTER.get().defaultBlockState().setValue(NaturalSporeBlaster.AXIS, Direction.Axis.Z)));
+        register(context, NATURAL_SPORE_BLASTER, ModFeatures.NATURAL_SPORE_BLASTER_FEATURE.get(), new ReplaceBlockConfiguration(ModBlocks.SUBSTILIUM_SOIL.get().defaultBlockState(), ModBlocks.NATURAL_SPORE_BLASTER.get().defaultBlockState()));
 
         register(context, VIBRION_GROWTH, Feature.FLOWER,
                 new RandomPatchConfiguration(32, 8, 3, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,

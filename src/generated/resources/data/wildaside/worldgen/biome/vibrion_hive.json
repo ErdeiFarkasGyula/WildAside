@@ -59,10 +59,7 @@
       "minecraft:ore_andesite_lower",
       "minecraft:ore_tuff",
       "wildaside:overgrown_entorium_ore_placed",
-      "wildaside:entorium_ore_placed",
-      "wildaside:natural_spore_blaster_x_placed",
-      "wildaside:natural_spore_blaster_y_placed",
-      "wildaside:natural_spore_blaster_z_placed",
+      "wildaside:natural_spore_blaster_placed",
       "wildaside:compressed_substilium_soil_placed"
     ],
     [

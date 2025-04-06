@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.item.ModItems;
+import net.farkas.wildaside.util.AdvancementHandler;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
@@ -92,7 +93,7 @@ public class ModEvents {
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         glowUpAdvancement(event);
         itsShearingTimeAdvancement(event);
-        extensiveResearchAdvancement(event);
+        bacteriaBarrierhAdvancement(event);
     }
 
     private static final ResourceLocation GLOWING_FOREST = new ResourceLocation("wildaside", "glowing_hickory_forest");
@@ -110,16 +111,7 @@ public class ModEvents {
                 ResourceKey<Biome> biomeKey = biomeHolder.unwrapKey().orElse(null);
 
                 if (biomeKey != null && biomeKey.location().equals(GLOWING_FOREST)) {
-                    ResourceLocation advancementID = new ResourceLocation("wildaside", "glow_up");
-                    Advancement advancement = player.server.getAdvancements().getAdvancement(advancementID);
-                    if (advancement != null) {
-                        AdvancementProgress progress = player.getAdvancements().getOrStartProgress(advancement);
-                        if (!progress.isDone()) {
-                            for (String criterion : progress.getRemainingCriteria()) {
-                                player.getAdvancements().award(advancement, criterion);
-                            }
-                        }
-                    }
+                    AdvancementHandler.givePlayerAdvancement(player, "glow_up");
                 }
             }
         }
@@ -139,19 +131,12 @@ public class ModEvents {
             BlockPos blockPos = level.clip(clipContext).getBlockPos();
 
             if (level.getBlockState(blockPos).getBlock() == ModBlocks.OVERGROWN_ENTORIUM_ORE.get()) {
-                Advancement advancement = player.server.getAdvancements().getAdvancement(new ResourceLocation("wildaside", "its_shearing_time"));
-                AdvancementProgress progress = player.getAdvancements().getOrStartProgress(advancement);
-
-                if (!progress.isDone()) {
-                    for (String criteria : progress.getRemainingCriteria()) {
-                        player.getAdvancements().award(advancement, criteria);
-                    }
-                }
+                AdvancementHandler.givePlayerAdvancement(player, "its_shearing_time");
             }
         }
     }
 
-    private static void extensiveResearchAdvancement(TickEvent.PlayerTickEvent event) {
+    private static void bacteriaBarrierhAdvancement(TickEvent.PlayerTickEvent event) {
         if (!event.player.level().isClientSide) {
             ServerPlayer player = (ServerPlayer) event.player;
             ServerLevel level = player.serverLevel();
@@ -164,17 +149,8 @@ public class ModEvents {
 
             BlockState blockState = level.getBlockState(blockPos);
             if (blockState.getBlock() == ModBlocks.SPORE_BLASTER.get() && level.getBestNeighborSignal(blockPos) > 0) {
-                Advancement advancement = player.server.getAdvancements().getAdvancement(new ResourceLocation("wildaside", "bacteria_bricks"));
-                AdvancementProgress progress = player.getAdvancements().getOrStartProgress(advancement);
-
-                    // Award the advancement if not done yet
-                if (!progress.isDone()) {
-                    for (String criteria : progress.getRemainingCriteria()) {
-                        player.getAdvancements().award(advancement, criteria);
-                    }
-                }
+                AdvancementHandler.givePlayerAdvancement(player, "bacteria_bricks");
             }
         }
-
     }
 }

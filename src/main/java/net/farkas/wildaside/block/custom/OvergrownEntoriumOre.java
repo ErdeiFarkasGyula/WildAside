@@ -3,8 +3,10 @@ package net.farkas.wildaside.block.custom;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.enchantment.ModEnchantments;
 import net.farkas.wildaside.particle.ModParticles;
+import net.farkas.wildaside.util.AdvancementHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -38,6 +40,7 @@ public class OvergrownEntoriumOre extends EntoriumOre {
                 }
 
                 if (playerItem.getItem().getEnchantmentLevel(playerItem, ModEnchantments.EXTENSIVE_RESEARCH.get()) > 0) {
+                    AdvancementHandler.givePlayerAdvancement((ServerPlayer) pPlayer, "extensive_research");
                     for (int i = -1; i <= 1; i++) {
                         for (int j = -1; j <= 1; j++) {
                             for (int k = -1; k <= 1; k++) {
@@ -61,7 +64,7 @@ public class OvergrownEntoriumOre extends EntoriumOre {
 
     @Override
     public void animateTick(BlockState pState, Level pLevel, BlockPos pPos, RandomSource pRandom) {
-        if (pRandom.nextFloat() < 0.2) {
+        if (pRandom.nextFloat() < 0.5) {
             pLevel.addParticle(ModParticles.ENTORIUM_PARTICLE.get(), pPos.getX() + pRandom.nextFloat(), pPos.getY() + 1, pPos.getZ() + pRandom.nextFloat(), 0, 0, 0);
             super.animateTick(pState, pLevel, pPos, pRandom);
         }

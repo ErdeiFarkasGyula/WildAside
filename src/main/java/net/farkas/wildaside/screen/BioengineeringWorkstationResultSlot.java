@@ -26,7 +26,6 @@ public class BioengineeringWorkstationResultSlot extends SlotItemHandler {
     @Override
     public void onTake(Player pPlayer, ItemStack pStack) {
         super.onTake(pPlayer, pStack);
-        System.out.println("Crafted item taken: "); // Debug message
 
         if (!player.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
             ResourceLocation id = new ResourceLocation("wildaside", "we_need_to_cook");

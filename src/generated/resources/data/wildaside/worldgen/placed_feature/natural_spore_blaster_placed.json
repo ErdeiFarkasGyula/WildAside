@@ -1,9 +1,9 @@
 {
-  "feature": "wildaside:natural_spore_blaster_y",
+  "feature": "wildaside:natural_spore_blaster",
   "placement": [
     {
       "type": "minecraft:count",
-      "count": 128
+      "count": 256
     },
     {
       "type": "minecraft:in_square"
@@ -11,7 +11,7 @@
     {
       "type": "minecraft:height_range",
       "height": {
-        "type": "minecraft:uniform",
+        "type": "minecraft:trapezoid",
         "max_inclusive": {
           "absolute": 80
         },

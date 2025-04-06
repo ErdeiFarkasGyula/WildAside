@@ -1,10 +1,8 @@
 package net.farkas.wildaside.block.custom.vibrion;
 
-import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.particle.ModParticles;
-import net.farkas.wildaside.util.ContaminationUtil;
+import net.farkas.wildaside.util.ContaminationHandler;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
@@ -31,7 +29,7 @@ public class Sporeholder extends SaplingBlock {
     public void entityInside(BlockState pState, Level pLevel, BlockPos pPos, Entity pEntity) {
         pLevel.addParticle(ModParticles.VIBRION_PARTICLE.get(), (pPos.getX() + 0.5), pPos.getY(), (pPos.getZ() + 0.5), 0, 0, 0);
         if (pEntity instanceof Player) {
-            ContaminationUtil.givePlayerContamination((Player)pEntity, 20);
+            ContaminationHandler.givePlayerContamination((Player)pEntity, 20);
         }
         super.entityInside(pState, pLevel, pPos, pEntity);
     }
