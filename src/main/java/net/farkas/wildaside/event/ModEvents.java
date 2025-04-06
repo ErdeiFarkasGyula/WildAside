@@ -1,28 +1,36 @@
 package net.farkas.wildaside.event;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
-import net.farkas.wildaside.worldgen.biome.ModBiomes;
+import net.farkas.wildaside.item.ModItems;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
-import net.minecraft.client.telemetry.events.WorldLoadEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.village.VillagerTradesEvent;
+import net.minecraftforge.event.village.WandererTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber
-public class ModEventBusServerEvents {
+import java.util.List;
+
+@Mod.EventBusSubscriber(modid = WildAside.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+public class ModEvents {
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
@@ -36,7 +44,49 @@ public class ModEventBusServerEvents {
         }
     }
 
-    private static final ResourceLocation GLOWING_FOREST = new ResourceLocation("wildaside", "glowing_hickory_forest");
+    @SubscribeEvent
+    public static void addCustomTrades(VillagerTradesEvent event) {
+        if (event.getType() == VillagerProfession.FARMER) {
+            Int2ObjectMap<List<VillagerTrades.ItemListing>> trades = event.getTrades();
+            int villagerLevel = 1;
+            ItemStack emerald = new ItemStack(Items.EMERALD);
+
+            trades.get(villagerLevel).add((pTrader, pRandom) -> new MerchantOffer(
+                    new ItemStack(ModItems.HICKORY_NUT.get(), 16), emerald, 20, 2, 0.05f
+            ));
+        }
+
+        if (event.getType() == VillagerProfession.TOOLSMITH) {
+            Int2ObjectMap<List<VillagerTrades.ItemListing>> trades = event.getTrades();
+            int villagerLevel = 3;
+
+            trades.get(villagerLevel).add((pTrader, pRandom) -> new MerchantOffer(
+                    new ItemStack(Items.EMERALD, 6), new ItemStack(ModItems.SPORE_BOMB.get()), 2, 5, 0.06f
+            ));
+        }
+    }
+
+    @SubscribeEvent
+    public static void addCustomWanderingTrades(WandererTradesEvent event) {
+        List<VillagerTrades.ItemListing> genericTrades = event.getGenericTrades();
+        //List<VillagerTrades.ItemListing> rareTrades = event.getRareTrades();
+
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(
+                new ItemStack(Items.EMERALD, 4), new ItemStack(ModBlocks.HICKORY_SAPLING.get()), 8, 2, 0.03f
+        ));
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(
+                new ItemStack(Items.EMERALD, 5), new ItemStack(ModBlocks.RED_GLOWING_HICKORY_SAPLING.get()), 8, 2, 0.03f
+        ));
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(
+                new ItemStack(Items.EMERALD, 5), new ItemStack(ModBlocks.BROWN_GLOWING_HICKORY_SAPLING.get()), 8, 2, 0.03f
+        ));
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(
+                new ItemStack(Items.EMERALD, 5), new ItemStack(ModBlocks.YELLOW_GLOWING_HICKORY_SAPLING.get()), 8, 2, 0.03f
+        ));
+        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(
+                new ItemStack(Items.EMERALD, 5), new ItemStack(ModBlocks.GREEN_GLOWING_HICKORY_SAPLING.get()), 8, 2, 0.03f
+        ));
+    }
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
@@ -44,6 +94,8 @@ public class ModEventBusServerEvents {
         itsShearingTimeAdvancement(event);
         extensiveResearchAdvancement(event);
     }
+
+    private static final ResourceLocation GLOWING_FOREST = new ResourceLocation("wildaside", "glowing_hickory_forest");
 
     private static void glowUpAdvancement(TickEvent.PlayerTickEvent event) {
         if (event.phase == TickEvent.Phase.END && !event.player.level().isClientSide) {
