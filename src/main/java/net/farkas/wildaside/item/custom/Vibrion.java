@@ -74,8 +74,7 @@ public class Vibrion extends Item {
             if (bonemealableblock.isValidBonemealTarget(pLevel, pPos, blockstate, pLevel.isClientSide)) {
                 if (pLevel instanceof ServerLevel) {
                     if (bonemealableblock.isBonemealSuccess(pLevel, pLevel.random, pPos, blockstate)) {
-                        bonemealableblock.performBonemeal((ServerLevel)pLevel, pLevel.random, pPos, blockstate);
-                        bonemealableblock.performBonemeal((ServerLevel)pLevel, pLevel.random, pPos, blockstate);
+                        bonemealableblock.performBonemeal((ServerLevel)pLevel, pLevel.random, pPos, blockstate);W
                     }
 
                     pStack.shrink(1);
