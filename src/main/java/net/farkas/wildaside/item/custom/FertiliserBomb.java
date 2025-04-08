@@ -1,0 +1,53 @@
+package net.farkas.wildaside.item.custom;
+
+import net.farkas.wildaside.entity.custom.FertiliserBombEntity;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.level.Level;
+import org.joml.Math;
+
+public class FertiliserBomb extends Item {
+    public FertiliserBomb(Properties pProperties) {
+        super(pProperties);
+    }
+
+    @Override
+    public UseAnim getUseAnimation(ItemStack pStack) {
+        return UseAnim.BOW;
+    }
+
+    @Override
+    public int getUseDuration(ItemStack stack) {
+        return 200;
+    }
+
+    public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pHand) {
+        pPlayer.startUsingItem(pHand);
+        return InteractionResultHolder.consume(pPlayer.getItemInHand(pHand));
+    }
+
+    @Override
+    public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
+        if (!(entity instanceof Player player) || level.isClientSide) return;
+
+        int chargeTime = this.getUseDuration(stack) - timeLeft;
+        float charge = Math.clamp((float) chargeTime / 20f, 0f, 1f); // 1 second full charge
+
+        // Spawn thrown entity or trigger fertilizing effect
+        FertiliserBombEntity thrown = new FertiliserBombEntity(level, player, charge);
+        thrown.setItem(stack);
+        thrown.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0.8F + charge * 0.8F, 1.0F);
+        level.addFreshEntity(thrown);
+
+        if (!player.getAbilities().instabuild) stack.shrink(1);
+    }
+}

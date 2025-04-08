@@ -1,9 +1,11 @@
 package net.farkas.wildaside.entity;
 
 import net.farkas.wildaside.WildAside;
+import net.farkas.wildaside.entity.custom.FertiliserBombEntity;
 import net.farkas.wildaside.entity.custom.ModBoatEntity;
 import net.farkas.wildaside.entity.custom.ModChestBoatEntity;
 import net.farkas.wildaside.entity.custom.SporeBombEntity;
+import net.farkas.wildaside.item.custom.FertiliserBomb;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -25,6 +27,9 @@ public class ModEntities {
     public static final RegistryObject<EntityType<SporeBombEntity>> SPORE_BOMB =
             ENTITY_TYPES.register("spore_bomb", () -> EntityType.Builder.<SporeBombEntity>of(SporeBombEntity::new, MobCategory.MISC)
                     .sized(0.5f, 0.5f).build("spore_bomb"));
+    public static final RegistryObject<EntityType<FertiliserBombEntity>> FERTILISER_BOMB =
+            ENTITY_TYPES.register("fertiliser_bomb", () -> EntityType.Builder.<FertiliserBombEntity>of(FertiliserBombEntity::new, MobCategory.MISC)
+                    .sized(0.5f, 0.5f).build("fertiliser_bomb"));
 
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);

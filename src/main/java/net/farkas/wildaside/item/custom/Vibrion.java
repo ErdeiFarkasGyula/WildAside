@@ -74,7 +74,7 @@ public class Vibrion extends Item {
             if (bonemealableblock.isValidBonemealTarget(pLevel, pPos, blockstate, pLevel.isClientSide)) {
                 if (pLevel instanceof ServerLevel) {
                     if (bonemealableblock.isBonemealSuccess(pLevel, pLevel.random, pPos, blockstate)) {
-                        bonemealableblock.performBonemeal((ServerLevel)pLevel, pLevel.random, pPos, blockstate);W
+                        bonemealableblock.performBonemeal((ServerLevel)pLevel, pLevel.random, pPos, blockstate);
                     }
 
                     pStack.shrink(1);
@@ -151,47 +151,4 @@ public class Vibrion extends Item {
             return false;
         }
     }
-
-    public static void addGrowthParticles(LevelAccessor pLevel, BlockPos pPos, int pData) {
-        if (pData == 0) {
-            pData = 15;
-        }
-
-        BlockState blockstate = pLevel.getBlockState(pPos);
-        if (!blockstate.isAir()) {
-            double d0 = 0.5D;
-            double d1;
-            if (blockstate.is(Blocks.WATER)) {
-                pData *= 3;
-                d1 = 1.0D;
-                d0 = 3.0D;
-            } else
-                if (blockstate.isSolidRender(pLevel, pPos)) {
-                    pPos = pPos.above();
-                    pData *= 3;
-                    d0 = 3.0D;
-                    d1 = 1.0D;
-                } else {
-                    d1 = blockstate.getShape(pLevel, pPos).max(Direction.Axis.Y);
-                }
-
-            pLevel.addParticle(ModParticles.VIBRION_PARTICLE.get(), (double) pPos.getX() + 0.5D, (double) pPos.getY() + 0.5D, (double) pPos.getZ() + 0.5D, 0.0D, 0.0D, 0.0D);
-            RandomSource randomsource = pLevel.getRandom();
-
-            for (int i = 0; i < pData; ++i) {
-                double d2 = randomsource.nextGaussian() * 0.02D;
-                double d3 = randomsource.nextGaussian() * 0.02D;
-                double d4 = randomsource.nextGaussian() * 0.02D;
-                double d5 = 0.5D - d0;
-                double d6 = (double) pPos.getX() + d5 + randomsource.nextDouble() * d0 * 2.0D;
-                double d7 = (double) pPos.getY() + randomsource.nextDouble() * d1;
-                double d8 = (double) pPos.getZ() + d5 + randomsource.nextDouble() * d0 * 2.0D;
-                if (!pLevel.getBlockState(BlockPos.containing(d6, d7, d8).below()).isAir()) {
-                    pLevel.addParticle(ModParticles.VIBRION_PARTICLE.get(), d6, d7, d8, d2, d3, d4);
-                }
-            }
-
-        }
-    }
-
 }

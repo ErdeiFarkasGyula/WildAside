@@ -26,6 +26,8 @@ public class ModItems {
             () ->  new EntoriumPill(new Item.Properties().food(ModFoods.ENTORIUM_PILL)));
     public static final RegistryObject<Item> SPORE_BOMB = ITEMS.register("spore_bomb",
             () ->  new SporeBomb(new Item.Properties()));
+    public static final RegistryObject<Item> FERTILISER_BOMB = ITEMS.register("fertiliser_bomb",
+            () ->  new FertiliserBomb(new Item.Properties()));
     public static final RegistryObject<Item> ENTORIUM_PICKAXE = ITEMS.register("entorium_pickaxe",
             () ->  new EntoriumPickaxe(1, 1, ModToolTiers.ENTORIUM, ModTags.Blocks.ENTORIUM_PICKAXE_BREAKABLE, new Item.Properties()));
 
