@@ -45,7 +45,7 @@ public class FertiliserBombEntity extends ThrowableItemProjectile {
 
     public FertiliserBombEntity(Level pLevel, LivingEntity thrower, float charge) {
         super(ModEntities.FERTILISER_BOMB.get(), thrower, pLevel);
-        this.charge = charge;
+        this.charge = charge + 0.1f;
     }
 
     @Override
