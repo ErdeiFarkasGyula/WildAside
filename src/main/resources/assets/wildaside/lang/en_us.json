@@ -5,7 +5,7 @@
   "item.wildaside.entorium": "Entorium",
   "item.wildaside.entorium_pill": "Entorium Pill",
   "item.wildaside.spore_bomb": "Spore Bomb",
-  "item.wildaside.entorium_pickaxe": "Entorium Pickaxe",
+  "item.wildaside.fertiliser_bomb": "Fertiliser Bomb",
   "item.wildaside.hickory_nut": "Hickory Nut",
 
   "item.wildaside.substilium_boat": "Substilium Boat",
@@ -21,6 +21,10 @@
   "item.minecraft.splash_potion.effect.immunity_potion": "Immunity Splash Potion",
   "item.minecraft.lingering_potion.effect.immunity_potion": "Immunity Lingering Potion",
   "item.minecraft.tipped_arrow.effect.immunity_potion": "Immunity Potion",
+  "item.minecraft.potion.effect.life_steal_potion": "Life Steal Potion",
+  "item.minecraft.splash_potion.effect.life_steal_potion": "Life Steal Splash Potion",
+  "item.minecraft.lingering_potion.effect.life_steal_potion": "Life Steal Lingering Potion",
+  "item.minecraft.tipped_arrow.effect.life_steal_potion": "Life Steal Potion",
 
   "block.wildaside.vibrion_block": "Vibrion Block",
   "block.wildaside.compressed_vibrion_block": "Compressed Vibrion Block",

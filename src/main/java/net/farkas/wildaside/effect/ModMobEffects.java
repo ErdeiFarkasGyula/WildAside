@@ -3,7 +3,7 @@ package net.farkas.wildaside.effect;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.effect.custom.ContaminationEffect;
 import net.farkas.wildaside.effect.custom.ImmunityEffect;
-import net.minecraft.resources.ResourceLocation;
+import net.farkas.wildaside.effect.custom.LifeStealEffect;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -12,8 +12,6 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-
-import java.util.UUID;
 
 public class ModMobEffects {
     public static final DeferredRegister<MobEffect> MOB_EFFECTS = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, WildAside.MOD_ID);
@@ -27,6 +25,10 @@ public class ModMobEffects {
 
     public static final RegistryObject<MobEffect> IMMUNITY = MOB_EFFECTS.register("immunity",
             () -> new ImmunityEffect(MobEffectCategory.BENEFICIAL, -3579177)
+    );
+
+    public static final RegistryObject<MobEffect> LIFE_STEAL = MOB_EFFECTS.register("life_steal",
+            () -> new LifeStealEffect(MobEffectCategory.BENEFICIAL, -3579177)
     );
 
     public static void register(IEventBus eventBus) {

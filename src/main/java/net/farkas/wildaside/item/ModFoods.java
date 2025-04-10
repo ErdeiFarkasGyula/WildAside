@@ -10,5 +10,5 @@ public class ModFoods {
             .saturationMod(0.2f).effect(() -> new MobEffectInstance(MobEffects.POISON, 400), 0.5f).build();
 
     public static final FoodProperties ENTORIUM_PILL = new FoodProperties.Builder().nutrition(0).fast().alwaysEat()
-            .saturationMod(0f).effect(() -> new MobEffectInstance(ModMobEffects.IMMUNITY.get(), 400), 1f).build();
+            .saturationMod(0f).effect(() -> new MobEffectInstance(ModMobEffects.IMMUNITY.get(), 200), 1f).build();
 }
