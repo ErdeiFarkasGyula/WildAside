@@ -158,7 +158,7 @@ public class ModEvents {
 
             BlockState blockState = level.getBlockState(blockPos);
             if (blockState.getBlock() == ModBlocks.SPORE_BLASTER.get() && level.getBestNeighborSignal(blockPos) > 0) {
-                AdvancementHandler.givePlayerAdvancement(player, "bacteria_bricks");
+                AdvancementHandler.givePlayerAdvancement(player, "bacteria_barrier");
             }
         }
     }
