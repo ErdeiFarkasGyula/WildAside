@@ -119,7 +119,7 @@ public class WildAside
         ComposterBlock.COMPOSTABLES.put(ModItems.HICKORY_NUT.get(), 0.65f);
 
         BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(Potions.AWKWARD, ModItems.VIBRION.get(), ModPotions.CONTAMINATION_POTION.get()));
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(ModPotions.CONTAMINATION_POTION.get(), ModItems.ENTORIUM.get(), ModPotions.LIFE_STEAL_POTION.get()));
+        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(ModPotions.CONTAMINATION_POTION.get(), ModItems.ENTORIUM.get(), ModPotions.OMNIVAMP_POTION.get()));
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event)

@@ -3,7 +3,7 @@ package net.farkas.wildaside.effect;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.effect.custom.ContaminationEffect;
 import net.farkas.wildaside.effect.custom.ImmunityEffect;
-import net.farkas.wildaside.effect.custom.LifeStealEffect;
+import net.farkas.wildaside.effect.custom.OmnivampEffect;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -27,8 +27,8 @@ public class ModMobEffects {
             () -> new ImmunityEffect(MobEffectCategory.BENEFICIAL, -3579177)
     );
 
-    public static final RegistryObject<MobEffect> LIFE_STEAL = MOB_EFFECTS.register("life_steal",
-            () -> new LifeStealEffect(MobEffectCategory.BENEFICIAL, -3579177)
+    public static final RegistryObject<MobEffect> OMNIVAMP = MOB_EFFECTS.register("omnivamp",
+            () -> new OmnivampEffect(MobEffectCategory.BENEFICIAL, -3579177)
     );
 
     public static void register(IEventBus eventBus) {

@@ -15,10 +15,25 @@ public class ModPotions {
 
     public static final RegistryObject<Potion> CONTAMINATION_POTION = POTIONS.register("contamination_potion",
             () -> new Potion(new MobEffectInstance(ModMobEffects.CONTAMINATION.get(), 800, 0)));
+    public static final RegistryObject<Potion> CONTAMINATION_POTION_2 = POTIONS.register("contamination_potion_2",
+            () -> new Potion(new MobEffectInstance(ModMobEffects.CONTAMINATION.get(), 800, 1)));
+    public static final RegistryObject<Potion> CONTAMINATION_POTION_3 = POTIONS.register("contamination_potion_3",
+            () -> new Potion(new MobEffectInstance(ModMobEffects.CONTAMINATION.get(), 800, 2)));
+
     public static final RegistryObject<Potion> IMMUNITY_POTION = POTIONS.register("immunity_potion",
             () -> new Potion(new MobEffectInstance(ModMobEffects.IMMUNITY.get(), 800, 0)));
-    public static final RegistryObject<Potion> LIFE_STEAL_POTION = POTIONS.register("life_steal_potion",
-            () -> new Potion(new MobEffectInstance(ModMobEffects.LIFE_STEAL.get(), 800, 0)));
+    public static final RegistryObject<Potion> IMMUNITY_POTION_2 = POTIONS.register("immunity_potion_2",
+            () -> new Potion(new MobEffectInstance(ModMobEffects.IMMUNITY.get(), 800, 1)));
+    public static final RegistryObject<Potion> IMMUNITY_POTION_3 = POTIONS.register("immunity_potion_3",
+            () -> new Potion(new MobEffectInstance(ModMobEffects.IMMUNITY.get(), 800, 2)));
+
+
+    public static final RegistryObject<Potion> OMNIVAMP_POTION = POTIONS.register("omnivamp_potion",
+            () -> new Potion(new MobEffectInstance(ModMobEffects.OMNIVAMP.get(), 800, 0)));
+    public static final RegistryObject<Potion> OMNIVAMP_POTION_2 = POTIONS.register("omnivamp_potion_2",
+            () -> new Potion(new MobEffectInstance(ModMobEffects.OMNIVAMP.get(), 800, 1)));
+    public static final RegistryObject<Potion> OMNIVAMP_POTION_3 = POTIONS.register("omnivamp_potion_3",
+            () -> new Potion(new MobEffectInstance(ModMobEffects.OMNIVAMP.get(), 800, 2)));
 
     public static void register(IEventBus eventBus) {
         POTIONS.register(eventBus);

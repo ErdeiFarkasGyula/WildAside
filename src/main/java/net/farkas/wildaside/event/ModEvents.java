@@ -14,9 +14,9 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.EntityEvent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -177,12 +177,14 @@ public class ModEvents {
     @SubscribeEvent
     public static void playerDoesCriticalStrike(CriticalHitEvent event) {
         if (!event.isCanceled()) {
-            if (event.getEntity() != null) {
-                Player attacker = event.getEntity();
-                if (attacker.hasEffect(ModMobEffects.CONTAMINATION.get())) {
-                    if (event.getTarget() instanceof LivingEntity target) {
-                        int amplifier = attacker.getEffect(ModMobEffects.CONTAMINATION.get()).getAmplifier() + 1;
-                        target.addEffect(new MobEffectInstance(ModMobEffects.CONTAMINATION.get(), 200, amplifier));
+            if (RandomSource.create().nextBoolean()) {
+                if (event.getEntity() != null) {
+                    Player attacker = event.getEntity();
+                    if (attacker.hasEffect(ModMobEffects.CONTAMINATION.get())) {
+                        if (event.getTarget() instanceof LivingEntity target) {
+                            int amplifier = attacker.getEffect(ModMobEffects.CONTAMINATION.get()).getAmplifier() + 1;
+                            target.addEffect(new MobEffectInstance(ModMobEffects.CONTAMINATION.get(), 200, amplifier));
+                        }
                     }
                 }
             }
@@ -190,21 +192,20 @@ public class ModEvents {
     }
 
     @SubscribeEvent
-    public static void applyLifeSteal(LivingHurtEvent event) {
+    public static void applyOmnivamp(LivingHurtEvent event) {
         DamageSource source = event.getSource();
-        System.out.println("Applying Life Steal!");
 
         if (source.getEntity() instanceof Player attacker) {
-            MobEffectInstance effectInstance  = attacker.getEffect(ModMobEffects.LIFE_STEAL.get());
+            MobEffectInstance effectInstance  = attacker.getEffect(ModMobEffects.OMNIVAMP.get());
             if (effectInstance != null) {
                 int amplifier = effectInstance.getAmplifier();
-                float lifeStealPercentage = (float) (amplifier + 1) / 10;
-                float maxLifeStealAmount = (amplifier + 1) * 3;
+                float omnivampPercentage = (float) (amplifier + 1) / 10;
+                float maxOmnivampAmount = (amplifier + 1) * 3;
 
-                float healAmount = event.getAmount() * lifeStealPercentage;
+                float healAmount = event.getAmount() * omnivampPercentage;
 
-                if (healAmount > maxLifeStealAmount) {
-                    healAmount = maxLifeStealAmount;
+                if (healAmount > maxOmnivampAmount) {
+                    healAmount = maxOmnivampAmount;
                 }
 
                 attacker.heal(healAmount);
