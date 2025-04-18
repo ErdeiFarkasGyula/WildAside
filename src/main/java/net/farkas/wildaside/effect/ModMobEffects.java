@@ -28,7 +28,7 @@ public class ModMobEffects {
     );
 
     public static final RegistryObject<MobEffect> OMNIVAMP = MOB_EFFECTS.register("omnivamp",
-            () -> new OmnivampEffect(MobEffectCategory.BENEFICIAL, -3579177)
+            () -> new OmnivampEffect(MobEffectCategory.BENEFICIAL, 11141120)
     );
 
     public static void register(IEventBus eventBus) {
