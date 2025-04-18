@@ -30,7 +30,7 @@ public class FertiliserBombEntity extends ThrowableItemProjectile {
     private final float charge;
 
     List<WeightedFlowerChoice.WeightedFlower> flowerList = new ArrayList<>(List.of(
-            new WeightedFlowerChoice.WeightedFlower(10, Blocks.DANDELION.defaultBlockState()),
+            new WeightedFlowerChoice.WeightedFlower(5, Blocks.DANDELION.defaultBlockState()),
             new WeightedFlowerChoice.WeightedFlower(5, Blocks.POPPY.defaultBlockState()),
             new WeightedFlowerChoice.WeightedFlower(3, Blocks.BLUE_ORCHID.defaultBlockState()),
             new WeightedFlowerChoice.WeightedFlower(2, Blocks.ALLIUM.defaultBlockState()),

@@ -4,6 +4,7 @@ import net.farkas.wildaside.entity.custom.FertiliserBombEntity;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -40,13 +41,16 @@ public class FertiliserBomb extends Item {
         if (!(entity instanceof Player player) || level.isClientSide) return;
 
         int chargeTime = this.getUseDuration(stack) - timeLeft;
-        float charge = Math.clamp((float) chargeTime / 20f, 0f, 1f); // 1 second full charge
+        float charge = Mth.clamp((float) chargeTime / 20f, 0f, 1f);
 
-        // Spawn thrown entity or trigger fertilizing effect
+        level.playSound((Player)null, player.getX(), player.getY(), player.getZ(), SoundEvents.SNOWBALL_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (player.getRandom().nextFloat() * 0.4F + 0.8F));
+
         FertiliserBombEntity thrown = new FertiliserBombEntity(level, player, charge);
         thrown.setItem(stack);
         thrown.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0.8F + charge * 0.8F, 1.0F);
         level.addFreshEntity(thrown);
+
+        player.getCooldowns().addCooldown(this, 100);
 
         if (!player.getAbilities().instabuild) stack.shrink(1);
     }
