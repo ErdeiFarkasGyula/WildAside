@@ -168,7 +168,7 @@ public class ModEvents {
         LivingEntity entity = event.getEntity();
         if (entity instanceof Player) {
             MobEffectInstance mobEffectInstance = event.getEffectInstance();
-            if (mobEffectInstance.getEffect() == ModMobEffects.CONTAMINATION.get()) {
+            if (mobEffectInstance != null && mobEffectInstance.getEffect() == ModMobEffects.CONTAMINATION.get()) {
                 entity.addEffect(new MobEffectInstance(ModMobEffects.IMMUNITY.get(), 100, mobEffectInstance.getAmplifier()));
             }
         }
@@ -182,8 +182,11 @@ public class ModEvents {
                     Player attacker = event.getEntity();
                     if (attacker.hasEffect(ModMobEffects.CONTAMINATION.get())) {
                         if (event.getTarget() instanceof LivingEntity target) {
-                            int amplifier = attacker.getEffect(ModMobEffects.CONTAMINATION.get()).getAmplifier() + 1;
-                            target.addEffect(new MobEffectInstance(ModMobEffects.CONTAMINATION.get(), 200, amplifier));
+                            MobEffectInstance effect = attacker.getEffect(ModMobEffects.CONTAMINATION.get());
+                            if (effect != null) {
+                                int amplifier = effect.getAmplifier() + 1;
+                                target.addEffect(new MobEffectInstance(ModMobEffects.CONTAMINATION.get(), 200, amplifier));
+                            }
                         }
                     }
                 }
