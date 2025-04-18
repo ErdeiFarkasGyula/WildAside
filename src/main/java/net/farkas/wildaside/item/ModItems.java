@@ -22,6 +22,9 @@ public class ModItems {
     public static final RegistryObject<Item> ENTORIUM = ITEMS.register("entorium",
             () ->  new Item(new Item.Properties()));
 
+    public static final RegistryObject<Item> MUCELLITH_JAW = ITEMS.register("mucellith_jaw",
+            () ->  new Item(new Item.Properties()));
+
     public static final RegistryObject<Item> ENTORIUM_PILL = ITEMS.register("entorium_pill",
             () ->  new EntoriumPill(new Item.Properties().food(ModFoods.ENTORIUM_PILL)));
     public static final RegistryObject<Item> SPORE_BOMB = ITEMS.register("spore_bomb",
