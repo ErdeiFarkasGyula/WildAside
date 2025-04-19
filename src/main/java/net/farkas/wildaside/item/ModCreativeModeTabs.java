@@ -32,6 +32,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModBlocks.LIT_VIBRION_GLASS_PANE.get());
                         pOutput.accept(ModItems.MUCELLITH_JAW.get());
 
+                        pOutput.accept(ModBlocks.SUBSTILIUM_SPROUTS.get());
                         pOutput.accept(ModBlocks.SUBSTILIUM_SOIL.get());
                         pOutput.accept(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get());
                         pOutput.accept(ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get());
@@ -44,10 +45,9 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModBlocks.SUBSTILIUM_TILE_PRESSURE_PLATE.get());
                         pOutput.accept(ModBlocks.SUBSTILIUM_TILE_BUTTON.get());
 
-                        pOutput.accept(ModItems.ENTORIUM.get());
-                        pOutput.accept(ModBlocks.ENTORIUM_SHROOM.get());
                         pOutput.accept(ModBlocks.OVERGROWN_ENTORIUM_ORE.get());
                         pOutput.accept(ModBlocks.ENTORIUM_ORE.get());
+                        pOutput.accept(ModItems.ENTORIUM.get());
                         pOutput.accept(ModBlocks.BIOENGINEERING_WORKSTATION.get());
                         pOutput.accept(ModItems.ENTORIUM_PILL.get());
                         pOutput.accept(ModItems.SPORE_BOMB.get());
@@ -56,6 +56,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModBlocks.NATURAL_SPORE_BLASTER.get());
                         pOutput.accept(ModBlocks.SPORE_BLASTER.get());
 
+                        pOutput.accept(ModBlocks.ENTORIUM_SHROOM.get());
                         pOutput.accept(ModBlocks.SUBSTILIUM_STEM.get());
                         pOutput.accept(ModBlocks.SUBSTILIUM_WOOD.get());
                         pOutput.accept(ModBlocks.STRIPPED_SUBSTILIUM_STEM.get());
@@ -73,7 +74,6 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModBlocks.SUBSTILIUM_HANGING_SIGN.get());
                         pOutput.accept(ModItems.SUBSTILIUM_BOAT.get());
                         pOutput.accept(ModItems.SUBSTILIUM_CHEST_BOAT.get());
-                        pOutput.accept(ModBlocks.SUBSTILIUM_SPROUTS.get());
 
                         pOutput.accept(ModBlocks.HICKORY_LOG.get());
                         pOutput.accept(ModBlocks.HICKORY_WOOD.get());

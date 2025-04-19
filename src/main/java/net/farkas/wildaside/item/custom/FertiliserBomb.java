@@ -50,8 +50,9 @@ public class FertiliserBomb extends Item {
         thrown.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0.8F + charge * 0.8F, 1.0F);
         level.addFreshEntity(thrown);
 
-        player.getCooldowns().addCooldown(this, 100);
-
-        if (!player.getAbilities().instabuild) stack.shrink(1);
+        if (!player.getAbilities().instabuild) {
+            player.getCooldowns().addCooldown(this, 100);
+            stack.shrink(1);
+        }
     }
 }

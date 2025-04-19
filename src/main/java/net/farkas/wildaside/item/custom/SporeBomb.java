@@ -27,12 +27,11 @@ public class SporeBomb extends Item {
             spore_bomb.shootFromRotation(pPlayer, pPlayer.getXRot(), pPlayer.getYRot(), 0.0F, 1.5F, 1.0F);
             pLevel.addFreshEntity(spore_bomb);
 
-            pPlayer.getCooldowns().addCooldown(this, 100);
-        }
-
-        pPlayer.awardStat(Stats.ITEM_USED.get(this));
-        if (!pPlayer.getAbilities().instabuild) {
-            itemstack.shrink(1);
+            pPlayer.awardStat(Stats.ITEM_USED.get(this));
+            if (!pPlayer.getAbilities().instabuild) {
+                pPlayer.getCooldowns().addCooldown(this, 100);
+                itemstack.shrink(1);
+            }
         }
 
         return InteractionResultHolder.sidedSuccess(itemstack, pLevel.isClientSide());

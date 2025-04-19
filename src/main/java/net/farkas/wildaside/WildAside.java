@@ -9,6 +9,7 @@ import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.entity.client.ModBoatRenderer;
 import net.farkas.wildaside.item.ModCreativeModeTabs;
 import net.farkas.wildaside.item.ModItems;
+import net.farkas.wildaside.item.VanillaCreativeTabs;
 import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.potion.BetterBrewingRecipe;
 import net.farkas.wildaside.potion.ModPotions;
@@ -26,6 +27,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
@@ -82,7 +84,7 @@ public class WildAside
         modEventBus.addListener(this::commonSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
-        modEventBus.addListener(this::addCreative);
+        modEventBus.addListener(VanillaCreativeTabs::addCreative);
 
         //context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
@@ -135,11 +137,6 @@ public class WildAside
         BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(Potions.AWKWARD, ModItems.MUCELLITH_JAW.get(), ModPotions.OMNIVAMP_POTION.get()));
         BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(ModPotions.OMNIVAMP_POTION.get(), Items.REDSTONE, ModPotions.OMNIVAMP_POTION_2.get()));
         BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(ModPotions.OMNIVAMP_POTION_2.get(), Items.REDSTONE, ModPotions.OMNIVAMP_POTION_3.get()));
-    }
-
-    private void addCreative(BuildCreativeModeTabContentsEvent event)
-    {
-
     }
 
     @SubscribeEvent
