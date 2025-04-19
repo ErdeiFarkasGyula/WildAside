@@ -169,7 +169,7 @@ public class ModEvents {
         if (entity instanceof Player) {
             MobEffectInstance mobEffectInstance = event.getEffectInstance();
             if (mobEffectInstance != null && mobEffectInstance.getEffect() == ModMobEffects.CONTAMINATION.get()) {
-                entity.addEffect(new MobEffectInstance(ModMobEffects.IMMUNITY.get(), 100, mobEffectInstance.getAmplifier()));
+                entity.addEffect(new MobEffectInstance(ModMobEffects.IMMUNITY.get(), 20 * 20, mobEffectInstance.getAmplifier()));
             }
         }
     }
@@ -177,14 +177,15 @@ public class ModEvents {
     @SubscribeEvent
     public static void playerDoesCriticalStrike(CriticalHitEvent event) {
         if (!event.isCanceled()) {
-            if (RandomSource.create().nextBoolean()) {
+            RandomSource rand = RandomSource.create();
+            if (rand.nextBoolean()) {
                 if (event.getEntity() != null) {
                     Player attacker = event.getEntity();
                     if (attacker.hasEffect(ModMobEffects.CONTAMINATION.get())) {
                         if (event.getTarget() instanceof LivingEntity target) {
                             MobEffectInstance effect = attacker.getEffect(ModMobEffects.CONTAMINATION.get());
                             if (effect != null) {
-                                int amplifier = effect.getAmplifier() + 1;
+                                int amplifier = effect.getAmplifier() + rand.nextIntBetweenInclusive(0, 1);
                                 target.addEffect(new MobEffectInstance(ModMobEffects.CONTAMINATION.get(), 200, amplifier));
                             }
                         }
@@ -193,26 +194,4 @@ public class ModEvents {
             }
         }
     }
-//
-//    @SubscribeEvent
-//    public static void applyOmnivamp(LivingHurtEvent event) {
-//        DamageSource source = event.getSource();
-//
-//        if (source.getEntity() instanceof Player attacker) {
-//            MobEffectInstance effectInstance  = attacker.getEffect(ModMobEffects.OMNIVAMP.get());
-//            if (effectInstance != null) {
-//                int amplifier = effectInstance.getAmplifier();
-//                float omnivampPercentage = (float) (amplifier + 1) / 10;
-//                float maxOmnivampAmount = (amplifier + 1) * 3;
-//
-//                float healAmount = event.getAmount() * omnivampPercentage;
-//
-//                if (healAmount > maxOmnivampAmount) {
-//                    healAmount = maxOmnivampAmount;
-//                }
-//
-//                attacker.heal(healAmount);
-//            }
-//        }
-//    }
 }
