@@ -2,7 +2,7 @@ package net.farkas.wildaside.block.custom;
 
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.particle.ModParticles;
-import net.farkas.wildaside.particle.ParticleUtils;
+import net.farkas.wildaside.util.ParticleHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
@@ -88,7 +88,7 @@ public class GlowingLeavesBlock extends LeavesBlock {
 
             }
 
-            ParticleUtils.spawnHickoryParticles(pLevel, pPos, pRandom, particle);
+            ParticleHandler.spawnHickoryParticles(pLevel, pPos, pRandom, particle);
         }
     }
 }

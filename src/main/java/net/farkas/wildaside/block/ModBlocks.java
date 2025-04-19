@@ -13,13 +13,12 @@ import net.farkas.wildaside.block.custom.vibrion.SporeBlaster;
 import net.farkas.wildaside.block.custom.BioengineeringWorkstation;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.particle.ModParticles;
-import net.farkas.wildaside.particle.ParticleUtils;
+import net.farkas.wildaside.util.ParticleHandler;
 import net.farkas.wildaside.util.ModWoodTypes;
 import net.farkas.wildaside.worldgen.feature.tree.hickory.*;
 import net.farkas.wildaside.worldgen.feature.tree.substilium.SubstiliumMushroomGrower;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -350,7 +349,7 @@ public class ModBlocks {
                     super.animateTick(pState, pLevel, pPos, pRandom);
                     if (!pLevel.getBlockState(pPos.below()).isAir()) return;
                     if (pRandom.nextFloat() < 0.02f) {
-                        ParticleUtils.spawnHickoryParticles(pLevel, pPos, pRandom, ModParticles.HICKORY_PARTICLE.get());
+                        ParticleHandler.spawnHickoryParticles(pLevel, pPos, pRandom, ModParticles.HICKORY_PARTICLE.get());
                     }
                 }
             });

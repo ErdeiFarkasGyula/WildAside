@@ -20,6 +20,8 @@ public class ModParticles {
             PARTICLE_TYPES.register("substilium_particle", () -> new SimpleParticleType(true));
     public static final RegistryObject<SimpleParticleType> STILL_SUBSTILIUM_PARTICLE =
             PARTICLE_TYPES.register("still_substilium_particle", () -> new SimpleParticleType(true));
+    public static final RegistryObject<SimpleParticleType> OMNIVAMP_PARTICLE =
+            PARTICLE_TYPES.register("omnivamp_particle", () -> new SimpleParticleType(true));
 
     public static final RegistryObject<SimpleParticleType> HICKORY_PARTICLE =
             PARTICLE_TYPES.register("hickory_particle", () -> new SimpleParticleType(true));

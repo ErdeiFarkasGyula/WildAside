@@ -193,26 +193,26 @@ public class ModEvents {
             }
         }
     }
-
-    @SubscribeEvent
-    public static void applyOmnivamp(LivingHurtEvent event) {
-        DamageSource source = event.getSource();
-
-        if (source.getEntity() instanceof Player attacker) {
-            MobEffectInstance effectInstance  = attacker.getEffect(ModMobEffects.OMNIVAMP.get());
-            if (effectInstance != null) {
-                int amplifier = effectInstance.getAmplifier();
-                float omnivampPercentage = (float) (amplifier + 1) / 10;
-                float maxOmnivampAmount = (amplifier + 1) * 3;
-
-                float healAmount = event.getAmount() * omnivampPercentage;
-
-                if (healAmount > maxOmnivampAmount) {
-                    healAmount = maxOmnivampAmount;
-                }
-
-                attacker.heal(healAmount);
-            }
-        }
-    }
+//
+//    @SubscribeEvent
+//    public static void applyOmnivamp(LivingHurtEvent event) {
+//        DamageSource source = event.getSource();
+//
+//        if (source.getEntity() instanceof Player attacker) {
+//            MobEffectInstance effectInstance  = attacker.getEffect(ModMobEffects.OMNIVAMP.get());
+//            if (effectInstance != null) {
+//                int amplifier = effectInstance.getAmplifier();
+//                float omnivampPercentage = (float) (amplifier + 1) / 10;
+//                float maxOmnivampAmount = (amplifier + 1) * 3;
+//
+//                float healAmount = event.getAmount() * omnivampPercentage;
+//
+//                if (healAmount > maxOmnivampAmount) {
+//                    healAmount = maxOmnivampAmount;
+//                }
+//
+//                attacker.heal(healAmount);
+//            }
+//        }
+//    }
 }
