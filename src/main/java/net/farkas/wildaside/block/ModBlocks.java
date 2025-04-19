@@ -186,7 +186,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> SMOOTH_SUBSTILIUM_SOIL = registerBlock("smooth_substilium_soil",
             () ->  new Block(BlockBehaviour.Properties.copy(COMPRESSED_SUBSTILIUM_SOIL.get())));
 
-    public static final RegistryObject<Block> CHISELLED_SUBSTILIUM_SOIL = registerBlock("chiselled_substilium_soil",
+    public static final RegistryObject<Block> CHISELED_SUBSTILIUM_SOIL = registerBlock("chiseled_substilium_soil",
             () ->  new Block(BlockBehaviour.Properties.copy(COMPRESSED_SUBSTILIUM_SOIL.get())));
 
     public static final RegistryObject<Block> SUBSTILIUM_TILES = registerBlock("substilium_tiles",

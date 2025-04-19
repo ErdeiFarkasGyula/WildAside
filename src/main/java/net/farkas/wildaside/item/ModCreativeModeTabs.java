@@ -35,7 +35,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModBlocks.SUBSTILIUM_SOIL.get());
                         pOutput.accept(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get());
                         pOutput.accept(ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get());
-                        pOutput.accept(ModBlocks.CHISELLED_SUBSTILIUM_SOIL.get());
+                        pOutput.accept(ModBlocks.CHISELED_SUBSTILIUM_SOIL.get());
                         pOutput.accept(ModBlocks.SUBSTILIUM_TILES.get());
                         pOutput.accept(ModBlocks.CRACKED_SUBSTILIUM_TILES.get());
                         pOutput.accept(ModBlocks.SUBSTILIUM_TILE_STAIRS.get());

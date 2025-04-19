@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "wildaside:chiselled_substilium_soil"
+          "name": "wildaside:chiseled_substilium_soil"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "wildaside:blocks/chiselled_substilium_soil"
+  "random_sequence": "wildaside:blocks/chiseled_substilium_soil"
 }

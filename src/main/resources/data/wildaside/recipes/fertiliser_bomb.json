@@ -1,7 +1,7 @@
 {
   "type": "wildaside:bioengineering",
   "ingredients": [
-    { "item": "wildaside:vibrion" },
+    { "item": "wildaside:entorium" },
     { "item": "minecraft:iron_nugget" },
     { "item": "minecraft:iron_nugget" },
     { "item": "minecraft:iron_nugget" },
@@ -9,6 +9,6 @@
   ],
   "output": {
     "count": 1,
-    "item": "wildaside:spore_bomb"
+    "item": "wildaside:fertiliser_bomb"
   }
 }

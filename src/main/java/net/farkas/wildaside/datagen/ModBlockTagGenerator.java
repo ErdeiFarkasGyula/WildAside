@@ -6,11 +6,9 @@ import net.farkas.wildaside.util.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
-import org.openjdk.nashorn.internal.ir.Block;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -35,7 +33,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 .add(ModBlocks.SPORE_BLASTER.get())
                 .add(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get())
                 .add(ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get())
-                .add(ModBlocks.CHISELLED_SUBSTILIUM_SOIL.get())
+                .add(ModBlocks.CHISELED_SUBSTILIUM_SOIL.get())
                 .add(ModBlocks.SUBSTILIUM_TILES.get())
                 .add(ModBlocks.CRACKED_SUBSTILIUM_TILES.get())
                 .add(ModBlocks.SUBSTILIUM_TILE_STAIRS.get())

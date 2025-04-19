@@ -1,8 +1,8 @@
-// 1.20.1	2025-03-21T23:05:51.0645846	Loot Tables
+// 1.20.1	2025-04-19T17:54:39.3619726	Loot Tables
 cb111f4aa2094610caccd6c93bb58846842f1adf data/wildaside/loot_tables/blocks/bioengineering_workstation.json
 9af05efdb1326dfab1d8ce52f3587c6b2314e19e data/wildaside/loot_tables/blocks/brown_glowing_hickory_leaves.json
 806c305e5b6bdf1e690e0d5df8ae5f63031a6a21 data/wildaside/loot_tables/blocks/brown_glowing_hickory_sapling.json
-3c8b39c2cbec8838dcc9cf9e53d6b1423b79a414 data/wildaside/loot_tables/blocks/chiselled_substilium_soil.json
+af75d09f745b7c2e54ece2d661f97d18d3e28af4 data/wildaside/loot_tables/blocks/chiseled_substilium_soil.json
 111fee04e3401afeea79a69eefe18e3d47c2bbdb data/wildaside/loot_tables/blocks/compressed_substilium_soil.json
 81a8156e39609af343dc9426ad6a9636eabf9eef data/wildaside/loot_tables/blocks/compressed_vibrion_block.json
 c896682c9c12935a4c856e85ac768e1c06f6e397 data/wildaside/loot_tables/blocks/cracked_substilium_tiles.json

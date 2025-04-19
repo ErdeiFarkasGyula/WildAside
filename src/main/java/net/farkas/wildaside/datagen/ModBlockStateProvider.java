@@ -46,7 +46,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
         blockWithItem(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL);
         blockWithItem(ModBlocks.SMOOTH_SUBSTILIUM_SOIL);
-        blockWithItem(ModBlocks.CHISELLED_SUBSTILIUM_SOIL);
+        blockWithItem(ModBlocks.CHISELED_SUBSTILIUM_SOIL);
         blockWithItem(ModBlocks.SUBSTILIUM_TILES);
         blockWithItem(ModBlocks.CRACKED_SUBSTILIUM_TILES);
         wallBlock((WallBlock) ModBlocks.SUBSTILIUM_TILE_WALLS.get(), modLoc("block/substilium_tiles"));

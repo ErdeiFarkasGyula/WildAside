@@ -76,7 +76,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.dropSelf(ModBlocks.SUBSTILIUM_SOIL.get());
         this.dropSelf(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get());
         this.dropSelf(ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get());
-        this.dropSelf(ModBlocks.CHISELLED_SUBSTILIUM_SOIL.get());
+        this.dropSelf(ModBlocks.CHISELED_SUBSTILIUM_SOIL.get());
         this.dropSelf(ModBlocks.SUBSTILIUM_TILES.get());
         this.dropSelf(ModBlocks.CRACKED_SUBSTILIUM_TILES.get());
         this.dropSelf(ModBlocks.SUBSTILIUM_TILE_STAIRS.get());

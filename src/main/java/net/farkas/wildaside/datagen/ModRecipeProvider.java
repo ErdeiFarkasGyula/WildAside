@@ -5,7 +5,6 @@ import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.item.ModItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -113,6 +112,15 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 ModItems.HICKORY_BOAT.get(), ModItems.HICKORY_CHEST_BOAT.get());
         defaultWoodSet(pWriter, HICKORY_WOODSET);
 
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.HICKORY_NUT_TRAIL_MIX.get())
+                .requires(ModItems.HICKORY_NUT.get())
+                .requires(Items.BOWL)
+                .requires(Items.GLOW_BERRIES)
+                .requires(Items.SWEET_BERRIES)
+                .requires(Items.KELP)
+                .unlockedBy(getHasName(ModItems.HICKORY_NUT.get()), has(ModItems.HICKORY_NUT.get()))
+                .save(pWriter);
+
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.PINK_DYE, 1)
                 .requires(ModBlocks.PINKSTER_FLOWER.get())
                 .unlockedBy(getHasName(ModBlocks.PINKSTER_FLOWER.get()), has(ModBlocks.PINKSTER_FLOWER.get()))
@@ -146,7 +154,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
         Block tiles = ModBlocks.SUBSTILIUM_TILES.get();
 
-        stoneCutting(pWriter, ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get(), ModBlocks.CHISELLED_SUBSTILIUM_SOIL.get());
+        stoneCutting(pWriter, ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get(), ModBlocks.CHISELED_SUBSTILIUM_SOIL.get());
         stoneCutting(pWriter, ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get(), ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get());
         stoneCutting(pWriter, ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get(), tiles);
         stoneCutting(pWriter, ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get(), ModBlocks.CRACKED_SUBSTILIUM_TILES.get());

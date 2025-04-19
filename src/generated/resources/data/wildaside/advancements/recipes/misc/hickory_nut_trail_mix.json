@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_compressed_substilium_soil": {
+    "has_hickory_nut": {
       "conditions": {
         "items": [
           {
             "items": [
-              "wildaside:compressed_substilium_soil"
+              "wildaside:hickory_nut"
             ]
           }
         ]
@@ -15,20 +15,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "wildaside:chiselled_substilium_soilcut_from_compressed_substilium_soil"
+        "recipe": "wildaside:hickory_nut_trail_mix"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_compressed_substilium_soil",
+      "has_hickory_nut",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "wildaside:chiselled_substilium_soilcut_from_compressed_substilium_soil"
+      "wildaside:hickory_nut_trail_mix"
     ]
   },
   "sends_telemetry_event": false
