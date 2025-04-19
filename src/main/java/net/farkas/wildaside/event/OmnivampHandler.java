@@ -87,9 +87,10 @@ public class OmnivampHandler {
             t.level.sendParticles(ModParticles.OMNIVAMP_PARTICLE.get(), px, py, pz, 1, 0, 0, 0, 0);
 
             t.ticksElapsed++;
-            a.heal(t.healAmount);
-            it.remove();
-
+            if (t.ticksElapsed >= t.totalTicks) {
+                a.heal(t.healAmount);
+                it.remove();
+            }
         }
     }
 }
