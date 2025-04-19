@@ -1,4 +1,4 @@
-// 1.20.1	2025-04-18T12:53:34.8685812	Item Models: wildaside
+// 1.20.1	2025-04-19T17:38:39.5523207	Item Models: wildaside
 657a44b343b52d1185c119350b9599bc495c3976 assets/wildaside/models/item/brown_glowing_hickory_sapling.json
 7c314b9855fa14cfb6f45f4b35479303da8c369e assets/wildaside/models/item/entorium.json
 72ebbdfaa5d8b7399ab25ba412fa3bfdc404a9a3 assets/wildaside/models/item/entorium_ore.json
@@ -16,6 +16,7 @@ a0698b6134905369e8e3a022cf78faaab16f4e46 assets/wildaside/models/item/hickory_fe
 a26dc7269bff8cf5a6ca1d2ba5c2a4cd4928e57e assets/wildaside/models/item/hickory_hanging_sign.json
 70771378941d5d2d07294cf895a5d587e82a90f1 assets/wildaside/models/item/hickory_log.json
 93348671ff1014ae2bd645589d703420ceb62294 assets/wildaside/models/item/hickory_nut.json
+58dc039a03c662bdc6a98815d1e8db72fd98ea70 assets/wildaside/models/item/hickory_nut_trail_mix.json
 03319db4bf5d455645952b5f2ef29a130a99cc3d assets/wildaside/models/item/hickory_pressure_plate.json
 38539f8dbcf382e0a870a176a6a288377e74be93 assets/wildaside/models/item/hickory_sapling.json
 45745fbfaa8eef505ed0c0205c6b00d9a49774e7 assets/wildaside/models/item/hickory_sign.json

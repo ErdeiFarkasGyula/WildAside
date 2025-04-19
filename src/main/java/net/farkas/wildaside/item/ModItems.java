@@ -28,9 +28,9 @@ public class ModItems {
     public static final RegistryObject<Item> ENTORIUM_PILL = ITEMS.register("entorium_pill",
             () ->  new EntoriumPill(new Item.Properties().food(ModFoods.ENTORIUM_PILL)));
     public static final RegistryObject<Item> SPORE_BOMB = ITEMS.register("spore_bomb",
-            () ->  new SporeBomb(new Item.Properties()));
+            () ->  new SporeBomb(new Item.Properties().stacksTo(16)));
     public static final RegistryObject<Item> FERTILISER_BOMB = ITEMS.register("fertiliser_bomb",
-            () ->  new FertiliserBomb(new Item.Properties()));
+            () ->  new FertiliserBomb(new Item.Properties().stacksTo(16)));
 
     public static final RegistryObject<Item> SUBSTILIUM_SIGN = ITEMS.register("substilium_sign",
             () ->  new SignItem(new Item.Properties().stacksTo(16), ModBlocks.SUBSTILIUM_SIGN.get(), ModBlocks.SUBSTILIUM_WALL_SIGN.get()));
@@ -52,6 +52,9 @@ public class ModItems {
 
     public static final RegistryObject<Item> HICKORY_NUT = ITEMS.register("hickory_nut",
             () ->  new FuelItem(new Item.Properties(), 100));
+
+    public static final RegistryObject<Item> HICKORY_NUT_TRAIL_MIX = ITEMS.register("hickory_nut_trail_mix",
+            () ->  new HickoryNutTrailMix(new Item.Properties().stacksTo(1).food(ModFoods.HICKORY_NUT_TRAIL_MIX)));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

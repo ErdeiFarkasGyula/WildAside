@@ -82,6 +82,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.HICKORY_CHEST_BOAT);
 
         simpleItem(ModItems.HICKORY_NUT);
+        simpleItem(ModItems.HICKORY_NUT_TRAIL_MIX);
         simpleBlockItemBlockTexture(ModBlocks.HICKORY_SAPLING);
         simpleBlockItemBlockTexture(ModBlocks.RED_GLOWING_HICKORY_SAPLING);
         simpleBlockItemBlockTexture(ModBlocks.BROWN_GLOWING_HICKORY_SAPLING);
