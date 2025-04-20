@@ -157,39 +157,6 @@
 					}
 				}
 			}
-		},
-		"animation.mucellith.in_defense": {
-			"loop": true,
-			"bones": {
-				"bottom": {
-					"rotation": [-7.5, 0, 0],
-					"position": [0, -3, 0]
-				},
-				"bottomLeaves": {
-					"position": [0, 3, 0.05]
-				},
-				"lowerMid": {
-					"position": [0, -2, 0]
-				},
-				"lowerMidLeaves": {
-					"rotation": [-9.86482, 0, 0],
-					"position": [0, 3, 0.1]
-				},
-				"higherMidLeaves": {
-					"rotation": [-19.82509, -0.12258, 0.1085],
-					"position": [0, 0.75, 0.1]
-				},
-				"top": {
-					"rotation": [-25, 0, 0],
-					"position": [0, -4, -0.04]
-				},
-				"topLeaves": {
-					"position": [0, 2.25, 0.13]
-				},
-				"headLeaves": {
-					"position": [0, 0.03263, 0.24786]
-				}
-			}
 		}
 	}
 }
