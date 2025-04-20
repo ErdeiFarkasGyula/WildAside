@@ -1,12 +1,12 @@
 For Hamza :D
 
-The mucellith is a stationary plant-mob
+The mucellith is a stationary, hostile, plant-mob
 It has 2 'phases':
 1.
     It shoots out Sporebombs (already set-up) (animation!)
     When below a certain HP threshold, let's say 20%, it goes into the second phase
 2.
-    It doesn't attack anymore, but instead becomes resistant and starts regenerating HP (animation!)
+    It doesn't attack anymore, but instead becomes resistant to damage and starts regenerating HP (animation!)
     When it regened enough HP(over said threshold), it goes back to its 1. phase
 
 They spawn in the Vibrion Hive either alone or in small groups (2-3)
