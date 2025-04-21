@@ -63,6 +63,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
                 block -> createSilktouchedDrops(ModBlocks.VIBRION_BLOCK.get(), ModItems.VIBRION.get()));
 
         this.dropSelf(ModBlocks.SPORE_BLASTER.get());
+        this.dropSelf(ModBlocks.POTION_BLASTER.get());
         this.dropSelf(ModBlocks.NATURAL_SPORE_BLASTER.get());
         this.dropSelf(ModBlocks.BIOENGINEERING_WORKSTATION.get());
 

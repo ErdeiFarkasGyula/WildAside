@@ -1,6 +1,8 @@
 package net.farkas.wildaside.screen;
 
 import net.farkas.wildaside.WildAside;
+import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationMenu;
+import net.farkas.wildaside.screen.potion_blaster.PotionBlasterMenu;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
@@ -16,6 +18,8 @@ public class ModMenuTypes {
 
     public static final RegistryObject<MenuType<BioengineeringWorkstationMenu>> BIOENGINEERING_WORKSTATION_MENU =
             registerMenuType("bioengineering_workstation_menu", BioengineeringWorkstationMenu::new);
+    public static final RegistryObject<MenuType<PotionBlasterMenu>> POTION_BLASTER_MENU =
+            registerMenuType("potion_blaster_menu", PotionBlasterMenu::new);
 
     private static <T extends AbstractContainerMenu>RegistryObject<MenuType<T>> registerMenuType(String name, IContainerFactory<T> factory) {
         return MENUS.register(name, () -> IForgeMenuType.create(factory));

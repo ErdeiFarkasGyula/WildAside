@@ -179,6 +179,9 @@ public class ModBlocks {
             () ->  new SporeBlaster(BlockBehaviour.Properties.copy(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get())
                     .noOcclusion().strength(2f, 12f).requiresCorrectToolForDrops()));
 
+    public static final RegistryObject<Block> POTION_BLASTER = registerBlock("potion_blaster",
+            () ->  new PotionBlaster(BlockBehaviour.Properties.copy(ModBlocks.SPORE_BLASTER.get())));
+
     public static final RegistryObject<Block> NATURAL_SPORE_BLASTER = registerBlock("natural_spore_blaster",
             () ->  new NaturalSporeBlaster(BlockBehaviour.Properties.copy(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get())
                     .noOcclusion().strength(2f, 12f).requiresCorrectToolForDrops()));

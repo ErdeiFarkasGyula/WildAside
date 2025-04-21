@@ -1,7 +1,9 @@
-package net.farkas.wildaside.screen;
+package net.farkas.wildaside.screen.potion_blaster;
 
 import net.farkas.wildaside.block.ModBlocks;
-import net.farkas.wildaside.block.entity.BioengineeringWorkstationBlockEntity;
+import net.farkas.wildaside.block.entity.PotionBlasterBlockEntity;
+import net.farkas.wildaside.screen.ModMenuTypes;
+import net.farkas.wildaside.screen.ModOutputSlot;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -12,20 +14,20 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
-    public final BioengineeringWorkstationBlockEntity blockEntity;
+public class PotionBlasterMenu extends AbstractContainerMenu {
+    public final PotionBlasterBlockEntity blockEntity;
     private final Level level;
     private final ContainerData data;
 
-    public BioengineeringWorkstationMenu(int pContainerId, Inventory inv, FriendlyByteBuf extraData) {
-        this(pContainerId, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2));
+    public PotionBlasterMenu(int pContainerId, Inventory inv, FriendlyByteBuf extraData) {
+        this(pContainerId, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(10));
     }
 
-    public BioengineeringWorkstationMenu(int pContainerId, Inventory inv, BlockEntity entity, ContainerData data) {
-        super(ModMenuTypes.BIOENGINEERING_WORKSTATION_MENU.get(), pContainerId);
+    public PotionBlasterMenu(int pContainerId, Inventory inv, BlockEntity entity, ContainerData data) {
+        super(ModMenuTypes.POTION_BLASTER_MENU.get(), pContainerId);
 
-        checkContainerSize(inv, 6);
-        blockEntity = ((BioengineeringWorkstationBlockEntity)entity);
+        checkContainerSize(inv, 10);
+        blockEntity = ((PotionBlasterBlockEntity)entity);
         this.level = inv.player.level();
         this.data = data;
 
@@ -33,25 +35,25 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
         addPlayerHotbar(inv);
 
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
-            this.addSlot(new SlotItemHandler(iItemHandler, 0, 44, 34));
-            this.addSlot(new SlotItemHandler(iItemHandler, 1, 44, 16));
-            this.addSlot(new SlotItemHandler(iItemHandler, 2, 62, 34));
-            this.addSlot(new SlotItemHandler(iItemHandler, 3, 44, 52));
-            this.addSlot(new SlotItemHandler(iItemHandler, 4, 26, 34));
-            this.addSlot(new BioengineeringWorkstationResultSlot(iItemHandler, 5, 134, 34, inv.player));
+            this.addSlot(new SlotItemHandler(iItemHandler, 0, 26, 15));
+            this.addSlot(new SlotItemHandler(iItemHandler, 1, 44, 15));
+            this.addSlot(new SlotItemHandler(iItemHandler, 2, 62, 15));
+            this.addSlot(new SlotItemHandler(iItemHandler, 3, 26, 33));
+            this.addSlot(new SlotItemHandler(iItemHandler, 4, 44, 33));
+            this.addSlot(new SlotItemHandler(iItemHandler, 5, 62, 33));
+            this.addSlot(new SlotItemHandler(iItemHandler, 6, 26, 51));
+            this.addSlot(new SlotItemHandler(iItemHandler, 7, 44, 51));
+            this.addSlot(new SlotItemHandler(iItemHandler, 8, 62, 51));
+            this.addSlot(new ModOutputSlot(iItemHandler, 9, 116, 51));
         });
 
         addDataSlots(data);
     }
 
-    public boolean isCrafting() {
-        return data.get(0) > 0;
-    }
-
     public int getScaledProgress() {
         int progress = this.data.get(0);
         int maxProgress = this.data.get(1);  // Max Progress
-        int progressArrowSize = 26; // This is the height in pixels of your arrow
+        int progressArrowSize = 36; // This is the height in pixels of your arrow
 
         return maxProgress != 0 && progress != 0 ? progress * progressArrowSize / maxProgress : 0;
     }
@@ -73,7 +75,7 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
     private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
 
     // THIS YOU HAVE TO DEFINE!
-    private static final int TE_INVENTORY_SLOT_COUNT = 6;  // must be the number of slots you have!
+    private static final int TE_INVENTORY_SLOT_COUNT = 10;  // must be the number of slots you have!
     @Override
     public ItemStack quickMoveStack(Player playerIn, int pIndex) {
         Slot sourceSlot = slots.get(pIndex);
@@ -112,7 +114,7 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
     @Override
     public boolean stillValid(Player pPlayer) {
         return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()),
-                pPlayer, ModBlocks.BIOENGINEERING_WORKSTATION.get());
+                pPlayer, ModBlocks.POTION_BLASTER.get());
     }
 
     private void addPlayerInventory(Inventory playerInventory) {

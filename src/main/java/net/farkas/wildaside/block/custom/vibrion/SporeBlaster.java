@@ -41,7 +41,9 @@ public class SporeBlaster extends Block {
 
     @Override
     public void onPlace(BlockState pState, Level pLevel, BlockPos pPos, BlockState pOldState, boolean pMovedByPiston) {
-        pLevel.scheduleTick(pPos, this, 10);
+        if (!pLevel.isClientSide) {
+            pLevel.scheduleTick(pPos, this, 10);
+        }
         super.onPlace(pState, pLevel, pPos, pOldState, pMovedByPiston);
     }
 

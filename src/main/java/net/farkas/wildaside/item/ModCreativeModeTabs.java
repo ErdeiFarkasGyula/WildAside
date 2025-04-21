@@ -55,6 +55,7 @@ public class ModCreativeModeTabs {
 
                         pOutput.accept(ModBlocks.NATURAL_SPORE_BLASTER.get());
                         pOutput.accept(ModBlocks.SPORE_BLASTER.get());
+                        pOutput.accept(ModBlocks.POTION_BLASTER.get());
 
                         pOutput.accept(ModBlocks.ENTORIUM_SHROOM.get());
                         pOutput.accept(ModBlocks.SUBSTILIUM_STEM.get());

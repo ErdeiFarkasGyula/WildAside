@@ -7,7 +7,7 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.recipe.BioengineeringWorkstationRecipe;
-import net.farkas.wildaside.screen.BioengineeringWorkstationScreen;
+import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeManager;

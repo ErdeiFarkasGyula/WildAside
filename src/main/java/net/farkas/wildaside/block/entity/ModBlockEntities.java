@@ -2,6 +2,8 @@ package net.farkas.wildaside.block.entity;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
+import net.farkas.wildaside.block.entity.sign.ModHangingSignBlockEntity;
+import net.farkas.wildaside.block.entity.sign.ModSignBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -24,6 +26,10 @@ public class ModBlockEntities {
     public static final RegistryObject<BlockEntityType<BioengineeringWorkstationBlockEntity>> BIOENGINEERING_WORKSTATION =
             BLOCK_ENTITIES.register("bioengineering_workstation", () -> BlockEntityType.Builder.of(BioengineeringWorkstationBlockEntity::new,
                     ModBlocks.BIOENGINEERING_WORKSTATION.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<PotionBlasterBlockEntity>> POTION_BLASTER =
+            BLOCK_ENTITIES.register("potion_blaster", () -> BlockEntityType.Builder.of(PotionBlasterBlockEntity::new,
+                    ModBlocks.POTION_BLASTER.get()).build(null));
 
 
     public static void register(IEventBus eventBus) {

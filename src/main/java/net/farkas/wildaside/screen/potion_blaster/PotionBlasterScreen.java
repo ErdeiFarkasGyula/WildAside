@@ -1,4 +1,4 @@
-package net.farkas.wildaside.screen;
+package net.farkas.wildaside.screen.potion_blaster;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.farkas.wildaside.WildAside;
@@ -9,10 +9,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class BioengineeringWorkstationScreen extends AbstractContainerScreen<BioengineeringWorkstationMenu> {
-    private static final ResourceLocation BACKGROUND = new ResourceLocation(WildAside.MOD_ID, "textures/gui/bioengineering_workstation_gui.png");
+public class PotionBlasterScreen extends AbstractContainerScreen<PotionBlasterMenu> {
+    private static final ResourceLocation BACKGROUND = new ResourceLocation(WildAside.MOD_ID, "textures/gui/potion_blaster.png");
 
-    public BioengineeringWorkstationScreen(BioengineeringWorkstationMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
+    public PotionBlasterScreen(PotionBlasterMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
     }
 
@@ -24,22 +24,21 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
     }
 
     @Override
-    protected void renderBg(GuiGraphics guiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
+    protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, BACKGROUND);
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
-        guiGraphics.blit(BACKGROUND, x, y, 0, 0, imageWidth, imageHeight);
+        pGuiGraphics.blit(BACKGROUND, x, y, 0, 0, imageWidth, imageHeight);
 
-        renderProgressArrow(guiGraphics, x, y);
+        renderProgress(pGuiGraphics, x, y);
+
     }
 
-    private void renderProgressArrow(GuiGraphics guiGraphics, int x, int y) {
-        if (menu.isCrafting()) {
-            guiGraphics.blit(BACKGROUND, x + 93, y + 37, 176, 0, menu.getScaledProgress(), 7);
-        }
+    private void renderProgress(GuiGraphics guiGraphics, int x, int y) {
+        guiGraphics.blit(BACKGROUND, x + 106, y + 38, 176, 0, menu.getScaledProgress(), 4);
     }
 
     @Override

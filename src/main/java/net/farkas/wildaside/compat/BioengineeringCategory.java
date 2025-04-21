@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class BioengineeringCategory implements IRecipeCategory<BioengineeringWorkstationRecipe> {
     public static final ResourceLocation UID = new ResourceLocation(WildAside.MOD_ID, "bioengineering");
-    public static final ResourceLocation TEXTURE = new ResourceLocation(WildAside.MOD_ID, "textures/gui/bioengineering_workstation_gui.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(WildAside.MOD_ID, "textures/gui/bioengineering_workstation.png");
 
     public static final RecipeType<BioengineeringWorkstationRecipe> BIOENGINEERING_TYPE =
             new RecipeType<>(UID, BioengineeringWorkstationRecipe.class);

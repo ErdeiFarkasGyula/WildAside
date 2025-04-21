@@ -1,4 +1,4 @@
-package net.farkas.wildaside.screen;
+package net.farkas.wildaside.screen.bioengineering_workstation;
 
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;

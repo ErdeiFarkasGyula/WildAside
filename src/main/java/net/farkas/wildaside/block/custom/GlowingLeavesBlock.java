@@ -34,7 +34,9 @@ public class GlowingLeavesBlock extends LeavesBlock {
 
     @Override
     public void onPlace(BlockState pState, Level pLevel, BlockPos pPos, BlockState pOldState, boolean pMovedByPiston) {
-        pLevel.scheduleTick(pPos, this, 0);
+        if (!pLevel.isClientSide) {
+            pLevel.scheduleTick(pPos, this, 0);
+        }
         super.onPlace(pState, pLevel, pPos, pOldState, pMovedByPiston);
 
     }

@@ -1,8 +1,7 @@
 package net.farkas.wildaside.block.entity;
 
-import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.recipe.BioengineeringWorkstationRecipe;
-import net.farkas.wildaside.screen.BioengineeringWorkstationMenu;
+import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;

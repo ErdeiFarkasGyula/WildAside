@@ -31,13 +31,17 @@ public class NaturalSporeBlaster extends RotatedPillarBlock {
 
     @Override
     public void neighborChanged(BlockState pState, Level pLevel, BlockPos pPos, Block pNeighborBlock, BlockPos pNeighborPos, boolean pMovedByPiston) {
-        pLevel.scheduleTick(pPos, this, 20);
+        if (!pLevel.isClientSide) {
+            pLevel.scheduleTick(pPos, this, 20);
+        }
         super.neighborChanged(pState, pLevel, pPos, pNeighborBlock, pNeighborPos, pMovedByPiston);
     }
 
     @Override
     public void onPlace(BlockState pState, Level pLevel, BlockPos pPos, BlockState pOldState, boolean pMovedByPiston) {
-        pLevel.scheduleTick(pPos, this, 20);
+        if (!pLevel.isClientSide) {
+            pLevel.scheduleTick(pPos, this, 20);
+        }
         super.onPlace(pState, pLevel, pPos, pOldState, pMovedByPiston);
     }
 

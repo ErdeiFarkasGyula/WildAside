@@ -1,6 +1,6 @@
 package net.farkas.wildaside.block.custom.sign;
 
-import net.farkas.wildaside.block.entity.ModHangingSignBlockEntity;
+import net.farkas.wildaside.block.entity.sign.ModHangingSignBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.WallHangingSignBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
