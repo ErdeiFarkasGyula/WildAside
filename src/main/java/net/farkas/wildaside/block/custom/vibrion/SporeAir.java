@@ -28,7 +28,7 @@ public class SporeAir extends AirBlock {
     @Override
     public void entityInside(BlockState pState, Level pLevel, BlockPos pPos, Entity pEntity) {
         if (pEntity instanceof Player) {
-            ContaminationHandler.givePlayerContamination((Player)pEntity, 20);
+            ContaminationHandler.applyContamination((Player)pEntity, 20);
         }
         super.entityInside(pState, pLevel, pPos, pEntity);
     }

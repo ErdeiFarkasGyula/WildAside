@@ -1,27 +1,18 @@
 package net.farkas.wildaside.entity.custom;
 
-import net.farkas.wildaside.block.ModBlocks;
-import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageSources;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.*;
 
@@ -83,7 +74,7 @@ public class SporeBombEntity extends ThrowableItemProjectile {
             for (int dy = -radius; dy <= radius; dy++) {
                 for (int dz = -radius; dz <= radius; dz++) {
                     if (dx * dx + dy * dy + dz * dz <= radius * radius) {
-                        for (int i = 0; i < 2; i++) {
+                        for (int i = 0; i < 3; i++) {
                             double x = center.getX() + 0.5 + dx + (rand.nextDouble() - 0.5);
                             double y = center.getY() + 0.5 + dy + (rand.nextDouble() - 0.5);
                             double z = center.getZ() + 0.5 + dz + (rand.nextDouble() - 0.5);
@@ -99,7 +90,7 @@ public class SporeBombEntity extends ThrowableItemProjectile {
         List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, box, e -> !e.isSpectator());
 
         for (LivingEntity entity : list) {
-            ContaminationHandler.givePlayerContamination((Player) entity, 20);
+            ContaminationHandler.applyContamination(entity, 20);
             level.sendParticles(particle,
                     entity.getX(), entity.getY() + 0.5, entity.getZ(),
                     5, 0.2, 0.2, 0.2, 0.01);

@@ -10,16 +10,11 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
@@ -101,7 +96,7 @@ public class NaturalSporeBlaster extends RotatedPillarBlock {
             }
 
             for (LivingEntity entity : hits) {
-                ContaminationHandler.givePlayerContamination((Player)entity, 20);
+                ContaminationHandler.applyContamination(entity, 20);
                 world.sendParticles(particle,
                         entity.getX(), entity.getY() + 0.5, entity.getZ(),
                         5, 0.2, 0.2, 0.2, 0.01);
