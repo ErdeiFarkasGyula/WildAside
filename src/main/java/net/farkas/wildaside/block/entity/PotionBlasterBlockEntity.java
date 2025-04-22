@@ -185,19 +185,14 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
 
         itemHandler.insertItem(OUTPUT_1, new ItemStack(Items.GLASS_BOTTLE), false);
 
-
         activePotion = potionStack.copy();
-
         setChanged();
 
         List<MobEffectInstance> effects = PotionUtils.getMobEffects(activePotion);
         if (effects.isEmpty()) {
             maxPotionTicks = 200;
         } else {
-            maxPotionTicks = effects.stream()
-                    .mapToInt(MobEffectInstance::getDuration)
-                    .max()
-                    .orElse(200);
+            maxPotionTicks = effects.stream().mapToInt(MobEffectInstance::getDuration).max().orElse(200);
         }
         setChanged();
 
@@ -256,19 +251,29 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
     }
 
     public void tick(Level level, BlockPos pos, BlockState state) {
-        System.out.println("OKAY... :|");
         if (level.getBlockEntity(pos) instanceof PotionBlasterBlockEntity be) {
             if (level.getBestNeighborSignal(pos) > 0) {
-                System.out.println("MEOW!");
+                int poweredSides = 0;
+                for (Direction dir : Direction.values()) {
+                    if (level.getSignal(pos.relative(dir), dir) > 0) {
+                        poweredSides++;
+                    }
+                }
+
+                System.out.println(poweredSides);
+
+                if (poweredSides >= 2) {
+                    clearActivePotion();
+                    return;
+                }
+
                 if (potionTicksLeft <= 0 || activePotion.isEmpty()) {
-                    System.out.println("HMMM::");
                     if (shouldSelectNewPotion) {
                         selectNewPotion();
                     }
                 }
 
                 if (!activePotion.isEmpty()) {
-                    System.out.println("YIPPE!!");
                     shootPotionBeam(state.getValue(PotionBlaster.FACING), (ServerLevel)level, pos);
                     potionTicksLeft--;
 
@@ -276,8 +281,19 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
                         consumePotionBottle();
                     }
                 }
+            }
+        }
+    }
 
-                System.out.println(activePotion.isEmpty());
+    private void clearActivePotion() {
+        if (!activePotion.isEmpty()) {
+            activePotion = ItemStack.EMPTY;
+            potionTicksLeft = 0;
+            lastUsedSlot = -1;
+            shouldSelectNewPotion = true;
+            setChanged();
+            if (level != null) {
+                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
             }
         }
     }

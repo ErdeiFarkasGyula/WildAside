@@ -29,14 +29,14 @@ public class PotionBlasterScreen extends AbstractContainerScreen<PotionBlasterMe
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
-//        this.addRenderableWidget(Button.builder(Component.translatable("gui.wildaside.potion_blaster_button"), (pButton -> {
-//            onButtonClick();
-//        })).bounds(x + 85, y + 50, 80, 18).build());
-
+        this.addRenderableWidget(Button.builder(Component.literal("X"), (pButton -> {
+            onButtonClick();
+        })).bounds(x + 98, y + 52, 10, 10).build());
     }
 
     private void onButtonClick() {
         System.out.println("MEOW!!!");
+        
     }
 
     @Override
