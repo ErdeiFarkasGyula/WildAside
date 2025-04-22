@@ -125,7 +125,7 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
             BlockPos target = pos.relative(direction, i);
             if (level.getBlockState(target).isCollisionShapeFullBlock(level, target)) break;
 
-            for (int k = 0; k < 3; k++) {
+            for (int k = 0; k < 2; k++) {
                 double x = target.getX() + random.nextDouble();
                 double y = target.getY() + random.nextDouble();
                 double z = target.getZ() + random.nextDouble();
@@ -143,6 +143,9 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
                             effect.getDuration() - (maxPotionTicks - potionTicksLeft),
                             effect.getAmplifier()
                     ));
+                    level.sendParticles(particle,
+                            entity.getX(), entity.getY(), entity.getZ(), 1, direction.getStepX(), direction.getStepY(), direction.getStepZ(), 0.1
+                    );
                 }
             }
         }

@@ -18,8 +18,7 @@ public class VibrionParticle extends TextureSheetParticle {
     }
 
     private final SpriteSet spriteSet;
-    private float angularVelocity;
-    private float angularAcceleration;
+    private final float angularVelocity;
 
     protected VibrionParticle(ClientLevel world, double x, double y, double z, double vx, double vy, double vz, SpriteSet spriteSet) {
         super(world, x, y, z);
@@ -32,7 +31,6 @@ public class VibrionParticle extends TextureSheetParticle {
         this.yd = vy * 1;
         this.zd = vz * 1;
         this.angularVelocity = 0.1f;
-        this.angularAcceleration = 0.01f;
         this.pickSprite(spriteSet);
     }
 
@@ -46,11 +44,9 @@ public class VibrionParticle extends TextureSheetParticle {
         super.tick();
         this.oRoll = this.roll;
         this.roll += this.angularVelocity;
-        this.angularVelocity += this.angularAcceleration;
-        //this.alpha = 1 - (this.age / this.lifetime);
 
         if (!this.removed) {
-            this.setSprite(this.spriteSet.get((this.age / 1) % 32 + 1, 32));
+            this.setSprite(this.spriteSet.get((this.age) % 32 + 1, 32));
         }
     }
 }

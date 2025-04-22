@@ -1,10 +1,14 @@
 package net.farkas.wildaside.block.custom.vibrion;
 
-import net.farkas.wildaside.block.ModBlocks;
+import net.farkas.wildaside.particle.ModParticles;
+import net.farkas.wildaside.util.ContaminationHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -13,57 +17,78 @@ import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class SporeBlaster extends Block {
     public static final DirectionProperty FACING = DirectionalBlock.FACING;
 
-    BlockState spore_air = ModBlocks.SPORE_AIR.get().defaultBlockState();
-
-    public SporeBlaster(Properties pProperties) {
-        super(pProperties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
+    public SporeBlaster(Properties props) {
+        super(props);
+        this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH));
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING);
-    }
-
-    public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        return this.defaultBlockState().setValue(FACING, pContext.getNearestLookingDirection().getOpposite());
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> b) {
+        b.add(FACING);
     }
 
     @Override
-    public boolean canConnectRedstone(BlockState state, BlockGetter level, BlockPos pos, @Nullable Direction direction) {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite());
+    }
+
+    @Override
+    public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, @Nullable Direction side) {
         return true;
     }
 
     @Override
-    public void onPlace(BlockState pState, Level pLevel, BlockPos pPos, BlockState pOldState, boolean pMovedByPiston) {
-        if (!pLevel.isClientSide) {
-            pLevel.scheduleTick(pPos, this, 10);
+    public void onPlace(BlockState state, Level world, BlockPos pos, BlockState oldState, boolean movedByPiston) {
+        if (!world.isClientSide) {
+            world.scheduleTick(pos, this, 2);
         }
-        super.onPlace(pState, pLevel, pPos, pOldState, pMovedByPiston);
     }
 
     @Override
-    public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
-        int power = pLevel.getBestNeighborSignal(pPos);
-        spawnSporeAir(pLevel, pPos, pRandom, power);
-        pLevel.scheduleTick(pPos, this, 5);
-        super.tick(pState, pLevel, pPos, pRandom);
+    public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource rand) {
+        int power = world.getBestNeighborSignal(pos);
+        if (power > 0) {
+            infectAlongLine(world, pos, state.getValue(FACING), power, rand);
+        }
+        world.scheduleTick(pos, this, 2);
     }
 
-    public void spawnSporeAir(ServerLevel level, BlockPos pos, RandomSource random, int power) {
-        Direction direction = level.getBlockState(pos).getValue(FACING);
+    private void infectAlongLine(ServerLevel world, BlockPos origin, Direction dir, int range, RandomSource rand) {
+        for (int i = 1; i <= range; i++) {
+            BlockPos step = origin.relative(dir, i);
+            if (world.getBlockState(step).isCollisionShapeFullBlock(world, step)) break;
 
-        for (int i = 1; i <= power; i++) {
-            var position = pos.relative(direction, i);
-            var nextBlock = level.getBlockState(position);
+            AABB area = new AABB(step);
+            List<LivingEntity> hits = world.getEntitiesOfClass(LivingEntity.class, area,e -> !e.isSpectator());
 
-            if (nextBlock.isCollisionShapeFullBlock(level, position)) return;
-            if (nextBlock.isAir()) level.setBlockAndUpdate(position, spore_air);
+            SimpleParticleType particle = ModParticles.VIBRION_PARTICLE.get();
+
+            for (int j = 0; j < 2; j++) {
+                double x = step.getX() + rand.nextDouble();
+                double y = step.getY() + rand.nextDouble();
+                double z = step.getZ() + rand.nextDouble();
+                world.sendParticles(particle, x, y, z,1,
+                        0.02 * dir.getStepX(),
+                        0.02 * dir.getStepY(),
+                        0.02 * dir.getStepZ(),
+                        0.0
+                );
+            }
+
+            for (LivingEntity entity : hits) {
+                ContaminationHandler.givePlayerContamination((Player)entity, 20);
+                world.sendParticles(particle,
+                        entity.getX(), entity.getY() + 0.5, entity.getZ(),
+                        5, 0.2, 0.2, 0.2, 0.01);
+            }
         }
     }
 }
