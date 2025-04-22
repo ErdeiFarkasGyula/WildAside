@@ -2,12 +2,16 @@ package net.farkas.wildaside.screen.potion_blaster;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.farkas.wildaside.WildAside;
+import net.farkas.wildaside.block.entity.PotionBlasterBlockEntity;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ContainerData;
 
 public class PotionBlasterScreen extends AbstractContainerScreen<PotionBlasterMenu> {
     private static final ResourceLocation BACKGROUND = new ResourceLocation(WildAside.MOD_ID, "textures/gui/potion_blaster.png");
@@ -21,6 +25,18 @@ public class PotionBlasterScreen extends AbstractContainerScreen<PotionBlasterMe
         super.init();
         this.inventoryLabelY = 9999;
         this.titleLabelY = 9999;
+
+        int x = (width - imageWidth) / 2;
+        int y = (height - imageHeight) / 2;
+
+//        this.addRenderableWidget(Button.builder(Component.translatable("gui.wildaside.potion_blaster_button"), (pButton -> {
+//            onButtonClick();
+//        })).bounds(x + 85, y + 50, 80, 18).build());
+
+    }
+
+    private void onButtonClick() {
+        System.out.println("MEOW!!!");
     }
 
     @Override
@@ -34,11 +50,19 @@ public class PotionBlasterScreen extends AbstractContainerScreen<PotionBlasterMe
         pGuiGraphics.blit(BACKGROUND, x, y, 0, 0, imageWidth, imageHeight);
 
         renderProgress(pGuiGraphics, x, y);
-
     }
 
-    private void renderProgress(GuiGraphics guiGraphics, int x, int y) {
-        guiGraphics.blit(BACKGROUND, x + 106, y + 38, 176, 0, menu.getScaledProgress(), 4);
+    private void renderProgress(GuiGraphics gui, int x, int y) {
+        final int bottomX = x + 140;
+        final int bottomY = y + 67;
+        final int width   = 4;
+
+        int rgb = this.menu.data.get(2) & 0xFFFFFF;
+        int argb = 0xFF000000 | rgb;
+
+        int filled = menu.getScaledProgress();
+
+        gui.fill(bottomX, bottomY - filled,bottomX + width, bottomY, argb);
     }
 
     @Override

@@ -42,21 +42,13 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
     private final ItemStackHandler itemHandler = new ItemStackHandler(10);
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
-    private static final int INPUT_1 = 0;
-    private static final int INPUT_2 = 1;
-    private static final int INPUT_3 = 2;
-    private static final int INPUT_4 = 3;
-    private static final int INPUT_5 = 4;
-    private static final int INPUT_6 = 5;
-    private static final int INPUT_7 = 6;
-    private static final int INPUT_8 = 7;
-    private static final int INPUT_9 = 8;
-    private static final int OUTPUT_1 = 9;
+    public static final int OUTPUT_1 = 9;
 
-    protected final ContainerData data;
+    public final ContainerData data;
 
+    public int potionColour = 0;
     public int potionTicksLeft = 0;
-    public int maxPotionTicks = 1200;
+    public int maxPotionTicks = 200;
     public int lastUsedSlot = -1;
     public ItemStack activePotion = ItemStack.EMPTY;
     public boolean shouldSelectNewPotion = true;
@@ -70,6 +62,7 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
                 return switch (pIndex) {
                     case 0 -> PotionBlasterBlockEntity.this.potionTicksLeft;
                     case 1 -> PotionBlasterBlockEntity.this.maxPotionTicks;
+                    case 2 -> PotionBlasterBlockEntity.this.potionColour;
                     default -> 0;
                 };
             }
@@ -79,12 +72,13 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
                 switch (pIndex) {
                     case 0 -> PotionBlasterBlockEntity.this.potionTicksLeft = pValue;
                     case 1 -> PotionBlasterBlockEntity.this.maxPotionTicks = pValue;
+                    case 2 -> PotionBlasterBlockEntity.this.potionColour = pValue;
                 }
             }
 
             @Override
             public int getCount() {
-                return 2;
+                return 3;
             }
         };
     }
@@ -115,18 +109,21 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
 
         int power = level.getBestNeighborSignal(pos);
 
+        this.potionColour = PotionUtils.getColor(activePotion);
+        setChanged();
+        level.sendBlockUpdated( // push an update to clients
+                worldPosition, getBlockState(), getBlockState(), 3
+        );
+        float r = ((potionColour >> 16) & 0xFF) / 255.0f;
+        float g = ((potionColour >> 8) & 0xFF) / 255.0f;
+        float b = (potionColour & 0xFF) / 255.0f;
+
+        DustParticleOptions particle = new DustParticleOptions(new Vector3f(r, g, b), 1f);
+        RandomSource random = level.random;
+
         for (int i = 1; i <= power; i++) {
             BlockPos target = pos.relative(direction, i);
             if (level.getBlockState(target).isCollisionShapeFullBlock(level, target)) break;
-
-            int colour = PotionUtils.getColor(activePotion);
-            float r = ((colour >> 16) & 0xFF) / 255.0f;
-            float g = ((colour >> 8) & 0xFF) / 255.0f;
-            float b = (colour & 0xFF) / 255.0f;
-
-            DustParticleOptions particle = new DustParticleOptions(new Vector3f(r, g, b), 1f);
-            RandomSource random = level.random;
-            Vec3 base = Vec3.atCenterOf(worldPosition);
 
             for (int k = 0; k < 3; k++) {
                 double x = target.getX() + random.nextDouble();
@@ -156,7 +153,6 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
             ItemStack stack = itemHandler.getStackInSlot(lastUsedSlot);
             if (!stack.isEmpty()) {
                 itemHandler.setStackInSlot(lastUsedSlot, stack);
-                itemHandler.insertItem(OUTPUT_1, new ItemStack(Items.GLASS_BOTTLE), false);
             }
         }
 
@@ -164,6 +160,8 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
         potionTicksLeft = 0;
 
         lastUsedSlot = -1;
+
+        setChanged();
     }
 
     public void selectNewPotion() {
@@ -185,14 +183,31 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
         int slot = validSlots.get(level.random.nextInt(validSlots.size()));
         ItemStack potionStack = itemHandler.getStackInSlot(slot);
 
+        itemHandler.insertItem(OUTPUT_1, new ItemStack(Items.GLASS_BOTTLE), false);
+
+
         activePotion = potionStack.copy();
+
+        setChanged();
+
+        List<MobEffectInstance> effects = PotionUtils.getMobEffects(activePotion);
+        if (effects.isEmpty()) {
+            maxPotionTicks = 200;
+        } else {
+            maxPotionTicks = effects.stream()
+                    .mapToInt(MobEffectInstance::getDuration)
+                    .max()
+                    .orElse(200);
+        }
+        setChanged();
+
         potionTicksLeft = maxPotionTicks;
 
         potionStack.shrink(1);
         itemHandler.setStackInSlot(slot, potionStack);
-        itemHandler.insertItem(OUTPUT_1, new ItemStack(Items.GLASS_BOTTLE), false);
 
         lastUsedSlot = slot;
+
     }
 
     @Override
@@ -200,7 +215,6 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
         if (cap == ForgeCapabilities.ITEM_HANDLER) {
             return lazyItemHandler.cast();
         }
-
         return super.getCapability(cap, side);
     }
 
@@ -219,7 +233,10 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
     @Override
     protected void saveAdditional(CompoundTag pTag) {
         pTag.put("inventory", itemHandler.serializeNBT());
-        pTag.putInt("spore_blaster.progress", potionTicksLeft);
+        pTag.putInt("spore_blaster.ticks_left", potionTicksLeft);
+        pTag.putInt("spore_blaster.max_ticks", maxPotionTicks);
+        pTag.putInt("spore_blaster.colour", potionColour);
+        pTag.put("spore_blaster.potion", activePotion.save(new CompoundTag()));
 
         super.saveAdditional(pTag);
     }
@@ -228,6 +245,40 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
     public void load(CompoundTag pTag) {
         super.load(pTag);
         itemHandler.deserializeNBT(pTag.getCompound("inventory"));
-        potionTicksLeft = pTag.getInt("spore_blaster.progress");
+        potionTicksLeft = pTag.getInt("spore_blaster.ticks_left");
+        maxPotionTicks = pTag.getInt("spore_blaster.max_ticks");
+        potionColour = pTag.getInt("spore_blaster.colour");
+        if (pTag.contains("spore_blaster.potion")) {
+            activePotion = ItemStack.of(pTag.getCompound("spore_blaster.potion"));
+        } else {
+            activePotion = ItemStack.EMPTY;
+        }
+    }
+
+    public void tick(Level level, BlockPos pos, BlockState state) {
+        System.out.println("OKAY... :|");
+        if (level.getBlockEntity(pos) instanceof PotionBlasterBlockEntity be) {
+            if (level.getBestNeighborSignal(pos) > 0) {
+                System.out.println("MEOW!");
+                if (potionTicksLeft <= 0 || activePotion.isEmpty()) {
+                    System.out.println("HMMM::");
+                    if (shouldSelectNewPotion) {
+                        selectNewPotion();
+                    }
+                }
+
+                if (!activePotion.isEmpty()) {
+                    System.out.println("YIPPE!!");
+                    shootPotionBeam(state.getValue(PotionBlaster.FACING), (ServerLevel)level, pos);
+                    potionTicksLeft--;
+
+                    if (potionTicksLeft <= 0) {
+                        consumePotionBottle();
+                    }
+                }
+
+                System.out.println(activePotion.isEmpty());
+            }
+        }
     }
 }

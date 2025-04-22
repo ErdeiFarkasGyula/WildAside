@@ -4,6 +4,7 @@ import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.PotionBlasterBlockEntity;
 import net.farkas.wildaside.screen.ModMenuTypes;
 import net.farkas.wildaside.screen.ModOutputSlot;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -15,12 +16,22 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class PotionBlasterMenu extends AbstractContainerMenu {
-    public final PotionBlasterBlockEntity blockEntity;
-    private final Level level;
-    private final ContainerData data;
+    public PotionBlasterBlockEntity blockEntity;
+    public Level level;
+    public ContainerData data;
 
     public PotionBlasterMenu(int pContainerId, Inventory inv, FriendlyByteBuf extraData) {
-        this(pContainerId, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(10));
+        this(pContainerId, inv, getBlockEntityFromBuffer(inv, extraData));
+    }
+
+    private static PotionBlasterBlockEntity getBlockEntityFromBuffer(Inventory inv, FriendlyByteBuf extraData) {
+        BlockPos pos = extraData.readBlockPos();  // Read once!
+        BlockEntity entity = inv.player.level().getBlockEntity(pos);
+        return (PotionBlasterBlockEntity) entity;
+    }
+
+    public PotionBlasterMenu(int pContainerId, Inventory inv, PotionBlasterBlockEntity blockEntity) {
+        this(pContainerId, inv, blockEntity, blockEntity.data);
     }
 
     public PotionBlasterMenu(int pContainerId, Inventory inv, BlockEntity entity, ContainerData data) {
@@ -44,7 +55,7 @@ public class PotionBlasterMenu extends AbstractContainerMenu {
             this.addSlot(new SlotItemHandler(iItemHandler, 6, 26, 51));
             this.addSlot(new SlotItemHandler(iItemHandler, 7, 44, 51));
             this.addSlot(new SlotItemHandler(iItemHandler, 8, 62, 51));
-            this.addSlot(new ModOutputSlot(iItemHandler, 9, 116, 51));
+            this.addSlot(new ModOutputSlot(iItemHandler, 9, 99, 33));
         });
 
         addDataSlots(data);
@@ -52,10 +63,9 @@ public class PotionBlasterMenu extends AbstractContainerMenu {
 
     public int getScaledProgress() {
         int progress = this.data.get(0);
-        int maxProgress = this.data.get(1);  // Max Progress
-        int progressArrowSize = 36; // This is the height in pixels of your arrow
+        int maxProgress = this.data.get(1);
 
-        return maxProgress != 0 && progress != 0 ? progress * progressArrowSize / maxProgress : 0;
+        return progress * 52 / maxProgress;
     }
 
     // CREDIT GOES TO: diesieben07 | https://github.com/diesieben07/SevenCommons

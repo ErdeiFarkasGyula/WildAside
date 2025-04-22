@@ -52,6 +52,7 @@
   "block.wildaside.substilium_soil": "Substilium Soil",
   "block.wildaside.compressed_substilium_soil": "Compressed Substilium Soil",
   "block.wildaside.spore_blaster": "Spore Blaster",
+  "block.wildaside.potion_blaster": "Potion Blaster",
   "block.wildaside.natural_spore_blaster": "Natural Spore Blaster",
   "block.wildaside.smooth_substilium_soil": "Smooth Substilium Soil",
   "block.wildaside.chiseled_substilium_soil": "Chiseled Substilium Soil",
@@ -142,6 +143,8 @@
   "advancements.colourful_innit.title": "Colourful, Innit?",
   "advancements.colourful_innit.descr": "Enter the Glowing Hickory Forest",
   "advancements.glow_up.title": "Glow Up",
-  "advancements.glow_up.descr": "Witness the Glowing Hickory Forest in its full glory during the night"
+  "advancements.glow_up.descr": "Witness the Glowing Hickory Forest in its full glory during the night",
+
+  "gui.wildaside.potion_blaster_button": "Clear Effect"
 
 }
