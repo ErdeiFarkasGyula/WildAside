@@ -1,26 +1,26 @@
 {
   "display": {
     "icon": {
-      "item": "wildaside:red_glowing_hickory_leaves"
+      "item": "wildaside:potion_blaster"
     },
     "title": {
-      "translate": "advancements.glow_up.title"
+      "translate": "advancements.brew_barrage.title"
     },
     "description": {
-      "translate": "advancements.glow_up.descr"
+      "translate": "advancements.brew_barrage.descr"
     },
-    "frame": "goal",
+    "frame": "challenge",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false
   },
   "criteria": {
-    "glow_up": {
+    "brew_barrage": {
       "trigger": "minecraft:impossible"
     }
   },
   "rewards": {
     "experience": 10
   },
-  "parent": "wildaside:colourful_innit"
+  "parent": "wildaside:petrified_prescription"
 }

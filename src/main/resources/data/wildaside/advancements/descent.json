@@ -9,9 +9,9 @@
     "description": {
       "translate": "advancements.descent.descr"
     },
-    "frame": "goal",
+    "frame": "task",
     "show_toast": true,
-    "announce_to_chat": false,
+    "announce_to_chat": true,
     "hidden": false
   },
   "criteria": {

@@ -2,6 +2,7 @@ package net.farkas.wildaside.block.entity;
 
 import net.farkas.wildaside.block.custom.vibrion.PotionBlaster;
 import net.farkas.wildaside.screen.potion_blaster.PotionBlasterMenu;
+import net.farkas.wildaside.util.AdvancementHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -9,6 +10,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.*;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -146,6 +148,9 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
                     level.sendParticles(particle,
                             entity.getX(), entity.getY(), entity.getZ(), 1, direction.getStepX(), direction.getStepY(), direction.getStepZ(), 0.1
                     );
+                    if (entity instanceof ServerPlayer player) {
+                        AdvancementHandler.givePlayerAdvancement(player, "brew_barrage");
+                    }
                 }
             }
         }

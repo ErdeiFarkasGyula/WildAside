@@ -1,13 +1,13 @@
 {
   "display": {
     "icon": {
-      "item": "wildaside:natural_spore_blaster"
+      "item": "wildaside:fertiliser_bomb"
     },
     "title": {
-      "translate": "advancements.danger_eliminated.title"
+      "translate": "advancements.fertile_forest.title"
     },
     "description": {
-      "translate": "advancements.danger_eliminated.descr"
+      "translate": "advancements.fertile_forest.descr"
     },
     "frame": "task",
     "show_toast": true,
@@ -15,12 +15,12 @@
     "hidden": false
   },
   "criteria": {
-    "danger_eliminated": {
+    "fertile_forest": {
       "trigger": "minecraft:impossible"
     }
   },
   "rewards": {
-    "experience": 5
+    "experience": 6
   },
-  "parent": "wildaside:descent"
+  "parent": "wildaside:petrified_prescription"
 }

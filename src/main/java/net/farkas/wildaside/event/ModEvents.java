@@ -32,6 +32,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.event.village.WandererTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -114,7 +115,7 @@ public class ModEvents {
 
             long time = world.getDayTime();
 
-            if (time >= 18000 && time <= 22000) {
+            if (time >= 14000 && time <= 22000) {
 
                 Holder<Biome> biomeHolder = world.getBiome(player.blockPosition());
                 ResourceKey<Biome> biomeKey = biomeHolder.unwrapKey().orElse(null);
@@ -160,6 +161,13 @@ public class ModEvents {
             if (blockState.getBlock() == ModBlocks.SPORE_BLASTER.get() && level.getBestNeighborSignal(blockPos) > 0) {
                 AdvancementHandler.givePlayerAdvancement(player, "bacteria_barrier");
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void blasterBustedAdvancement(BlockEvent.BreakEvent event) {
+        if (!event.getPlayer().level().isClientSide) {
+            AdvancementHandler.givePlayerAdvancement((ServerPlayer)event.getPlayer(), "blaster_busted");
         }
     }
 
