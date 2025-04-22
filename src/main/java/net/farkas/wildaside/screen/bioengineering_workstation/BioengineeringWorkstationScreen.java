@@ -38,7 +38,7 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
 
     private void renderProgressArrow(GuiGraphics guiGraphics, int x, int y) {
         if (menu.isCrafting()) {
-            guiGraphics.blit(BACKGROUND, x + 93, y + 37, 176, 0, menu.getScaledProgress(), 7);
+            guiGraphics.blit(BACKGROUND, x + 89, y + 37, 176, 0, menu.getScaledProgress(), 7);
         }
     }
 
