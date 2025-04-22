@@ -14,7 +14,7 @@ public class ContaminationHandler {
         int cappedAmplifier = Math.min(amplifier, 4);
 
         if (immunity == null || cappedAmplifier > immunity.getAmplifier()) {
-            if (duration <= 15 * 20) {
+            if (duration <= (sec * 0.75 - amplifier) * 20) {
                 player.addEffect(new MobEffectInstance(ModMobEffects.CONTAMINATION.get(), sec * 20, cappedAmplifier));
             }
         }
