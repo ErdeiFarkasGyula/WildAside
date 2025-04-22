@@ -260,8 +260,6 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
                     }
                 }
 
-                System.out.println(poweredSides);
-
                 if (poweredSides >= 2) {
                     clearActivePotion();
                     return;
@@ -285,8 +283,10 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
         }
     }
 
-    private void clearActivePotion() {
+    public void clearActivePotion() {
+        System.out.println(activePotion);
         if (!activePotion.isEmpty()) {
+            System.out.println("YIPPE");
             activePotion = ItemStack.EMPTY;
             potionTicksLeft = 0;
             lastUsedSlot = -1;

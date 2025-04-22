@@ -2,16 +2,13 @@ package net.farkas.wildaside.screen.potion_blaster;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.farkas.wildaside.WildAside;
-import net.farkas.wildaside.block.entity.PotionBlasterBlockEntity;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.ContainerData;
 
 public class PotionBlasterScreen extends AbstractContainerScreen<PotionBlasterMenu> {
     private static final ResourceLocation BACKGROUND = new ResourceLocation(WildAside.MOD_ID, "textures/gui/potion_blaster.png");
@@ -25,18 +22,6 @@ public class PotionBlasterScreen extends AbstractContainerScreen<PotionBlasterMe
         super.init();
         this.inventoryLabelY = 9999;
         this.titleLabelY = 9999;
-
-        int x = (width - imageWidth) / 2;
-        int y = (height - imageHeight) / 2;
-
-        this.addRenderableWidget(Button.builder(Component.literal("X"), (pButton -> {
-            onButtonClick();
-        })).bounds(x + 98, y + 52, 10, 10).build());
-    }
-
-    private void onButtonClick() {
-        System.out.println("MEOW!!!");
-        
     }
 
     @Override

@@ -19,14 +19,28 @@
   "item.minecraft.splash_potion.effect.contamination_potion": "Splash Potion of Contamination",
   "item.minecraft.lingering_potion.effect.contamination_potion": "Lingering Potion of Contamination",
   "item.minecraft.tipped_arrow.effect.contamination_potion": "Arrow of Contamination",
+  "item.minecraft.potion.effect.contamination_potion_2": "Potion of Contamination",
+  "item.minecraft.splash_potion.effect.contamination_potion_2": "Splash Potion of Contamination",
+  "item.minecraft.lingering_potion.effect.contamination_potion_2": "Lingering Potion of Contamination",
+  "item.minecraft.tipped_arrow.effect.contamination_potion_2": "Arrow of Contamination",
+
   "item.minecraft.potion.effect.immunity_potion": "Potion of Immunity",
   "item.minecraft.splash_potion.effect.immunity_potion": "Splash Potion of Immunity",
   "item.minecraft.lingering_potion.effect.immunity_potion": "Lingering Potion of Immunity",
   "item.minecraft.tipped_arrow.effect.immunity_potion": "Arrow of Immunity",
+  "item.minecraft.potion.effect.immunity_potion_2": "Potion of Immunity",
+  "item.minecraft.splash_potion.effect.immunity_potion_2": "Splash Potion of Immunity",
+  "item.minecraft.lingering_potion.effect.immunity_potion_2": "Lingering Potion of Immunity",
+  "item.minecraft.tipped_arrow.effect.immunity_potion_2": "Arrow of Immunity",
+
   "item.minecraft.potion.effect.omnivamp_potion": "Potion of Omnivamp",
   "item.minecraft.splash_potion.effect.omnivamp_potion": "Splash Potion of Omnivamp",
   "item.minecraft.lingering_potion.effect.omnivamp_potion": "Lingering Potion of Omnivamp",
   "item.minecraft.tipped_arrow.effect.omnivamp_potion": "Arrow of Omnivamp",
+  "item.minecraft.potion.effect.omnivamp_potion_2": "Potion of Omnivamp",
+  "item.minecraft.splash_potion.effect.omnivamp_potion_2": "Splash Potion of Omnivamp",
+  "item.minecraft.lingering_potion.effect.omnivamp_potion_2": "Lingering Potion of Omnivamp",
+  "item.minecraft.tipped_arrow.effect.omnivamp_potion_2": "Arrow of Omnivamp",
 
   "effect.wildaside.contamination": "Contamination",
   "effect.wildaside.immunity": "Immunity",
@@ -116,6 +130,7 @@
   "particle.wildaside.entorium_particle": "Entorium Particle",
   "particle.wildaside.substilium_particle": "Substilium Particle",
   "particle.wildaside.still_substilium_particle": "Still Substilium Particle",
+  "particle.wildaside.omnivamp_particle": "Omnivamp Particle",
 
   "entity.wildaside.mod_chest_boat": "Boat with Chest",
 
@@ -143,8 +158,5 @@
   "advancements.colourful_innit.title": "Colourful, Innit?",
   "advancements.colourful_innit.descr": "Enter the Glowing Hickory Forest",
   "advancements.glow_up.title": "Glow Up",
-  "advancements.glow_up.descr": "Witness the Glowing Hickory Forest in its full glory during the night",
-
-  "gui.wildaside.potion_blaster_button": "Clear Effect"
-
+  "advancements.glow_up.descr": "Witness the Glowing Hickory Forest in its full glory during the night"
 }

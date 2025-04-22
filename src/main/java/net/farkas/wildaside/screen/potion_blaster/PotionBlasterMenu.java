@@ -38,7 +38,7 @@ public class PotionBlasterMenu extends AbstractContainerMenu {
         super(ModMenuTypes.POTION_BLASTER_MENU.get(), pContainerId);
 
         checkContainerSize(inv, 10);
-        blockEntity = ((PotionBlasterBlockEntity)entity);
+        this.blockEntity = ((PotionBlasterBlockEntity)entity);
         this.level = inv.player.level();
         this.data = data;
 
@@ -55,7 +55,7 @@ public class PotionBlasterMenu extends AbstractContainerMenu {
             this.addSlot(new SlotItemHandler(iItemHandler, 6, 26, 51));
             this.addSlot(new SlotItemHandler(iItemHandler, 7, 44, 51));
             this.addSlot(new SlotItemHandler(iItemHandler, 8, 62, 51));
-            this.addSlot(new ModOutputSlot(iItemHandler, 9, 99, 33));
+            this.addSlot(new ModOutputSlot(iItemHandler, 9, 102, 35));
         });
 
         addDataSlots(data);

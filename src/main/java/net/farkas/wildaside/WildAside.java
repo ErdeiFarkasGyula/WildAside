@@ -123,18 +123,14 @@ public class WildAside
         BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(Potions.AWKWARD, ModItems.VIBRION.get(), ModPotions.CONTAMINATION_POTION.get()));
         BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(ModPotions.CONTAMINATION_POTION.get(), Items.REDSTONE, ModPotions.CONTAMINATION_POTION_2.get()));
         BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(ModPotions.IMMUNITY_POTION.get(), Items.FERMENTED_SPIDER_EYE, ModPotions.IMMUNITY_POTION.get()));
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(ModPotions.CONTAMINATION_POTION_2.get(), Items.REDSTONE, ModPotions.CONTAMINATION_POTION_3.get()));
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(ModPotions.CONTAMINATION_POTION_3.get(), Items.FERMENTED_SPIDER_EYE, ModPotions.IMMUNITY_POTION_3.get()));
 
         BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(Potions.AWKWARD, ModItems.ENTORIUM.get(), ModPotions.IMMUNITY_POTION.get()));
         BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(ModPotions.CONTAMINATION_POTION.get(), Items.FERMENTED_SPIDER_EYE, ModPotions.IMMUNITY_POTION.get()));
         BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(ModPotions.IMMUNITY_POTION.get(), Items.REDSTONE, ModPotions.IMMUNITY_POTION_2.get()));
         BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(ModPotions.CONTAMINATION_POTION_2.get(), Items.FERMENTED_SPIDER_EYE, ModPotions.IMMUNITY_POTION_2.get()));
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(ModPotions.IMMUNITY_POTION_2.get(), Items.REDSTONE, ModPotions.IMMUNITY_POTION_3.get()));
 
         BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(Potions.AWKWARD, ModItems.MUCELLITH_JAW.get(), ModPotions.OMNIVAMP_POTION.get()));
         BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(ModPotions.OMNIVAMP_POTION.get(), Items.REDSTONE, ModPotions.OMNIVAMP_POTION_2.get()));
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(ModPotions.OMNIVAMP_POTION_2.get(), Items.REDSTONE, ModPotions.OMNIVAMP_POTION_3.get()));
     }
 
     @SubscribeEvent
