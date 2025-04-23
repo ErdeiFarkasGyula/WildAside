@@ -7,6 +7,7 @@ import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.enchantment.ModEnchantments;
 import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.entity.client.ModBoatRenderer;
+import net.farkas.wildaside.entity.client.MucellithRenderer;
 import net.farkas.wildaside.item.ModCreativeModeTabs;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.item.VanillaCreativeTabs;
@@ -153,6 +154,7 @@ public class WildAside
             EntityRenderers.register(ModEntities.MOD_CHEST_BOAT.get(), pContext -> new ModBoatRenderer(pContext, true));
             EntityRenderers.register(ModEntities.SPORE_BOMB.get(), ThrownItemRenderer::new);
             EntityRenderers.register(ModEntities.FERTILISER_BOMB.get(), ThrownItemRenderer::new);
+            EntityRenderers.register(ModEntities.MUCELLITH.get(), MucellithRenderer::new);
 
             MenuScreens.register(ModMenuTypes.BIOENGINEERING_WORKSTATION_MENU.get(), BioengineeringWorkstationScreen::new);
             MenuScreens.register(ModMenuTypes.POTION_BLASTER_MENU.get(), PotionBlasterScreen::new);

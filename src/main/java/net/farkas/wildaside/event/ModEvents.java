@@ -4,6 +4,10 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.effect.ModMobEffects;
+import net.farkas.wildaside.entity.ModEntities;
+import net.farkas.wildaside.entity.client.ModModelLayers;
+import net.farkas.wildaside.entity.client.MucellithModel;
+import net.farkas.wildaside.entity.custom.MucellithEntity;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.util.AdvancementHandler;
 import net.minecraft.advancements.Advancement;
@@ -27,7 +31,9 @@ import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
@@ -42,6 +48,7 @@ import java.util.List;
 
 @Mod.EventBusSubscriber(modid = WildAside.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModEvents {
+
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {

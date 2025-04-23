@@ -30,6 +30,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModBlocks.LIT_VIBRION_GLASS.get());
                         pOutput.accept(ModBlocks.VIBRION_GLASS_PANE.get());
                         pOutput.accept(ModBlocks.LIT_VIBRION_GLASS_PANE.get());
+                        pOutput.accept(ModItems.MUCELLITH_SPAWN_EGG.get());
                         pOutput.accept(ModItems.MUCELLITH_JAW.get());
 
                         pOutput.accept(ModBlocks.SUBSTILIUM_SPROUTS.get());

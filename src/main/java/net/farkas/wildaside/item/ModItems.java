@@ -2,6 +2,7 @@ package net.farkas.wildaside.item;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
+import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.entity.custom.ModBoatEntity;
 import net.farkas.wildaside.item.custom.*;
 import net.farkas.wildaside.util.ModTags;
@@ -9,6 +10,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.HangingSignItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SignItem;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -22,6 +24,8 @@ public class ModItems {
     public static final RegistryObject<Item> ENTORIUM = ITEMS.register("entorium",
             () ->  new Item(new Item.Properties()));
 
+    public static final RegistryObject<Item> MUCELLITH_SPAWN_EGG = ITEMS.register("mucellith_spawn_egg",
+            () ->  new ForgeSpawnEggItem(ModEntities.MUCELLITH, 0xc8e3ff, 0xfff571, new Item.Properties()));
     public static final RegistryObject<Item> MUCELLITH_JAW = ITEMS.register("mucellith_jaw",
             () ->  new Item(new Item.Properties()));
 

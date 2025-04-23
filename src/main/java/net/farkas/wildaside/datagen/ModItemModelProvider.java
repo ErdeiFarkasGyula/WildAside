@@ -23,6 +23,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         //VIBRION
         simpleItem(ModItems.VIBRION);
         simpleItem(ModItems.MUCELLITH_JAW);
+        withExistingParent(ModItems.MUCELLITH_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
         simpleBlockItemBlockTexture(ModBlocks.VIBRION_GROWTH);
         simpleBlockItem(ModBlocks.VIBRION_GLASS_PANE, ModBlocks.VIBRION_GLASS);
         simpleBlockItem(ModBlocks.LIT_VIBRION_GLASS_PANE, ModBlocks.VIBRION_GLASS);
