@@ -3,12 +3,14 @@ package net.farkas.wildaside.entity.custom;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.item.ModItems;
+import net.farkas.wildaside.util.AdvancementHandler;
 import net.farkas.wildaside.util.WeightedFlowerChoice;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -28,6 +30,7 @@ import java.util.List;
 
 public class FertiliserBombEntity extends ThrowableItemProjectile {
     private final float charge;
+    private final LivingEntity thrower;
 
     List<WeightedFlowerChoice.WeightedFlower> flowerList = new ArrayList<>(List.of(
             new WeightedFlowerChoice.WeightedFlower(5, Blocks.DANDELION.defaultBlockState()),
@@ -41,11 +44,13 @@ public class FertiliserBombEntity extends ThrowableItemProjectile {
     public FertiliserBombEntity(EntityType<? extends ThrowableItemProjectile> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
         this.charge = 0;
+        thrower = null;
     }
 
     public FertiliserBombEntity(Level pLevel, LivingEntity thrower, float charge) {
         super(ModEntities.FERTILISER_BOMB.get(), thrower, pLevel);
         this.charge = charge + 0.1f;
+        this.thrower = thrower;
     }
 
     @Override
@@ -75,6 +80,7 @@ public class FertiliserBombEntity extends ThrowableItemProjectile {
                 .map((ResourceKey<Biome> key) -> key.location().getPath())
                 .orElse("");
         if (biomePath.contains("hickory")) {
+            AdvancementHandler.givePlayerAdvancement((ServerPlayer)thrower, "fertile_forest");
             flowerList.add(new WeightedFlowerChoice.WeightedFlower(4, ModBlocks.SPOTTED_WINTERGREEN.get().defaultBlockState()));
             flowerList.add(new WeightedFlowerChoice.WeightedFlower(4, ModBlocks.PINKSTER_FLOWER.get().defaultBlockState()));
         }

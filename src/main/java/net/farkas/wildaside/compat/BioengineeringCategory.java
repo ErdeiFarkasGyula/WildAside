@@ -58,6 +58,6 @@ public class BioengineeringCategory implements IRecipeCategory<BioengineeringWor
         builder.addSlot(RecipeIngredientRole.INPUT, 45, 24).addIngredients(recipe.getIngredients().get(2));
         builder.addSlot(RecipeIngredientRole.INPUT, 27, 42).addIngredients(recipe.getIngredients().get(3));
         builder.addSlot(RecipeIngredientRole.INPUT, 9, 24).addIngredients(recipe.getIngredients().get(4));
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 117, 24).addItemStack(recipe.getResultItem(null));
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 113, 24).addItemStack(recipe.getResultItem(null));
     }
 }

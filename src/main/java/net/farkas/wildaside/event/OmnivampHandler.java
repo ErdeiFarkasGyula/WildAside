@@ -3,8 +3,10 @@ package net.farkas.wildaside.event;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.particle.ModParticles;
+import net.farkas.wildaside.util.AdvancementHandler;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -88,6 +90,9 @@ public class OmnivampHandler {
 
             t.ticksElapsed++;
             if (t.ticksElapsed >= t.totalTicks) {
+                if (a instanceof ServerPlayer serverPlayer) {
+                    AdvancementHandler.givePlayerAdvancement(serverPlayer, "life_leech");
+                }
                 a.heal(t.healAmount);
                 it.remove();
             }

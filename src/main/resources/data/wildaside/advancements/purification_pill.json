@@ -1,13 +1,13 @@
 {
   "display": {
     "icon": {
-      "item": "wildaside:overgrown_entorium_ore"
+      "item": "wildaside:entorium_pill"
     },
     "title": {
-      "translate": "advancements.its_shearing_time.title"
+      "translate": "advancements.purification_pill.title"
     },
     "description": {
-      "translate": "advancements.its_shearing_time.descr"
+      "translate": "advancements.purification_pill.descr"
     },
     "frame": "task",
     "show_toast": true,
@@ -15,12 +15,12 @@
     "hidden": false
   },
   "criteria": {
-    "its_shearing_time": {
+    "purification_pill": {
       "trigger": "minecraft:impossible"
     }
   },
   "rewards": {
-    "experience": 5
+    "experience": 4
   },
-  "parent": "wildaside:descent"
+  "parent": "wildaside:petrified_prescription"
 }

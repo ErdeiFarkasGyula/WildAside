@@ -38,7 +38,7 @@ public class PotionBlasterScreen extends AbstractContainerScreen<PotionBlasterMe
     }
 
     private void renderProgress(GuiGraphics gui, int x, int y) {
-        final int bottomX = x + 140;
+        final int bottomX = x + 142;
         final int bottomY = y + 67;
         final int width   = 4;
 

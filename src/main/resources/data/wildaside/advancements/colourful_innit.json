@@ -9,9 +9,9 @@
     "description": {
       "translate": "advancements.colourful_innit.descr"
     },
-    "frame": "goal",
+    "frame": "task",
     "show_toast": true,
-    "announce_to_chat": false,
+    "announce_to_chat": true,
     "hidden": false
   },
   "criteria": {
@@ -36,7 +36,7 @@
     "experience": 3,
     "recipes": [
       "wildaside:spotted_wintergreen_to_dye",
-      "wildaside:panxter_flower_to_dye"
+      "wildaside:pinkster_flower_to_dye"
     ]
   },
   "parent": "wildaside:wild_wilder_wildest"

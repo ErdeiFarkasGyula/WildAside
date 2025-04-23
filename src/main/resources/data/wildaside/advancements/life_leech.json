@@ -1,26 +1,26 @@
 {
   "display": {
     "icon": {
-      "item": "wildaside:red_glowing_hickory_leaves"
+      "item": "wildaside:mucellith_jaw"
     },
     "title": {
-      "translate": "advancements.glow_up.title"
+      "translate": "advancements.life_leech.title"
     },
     "description": {
-      "translate": "advancements.glow_up.descr"
+      "translate": "advancements.life_leech.descr"
     },
-    "frame": "goal",
+    "frame": "task",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false
   },
   "criteria": {
-    "glow_up": {
+    "life_leech": {
       "trigger": "minecraft:impossible"
     }
   },
   "rewards": {
     "experience": 10
   },
-  "parent": "wildaside:colourful_innit"
+  "parent": "wildaside:descent"
 }

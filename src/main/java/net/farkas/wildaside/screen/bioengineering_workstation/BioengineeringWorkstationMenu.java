@@ -39,7 +39,7 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
             this.addSlot(new SlotItemHandler(iItemHandler, 2, 62, 34));
             this.addSlot(new SlotItemHandler(iItemHandler, 3, 44, 52));
             this.addSlot(new SlotItemHandler(iItemHandler, 4, 26, 34));
-            this.addSlot(new BioengineeringWorkstationResultSlot(iItemHandler, 5, 134, 34, inv.player));
+            this.addSlot(new BioengineeringWorkstationResultSlot(iItemHandler, 5, 130, 34, inv.player));
         });
 
         addDataSlots(data);

@@ -154,9 +154,19 @@
   "advancements.petrified_prescription.descr":  "Obtain an Entorium",
   "advancements.extensive_research.title":  "Extensive Research",
   "advancements.extensive_research.descr":  "Reveal Entorium Ores using a Shears with the Extensive Research enchantment",
+  "advancements.blaster_busted.title":  "Blaster? Busted!",
+  "advancements.blaster_busted.descr":  "Destroy a Natural Spore Blaster",
+  "advancements.purification_pill.title":  "Purification Pill",
+  "advancements.purification_pill.descr":  "Cure your Contamination with an Entorium pill",
+  "advancements.life_leech.title":  "Life Leech",
+  "advancements.life_leech.descr":  "Heal from the Omnivamp effect",
+  "advancements.brew_barrage.title":  "Brew Barrage",
+  "advancements.brew_barrage.descr":  "Apply an effect to yourself with a Potion Blaster",
 
   "advancements.colourful_innit.title": "Colourful, Innit?",
   "advancements.colourful_innit.descr": "Enter the Glowing Hickory Forest",
   "advancements.glow_up.title": "Glow Up",
-  "advancements.glow_up.descr": "Witness the Glowing Hickory Forest in its full glory during the night"
+  "advancements.glow_up.descr": "Witness the Glowing Hickory Forest in its full glory during the night",
+  "advancements.fertile_forest.title": "Fertile Forest",
+  "advancements.fertile_forest.descr": "Detonate a Fertiliser Bomb in a Hickory Forest"
 }
