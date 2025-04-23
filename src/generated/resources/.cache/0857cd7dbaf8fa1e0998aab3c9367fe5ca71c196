@@ -1,4 +1,4 @@
-// 1.20.1	2025-04-21T11:44:02.4040762	Block States: wildaside
+// 1.20.1	2025-04-23T19:21:21.1857236	Block States: wildaside
 38a24b92f303bb5285d9a988d6c1d7ee8278e463 assets/wildaside/blockstates/bioengineering_workstation.json
 a6f417d7a5e3c62f22064fbdec6661e901c45ab1 assets/wildaside/blockstates/brown_glowing_hickory_leaves.json
 fa64f943551c3309b74c342bd1fa550093c63be0 assets/wildaside/blockstates/brown_glowing_hickory_sapling.json
@@ -35,7 +35,7 @@ cfc9ebef6a36da6415f6b3057d30d763b8992de3 assets/wildaside/blockstates/lit_vibrio
 bd5176f715441de730588484412b3457017e8d6e assets/wildaside/blockstates/natural_spore_blaster.json
 a7da14be551030a664be292713fd3e95ecdb49ac assets/wildaside/blockstates/overgrown_entorium_ore.json
 6fb1d06f3fc7983ae7182e42ff50a2a73d461e0d assets/wildaside/blockstates/pinkster_flower.json
-af45b812c82a4d413b9c0115d64e641744a1477b assets/wildaside/blockstates/potion_blaster.json
+ce41b8dcc97ec6ae4e47ab7a3888c1eaac29eb0e assets/wildaside/blockstates/potion_blaster.json
 0835b2cee285e2c38fc3eacd984aef192afb5480 assets/wildaside/blockstates/potted_vibrion_growth.json
 9fa936c88a70262c95e0fd6617922a490f87295a assets/wildaside/blockstates/red_glowing_hickory_leaves.json
 496022155c7a110bbf87ae67989f4f64bd3d253b assets/wildaside/blockstates/red_glowing_hickory_sapling.json
@@ -224,7 +224,7 @@ bc602a3798799ed11e4f88c87d75be62f3597955 assets/wildaside/models/item/bioenginee
 a93a91ed561f430e5d889ea95c75699ab516c65d assets/wildaside/models/item/lit_vibrion_glass.json
 e4fe8f67756394c7d0485127c89f3248be5efef6 assets/wildaside/models/item/natural_spore_blaster.json
 06017fbe89a63026f0f3e0163d65cf1fa156d723 assets/wildaside/models/item/overgrown_entorium_ore.json
-311db7bdc21812dc59b910bbbe080d836a134455 assets/wildaside/models/item/potion_blaster.json
+51e07673d4b08ce16f1cae945a5734bc263678cf assets/wildaside/models/item/potion_blaster.json
 5fd14c49b49afd071c2bb7932cfff1fb9fa4c6e0 assets/wildaside/models/item/potted_vibrion_growth.json
 23fd79d7493b2917fdf5e9fce20b4b27c294f703 assets/wildaside/models/item/red_glowing_hickory_leaves.json
 453dc730b880c2cd8bfa59e1b5e357ff42d03b30 assets/wildaside/models/item/smooth_substilium_soil.json

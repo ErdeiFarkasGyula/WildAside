@@ -1,4 +1,4 @@
-// 1.20.1	2025-04-19T17:38:39.5523207	Item Models: wildaside
+// 1.20.1	2025-04-23T19:01:09.7398034	Item Models: wildaside
 657a44b343b52d1185c119350b9599bc495c3976 assets/wildaside/models/item/brown_glowing_hickory_sapling.json
 7c314b9855fa14cfb6f45f4b35479303da8c369e assets/wildaside/models/item/entorium.json
 72ebbdfaa5d8b7399ab25ba412fa3bfdc404a9a3 assets/wildaside/models/item/entorium_ore.json
@@ -26,6 +26,7 @@ a26dc7269bff8cf5a6ca1d2ba5c2a4cd4928e57e assets/wildaside/models/item/hickory_ha
 6423758f57bd46ac66d09d2ec8c876a3f96a78fa assets/wildaside/models/item/hickory_wood.json
 28b841c1b7ab30aa3f867a711da8e464c43ecf6b assets/wildaside/models/item/lit_vibrion_glass_pane.json
 36e2883a7556c4fcefc7bc6049546bda34a728d6 assets/wildaside/models/item/mucellith_jaw.json
+63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/wildaside/models/item/mucellith_spawn_egg.json
 06017fbe89a63026f0f3e0163d65cf1fa156d723 assets/wildaside/models/item/overgrown_entorium_ore.json
 968dcec5a5c71d9ad044f4e3738c602ffad2985d assets/wildaside/models/item/pinkster_flower.json
 d352d1091ffaa4c5a75c1920c4b91cb2664f1592 assets/wildaside/models/item/red_glowing_hickory_sapling.json

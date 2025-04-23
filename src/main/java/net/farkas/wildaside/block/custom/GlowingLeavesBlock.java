@@ -6,6 +6,7 @@ import net.farkas.wildaside.util.ParticleHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -46,26 +47,29 @@ public class GlowingLeavesBlock extends LeavesBlock {
         super.tick(pState, pLevel, pPos, pRandom);
 
         int time = (int)pLevel.dayTime();
+        int currentLight = pLevel.getBlockState(pPos).getValue(LIGHT);
+        int newLight = 0;
 
         if (time > 22000) {
-            int lightLevel = Math.round(7 - (maxLight * ((time - 22000f) / 2000f)));
-            if (lightLevel < minLight) lightLevel = minLight;
-            pLevel.setBlockAndUpdate(pPos, pLevel.getBlockState(pPos).setValue(LIGHT, lightLevel));
+            newLight = Math.round(7 - (maxLight * ((time - 22000f) / 2000f)));
         } else
         if (time > 12000 && time < 14000) {
-            int lightLevel = Math.round(maxLight * ((time - 12000f) / 2000f));
-            if (lightLevel > maxLight) lightLevel = maxLight;
-            pLevel.setBlockAndUpdate(pPos, pLevel.getBlockState(pPos).setValue(LIGHT, lightLevel));
+            newLight = Math.round(maxLight * ((time - 12000f) / 2000f));
         } else
         if (time > 14000) {
-            pLevel.setBlockAndUpdate(pPos, pLevel.getBlockState(pPos).setValue(LIGHT, 7));
+            newLight = 7;
         } else
         if (time < 12000) {
-            pLevel.setBlockAndUpdate(pPos, pLevel.getBlockState(pPos).setValue(LIGHT, 0));
+            newLight = 0;
         }
 
-        int distance = pLevel.getBlockState(pPos).getValue(DISTANCE);
-        pLevel.scheduleTick(pPos, this, pRandom.nextInt(10, 20) + (distance * 40));
+        newLight = Math.min(Math.max(0, newLight), 7);
+
+        if (newLight != currentLight) {
+            pLevel.setBlockAndUpdate(pPos, pLevel.getBlockState(pPos).setValue(LIGHT, newLight));
+        }
+
+        pLevel.scheduleTick(pPos, this, 100);
 
     }
 
@@ -73,23 +77,22 @@ public class GlowingLeavesBlock extends LeavesBlock {
     public void animateTick(BlockState pState, Level pLevel, BlockPos pPos, RandomSource pRandom) {
         super.animateTick(pState, pLevel, pPos, pRandom);
         if (!pLevel.getBlockState(pPos.below()).isAir()) return;
-        if (pRandom.nextFloat() < 0.02f) {
-            if (!particleChanged) {
-                if (pState.is(ModBlocks.RED_GLOWING_HICKORY_LEAVES.get())) {
-                    particle = ModParticles.RED_GLOWING_HICKORY_PARTICLE.get();
-                } else
+        if (!particleChanged) {
+            if (pState.is(ModBlocks.RED_GLOWING_HICKORY_LEAVES.get())) {
+                particle = ModParticles.RED_GLOWING_HICKORY_PARTICLE.get();
+            } else
                 if (pState.is(ModBlocks.BROWN_GLOWING_HICKORY_LEAVES.get())) {
                     particle = ModParticles.BROWN_GLOWING_HICKORY_PARTICLE.get();
                 } else
-                if (pState.is(ModBlocks.YELLOW_GLOWING_HICKORY_LEAVES.get())) {
-                    particle = ModParticles.YELLOW_GLOWING_HICKORY_PARTICLE.get();
-                } else {
-                    particle = ModParticles.GREEN_GLOWING_HICKORY_PARTICLE.get();
-                }
-                particleChanged = true;
+                    if (pState.is(ModBlocks.YELLOW_GLOWING_HICKORY_LEAVES.get())) {
+                        particle = ModParticles.YELLOW_GLOWING_HICKORY_PARTICLE.get();
+                    } else {
+                        particle = ModParticles.GREEN_GLOWING_HICKORY_PARTICLE.get();
+                    }
+            particleChanged = true;
 
-            }
-
+        }
+        if (pRandom.nextFloat() < 0.02f) {
             ParticleHandler.spawnHickoryParticles(pLevel, pPos, pRandom, particle);
         }
     }
