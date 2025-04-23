@@ -6,8 +6,7 @@ import net.minecraft.client.animation.Keyframe;
 import net.minecraft.client.animation.KeyframeAnimations;
 
 public class MucellithAnimations {
-
-    public static final AnimationDefinition IDLE = AnimationDefinition.Builder.withLength(2f).looping()
+    public static final AnimationDefinition IDLE = AnimationDefinition.Builder.withLength(2f)
             .addAnimation("body",
                     new AnimationChannel(AnimationChannel.Targets.ROTATION,
                             new Keyframe(0f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
@@ -63,7 +62,7 @@ public class MucellithAnimations {
                                     AnimationChannel.Interpolations.LINEAR),
                             new Keyframe(0.375f, KeyframeAnimations.degreeVec(22.5f, 0f, 0f),
                                     AnimationChannel.Interpolations.LINEAR),
-                            new Keyframe(0.5f, KeyframeAnimations.degreeVec(17.5f, 0f, 0f),
+                            new Keyframe(0.5416766f, KeyframeAnimations.degreeVec(17.5f, 0f, 0f),
                                     AnimationChannel.Interpolations.LINEAR),
                             new Keyframe(0.625f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
                                     AnimationChannel.Interpolations.LINEAR),
@@ -255,34 +254,5 @@ public class MucellithAnimations {
                             new Keyframe(0f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
                                     AnimationChannel.Interpolations.LINEAR),
                             new Keyframe(0.2917f, KeyframeAnimations.degreeVec(7.5f, 0f, 0f),
-                                    AnimationChannel.Interpolations.LINEAR))).build();
-    public static final AnimationDefinition DEFENDING = AnimationDefinition.Builder.withLength(2f).looping()
-            .addAnimation("lowerMid",
-                    new AnimationChannel(AnimationChannel.Targets.POSITION,
-                            new Keyframe(0f, KeyframeAnimations.posVec(0f, -2f, 0f),
-                                    AnimationChannel.Interpolations.LINEAR)))
-            .addAnimation("topLeaves",
-                    new AnimationChannel(AnimationChannel.Targets.POSITION,
-                            new Keyframe(0f, KeyframeAnimations.posVec(0f, 2.25f, 0.13f),
-                                    AnimationChannel.Interpolations.LINEAR)))
-            .addAnimation("topLeaves",
-                    new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                            new Keyframe(0f, KeyframeAnimations.degreeVec(-15f, 0f, 0f),
-                                    AnimationChannel.Interpolations.LINEAR)))
-            .addAnimation("biggerHead",
-                    new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                            new Keyframe(0f, KeyframeAnimations.degreeVec(-50f, 0f, 0f),
-                                    AnimationChannel.Interpolations.LINEAR)))
-            .addAnimation("headLeaves",
-                    new AnimationChannel(AnimationChannel.Targets.POSITION,
-                            new Keyframe(0f, KeyframeAnimations.posVec(0f, 0.03f, 0.25f),
-                                    AnimationChannel.Interpolations.LINEAR)))
-            .addAnimation("headLeaves",
-                    new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                            new Keyframe(0f, KeyframeAnimations.degreeVec(7.5f, 0f, 0f),
-                                    AnimationChannel.Interpolations.LINEAR)))
-            .addAnimation("body",
-                    new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                            new Keyframe(1f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
                                     AnimationChannel.Interpolations.LINEAR))).build();
 }
