@@ -1,11 +1,13 @@
 package net.farkas.wildaside.entity.custom;
 
 import net.minecraft.world.entity.AnimationState;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.fluids.FluidType;
 
 public class MucellithEntity extends PathfinderMob {
     public MucellithEntity(EntityType<? extends PathfinderMob> pEntityType, Level pLevel) {
@@ -45,4 +47,28 @@ public class MucellithEntity extends PathfinderMob {
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1);
     }
 
+    @Override
+    public void push(Entity pEntity) {
+        //NO PUSH!
+    }
+
+    @Override
+    public void push(double pX, double pY, double pZ) {
+        //NO PUSH!
+    }
+
+    @Override
+    public boolean isPushable() {
+        return false;
+    }
+
+    @Override
+    public boolean isPushedByFluid(FluidType type) {
+        return false;
+    }
+
+    @Override
+    public boolean ignoreExplosion() {
+        return true;
+    }
 }

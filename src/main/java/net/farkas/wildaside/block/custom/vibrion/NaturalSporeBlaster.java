@@ -25,7 +25,6 @@ public class NaturalSporeBlaster extends RotatedPillarBlock {
     private int changePowerTimer = maxTimer;
     private int power1 = 0;
     private int power2 = 0;
-    BlockState spore_air = ModBlocks.SPORE_AIR.get().defaultBlockState();
 
     public NaturalSporeBlaster(Properties pProperties) {
         super(pProperties);
