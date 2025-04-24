@@ -77,6 +77,7 @@ public class GlowingLeavesBlock extends LeavesBlock {
     public void animateTick(BlockState pState, Level pLevel, BlockPos pPos, RandomSource pRandom) {
         super.animateTick(pState, pLevel, pPos, pRandom);
         if (!pLevel.getBlockState(pPos.below()).isAir()) return;
+
         if (!particleChanged) {
             if (pState.is(ModBlocks.RED_GLOWING_HICKORY_LEAVES.get())) {
                 particle = ModParticles.RED_GLOWING_HICKORY_PARTICLE.get();
@@ -90,8 +91,8 @@ public class GlowingLeavesBlock extends LeavesBlock {
                         particle = ModParticles.GREEN_GLOWING_HICKORY_PARTICLE.get();
                     }
             particleChanged = true;
-
         }
+
         if (pRandom.nextFloat() < 0.02f) {
             ParticleHandler.spawnHickoryParticles(pLevel, pPos, pRandom, particle);
         }

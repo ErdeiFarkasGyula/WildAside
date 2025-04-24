@@ -43,25 +43,29 @@ public class GlowingSaplingBlock extends SaplingBlock {
         super.tick(pState, pLevel, pPos, pRandom);
 
         int time = (int)pLevel.dayTime();
+        int currentLight = pLevel.getBlockState(pPos).getValue(LIGHT);
+        int newLight = 0;
 
         if (time > 22000) {
-            int lightLevel = Math.round(7 - (maxLight * ((time - 22000f) / 2000f)));
-            if (lightLevel < minLight) lightLevel = minLight;
-            pLevel.setBlockAndUpdate(pPos, pLevel.getBlockState(pPos).setValue(LIGHT, lightLevel));
+            newLight = Math.round(7 - (maxLight * ((time - 22000f) / 2000f)));
         } else
-        if (time > 12000 && time < 14000) {
-            int lightLevel = Math.round(maxLight * ((time - 12000f) / 2000f));
-            if (lightLevel > maxLight) lightLevel = maxLight;
-            pLevel.setBlockAndUpdate(pPos, pLevel.getBlockState(pPos).setValue(LIGHT, lightLevel));
-        } else
-        if (time > 14000) {
-            pLevel.setBlockAndUpdate(pPos, pLevel.getBlockState(pPos).setValue(LIGHT, 7));
-        } else
-        if (time < 12000) {
-            pLevel.setBlockAndUpdate(pPos, pLevel.getBlockState(pPos).setValue(LIGHT, 0));
+            if (time > 12000 && time < 14000) {
+                newLight = Math.round(maxLight * ((time - 12000f) / 2000f));
+            } else
+                if (time > 14000) {
+                    newLight = 7;
+                } else
+                    if (time < 12000) {
+                        newLight = 0;
+                    }
+
+        newLight = Math.min(Math.max(0, newLight), 7);
+
+        if (newLight != currentLight) {
+            pLevel.setBlockAndUpdate(pPos, pLevel.getBlockState(pPos).setValue(LIGHT, newLight));
         }
 
-        pLevel.scheduleTick(pPos, this, pRandom.nextInt(10, 20));
+        pLevel.scheduleTick(pPos, this, 100);
 
     }
 }

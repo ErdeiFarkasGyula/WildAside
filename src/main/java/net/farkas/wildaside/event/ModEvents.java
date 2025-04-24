@@ -174,7 +174,9 @@ public class ModEvents {
     @SubscribeEvent
     public static void blasterBustedAdvancement(BlockEvent.BreakEvent event) {
         if (!event.getPlayer().level().isClientSide) {
-            AdvancementHandler.givePlayerAdvancement((ServerPlayer)event.getPlayer(), "blaster_busted");
+            if (event.getLevel().getBlockState(event.getPos()).getBlock() == ModBlocks.NATURAL_SPORE_BLASTER.get()) {
+                AdvancementHandler.givePlayerAdvancement((ServerPlayer)event.getPlayer(), "blaster_busted");
+            }
         }
     }
 
