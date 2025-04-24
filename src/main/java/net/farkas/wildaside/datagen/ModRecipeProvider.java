@@ -275,7 +275,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         signBuilder(sign, planks).unlockedBy(getHasName(blocks.get(4)), has(blocks.get(4))).save(pWriter);
         hangingSign(pWriter, hang_sign, blocks.get(4));
         woodenBoat(pWriter, boat, blocks.get(4));
-        chestBoat(pWriter, chest_boat, blocks.get(4));
+        chestBoat(pWriter, chest_boat, blocks.get(15));
 
     }
 }

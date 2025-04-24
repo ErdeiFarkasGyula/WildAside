@@ -10,7 +10,7 @@
     },
     "foliage_placer": {
       "type": "wildaside:hickory_foliage_placer",
-      "height": 12,
+      "height": 14,
       "offset": 0,
       "radius": 2
     },
@@ -35,7 +35,7 @@
     },
     "trunk_placer": {
       "type": "minecraft:straight_trunk_placer",
-      "base_height": 14,
+      "base_height": 18,
       "height_rand_a": 0,
       "height_rand_b": 6
     },
