@@ -22,7 +22,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
-@Mod.EventBusSubscriber(modid = "wildaside", bus = Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid = WildAside.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+
 public class OmnivampHandler {
     private static class Task {
         final ServerLevel level;

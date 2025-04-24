@@ -1,5 +1,7 @@
 {
   "values": [
+    "wildaside:vibrion_block",
+    "wildaside:compressed_vibrion_block",
     "wildaside:vibrion_gel",
     "wildaside:lit_vibrion_gel",
     "wildaside:vibrion_glass"
