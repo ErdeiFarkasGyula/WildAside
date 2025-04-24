@@ -45,7 +45,7 @@ public class SporeBombEntity extends ThrowableItemProjectile {
     @Override
     protected void onHitEntity(EntityHitResult pResult) {
         if (!this.level().isClientSide) {
-            pResult.getEntity().hurt(damageSources().thrown(this, this.getOwner()), 4.0F);
+            pResult.getEntity().hurt(damageSources().thrown(this, this.getOwner()), 2f);
             applySporeCloud((ServerLevel) pResult.getEntity().level(), pResult.getEntity().blockPosition(), charge);
             this.discard();
         }
