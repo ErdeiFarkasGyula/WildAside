@@ -49,6 +49,8 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 .add(ModBlocks.ENTORIUM_ORE.get());
 
         this.tag(BlockTags.MINEABLE_WITH_HOE)
+                .add(ModBlocks.VIBRION_BLOCK.get())
+                .add(ModBlocks.COMPRESSED_VIBRION_BLOCK.get())
                 .add(ModBlocks.VIBRION_GEL.get())
                 .add(ModBlocks.LIT_VIBRION_GEL.get())
                 .add(ModBlocks.VIBRION_GLASS.get());
