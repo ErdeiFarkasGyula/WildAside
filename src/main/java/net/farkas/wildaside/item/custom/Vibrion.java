@@ -1,16 +1,23 @@
 package net.farkas.wildaside.item.custom;
 
+import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.particle.ModParticles;
+import net.farkas.wildaside.util.AdvancementHandler;
+import net.farkas.wildaside.util.ContaminationHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
@@ -150,5 +157,19 @@ public class Vibrion extends Item {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity) {
+        if (!pLevel.isClientSide) {
+            if (pLevel.random.nextFloat() < 0.5f) {
+                ContaminationHandler.applyContamination(pLivingEntity, 20);
+            }
+            if (pLevel.random.nextFloat() < 0.5f) {
+                pLivingEntity.addEffect(new MobEffectInstance(MobEffects.POISON, 400, 0));
+            }
+        }
+
+        return super.finishUsingItem(pStack, pLevel, pLivingEntity);
     }
 }
