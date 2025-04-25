@@ -1,41 +1,41 @@
-[24ápr.2025 19:47:51.112] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgedatauserdev, --assetIndex, 5, --assetsDir, C:\Users\Gyula\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.3.27, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412, --mod, wildaside, --all, --output, D:\Wild Aside\remake\forge-1.20.1\src\generated\resources, --existing, D:\Wild Aside\remake\forge-1.20.1\src\main\resources]
-[24ápr.2025 19:47:51.115] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.14 by Eclipse Adoptium; OS Windows 11 arch amd64 version 10.0
-[24ápr.2025 19:47:51.205] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgedatauserdev
-[24ápr.2025 19:47:51.241] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/C:/Users/Gyula/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23132!/ Service=ModLauncher Env=CLIENT
-[24ápr.2025 19:47:51.432] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Gyula\.gradle\caches\modules-2\files-2.1\net.minecraftforge\javafmllanguage\1.20.1-47.3.27\8001575a8be1ded39093805ca80ef976b5149b3f\javafmllanguage-1.20.1-47.3.27.jar is missing mods.toml file
-[24ápr.2025 19:47:51.434] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Gyula\.gradle\caches\modules-2\files-2.1\net.minecraftforge\lowcodelanguage\1.20.1-47.3.27\17ff592420fbc1f933420f0a473783943ac176ce\lowcodelanguage-1.20.1-47.3.27.jar is missing mods.toml file
-[24ápr.2025 19:47:51.436] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Gyula\.gradle\caches\modules-2\files-2.1\net.minecraftforge\mclanguage\1.20.1-47.3.27\48269e2cdbd3c44641fb99a6b05f205b63efa37b\mclanguage-1.20.1-47.3.27.jar is missing mods.toml file
-[24ápr.2025 19:47:51.438] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Gyula\.gradle\caches\modules-2\files-2.1\net.minecraftforge\fmlcore\1.20.1-47.3.27\8e7f3f29ab42d8116b9ee3f9f06fc8e8fa0fd12f\fmlcore-1.20.1-47.3.27.jar is missing mods.toml file
-[24ápr.2025 19:47:51.492] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: No dependencies to load found. Skipping!
-[24ápr.2025 19:47:52.284] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
-[24ápr.2025 19:47:52.286] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgedatauserdev' with arguments [--gameDir, ., --assetsDir, C:\Users\Gyula\.gradle\caches\forge_gradle\assets, --assetIndex, 5, --mod, wildaside, --all, --output, D:\Wild Aside\remake\forge-1.20.1\src\generated\resources, --existing, D:\Wild Aside\remake\forge-1.20.1\src\main\resources]
-[24ápr.2025 19:47:52.493] [main/INFO] [mixin/]: Remapping refMap terrablender.refmap.json using D:\Wild Aside\remake\forge-1.20.1\build\createSrgToMcp\output.srg
-[24ápr.2025 19:47:52.494] [main/INFO] [mixin/]: Remapping refMap terrablender.refmap.json using D:\Wild Aside\remake\forge-1.20.1\build\createSrgToMcp\output.srg
-[24ápr.2025 19:47:52.709] [main/INFO] [net.minecraftforge.data.loading.DatagenModLoader/]: Initializing Data Gatherer for mods [wildaside]
-[24ápr.2025 19:47:55.294] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.3.27, for MC 1.20.1 with MCP 20230612.114412
-[24ápr.2025 19:47:55.295] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.3.27 Initialized
-[24ápr.2025 19:47:55.352] [modloading-worker-0/INFO] [terrablender/]: Registered region minecraft:overworld to index 0 for type OVERWORLD
-[24ápr.2025 19:47:55.352] [modloading-worker-0/INFO] [terrablender/]: Registered region minecraft:nether to index 0 for type NETHER
-[24ápr.2025 19:47:55.352] [modloading-worker-0/INFO] [terrablender/]: Registered region wildaside:hickory_forest to index 1 for type OVERWORLD
-[24ápr.2025 19:47:55.352] [modloading-worker-0/INFO] [terrablender/]: Registered region wildaside:glowing_hickory_forest to index 2 for type OVERWORLD
-[24ápr.2025 19:47:55.353] [modloading-worker-0/INFO] [terrablender/]: Registered region wildaside:vibrion_hive to index 3 for type OVERWORLD
-[24ápr.2025 19:47:55.451] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager...
-[24ápr.2025 19:47:55.454] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager took 2.264 ms
-[24ápr.2025 19:47:55.650] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/Gyula/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.3.27_mapped_parchment_2023.09.03-1.20.1/forge-1.20.1-47.3.27_mapped_parchment_2023.09.03-1.20.1-recomp.jar%23191!/assets/.mcassetsroot' uses unexpected schema
-[24ápr.2025 19:47:55.650] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/Gyula/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.3.27_mapped_parchment_2023.09.03-1.20.1/forge-1.20.1-47.3.27_mapped_parchment_2023.09.03-1.20.1-recomp.jar%23191!/data/.mcassetsroot' uses unexpected schema
-[24ápr.2025 19:47:55.764] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Recipes
-[24ápr.2025 19:47:55.815] [main/INFO] [net.minecraft.data.DataGenerator/]: Recipes finished after 50 ms
-[24ápr.2025 19:47:55.815] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Loot Tables
-[24ápr.2025 19:47:55.868] [main/INFO] [net.minecraft.data.DataGenerator/]: Loot Tables finished after 52 ms
-[24ápr.2025 19:47:55.868] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Block States: wildaside
-[24ápr.2025 19:47:55.978] [main/INFO] [net.minecraft.data.DataGenerator/]: Block States: wildaside finished after 110 ms
-[24ápr.2025 19:47:55.979] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Item Models: wildaside
-[24ápr.2025 19:47:55.982] [main/INFO] [net.minecraft.data.DataGenerator/]: Item Models: wildaside finished after 3 ms
-[24ápr.2025 19:47:55.983] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:block mod id wildaside
-[24ápr.2025 19:47:55.994] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:block mod id wildaside finished after 11 ms
-[24ápr.2025 19:47:55.994] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:item mod id wildaside
-[24ápr.2025 19:47:55.995] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:item mod id wildaside finished after 0 ms
-[24ápr.2025 19:47:55.995] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Registries
-[24ápr.2025 19:47:56.013] [main/INFO] [net.minecraft.data.DataGenerator/]: Registries finished after 17 ms
-[24ápr.2025 19:47:56.013] [main/INFO] [net.minecraft.data.DataGenerator/]: All providers took: 248 ms
-[24ápr.2025 19:47:56.022] [main/INFO] [net.minecraft.data.HashCache/]: Caching: total files: 583, old count: 589, new count: 584, removed stale: 0, written: 5
+[25ápr.2025 22:08:29.657] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgedatauserdev, --assetIndex, 5, --assetsDir, C:\Users\Gyula\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.3.27, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412, --mod, wildaside, --all, --output, D:\Wild Aside\remake\forge-1.20.1\src\generated\resources, --existing, D:\Wild Aside\remake\forge-1.20.1\src\main\resources]
+[25ápr.2025 22:08:29.665] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.14 by Eclipse Adoptium; OS Windows 11 arch amd64 version 10.0
+[25ápr.2025 22:08:29.753] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgedatauserdev
+[25ápr.2025 22:08:29.790] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/C:/Users/Gyula/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23132!/ Service=ModLauncher Env=CLIENT
+[25ápr.2025 22:08:29.978] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Gyula\.gradle\caches\modules-2\files-2.1\net.minecraftforge\javafmllanguage\1.20.1-47.3.27\8001575a8be1ded39093805ca80ef976b5149b3f\javafmllanguage-1.20.1-47.3.27.jar is missing mods.toml file
+[25ápr.2025 22:08:29.980] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Gyula\.gradle\caches\modules-2\files-2.1\net.minecraftforge\lowcodelanguage\1.20.1-47.3.27\17ff592420fbc1f933420f0a473783943ac176ce\lowcodelanguage-1.20.1-47.3.27.jar is missing mods.toml file
+[25ápr.2025 22:08:29.981] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Gyula\.gradle\caches\modules-2\files-2.1\net.minecraftforge\mclanguage\1.20.1-47.3.27\48269e2cdbd3c44641fb99a6b05f205b63efa37b\mclanguage-1.20.1-47.3.27.jar is missing mods.toml file
+[25ápr.2025 22:08:29.983] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Gyula\.gradle\caches\modules-2\files-2.1\net.minecraftforge\fmlcore\1.20.1-47.3.27\8e7f3f29ab42d8116b9ee3f9f06fc8e8fa0fd12f\fmlcore-1.20.1-47.3.27.jar is missing mods.toml file
+[25ápr.2025 22:08:30.048] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: No dependencies to load found. Skipping!
+[25ápr.2025 22:08:30.944] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
+[25ápr.2025 22:08:30.947] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgedatauserdev' with arguments [--gameDir, ., --assetsDir, C:\Users\Gyula\.gradle\caches\forge_gradle\assets, --assetIndex, 5, --mod, wildaside, --all, --output, D:\Wild Aside\remake\forge-1.20.1\src\generated\resources, --existing, D:\Wild Aside\remake\forge-1.20.1\src\main\resources]
+[25ápr.2025 22:08:31.118] [main/INFO] [mixin/]: Remapping refMap terrablender.refmap.json using D:\Wild Aside\remake\forge-1.20.1\build\createSrgToMcp\output.srg
+[25ápr.2025 22:08:31.119] [main/INFO] [mixin/]: Remapping refMap terrablender.refmap.json using D:\Wild Aside\remake\forge-1.20.1\build\createSrgToMcp\output.srg
+[25ápr.2025 22:08:31.354] [main/INFO] [net.minecraftforge.data.loading.DatagenModLoader/]: Initializing Data Gatherer for mods [wildaside]
+[25ápr.2025 22:08:34.248] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.3.27, for MC 1.20.1 with MCP 20230612.114412
+[25ápr.2025 22:08:34.248] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.3.27 Initialized
+[25ápr.2025 22:08:34.301] [modloading-worker-0/INFO] [terrablender/]: Registered region minecraft:overworld to index 0 for type OVERWORLD
+[25ápr.2025 22:08:34.301] [modloading-worker-0/INFO] [terrablender/]: Registered region minecraft:nether to index 0 for type NETHER
+[25ápr.2025 22:08:34.302] [modloading-worker-0/INFO] [terrablender/]: Registered region wildaside:hickory_forest to index 1 for type OVERWORLD
+[25ápr.2025 22:08:34.302] [modloading-worker-0/INFO] [terrablender/]: Registered region wildaside:glowing_hickory_forest to index 2 for type OVERWORLD
+[25ápr.2025 22:08:34.302] [modloading-worker-0/INFO] [terrablender/]: Registered region wildaside:vibrion_hive to index 3 for type OVERWORLD
+[25ápr.2025 22:08:34.432] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager...
+[25ápr.2025 22:08:34.436] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager took 2.295 ms
+[25ápr.2025 22:08:34.674] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/Gyula/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.3.27_mapped_parchment_2023.09.03-1.20.1/forge-1.20.1-47.3.27_mapped_parchment_2023.09.03-1.20.1-recomp.jar%23191!/assets/.mcassetsroot' uses unexpected schema
+[25ápr.2025 22:08:34.674] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/Gyula/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.3.27_mapped_parchment_2023.09.03-1.20.1/forge-1.20.1-47.3.27_mapped_parchment_2023.09.03-1.20.1-recomp.jar%23191!/data/.mcassetsroot' uses unexpected schema
+[25ápr.2025 22:08:34.796] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Recipes
+[25ápr.2025 22:08:34.831] [main/INFO] [net.minecraft.data.DataGenerator/]: Recipes finished after 34 ms
+[25ápr.2025 22:08:34.831] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Loot Tables
+[25ápr.2025 22:08:34.893] [main/INFO] [net.minecraft.data.DataGenerator/]: Loot Tables finished after 62 ms
+[25ápr.2025 22:08:34.894] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Block States: wildaside
+[25ápr.2025 22:08:35.043] [main/INFO] [net.minecraft.data.DataGenerator/]: Block States: wildaside finished after 148 ms
+[25ápr.2025 22:08:35.043] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Item Models: wildaside
+[25ápr.2025 22:08:35.049] [main/INFO] [net.minecraft.data.DataGenerator/]: Item Models: wildaside finished after 5 ms
+[25ápr.2025 22:08:35.049] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:block mod id wildaside
+[25ápr.2025 22:08:35.061] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:block mod id wildaside finished after 11 ms
+[25ápr.2025 22:08:35.061] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:item mod id wildaside
+[25ápr.2025 22:08:35.062] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:item mod id wildaside finished after 0 ms
+[25ápr.2025 22:08:35.062] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Registries
+[25ápr.2025 22:08:35.082] [main/INFO] [net.minecraft.data.DataGenerator/]: Registries finished after 21 ms
+[25ápr.2025 22:08:35.083] [main/INFO] [net.minecraft.data.DataGenerator/]: All providers took: 287 ms
+[25ápr.2025 22:08:35.094] [main/INFO] [net.minecraft.data.HashCache/]: Caching: total files: 583, old count: 589, new count: 584, removed stale: 0, written: 2

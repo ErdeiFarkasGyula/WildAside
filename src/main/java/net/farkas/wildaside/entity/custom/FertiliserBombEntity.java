@@ -22,6 +22,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
 
@@ -92,6 +93,20 @@ public class FertiliserBombEntity extends ThrowableItemProjectile {
                     BlockPos pos = center.offset(dx, dy, dz);
                     BlockState state = level.getBlockState(pos);
 
+                    if (state.getBlock() instanceof FarmBlock) {
+                        if (random.nextFloat() < charge * 0.3f) {
+                            int currentMoisture = state.getValue(FarmBlock.MOISTURE);
+                            if (currentMoisture < 7) {
+                                BlockState hydratedState = state.setValue(FarmBlock.MOISTURE, 7);
+                                level.setBlock(pos, hydratedState, 3);
+                                level.sendParticles(ParticleTypes.SPLASH,
+                                        pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5,
+                                        5, 0.2, 0.2, 0.2, 0.05);
+                            }
+                            continue;
+                        }
+                    }
+
                     if (state.isAir() && level.getBlockState(pos.below()).is(BlockTags.DIRT)) {
                         if (random.nextFloat() < charge * 0.3f) {
                             BlockState flower = flowerChoice.selectFlower(random);
@@ -102,6 +117,7 @@ public class FertiliserBombEntity extends ThrowableItemProjectile {
                             continue;
                         }
                     }
+
                     if (state.getBlock() instanceof BonemealableBlock bonemealBlock) {
                         if (bonemealBlock.isValidBonemealTarget(level, pos, state, false)) {
                             if (random.nextFloat() < charge * 0.3f) {
@@ -110,8 +126,7 @@ public class FertiliserBombEntity extends ThrowableItemProjectile {
                                 continue;
                             }
                         }
-                    }
-                    else if (state.isAir()) {
+                    } else if (state.isAir()) {
                         BlockPos belowPos = pos.below();
                         BlockState belowState = level.getBlockState(belowPos);
                         if (belowState.getBlock() instanceof BonemealableBlock bonemealBlockBelow &&

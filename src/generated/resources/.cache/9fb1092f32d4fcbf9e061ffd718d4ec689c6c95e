@@ -1,4 +1,4 @@
-// 1.20.1	2025-04-19T18:04:54.4834247	Recipes
+// 1.20.1	2025-04-25T22:08:35.0838096	Recipes
 5b465bf35c1e00856e7257bae2fff66fe82f57d2 data/minecraft/advancements/recipes/misc/pink_dye.json
 014dd0b0a092b0f828ef3ffa797760789fac71c3 data/minecraft/advancements/recipes/misc/white_dye.json
 bbb8f19ec76f96d30bceac1d6e41467033513f70 data/minecraft/recipes/pink_dye.json
@@ -82,7 +82,7 @@ ddbc8c020f573abe0b7630585668750274455bd3 data/wildaside/recipes/cracked_substili
 be057e8b487e7fd2347387308f710a0811d961bc data/wildaside/recipes/cracked_substilium_tiles_from_smelting_substilium_tiles.json
 0240e9694ac354f43e0abbe12ff94374e95407f7 data/wildaside/recipes/hickory_boat.json
 4104e72713c868d6621f3c9b9a0cc1afbc7d6220 data/wildaside/recipes/hickory_button.json
-9e60603ad011e5d68d7076afeced1f35a5b83879 data/wildaside/recipes/hickory_chest_boat.json
+eba2d19d06f04662ea62a71bc6be8498d1f61389 data/wildaside/recipes/hickory_chest_boat.json
 c2799b1a00658a5391d26a92b13b8df43e6ee3a7 data/wildaside/recipes/hickory_door.json
 30eca6052d1d4a428f2494e1dde6f52cf551b903 data/wildaside/recipes/hickory_fence.json
 9a473fca523df9eb8ba758f60296b6f502bddb33 data/wildaside/recipes/hickory_fence_gate.json
@@ -106,7 +106,7 @@ aaf7c03d0931f4b582e25cdb87ef9158a9a0cbc7 data/wildaside/recipes/smooth_substiliu
 a1f31c960d76ca619aa4266e0496abd68024c7b2 data/wildaside/recipes/stripped_substilium_wood.json
 c248a9a74517b6c2cd3ac65d295933218e07c673 data/wildaside/recipes/substilium_boat.json
 83b84f21d7f23a85465da625e157b36ddc5d8469 data/wildaside/recipes/substilium_button.json
-85a6c5bbd08912456e9572b379d17523067b5564 data/wildaside/recipes/substilium_chest_boat.json
+6d5ba19948ebefec314b858a75a0c5ee2139d0a9 data/wildaside/recipes/substilium_chest_boat.json
 89faaa32e1107c6e4cc75c07e2ea47c393597f4e data/wildaside/recipes/substilium_door.json
 f8f17b2d68532e78c7571404321e844a45522b4f data/wildaside/recipes/substilium_fence.json
 f9eb3d8139d4752428a6263aee7c97e4fb000232 data/wildaside/recipes/substilium_fence_gate.json
