@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.8,
+  "group": "copper_ingot",
+  "ingredient": {
+    "item": "wildaside:substilium_copper_ore"
+  },
+  "result": "minecraft:copper_ingot"
+}

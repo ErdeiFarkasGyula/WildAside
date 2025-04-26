@@ -12,6 +12,7 @@ import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.valueproviders.ConstantInt;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -20,37 +21,53 @@ import net.minecraft.world.level.levelgen.placement.*;
 import java.util.List;
 
 public class ModPlacedFeatures {
-    public static final ResourceKey<PlacedFeature> REDLIKE_SUBSTILIUM_MUSHROOM_PLACED = registerKey("redlike_substilium_mushroom_placed");
-    public static final ResourceKey<PlacedFeature> BROWNLIKE_SUBSTILIUM_MUSHROOM_PLACED = registerKey("brownlike_substilium_mushroom_placed");
+    public static final ResourceKey<PlacedFeature> REDLIKE_SUBSTILIUM_MUSHROOM_PLACED = registerKey("redlike_substilium_mushroom");
+    public static final ResourceKey<PlacedFeature> BROWNLIKE_SUBSTILIUM_MUSHROOM_PLACED = registerKey("brownlike_substilium_mushroom");
 
-    public static final ResourceKey<PlacedFeature> VIBRION_GROWTH_PLACED = registerKey("vibrion_growth_placed");
-    public static final ResourceKey<PlacedFeature> VIBRION_SPOREHOLDER_PLACED = registerKey("vibrion_sporeholder_placed");
-    public static final ResourceKey<PlacedFeature> SUBSTILIUM_SPROUTS_PLACED_KEY = registerKey("substilium_sprouts_placed");
+    public static final ResourceKey<PlacedFeature> VIBRION_GROWTH_PLACED = registerKey("vibrion_growth");
+    public static final ResourceKey<PlacedFeature> VIBRION_SPOREHOLDER_PLACED = registerKey("vibrion_sporeholder");
+    public static final ResourceKey<PlacedFeature> SUBSTILIUM_SPROUTS_PLACED_KEY = registerKey("substilium_sprouts");
 
     public static final ResourceKey<PlacedFeature> HANGING_VIBRION_VINES = registerKey("hanging_vibrion_vines");
     public static final ResourceKey<PlacedFeature> HANGING_VIBRION_GEL = registerKey("hanging_vibrion_gel");
     public static final ResourceKey<PlacedFeature> HANGING_LIT_VIBRION_GEL = registerKey("hanging_lit_vibrion_gel");
 
-    public static final ResourceKey<PlacedFeature> OVERGROWN_ENTORIUM_ORE_PLACED = registerKey("overgrown_entorium_ore_placed");
+    public static final ResourceKey<PlacedFeature> OVERGROWN_ENTORIUM_ORE_PLACED = registerKey("overgrown_entorium_ore");
 
-    public static final ResourceKey<PlacedFeature> COMPRESSED_SUBSTILIUM_SOIL_PLACED = registerKey("compressed_substilium_soil_placed");
+    public static final ResourceKey<PlacedFeature> SUBSTILIUM_COAL_ORE = registerKey("substilium_coal_ore");
+    public static final ResourceKey<PlacedFeature> SUBSTILIUM_COPPER_ORE = registerKey("substilium_copper_ore");
+    public static final ResourceKey<PlacedFeature> SUBSTILIUM_COPPER_ORE_LARGE = registerKey("substilium_copper_ore_large");
+    public static final ResourceKey<PlacedFeature> SUBSTILIUM_LAPIS_ORE = registerKey("substilium_lapis_ore");
+    public static final ResourceKey<PlacedFeature> SUBSTILIUM_LAPIS_ORE_BURIED = registerKey("substilium_lapis_ore_buried");
+    public static final ResourceKey<PlacedFeature> SUBSTILIUM_IRON_ORE_MIDDLE = registerKey("substilium_iron_ore_middle");
+    public static final ResourceKey<PlacedFeature> SUBSTILIUM_IRON_ORE_SMALL = registerKey("substilium_iron_ore_small");
+    public static final ResourceKey<PlacedFeature> SUBSTILIUM_GOLD_ORE = registerKey("substilium_gold_ore");
+    public static final ResourceKey<PlacedFeature> SUBSTILIUM_GOLD_ORE_LOWER = registerKey("substilium_gold_ore_lower");
+    public static final ResourceKey<PlacedFeature> SUBSTILIUM_REDSTONE_ORE = registerKey("substilium_redstone_ore");
+    public static final ResourceKey<PlacedFeature> SUBSTILIUM_REDSTONE_ORE_LOWER = registerKey("substilium_redstone_ore_lower");
+    public static final ResourceKey<PlacedFeature> SUBSTILIUM_DIAMOND_ORE = registerKey("substilium_diamond_ore");
+    public static final ResourceKey<PlacedFeature> SUBSTILIUM_DIAMOND_ORE_LARGE = registerKey("substilium_diamond_ore_large");
+    public static final ResourceKey<PlacedFeature> SUBSTILIUM_DIAMOND_ORE_BURIED = registerKey("substilium_diamond_ore_buried");
+    public static final ResourceKey<PlacedFeature> SUBSTILIUM_EMERALD_ORE = registerKey("substilium_emerald_ore");
 
-    public static final ResourceKey<PlacedFeature> NATURAL_SPORE_BLASTER_PLACED = registerKey("natural_spore_blaster_placed");
+    public static final ResourceKey<PlacedFeature> COMPRESSED_SUBSTILIUM_SOIL_PLACED = registerKey("compressed_substilium_soil");
 
-    public static final ResourceKey<PlacedFeature> SPOTTED_WINTERGREEN_PLACED = registerKey("spotted_wintergreen_placed");
-    public static final ResourceKey<PlacedFeature> PINKSTER_FLOWER_PLACED = registerKey("pinkster_flower_placed");
+    public static final ResourceKey<PlacedFeature> NATURAL_SPORE_BLASTER_PLACED = registerKey("natural_spore_blaster");
 
-    public static final ResourceKey<PlacedFeature> HICKORY_TREE_PLACED = registerKey("hickory_tree_placed");
-    public static final ResourceKey<PlacedFeature> RED_GLOWING_HICKORY_TREE_PLACED = registerKey("red_glowing_hickory_tree_placed");
-    public static final ResourceKey<PlacedFeature> BROWN_GLOWING_HICKORY_TREE_PLACED = registerKey("brown_glowing_hickory_tree_placed");
-    public static final ResourceKey<PlacedFeature> YELLOW_GLOWING_HICKORY_TREE_PLACED = registerKey("yellow_glowing_hickory_tree_placed");
-    public static final ResourceKey<PlacedFeature> GREEN_GLOWING_HICKORY_TREE_PLACED = registerKey("green_glowing_hickory_tree_placed");
+    public static final ResourceKey<PlacedFeature> SPOTTED_WINTERGREEN_PLACED = registerKey("spotted_wintergreen");
+    public static final ResourceKey<PlacedFeature> PINKSTER_FLOWER_PLACED = registerKey("pinkster_flower");
 
-    public static final ResourceKey<PlacedFeature> HICKORY_SAPLING_PLACED = registerKey("hickory_sapling_placed");
-    public static final ResourceKey<PlacedFeature> RED_GLOWING_HICKORY_SAPLING_PLACED = registerKey("red_glowing_hickory_sapling_placed");
-    public static final ResourceKey<PlacedFeature> BROWN_GLOWING_HICKORY_SAPLING_PLACED = registerKey("brown_glowing_hickory_sapling_placed");
-    public static final ResourceKey<PlacedFeature> YELLOW_GLOWING_HICKORY_SAPLING_PLACED = registerKey("yellow_glowing_hickory_sapling_placed");
-    public static final ResourceKey<PlacedFeature> GREEN_GLOWING_HICKORY_SAPLING_PLACED = registerKey("green_glowing_hickory_sapling_placed");
+    public static final ResourceKey<PlacedFeature> HICKORY_TREE_PLACED = registerKey("hickory_tree");
+    public static final ResourceKey<PlacedFeature> RED_GLOWING_HICKORY_TREE_PLACED = registerKey("red_glowing_hickory_tree");
+    public static final ResourceKey<PlacedFeature> BROWN_GLOWING_HICKORY_TREE_PLACED = registerKey("brown_glowing_hickory_tree");
+    public static final ResourceKey<PlacedFeature> YELLOW_GLOWING_HICKORY_TREE_PLACED = registerKey("yellow_glowing_hickory_tree");
+    public static final ResourceKey<PlacedFeature> GREEN_GLOWING_HICKORY_TREE_PLACED = registerKey("green_glowing_hickory_tree");
+
+    public static final ResourceKey<PlacedFeature> HICKORY_SAPLING_PLACED = registerKey("hickory_sapling");
+    public static final ResourceKey<PlacedFeature> RED_GLOWING_HICKORY_SAPLING_PLACED = registerKey("red_glowing_hickory_sapling");
+    public static final ResourceKey<PlacedFeature> BROWN_GLOWING_HICKORY_SAPLING_PLACED = registerKey("brown_glowing_hickory_sapling");
+    public static final ResourceKey<PlacedFeature> YELLOW_GLOWING_HICKORY_SAPLING_PLACED = registerKey("yellow_glowing_hickory_sapling");
+    public static final ResourceKey<PlacedFeature> GREEN_GLOWING_HICKORY_SAPLING_PLACED = registerKey("green_glowing_hickory_sapling");
 
     public static void bootstrap(BootstapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
@@ -79,6 +96,37 @@ public class ModPlacedFeatures {
                 CountPlacement.of(256), InSquarePlacement.spread(), PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
                 EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.hasSturdyFace(Direction.DOWN),
                         BlockPredicate.ONLY_IN_AIR_PREDICATE, 32), RandomOffsetPlacement.vertical(ConstantInt.of(-1)), BiomeFilter.biome()));
+
+        register(context, SUBSTILIUM_COAL_ORE, configuredFeatures.getOrThrow(ModConfiguredFeatures.SUBSTILIUM_COAL_ORE),
+                ModOrePlacement.commonOrePlacement(20, HeightRangePlacement.triangle(VerticalAnchor.absolute(0), VerticalAnchor.absolute(192))));
+        register(context, SUBSTILIUM_COPPER_ORE, configuredFeatures.getOrThrow(ModConfiguredFeatures.SUBSTILIUM_COPPER_ORE_SMALL),
+                ModOrePlacement.commonOrePlacement(16, HeightRangePlacement.triangle(VerticalAnchor.absolute(-16), VerticalAnchor.absolute(112))));
+        register(context, SUBSTILIUM_COPPER_ORE_LARGE, configuredFeatures.getOrThrow(ModConfiguredFeatures.SUBSTILIUM_COPPER_ORE_LARGE),
+                ModOrePlacement.commonOrePlacement(16, HeightRangePlacement.triangle(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(112))));
+        register(context, SUBSTILIUM_LAPIS_ORE, configuredFeatures.getOrThrow(ModConfiguredFeatures.SUBSTILIUM_LAPIS_ORE),
+                ModOrePlacement.commonOrePlacement(2, HeightRangePlacement.triangle(VerticalAnchor.absolute(-32), VerticalAnchor.absolute(64))));
+        register(context, SUBSTILIUM_LAPIS_ORE_BURIED, configuredFeatures.getOrThrow(ModConfiguredFeatures.SUBSTILIUM_LAPIS_ORE_BURIED),
+                ModOrePlacement.commonOrePlacement(4, HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(63))));
+        register(context, SUBSTILIUM_IRON_ORE_MIDDLE, configuredFeatures.getOrThrow(ModConfiguredFeatures.SUBSTILIUM_IRON_ORE),
+                ModOrePlacement.commonOrePlacement(10, HeightRangePlacement.triangle(VerticalAnchor.absolute(-24), VerticalAnchor.absolute(56))));
+        register(context, SUBSTILIUM_IRON_ORE_SMALL, configuredFeatures.getOrThrow(ModConfiguredFeatures.SUBSTILIUM_IRON_ORE_SMALL),
+                ModOrePlacement.commonOrePlacement(11, HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(72))));
+        register(context, SUBSTILIUM_GOLD_ORE, configuredFeatures.getOrThrow(ModConfiguredFeatures.SUBSTILIUM_GOLD_ORE_BURIED),
+                ModOrePlacement.commonOrePlacement(4, HeightRangePlacement.triangle(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(32))));
+        register(context, SUBSTILIUM_GOLD_ORE_LOWER, configuredFeatures.getOrThrow(ModConfiguredFeatures.SUBSTILIUM_GOLD_ORE_BURIED),
+                ModOrePlacement.orePlacement(CountPlacement.of(UniformInt.of(0, 1)), HeightRangePlacement.triangle(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(-48))));
+        register(context, SUBSTILIUM_REDSTONE_ORE, configuredFeatures.getOrThrow(ModConfiguredFeatures.SUBSTILIUM_REDSTONE_ORE),
+                ModOrePlacement.commonOrePlacement(4, HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(15))));
+        register(context, SUBSTILIUM_REDSTONE_ORE_LOWER, configuredFeatures.getOrThrow(ModConfiguredFeatures.SUBSTILIUM_REDSTONE_ORE),
+                ModOrePlacement.commonOrePlacement(8, HeightRangePlacement.triangle(VerticalAnchor.absolute(-32), VerticalAnchor.absolute(32))));
+        register(context, SUBSTILIUM_DIAMOND_ORE, configuredFeatures.getOrThrow(ModConfiguredFeatures.SUBSTILIUM_DIAMOND_ORE_SMALL),
+                ModOrePlacement.commonOrePlacement(7, HeightRangePlacement.triangle(VerticalAnchor.absolute(-80), VerticalAnchor.absolute(80))));
+        register(context, SUBSTILIUM_DIAMOND_ORE_BURIED, configuredFeatures.getOrThrow(ModConfiguredFeatures.SUBSTILIUM_DIAMOND_ORE_LARGE),
+                ModOrePlacement.commonOrePlacement(4, HeightRangePlacement.triangle(VerticalAnchor.absolute(-80), VerticalAnchor.absolute(80))));
+        register(context, SUBSTILIUM_DIAMOND_ORE_LARGE, configuredFeatures.getOrThrow(ModConfiguredFeatures.SUBSTILIUM_DIAMOND_ORE_BURIED),
+                ModOrePlacement.commonOrePlacement(9, HeightRangePlacement.triangle(VerticalAnchor.absolute(-80), VerticalAnchor.absolute(80))));
+        register(context, SUBSTILIUM_EMERALD_ORE, configuredFeatures.getOrThrow(ModConfiguredFeatures.SUBSTILIUM_EMERALD_ORE),
+                ModOrePlacement.commonOrePlacement(100, HeightRangePlacement.triangle(VerticalAnchor.absolute(-16), VerticalAnchor.absolute(480))));
 
         register(context, OVERGROWN_ENTORIUM_ORE_PLACED, configuredFeatures.getOrThrow(ModConfiguredFeatures.OVERGROWN_ENTORIUM_ORE),
                 ModOrePlacement.commonOrePlacement(48, HeightRangePlacement.triangle(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80))));

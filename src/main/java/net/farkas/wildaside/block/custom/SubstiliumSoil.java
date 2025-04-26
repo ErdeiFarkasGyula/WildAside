@@ -10,11 +10,13 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraftforge.common.IPlantable;
@@ -23,9 +25,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Optional;
 
-public class SubstiliumSoil extends Block implements BonemealableBlock {
-    public SubstiliumSoil(Properties pProperties) {
-        super(pProperties);
+public class SubstiliumSoil extends DropExperienceBlock implements BonemealableBlock {
+    public SubstiliumSoil(Properties pProperties, IntProvider pXpRange) {
+        super(pProperties, pXpRange);
     }
 
     @Override

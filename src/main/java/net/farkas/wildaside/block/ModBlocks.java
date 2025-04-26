@@ -156,12 +156,30 @@ public class ModBlocks {
                     .sound(SoundType.NETHER_ORE)
                     .strength(3,  12)));
 
+    public static final RegistryObject<Block> SUBSTILIUM_COAL_ORE = registerBlock("substilium_coal_ore",
+            () ->  new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.COAL_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(0, 3)));
+    public static final RegistryObject<Block> SUBSTILIUM_COPPER_ORE = registerBlock("substilium_copper_ore",
+            () ->  new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.COPPER_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(0, 1)));
+    public static final RegistryObject<Block> SUBSTILIUM_LAPIS_ORE = registerBlock("substilium_lapis_ore",
+            () ->  new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.LAPIS_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(2, 6)));
+    public static final RegistryObject<Block> SUBSTILIUM_IRON_ORE = registerBlock("substilium_iron_ore",
+            () ->  new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.IRON_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(0, 1)));
+    public static final RegistryObject<Block> SUBSTILIUM_GOLD_ORE = registerBlock("substilium_gold_ore",
+            () ->  new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.GOLD_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(0, 1)));
+    public static final RegistryObject<Block> SUBSTILIUM_REDSTONE_ORE = registerBlock("substilium_redstone_ore",
+            () ->  new SubstiliumRedstoneOre(BlockBehaviour.Properties.copy(Blocks.REDSTONE_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(0, 1)));
+    public static final RegistryObject<Block> SUBSTILIUM_DIAMOND_ORE = registerBlock("substilium_diamond_ore",
+            () ->  new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.DIAMOND_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(3, 8)));
+    public static final RegistryObject<Block> SUBSTILIUM_EMERALD_ORE = registerBlock("substilium_emerald_ore",
+            () ->  new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.EMERALD_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(3, 8)));
+
+
     //SUBSTILIUM
     public static final RegistryObject<Block> SUBSTILIUM_SOIL = registerBlock("substilium_soil",
             () ->  new SubstiliumSoil(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_CYAN)
                     .sound(SoundType.ROOTED_DIRT)
-                    .strength(1,  2)));
+                    .strength(1,  2), UniformInt.of(0, 1)));
 
     public static final RegistryObject<Block> COMPRESSED_SUBSTILIUM_SOIL = registerBlock("compressed_substilium_soil",
             () ->  new Block(BlockBehaviour.Properties.of()

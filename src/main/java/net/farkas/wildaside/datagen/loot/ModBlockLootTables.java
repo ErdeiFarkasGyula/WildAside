@@ -73,6 +73,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
                 block -> createSilktouchedFortuneDrops(ModBlocks.ENTORIUM_ORE.get(), ModItems.ENTORIUM.get(), 1, 2));
         this.dropSelf(ModBlocks.OVERGROWN_ENTORIUM_ORE.get());
 
+
         //SUBSTILIUM
         this.dropSelf(ModBlocks.SUBSTILIUM_SOIL.get());
         this.dropSelf(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get());
@@ -84,6 +85,23 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.dropSelf(ModBlocks.SUBSTILIUM_TILE_WALLS.get());
         this.dropSelf(ModBlocks.SUBSTILIUM_TILE_BUTTON.get());
         this.dropSelf(ModBlocks.SUBSTILIUM_TILE_PRESSURE_PLATE.get());
+
+        this.add(ModBlocks.SUBSTILIUM_COAL_ORE.get(),
+                block -> createSilktouchedFortuneDrops(ModBlocks.SUBSTILIUM_COAL_ORE.get(), Items.COAL, 1, 2));
+        this.add(ModBlocks.SUBSTILIUM_COPPER_ORE.get(),
+                block -> createSilktouchedFortuneDrops(ModBlocks.SUBSTILIUM_COPPER_ORE.get(), Items.RAW_COPPER, 2, 6));
+        this.add(ModBlocks.SUBSTILIUM_LAPIS_ORE.get(),
+                block -> createSilktouchedFortuneDrops(ModBlocks.SUBSTILIUM_LAPIS_ORE.get(), Items.LAPIS_LAZULI, 4, 10));
+        this.add(ModBlocks.SUBSTILIUM_IRON_ORE.get(),
+                block -> createSilktouchedFortuneDrops(ModBlocks.SUBSTILIUM_IRON_ORE.get(), Items.RAW_IRON, 1, 2));
+        this.add(ModBlocks.SUBSTILIUM_GOLD_ORE.get(),
+                block -> createSilktouchedFortuneDrops(ModBlocks.SUBSTILIUM_GOLD_ORE.get(), Items.RAW_GOLD, 1, 2));
+        this.add(ModBlocks.SUBSTILIUM_REDSTONE_ORE.get(),
+                block -> createSilktouchedFortuneDrops(ModBlocks.SUBSTILIUM_REDSTONE_ORE.get(), Items.REDSTONE, 4, 6));
+        this.add(ModBlocks.SUBSTILIUM_DIAMOND_ORE.get(),
+                block -> createSilktouchedFortuneDrops(ModBlocks.SUBSTILIUM_DIAMOND_ORE.get(), Items.DIAMOND, 1, 2));
+        this.add(ModBlocks.SUBSTILIUM_EMERALD_ORE.get(),
+                block -> createSilktouchedFortuneDrops(ModBlocks.SUBSTILIUM_EMERALD_ORE.get(), Items.EMERALD, 1, 2));
 
         this.dropSelf(ModBlocks.SUBSTILIUM_STEM.get());
         this.dropSelf(ModBlocks.STRIPPED_SUBSTILIUM_STEM.get());

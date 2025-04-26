@@ -82,10 +82,10 @@
       "minecraft:patch_grass_jungle",
       "minecraft:patch_sugar_cane",
       "minecraft:patch_pumpkin",
-      "wildaside:spotted_wintergreen_placed",
-      "wildaside:pinkster_flower_placed",
-      "wildaside:hickory_tree_placed",
-      "wildaside:hickory_sapling_placed"
+      "wildaside:spotted_wintergreen",
+      "wildaside:pinkster_flower",
+      "wildaside:hickory_tree",
+      "wildaside:hickory_sapling"
     ]
   ],
   "has_precipitation": true,

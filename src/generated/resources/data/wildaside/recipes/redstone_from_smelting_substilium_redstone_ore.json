@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "category": "blocks",
+  "cookingtime": 200,
+  "experience": 0.4,
+  "group": "redstone",
+  "ingredient": {
+    "item": "wildaside:substilium_redstone_ore"
+  },
+  "result": "minecraft:redstone"
+}

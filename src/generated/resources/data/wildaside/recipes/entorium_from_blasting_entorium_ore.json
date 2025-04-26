@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.5,
+  "group": "entorium",
+  "ingredient": {
+    "item": "wildaside:entorium_ore"
+  },
+  "result": "wildaside:entorium"
+}

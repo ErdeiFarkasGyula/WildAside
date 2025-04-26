@@ -18,23 +18,14 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class ModRecipeProvider extends RecipeProvider implements IConditionBuilder {
-//    private static final List<ItemLike> SAPPHIRE_SMELTABLES = List.of(ModItems.RAW_SAPPHIRE.get(),
-//            ModBlocks.SAPPHIRE_ORE.get(), ModBlocks.DEEPSLATE_SAPPHIRE_ORE.get(), ModBlocks.NETHER_SAPPHIRE_ORE.get(),
-//            ModBlocks.END_STONE_SAPPHIRE_ORE.get());
-
-
-
     public ModRecipeProvider(PackOutput pOutput) {
         super(pOutput);
     }
 
     @Override
     protected void buildRecipes(Consumer<FinishedRecipe> pWriter) {
-//      oreBlasting(pWriter, SAPPHIRE_SMELTABLES, RecipeCategory.MISC, ModItems.SAPPHIRE.get(), 0.25f, 100, "sapphire");
-
-
         //VIBRION
-        oreSmelting(pWriter, List.of(ModItems.VIBRION.get()), RecipeCategory.MISC, Items.YELLOW_DYE, 0.25f, 200, "yellow dye");
+        smelting(pWriter, List.of(ModItems.VIBRION.get()), RecipeCategory.MISC, Items.YELLOW_DYE, 0.25f, 200, "yellow dye");
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.VIBRION_BLOCK.get())
                 .pattern("SS")
@@ -76,6 +67,9 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
         //ENTORIUM
 
+        smelting(pWriter, List.of(ModBlocks.ENTORIUM_ORE.get()), RecipeCategory.MISC, ModItems.ENTORIUM.get(), 0.5f, 200, "entorium");
+        blasting(pWriter, List.of(ModBlocks.ENTORIUM_ORE.get()), RecipeCategory.MISC, ModItems.ENTORIUM.get(), 0.5f, 100, "entorium");
+
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.BIOENGINEERING_WORKSTATION.get())
                 .pattern("ECE")
                 .pattern("VQV")
@@ -88,13 +82,6 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .save(pWriter);
 
         //SUBSTILIUM
-//        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SPORE_BLASTER.get())
-//                .pattern("S")
-//                .pattern("S")
-//                .define('S', ModBlocks.NATURAL_SPORE_BLASTER.get())
-//                .unlockedBy(getHasName(ModItems.VIBRION.get()), has(ModItems.VIBRION.get()))
-//                .save(pWriter);
-
         List<ItemLike> SUBSTILIUM_WOODSET = List.of(ModBlocks.SUBSTILIUM_STEM.get().asItem(), ModBlocks.STRIPPED_SUBSTILIUM_STEM.get(),
                 ModBlocks.SUBSTILIUM_WOOD.get(), ModBlocks.STRIPPED_SUBSTILIUM_WOOD.get(), ModBlocks.SUBSTILIUM_PLANKS.get(),
                 ModBlocks.SUBSTILIUM_STAIRS.get(), ModBlocks.SUBSTILIUM_SLAB.get(), ModBlocks.SUBSTILIUM_FENCE.get(),
@@ -103,7 +90,67 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 ModItems.SUBSTILIUM_BOAT.get(), ModItems.SUBSTILIUM_CHEST_BOAT.get());
         defaultWoodSet(pWriter, SUBSTILIUM_WOODSET);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get(), 2)
+                .pattern("SS")
+                .pattern("SS")
+                .define('S', ModBlocks.SUBSTILIUM_SOIL.get())
+                .unlockedBy(getHasName(ModBlocks.SUBSTILIUM_SOIL.get()), has(ModBlocks.SUBSTILIUM_SOIL.get()))
+                .save(pWriter);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get(), 4)
+                .pattern("SS")
+                .pattern("SS")
+                .define('S', ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get())
+                .unlockedBy(getHasName(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get()), has(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get()))
+                .save(pWriter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.SUBSTILIUM_TILES.get(), 4)
+                .pattern("SS")
+                .pattern("SS")
+                .define('S', ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get())
+                .unlockedBy(getHasName(ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get()), has(ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get()))
+                .save(pWriter);
+
+        Block tiles = ModBlocks.SUBSTILIUM_TILES.get();
+        stoneCutting(pWriter, ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get(), ModBlocks.CHISELED_SUBSTILIUM_SOIL.get());
+        stoneCutting(pWriter, ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get(), ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get());
+        stoneCutting(pWriter, ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get(), tiles);
+        stoneCutting(pWriter, ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get(), ModBlocks.CRACKED_SUBSTILIUM_TILES.get());
+        stoneCutting(pWriter, ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get(), tiles);
+        stoneCutting(pWriter, ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get(), ModBlocks.CRACKED_SUBSTILIUM_TILES.get());
+        stoneCutting(pWriter, tiles, ModBlocks.CRACKED_SUBSTILIUM_TILES.get());
+        stoneCutting(pWriter, tiles, ModBlocks.SUBSTILIUM_TILE_STAIRS.get());
+        stoneCutting(pWriter, tiles, ModBlocks.SUBSTILIUM_TILE_SLAB.get());
+        stoneCutting(pWriter, tiles, ModBlocks.SUBSTILIUM_TILE_BUTTON.get());
+        stoneCutting(pWriter, tiles, ModBlocks.SUBSTILIUM_TILE_PRESSURE_PLATE.get());
+        stoneCutting(pWriter, tiles, ModBlocks.SUBSTILIUM_TILE_WALLS.get());
+
+        stairsRecipe(pWriter, ModBlocks.SUBSTILIUM_TILE_STAIRS.get(), tiles);
+        slabBuilder(RecipeCategory.BUILDING_BLOCKS, ModBlocks.SUBSTILIUM_TILE_SLAB.get(), Ingredient.of(tiles)).unlockedBy(getHasName(tiles), has(tiles)).save(pWriter);
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.REDSTONE, ModBlocks.SUBSTILIUM_TILE_BUTTON.get()).requires(tiles).unlockedBy(getHasName(tiles), has(tiles)).save(pWriter);
+        pressurePlateBuilder(RecipeCategory.REDSTONE, ModBlocks.SUBSTILIUM_TILE_PRESSURE_PLATE.get(), Ingredient.of(tiles)).unlockedBy(getHasName(tiles), has(tiles)).save(pWriter);
+        wallBuilder(RecipeCategory.BUILDING_BLOCKS, ModBlocks.SUBSTILIUM_TILE_WALLS.get(), Ingredient.of(tiles)).unlockedBy(getHasName(tiles), has(tiles)).save(pWriter);
+
+        smelting(pWriter, List.of(tiles), RecipeCategory.BUILDING_BLOCKS, ModBlocks.CRACKED_SUBSTILIUM_TILES.get(), 0.20f, 200, "cracked_substilium_tiles");
+
+        smelting(pWriter, List.of(ModBlocks.SUBSTILIUM_COAL_ORE.get()), RecipeCategory.MISC, Items.COAL, 0.2f, 200, "coal");
+        blasting(pWriter, List.of(ModBlocks.SUBSTILIUM_COAL_ORE.get()), RecipeCategory.MISC, Items.COAL, 0.3f, 100, "coal");
+        smelting(pWriter, List.of(ModBlocks.SUBSTILIUM_COPPER_ORE.get()), RecipeCategory.MISC, Items.COPPER_INGOT, 0.8f, 200, "copper_ingot");
+        blasting(pWriter, List.of(ModBlocks.SUBSTILIUM_COPPER_ORE.get()), RecipeCategory.MISC, Items.COPPER_INGOT, 0.8f, 100, "copper_ingot");
+        smelting(pWriter, List.of(ModBlocks.SUBSTILIUM_LAPIS_ORE.get()), RecipeCategory.MISC, Items.LAPIS_LAZULI, 0.3f, 200, "lapis");
+        blasting(pWriter, List.of(ModBlocks.SUBSTILIUM_LAPIS_ORE.get()), RecipeCategory.MISC, Items.LAPIS_LAZULI, 0.3f, 100, "lapis");
+        smelting(pWriter, List.of(ModBlocks.SUBSTILIUM_IRON_ORE.get()), RecipeCategory.MISC, Items.IRON_INGOT, 0.8f, 200, "iron_ingot");
+        blasting(pWriter, List.of(ModBlocks.SUBSTILIUM_IRON_ORE.get()), RecipeCategory.MISC, Items.IRON_INGOT, 0.8f, 100, "iron_ingot");
+        smelting(pWriter, List.of(ModBlocks.SUBSTILIUM_GOLD_ORE.get()), RecipeCategory.MISC, Items.GOLD_INGOT, 1.1f, 200, "gold_ingot");
+        blasting(pWriter, List.of(ModBlocks.SUBSTILIUM_GOLD_ORE.get()), RecipeCategory.MISC, Items.GOLD_INGOT, 1.1f, 100, "gold_ingot");
+        smelting(pWriter, List.of(ModBlocks.SUBSTILIUM_REDSTONE_ORE.get()), RecipeCategory.MISC, Items.REDSTONE, 0.4f, 200, "redstone");
+        blasting(pWriter, List.of(ModBlocks.SUBSTILIUM_REDSTONE_ORE.get()), RecipeCategory.MISC, Items.REDSTONE, 0.4f, 100, "redstone");
+        smelting(pWriter, List.of(ModBlocks.SUBSTILIUM_DIAMOND_ORE.get()), RecipeCategory.MISC, Items.DIAMOND, 1.1f, 200, "diamond");
+        blasting(pWriter, List.of(ModBlocks.SUBSTILIUM_DIAMOND_ORE.get()), RecipeCategory.MISC, Items.DIAMOND, 1.1f, 100, "diamond");
+        smelting(pWriter, List.of(ModBlocks.SUBSTILIUM_EMERALD_ORE.get()), RecipeCategory.MISC, Items.EMERALD, 1.1f, 200, "emerald");
+        blasting(pWriter, List.of(ModBlocks.SUBSTILIUM_EMERALD_ORE.get()), RecipeCategory.MISC, Items.EMERALD, 1.1f, 100, "emerald");
+
+        //HICKORY
         List<ItemLike> HICKORY_WOODSET = List.of(ModBlocks.HICKORY_LOG.get().asItem(), ModBlocks.STRIPPED_HICKORY_LOG.get(),
                 ModBlocks.HICKORY_WOOD.get(), ModBlocks.STRIPPED_HICKORY_WOOD.get(), ModBlocks.HICKORY_PLANKS.get(),
                 ModBlocks.HICKORY_STAIRS.get(), ModBlocks.HICKORY_SLAB.get(), ModBlocks.HICKORY_FENCE.get(),
@@ -131,60 +178,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .unlockedBy(getHasName(ModBlocks.SPOTTED_WINTERGREEN.get()), has(ModBlocks.SPOTTED_WINTERGREEN.get()))
                 .save(pWriter);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get(), 2)
-                .pattern("SS")
-                .pattern("SS")
-                .define('S', ModBlocks.SUBSTILIUM_SOIL.get())
-                .unlockedBy(getHasName(ModBlocks.SUBSTILIUM_SOIL.get()), has(ModBlocks.SUBSTILIUM_SOIL.get()))
-                .save(pWriter);
-
-        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get(), 4)
-                .pattern("SS")
-                .pattern("SS")
-                .define('S', ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get())
-                .unlockedBy(getHasName(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get()), has(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get()))
-                .save(pWriter);
-
-        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.SUBSTILIUM_TILES.get(), 4)
-                .pattern("SS")
-                .pattern("SS")
-                .define('S', ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get())
-                .unlockedBy(getHasName(ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get()), has(ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get()))
-                .save(pWriter);
-
-        Block tiles = ModBlocks.SUBSTILIUM_TILES.get();
-
-        stoneCutting(pWriter, ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get(), ModBlocks.CHISELED_SUBSTILIUM_SOIL.get());
-        stoneCutting(pWriter, ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get(), ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get());
-        stoneCutting(pWriter, ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get(), tiles);
-        stoneCutting(pWriter, ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get(), ModBlocks.CRACKED_SUBSTILIUM_TILES.get());
-        stoneCutting(pWriter, ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get(), tiles);
-        stoneCutting(pWriter, ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get(), ModBlocks.CRACKED_SUBSTILIUM_TILES.get());
-        stoneCutting(pWriter, tiles, ModBlocks.CRACKED_SUBSTILIUM_TILES.get());
-        stoneCutting(pWriter, tiles, ModBlocks.SUBSTILIUM_TILE_STAIRS.get());
-        stoneCutting(pWriter, tiles, ModBlocks.SUBSTILIUM_TILE_SLAB.get());
-        stoneCutting(pWriter, tiles, ModBlocks.SUBSTILIUM_TILE_BUTTON.get());
-        stoneCutting(pWriter, tiles, ModBlocks.SUBSTILIUM_TILE_PRESSURE_PLATE.get());
-        stoneCutting(pWriter, tiles, ModBlocks.SUBSTILIUM_TILE_WALLS.get());
-
-        stairsRecipe(pWriter, ModBlocks.SUBSTILIUM_TILE_STAIRS.get(), tiles);
-        slabBuilder(RecipeCategory.BUILDING_BLOCKS, ModBlocks.SUBSTILIUM_TILE_SLAB.get(), Ingredient.of(tiles)).unlockedBy(getHasName(tiles), has(tiles)).save(pWriter);
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.REDSTONE, ModBlocks.SUBSTILIUM_TILE_BUTTON.get())
-                .requires(tiles)
-                .unlockedBy(getHasName(tiles), has(tiles))
-                .save(pWriter);
-        pressurePlateBuilder(RecipeCategory.REDSTONE, ModBlocks.SUBSTILIUM_TILE_PRESSURE_PLATE.get(), Ingredient.of(tiles)).unlockedBy(getHasName(tiles), has(tiles)).save(pWriter);
-        wallBuilder(RecipeCategory.BUILDING_BLOCKS, ModBlocks.SUBSTILIUM_TILE_WALLS.get(), Ingredient.of(tiles)).unlockedBy(getHasName(tiles), has(tiles)).save(pWriter);
-
-        oreSmelting(pWriter, List.of(tiles), RecipeCategory.BUILDING_BLOCKS, ModBlocks.CRACKED_SUBSTILIUM_TILES.get(), 0.20f, 200, "cracked_substilium_tiles");
-
     }
 
-    protected static void oreSmelting(Consumer<FinishedRecipe> pFinishedRecipeConsumer, List<ItemLike> pIngredients, RecipeCategory pCategory, ItemLike pResult, float pExperience, int pCookingTIme, String pGroup) {
+    protected static void smelting(Consumer<FinishedRecipe> pFinishedRecipeConsumer, List<ItemLike> pIngredients, RecipeCategory pCategory, ItemLike pResult, float pExperience, int pCookingTIme, String pGroup) {
         oreCooking(pFinishedRecipeConsumer, RecipeSerializer.SMELTING_RECIPE, pIngredients, pCategory, pResult, pExperience, pCookingTIme, pGroup, "_from_smelting");
     }
 
-    protected static void oreBlasting(Consumer<FinishedRecipe> pFinishedRecipeConsumer, List<ItemLike> pIngredients, RecipeCategory pCategory, ItemLike pResult, float pExperience, int pCookingTime, String pGroup) {
+    protected static void blasting(Consumer<FinishedRecipe> pFinishedRecipeConsumer, List<ItemLike> pIngredients, RecipeCategory pCategory, ItemLike pResult, float pExperience, int pCookingTime, String pGroup) {
         oreCooking(pFinishedRecipeConsumer, RecipeSerializer.BLASTING_RECIPE, pIngredients, pCategory, pResult, pExperience, pCookingTime, pGroup, "_from_blasting");
     }
 

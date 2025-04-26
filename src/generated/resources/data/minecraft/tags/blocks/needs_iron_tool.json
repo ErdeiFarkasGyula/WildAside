@@ -1,5 +1,9 @@
 {
   "values": [
+    "wildaside:substilium_gold_ore",
+    "wildaside:substilium_redstone_ore",
+    "wildaside:substilium_diamond_ore",
+    "wildaside:substilium_emerald_ore",
     "wildaside:entorium_ore",
     "wildaside:overgrown_entorium_ore"
   ]

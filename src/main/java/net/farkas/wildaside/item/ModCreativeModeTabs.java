@@ -46,6 +46,14 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModBlocks.SUBSTILIUM_TILE_PRESSURE_PLATE.get());
                         pOutput.accept(ModBlocks.SUBSTILIUM_TILE_BUTTON.get());
 
+                        pOutput.accept(ModBlocks.SUBSTILIUM_COAL_ORE.get());
+                        pOutput.accept(ModBlocks.SUBSTILIUM_COPPER_ORE.get());
+                        pOutput.accept(ModBlocks.SUBSTILIUM_LAPIS_ORE.get());
+                        pOutput.accept(ModBlocks.SUBSTILIUM_IRON_ORE.get());
+                        pOutput.accept(ModBlocks.SUBSTILIUM_GOLD_ORE.get());
+                        pOutput.accept(ModBlocks.SUBSTILIUM_REDSTONE_ORE.get());
+                        pOutput.accept(ModBlocks.SUBSTILIUM_DIAMOND_ORE.get());
+                        pOutput.accept(ModBlocks.SUBSTILIUM_EMERALD_ORE.get());
                         pOutput.accept(ModBlocks.OVERGROWN_ENTORIUM_ORE.get());
                         pOutput.accept(ModBlocks.ENTORIUM_ORE.get());
                         pOutput.accept(ModItems.ENTORIUM.get());

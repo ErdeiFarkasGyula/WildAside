@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_entorium_ore": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "wildaside:entorium_ore"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "wildaside:entorium_from_smelting_entorium_ore"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_entorium_ore",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "wildaside:entorium_from_smelting_entorium_ore"
+    ]
+  },
+  "sends_telemetry_event": false
+}

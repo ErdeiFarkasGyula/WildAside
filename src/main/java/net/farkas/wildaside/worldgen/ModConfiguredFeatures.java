@@ -39,6 +39,21 @@ public class ModConfiguredFeatures {
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> OVERGROWN_ENTORIUM_ORE = registerKey("overgrown_entorium_ore");
 
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SUBSTILIUM_COAL_ORE = registerKey("substilium_coal_ore");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SUBSTILIUM_COPPER_ORE_SMALL = registerKey("substilium_copper_ore_small");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SUBSTILIUM_COPPER_ORE_LARGE = registerKey("substilium_copper_ore_large");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SUBSTILIUM_LAPIS_ORE = registerKey("substilium_lapis_ore");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SUBSTILIUM_LAPIS_ORE_BURIED = registerKey("substilium_lapis_ore_buried");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SUBSTILIUM_IRON_ORE = registerKey("substilium_iron_ore");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SUBSTILIUM_IRON_ORE_SMALL = registerKey("substilium_iron_ore_small");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SUBSTILIUM_GOLD_ORE = registerKey("substilium_gold_ore");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SUBSTILIUM_GOLD_ORE_BURIED = registerKey("substilium_gold_ore_buried");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SUBSTILIUM_REDSTONE_ORE = registerKey("substilium_redstone_ore");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SUBSTILIUM_DIAMOND_ORE_SMALL = registerKey("substilium_diamond_ore_small");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SUBSTILIUM_DIAMOND_ORE_LARGE = registerKey("substilium_diamond_ore_large");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SUBSTILIUM_DIAMOND_ORE_BURIED = registerKey("substilium_diamond_ore_buried");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SUBSTILIUM_EMERALD_ORE = registerKey("substilium_emerald_ore");
+
     public static final ResourceKey<ConfiguredFeature<?, ?>> COMPRESSED_SUBSTILIUM_SOIL = registerKey("compressed_substilium_soil");
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> NATURAL_SPORE_BLASTER = registerKey("natural_spore_blaster");
@@ -62,11 +77,36 @@ public class ModConfiguredFeatures {
     public static void bootstrap(BootstapContext<ConfiguredFeature<?, ?>> context) {
         RuleTest overgrown_entorium_ore_replaceables = new BlockMatchTest(ModBlocks.SUBSTILIUM_SOIL.get());
         RuleTest compressed_substilium_soil_replaceables = new BlockMatchTest(ModBlocks.SUBSTILIUM_SOIL.get());
+        RuleTest substilium_ore_replaceables = new BlockMatchTest(ModBlocks.SUBSTILIUM_SOIL.get());
 
         List<OreConfiguration.TargetBlockState> overgrown_entorium_ore = List.of(OreConfiguration.target(overgrown_entorium_ore_replaceables, ModBlocks.OVERGROWN_ENTORIUM_ORE.get().defaultBlockState()));
         List<OreConfiguration.TargetBlockState> compressed_substilium_soil = List.of(OreConfiguration.target(compressed_substilium_soil_replaceables, ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get().defaultBlockState()));
 
+        List<OreConfiguration.TargetBlockState> substilium_coal_ore = List.of(OreConfiguration.target(substilium_ore_replaceables, ModBlocks.SUBSTILIUM_COAL_ORE.get().defaultBlockState()));
+        List<OreConfiguration.TargetBlockState> substilium_copper_ore = List.of(OreConfiguration.target(substilium_ore_replaceables, ModBlocks.SUBSTILIUM_COPPER_ORE.get().defaultBlockState()));
+        List<OreConfiguration.TargetBlockState> substilium_lapis_ore = List.of(OreConfiguration.target(substilium_ore_replaceables, ModBlocks.SUBSTILIUM_LAPIS_ORE.get().defaultBlockState()));
+        List<OreConfiguration.TargetBlockState> substilium_iron_ore = List.of(OreConfiguration.target(substilium_ore_replaceables, ModBlocks.SUBSTILIUM_IRON_ORE.get().defaultBlockState()));
+        List<OreConfiguration.TargetBlockState> substilium_gold_ore = List.of(OreConfiguration.target(substilium_ore_replaceables, ModBlocks.SUBSTILIUM_GOLD_ORE.get().defaultBlockState()));
+        List<OreConfiguration.TargetBlockState> substilium_redstone_ore = List.of(OreConfiguration.target(substilium_ore_replaceables, ModBlocks.SUBSTILIUM_REDSTONE_ORE.get().defaultBlockState()));
+        List<OreConfiguration.TargetBlockState> substilium_diamond_ore = List.of(OreConfiguration.target(substilium_ore_replaceables, ModBlocks.SUBSTILIUM_DIAMOND_ORE.get().defaultBlockState()));
+        List<OreConfiguration.TargetBlockState> substilium_emerald_ore = List.of(OreConfiguration.target(substilium_ore_replaceables, ModBlocks.SUBSTILIUM_EMERALD_ORE.get().defaultBlockState()));
+
         register(context, OVERGROWN_ENTORIUM_ORE, Feature.ORE, new OreConfiguration(overgrown_entorium_ore, 16));
+
+        register(context, SUBSTILIUM_COAL_ORE, Feature.ORE, new OreConfiguration(substilium_coal_ore, 17, 0.5f));
+        register(context, SUBSTILIUM_COPPER_ORE_SMALL, Feature.ORE, new OreConfiguration(substilium_copper_ore, 10));
+        register(context, SUBSTILIUM_COPPER_ORE_LARGE, Feature.ORE, new OreConfiguration(substilium_copper_ore, 20));
+        register(context, SUBSTILIUM_LAPIS_ORE, Feature.ORE, new OreConfiguration(substilium_lapis_ore, 7));
+        register(context, SUBSTILIUM_LAPIS_ORE_BURIED, Feature.ORE, new OreConfiguration(substilium_lapis_ore, 7, 1f));
+        register(context, SUBSTILIUM_IRON_ORE, Feature.ORE, new OreConfiguration(substilium_iron_ore, 9));
+        register(context, SUBSTILIUM_IRON_ORE_SMALL, Feature.ORE, new OreConfiguration(substilium_iron_ore, 4));
+        register(context, SUBSTILIUM_GOLD_ORE, Feature.ORE, new OreConfiguration(substilium_gold_ore, 16));
+        register(context, SUBSTILIUM_GOLD_ORE_BURIED, Feature.ORE, new OreConfiguration(substilium_gold_ore, 9));
+        register(context, SUBSTILIUM_REDSTONE_ORE, Feature.ORE, new OreConfiguration(substilium_redstone_ore, 9, 0.5f));
+        register(context, SUBSTILIUM_DIAMOND_ORE_SMALL, Feature.ORE, new OreConfiguration(substilium_diamond_ore, 4, 0.5f));
+        register(context, SUBSTILIUM_DIAMOND_ORE_LARGE, Feature.ORE, new OreConfiguration(substilium_diamond_ore, 12, 0.7f));
+        register(context, SUBSTILIUM_DIAMOND_ORE_BURIED, Feature.ORE, new OreConfiguration(substilium_diamond_ore, 8, 1f));
+        register(context, SUBSTILIUM_EMERALD_ORE, Feature.ORE, new OreConfiguration(substilium_emerald_ore, 3));
 
         register(context, COMPRESSED_SUBSTILIUM_SOIL, Feature.ORE, new OreConfiguration(compressed_substilium_soil, 36));
 

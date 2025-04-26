@@ -57,6 +57,15 @@ public class ModBlockStateProvider extends BlockStateProvider {
         buttonBlock(((ButtonBlock)ModBlocks.SUBSTILIUM_TILE_BUTTON.get()), blockTexture(ModBlocks.SUBSTILIUM_TILES.get()));
         pressurePlateBlock(((PressurePlateBlock)ModBlocks.SUBSTILIUM_TILE_PRESSURE_PLATE.get()), blockTexture(ModBlocks.SUBSTILIUM_TILES.get()));
 
+        blockWithItem(ModBlocks.SUBSTILIUM_COAL_ORE);
+        blockWithItem(ModBlocks.SUBSTILIUM_COPPER_ORE);
+        blockWithItem(ModBlocks.SUBSTILIUM_LAPIS_ORE);
+        blockWithItem(ModBlocks.SUBSTILIUM_IRON_ORE);
+        blockWithItem(ModBlocks.SUBSTILIUM_GOLD_ORE);
+        blockWithItem(ModBlocks.SUBSTILIUM_REDSTONE_ORE);
+        blockWithItem(ModBlocks.SUBSTILIUM_DIAMOND_ORE);
+        blockWithItem(ModBlocks.SUBSTILIUM_EMERALD_ORE);
+
         axisBlock(((RotatedPillarBlock) ModBlocks.SUBSTILIUM_STEM.get()), modLoc("block/substilium_stem_side"), modLoc("block/substilium_stem_top"));
         axisBlock(((RotatedPillarBlock) ModBlocks.STRIPPED_SUBSTILIUM_STEM.get()), modLoc("block/stripped_substilium_stem_side"), modLoc("block/stripped_substilium_stem_top"));
         axisBlock(((RotatedPillarBlock) ModBlocks.SUBSTILIUM_WOOD.get()), modLoc("block/substilium_stem_side"), modLoc("block/substilium_stem_side"));
