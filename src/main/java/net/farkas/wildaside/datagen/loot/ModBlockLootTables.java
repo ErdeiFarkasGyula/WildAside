@@ -190,7 +190,6 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.dropSelf(ModBlocks.SPOTTED_WINTERGREEN.get());
         this.dropSelf(ModBlocks.PINKSTER_FLOWER.get());
 
-
     }
 
     protected LootTable.Builder createSilktouchedFortuneDrops(Block pBlock, Item item, int min, int max) {

@@ -1,0 +1,32 @@
+{
+  "pools": [
+    {
+      "name": "wildaside_inject",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:enchanted_book",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{StoredEnchantments:[{id:\"wildaside:extensive_research\",lvl:1s}]}"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:enchanted_book",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{StoredEnchantments:[{id:\"wildaside:cushioning\",lvl:1s}]}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

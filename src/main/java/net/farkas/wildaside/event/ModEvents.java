@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.effect.ModMobEffects;
+import net.farkas.wildaside.enchantment.ModEnchantments;
 import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.entity.client.ModModelLayers;
 import net.farkas.wildaside.entity.client.MucellithModel;
@@ -14,6 +15,8 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -25,8 +28,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.biome.Biome;
@@ -65,21 +70,29 @@ public class ModEvents {
     @SubscribeEvent
     public static void addCustomTrades(VillagerTradesEvent event) {
         if (event.getType() == VillagerProfession.FARMER) {
-            Int2ObjectMap<List<VillagerTrades.ItemListing>> trades = event.getTrades();
             int villagerLevel = 1;
             ItemStack emerald = new ItemStack(Items.EMERALD);
-
-            trades.get(villagerLevel).add((pTrader, pRandom) -> new MerchantOffer(
+            event.getTrades().get(villagerLevel).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemStack(ModItems.HICKORY_NUT.get(), 16), emerald, 20, 2, 0.05f
             ));
         }
 
         if (event.getType() == VillagerProfession.TOOLSMITH) {
-            Int2ObjectMap<List<VillagerTrades.ItemListing>> trades = event.getTrades();
             int villagerLevel = 3;
-
-            trades.get(villagerLevel).add((pTrader, pRandom) -> new MerchantOffer(
+            event.getTrades().get(villagerLevel).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemStack(Items.EMERALD, 6), new ItemStack(ModItems.SPORE_BOMB.get()), 2, 5, 0.06f
+            ));
+        }
+
+        if (event.getType() == VillagerProfession.LIBRARIAN) {
+            int villagerLevel = 5;
+            ItemStack book = new ItemStack(Items.BOOK);
+            ItemStack emerald = new ItemStack(Items.EMERALD, 8);
+            EnchantmentInstance enchantmentInstance = new EnchantmentInstance(ModEnchantments.CUSHIONING.get(), 1);
+            ItemStack enchantedBook = EnchantedBookItem.createForEnchantment(enchantmentInstance);
+
+            event.getTrades().get(villagerLevel).add(((pTrader, pRandom) -> new MerchantOffer(
+                    book, emerald, enchantedBook, 1, 5, 0.05f)
             ));
         }
     }
