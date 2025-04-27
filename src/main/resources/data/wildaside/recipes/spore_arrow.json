@@ -1,0 +1,14 @@
+{
+  "type": "wildaside:bioengineering",
+  "ingredients": [
+    { "item": "wildaside:vibrion" },
+    { "item": "minecraft:arrow" },
+    { "item": "minecraft:arrow" },
+    { "item": "minecraft:arrow" },
+    { "item": "minecraft:arrow" }
+  ],
+  "output": {
+    "count": 4,
+    "item": "wildaside:spore_arrow"
+  }
+}

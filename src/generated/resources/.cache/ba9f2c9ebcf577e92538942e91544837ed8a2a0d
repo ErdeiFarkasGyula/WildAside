@@ -1,4 +1,4 @@
-// 1.20.1	2025-04-23T19:01:09.7398034	Item Models: wildaside
+// 1.20.1	2025-04-27T21:20:51.9164987	Item Models: wildaside
 657a44b343b52d1185c119350b9599bc495c3976 assets/wildaside/models/item/brown_glowing_hickory_sapling.json
 7c314b9855fa14cfb6f45f4b35479303da8c369e assets/wildaside/models/item/entorium.json
 72ebbdfaa5d8b7399ab25ba412fa3bfdc404a9a3 assets/wildaside/models/item/entorium_ore.json
@@ -30,6 +30,7 @@ a26dc7269bff8cf5a6ca1d2ba5c2a4cd4928e57e assets/wildaside/models/item/hickory_ha
 06017fbe89a63026f0f3e0163d65cf1fa156d723 assets/wildaside/models/item/overgrown_entorium_ore.json
 968dcec5a5c71d9ad044f4e3738c602ffad2985d assets/wildaside/models/item/pinkster_flower.json
 d352d1091ffaa4c5a75c1920c4b91cb2664f1592 assets/wildaside/models/item/red_glowing_hickory_sapling.json
+886632645a8f997a9f6e142cdf190a3305f2bd99 assets/wildaside/models/item/spore_arrow.json
 8adc0b5bb5773db56c57a0374736715a147725ed assets/wildaside/models/item/spore_bomb.json
 5d6aa0d659537fe959c1581e669c5f9553426425 assets/wildaside/models/item/spotted_wintergreen.json
 62a1de6bc697c207fabeb6f8d1d78c9b09dc6d83 assets/wildaside/models/item/stripped_hickory_log.json

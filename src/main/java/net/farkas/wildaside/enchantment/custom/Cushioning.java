@@ -2,6 +2,7 @@ package net.farkas.wildaside.enchantment.custom;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.enchantment.ModEnchantments;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -51,25 +52,32 @@ class CushioningHandler {
 
     @SubscribeEvent
     public static void onFallDamage(LivingHurtEvent event) {
-        LivingEntity entity = event.getEntity();
         DamageSource source = event.getSource();
-
         if (!source.is(DamageTypes.FALL)) return;
         if (event.getAmount() <= 0) return;
+        if (!(event.getEntity() instanceof Player player)) return;
 
-        if (!(entity instanceof Player player)) return;
         ItemStack boots = player.getItemBySlot(EquipmentSlot.FEET);
         int level = boots.getEnchantmentLevel(ModEnchantments.CUSHIONING.get());
         if (level <= 0) return;
 
-        int amp = (level >= 3 ? 1 : 0);
+        float chance;
+        switch (level) {
+            case 1 -> chance = 0.5f;
+            case 2 -> chance = 0.75f;
+            default -> chance = 1f;
+        }
+
+        if (RandomSource.create().nextFloat() > chance) return;
+
         int seconds;
         switch (level) {
             case 1 -> seconds = 5;
             case 2 -> seconds = 7;
-            case 3 -> seconds = 10;
-            default -> seconds = 5;
+            default -> seconds = 10;
         }
+
+        int amp = (level >= 3 ? 1 : 0);
         player.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, seconds * 20, amp, true, true));
     }
 }

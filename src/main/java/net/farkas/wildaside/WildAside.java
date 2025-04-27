@@ -8,6 +8,7 @@ import net.farkas.wildaside.enchantment.ModEnchantments;
 import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.entity.client.ModBoatRenderer;
 import net.farkas.wildaside.entity.client.MucellithRenderer;
+import net.farkas.wildaside.entity.custom.SporeArrowEntity;
 import net.farkas.wildaside.item.ModCreativeModeTabs;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.item.VanillaCreativeTabs;
@@ -27,8 +28,10 @@ import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.entity.ArrowRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.block.Blocks;
@@ -154,6 +157,12 @@ public class WildAside
             EntityRenderers.register(ModEntities.MOD_CHEST_BOAT.get(), pContext -> new ModBoatRenderer(pContext, true));
             EntityRenderers.register(ModEntities.SPORE_BOMB.get(), ThrownItemRenderer::new);
             EntityRenderers.register(ModEntities.FERTILISER_BOMB.get(), ThrownItemRenderer::new);
+            EntityRenderers.register(ModEntities.SPORE_ARROW.get(),pContext -> new ArrowRenderer<SporeArrowEntity>(pContext) {
+                @Override
+                public ResourceLocation getTextureLocation(SporeArrowEntity pEntity) {
+                    return new ResourceLocation(WildAside.MOD_ID, "textures/entity/projectiles/spore_arrow.png");
+                }
+            });
             EntityRenderers.register(ModEntities.MUCELLITH.get(), MucellithRenderer::new);
 
             MenuScreens.register(ModMenuTypes.BIOENGINEERING_WORKSTATION_MENU.get(), BioengineeringWorkstationScreen::new);

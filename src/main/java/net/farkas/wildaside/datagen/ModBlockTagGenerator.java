@@ -40,7 +40,12 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 .add(ModBlocks.SUBSTILIUM_TILE_SLAB.get())
                 .add(ModBlocks.SUBSTILIUM_TILE_BUTTON.get())
                 .add(ModBlocks.SUBSTILIUM_TILE_PRESSURE_PLATE.get())
-                .add(ModBlocks.SUBSTILIUM_TILE_WALLS.get())
+                .add(ModBlocks.SUBSTILIUM_TILE_WALLS.get());
+
+        this.tag(BlockTags.MINEABLE_WITH_SHOVEL)
+                .add(ModBlocks.SPORE_BLASTER.get())
+                .add(ModBlocks.SUBSTILIUM_SOIL.get())
+                .add(ModBlocks.OVERGROWN_ENTORIUM_ORE.get())
                 .add(ModBlocks.SUBSTILIUM_COAL_ORE.get())
                 .add(ModBlocks.SUBSTILIUM_COPPER_ORE.get())
                 .add(ModBlocks.SUBSTILIUM_LAPIS_ORE.get())
@@ -48,12 +53,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 .add(ModBlocks.SUBSTILIUM_GOLD_ORE.get())
                 .add(ModBlocks.SUBSTILIUM_REDSTONE_ORE.get())
                 .add(ModBlocks.SUBSTILIUM_DIAMOND_ORE.get())
-                .add(ModBlocks.SUBSTILIUM_EMERALD_ORE.get());
-
-        this.tag(BlockTags.MINEABLE_WITH_SHOVEL)
-                .add(ModBlocks.SPORE_BLASTER.get())
-                .add(ModBlocks.SUBSTILIUM_SOIL.get())
-                .add(ModBlocks.OVERGROWN_ENTORIUM_ORE.get())
+                .add(ModBlocks.SUBSTILIUM_EMERALD_ORE.get())
                 .add(ModBlocks.ENTORIUM_ORE.get());
 
         this.tag(BlockTags.MINEABLE_WITH_HOE)

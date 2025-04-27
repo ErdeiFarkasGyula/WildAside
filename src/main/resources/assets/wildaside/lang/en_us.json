@@ -5,6 +5,7 @@
   "item.wildaside.mucellith_jaw": "Mucellith Jaw",
   "item.wildaside.entorium": "Entorium",
   "item.wildaside.entorium_pill": "Entorium Pill",
+  "item.wildaside.spore_arrow": "Spore Arrow",
   "item.wildaside.spore_bomb": "Spore Bomb",
   "item.wildaside.fertiliser_bomb": "Fertiliser Bomb",
   "item.wildaside.hickory_nut": "Hickory Nut",
@@ -141,6 +142,7 @@
   "particle.wildaside.omnivamp_particle": "Omnivamp Particle",
 
   "entity.wildaside.mod_chest_boat": "Boat with Chest",
+  "entity.wildaside.mucellith": "Mucellith",
 
   "enchantment.wildaside.extensive_research": "Extensive Research",
   "enchantment.wildaside.cushioning": "Cushioning",

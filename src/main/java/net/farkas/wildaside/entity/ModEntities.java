@@ -27,6 +27,9 @@ public class ModEntities {
     public static final RegistryObject<EntityType<FertiliserBombEntity>> FERTILISER_BOMB =
             ENTITY_TYPES.register("fertiliser_bomb", () -> EntityType.Builder.<FertiliserBombEntity>of(FertiliserBombEntity::new, MobCategory.MISC)
                     .sized(0.5f, 0.5f).build("fertiliser_bomb"));
+    public static final RegistryObject<EntityType<SporeArrowEntity>> SPORE_ARROW =
+            ENTITY_TYPES.register("spore_arrow", () -> EntityType.Builder.<SporeArrowEntity>of(SporeArrowEntity::new, MobCategory.MISC)
+                    .sized(0.5f, 0.5f).build("spore_arrow"));
 
     public static final RegistryObject<EntityType<MucellithEntity>> MUCELLITH =
             ENTITY_TYPES.register("mucellith", () -> EntityType.Builder.<MucellithEntity>of(MucellithEntity::new, MobCategory.MISC)
