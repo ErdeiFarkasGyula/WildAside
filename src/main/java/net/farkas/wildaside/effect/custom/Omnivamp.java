@@ -1,14 +1,15 @@
-package net.farkas.wildaside.event;
+package net.farkas.wildaside.effect.custom;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.util.AdvancementHandler;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -22,9 +23,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
-@Mod.EventBusSubscriber(modid = WildAside.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+public class Omnivamp extends MobEffect {
+    public Omnivamp(MobEffectCategory pCategory, int pColor) {
+        super(pCategory, pColor);
+    }
+}
 
-public class OmnivampHandler {
+@Mod.EventBusSubscriber(modid = WildAside.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+class OmnivampHandler {
     private static class Task {
         final ServerLevel level;
         final UUID attackerId, targetId;
