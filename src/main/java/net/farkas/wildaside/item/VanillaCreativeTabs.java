@@ -3,6 +3,7 @@ package net.farkas.wildaside.item;
 import net.farkas.wildaside.block.ModBlocks;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import org.checkerframework.checker.units.qual.A;
 
 public class VanillaCreativeTabs {
     public static void addCreative(BuildCreativeModeTabContentsEvent event) {
@@ -53,6 +54,7 @@ public class VanillaCreativeTabs {
             event.accept(ModBlocks.HICKORY_BUTTON);
         }
         if (tab == CreativeModeTabs.COMBAT) {
+            event.accept(ModItems.SPORE_ARROW);
             event.accept(ModItems.SPORE_BOMB);
         }
         if (tab == CreativeModeTabs.FOOD_AND_DRINKS) {
@@ -75,6 +77,14 @@ public class VanillaCreativeTabs {
             event.accept(ModBlocks.HANGING_VIBRION_VINES);
             event.accept(ModBlocks.SUBSTILIUM_SPROUTS);
             event.accept(ModBlocks.SUBSTILIUM_SOIL);
+            event.accept(ModBlocks.SUBSTILIUM_COAL_ORE);
+            event.accept(ModBlocks.SUBSTILIUM_IRON_ORE);
+            event.accept(ModBlocks.SUBSTILIUM_COPPER_ORE);
+            event.accept(ModBlocks.SUBSTILIUM_GOLD_ORE);
+            event.accept(ModBlocks.SUBSTILIUM_REDSTONE_ORE);
+            event.accept(ModBlocks.SUBSTILIUM_EMERALD_ORE);
+            event.accept(ModBlocks.SUBSTILIUM_LAPIS_ORE);
+            event.accept(ModBlocks.SUBSTILIUM_DIAMOND_ORE);
             event.accept(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL);
             event.accept(ModBlocks.OVERGROWN_ENTORIUM_ORE);
             event.accept(ModBlocks.ENTORIUM_ORE);
@@ -97,15 +107,20 @@ public class VanillaCreativeTabs {
         }
         if (tab == CreativeModeTabs.REDSTONE_BLOCKS) {
             event.accept(ModBlocks.SPORE_BLASTER);
+            event.accept(ModBlocks.POTION_BLASTER);
         }
         if (tab == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             event.accept(ModItems.ENTORIUM_PILL);
+            event.accept(ModItems.SPORE_ARROW);
             event.accept(ModItems.SPORE_BOMB);
             event.accept(ModItems.FERTILISER_BOMB);
             event.accept(ModItems.SUBSTILIUM_BOAT);
             event.accept(ModItems.SUBSTILIUM_CHEST_BOAT);
             event.accept(ModItems.HICKORY_BOAT);
             event.accept(ModItems.HICKORY_CHEST_BOAT);
+        }
+        if (tab == CreativeModeTabs.SPAWN_EGGS) {
+            event.accept(ModItems.MUCELLITH_SPAWN_EGG);
         }
     }
 }

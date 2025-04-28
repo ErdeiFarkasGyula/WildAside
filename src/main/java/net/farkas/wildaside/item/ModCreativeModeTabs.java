@@ -13,7 +13,7 @@ import net.minecraftforge.registries.RegistryObject;
 public class ModCreativeModeTabs {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, WildAside.MOD_ID);
 
-    public static final RegistryObject<CreativeModeTab> WILDASIDE_TAB = CREATIVE_MODE_TABS.register("wildaside_tab",
+    public static final RegistryObject<CreativeModeTab> WILDASIDE_TAB = CREATIVE_MODE_TABS.register("wildaside",
             () -> CreativeModeTab.builder()
                     .icon(() -> new ItemStack(ModBlocks.VIBRION_BLOCK.get()))
                     .title(Component.translatable("creativetab.wildaside_tab"))
@@ -47,13 +47,13 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModBlocks.SUBSTILIUM_TILE_BUTTON.get());
 
                         pOutput.accept(ModBlocks.SUBSTILIUM_COAL_ORE.get());
-                        pOutput.accept(ModBlocks.SUBSTILIUM_COPPER_ORE.get());
-                        pOutput.accept(ModBlocks.SUBSTILIUM_LAPIS_ORE.get());
                         pOutput.accept(ModBlocks.SUBSTILIUM_IRON_ORE.get());
+                        pOutput.accept(ModBlocks.SUBSTILIUM_COPPER_ORE.get());
                         pOutput.accept(ModBlocks.SUBSTILIUM_GOLD_ORE.get());
                         pOutput.accept(ModBlocks.SUBSTILIUM_REDSTONE_ORE.get());
-                        pOutput.accept(ModBlocks.SUBSTILIUM_DIAMOND_ORE.get());
                         pOutput.accept(ModBlocks.SUBSTILIUM_EMERALD_ORE.get());
+                        pOutput.accept(ModBlocks.SUBSTILIUM_LAPIS_ORE.get());
+                        pOutput.accept(ModBlocks.SUBSTILIUM_DIAMOND_ORE.get());
                         pOutput.accept(ModBlocks.OVERGROWN_ENTORIUM_ORE.get());
                         pOutput.accept(ModBlocks.ENTORIUM_ORE.get());
                         pOutput.accept(ModItems.ENTORIUM.get());
