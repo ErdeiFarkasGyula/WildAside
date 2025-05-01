@@ -20,7 +20,7 @@ public class ModMobEffects {
             () -> new Contamination(MobEffectCategory.HARMFUL, -6184663)
                     .addAttributeModifier(Attributes.ARMOR, "FA233E1C-6969-4200-B01B-BCCE9785ACA4", -0.20 , AttributeModifier.Operation.MULTIPLY_TOTAL)
                     .addAttributeModifier(Attributes.ATTACK_DAMAGE, "FA233E1C-6969-4200-B01B-BCCE9785ACA4", -0.20 , AttributeModifier.Operation.MULTIPLY_TOTAL)
-                    .addAttributeModifier(Attributes.SPAWN_REINFORCEMENTS_CHANCE, "FB233E1C-6969-4200-B01B-BCCE9785ACA4", 0.1, AttributeModifier.Operation.ADDITION)
+                    .addAttributeModifier(Attributes.SPAWN_REINFORCEMENTS_CHANCE, "FB233E1C-6969-4200-B01B-BCCE9785ACA4", 0.05, AttributeModifier.Operation.ADDITION)
     );
 
     public static final RegistryObject<MobEffect> IMMUNITY = MOB_EFFECTS.register("immunity",

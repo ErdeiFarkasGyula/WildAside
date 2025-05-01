@@ -1,0 +1,103 @@
+package net.farkas.wildaside.entity.ai.mucellith;
+
+import net.farkas.wildaside.entity.custom.MucellithEntity;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.player.Player;
+
+import javax.annotation.Nullable;
+import java.util.EnumSet;
+
+public class MucellithAttackGoal extends Goal {
+    private final Mob mob;
+    private final MucellithEntity entity;
+    @Nullable
+    private LivingEntity target;
+    private int attackTime = -1;
+    private final int attackTimeMax;
+    private final float attackRadius;
+
+    public MucellithAttackGoal(MucellithEntity entity, int pAttackInterval, float pAttackRadius) {
+        if (!(entity instanceof LivingEntity)) {
+            throw new IllegalArgumentException("MucellithAttackGoal requires LivingEntity");
+        } else {
+            this.entity = entity;
+            this.mob = (Mob)entity;
+            this.attackTimeMax = pAttackInterval;
+            this.attackRadius = pAttackRadius;
+            this.setFlags(EnumSet.of(Goal.Flag.LOOK));
+        }
+    }
+
+    @Override
+    public boolean canUse() {
+        LivingEntity livingentity = this.mob.getTarget();
+        if (livingentity != null && livingentity.isAlive()) {
+            this.target = livingentity;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean canContinueToUse() {
+        return this.canUse();
+    }
+
+    @Override
+    public void stop() {
+        entity.setAttacking(false);
+        this.attackTime = attackTimeMax;
+        this.target = null;
+    }
+
+    @Override
+    public void start() {
+        this.attackTime = attackTimeMax;
+    }
+
+    @Override
+    public boolean requiresUpdateEveryTick() {
+        return true;
+    }
+
+    @Override
+    public void tick() {
+//        if (entity.belowHealthThreshold(0.4f)) {
+//            entity.setDefending(true);
+//            stop();
+//        }
+        if (target instanceof Player player) {
+            if (player.isCreative() || player.isSpectator()) {
+                stop();
+                return;
+            }
+        }
+
+        if (target == null) return;
+
+        double d0 = this.mob.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
+        boolean flag = this.mob.getSensing().hasLineOfSight(this.target);
+
+        this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
+
+        --this.attackTime;
+
+        if (attackTime <= 0) {
+            if (!flag) {
+                return;
+            }
+
+            float f = (float) Math.sqrt(d0) / this.attackRadius;
+            float f1 = Mth.clamp(f, 0.1F, 1.0F);
+            this.entity.performRangedAttack(this.target, f1);
+            this.attackTime = attackTimeMax;
+        } else
+            if (attackTime <= 7) {
+                entity.setAttacking(true);
+            }
+    }
+}

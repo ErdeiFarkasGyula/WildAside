@@ -146,13 +146,14 @@ public class MucellithModel<T extends Entity> extends HierarchicalModel<T> {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
 		this.applyHeadRotation(pNetHeadYaw, pHeadPitch, pAgeInTicks);
 
-//		this.animateWalk(MucellithAnimations.IDLE, 0, 0, 1f, 1f);
 		this.animate(((MucellithEntity)pEntity).idleAnimation, MucellithAnimations.IDLE, pAgeInTicks, 1f);
+		this.animate(((MucellithEntity)pEntity).attackAnimation, MucellithAnimations.ATTACK, pAgeInTicks, 1f);
+		this.animate(((MucellithEntity)pEntity).defenseAnimation, MucellithAnimations.TO_DEFENSE, pAgeInTicks, 1f);
 	}
 
 	private void applyHeadRotation(float pNetHeadYaw, float pHeadPitch, float pAgeInTicks) {
 		pNetHeadYaw = Mth.clamp(pNetHeadYaw, -30.0F, 30.0F);
-		pHeadPitch = Mth.clamp(pHeadPitch, -25.0F, 45.0F);
+		pHeadPitch = Mth.clamp(pHeadPitch, -25.0F, 45.0F) + 40;
 
 		this.biggerHead.yRot = pNetHeadYaw * ((float)Math.PI / 180F);
 		this.biggerHead.xRot = pHeadPitch * ((float)Math.PI / 180F);
