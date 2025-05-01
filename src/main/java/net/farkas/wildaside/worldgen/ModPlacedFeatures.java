@@ -135,7 +135,7 @@ public class ModPlacedFeatures {
                 ModOrePlacement.commonOrePlacement(48, HeightRangePlacement.triangle(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80))));
 
         register(context, NATURAL_SPORE_BLASTER_PLACED, configuredFeatures.getOrThrow(ModConfiguredFeatures.NATURAL_SPORE_BLASTER),
-                ModOrePlacement.commonOrePlacement(256, HeightRangePlacement.triangle(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80))));
+                ModOrePlacement.commonOrePlacement(128, HeightRangePlacement.triangle(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80))));
 
         register(context, SPOTTED_WINTERGREEN_PLACED, configuredFeatures.getOrThrow(ModConfiguredFeatures.SPOTTED_EVERGREEN),
                 List.of(RarityFilter.onAverageOnceEvery(16), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
