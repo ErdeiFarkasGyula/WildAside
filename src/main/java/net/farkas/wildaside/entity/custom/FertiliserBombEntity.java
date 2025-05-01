@@ -94,7 +94,7 @@ public class FertiliserBombEntity extends ThrowableItemProjectile {
                     BlockState state = level.getBlockState(pos);
 
                     if (state.getBlock() instanceof FarmBlock) {
-                        if (random.nextFloat() < charge * 0.3f) {
+                        if (random.nextFloat() < charge * 0.5f) {
                             int currentMoisture = state.getValue(FarmBlock.MOISTURE);
                             if (currentMoisture < 7) {
                                 BlockState hydratedState = state.setValue(FarmBlock.MOISTURE, 7);
