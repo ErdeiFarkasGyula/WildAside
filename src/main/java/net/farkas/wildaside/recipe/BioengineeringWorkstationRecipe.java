@@ -16,6 +16,10 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 public class BioengineeringWorkstationRecipe implements Recipe<SimpleContainer> {
     private final NonNullList<Ingredient> inputItems;
     private final ItemStack output;
@@ -31,18 +35,31 @@ public class BioengineeringWorkstationRecipe implements Recipe<SimpleContainer> 
     public boolean matches(SimpleContainer inv, Level level) {
         if (level.isClientSide()) return false;
 
-        for (int i = 0; i < inputItems.size(); i++) {
-            Ingredient ing = inputItems.get(i);
-            ItemStack slot = inv.getItem(i);
+        List<ItemStack> stacks = new ArrayList<>();
 
-            if (ing == Ingredient.EMPTY) {
-                continue;
-            }
-
-            if (!ing.test(slot)) {
-                return false;
+        for (int i = 0; i < inv.getContainerSize(); i++) {
+            ItemStack s = inv.getItem(i);
+            if (!s.isEmpty()) {
+                stacks.add(s.copy());
             }
         }
+
+        for (Ingredient ing : inputItems) {
+            if (ing == Ingredient.EMPTY) continue;
+
+            boolean matched = false;
+            for (Iterator<ItemStack> it = stacks.iterator(); it.hasNext();) {
+                ItemStack candidate = it.next();
+                if (ing.test(candidate)) {
+                    it.remove();
+                    matched = true;
+                    break;
+                }
+            }
+
+            if (!matched) return false;
+        }
+
         return true;
     }
 
