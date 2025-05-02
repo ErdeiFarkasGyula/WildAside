@@ -20,19 +20,17 @@ public class MucellithAttackGoal extends Goal {
     private final float attackRadius;
 
     public MucellithAttackGoal(MucellithEntity entity, int pAttackInterval, float pAttackRadius) {
-        if (!(entity instanceof LivingEntity)) {
-            throw new IllegalArgumentException("MucellithAttackGoal requires LivingEntity");
-        } else {
-            this.entity = entity;
-            this.mob = (Mob)entity;
-            this.attackTimeMax = pAttackInterval;
-            this.attackRadius = pAttackRadius;
-            this.setFlags(EnumSet.of(Goal.Flag.LOOK));
-        }
+        this.entity = entity;
+        this.mob = (Mob)entity;
+        this.attackTimeMax = pAttackInterval;
+        this.attackRadius = pAttackRadius;
+        this.setFlags(EnumSet.of(Goal.Flag.LOOK));
     }
 
     @Override
     public boolean canUse() {
+        if (entity.isDefending()) return false;
+
         LivingEntity livingentity = this.mob.getTarget();
         if (livingentity != null && livingentity.isAlive()) {
             this.target = livingentity;
@@ -40,11 +38,6 @@ public class MucellithAttackGoal extends Goal {
         } else {
             return false;
         }
-    }
-
-    @Override
-    public boolean canContinueToUse() {
-        return this.canUse();
     }
 
     @Override
@@ -66,10 +59,12 @@ public class MucellithAttackGoal extends Goal {
 
     @Override
     public void tick() {
-//        if (entity.belowHealthThreshold(0.4f)) {
-//            entity.setDefending(true);
-//            stop();
-//        }
+        if (entity.belowHealthThreshold(0.4f)) {
+            entity.setDefending(true);
+            stop();
+            return;
+        }
+
         if (target instanceof Player player) {
             if (player.isCreative() || player.isSpectator()) {
                 stop();

@@ -1,6 +1,7 @@
 package net.farkas.wildaside.entity.custom;
 
 import net.farkas.wildaside.entity.ai.mucellith.MucellithAttackGoal;
+import net.farkas.wildaside.entity.ai.mucellith.MucellithDefendGoal;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -23,6 +24,7 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
     private static final EntityDataAccessor<Boolean> ATTACKING = SynchedEntityData.defineId(MucellithEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DEFENDING = SynchedEntityData.defineId(MucellithEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> HAS_DEFENDED = SynchedEntityData.defineId(MucellithEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> USED_DEFENDING_ANIMATION = SynchedEntityData.defineId(MucellithEntity.class, EntityDataSerializers.BOOLEAN);
 
     public MucellithEntity(EntityType<? extends PathfinderMob> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -40,8 +42,8 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
 
     @Override
     protected void registerGoals() {
-        //this.goalSelector.addGoal(0, new MucellithDefendGoal(this));
-        this.goalSelector.addGoal(2, new MucellithAttackGoal(this, 60, 10.0F));
+        this.goalSelector.addGoal(1, new MucellithAttackGoal(this, 60, 10.0F));
+        this.goalSelector.addGoal(2, new MucellithDefendGoal(this));
         this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
 
@@ -73,6 +75,16 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
         if (this.level().isClientSide()) {
             setupAnimationStates();
         }
+
+//        System.out.println("ATTACKING" + isAttacking());
+//        System.out.println("DEFENDING" + isDefending());
+//        System.out.println("HAS_DEFENDED" + hasDefended());
+//        System.out.println("USED_DEFENDING_ANIMATION" + usedDefendingAnimation());
+    }
+
+    @Override
+    public void aiStep() {
+        System.out.println("AIAIAIAIAI");
     }
 
     private void setupAnimationStates() {
@@ -86,6 +98,14 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
         } else {
             attackAnimationTimeout = attackAnimationMax;
             attackAnimation.stop();
+        }
+
+        if (this.isDefending()) {
+            if (!usedDefendingAnimation()) {
+                defenseAnimation.start(tickCount);
+            } else {
+                setUsedDefendingAnimation(true);
+            }
         }
 
         if (this.idleAnimationTimeout <= 0) {
@@ -103,6 +123,7 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
         this.entityData.define(ATTACKING, false);
         this.entityData.define(DEFENDING, false);
         this.entityData.define(HAS_DEFENDED, false);
+        this.entityData.define(USED_DEFENDING_ANIMATION, false);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -176,6 +197,14 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
 
     public boolean hasDefended() {
         return this.entityData.get(HAS_DEFENDED);
+    }
+
+    public void setUsedDefendingAnimation(boolean usedDefendingAnimation) {
+        this.entityData.set(USED_DEFENDING_ANIMATION, usedDefendingAnimation);
+    }
+
+    public boolean usedDefendingAnimation() {
+        return this.entityData.get(USED_DEFENDING_ANIMATION);
     }
 
     public boolean belowHealthThreshold(float threshold) {

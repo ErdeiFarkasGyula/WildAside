@@ -7,8 +7,8 @@
     }
   },
   "pattern": [
-    "SS",
-    "SS"
+    "SSS",
+    "SSS"
   ],
   "result": {
     "count": 16,

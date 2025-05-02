@@ -2,9 +2,9 @@
   "type": "wildaside:bioengineering",
   "ingredients": [
     { "item": "wildaside:entorium" },
-    { "item": "minecraft:entorium" },
+    { "item": "wildaside:entorium" },
     {},
-    { "item": "minecraft:entorium" },
+    { "item": "wildaside:entorium" },
     {}
   ],
   "output": {
