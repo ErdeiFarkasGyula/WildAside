@@ -1,0 +1,14 @@
+{
+  "type": "wildaside:bioengineering",
+  "ingredients": [
+    { "item": "wildaside:lit_vibrion_gel" },
+    { "item": "minecraft:glass_pane" },
+    { "item": "minecraft:glass_pane" },
+    { "item": "minecraft:glass_pane" },
+    { "item": "minecraft:glass_pane" }
+  ],
+  "output": {
+    "count": 4,
+    "item": "wildaside:lit_vibrion_glass_pane"
+  }
+}

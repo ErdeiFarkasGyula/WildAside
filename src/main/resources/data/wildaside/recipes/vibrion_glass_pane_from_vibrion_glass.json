@@ -1,0 +1,14 @@
+{
+  "type": "wildaside:bioengineering",
+  "ingredients": [
+    {},
+    { "item": "wildaside:vibrion_glass" },
+    { "item": "wildaside:vibrion_glass" },
+    { "item": "wildaside:vibrion_glass" },
+    { "item": "wildaside:vibrion_glass" }
+  ],
+  "output": {
+    "count": 12,
+    "item": "wildaside:vibrion_glass_pane_pane"
+  }
+}

@@ -2,10 +2,10 @@
   "type": "wildaside:bioengineering",
   "ingredients": [
     { "item": "wildaside:entorium" },
-    { "item": "minecraft:iron_nugget" },
-    { "item": "minecraft:iron_nugget" },
-    { "item": "minecraft:iron_nugget" },
-    { "item": "minecraft:iron_nugget" }
+    { "item": "minecraft:entorium" },
+    {},
+    { "item": "minecraft:entorium" },
+    {}
   ],
   "output": {
     "count": 1,

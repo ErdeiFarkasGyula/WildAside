@@ -26,6 +26,8 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
     protected void buildRecipes(Consumer<FinishedRecipe> pWriter) {
         //VIBRION
         smelting(pWriter, List.of(ModItems.VIBRION.get()), RecipeCategory.MISC, Items.YELLOW_DYE, 0.25f, 200, "yellow dye");
+        smelting(pWriter, List.of(ModBlocks.VIBRION_GEL.get()), RecipeCategory.MISC, ModItems.VIBRION.get(), 0.25f, 200, "vibrion");
+        smelting(pWriter, List.of(ModBlocks.LIT_VIBRION_GEL.get()), RecipeCategory.MISC, ModItems.VIBRION.get(), 0.25f, 200, "vibrion");
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.VIBRION_BLOCK.get())
                 .pattern("SS")
@@ -40,15 +42,15 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .save(pWriter);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.VIBRION_GLASS_PANE.get(), 16)
-                .pattern("SS")
-                .pattern("SS")
+                .pattern("SSS")
+                .pattern("SSS")
                 .define('S', ModBlocks.VIBRION_GLASS.get())
                 .unlockedBy(getHasName( ModBlocks.VIBRION_GLASS.get()), has( ModBlocks.VIBRION_GLASS.get()))
                 .save(pWriter);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.LIT_VIBRION_GLASS_PANE.get(), 16)
-                .pattern("SS")
-                .pattern("SS")
+                .pattern("SSS")
+                .pattern("SSS")
                 .define('S', ModBlocks.LIT_VIBRION_GLASS.get())
                 .unlockedBy(getHasName( ModBlocks.LIT_VIBRION_GLASS.get()), has( ModBlocks.LIT_VIBRION_GLASS.get()))
                 .save(pWriter);
