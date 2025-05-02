@@ -1,4 +1,4 @@
-// 1.20.1	2025-04-26T00:18:51.7981956	Loot Tables
+// 1.20.1	2025-05-02T14:07:02.109234	Loot Tables
 cb111f4aa2094610caccd6c93bb58846842f1adf data/wildaside/loot_tables/blocks/bioengineering_workstation.json
 9af05efdb1326dfab1d8ce52f3587c6b2314e19e data/wildaside/loot_tables/blocks/brown_glowing_hickory_leaves.json
 806c305e5b6bdf1e690e0d5df8ae5f63031a6a21 data/wildaside/loot_tables/blocks/brown_glowing_hickory_sapling.json
@@ -6,7 +6,7 @@ af75d09f745b7c2e54ece2d661f97d18d3e28af4 data/wildaside/loot_tables/blocks/chise
 111fee04e3401afeea79a69eefe18e3d47c2bbdb data/wildaside/loot_tables/blocks/compressed_substilium_soil.json
 81a8156e39609af343dc9426ad6a9636eabf9eef data/wildaside/loot_tables/blocks/compressed_vibrion_block.json
 c896682c9c12935a4c856e85ac768e1c06f6e397 data/wildaside/loot_tables/blocks/cracked_substilium_tiles.json
-4b4746696f765b6494b1c9325bf4ebf2609dbb6b data/wildaside/loot_tables/blocks/entorium_ore.json
+4fc61a8e97fbec16029c26a226dcbe13e01985a9 data/wildaside/loot_tables/blocks/entorium_ore.json
 37eecf0ef6a9c8fddba678ee0a32c9d1425a417e data/wildaside/loot_tables/blocks/entorium_shroom.json
 5b6979312631ffe7947be68144aed572d20583d6 data/wildaside/loot_tables/blocks/green_glowing_hickory_leaves.json
 ebcc2b79ff2e780ffeb1dfd5c568de75add22f8b data/wildaside/loot_tables/blocks/green_glowing_hickory_sapling.json
@@ -33,7 +33,7 @@ b490f04ee92cd8edbbf4bb0f7885c628b6f53e93 data/wildaside/loot_tables/blocks/hicko
 e0ede89ac3ded8493fa0c5b49e68f6518535fec6 data/wildaside/loot_tables/blocks/lit_vibrion_glass.json
 6aeaa252206ddaa0d034954ac7e0a71bd82c6af3 data/wildaside/loot_tables/blocks/lit_vibrion_glass_pane.json
 92f633b89fb2eacc649a02ce528ae75ba6edbfa8 data/wildaside/loot_tables/blocks/natural_spore_blaster.json
-e226fc4b5e9efd3ffcf7ce37883dfd1c3d197ab3 data/wildaside/loot_tables/blocks/overgrown_entorium_ore.json
+8ff0db3f91eba7f9adc14c4418fd9c1219bcad20 data/wildaside/loot_tables/blocks/overgrown_entorium_ore.json
 9cff9fa985b38020b7b01ef2ad2b885096da2b55 data/wildaside/loot_tables/blocks/pinkster_flower.json
 ce4c65fb7b8379a416dc13189b7e46053d5e6191 data/wildaside/loot_tables/blocks/potion_blaster.json
 2cb5b5d8b37cbd4e705a80f1af8d47ce607e2ffa data/wildaside/loot_tables/blocks/potted_vibrion_growth.json

@@ -11,6 +11,7 @@ import net.farkas.wildaside.entity.client.MucellithModel;
 import net.farkas.wildaside.entity.custom.MucellithEntity;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.util.AdvancementHandler;
+import net.farkas.wildaside.util.ContaminationHandler;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
@@ -215,8 +216,7 @@ public class ModEvents {
                         if (event.getTarget() instanceof LivingEntity target) {
                             MobEffectInstance effect = attacker.getEffect(ModMobEffects.CONTAMINATION.get());
                             if (effect != null) {
-                                int amplifier = effect.getAmplifier() + rand.nextIntBetweenInclusive(0, 1);
-                                target.addEffect(new MobEffectInstance(ModMobEffects.CONTAMINATION.get(), 200, amplifier));
+                                ContaminationHandler.applyContamination(target, 10);
                             }
                         }
                     }

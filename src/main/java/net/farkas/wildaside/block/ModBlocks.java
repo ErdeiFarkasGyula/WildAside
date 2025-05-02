@@ -93,6 +93,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> VIBRION_GROWTH = registerBlock("vibrion_growth",
             () ->  new FlowerBlock(() -> MobEffects.POISON, 5, BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_YELLOW)
+                    .lightLevel(l -> 3)
                     .sound(SoundType.ROOTS)
                     .noCollission()
                     .noOcclusion()

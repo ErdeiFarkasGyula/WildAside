@@ -1,4 +1,4 @@
-package net.farkas.wildaside.worldgen.biome.custom;
+package net.farkas.wildaside.worldgen.biome.region;
 
 import com.mojang.datafixers.util.Pair;
 import net.farkas.wildaside.worldgen.biome.ModBiomes;
@@ -13,8 +13,8 @@ import terrablender.api.RegionType;
 
 import java.util.function.Consumer;
 
-public class ModGlowingHickoryForestRegion extends Region {
-    public ModGlowingHickoryForestRegion(ResourceLocation name, int weight) {
+public class ModHickoryForestRegion extends Region {
+    public ModHickoryForestRegion(ResourceLocation name, int weight) {
         super(name, RegionType.OVERWORLD, weight);
     }
 
@@ -22,7 +22,7 @@ public class ModGlowingHickoryForestRegion extends Region {
     public void addBiomes(Registry<Biome> registry, Consumer<Pair<Climate.ParameterPoint,
             ResourceKey<Biome>>> mapper) {
         this.addModifiedVanillaOverworldBiomes(mapper, modifiedVanillaOverworldBuilder -> {
-            modifiedVanillaOverworldBuilder.replaceBiome(Biomes.FOREST, ModBiomes.GLOWING_HICKORY_FOREST);
+            modifiedVanillaOverworldBuilder.replaceBiome(Biomes.FOREST, ModBiomes.HICKORY_FOREST);
         });
 
     }

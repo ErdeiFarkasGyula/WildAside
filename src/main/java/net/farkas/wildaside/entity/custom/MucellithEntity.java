@@ -33,7 +33,7 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
     private int idleAnimationTimeout = 0;
 
     public final AnimationState attackAnimation = new AnimationState();
-    private final int attackAnimationMax = 29;
+    private final int attackAnimationMax = 59;
     private int attackAnimationTimeout = 0;
 
     public final AnimationState defenseAnimation = new AnimationState();
@@ -41,7 +41,7 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
     @Override
     protected void registerGoals() {
         //this.goalSelector.addGoal(0, new MucellithDefendGoal(this));
-        this.goalSelector.addGoal(2, new MucellithAttackGoal(this, 30, 10.0F));
+        this.goalSelector.addGoal(2, new MucellithAttackGoal(this, 60, 10.0F));
         this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
 

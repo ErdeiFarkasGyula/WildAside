@@ -13,7 +13,7 @@ public class ContaminationHandler {
 
             int amplifier = cont != null ? cont.getAmplifier() + 1 : 0;
             int duration = cont != null ? cont.getDuration() : 0;
-            int cappedAmplifier = Math.min(amplifier, 4);
+            int cappedAmplifier = Math.min(amplifier, 3);
 
             if (immunity == null || cappedAmplifier > immunity.getAmplifier()) {
                 if (duration <= (sec * 0.75 - amplifier) * 20) {

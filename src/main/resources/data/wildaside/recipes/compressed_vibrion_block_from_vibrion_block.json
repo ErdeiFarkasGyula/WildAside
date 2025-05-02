@@ -1,0 +1,14 @@
+{
+  "type": "wildaside:bioengineering",
+  "ingredients": [
+    {},
+    { "item": "wildaside:vibrion_block" },
+    { "item": "wildaside:vibrion_block" },
+    { "item": "wildaside:vibrion_block" },
+    { "item": "wildaside:vibrion_block" }
+  ],
+  "output": {
+    "count": 1,
+    "item": "wildaside:compressed_vibrion_block"
+  }
+}

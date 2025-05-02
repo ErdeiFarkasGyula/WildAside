@@ -1,0 +1,14 @@
+{
+  "type": "wildaside:bioengineering",
+  "ingredients": [
+    { "item": "wildaside:vibrion_sporeholder" },
+    {},
+    {},
+    {},
+    {}
+  ],
+  "output": {
+    "count": 2,
+    "item": "wildaside:vibrion"
+  }
+}

@@ -11,6 +11,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
@@ -70,8 +71,8 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         //ENTORIUM
         this.dropSelf(ModBlocks.ENTORIUM_SHROOM.get());
         this.add(ModBlocks.ENTORIUM_ORE.get(),
-                block -> createSilktouchedFortuneDrops(ModBlocks.ENTORIUM_ORE.get(), ModItems.ENTORIUM.get(), 1, 2));
-        this.dropSelf(ModBlocks.OVERGROWN_ENTORIUM_ORE.get());
+                block -> createSilktouchedFortuneDrops(ModBlocks.ENTORIUM_ORE.get(), ModItems.ENTORIUM.get(), 1, 1));
+        this.add(ModBlocks.OVERGROWN_ENTORIUM_ORE.get(), block -> createSilktouchedDrops(ModBlocks.OVERGROWN_ENTORIUM_ORE.get(), Blocks.AIR.asItem()));
 
 
         //SUBSTILIUM

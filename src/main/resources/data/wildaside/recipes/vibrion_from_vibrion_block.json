@@ -1,0 +1,14 @@
+{
+  "type": "wildaside:bioengineering",
+  "ingredients": [
+    { "item": "wildaside:vibrion_block" },
+    {},
+    {},
+    {},
+    {}
+  ],
+  "output": {
+    "count": 4,
+    "item": "wildaside:vibrion"
+  }
+}

@@ -32,7 +32,7 @@ public class ModEntities {
                     .sized(0.5f, 0.5f).build("spore_arrow"));
 
     public static final RegistryObject<EntityType<MucellithEntity>> MUCELLITH =
-            ENTITY_TYPES.register("mucellith", () -> EntityType.Builder.<MucellithEntity>of(MucellithEntity::new, MobCategory.MISC)
+            ENTITY_TYPES.register("mucellith", () -> EntityType.Builder.<MucellithEntity>of(MucellithEntity::new, MobCategory.MONSTER)
                     .sized(0.75f, 2.2f).build("mucellith"));
 
 

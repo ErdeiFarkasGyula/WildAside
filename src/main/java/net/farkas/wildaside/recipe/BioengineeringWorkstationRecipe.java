@@ -1,6 +1,8 @@
 package net.farkas.wildaside.recipe;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import net.farkas.wildaside.WildAside;
 import net.minecraft.core.NonNullList;
@@ -26,16 +28,22 @@ public class BioengineeringWorkstationRecipe implements Recipe<SimpleContainer> 
     }
 
     @Override
-    public boolean matches(SimpleContainer pContainer, Level pLevel) {
-        if (pLevel.isClientSide()) {
-            return false;
-        }
+    public boolean matches(SimpleContainer inv, Level level) {
+        if (level.isClientSide()) return false;
 
-        return inputItems.get(0).test(pContainer.getItem(0))
-                && inputItems.get(1).test(pContainer.getItem(1))
-                && inputItems.get(2).test(pContainer.getItem(2))
-                && inputItems.get(3).test(pContainer.getItem(3))
-                && inputItems.get(4).test(pContainer.getItem(4));
+        for (int i = 0; i < inputItems.size(); i++) {
+            Ingredient ing = inputItems.get(i);
+            ItemStack slot = inv.getItem(i);
+
+            if (ing == Ingredient.EMPTY) {
+                continue;
+            }
+
+            if (!ing.test(slot)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
@@ -90,7 +98,13 @@ public class BioengineeringWorkstationRecipe implements Recipe<SimpleContainer> 
             NonNullList<Ingredient> inputs = NonNullList.withSize(5, Ingredient.EMPTY);
 
             for (int i = 0; i < inputs.size(); i++) {
-                inputs.set(i, Ingredient.fromJson(ingredients.get(i)));
+                JsonElement element = ingredients.size() > i ? ingredients.get(i) : JsonNull.INSTANCE;
+
+                if (element.isJsonNull() || (element.isJsonObject() && element.getAsJsonObject().entrySet().isEmpty())) {
+                    inputs.set(i, Ingredient.EMPTY);
+                } else {
+                    inputs.set(i, Ingredient.fromJson(element));
+                }
             }
 
             return new BioengineeringWorkstationRecipe(inputs, output, pRecipeId);

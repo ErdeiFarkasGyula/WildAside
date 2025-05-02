@@ -1,6 +1,7 @@
 package net.farkas.wildaside.worldgen.biome;
 
 import net.farkas.wildaside.WildAside;
+import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.worldgen.ModPlacedFeatures;
 import net.minecraft.core.registries.Registries;
@@ -127,6 +128,9 @@ public class ModBiomes {
     public static Biome vibrionHive(BootstapContext<Biome> context) {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
+
+        spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntities.MUCELLITH.get(), 20, 1, 2));
+        BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
         globalOverworldGeneration(biomeBuilder);
 

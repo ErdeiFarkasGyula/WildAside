@@ -1,0 +1,14 @@
+{
+  "type": "wildaside:bioengineering",
+  "ingredients": [
+    { "item": "wildaside:hanging_vibrion_vines" },
+    {},
+    {},
+    {},
+    {}
+  ],
+  "output": {
+    "count": 1,
+    "item": "wildaside:vibrion"
+  }
+}

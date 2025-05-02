@@ -1,0 +1,14 @@
+{
+  "type": "wildaside:bioengineering",
+  "ingredients": [
+    { "item": "wildaside:vibrion_growth" },
+    {},
+    {},
+    {},
+    {}
+  ],
+  "output": {
+    "count": 1,
+    "item": "wildaside:vibrion"
+  }
+}
