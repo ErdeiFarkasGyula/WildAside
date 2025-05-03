@@ -1,7 +1,6 @@
 package net.farkas.wildaside.entity.custom;
 
 import net.farkas.wildaside.entity.ai.mucellith.MucellithAttackGoal;
-import net.farkas.wildaside.entity.ai.mucellith.MucellithDefendGoal;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -15,7 +14,6 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.RangedAttackMob;
-import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidType;
@@ -31,20 +29,20 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
     }
 
     public final AnimationState idleAnimation = new AnimationState();
-    private final int idleAnimationMax = 39;
+    private final int idleAnimationMax = 40;
     private int idleAnimationTimeout = 0;
 
     public final AnimationState attackAnimation = new AnimationState();
-    private final int attackAnimationMax = 59;
+    private final int attackAnimationMax = 60;
     private int attackAnimationTimeout = 0;
 
     public final AnimationState defenseAnimation = new AnimationState();
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new MucellithAttackGoal(this, 60, 10.0F));
-        this.goalSelector.addGoal(2, new MucellithDefendGoal(this));
-        this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 6.0F));
+        this.goalSelector.addGoal(1, new MucellithAttackGoal(this, 60, 8f));
+        //this.goalSelector.addGoal(2, new MucellithDefendGoal(this));
+        this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 6f));
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
 
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
@@ -65,26 +63,10 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
     public void tick() {
         super.tick();
 
-        if (this.getTarget() instanceof Player player) {
-            if (player.isCreative() || player.isSpectator()) {
-                this.setAttacking(false);
-                this.setTarget(null);
-            }
-        }
-
         if (this.level().isClientSide()) {
             setupAnimationStates();
         }
 
-//        System.out.println("ATTACKING" + isAttacking());
-//        System.out.println("DEFENDING" + isDefending());
-//        System.out.println("HAS_DEFENDED" + hasDefended());
-//        System.out.println("USED_DEFENDING_ANIMATION" + usedDefendingAnimation());
-    }
-
-    @Override
-    public void aiStep() {
-        System.out.println("AIAIAIAIAI");
     }
 
     private void setupAnimationStates() {
@@ -100,13 +82,13 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
             attackAnimation.stop();
         }
 
-        if (this.isDefending()) {
-            if (!usedDefendingAnimation()) {
-                defenseAnimation.start(tickCount);
-            } else {
-                setUsedDefendingAnimation(true);
-            }
-        }
+//        if (this.isDefending()) {
+//            if (!usedDefendingAnimation()) {
+//                defenseAnimation.start(tickCount);
+//            } else {
+//                setUsedDefendingAnimation(true);
+//            }
+//        }
 
         if (this.idleAnimationTimeout <= 0) {
             this.idleAnimationTimeout = idleAnimationMax;
@@ -129,7 +111,7 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
     public static AttributeSupplier.Builder createAttributes() {
         return PathfinderMob.createLivingAttributes()
                 .add(Attributes.MAX_HEALTH, 20)
-                .add(Attributes.FOLLOW_RANGE, 240)
+                .add(Attributes.FOLLOW_RANGE, 100)
                 .add(Attributes.MOVEMENT_SPEED, 0)
                 .add(Attributes.JUMP_STRENGTH, 0)
                 .add(Attributes.FLYING_SPEED, 0)

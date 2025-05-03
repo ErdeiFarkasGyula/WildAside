@@ -59,21 +59,21 @@ public class MucellithAttackGoal extends Goal {
 
     @Override
     public void tick() {
-        if (entity.belowHealthThreshold(0.4f)) {
-            entity.setDefending(true);
+        if (target instanceof Player player) {
+            if (player.isCreative() || player.isSpectator()) {
+                target = null;
+            }
+        }
+
+        if (target == null) {
             stop();
             return;
         }
 
-        if (target instanceof Player player) {
-            if (player.isCreative() || player.isSpectator()) {
-                stop();
-                return;
-            }
-        }
+        shoot();
+    }
 
-        if (target == null) return;
-
+    private void shoot() {
         double d0 = this.mob.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
         boolean flag = this.mob.getSensing().hasLineOfSight(this.target);
 
