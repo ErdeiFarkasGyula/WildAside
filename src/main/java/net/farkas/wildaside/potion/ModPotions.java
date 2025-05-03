@@ -23,10 +23,10 @@ public class ModPotions {
     public static final RegistryObject<Potion> IMMUNITY_POTION_2 = POTIONS.register("immunity_potion_2",
             () -> new Potion(new MobEffectInstance(ModMobEffects.IMMUNITY.get(), 400, 1)));
 
-    public static final RegistryObject<Potion> OMNIVAMP_POTION = POTIONS.register("omnivamp_potion",
-            () -> new Potion(new MobEffectInstance(ModMobEffects.OMNIVAMP.get(), 1800, 0)));
-    public static final RegistryObject<Potion> OMNIVAMP_POTION_2 = POTIONS.register("omnivamp_potion_2",
-            () -> new Potion(new MobEffectInstance(ModMobEffects.OMNIVAMP.get(), 1800, 1)));
+    public static final RegistryObject<Potion> LIFESTEAL_POTION = POTIONS.register("lifesteal_potion",
+            () -> new Potion(new MobEffectInstance(ModMobEffects.LIFESTEAL.get(), 1800, 0)));
+    public static final RegistryObject<Potion> LIFESTEAL_POTION_2 = POTIONS.register("lifesteal_potion_2",
+            () -> new Potion(new MobEffectInstance(ModMobEffects.LIFESTEAL.get(), 1800, 1)));
 
 
 

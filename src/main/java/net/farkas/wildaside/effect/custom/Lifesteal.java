@@ -23,14 +23,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
-public class Omnivamp extends MobEffect {
-    public Omnivamp(MobEffectCategory pCategory, int pColor) {
+public class Lifesteal extends MobEffect {
+    public Lifesteal(MobEffectCategory pCategory, int pColor) {
         super(pCategory, pColor);
     }
 }
 
 @Mod.EventBusSubscriber(modid = WildAside.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-class OmnivampHandler {
+class LifestealHandler {
     private static class Task {
         final ServerLevel level;
         final UUID attackerId, targetId;
@@ -50,15 +50,15 @@ class OmnivampHandler {
     private static final List<Task> TASKS = new LinkedList<>();
 
     @SubscribeEvent
-    public static void applyOmnivamp(LivingHurtEvent event) {
+    public static void applyLifesteal(LivingHurtEvent event) {
         DamageSource src = event.getSource();
         if (!(src.getEntity() instanceof Player attacker)) return;
 
-        MobEffectInstance omni = attacker.getEffect(ModMobEffects.OMNIVAMP.get());
-        if (omni == null) return;
+        MobEffectInstance lifesteal = attacker.getEffect(ModMobEffects.LIFESTEAL.get());
+        if (lifesteal == null) return;
 
-        float perc = (omni.getAmplifier() + 1) / 10f;
-        float max = (omni.getAmplifier() + 1) * 3f;
+        float perc = (lifesteal.getAmplifier() + 1) / 10f;
+        float max = (lifesteal.getAmplifier() + 1) * 3f;
         float heal = event.getAmount() * perc;
         if (heal > max) heal = max;
 
@@ -93,7 +93,7 @@ class OmnivampHandler {
             double py = Mth.lerp(prog, ty, ay);
             double pz = Mth.lerp(prog, tz, az);
 
-            t.level.sendParticles(ModParticles.OMNIVAMP_PARTICLE.get(), px, py, pz, 1, 0, 0, 0, 0);
+            t.level.sendParticles(ModParticles.LIFESTEAL_PARTICLE.get(), px, py, pz, 1, 0, 0, 0, 0);
 
             t.ticksElapsed++;
             if (t.ticksElapsed >= t.totalTicks) {
