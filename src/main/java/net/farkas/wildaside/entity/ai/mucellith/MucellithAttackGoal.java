@@ -15,7 +15,7 @@ public class MucellithAttackGoal extends Goal {
     private final MucellithEntity entity;
     @Nullable
     private LivingEntity target;
-    private int attackTime = -1;
+    private int attackTime = 8;
     private final int attackTimeMax;
     private final float attackRadius;
 
@@ -91,7 +91,7 @@ public class MucellithAttackGoal extends Goal {
             this.entity.performRangedAttack(this.target, f1);
             this.attackTime = attackTimeMax;
         } else
-            if (attackTime <= 7) {
+            if (attackTime == 7) {
                 entity.setAttacking(true);
             }
     }

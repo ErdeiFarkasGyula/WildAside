@@ -149,6 +149,7 @@ public class MucellithModel<T extends Entity> extends HierarchicalModel<T> {
 		this.animate(((MucellithEntity)pEntity).idleAnimation, MucellithAnimations.IDLE, pAgeInTicks, 1f);
 		this.animate(((MucellithEntity)pEntity).attackAnimation, MucellithAnimations.ATTACK, pAgeInTicks, 1f);
 		this.animate(((MucellithEntity)pEntity).defenseAnimation, MucellithAnimations.TO_DEFENSE, pAgeInTicks, 1f);
+		this.animate(((MucellithEntity)pEntity).defenseAnimationReverse, MucellithAnimations.REVERSE_DEFENSE, pAgeInTicks, 1f);
 	}
 
 	private void applyHeadRotation(float pNetHeadYaw, float pHeadPitch, float pAgeInTicks) {

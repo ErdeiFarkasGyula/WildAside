@@ -5,6 +5,8 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -22,8 +24,6 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
     private static final EntityDataAccessor<Boolean> ATTACKING = SynchedEntityData.defineId(MucellithEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DEFENDING = SynchedEntityData.defineId(MucellithEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> HAS_DEFENDED = SynchedEntityData.defineId(MucellithEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Boolean> USED_DEFENDING_ANIMATION = SynchedEntityData.defineId(MucellithEntity.class, EntityDataSerializers.BOOLEAN);
-
     public MucellithEntity(EntityType<? extends PathfinderMob> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
@@ -37,11 +37,13 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
     private int attackAnimationTimeout = 0;
 
     public final AnimationState defenseAnimation = new AnimationState();
+    public final AnimationState defenseAnimationReverse = new AnimationState();
+    private final int defenseAnimationReverseMax = 15;
+    private int defenseAnimationReverseTimeout = 15;
 
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new MucellithAttackGoal(this, 60, 8f));
-        //this.goalSelector.addGoal(2, new MucellithDefendGoal(this));
         this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 6f));
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
 
@@ -58,6 +60,15 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
 
     }
 
+    public static AttributeSupplier.Builder createAttributes() {
+        return PathfinderMob.createLivingAttributes()
+                .add(Attributes.MAX_HEALTH, 30)
+                .add(Attributes.FOLLOW_RANGE, 100)
+                .add(Attributes.MOVEMENT_SPEED, 0)
+                .add(Attributes.JUMP_STRENGTH, 0)
+                .add(Attributes.FLYING_SPEED, 0)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 1);
+    }
 
     @Override
     public void tick() {
@@ -66,11 +77,53 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
         if (this.level().isClientSide()) {
             setupAnimationStates();
         }
+    }
 
+    @Override
+    public void aiStep() {
+        super.aiStep();
+
+        if (belowHealthThreshold(0.25f) && !hasDefended()) {
+            setDefending(true);
+            this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, MobEffectInstance.INFINITE_DURATION, 6, false, true));
+            this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, MobEffectInstance.INFINITE_DURATION, 1, false, true));
+        }
+
+        if (isDefending()) {
+            if (!belowHealthThreshold(0.5f)) {
+                this.removeEffect(MobEffects.DAMAGE_RESISTANCE);
+                this.removeEffect(MobEffects.REGENERATION);
+                setHasDefended(true);
+                setDefending(false);
+            }
+        }
+
+        System.out.println(isDefending());
+        System.out.println(getHealth() / getMaxHealth());
     }
 
     private void setupAnimationStates() {
-        if (this.isAttacking()) {
+        if (isDefending()) {
+            if (!defenseAnimation.isStarted()) {
+                defenseAnimation.start(tickCount);
+            }
+        } else {
+            if (hasDefended()) {
+                if (defenseAnimationReverseTimeout == defenseAnimationReverseMax) {
+                    defenseAnimationReverse.start(tickCount);
+                    --defenseAnimationReverseTimeout;
+                } else
+                    if (defenseAnimationReverseTimeout > 0) {
+                        --defenseAnimationReverseTimeout;
+                    } else {
+                        defenseAnimationReverse.stop();
+                    }
+
+            }
+            defenseAnimation.stop();
+        }
+
+        if (isAttacking()) {
             if (attackAnimationTimeout <= 0) {
                 attackAnimationTimeout = attackAnimationMax;
                 attackAnimation.start(tickCount);
@@ -81,14 +134,6 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
             attackAnimationTimeout = attackAnimationMax;
             attackAnimation.stop();
         }
-
-//        if (this.isDefending()) {
-//            if (!usedDefendingAnimation()) {
-//                defenseAnimation.start(tickCount);
-//            } else {
-//                setUsedDefendingAnimation(true);
-//            }
-//        }
 
         if (this.idleAnimationTimeout <= 0) {
             this.idleAnimationTimeout = idleAnimationMax;
@@ -105,17 +150,6 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
         this.entityData.define(ATTACKING, false);
         this.entityData.define(DEFENDING, false);
         this.entityData.define(HAS_DEFENDED, false);
-        this.entityData.define(USED_DEFENDING_ANIMATION, false);
-    }
-
-    public static AttributeSupplier.Builder createAttributes() {
-        return PathfinderMob.createLivingAttributes()
-                .add(Attributes.MAX_HEALTH, 20)
-                .add(Attributes.FOLLOW_RANGE, 100)
-                .add(Attributes.MOVEMENT_SPEED, 0)
-                .add(Attributes.JUMP_STRENGTH, 0)
-                .add(Attributes.FLYING_SPEED, 0)
-                .add(Attributes.KNOCKBACK_RESISTANCE, 1);
     }
 
     @Override
@@ -179,14 +213,6 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
 
     public boolean hasDefended() {
         return this.entityData.get(HAS_DEFENDED);
-    }
-
-    public void setUsedDefendingAnimation(boolean usedDefendingAnimation) {
-        this.entityData.set(USED_DEFENDING_ANIMATION, usedDefendingAnimation);
-    }
-
-    public boolean usedDefendingAnimation() {
-        return this.entityData.get(USED_DEFENDING_ANIMATION);
     }
 
     public boolean belowHealthThreshold(float threshold) {
