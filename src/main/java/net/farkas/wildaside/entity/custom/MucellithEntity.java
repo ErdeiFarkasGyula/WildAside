@@ -97,9 +97,6 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
                 setDefending(false);
             }
         }
-
-        System.out.println(isDefending());
-        System.out.println(getHealth() / getMaxHealth());
     }
 
     private void setupAnimationStates() {
