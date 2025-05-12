@@ -71,29 +71,30 @@ public class ModPlacedFeatures {
 
     public static void bootstrap(BootstapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
+        HeightRangePlacement VibrionHivePlacement = HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80));
 
         register(context, REDLIKE_SUBSTILIUM_MUSHROOM_PLACED, configuredFeatures.getOrThrow(ModConfiguredFeatures.REDLIKE_SUBSTILIUM_MUSHROOM),
-                List.of(PlacementUtils.countExtra(128, 1, 32), InSquarePlacement.spread(), PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT, BiomeFilter.biome()));
+                List.of(PlacementUtils.countExtra(128, 0.5f, 32), InSquarePlacement.spread(), VibrionHivePlacement, BiomeFilter.biome()));
         register(context, BROWNLIKE_SUBSTILIUM_MUSHROOM_PLACED, configuredFeatures.getOrThrow(ModConfiguredFeatures.BROWNLIKE_SUBSTILIUM_MUSHROOM),
-                List.of(PlacementUtils.countExtra(128, 1, 32), InSquarePlacement.spread(), PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT, BiomeFilter.biome()));
+                List.of(PlacementUtils.countExtra(128, 0.5f, 32), InSquarePlacement.spread(), VibrionHivePlacement, BiomeFilter.biome()));
 
         register(context, VIBRION_GROWTH_PLACED, configuredFeatures.getOrThrow(ModConfiguredFeatures.VIBRION_GROWTH),
-                List.of(PlacementUtils.countExtra(128, 1f, 16), InSquarePlacement.spread(), PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT, BiomeFilter.biome()));
+                List.of(PlacementUtils.countExtra(128, 1f, 32), InSquarePlacement.spread(), VibrionHivePlacement, BiomeFilter.biome()));
         register(context, VIBRION_SPOREHOLDER_PLACED, configuredFeatures.getOrThrow(ModConfiguredFeatures.VIBRION_SPOREHOLDER),
-                List.of(PlacementUtils.countExtra(64, 0.5f, 32), InSquarePlacement.spread(), PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT, BiomeFilter.biome()));
+                List.of(PlacementUtils.countExtra(64, 0.5f, 32), InSquarePlacement.spread(), VibrionHivePlacement, BiomeFilter.biome()));
         register(context, SUBSTILIUM_SPROUTS_PLACED_KEY, configuredFeatures.getOrThrow(ModConfiguredFeatures.SUBSTILIUM_SPROUTS),
-                List.of(PlacementUtils.countExtra(128, 1f, 16), InSquarePlacement.spread(), PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT, BiomeFilter.biome()));
+                List.of(PlacementUtils.countExtra(128, 1f, 32), InSquarePlacement.spread(), VibrionHivePlacement, BiomeFilter.biome()));
 
         register(context, HANGING_VIBRION_VINES, configuredFeatures.getOrThrow(ModConfiguredFeatures.HANGING_VIBRION_VINES), List.of(
-                CountPlacement.of(256), InSquarePlacement.spread(), PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+                CountPlacement.of(256), InSquarePlacement.spread(), VibrionHivePlacement,
                 EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.hasSturdyFace(Direction.DOWN),
                         BlockPredicate.ONLY_IN_AIR_PREDICATE, 32), RandomOffsetPlacement.vertical(ConstantInt.of(-1)), BiomeFilter.biome()));
         register(context, HANGING_VIBRION_GEL, configuredFeatures.getOrThrow(ModConfiguredFeatures.HANGING_VIBRION_GEL), List.of(
-                CountPlacement.of(256), InSquarePlacement.spread(), PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+                CountPlacement.of(256), InSquarePlacement.spread(), VibrionHivePlacement,
                 EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.hasSturdyFace(Direction.DOWN),
                         BlockPredicate.ONLY_IN_AIR_PREDICATE, 32), RandomOffsetPlacement.vertical(ConstantInt.of(-1)), BiomeFilter.biome()));
         register(context, HANGING_LIT_VIBRION_GEL, configuredFeatures.getOrThrow(ModConfiguredFeatures.HANGING_LIT_VIBRION_GEL), List.of(
-                CountPlacement.of(256), InSquarePlacement.spread(), PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+                CountPlacement.of(256), InSquarePlacement.spread(), VibrionHivePlacement,
                 EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.hasSturdyFace(Direction.DOWN),
                         BlockPredicate.ONLY_IN_AIR_PREDICATE, 32), RandomOffsetPlacement.vertical(ConstantInt.of(-1)), BiomeFilter.biome()));
 

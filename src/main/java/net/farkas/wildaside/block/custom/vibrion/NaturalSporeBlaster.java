@@ -82,17 +82,14 @@ public class NaturalSporeBlaster extends RotatedPillarBlock {
 
             SimpleParticleType particle = ModParticles.VIBRION_PARTICLE.get();
 
-            for (int j = 0; j < 2; j++) {
-                double particleX = position.getX() + random.nextDouble();
-                double particleY = position.getY() + random.nextDouble();
-                double particleZ = position.getZ() + random.nextDouble();
-                world.sendParticles(particle, particleX, particleY, particleZ,1,
-                        0.02 * x,
-                        0.02 * y,
-                        0.02 * z,
-                        0.0
-                );
-            }
+            double particleX = position.getX() + random.nextDouble();
+            double particleY = position.getY() + random.nextDouble();
+            double particleZ = position.getZ() + random.nextDouble();
+            world.sendParticles(particle, particleX, particleY, particleZ,1,
+                    0.02 * x,
+                    0.02 * y,
+                    0.02 * z,
+                    0.0);
 
             for (LivingEntity entity : hits) {
                 ContaminationHandler.applyContamination(entity, 20);

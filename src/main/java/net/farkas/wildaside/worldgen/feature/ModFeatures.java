@@ -1,6 +1,7 @@
 package net.farkas.wildaside.worldgen.feature;
 
 import net.farkas.wildaside.WildAside;
+import net.farkas.wildaside.worldgen.feature.custom.BrownlikeSubstiliumMushroomFeature;
 import net.farkas.wildaside.worldgen.feature.custom.NaturalSporeBlasterFeature;
 import net.farkas.wildaside.worldgen.feature.custom.RedlikeSubstiliumMushroomFeature;
 import net.farkas.wildaside.worldgen.feature.custom.UpdateReplaceSingleBlockFeature;
@@ -23,6 +24,9 @@ public class ModFeatures {
 
     public static final RegistryObject<RedlikeSubstiliumMushroomFeature> REDLIKE_SUBSTILIUM_MUSHROOM = FEATURES.register("redlike_substilium_mushroom",
             () -> new RedlikeSubstiliumMushroomFeature(HugeMushroomFeatureConfiguration.CODEC));
+    public static final RegistryObject<BrownlikeSubstiliumMushroomFeature> BROWNLIKE_SUBSTILIUM_MUSHROOM = FEATURES.register("brownlike_substilium_mushroom",
+            () -> new BrownlikeSubstiliumMushroomFeature(HugeMushroomFeatureConfiguration.CODEC));
+
     public static void register(IEventBus eventBus) {
         FEATURES.register(eventBus);
     }

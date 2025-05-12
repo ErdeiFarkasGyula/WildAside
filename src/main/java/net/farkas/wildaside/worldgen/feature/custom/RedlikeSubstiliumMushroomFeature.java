@@ -21,6 +21,11 @@ public class RedlikeSubstiliumMushroomFeature extends AbstractHugeMushroomFeatur
     }
 
     @Override
+    protected int getTreeHeight(RandomSource pRandom) {
+        return pRandom.nextInt(5, 12);
+    }
+
+    @Override
     protected int getTreeRadiusForHeight(int p_65094_, int p_65095_, int pFoliageRadius, int pY) {
         int i = 0;
         if (pY < p_65095_ && pY >= p_65095_ - 3) {
@@ -63,7 +68,7 @@ public class RedlikeSubstiliumMushroomFeature extends AbstractHugeMushroomFeatur
 
         RandomSource random = RandomSource.create();
         for (int i = 1; i < 4; i++) {
-            for (int j = 0; j < random.nextInt(1, 5 - i); j++) {
+            for (int j = 0; j < random.nextInt(3, 7 - i); j++) {
                 Block block = blocks.get(random.nextInt(0, blocks.size()));
                 int offX = random.nextBoolean() ? -2 : 0;
                 int offZ = random.nextBoolean() ? -2 : 0;

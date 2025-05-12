@@ -71,17 +71,14 @@ public class SporeBlaster extends Block {
 
             SimpleParticleType particle = ModParticles.VIBRION_PARTICLE.get();
 
-            for (int j = 0; j < 2; j++) {
-                double x = step.getX() + rand.nextDouble();
-                double y = step.getY() + rand.nextDouble();
-                double z = step.getZ() + rand.nextDouble();
-                world.sendParticles(particle, x, y, z,1,
-                        0.02 * dir.getStepX(),
-                        0.02 * dir.getStepY(),
-                        0.02 * dir.getStepZ(),
-                        0.0
-                );
-            }
+            double x = step.getX() + rand.nextDouble();
+            double y = step.getY() + rand.nextDouble();
+            double z = step.getZ() + rand.nextDouble();
+            world.sendParticles(particle, x, y, z,1,
+                    0.02 * dir.getStepX(),
+                    0.02 * dir.getStepY(),
+                    0.02 * dir.getStepZ(),
+                    0.0);
 
             for (LivingEntity entity : hits) {
                 ContaminationHandler.applyContamination(entity, 20);

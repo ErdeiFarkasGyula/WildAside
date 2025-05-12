@@ -142,7 +142,7 @@ public class ModConfiguredFeatures {
 
         register(context, REDLIKE_SUBSTILIUM_MUSHROOM, ModFeatures.REDLIKE_SUBSTILIUM_MUSHROOM.get(), new HugeMushroomFeatureConfiguration(
                 BlockStateProvider.simple(ModBlocks.ENTORIUM_SHROOM.get()), BlockStateProvider.simple(ModBlocks.SUBSTILIUM_STEM.get()), 2));
-        register(context, BROWNLIKE_SUBSTILIUM_MUSHROOM, Feature.HUGE_BROWN_MUSHROOM, new HugeMushroomFeatureConfiguration(
+        register(context, BROWNLIKE_SUBSTILIUM_MUSHROOM, ModFeatures.BROWNLIKE_SUBSTILIUM_MUSHROOM.get(), new HugeMushroomFeatureConfiguration(
                 BlockStateProvider.simple(ModBlocks.ENTORIUM_SHROOM.get()), BlockStateProvider.simple(ModBlocks.SUBSTILIUM_STEM.get()), 3));
 
         register(context, SPOTTED_EVERGREEN, Feature.FLOWER,

@@ -27,7 +27,7 @@
       "options": {
         "type": "wildaside:still_substilium_particle"
       },
-      "probability": 0.1
+      "probability": 0.05
     },
     "sky_color": 7972607,
     "water_color": -6184663,
