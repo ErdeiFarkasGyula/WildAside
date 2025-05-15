@@ -58,7 +58,7 @@ public class ModEvents {
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            Advancement advancement = player.server.getAdvancements().getAdvancement(new ResourceLocation("wildaside:wild_wilder_wildest"));
+            Advancement advancement = player.server.getAdvancements().getAdvancement(new ResourceLocation(WildAside.MOD_ID,"wild_wilder_wildest"));
             AdvancementProgress progress = player.getAdvancements().getOrStartProgress(advancement);
             if (!progress.isDone()) {
                 for (String criteria : progress.getRemainingCriteria()) {
@@ -127,7 +127,7 @@ public class ModEvents {
         bacteriaBarrierAdvancement(event);
     }
 
-    private static final ResourceLocation GLOWING_FOREST = new ResourceLocation("wildaside", "glowing_hickory_forest");
+    private static final ResourceLocation GLOWING_FOREST = new ResourceLocation(WildAside.MOD_ID, "glowing_hickory_forest");
 
     private static void glowUpAdvancement(TickEvent.PlayerTickEvent event) {
         if (event.phase == TickEvent.Phase.END && !event.player.level().isClientSide) {
