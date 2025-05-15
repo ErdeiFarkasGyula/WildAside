@@ -13,7 +13,7 @@ import net.minecraftforge.registries.RegistryObject;
 public class ModCreativeModeTabs {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, WildAside.MOD_ID);
 
-    public static final RegistryObject<CreativeModeTab> WILDASIDE_TAB = CREATIVE_MODE_TABS.register("wildaside",
+    public static final RegistryObject<CreativeModeTab> WILDASIDE_TAB = CREATIVE_MODE_TABS.register(WildAside.MOD_ID,
             () -> CreativeModeTab.builder()
                     .icon(() -> new ItemStack(ModBlocks.VIBRION_BLOCK.get()))
                     .title(Component.translatable("creativetab.wildaside_tab"))
