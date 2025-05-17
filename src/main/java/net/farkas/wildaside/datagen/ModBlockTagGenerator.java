@@ -43,6 +43,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 .add(ModBlocks.SUBSTILIUM_TILE_WALLS.get());
 
         this.tag(BlockTags.MINEABLE_WITH_SHOVEL)
+                .add(ModBlocks.NATURAL_SPORE_BLASTER.get())
                 .add(ModBlocks.SPORE_BLASTER.get())
                 .add(ModBlocks.SUBSTILIUM_SOIL.get())
                 .add(ModBlocks.OVERGROWN_ENTORIUM_ORE.get())
@@ -102,6 +103,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 .add(ModBlocks.SUBSTILIUM_COPPER_ORE.get());
 
         this.tag(BlockTags.NEEDS_IRON_TOOL)
+                .add(ModBlocks.NATURAL_SPORE_BLASTER.get())
                 .add(ModBlocks.SUBSTILIUM_GOLD_ORE.get())
                 .add(ModBlocks.SUBSTILIUM_REDSTONE_ORE.get())
                 .add(ModBlocks.SUBSTILIUM_DIAMOND_ORE.get())

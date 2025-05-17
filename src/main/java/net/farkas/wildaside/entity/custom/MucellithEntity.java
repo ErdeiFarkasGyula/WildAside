@@ -10,6 +10,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
@@ -24,8 +25,19 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
     private static final EntityDataAccessor<Boolean> ATTACKING = SynchedEntityData.defineId(MucellithEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DEFENDING = SynchedEntityData.defineId(MucellithEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> HAS_DEFENDED = SynchedEntityData.defineId(MucellithEntity.class, EntityDataSerializers.BOOLEAN);
+    private static LookControl unlockedLookControl;
+    private final LookControl lockedLookControl = new LookControl(this) {
+        @Override
+        public void tick() {}
+
+        @Override
+        public void setLookAt(Entity pEntity) {}
+    };
+
+
     public MucellithEntity(EntityType<? extends PathfinderMob> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
+        unlockedLookControl = this.lookControl;
     }
 
     public final AnimationState idleAnimation = new AnimationState();
@@ -63,7 +75,7 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
     public static AttributeSupplier.Builder createAttributes() {
         return PathfinderMob.createLivingAttributes()
                 .add(Attributes.MAX_HEALTH, 30)
-                .add(Attributes.FOLLOW_RANGE, 100)
+                .add(Attributes.FOLLOW_RANGE, 20)
                 .add(Attributes.MOVEMENT_SPEED, 0)
                 .add(Attributes.JUMP_STRENGTH, 0)
                 .add(Attributes.FLYING_SPEED, 0)
@@ -96,6 +108,11 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
                 setHasDefended(true);
                 setDefending(false);
             }
+
+            lookControl = lockedLookControl;
+        }
+        else {
+            lookControl = unlockedLookControl;
         }
     }
 
@@ -105,6 +122,13 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
                 defenseAnimation.start(tickCount);
             }
         } else {
+            if (this.idleAnimationTimeout <= 0) {
+                this.idleAnimationTimeout = idleAnimationMax;
+                this.idleAnimation.start(this.tickCount);
+            } else {
+                --this.idleAnimationTimeout;
+            }
+
             if (hasDefended()) {
                 if (defenseAnimationReverseTimeout == defenseAnimationReverseMax) {
                     defenseAnimationReverse.start(tickCount);
@@ -131,14 +155,6 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
             attackAnimationTimeout = attackAnimationMax;
             attackAnimation.stop();
         }
-
-        if (this.idleAnimationTimeout <= 0) {
-            this.idleAnimationTimeout = idleAnimationMax;
-            this.idleAnimation.start(this.tickCount);
-        } else {
-            --this.idleAnimationTimeout;
-        }
-
     }
 
     @Override

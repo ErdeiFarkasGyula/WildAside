@@ -1,4 +1,4 @@
-// 1.20.1	2025-04-28T16:48:11.7074509	Tags for minecraft:block mod id wildaside
+// 1.20.1	2025-05-17T16:37:18.4396448	Tags for minecraft:block mod id wildaside
 d1f85e88be042254e820879eaaf2cffeedd7706d data/minecraft/tags/blocks/fences.json
 91a3e6d389cd000ab12cedc46ba98c4026da8887 data/minecraft/tags/blocks/fence_gates.json
 1a6ca65cc7729f3e05799bc6055ee7ceee68f7be data/minecraft/tags/blocks/leaves.json
@@ -6,9 +6,9 @@ d1f85e88be042254e820879eaaf2cffeedd7706d data/minecraft/tags/blocks/fences.json
 127676f0cc4343483bedd610df15bfb22a00ecd4 data/minecraft/tags/blocks/mineable/axe.json
 285d0b3d391eac75aa764566843e67c6e2819247 data/minecraft/tags/blocks/mineable/hoe.json
 7e52c6500b39f1df008f4169c4684a285f447723 data/minecraft/tags/blocks/mineable/pickaxe.json
-62857087bab9c6588eaffecd576dd17cdaf6d9b8 data/minecraft/tags/blocks/mineable/shovel.json
+b6998083c1a48fb136647d06c9d91931e88c0e3c data/minecraft/tags/blocks/mineable/shovel.json
 8efebeeb6ffd595c82f4508677f9439e5c89c3f6 data/minecraft/tags/blocks/mushroom_grow_block.json
-a38d9f95e3ea34616d25bdeff85bf27b3c7c05d3 data/minecraft/tags/blocks/needs_iron_tool.json
+fc788d0bd6ac1b11ccf5fdd31081d74b067c80a9 data/minecraft/tags/blocks/needs_iron_tool.json
 d1342822298c90526caad3a06ce0c2afd95ef559 data/minecraft/tags/blocks/needs_stone_tool.json
 74bf2f8f2becd0dc41875b171a95e95dd8698f57 data/minecraft/tags/blocks/overworld_natural_logs.json
 8834804abd83952ec74c55a2254f2f0a04901cfc data/minecraft/tags/blocks/planks.json
