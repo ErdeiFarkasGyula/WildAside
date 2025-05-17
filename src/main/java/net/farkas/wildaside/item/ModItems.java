@@ -30,7 +30,7 @@ public class ModItems {
             () ->  new Item(new Item.Properties()));
 
     public static final RegistryObject<Item> ENTORIUM_PILL = ITEMS.register("entorium_pill",
-            () ->  new EntoriumPill(new Item.Properties().food(ModFoods.ENTORIUM_PILL)));
+            () ->  new EntoriumPill(new Item.Properties().food(ModFoods.ENTORIUM_PILL).stacksTo(16)));
     public static final RegistryObject<Item> SPORE_ARROW = ITEMS.register("spore_arrow",
             () ->  new SporeArrow(new Item.Properties()));
     public static final RegistryObject<Item> SPORE_BOMB = ITEMS.register("spore_bomb",
