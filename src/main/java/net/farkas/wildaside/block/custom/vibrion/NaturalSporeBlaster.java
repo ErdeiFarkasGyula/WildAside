@@ -15,6 +15,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DoorHingeSide;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
@@ -75,14 +76,14 @@ public class NaturalSporeBlaster extends RotatedPillarBlock {
 
     private void infectAlongLine(ServerLevel world, BlockPos origin, RandomSource random, int power, int x, int y, int z) {
         for (int i = 1; i <= power; i++) {
-            var originBlock = world.getBlockState(origin);
-            var position = origin.offset(x * i, y * i, z * i);
-            var nextBlock = world.getBlockState(position);
-
             if (shouldBreakNext) {
                 shouldBreakNext = false;
                 break;
             }
+
+            var originBlock = world.getBlockState(origin);
+            var position = origin.offset(x * i, y * i, z * i);
+            var nextBlock = world.getBlockState(position);
 
             if (nextBlock.isCollisionShapeFullBlock(world, position)) break;
             if (y != 0) {
@@ -133,9 +134,16 @@ public class NaturalSporeBlaster extends RotatedPillarBlock {
                     } else {
                         if (facing.getAxis() != Direction.Axis.X) {
                             if (doorDirectionCheck(axis, x, facing)) {
+                                if (nextBlock.getValue(DoorBlock.HINGE) == DoorHingeSide.LEFT) {
+                                    break;
+                                }
                                 shouldBreakNext = true;
                             } else {
-                                break;
+                                if (nextBlock.getValue(DoorBlock.HINGE) == DoorHingeSide.LEFT) {
+                                    shouldBreakNext = true;
+                                } else {
+                                    break;
+                                }
                             }
                         }
                     }
@@ -177,9 +185,16 @@ public class NaturalSporeBlaster extends RotatedPillarBlock {
                     } else {
                         if (facing.getAxis() != Direction.Axis.Z) {
                             if (doorDirectionCheck(axis, z, facing)) {
+                                if (nextBlock.getValue(DoorBlock.HINGE) == DoorHingeSide.RIGHT) {
+                                    break;
+                                }
                                 shouldBreakNext = true;
                             } else {
-                                break;
+                                if (nextBlock.getValue(DoorBlock.HINGE) == DoorHingeSide.RIGHT) {
+                                    shouldBreakNext = true;
+                                } else {
+                                    break;
+                                }
                             }
                         }
                     }

@@ -24,8 +24,10 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.PotionItem;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DoorHingeSide;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
@@ -43,6 +45,8 @@ import java.util.List;
 public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvider {
     private final ItemStackHandler itemHandler = new ItemStackHandler(10);
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
+
+    private boolean shouldBreakNext;
 
     public static final int OUTPUT_1 = 9;
 
@@ -124,8 +128,129 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
         RandomSource random = level.random;
 
         for (int i = 1; i <= power; i++) {
+            if (shouldBreakNext) {
+                shouldBreakNext = false;
+                break;
+            }
+
             BlockPos target = pos.relative(direction, i);
             if (level.getBlockState(target).isCollisionShapeFullBlock(level, target)) break;
+
+            var nextBlock = level.getBlockState(target);
+            var originBlock = level.getBlockState(this.getBlockPos());
+            var axis = originBlock.getValue(PotionBlaster.FACING).getAxis();
+
+            if (axis == Direction.Axis.Y) {
+                if (nextBlock.getBlock() instanceof SlabBlock) {
+                    break;
+                }
+                if (nextBlock.getBlock() instanceof TrapDoorBlock) {
+                    if (!nextBlock.getValue(TrapDoorBlock.OPEN)) {
+                        break;
+                    }
+                }
+                if (nextBlock.getBlock() instanceof StairBlock) {
+                    break;
+                }
+            }
+            else
+            if (axis == Direction.Axis.X) {
+                if (nextBlock.getBlock() instanceof StairBlock) {
+                    if (nextBlock.getValue(StairBlock.FACING).getAxis() == Direction.Axis.X) {
+                        break;
+                    }
+                }
+                if (nextBlock.getBlock() instanceof TrapDoorBlock) {
+                    if (nextBlock.getValue(TrapDoorBlock.OPEN)) {
+                        Direction facing = nextBlock.getValue(TrapDoorBlock.FACING);
+                        if (facing.getAxis() == Direction.Axis.X) {
+                            if (direction == facing) {
+                                break;
+                            } else {
+                                shouldBreakNext = true;
+                            }
+                        }
+                    }
+                }
+                if (nextBlock.getBlock() instanceof DoorBlock) {
+                    var open = nextBlock.getValue(DoorBlock.OPEN);
+                    Direction facing = nextBlock.getValue(DoorBlock.FACING);
+
+                    if (!open) {
+                        if (facing.getAxis() == Direction.Axis.X) {
+                            if (axisToDirection(axis, direction.getStepX()) == facing) {
+                                break;
+                            } else {
+                                shouldBreakNext = true;
+                            }
+                        }
+                    } else {
+                        if (facing.getAxis() != Direction.Axis.X) {
+                            if (doorDirectionCheck(axis, direction.getStepX(), facing)) {
+                                if (nextBlock.getValue(DoorBlock.HINGE) == DoorHingeSide.LEFT) {
+                                    break;
+                                }
+                                shouldBreakNext = true;
+                            } else {
+                                if (nextBlock.getValue(DoorBlock.HINGE) == DoorHingeSide.LEFT) {
+                                    shouldBreakNext = true;
+                                } else {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            if (axis == Direction.Axis.Z) {
+                if (nextBlock.getBlock() instanceof StairBlock) {
+                    if (nextBlock.getValue(StairBlock.FACING).getAxis() == Direction.Axis.Z) {
+                        break;
+                    }
+                }
+                if (nextBlock.getBlock() instanceof TrapDoorBlock) {
+                    if (nextBlock.getValue(TrapDoorBlock.OPEN)) {
+                        Direction facing = nextBlock.getValue(TrapDoorBlock.FACING);
+                        if (facing.getAxis() == Direction.Axis.Z) {
+                            if (direction == facing) {
+                                break;
+                            } else {
+                                shouldBreakNext = true;
+                            }
+                        }
+                    }
+                }
+                if (nextBlock.getBlock() instanceof DoorBlock) {
+                    var open = nextBlock.getValue(DoorBlock.OPEN);
+                    Direction facing = nextBlock.getValue(DoorBlock.FACING);
+
+                    if (!open) {
+                        if (facing.getAxis() == Direction.Axis.Z) {
+                            if (direction == facing) {
+                                break;
+                            } else {
+                                shouldBreakNext = true;
+                            }
+                        }
+                    } else {
+                        if (facing.getAxis() != Direction.Axis.Z) {
+                            if (doorDirectionCheck(axis, direction.getStepZ(), facing)) {
+                                if (nextBlock.getValue(DoorBlock.HINGE) == DoorHingeSide.RIGHT) {
+                                    break;
+                                }
+                                shouldBreakNext = true;
+                            } else {
+                                if (nextBlock.getValue(DoorBlock.HINGE) == DoorHingeSide.RIGHT) {
+                                    shouldBreakNext = true;
+                                } else {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
             for (int k = 0; k < 2; k++) {
                 double x = target.getX() + random.nextDouble();
@@ -305,4 +430,31 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
             }
         }
     }
+    private Direction axisToDirection(Direction.Axis axis, int offset) {
+        if (axis.equals(Direction.Axis.X)) {
+            if (offset == 1) return Direction.EAST;
+            else return Direction.WEST;
+        }
+        if (axis.equals(Direction.Axis.Y)) {
+            if (offset == 1) return Direction.UP;
+            else return Direction.DOWN;
+        }
+        if (axis.equals(Direction.Axis.Z)) {
+            if (offset == 1) return Direction.SOUTH;
+            else return Direction.NORTH;
+        }
+
+        return Direction.UP;
+    }
+
+    private Boolean doorDirectionCheck(Direction.Axis axis, int offset, Direction facing) {
+        if (axis.equals(Direction.Axis.X)) {
+            return axisToDirection(Direction.Axis.Z, -offset) == facing;
+        }
+        if (axis.equals(Direction.Axis.Z)) {
+            return axisToDirection(Direction.Axis.X, -offset) == facing;
+        }
+        return false;
+    }
+
 }
