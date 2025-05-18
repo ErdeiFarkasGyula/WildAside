@@ -1,0 +1,333 @@
+{
+  "type": "minecraft:chests/simple_dungeon",
+  "pools": [
+    {
+      "name": "substilium_stones",
+      "rolls": {
+        "min": 0,
+        "max": 2
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:compressed_substilium_soil",
+          "weight": 6,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 2, "max": 5 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:chiseled_substilium_soil",
+          "weight": 5,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 2, "max": 5 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:substilium_tiles",
+          "weight": 6,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 2, "max": 5 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:smooth_substilium_soil",
+          "weight": 5,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 2, "max": 5 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:chiseled_substilium_soil",
+          "weight": 5,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 2, "max": 5 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:cracked_substilium_tiles",
+          "weight": 3,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 2, "max": 5 } }]
+        }
+      ]
+    },
+    {
+      "name": "substilium_wood",
+      "rolls": {
+        "min": 1,
+        "max": 2
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:substilium_stem",
+          "weight": 6,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 2, "max": 5 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:substilium_wood",
+          "weight": 5,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 2, "max": 5 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:stripped_substilium_stem",
+          "weight": 4,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 2, "max": 5 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:stripped_substilium_wood",
+          "weight": 4,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 2, "max": 5 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:substilium_planks",
+          "weight": 5,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 3, "max": 7 } }]
+        }
+      ]
+    },
+    {
+      "name": "vibrion",
+      "rolls": 2,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:vibrion",
+          "weight": 7,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 2, "max": 4 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:vibrion_block",
+          "weight": 3,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 1, "max": 2 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:compressed_vibrion_block",
+          "weight": 1,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 1, "max": 2 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:vibrion_gel",
+          "weight": 5,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 2, "max": 4 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:lit_vibrion_gel",
+          "weight": 5,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 2, "max": 4 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:vibrion_growth",
+          "weight": 3,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 2, "max": 3 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:vibrion_sporeholder",
+          "weight": 2,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 1, "max": 2 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:hanging_vibrion_vines",
+          "weight": 3,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 2, "max": 3 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:vibrion_glass",
+          "weight": 2,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 2, "max": 3 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:lit_vibrion_glass",
+          "weight": 1,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 2, "max": 3 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:vibrion_glass_pane",
+          "weight": 1,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 3, "max": 6 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:lit_vibrion_glass_pane",
+          "weight": 1,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 3, "max": 6 } }]
+        }
+      ]
+    },
+    {
+      "name": "vegetation",
+      "rolls": {
+        "min": 2,
+        "max": 3
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:vibrion_growth",
+          "weight": 3,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 2, "max": 4 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:vibrion_sporeholder",
+          "weight": 1,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 1, "max": 2 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:hanging_vibrion_vines",
+          "weight": 3,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 2, "max": 3 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:substilium_sprouts",
+          "weight": 3,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 2, "max": 4 } }]
+        }
+      ]
+    },
+    {
+      "name": "mid_tier",
+      "rolls": {
+        "min": 1,
+        "max": 2
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:entorium",
+          "weight": 3,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 1, "max": 2 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:entorium_pill",
+          "weight": 2,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 1, "max": 2 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:spore_arrow",
+          "weight": 2,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 2, "max": 6 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:spore_bomb",
+          "weight": 2,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 1, "max": 2 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:fertiliser_bomb",
+          "weight": 2,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 1, "max": 2 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:glass_bottle",
+          "weight": 3,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 1, "max": 3 } }]
+        }
+      ]
+    },
+    {
+      "name": "ores",
+      "rolls": {
+        "min": 1,
+        "max": 3
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:substilium_coal_ore",
+          "weight": 5,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 1, "max": 5 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:entorium_ore",
+          "weight": 4,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 1, "max": 4 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:substilium_iron_ore",
+          "weight": 4,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 1, "max": 4 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:substilium_copper_ore",
+          "weight": 4,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 1, "max": 4 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:substilium_gold_ore",
+          "weight": 3,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 1, "max": 3 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:substilium_lapis_ore",
+          "weight": 2,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 1, "max": 2 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:substilium_redstone_ore",
+          "weight": 2,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 1, "max": 2 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:substilium_diamond_ore",
+          "weight": 1,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 1, "max": 2 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:substilium_emerald_ore",
+          "weight": 1,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 1, "max": 2 } }]
+        }
+      ]
+    },
+    {
+      "name": "rare_drops",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:mucellith_jaw",
+          "weight": 3,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 1, "max": 2 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:spore_blaster",
+          "weight": 2,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 1, "max": 1 } }]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "wildaside:potion_blaster",
+          "weight": 1,
+          "functions": [{ "function": "minecraft:set_count", "count": { "min": 1, "max": 1 } }]
+        }
+      ]
+    }
+  ],
+  "random_sequence": "wildaside:chests/vibrion_hive_chest"
+}
