@@ -7,24 +7,27 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 public class NaturalSporeBlaster extends RotatedPillarBlock {
     private final int maxTimer = 40;
     private int changePowerTimer = maxTimer;
     private int power1 = 0;
     private int power2 = 0;
+
+    private boolean shouldBreakNext;
 
     public NaturalSporeBlaster(Properties pProperties) {
         super(pProperties);
@@ -72,10 +75,116 @@ public class NaturalSporeBlaster extends RotatedPillarBlock {
 
     private void infectAlongLine(ServerLevel world, BlockPos origin, RandomSource random, int power, int x, int y, int z) {
         for (int i = 1; i <= power; i++) {
+            var originBlock = world.getBlockState(origin);
             var position = origin.offset(x * i, y * i, z * i);
             var nextBlock = world.getBlockState(position);
 
+            if (shouldBreakNext) {
+                shouldBreakNext = false;
+                break;
+            }
+
             if (nextBlock.isCollisionShapeFullBlock(world, position)) break;
+            if (y != 0) {
+                if (nextBlock.getBlock() instanceof SlabBlock) {
+                    break;
+                }
+                if (nextBlock.getBlock() instanceof TrapDoorBlock) {
+                    if (!nextBlock.getValue(TrapDoorBlock.OPEN)) {
+                        break;
+                    }
+                }
+                if (nextBlock.getBlock() instanceof StairBlock) {
+                    break;
+                }
+            }
+            if (x != 0) {
+                if (nextBlock.getBlock() instanceof StairBlock) {
+                    if (nextBlock.getValue(StairBlock.FACING).getAxis() == Direction.Axis.X) {
+                        break;
+                    }
+                }
+                if (nextBlock.getBlock() instanceof TrapDoorBlock) {
+                    if (nextBlock.getValue(TrapDoorBlock.OPEN)) {
+                        Direction facing = nextBlock.getValue(TrapDoorBlock.FACING);
+                        if (facing.getAxis() == Direction.Axis.X) {
+                            Direction.Axis axis = originBlock.getValue(RotatedPillarBlock.AXIS);
+                            if (axisToDirection(axis, x) == facing) {
+                                break;
+                            } else {
+                                shouldBreakNext = true;
+                            }
+                        }
+                    }
+                }
+                if (nextBlock.getBlock() instanceof DoorBlock) {
+                    var open = nextBlock.getValue(DoorBlock.OPEN);
+                    Direction facing = nextBlock.getValue(DoorBlock.FACING);
+                    Direction.Axis axis = originBlock.getValue(RotatedPillarBlock.AXIS);
+
+                    if (!open) {
+                        if (facing.getAxis() == Direction.Axis.X) {
+                            if (axisToDirection(axis, x) == facing) {
+                                break;
+                            } else {
+                                shouldBreakNext = true;
+                            }
+                        }
+                    } else {
+                        if (facing.getAxis() != Direction.Axis.X) {
+                            if (doorDirectionCheck(axis, x, facing)) {
+                                shouldBreakNext = true;
+                            } else {
+                                break;
+                            }
+                        }
+                    }
+                }
+
+            }
+            if (z != 0) {
+                if (nextBlock.getBlock() instanceof StairBlock) {
+                    if (nextBlock.getValue(StairBlock.FACING).getAxis() == Direction.Axis.Z) {
+                        break;
+                    }
+                }
+                if (nextBlock.getBlock() instanceof TrapDoorBlock) {
+                    if (nextBlock.getValue(TrapDoorBlock.OPEN)) {
+                        Direction facing = nextBlock.getValue(TrapDoorBlock.FACING);
+                        if (facing.getAxis() == Direction.Axis.Z) {
+                            Direction.Axis axis = originBlock.getValue(RotatedPillarBlock.AXIS);
+                            if (axisToDirection(axis, z) == facing) {
+                                break;
+                            } else {
+                                shouldBreakNext = true;
+                            }
+                        }
+                    }
+                }
+                if (nextBlock.getBlock() instanceof DoorBlock) {
+                    var open = nextBlock.getValue(DoorBlock.OPEN);
+                    Direction facing = nextBlock.getValue(DoorBlock.FACING);
+                    Direction.Axis axis = originBlock.getValue(RotatedPillarBlock.AXIS);
+
+                    if (!open) {
+                        if (facing.getAxis() == Direction.Axis.Z) {
+                            if (axisToDirection(axis, z) == facing) {
+                                break;
+                            } else {
+                                shouldBreakNext = true;
+                            }
+                        }
+                    } else {
+                        if (facing.getAxis() != Direction.Axis.Z) {
+                            if (doorDirectionCheck(axis, z, facing)) {
+                                shouldBreakNext = true;
+                            } else {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
 
             AABB area = new AABB(position);
             List<LivingEntity> hits = world.getEntitiesOfClass(LivingEntity.class, area, e -> !e.isSpectator());
@@ -98,5 +207,32 @@ public class NaturalSporeBlaster extends RotatedPillarBlock {
                         5, 0.2, 0.2, 0.2, 0.01);
             }
         }
+    }
+
+    private Direction axisToDirection(Direction.Axis axis, int offset) {
+        if (axis.equals(Direction.Axis.X)) {
+            if (offset == 1) return Direction.EAST;
+            else return Direction.WEST;
+        }
+        if (axis.equals(Direction.Axis.Y)) {
+            if (offset == 1) return Direction.UP;
+            else return Direction.DOWN;
+        }
+        if (axis.equals(Direction.Axis.Z)) {
+            if (offset == 1) return Direction.SOUTH;
+            else return Direction.NORTH;
+        }
+
+        return Direction.UP;
+    }
+
+    private Boolean doorDirectionCheck(Direction.Axis axis, int offset, Direction facing) {
+        if (axis.equals(Direction.Axis.X)) {
+            return axisToDirection(Direction.Axis.Z, -offset) == facing;
+        }
+        if (axis.equals(Direction.Axis.Z)) {
+            return axisToDirection(Direction.Axis.X, -offset) == facing;
+        }
+        return false;
     }
 }

@@ -80,7 +80,9 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 .add(ModBlocks.SUBSTILIUM_FENCE.get())
                 .add(ModBlocks.SUBSTILIUM_FENCE_GATE.get())
                 .add(ModBlocks.SUBSTILIUM_SIGN.get())
+                .add(ModBlocks.SUBSTILIUM_WALL_SIGN.get())
                 .add(ModBlocks.SUBSTILIUM_HANGING_SIGN.get())
+                .add(ModBlocks.HICKORY_WALL_HANGING_SIGN.get())
                 .add(ModBlocks.HICKORY_LOG.get())
                 .add(ModBlocks.HICKORY_WOOD.get())
                 .add(ModBlocks.STRIPPED_HICKORY_LOG.get())
@@ -95,7 +97,9 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 .add(ModBlocks.HICKORY_FENCE.get())
                 .add(ModBlocks.HICKORY_FENCE_GATE.get())
                 .add(ModBlocks.HICKORY_SIGN.get())
-                .add(ModBlocks.HICKORY_HANGING_SIGN.get());
+                .add(ModBlocks.HICKORY_WALL_SIGN.get())
+                .add(ModBlocks.HICKORY_HANGING_SIGN.get())
+                .add(ModBlocks.HICKORY_WALL_HANGING_SIGN.get());
 
         this.tag(BlockTags.NEEDS_STONE_TOOL)
                 .add(ModBlocks.SUBSTILIUM_LAPIS_ORE.get())
@@ -130,7 +134,49 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 .add(ModBlocks.SUBSTILIUM_HANGING_SIGN.get());
 
         //
-
+        this.tag(BlockTags.STAIRS)
+                .add(ModBlocks.SUBSTILIUM_STAIRS.get())
+                .add(ModBlocks.SUBSTILIUM_TILE_STAIRS.get())
+                .add(ModBlocks.HICKORY_STAIRS.get());
+        this.tag(BlockTags.SLABS)
+                .add(ModBlocks.SUBSTILIUM_SLAB.get())
+                .add(ModBlocks.SUBSTILIUM_TILE_SLAB.get())
+                .add(ModBlocks.HICKORY_SLAB.get());
+        this.tag(BlockTags.BUTTONS)
+                .add(ModBlocks.SUBSTILIUM_BUTTON.get())
+                .add(ModBlocks.SUBSTILIUM_TILE_BUTTON.get())
+                .add(ModBlocks.HICKORY_BUTTON.get());
+        this.tag(BlockTags.PRESSURE_PLATES)
+                .add(ModBlocks.SUBSTILIUM_PRESSURE_PLATE.get())
+                .add(ModBlocks.SUBSTILIUM_TILE_PRESSURE_PLATE.get())
+                .add(ModBlocks.HICKORY_PRESSURE_PLATE.get());
+        this.tag(BlockTags.DOORS)
+                .add(ModBlocks.SUBSTILIUM_DOOR.get())
+                .add(ModBlocks.SUBSTILIUM_DOOR.get());
+        this.tag(BlockTags.TRAPDOORS)
+                .add(ModBlocks.SUBSTILIUM_TRAPDOOR.get())
+                .add(ModBlocks.HICKORY_TRAPDOOR.get());
+        this.tag(BlockTags.SIGNS)
+                .add(ModBlocks.SUBSTILIUM_SIGN.get())
+                .add(ModBlocks.HICKORY_SIGN.get());
+        this.tag(BlockTags.WALL_SIGNS)
+                .add(ModBlocks.SUBSTILIUM_WALL_SIGN.get())
+                .add(ModBlocks.HICKORY_WALL_SIGN.get());
+        this.tag(BlockTags.STANDING_SIGNS)
+                .add(ModBlocks.HICKORY_SIGN.get())
+                .add(ModBlocks.SUBSTILIUM_SIGN.get());
+        this.tag(BlockTags.WALL_HANGING_SIGNS)
+                .add(ModBlocks.HICKORY_WALL_HANGING_SIGN.get())
+                .add(ModBlocks.SUBSTILIUM_WALL_HANGING_SIGN.get());
+        this.tag(BlockTags.ALL_SIGNS)
+                .add(ModBlocks.SUBSTILIUM_SIGN.get())
+                .add(ModBlocks.SUBSTILIUM_WALL_SIGN.get())
+                .add(ModBlocks.SUBSTILIUM_HANGING_SIGN.get())
+                .add(ModBlocks.SUBSTILIUM_WALL_HANGING_SIGN.get())
+                .add(ModBlocks.HICKORY_SIGN.get())
+                .add(ModBlocks.HICKORY_WALL_SIGN.get())
+                .add(ModBlocks.HICKORY_HANGING_SIGN.get())
+                .add(ModBlocks.HICKORY_WALL_HANGING_SIGN.get());
         this.tag(BlockTags.FENCES)
                 .add(ModBlocks.SUBSTILIUM_FENCE.get())
                 .add(ModBlocks.HICKORY_FENCE.get());
@@ -166,6 +212,16 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 .add(ModBlocks.BROWN_GLOWING_HICKORY_LEAVES.get())
                 .add(ModBlocks.YELLOW_GLOWING_HICKORY_LEAVES.get())
                 .add(ModBlocks.GREEN_GLOWING_HICKORY_LEAVES.get());
+
+        this.tag(BlockTags.LOGS)
+                .add(ModBlocks.SUBSTILIUM_STEM.get())
+                .add(ModBlocks.STRIPPED_SUBSTILIUM_STEM.get())
+                .add(ModBlocks.HICKORY_LOG.get())
+                .add(ModBlocks.STRIPPED_HICKORY_LOG.get());
+
+        this.tag(BlockTags.FLOWERS)
+                .add(ModBlocks.PINKSTER_FLOWER.get())
+                .add(ModBlocks.SPOTTED_WINTERGREEN.get());
 
         this.tag(BlockTags.MUSHROOM_GROW_BLOCK)
                 .add(ModBlocks.SUBSTILIUM_SOIL.get());
