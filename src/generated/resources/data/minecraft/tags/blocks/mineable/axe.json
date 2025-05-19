@@ -15,7 +15,9 @@
     "wildaside:substilium_fence",
     "wildaside:substilium_fence_gate",
     "wildaside:substilium_sign",
+    "wildaside:substilium_wall_sign",
     "wildaside:substilium_hanging_sign",
+    "wildaside:hickory_hanging_wall_sign",
     "wildaside:hickory_log",
     "wildaside:hickory_wood",
     "wildaside:stripped_hickory_log",
@@ -30,6 +32,8 @@
     "wildaside:hickory_fence",
     "wildaside:hickory_fence_gate",
     "wildaside:hickory_sign",
-    "wildaside:hickory_hanging_sign"
+    "wildaside:hickory_wall_sign",
+    "wildaside:hickory_hanging_sign",
+    "wildaside:hickory_hanging_wall_sign"
   ]
 }
