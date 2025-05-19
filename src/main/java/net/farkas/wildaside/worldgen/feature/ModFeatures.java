@@ -1,13 +1,11 @@
 package net.farkas.wildaside.worldgen.feature;
 
 import net.farkas.wildaside.WildAside;
-import net.farkas.wildaside.worldgen.feature.custom.BrownlikeSubstiliumMushroomFeature;
-import net.farkas.wildaside.worldgen.feature.custom.NaturalSporeBlasterFeature;
-import net.farkas.wildaside.worldgen.feature.custom.RedlikeSubstiliumMushroomFeature;
-import net.farkas.wildaside.worldgen.feature.custom.UpdateReplaceSingleBlockFeature;
+import net.farkas.wildaside.worldgen.feature.custom.*;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.HugeMushroomFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.ReplaceBlockConfiguration;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -26,6 +24,9 @@ public class ModFeatures {
             () -> new RedlikeSubstiliumMushroomFeature(HugeMushroomFeatureConfiguration.CODEC));
     public static final RegistryObject<BrownlikeSubstiliumMushroomFeature> BROWNLIKE_SUBSTILIUM_MUSHROOM = FEATURES.register("brownlike_substilium_mushroom",
             () -> new BrownlikeSubstiliumMushroomFeature(HugeMushroomFeatureConfiguration.CODEC));
+
+    public static final RegistryObject<VibrionHiveRuinFeature> VIBRION_HIVE_RUIN = FEATURES.register("vibrion_hive_ruin",
+            () -> new VibrionHiveRuinFeature(NoneFeatureConfiguration.CODEC));
 
     public static void register(IEventBus eventBus) {
         FEATURES.register(eventBus);

@@ -1,6 +1,8 @@
 package net.farkas.wildaside.entity.custom;
 
 import net.farkas.wildaside.entity.ai.mucellith.MucellithAttackGoal;
+import net.farkas.wildaside.entity.ai.mucellith.MucellithLookAtPlayerGoal;
+import net.farkas.wildaside.entity.ai.mucellith.MucellithRandomLookAroundGoal;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -29,6 +31,9 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
     private static final EntityDataAccessor<Boolean> DEFENDING = SynchedEntityData.defineId(MucellithEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> HAS_DEFENDED = SynchedEntityData.defineId(MucellithEntity.class, EntityDataSerializers.BOOLEAN);
 
+    private int soundCooldown = 0;
+    private int soundCooldownMax = 20;
+
     public MucellithEntity(EntityType<? extends PathfinderMob> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
@@ -49,8 +54,8 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new MucellithAttackGoal(this, 60, 8f));
-        this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 6f));
-        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(3, new MucellithLookAtPlayerGoal(this, Player.class, 6f));
+        this.goalSelector.addGoal(4, new MucellithRandomLookAroundGoal(this));
 
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, (entity) -> {
@@ -95,7 +100,15 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
         }
 
         if (isDefending()) {
+            if (this.soundCooldown <= 0) {
+                this.playSound(SoundEvents.WARDEN_HEARTBEAT, 1f, 1.5f);
+                soundCooldown = soundCooldownMax;
+            } else {
+                --this.soundCooldown;
+            }
+
             if (!belowHealthThreshold(0.5f)) {
+                this.playSound(SoundEvents.WARDEN_ANGRY, 1f, 1.5f);
                 this.removeEffect(MobEffects.DAMAGE_RESISTANCE);
                 this.removeEffect(MobEffects.REGENERATION);
                 setHasDefended(true);
@@ -163,7 +176,7 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
         double d3 = pTarget.getZ() - this.getZ();
         double d4 = Math.sqrt(d1 * d1 + d3 * d3) * (double)0.2F;
         sporeBomb.shoot(d1, d2 + d4, d3, 1.6F, 2);
-        this.playSound(SoundEvents.SNOWBALL_THROW, 1.0F, 0.4F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        this.playSound(SoundEvents.SNOWBALL_THROW, 1.0F, 0.2f);
         this.level().addFreshEntity(sporeBomb);
     }
 

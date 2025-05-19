@@ -34,6 +34,8 @@ public class ModPlacedFeatures {
 
     public static final ResourceKey<PlacedFeature> OVERGROWN_ENTORIUM_ORE_PLACED = registerKey("overgrown_entorium_ore");
 
+    public static final ResourceKey<PlacedFeature> VIBRION_HIVE_RUIN = registerKey("vibrion_hive_ruin");
+
     public static final ResourceKey<PlacedFeature> SUBSTILIUM_COAL_ORE = registerKey("substilium_coal_ore");
     public static final ResourceKey<PlacedFeature> SUBSTILIUM_COPPER_ORE = registerKey("substilium_copper_ore");
     public static final ResourceKey<PlacedFeature> SUBSTILIUM_COPPER_ORE_LARGE = registerKey("substilium_copper_ore_large");
@@ -97,6 +99,10 @@ public class ModPlacedFeatures {
                 CountPlacement.of(256), InSquarePlacement.spread(), VibrionHivePlacement,
                 EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.hasSturdyFace(Direction.DOWN),
                         BlockPredicate.ONLY_IN_AIR_PREDICATE, 32), RandomOffsetPlacement.vertical(ConstantInt.of(-1)), BiomeFilter.biome()));
+
+        register(context, VIBRION_HIVE_RUIN, configuredFeatures.getOrThrow(ModConfiguredFeatures.VIBRION_HIVE_RUIN),
+                List.of(CountPlacement.of(256), InSquarePlacement.spread(),
+                        HeightRangePlacement.triangle(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80)), BiomeFilter.biome()));
 
         register(context, SUBSTILIUM_COAL_ORE, configuredFeatures.getOrThrow(ModConfiguredFeatures.SUBSTILIUM_COAL_ORE),
                 ModOrePlacement.commonOrePlacement(20, HeightRangePlacement.triangle(VerticalAnchor.absolute(0), VerticalAnchor.absolute(192))));
