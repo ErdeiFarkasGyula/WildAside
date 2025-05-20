@@ -25,9 +25,6 @@ public class ModFeatures {
     public static final RegistryObject<BrownlikeSubstiliumMushroomFeature> BROWNLIKE_SUBSTILIUM_MUSHROOM = FEATURES.register("brownlike_substilium_mushroom",
             () -> new BrownlikeSubstiliumMushroomFeature(HugeMushroomFeatureConfiguration.CODEC));
 
-    public static final RegistryObject<VibrionHiveRuinFeature> VIBRION_HIVE_RUIN = FEATURES.register("vibrion_hive_ruin",
-            () -> new VibrionHiveRuinFeature(NoneFeatureConfiguration.CODEC));
-
     public static void register(IEventBus eventBus) {
         FEATURES.register(eventBus);
     }

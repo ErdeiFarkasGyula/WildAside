@@ -2,7 +2,6 @@ package net.farkas.wildaside.worldgen;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
-import net.farkas.wildaside.block.custom.vibrion.NaturalSporeBlaster;
 import net.farkas.wildaside.worldgen.feature.ModFeatures;
 import net.farkas.wildaside.worldgen.feature.tree.hickory.HickoryTreeFoliagePlacer;
 import net.minecraft.core.Direction;
@@ -11,8 +10,13 @@ import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.util.valueproviders.*;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.GeodeBlockSettings;
+import net.minecraft.world.level.levelgen.GeodeCrackSettings;
+import net.minecraft.world.level.levelgen.GeodeLayerSettings;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -38,8 +42,6 @@ public class ModConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> HANGING_LIT_VIBRION_GEL = registerKey("hanging_lit_vibrion_gel");
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> OVERGROWN_ENTORIUM_ORE = registerKey("overgrown_entorium_ore");
-
-    public static final ResourceKey<ConfiguredFeature<?, ?>> VIBRION_HIVE_RUIN = registerKey("vibrion_hive_ruin");
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> SUBSTILIUM_COAL_ORE = registerKey("substilium_coal_ore");
     public static final ResourceKey<ConfiguredFeature<?, ?>> SUBSTILIUM_COPPER_ORE_SMALL = registerKey("substilium_copper_ore_small");
@@ -94,8 +96,6 @@ public class ModConfiguredFeatures {
         List<OreConfiguration.TargetBlockState> substilium_emerald_ore = List.of(OreConfiguration.target(substilium_ore_replaceables, ModBlocks.SUBSTILIUM_EMERALD_ORE.get().defaultBlockState()));
 
         register(context, OVERGROWN_ENTORIUM_ORE, Feature.ORE, new OreConfiguration(overgrown_entorium_ore, 16));
-
-        register(context, VIBRION_HIVE_RUIN, ModFeatures.VIBRION_HIVE_RUIN.get(), new NoneFeatureConfiguration());
 
         register(context, SUBSTILIUM_COAL_ORE, Feature.ORE, new OreConfiguration(substilium_coal_ore, 17, 0.5f));
         register(context, SUBSTILIUM_COPPER_ORE_SMALL, Feature.ORE, new OreConfiguration(substilium_copper_ore, 10));
