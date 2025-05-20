@@ -2,6 +2,7 @@ package net.farkas.wildaside.block.custom;
 
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.particle.ModParticles;
+import net.farkas.wildaside.util.ParticleUtils;
 import net.farkas.wildaside.worldgen.ModPlacedFeatures;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -32,10 +33,7 @@ public class SubstiliumSoil extends DropExperienceBlock implements BonemealableB
 
     @Override
     public void animateTick(BlockState pState, Level pLevel, BlockPos pPos, RandomSource pRandom) {
-        if (!pLevel.getBlockState(pPos.above()).isCollisionShapeFullBlock(pLevel, pPos.above())) {
-            pLevel.addParticle(ModParticles.SUBSTILIUM_PARTICLE.get(), (pPos.getX() + pRandom.nextFloat()), (pPos.getY() + 1), (pPos.getZ() + pRandom.nextFloat()),
-                    0, (Mth.nextInt(pRandom, 7, 13) / 1000), 0);
-        }
+        ParticleUtils.spawnSubstiliumSoilParticles(pLevel, pPos, pRandom);
         super.animateTick(pState, pLevel, pPos, pRandom);
     }
 

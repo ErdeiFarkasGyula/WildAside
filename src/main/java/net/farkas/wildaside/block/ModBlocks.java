@@ -13,7 +13,7 @@ import net.farkas.wildaside.block.custom.vibrion.SporeBlaster;
 import net.farkas.wildaside.block.custom.BioengineeringWorkstation;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.particle.ModParticles;
-import net.farkas.wildaside.util.ParticleHandler;
+import net.farkas.wildaside.util.ParticleUtils;
 import net.farkas.wildaside.util.ModWoodTypes;
 import net.farkas.wildaside.worldgen.feature.tree.hickory.*;
 import net.farkas.wildaside.worldgen.feature.tree.substilium.SubstiliumMushroomGrower;
@@ -158,21 +158,21 @@ public class ModBlocks {
                     .strength(3,  12)));
 
     public static final RegistryObject<Block> SUBSTILIUM_COAL_ORE = registerBlock("substilium_coal_ore",
-            () ->  new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.COAL_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(0, 3)));
+            () ->  new SubstiliumSoil(BlockBehaviour.Properties.copy(Blocks.COAL_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(0, 3)));
     public static final RegistryObject<Block> SUBSTILIUM_COPPER_ORE = registerBlock("substilium_copper_ore",
-            () ->  new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.COPPER_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(0, 1)));
+            () ->  new SubstiliumSoil(BlockBehaviour.Properties.copy(Blocks.COPPER_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(0, 1)));
     public static final RegistryObject<Block> SUBSTILIUM_LAPIS_ORE = registerBlock("substilium_lapis_ore",
-            () ->  new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.LAPIS_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(2, 6)));
+            () ->  new SubstiliumSoil(BlockBehaviour.Properties.copy(Blocks.LAPIS_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(2, 6)));
     public static final RegistryObject<Block> SUBSTILIUM_IRON_ORE = registerBlock("substilium_iron_ore",
-            () ->  new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.IRON_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(0, 1)));
+            () ->  new SubstiliumSoil(BlockBehaviour.Properties.copy(Blocks.IRON_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(0, 1)));
     public static final RegistryObject<Block> SUBSTILIUM_GOLD_ORE = registerBlock("substilium_gold_ore",
-            () ->  new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.GOLD_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(0, 1)));
+            () ->  new SubstiliumSoil(BlockBehaviour.Properties.copy(Blocks.GOLD_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(0, 1)));
     public static final RegistryObject<Block> SUBSTILIUM_REDSTONE_ORE = registerBlock("substilium_redstone_ore",
             () ->  new SubstiliumRedstoneOre(BlockBehaviour.Properties.copy(Blocks.REDSTONE_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(0, 1)));
     public static final RegistryObject<Block> SUBSTILIUM_DIAMOND_ORE = registerBlock("substilium_diamond_ore",
-            () ->  new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.DIAMOND_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(3, 8)));
+            () ->  new SubstiliumSoil(BlockBehaviour.Properties.copy(Blocks.DIAMOND_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(3, 8)));
     public static final RegistryObject<Block> SUBSTILIUM_EMERALD_ORE = registerBlock("substilium_emerald_ore",
-            () ->  new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.EMERALD_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(3, 8)));
+            () ->  new SubstiliumSoil(BlockBehaviour.Properties.copy(Blocks.EMERALD_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(3, 8)));
 
 
     //SUBSTILIUM
@@ -371,7 +371,7 @@ public class ModBlocks {
                     super.animateTick(pState, pLevel, pPos, pRandom);
                     if (!pLevel.getBlockState(pPos.below()).isAir()) return;
                     if (pRandom.nextFloat() < 0.02f) {
-                        ParticleHandler.spawnHickoryParticles(pLevel, pPos, pRandom, ModParticles.HICKORY_PARTICLE.get());
+                        ParticleUtils.spawnHickoryParticles(pLevel, pPos, pRandom, ModParticles.HICKORY_PARTICLE.get());
                     }
                 }
             });

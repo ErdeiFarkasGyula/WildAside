@@ -207,21 +207,20 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void playerDoesCriticalStrike(CriticalHitEvent event) {
-        if (!event.isCanceled()) {
-            RandomSource rand = RandomSource.create();
-            if (rand.nextBoolean()) {
-                if (event.getEntity() != null) {
-                    Player attacker = event.getEntity();
-                    if (attacker.hasEffect(ModMobEffects.CONTAMINATION.get())) {
-                        if (event.getTarget() instanceof LivingEntity target) {
-                            MobEffectInstance effect = attacker.getEffect(ModMobEffects.CONTAMINATION.get());
-                            if (effect != null) {
-                                ContaminationHandler.applyContamination(target, 10);
-                            }
-                        }
+        if (event.isCanceled()) return;
+
+        ModMobEffects.CONTAMINATION.getHolder().ifPresent(contamEffect -> {
+            var contamination = contamEffect.get();
+            Player attacker = event.getEntity();
+            if (attacker == null) return;
+            if (attacker.hasEffect(contamination)) {
+                RandomSource random = attacker.getRandom();
+                if ((float)attacker.getEffect(contamination).getAmplifier() / 5 > random.nextFloat()) {
+                    if (event.getTarget() instanceof LivingEntity target) {
+                        ContaminationHandler.applyContamination(target, 10);
                     }
                 }
             }
-        }
+        });
     }
 }

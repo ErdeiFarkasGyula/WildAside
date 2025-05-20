@@ -22,7 +22,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class SubstiliumRedstoneOre extends DropExperienceBlock {
+public class SubstiliumRedstoneOre extends SubstiliumSoil {
     public static final BooleanProperty LIT = RedstoneTorchBlock.LIT;
 
     public SubstiliumRedstoneOre(Properties pProperties, IntProvider pXpRange) {
@@ -62,16 +62,10 @@ public class SubstiliumRedstoneOre extends DropExperienceBlock {
 
     }
 
-    /**
-     * @return whether this block needs random ticking.
-     */
     public boolean isRandomlyTicking(BlockState pState) {
         return pState.getValue(LIT);
     }
 
-    /**
-     * Performs a random tick on a block.
-     */
     public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
         if (pState.getValue(LIT)) {
             pLevel.setBlock(pPos, pState.setValue(LIT, Boolean.valueOf(false)), 3);
@@ -79,9 +73,6 @@ public class SubstiliumRedstoneOre extends DropExperienceBlock {
 
     }
 
-    /**
-     * Perform side-effects from block dropping, such as creating silverfish
-     */
     public void spawnAfterBreak(BlockState pState, ServerLevel pLevel, BlockPos pPos, ItemStack pStack, boolean pDropExperience) {
         super.spawnAfterBreak(pState, pLevel, pPos, pStack, pDropExperience);
     }
@@ -91,14 +82,10 @@ public class SubstiliumRedstoneOre extends DropExperienceBlock {
         return silktouch == 0 ? 1 + randomSource.nextInt(5) : 0;
     }
 
-    /**
-     * Called periodically clientside on blocks near the player to show effects (like furnace fire particles).
-     */
     public void animateTick(BlockState pState, Level pLevel, BlockPos pPos, RandomSource pRandom) {
         if (pState.getValue(LIT)) {
             spawnParticles(pLevel, pPos);
         }
-
     }
 
     private static void spawnParticles(Level pLevel, BlockPos pPos) {
