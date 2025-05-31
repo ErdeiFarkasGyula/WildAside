@@ -15,7 +15,7 @@ public class MucellithAttackGoal extends Goal {
     private final MucellithEntity entity;
     @Nullable
     private LivingEntity target;
-    private int attackTime = 8;
+    private int attackTime = 60;
     private final int attackTimeMax;
     private final float attackRadius;
 

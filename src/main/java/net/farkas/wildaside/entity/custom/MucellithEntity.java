@@ -44,7 +44,7 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
 
     public final AnimationState attackAnimation = new AnimationState();
     private final int attackAnimationMax = 60;
-    private int attackAnimationTimeout = 0;
+    private int attackAnimationTimeout = 1;
 
     public final AnimationState defenseAnimation = new AnimationState();
     public final AnimationState defenseAnimationReverse = new AnimationState();
@@ -83,6 +83,7 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
     @Override
     public void tick() {
         super.tick();
+        System.out.println(attackAnimationTimeout);
 
         if (this.level().isClientSide()) {
             setupAnimationStates();
