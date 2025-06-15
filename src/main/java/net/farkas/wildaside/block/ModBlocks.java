@@ -45,7 +45,6 @@ import java.util.function.Supplier;
 public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, WildAside.MOD_ID);
 
-
     //VIBRION
     public static final RegistryObject<Block> VIBRION_BLOCK = registerBlock("vibrion_block",
             () ->  new DropExperienceBlock(BlockBehaviour.Properties.of()

@@ -31,7 +31,7 @@ public class OvergrownEntoriumOre extends EntoriumOre {
             if (playerItem.getItem() == Items.SHEARS) {
                 BlockState newBlock = ModBlocks.ENTORIUM_ORE.get().defaultBlockState();
 
-                pLevel.setBlock(pPos, newBlock, 2);
+                pLevel.setBlock(pPos, newBlock, 3);
                 pLevel.playSound(null, pPos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.mooshroom.shear")), SoundSource.BLOCKS, 1, 1);
                 pPlayer.swing(pHand);
 
