@@ -31,12 +31,12 @@ public class HickoryParticle extends TextureSheetParticle {
         this.setSize(0.1f, 0.1f);
         this.quadSize = (this.random.nextFloat() + 1f) / 4f;
         this.lifetime = 400;
-        this.gravity = (float)this.random.nextInt(5, 8) / 100;
+        this.gravity = world.getGameTime() / 64;
         this.hasPhysics = true;
         this.xd = vx;
         this.yd = vy;
         this.zd = vz;
-        this.angularVelocity = (float) -(this.xd + this.zd) / 3;
+        this.angularVelocity = (float) -(this.xd + this.zd) / 5;
         this.angularAcceleration = 0;
         this.setSpriteFromAge(spriteSet);
     }
@@ -57,7 +57,6 @@ public class HickoryParticle extends TextureSheetParticle {
 
         if (onGround) {
             this.angularVelocity = 0;
-            return;
         }
     }
 }

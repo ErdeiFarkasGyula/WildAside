@@ -18,11 +18,4 @@ public class ModEventBusEvent {
     public static void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(ModEntities.MUCELLITH.get(), MucellithEntity.createAttributes().build());
     }
-
-//    @SubscribeEvent
-//    public static void onSpawnPlacementsRegister(SpawnPlacementRegisterEvent event) {
-//        System.out.println("MEOW");
-//        event.register(ModEntities.MUCELLITH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ((pEntityType, pServerLevel, pSpawnType, pPos, pRandom) ->
-//                pServerLevel.getBrightness(LightLayer.BLOCK, pPos) <= 7), SpawnPlacementRegisterEvent.Operation.REPLACE);
-//    }
 }
