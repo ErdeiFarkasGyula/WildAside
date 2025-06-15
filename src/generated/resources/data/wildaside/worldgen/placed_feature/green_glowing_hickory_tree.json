@@ -38,6 +38,7 @@
         "state": {
           "Name": "wildaside:green_glowing_hickory_sapling",
           "Properties": {
+            "fixed_lighting": "false",
             "light": "0",
             "stage": "0"
           }

@@ -37,7 +37,8 @@ public class GlowingLeavesBlock extends LeavesBlock {
 
     public GlowingLeavesBlock(Properties pProperties) {
         super(pProperties.lightLevel(s -> s.getValue(LIGHT)));
-        this.registerDefaultState(this.stateDefinition.any().setValue(DISTANCE, 7)
+        this.registerDefaultState(this.stateDefinition.any()
+                .setValue(DISTANCE, 7)
                 .setValue(PERSISTENT, false)
                 .setValue(WATERLOGGED, false)
                 .setValue(LIGHT, 0)

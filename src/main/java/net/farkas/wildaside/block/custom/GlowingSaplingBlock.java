@@ -1,8 +1,14 @@
 package net.farkas.wildaside.block.custom;
 
+import net.farkas.wildaside.item.ModItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SaplingBlock;
@@ -10,9 +16,13 @@ import net.minecraft.world.level.block.grower.AbstractTreeGrower;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.joml.Math;
+import org.stringtemplate.v4.ST;
 
 public class GlowingSaplingBlock extends SaplingBlock {
     public static final IntegerProperty STAGE = BlockStateProperties.STAGE;
@@ -22,14 +32,18 @@ public class GlowingSaplingBlock extends SaplingBlock {
     private static final int minLight = 0;
     private static final int maxLight = 7;
     public static final IntegerProperty LIGHT = IntegerProperty.create("light", minLight, maxLight);
+    public static BooleanProperty FIXED_LIGHTING = BooleanProperty.create("fixed_lighting");
 
     public GlowingSaplingBlock(AbstractTreeGrower pTreeGrower, Properties pProperties) {
         super(pTreeGrower, pProperties.lightLevel(s -> s.getValue(LIGHT)));
-        this.registerDefaultState(this.stateDefinition.any().setValue(LIGHT, 0).setValue(STAGE, Integer.valueOf(0)));
+        this.registerDefaultState(this.stateDefinition.any()
+                .setValue(STAGE, 0)
+                .setValue(LIGHT, 0)
+                .setValue(FIXED_LIGHTING, false));
     }
 
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
-        pBuilder.add(STAGE, LIGHT);
+        pBuilder.add(STAGE, LIGHT, FIXED_LIGHTING);
     }
 
     @Override
@@ -39,8 +53,29 @@ public class GlowingSaplingBlock extends SaplingBlock {
     }
 
     @Override
+    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+        if (pLevel.isClientSide) return InteractionResult.PASS;
+        var playerItem = pPlayer.getItemInHand(pHand);
+
+        if (playerItem.getItem().equals(ModItems.VIBRION.get())) {
+            pLevel.setBlock(pPos, pState.setValue(GlowingLeavesBlock.FIXED_LIGHTING, true), 3);
+            pLevel.playSound(null, pPos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.honeycomb.wax_on")), SoundSource.BLOCKS, 1, 1);
+            pPlayer.swing(pHand);
+
+            if (!pPlayer.isCreative()) {
+                playerItem.hurt(1, RandomSource.create(), null);
+            }
+
+            return InteractionResult.SUCCESS;
+        }
+        return InteractionResult.PASS;
+    }
+
+    @Override
     public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
         super.tick(pState, pLevel, pPos, pRandom);
+
+        if (pState.getValue(GlowingLeavesBlock.FIXED_LIGHTING)) return;
 
         int time = (int)pLevel.dayTime();
         int currentLight = pLevel.getBlockState(pPos).getValue(LIGHT);
