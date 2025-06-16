@@ -48,7 +48,9 @@ public class GlowingSaplingBlock extends SaplingBlock {
 
     @Override
     public void onPlace(BlockState pState, Level pLevel, BlockPos pPos, BlockState pOldState, boolean pMovedByPiston) {
-        pLevel.scheduleTick(pPos, this, 0);
+        if (!pLevel.isClientSide) {
+            pLevel.scheduleTick(pPos, this, 0);
+        }
         super.onPlace(pState, pLevel, pPos, pOldState, pMovedByPiston);
     }
 
@@ -58,7 +60,7 @@ public class GlowingSaplingBlock extends SaplingBlock {
         var playerItem = pPlayer.getItemInHand(pHand);
 
         if (playerItem.getItem().equals(ModItems.VIBRION.get())) {
-            pLevel.setBlock(pPos, pState.setValue(GlowingLeavesBlock.FIXED_LIGHTING, true), 3);
+            pLevel.setBlock(pPos, pState.setValue(GlowingSaplingBlock.FIXED_LIGHTING, true), 3);
             pLevel.playSound(null, pPos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.honeycomb.wax_on")), SoundSource.BLOCKS, 1, 1);
             pPlayer.swing(pHand);
 
@@ -75,7 +77,7 @@ public class GlowingSaplingBlock extends SaplingBlock {
     public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
         super.tick(pState, pLevel, pPos, pRandom);
 
-        if (pState.getValue(GlowingLeavesBlock.FIXED_LIGHTING)) return;
+        if (pState.getValue(GlowingSaplingBlock.FIXED_LIGHTING)) return;
 
         int time = (int)pLevel.dayTime();
         int currentLight = pLevel.getBlockState(pPos).getValue(LIGHT);

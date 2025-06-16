@@ -2,6 +2,7 @@ package net.farkas.wildaside.util;
 
 import net.farkas.wildaside.capability.contamination.ContaminationCapability;
 import net.farkas.wildaside.effect.ModMobEffects;
+import net.farkas.wildaside.entity.custom.MucellithEntity;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -24,6 +25,8 @@ public class ContaminationHandler {
     }
 
     public static void applyContamination(LivingEntity entity, int dose) {
+        if (entity instanceof MucellithEntity) return;
+
         MobEffect immunity = ModMobEffects.IMMUNITY.get();
         if (entity.hasEffect(immunity)) {
             int immunityAmp = entity.getEffect(immunity).getAmplifier();
@@ -33,9 +36,9 @@ public class ContaminationHandler {
         }
 
         int amplifier = Math.min(maxAmplifier, dose / 1000);
-        entity.addEffect(new MobEffectInstance(ModMobEffects.CONTAMINATION.get(), amplifier * 10 * 20, amplifier));
+        entity.addEffect(new MobEffectInstance(ModMobEffects.CONTAMINATION.get(), (amplifier + 1) * 10 * 20, amplifier));
         if (amplifier >= 4) {
-            entity.addEffect(new MobEffectInstance(MobEffects.POISON, amplifier * 5 * 20, amplifier - 4));
+            entity.addEffect(new MobEffectInstance(MobEffects.POISON, (amplifier + 1) * 5 * 20, amplifier - 4));
         }
     }
 }

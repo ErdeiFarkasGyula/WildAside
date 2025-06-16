@@ -201,7 +201,7 @@ public class ModEvents {
         if (entity instanceof Player) {
             MobEffectInstance mobEffectInstance = event.getEffectInstance();
             if (mobEffectInstance != null && mobEffectInstance.getEffect() == ModMobEffects.CONTAMINATION.get()) {
-                entity.addEffect(new MobEffectInstance(ModMobEffects.IMMUNITY.get(), mobEffectInstance.getAmplifier() * 5 * 20, mobEffectInstance.getAmplifier()));
+                entity.addEffect(new MobEffectInstance(ModMobEffects.IMMUNITY.get(), (mobEffectInstance.getAmplifier() + 1 ) * 5 * 20, mobEffectInstance.getAmplifier()));
             }
         }
     }

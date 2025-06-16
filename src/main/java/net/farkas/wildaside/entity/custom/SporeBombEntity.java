@@ -90,7 +90,7 @@ public class SporeBombEntity extends ThrowableItemProjectile {
         List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, box, e -> !e.isSpectator());
 
         for (LivingEntity entity : list) {
-            ContaminationHandler.giveContaminationDose(entity, entity.getRandom().nextInt(750, 1250));
+            ContaminationHandler.giveContaminationDose(entity, Math.round((charge + entity.getRandom().nextFloat()) * 1000));
             level.sendParticles(particle,
                     entity.getX(), entity.getY() + 0.5, entity.getZ(),
                     5, 0.2, 0.2, 0.2, 0.01);
