@@ -25,6 +25,13 @@ public class ModFeatures {
     public static final RegistryObject<BrownlikeSubstiliumMushroomFeature> BROWNLIKE_SUBSTILIUM_MUSHROOM = FEATURES.register("brownlike_substilium_mushroom",
             () -> new BrownlikeSubstiliumMushroomFeature(HugeMushroomFeatureConfiguration.CODEC));
 
+    public static final RegistryObject<HickoryBushFeature> HICKORY_BUSH = FEATURES.register("hickory_bush",
+            () -> new HickoryBushFeature(NoneFeatureConfiguration.CODEC));
+    public static final RegistryObject<GlowingHickoryBushFeature> GLOWING_HICKORY_BUSH = FEATURES.register("glowing_hickory_bush",
+            () -> new GlowingHickoryBushFeature(NoneFeatureConfiguration.CODEC));
+    public static final RegistryObject<FallenHickoryTreeFeature> FALLEN_HICKORY_TREE = FEATURES.register("fallen_hickory_tree",
+            () -> new FallenHickoryTreeFeature(NoneFeatureConfiguration.CODEC));
+
     public static void register(IEventBus eventBus) {
         FEATURES.register(eventBus);
     }

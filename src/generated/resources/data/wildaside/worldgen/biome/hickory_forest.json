@@ -85,7 +85,9 @@
       "wildaside:spotted_wintergreen",
       "wildaside:pinkster_flower",
       "wildaside:hickory_tree",
-      "wildaside:hickory_sapling"
+      "wildaside:hickory_sapling",
+      "wildaside:hickory_bush",
+      "wildaside:fallen_hickory_tree"
     ]
   ],
   "has_precipitation": true,

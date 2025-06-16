@@ -91,7 +91,9 @@
       "wildaside:red_glowing_hickory_sapling",
       "wildaside:brown_glowing_hickory_sapling",
       "wildaside:yellow_glowing_hickory_sapling",
-      "wildaside:green_glowing_hickory_sapling"
+      "wildaside:green_glowing_hickory_sapling",
+      "wildaside:glowing_hickory_bush",
+      "wildaside:fallen_hickory_tree"
     ]
   ],
   "has_precipitation": true,
