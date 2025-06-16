@@ -18,8 +18,6 @@ public class ContaminationHandler {
         livingEntity.getCapability(ContaminationCapability.INSTANCE).ifPresent(data -> {
             data.addDose(dose);
             applyContamination(livingEntity, data.getDose());
-            System.out.println(data.getDose());
-
         });
 
     }

@@ -137,14 +137,27 @@
   "block.wildaside.spotted_wintergreen": "Spotted Wintergreen",
   "block.wildaside.pinkster_flower": "Pinkster Flower",
 
+  "biome.wildaside.hickory_forest": "Hickory Forest",
+  "biome.wildaside.glowing_hickory_forest": "Glowing Hickory Forest",
+  "biome.wildaside.vibrion_hive": "Vibrion Hive",
+
   "particle.wildaside.vibrion_particle": "Vibrion Particle",
   "particle.wildaside.entorium_particle": "Entorium Particle",
   "particle.wildaside.substilium_particle": "Substilium Particle",
   "particle.wildaside.still_substilium_particle": "Still Substilium Particle",
   "particle.wildaside.lifesteal_particle": "Lifesteal Particle",
+  "particle.wildaside.hickory_particle": "Hickory Particle",
+  "particle.wildaside.red_glowing_hickory_particle": "Red Glowing Hickory Particle",
+  "particle.wildaside.brown_glowing_hickory_particle": "Brown Glowing Hickory Particle",
+  "particle.wildaside.yellow_glowing_hickory_particle": "Yellow Glowing Hickory Particle",
+  "particle.wildaside.green_glowing_hickory_particle": "Green Glowing Hickory Particle",
 
   "entity.wildaside.mod_chest_boat": "Boat with Chest",
+  "entity.wildaside.mod_boat": "Boat",
   "entity.wildaside.mucellith": "Mucellith",
+  "entity.wildaside.fertiliser_bomb": "Fertiliser Bomb",
+  "entity.wildaside.spore_arrow": "Spore Arrow",
+  "entity.wildaside.spore_bomb": "Spore Bomb",
 
   "enchantment.wildaside.extensive_research": "Extensive Research",
   "enchantment.wildaside.cushioning": "Cushioning",
