@@ -83,7 +83,6 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
     @Override
     public void tick() {
         super.tick();
-        System.out.println(attackAnimationTimeout);
 
         if (this.level().isClientSide()) {
             setupAnimationStates();

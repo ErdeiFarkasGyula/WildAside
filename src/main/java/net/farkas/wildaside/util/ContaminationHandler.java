@@ -1,26 +1,41 @@
 package net.farkas.wildaside.util;
 
+import net.farkas.wildaside.capability.contamination.ContaminationCapability;
 import net.farkas.wildaside.effect.ModMobEffects;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
 public class ContaminationHandler {
-    public static void applyContamination(Entity entity, int sec) {
-        if (entity instanceof LivingEntity livingEntity) {
-            MobEffectInstance cont = livingEntity.getEffect(ModMobEffects.CONTAMINATION.get());
-            MobEffectInstance immunity = livingEntity.getEffect(ModMobEffects.IMMUNITY.get());
+    private static final int maxAmplifier = 5;
 
-            int amplifier = cont != null ? cont.getAmplifier() + 1 : 0;
-            int duration = cont != null ? cont.getDuration() : 0;
-            int cappedAmplifier = Math.min(amplifier, 4);
+    public static void giveContaminationDose(Entity entity, int dose) {
+        if (!(entity instanceof LivingEntity livingEntity)) return;
 
-            if (immunity == null || cappedAmplifier > immunity.getAmplifier()) {
-                if (duration <= (sec * 0.75 - amplifier) * 20) {
-                    livingEntity.addEffect(new MobEffectInstance(ModMobEffects.CONTAMINATION.get(), sec * 20, cappedAmplifier));
-                }
+        livingEntity.getCapability(ContaminationCapability.INSTANCE).ifPresent(data -> {
+            data.addDose(dose);
+            applyContamination(livingEntity, data.getDose());
+            System.out.println(data.getDose());
+
+        });
+
+    }
+
+    public static void applyContamination(LivingEntity entity, int dose) {
+        MobEffect immunity = ModMobEffects.IMMUNITY.get();
+        if (entity.hasEffect(immunity)) {
+            int immunityAmp = entity.getEffect(immunity).getAmplifier();
+            if (dose < (immunityAmp + 1) * 1000) {
+                return;
             }
+        }
 
+        int amplifier = Math.min(maxAmplifier, dose / 1000);
+        entity.addEffect(new MobEffectInstance(ModMobEffects.CONTAMINATION.get(), amplifier * 10 * 20, amplifier));
+        if (amplifier >= 4) {
+            entity.addEffect(new MobEffectInstance(MobEffects.POISON, amplifier * 5 * 20, amplifier - 4));
         }
     }
 }

@@ -26,7 +26,6 @@ public class EntoriumPill extends Item {
             }
 
             player.addEffect(new MobEffectInstance(ModMobEffects.IMMUNITY.get(), 20 * 20, amplifier));
-            player.removeEffect(ModMobEffects.CONTAMINATION.get());
             player.removeEffect(MobEffects.POISON);
 
         }

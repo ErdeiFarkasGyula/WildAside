@@ -1,14 +1,12 @@
 package net.farkas.wildaside.event;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
+import net.farkas.wildaside.capability.contamination.ContaminationAttacher;
+import net.farkas.wildaside.capability.contamination.ContaminationCapability;
+import net.farkas.wildaside.capability.contamination.IContamination;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.enchantment.ModEnchantments;
-import net.farkas.wildaside.entity.ModEntities;
-import net.farkas.wildaside.entity.client.ModModelLayers;
-import net.farkas.wildaside.entity.client.MucellithModel;
-import net.farkas.wildaside.entity.custom.MucellithEntity;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.util.AdvancementHandler;
 import net.farkas.wildaside.util.ContaminationHandler;
@@ -16,15 +14,13 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -37,10 +33,10 @@ import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -54,6 +50,11 @@ import java.util.List;
 
 @Mod.EventBusSubscriber(modid = WildAside.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModEvents {
+    @SubscribeEvent
+    public static void attach(AttachCapabilitiesEvent<Entity> event) {
+        final ContaminationAttacher.ContaminationProvider provider = new ContaminationAttacher.ContaminationProvider();
+        event.addCapability(ContaminationAttacher.ContaminationProvider.IDENTIFIER, provider);
+    }
 
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
@@ -200,7 +201,7 @@ public class ModEvents {
         if (entity instanceof Player) {
             MobEffectInstance mobEffectInstance = event.getEffectInstance();
             if (mobEffectInstance != null && mobEffectInstance.getEffect() == ModMobEffects.CONTAMINATION.get()) {
-                entity.addEffect(new MobEffectInstance(ModMobEffects.IMMUNITY.get(), 20 * 20, mobEffectInstance.getAmplifier()));
+                entity.addEffect(new MobEffectInstance(ModMobEffects.IMMUNITY.get(), mobEffectInstance.getAmplifier() * 5 * 20, mobEffectInstance.getAmplifier()));
             }
         }
     }
@@ -217,10 +218,21 @@ public class ModEvents {
                 RandomSource random = attacker.getRandom();
                 if ((float)attacker.getEffect(contamination).getAmplifier() / 5 > random.nextFloat()) {
                     if (event.getTarget() instanceof LivingEntity target) {
-                        ContaminationHandler.applyContamination(target, 10);
+                        attacker.getCapability(ContaminationCapability.INSTANCE).ifPresent(data -> {
+                            ContaminationHandler.giveContaminationDose(target, data.getDose() / 5);
+                        });
                     }
                 }
             }
+        });
+    }
+
+    @SubscribeEvent
+    public static void livingEntityTick(LivingEvent.LivingTickEvent event) {
+        LivingEntity entity = event.getEntity();
+
+        entity.getCapability(ContaminationCapability.INSTANCE).ifPresent(data -> {
+            data.addDose(-10);
         });
     }
 }
