@@ -158,8 +158,8 @@ public class ModConfiguredFeatures {
                 new RandomPatchConfiguration(32, 16, 2, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
                         new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.PINKSTER_FLOWER.get())))));
 
-        ImmutableList beehiveDecorator = ImmutableList.of(new BeehiveDecorator(0.025f));
-        ImmutableList glowingBeehiveDecorator = ImmutableList.of(new BeehiveDecorator(0.05f));
+        ImmutableList beehiveDecorator = ImmutableList.of(new BeehiveDecorator(0.01f));
+        ImmutableList glowingBeehiveDecorator = ImmutableList.of(new BeehiveDecorator(0.02f));
 
         register(context, HICKORY_TREE, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.HICKORY_LOG.get()),

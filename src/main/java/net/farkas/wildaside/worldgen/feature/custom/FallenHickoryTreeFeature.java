@@ -50,18 +50,21 @@ public class FallenHickoryTreeFeature extends Feature<NoneFeatureConfiguration> 
             return false;
         }
 
-        int length = random.nextInt(minLength, available);
+        final int length = random.nextInt(minLength, available);
+        final BlockState log = ModBlocks.HICKORY_LOG.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, dir.getAxis());
+        int skipPlace = random.nextInt(length);
 
         for (int i = 0; i < length; i++) {
             BlockPos trunkPos = origin.relative(dir, i);
-            BlockState log = ModBlocks.HICKORY_LOG.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, dir.getAxis());
-            world.setBlock(trunkPos, log, 3);
-
-            BlockPos top = trunkPos.above();
-            if (random.nextFloat() < 0.2f && (world.isEmptyBlock(top)) && Blocks.RED_MUSHROOM.defaultBlockState().canSurvive(world, top)) {
-                BlockState mushroom = (random.nextBoolean() ? Blocks.RED_MUSHROOM : Blocks.BROWN_MUSHROOM).defaultBlockState();
-                world.setBlock(top, mushroom, 3);
+            if (!(random.nextFloat() < 0.5f && i == skipPlace)) {
+                world.setBlock(trunkPos, log, 3);
             }
+
+//            BlockState mushroom = (random.nextBoolean() ? Blocks.RED_MUSHROOM : Blocks.BROWN_MUSHROOM).defaultBlockState();
+//            BlockPos top = trunkPos.above();
+//            world.setBlock(top, ModBlocks.VIBRION_BLOCK.get().defaultBlockState(), 3);
+////            if (random.nextFloat() < 0.2f && (world.isEmptyBlock(top)) && Blocks.RED_MUSHROOM.defaultBlockState().canSurvive(world, top)) {
+////            }
         }
 
         return true;
