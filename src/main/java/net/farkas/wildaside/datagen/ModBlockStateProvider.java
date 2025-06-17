@@ -131,7 +131,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
         ModelFile[][] models = new ModelFile[colours.length][3];
         for (int ci = 0; ci < colours.length; ci++) {
-            String colName = colours[ci].getSerializedName(); // "hickory", "red", ...
+            String colName = colours[ci].getSerializedName();
             for (int count = 1; count <= 3; count++) {
                 String modelName = String.format("fallen_%s_leaves_%d", colName, count);
                 ResourceLocation tex = modLoc("block/" + modelName);
@@ -155,7 +155,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
                     return model;
                 },
-                // 2) Next: the varargs list of properties to IGNORE
+
                 FallenHickoryLeavesBlock.LIGHT,
                 FallenHickoryLeavesBlock.FIXED_LIGHTING
         );

@@ -2,11 +2,14 @@ package net.farkas.wildaside.event;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
+import net.farkas.wildaside.block.custom.FallenHickoryLeavesBlock;
 import net.farkas.wildaside.block.entity.ModBlockEntities;
 import net.farkas.wildaside.entity.client.ModModelLayers;
 import net.farkas.wildaside.entity.client.MucellithModel;
+import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.particle.*;
 import net.farkas.wildaside.particle.custom.*;
+import net.farkas.wildaside.util.HickoryColour;
 import net.minecraft.client.model.BoatModel;
 import net.minecraft.client.model.ChestBoatModel;
 import net.minecraft.client.renderer.BiomeColors;
@@ -58,6 +61,9 @@ public class ModEventBusClientEvents {
     public static void registerColoredBlocks(RegisterColorHandlersEvent.Block event) {
         event.register((pState, pLevel, pPos, pTintIndex) -> pLevel != null &&
                 pPos != null ? BiomeColors.getAverageFoliageColor(pLevel, pPos) : FoliageColor.getDefaultColor(), ModBlocks.HICKORY_LEAVES.get());
+        event.register((pState, pLevel, pPos, pTintIndex) -> pLevel != null &&
+                pPos != null ? BiomeColors.getAverageFoliageColor(pLevel, pPos) : FoliageColor.getDefaultColor(), ModBlocks.FALLEN_HICKORY_LEAVES.get());
+
     }
 
     @SubscribeEvent
@@ -66,10 +72,6 @@ public class ModEventBusClientEvents {
             BlockState state = ((BlockItem)pStack.getItem()).getBlock().defaultBlockState();
             return event.getBlockColors().getColor(state, null, null, pTintIndex);
         }, ModBlocks.HICKORY_LEAVES.get());
-        event.register((pStack, pTintIndex) -> {
-            BlockState state = ((BlockItem)pStack.getItem()).getBlock().defaultBlockState();
-            return event.getBlockColors().getColor(state, null, null, pTintIndex);
-        }, ModBlocks.FALLEN_HICKORY_LEAVES.get());
     }
 }
 
