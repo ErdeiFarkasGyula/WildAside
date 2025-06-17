@@ -145,16 +145,8 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.add(ModBlocks.GREEN_GLOWING_HICKORY_LEAVES.get(), block ->
                 createBiggerLeavesDrops(block, ModBlocks.GREEN_GLOWING_HICKORY_SAPLING.get(), ModItems.HICKORY_NUT.get()));
 
-//        this.add(ModBlocks.HICKORY_LEAVES.get(), block ->
-//                createLeavesDrops(block, ModBlocks.HICKORY_SAPLING.get(), NORMAL_LEAVES_SAPLING_CHANCES));
-//        this.add(ModBlocks.RED_GLOWING_HICKORY_LEAVES.get(), block ->
-//                createLeavesDrops(block, ModBlocks.HICKORY_SAPLING.get(), NORMAL_LEAVES_SAPLING_CHANCES));
-//        this.add(ModBlocks.BROWN_GLOWING_HICKORY_LEAVES.get(), block ->
-//                createLeavesDrops(block, ModBlocks.HICKORY_SAPLING.get(), NORMAL_LEAVES_SAPLING_CHANCES));
-//        this.add(ModBlocks.YELLOW_GLOWING_HICKORY_LEAVES.get(), block ->
-//                createLeavesDrops(block, ModBlocks.HICKORY_SAPLING.get(), NORMAL_LEAVES_SAPLING_CHANCES));
-//        this.add(ModBlocks.GREEN_GLOWING_HICKORY_LEAVES.get(), block ->
-//                createLeavesDrops(block, ModBlocks.HICKORY_SAPLING.get(), NORMAL_LEAVES_SAPLING_CHANCES));
+        this.add(ModBlocks.FALLEN_HICKORY_LEAVES.get(), block ->
+                createBiggerLeavesDrops(Blocks.AIR, Blocks.AIR, ModItems.HICKORY_NUT.get()));
 
         this.dropSelf(ModBlocks.HICKORY_SAPLING.get());
         this.dropSelf(ModBlocks.RED_GLOWING_HICKORY_SAPLING.get());

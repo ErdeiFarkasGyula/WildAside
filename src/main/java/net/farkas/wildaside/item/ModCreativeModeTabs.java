@@ -108,6 +108,11 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModBlocks.BROWN_GLOWING_HICKORY_LEAVES.get());
                         pOutput.accept(ModBlocks.YELLOW_GLOWING_HICKORY_LEAVES.get());
                         pOutput.accept(ModBlocks.GREEN_GLOWING_HICKORY_LEAVES.get());
+                        pOutput.accept(ModItems.HICKORY_LEAF.get());
+                        pOutput.accept(ModItems.RED_GLOWING_HICKORY_LEAF.get());
+                        pOutput.accept(ModItems.BROWN_GLOWING_HICKORY_LEAF.get());
+                        pOutput.accept(ModItems.YELLOW_GLOWING_HICKORY_LEAF.get());
+                        pOutput.accept(ModItems.GREEN_GLOWING_HICKORY_LEAF.get());
                         pOutput.accept(ModBlocks.HICKORY_SAPLING.get());
                         pOutput.accept(ModBlocks.RED_GLOWING_HICKORY_SAPLING.get());
                         pOutput.accept(ModBlocks.BROWN_GLOWING_HICKORY_SAPLING.get());

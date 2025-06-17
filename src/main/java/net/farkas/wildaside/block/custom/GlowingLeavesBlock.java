@@ -83,7 +83,7 @@ public class GlowingLeavesBlock extends LeavesBlock {
         if (pState.getValue(GlowingLeavesBlock.FIXED_LIGHTING)) return;
 
         int time = (int)pLevel.dayTime();
-        int currentLight = pLevel.getBlockState(pPos).getValue(LIGHT);
+        int currentLight = pState.getValue(LIGHT);
         int newLight = 0;
 
         if (time > 22000) {
@@ -102,7 +102,7 @@ public class GlowingLeavesBlock extends LeavesBlock {
         newLight = Math.min(Math.max(0, newLight), 7);
 
         if (newLight != currentLight) {
-            pLevel.setBlockAndUpdate(pPos, pLevel.getBlockState(pPos).setValue(LIGHT, newLight));
+            pLevel.setBlockAndUpdate(pPos, pState.setValue(LIGHT, newLight));
         }
 
         pLevel.scheduleTick(pPos, this, 100);

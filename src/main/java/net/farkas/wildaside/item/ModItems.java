@@ -5,8 +5,7 @@ import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.entity.custom.ModBoatEntity;
 import net.farkas.wildaside.item.custom.*;
-import net.farkas.wildaside.util.ModTags;
-import net.minecraft.tags.BlockTags;
+import net.farkas.wildaside.util.HickoryColour;
 import net.minecraft.world.item.HangingSignItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SignItem;
@@ -15,6 +14,8 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+
+import java.util.EnumMap;
 
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, WildAside.MOD_ID);
@@ -58,6 +59,28 @@ public class ModItems {
 
     public static final RegistryObject<Item> HICKORY_NUT = ITEMS.register("hickory_nut",
             () ->  new FuelItem(new Item.Properties(), 100));
+
+    public static final RegistryObject<Item> HICKORY_LEAF = ITEMS.register("hickory_leaf",
+            () ->  new HickoryLeafItem(new Item.Properties(), HickoryColour.HICKORY));
+    public static final RegistryObject<Item> RED_GLOWING_HICKORY_LEAF = ITEMS.register("red_glowing_hickory_leaf",
+            () ->  new HickoryLeafItem(new Item.Properties(), HickoryColour.RED_GLOWING));
+    public static final RegistryObject<Item> BROWN_GLOWING_HICKORY_LEAF = ITEMS.register("brown_glowing_hickory_leaf",
+            () ->  new HickoryLeafItem(new Item.Properties(), HickoryColour.BROWN_GLOWING));
+    public static final RegistryObject<Item> YELLOW_GLOWING_HICKORY_LEAF = ITEMS.register("yellow_glowing_hickory_leaf",
+            () ->  new HickoryLeafItem(new Item.Properties(), HickoryColour.YELLOW_GLOWING));
+    public static final RegistryObject<Item> GREEN_GLOWING_HICKORY_LEAF = ITEMS.register("green_glowing_hickory_leaf",
+            () ->  new HickoryLeafItem(new Item.Properties(), HickoryColour.GREEN_GLOWING));
+
+    public static final EnumMap<HickoryColour, RegistryObject<Item>> LEAF_ITEMS = new EnumMap<>(HickoryColour.class);
+
+    static {
+        LEAF_ITEMS.put(HickoryColour.HICKORY, HICKORY_LEAF);
+        LEAF_ITEMS.put(HickoryColour.RED_GLOWING, RED_GLOWING_HICKORY_LEAF);
+        LEAF_ITEMS.put(HickoryColour.BROWN_GLOWING, BROWN_GLOWING_HICKORY_LEAF);
+        LEAF_ITEMS.put(HickoryColour.YELLOW_GLOWING, YELLOW_GLOWING_HICKORY_LEAF);
+        LEAF_ITEMS.put(HickoryColour.GREEN_GLOWING, GREEN_GLOWING_HICKORY_LEAF);
+    }
+
 
     public static final RegistryObject<Item> HICKORY_NUT_TRAIL_MIX = ITEMS.register("hickory_nut_trail_mix",
             () ->  new HickoryNutTrailMix(new Item.Properties().stacksTo(1).food(ModFoods.HICKORY_NUT_TRAIL_MIX)));

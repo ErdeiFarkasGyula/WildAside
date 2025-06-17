@@ -66,6 +66,10 @@ public class ModEventBusClientEvents {
             BlockState state = ((BlockItem)pStack.getItem()).getBlock().defaultBlockState();
             return event.getBlockColors().getColor(state, null, null, pTintIndex);
         }, ModBlocks.HICKORY_LEAVES.get());
+        event.register((pStack, pTintIndex) -> {
+            BlockState state = ((BlockItem)pStack.getItem()).getBlock().defaultBlockState();
+            return event.getBlockColors().getColor(state, null, null, pTintIndex);
+        }, ModBlocks.FALLEN_HICKORY_LEAVES.get());
     }
 }
 

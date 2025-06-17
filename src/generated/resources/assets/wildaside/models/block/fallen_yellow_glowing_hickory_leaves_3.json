@@ -1,0 +1,6 @@
+{
+  "parent": "wildaside:custom/flat_block",
+  "textures": {
+    "leaves": "wildaside:block/fallen_yellow_glowing_hickory_leaves_3"
+  }
+}

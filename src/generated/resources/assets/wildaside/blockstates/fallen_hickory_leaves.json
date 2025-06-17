@@ -1,0 +1,229 @@
+{
+  "variants": {
+    "colour=brown_glowing_hickory,count=1,facing=east": {
+      "model": "wildaside:block/fallen_brown_glowing_hickory_leaves_1",
+      "y": 270
+    },
+    "colour=brown_glowing_hickory,count=1,facing=north": {
+      "model": "wildaside:block/fallen_brown_glowing_hickory_leaves_1",
+      "y": 180
+    },
+    "colour=brown_glowing_hickory,count=1,facing=south": {
+      "model": "wildaside:block/fallen_brown_glowing_hickory_leaves_1"
+    },
+    "colour=brown_glowing_hickory,count=1,facing=west": {
+      "model": "wildaside:block/fallen_brown_glowing_hickory_leaves_1",
+      "y": 90
+    },
+    "colour=brown_glowing_hickory,count=2,facing=east": {
+      "model": "wildaside:block/fallen_brown_glowing_hickory_leaves_2",
+      "y": 270
+    },
+    "colour=brown_glowing_hickory,count=2,facing=north": {
+      "model": "wildaside:block/fallen_brown_glowing_hickory_leaves_2",
+      "y": 180
+    },
+    "colour=brown_glowing_hickory,count=2,facing=south": {
+      "model": "wildaside:block/fallen_brown_glowing_hickory_leaves_2"
+    },
+    "colour=brown_glowing_hickory,count=2,facing=west": {
+      "model": "wildaside:block/fallen_brown_glowing_hickory_leaves_2",
+      "y": 90
+    },
+    "colour=brown_glowing_hickory,count=3,facing=east": {
+      "model": "wildaside:block/fallen_brown_glowing_hickory_leaves_3",
+      "y": 270
+    },
+    "colour=brown_glowing_hickory,count=3,facing=north": {
+      "model": "wildaside:block/fallen_brown_glowing_hickory_leaves_3",
+      "y": 180
+    },
+    "colour=brown_glowing_hickory,count=3,facing=south": {
+      "model": "wildaside:block/fallen_brown_glowing_hickory_leaves_3"
+    },
+    "colour=brown_glowing_hickory,count=3,facing=west": {
+      "model": "wildaside:block/fallen_brown_glowing_hickory_leaves_3",
+      "y": 90
+    },
+    "colour=green_glowing_hickory,count=1,facing=east": {
+      "model": "wildaside:block/fallen_green_glowing_hickory_leaves_1",
+      "y": 270
+    },
+    "colour=green_glowing_hickory,count=1,facing=north": {
+      "model": "wildaside:block/fallen_green_glowing_hickory_leaves_1",
+      "y": 180
+    },
+    "colour=green_glowing_hickory,count=1,facing=south": {
+      "model": "wildaside:block/fallen_green_glowing_hickory_leaves_1"
+    },
+    "colour=green_glowing_hickory,count=1,facing=west": {
+      "model": "wildaside:block/fallen_green_glowing_hickory_leaves_1",
+      "y": 90
+    },
+    "colour=green_glowing_hickory,count=2,facing=east": {
+      "model": "wildaside:block/fallen_green_glowing_hickory_leaves_2",
+      "y": 270
+    },
+    "colour=green_glowing_hickory,count=2,facing=north": {
+      "model": "wildaside:block/fallen_green_glowing_hickory_leaves_2",
+      "y": 180
+    },
+    "colour=green_glowing_hickory,count=2,facing=south": {
+      "model": "wildaside:block/fallen_green_glowing_hickory_leaves_2"
+    },
+    "colour=green_glowing_hickory,count=2,facing=west": {
+      "model": "wildaside:block/fallen_green_glowing_hickory_leaves_2",
+      "y": 90
+    },
+    "colour=green_glowing_hickory,count=3,facing=east": {
+      "model": "wildaside:block/fallen_green_glowing_hickory_leaves_3",
+      "y": 270
+    },
+    "colour=green_glowing_hickory,count=3,facing=north": {
+      "model": "wildaside:block/fallen_green_glowing_hickory_leaves_3",
+      "y": 180
+    },
+    "colour=green_glowing_hickory,count=3,facing=south": {
+      "model": "wildaside:block/fallen_green_glowing_hickory_leaves_3"
+    },
+    "colour=green_glowing_hickory,count=3,facing=west": {
+      "model": "wildaside:block/fallen_green_glowing_hickory_leaves_3",
+      "y": 90
+    },
+    "colour=hickory,count=1,facing=east": {
+      "model": "wildaside:block/fallen_hickory_leaves_1",
+      "y": 270
+    },
+    "colour=hickory,count=1,facing=north": {
+      "model": "wildaside:block/fallen_hickory_leaves_1",
+      "y": 180
+    },
+    "colour=hickory,count=1,facing=south": {
+      "model": "wildaside:block/fallen_hickory_leaves_1"
+    },
+    "colour=hickory,count=1,facing=west": {
+      "model": "wildaside:block/fallen_hickory_leaves_1",
+      "y": 90
+    },
+    "colour=hickory,count=2,facing=east": {
+      "model": "wildaside:block/fallen_hickory_leaves_2",
+      "y": 270
+    },
+    "colour=hickory,count=2,facing=north": {
+      "model": "wildaside:block/fallen_hickory_leaves_2",
+      "y": 180
+    },
+    "colour=hickory,count=2,facing=south": {
+      "model": "wildaside:block/fallen_hickory_leaves_2"
+    },
+    "colour=hickory,count=2,facing=west": {
+      "model": "wildaside:block/fallen_hickory_leaves_2",
+      "y": 90
+    },
+    "colour=hickory,count=3,facing=east": {
+      "model": "wildaside:block/fallen_hickory_leaves_3",
+      "y": 270
+    },
+    "colour=hickory,count=3,facing=north": {
+      "model": "wildaside:block/fallen_hickory_leaves_3",
+      "y": 180
+    },
+    "colour=hickory,count=3,facing=south": {
+      "model": "wildaside:block/fallen_hickory_leaves_3"
+    },
+    "colour=hickory,count=3,facing=west": {
+      "model": "wildaside:block/fallen_hickory_leaves_3",
+      "y": 90
+    },
+    "colour=red_glowing_hickory,count=1,facing=east": {
+      "model": "wildaside:block/fallen_red_glowing_hickory_leaves_1",
+      "y": 270
+    },
+    "colour=red_glowing_hickory,count=1,facing=north": {
+      "model": "wildaside:block/fallen_red_glowing_hickory_leaves_1",
+      "y": 180
+    },
+    "colour=red_glowing_hickory,count=1,facing=south": {
+      "model": "wildaside:block/fallen_red_glowing_hickory_leaves_1"
+    },
+    "colour=red_glowing_hickory,count=1,facing=west": {
+      "model": "wildaside:block/fallen_red_glowing_hickory_leaves_1",
+      "y": 90
+    },
+    "colour=red_glowing_hickory,count=2,facing=east": {
+      "model": "wildaside:block/fallen_red_glowing_hickory_leaves_2",
+      "y": 270
+    },
+    "colour=red_glowing_hickory,count=2,facing=north": {
+      "model": "wildaside:block/fallen_red_glowing_hickory_leaves_2",
+      "y": 180
+    },
+    "colour=red_glowing_hickory,count=2,facing=south": {
+      "model": "wildaside:block/fallen_red_glowing_hickory_leaves_2"
+    },
+    "colour=red_glowing_hickory,count=2,facing=west": {
+      "model": "wildaside:block/fallen_red_glowing_hickory_leaves_2",
+      "y": 90
+    },
+    "colour=red_glowing_hickory,count=3,facing=east": {
+      "model": "wildaside:block/fallen_red_glowing_hickory_leaves_3",
+      "y": 270
+    },
+    "colour=red_glowing_hickory,count=3,facing=north": {
+      "model": "wildaside:block/fallen_red_glowing_hickory_leaves_3",
+      "y": 180
+    },
+    "colour=red_glowing_hickory,count=3,facing=south": {
+      "model": "wildaside:block/fallen_red_glowing_hickory_leaves_3"
+    },
+    "colour=red_glowing_hickory,count=3,facing=west": {
+      "model": "wildaside:block/fallen_red_glowing_hickory_leaves_3",
+      "y": 90
+    },
+    "colour=yellow_glowing_hickory,count=1,facing=east": {
+      "model": "wildaside:block/fallen_yellow_glowing_hickory_leaves_1",
+      "y": 270
+    },
+    "colour=yellow_glowing_hickory,count=1,facing=north": {
+      "model": "wildaside:block/fallen_yellow_glowing_hickory_leaves_1",
+      "y": 180
+    },
+    "colour=yellow_glowing_hickory,count=1,facing=south": {
+      "model": "wildaside:block/fallen_yellow_glowing_hickory_leaves_1"
+    },
+    "colour=yellow_glowing_hickory,count=1,facing=west": {
+      "model": "wildaside:block/fallen_yellow_glowing_hickory_leaves_1",
+      "y": 90
+    },
+    "colour=yellow_glowing_hickory,count=2,facing=east": {
+      "model": "wildaside:block/fallen_yellow_glowing_hickory_leaves_2",
+      "y": 270
+    },
+    "colour=yellow_glowing_hickory,count=2,facing=north": {
+      "model": "wildaside:block/fallen_yellow_glowing_hickory_leaves_2",
+      "y": 180
+    },
+    "colour=yellow_glowing_hickory,count=2,facing=south": {
+      "model": "wildaside:block/fallen_yellow_glowing_hickory_leaves_2"
+    },
+    "colour=yellow_glowing_hickory,count=2,facing=west": {
+      "model": "wildaside:block/fallen_yellow_glowing_hickory_leaves_2",
+      "y": 90
+    },
+    "colour=yellow_glowing_hickory,count=3,facing=east": {
+      "model": "wildaside:block/fallen_yellow_glowing_hickory_leaves_3",
+      "y": 270
+    },
+    "colour=yellow_glowing_hickory,count=3,facing=north": {
+      "model": "wildaside:block/fallen_yellow_glowing_hickory_leaves_3",
+      "y": 180
+    },
+    "colour=yellow_glowing_hickory,count=3,facing=south": {
+      "model": "wildaside:block/fallen_yellow_glowing_hickory_leaves_3"
+    },
+    "colour=yellow_glowing_hickory,count=3,facing=west": {
+      "model": "wildaside:block/fallen_yellow_glowing_hickory_leaves_3",
+      "y": 90
+    }
+  }
+}

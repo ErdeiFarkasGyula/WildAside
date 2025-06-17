@@ -1,4 +1,4 @@
-// 1.20.1	2025-05-02T14:07:02.109234	Loot Tables
+// 1.20.1	2025-06-17T23:05:08.7631413	Loot Tables
 cb111f4aa2094610caccd6c93bb58846842f1adf data/wildaside/loot_tables/blocks/bioengineering_workstation.json
 9af05efdb1326dfab1d8ce52f3587c6b2314e19e data/wildaside/loot_tables/blocks/brown_glowing_hickory_leaves.json
 806c305e5b6bdf1e690e0d5df8ae5f63031a6a21 data/wildaside/loot_tables/blocks/brown_glowing_hickory_sapling.json
@@ -8,6 +8,7 @@ af75d09f745b7c2e54ece2d661f97d18d3e28af4 data/wildaside/loot_tables/blocks/chise
 c896682c9c12935a4c856e85ac768e1c06f6e397 data/wildaside/loot_tables/blocks/cracked_substilium_tiles.json
 4fc61a8e97fbec16029c26a226dcbe13e01985a9 data/wildaside/loot_tables/blocks/entorium_ore.json
 37eecf0ef6a9c8fddba678ee0a32c9d1425a417e data/wildaside/loot_tables/blocks/entorium_shroom.json
+823586aa00b92d751fceecfa07941e19a2be962e data/wildaside/loot_tables/blocks/fallen_hickory_leaves.json
 5b6979312631ffe7947be68144aed572d20583d6 data/wildaside/loot_tables/blocks/green_glowing_hickory_leaves.json
 ebcc2b79ff2e780ffeb1dfd5c568de75add22f8b data/wildaside/loot_tables/blocks/green_glowing_hickory_sapling.json
 ef8b664c46155cd355d54a7aa0a95dc4f6ca5e35 data/wildaside/loot_tables/blocks/hanging_vibrion_vines.json

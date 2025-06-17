@@ -64,7 +64,6 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleBlockItemBlockTexture(ModBlocks.SUBSTILIUM_SPROUTS);
 
 
-
         //HICKORY
         simpleBlockItem(ModBlocks.HICKORY_DOOR);
         trapdoorItem(ModBlocks.HICKORY_TRAPDOOR);
@@ -90,6 +89,12 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleBlockItemBlockTexture(ModBlocks.BROWN_GLOWING_HICKORY_SAPLING);
         simpleBlockItemBlockTexture(ModBlocks.YELLOW_GLOWING_HICKORY_SAPLING);
         simpleBlockItemBlockTexture(ModBlocks.GREEN_GLOWING_HICKORY_SAPLING);
+
+        simpleItem(ModItems.HICKORY_LEAF);
+        simpleItem(ModItems.RED_GLOWING_HICKORY_LEAF);
+        simpleItem(ModItems.BROWN_GLOWING_HICKORY_LEAF);
+        simpleItem(ModItems.YELLOW_GLOWING_HICKORY_LEAF);
+        simpleItem(ModItems.GREEN_GLOWING_HICKORY_LEAF);
 
         simpleBlockItemBlockTexture(ModBlocks.SPOTTED_WINTERGREEN);
         simpleBlockItemBlockTexture(ModBlocks.PINKSTER_FLOWER);
@@ -139,13 +144,11 @@ public class ModItemModelProvider extends ItemModelProvider {
                 new ResourceLocation(WildAside.MOD_ID,"block/" + item2.getId().getPath()));
     }
 
-
     private ItemModelBuilder simpleBlockItemBlockTexture(RegistryObject<Block> item) {
         return withExistingParent(item.getId().getPath(),
                 new ResourceLocation("item/generated")).texture("layer0",
                 new ResourceLocation(WildAside.MOD_ID,"block/" + item.getId().getPath()));
     }
-
 
     private ItemModelBuilder handheldItem(RegistryObject<Item> item) {
         return withExistingParent(item.getId().getPath(),

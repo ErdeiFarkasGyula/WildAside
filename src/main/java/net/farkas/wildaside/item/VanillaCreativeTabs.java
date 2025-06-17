@@ -97,6 +97,11 @@ public class VanillaCreativeTabs {
             event.accept(ModBlocks.BROWN_GLOWING_HICKORY_LEAVES);
             event.accept(ModBlocks.YELLOW_GLOWING_HICKORY_LEAVES);
             event.accept(ModBlocks.GREEN_GLOWING_HICKORY_LEAVES);
+            event.accept(ModItems.HICKORY_LEAF);
+            event.accept(ModItems.RED_GLOWING_HICKORY_LEAF);
+            event.accept(ModItems.BROWN_GLOWING_HICKORY_LEAF);
+            event.accept(ModItems.YELLOW_GLOWING_HICKORY_LEAF);
+            event.accept(ModItems.GREEN_GLOWING_HICKORY_LEAF);
             event.accept(ModBlocks.HICKORY_SAPLING);
             event.accept(ModBlocks.RED_GLOWING_HICKORY_SAPLING);
             event.accept(ModBlocks.BROWN_GLOWING_HICKORY_SAPLING);

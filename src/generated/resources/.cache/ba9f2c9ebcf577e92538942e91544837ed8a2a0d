@@ -1,9 +1,11 @@
-// 1.20.1	2025-04-27T21:20:51.9164987	Item Models: wildaside
+// 1.20.1	2025-06-17T17:16:58.6263621	Item Models: wildaside
+97ec986340aeed12ebc0d678c97ba34a7afb7b7c assets/wildaside/models/item/brown_glowing_hickory_leaf.json
 657a44b343b52d1185c119350b9599bc495c3976 assets/wildaside/models/item/brown_glowing_hickory_sapling.json
 7c314b9855fa14cfb6f45f4b35479303da8c369e assets/wildaside/models/item/entorium.json
 72ebbdfaa5d8b7399ab25ba412fa3bfdc404a9a3 assets/wildaside/models/item/entorium_ore.json
 b9e8179243c134d4c8ef147d30f464ca785a6b5b assets/wildaside/models/item/entorium_pill.json
 e5f1479fbf76bd4d9780abf55c782b4291be7387 assets/wildaside/models/item/fertiliser_bomb.json
+152bdd71db57062082146bd01d115f9d7270f261 assets/wildaside/models/item/green_glowing_hickory_leaf.json
 38b74d994c2cdaad9628ff8db55869887a2feddf assets/wildaside/models/item/green_glowing_hickory_sapling.json
 8736fb3e4b7f17bd9161702e5696a8b936b15d90 assets/wildaside/models/item/hanging_vibrion_vines.json
 8736fb3e4b7f17bd9161702e5696a8b936b15d90 assets/wildaside/models/item/hanging_vibrion_vines_plant.json
@@ -14,6 +16,7 @@ e5f1479fbf76bd4d9780abf55c782b4291be7387 assets/wildaside/models/item/fertiliser
 a0698b6134905369e8e3a022cf78faaab16f4e46 assets/wildaside/models/item/hickory_fence.json
 9f167d3c821750d96a6f5bd62e9b7a8c80b6845c assets/wildaside/models/item/hickory_fence_gate.json
 a26dc7269bff8cf5a6ca1d2ba5c2a4cd4928e57e assets/wildaside/models/item/hickory_hanging_sign.json
+7bfd6667eeab9bad155774205c0f78bfb0e3d26f assets/wildaside/models/item/hickory_leaf.json
 70771378941d5d2d07294cf895a5d587e82a90f1 assets/wildaside/models/item/hickory_log.json
 93348671ff1014ae2bd645589d703420ceb62294 assets/wildaside/models/item/hickory_nut.json
 58dc039a03c662bdc6a98815d1e8db72fd98ea70 assets/wildaside/models/item/hickory_nut_trail_mix.json
@@ -29,6 +32,7 @@ a26dc7269bff8cf5a6ca1d2ba5c2a4cd4928e57e assets/wildaside/models/item/hickory_ha
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/wildaside/models/item/mucellith_spawn_egg.json
 06017fbe89a63026f0f3e0163d65cf1fa156d723 assets/wildaside/models/item/overgrown_entorium_ore.json
 968dcec5a5c71d9ad044f4e3738c602ffad2985d assets/wildaside/models/item/pinkster_flower.json
+11380195f4d9e1c90960c8ca0b1f71216178132c assets/wildaside/models/item/red_glowing_hickory_leaf.json
 d352d1091ffaa4c5a75c1920c4b91cb2664f1592 assets/wildaside/models/item/red_glowing_hickory_sapling.json
 886632645a8f997a9f6e142cdf190a3305f2bd99 assets/wildaside/models/item/spore_arrow.json
 8adc0b5bb5773db56c57a0374736715a147725ed assets/wildaside/models/item/spore_bomb.json
@@ -60,4 +64,5 @@ e64cd79400c73a174556db69ac31d1be127aa727 assets/wildaside/models/item/substilium
 ba9b6c59e041ca210f319502611fc9d1be5045be assets/wildaside/models/item/vibrion.json
 28b841c1b7ab30aa3f867a711da8e464c43ecf6b assets/wildaside/models/item/vibrion_glass_pane.json
 78d1091c6bfee6f5eb6f3d286f67bc150b54208f assets/wildaside/models/item/vibrion_growth.json
+ba1aff45b7a91e03dcffd606c80c07ca2096b829 assets/wildaside/models/item/yellow_glowing_hickory_leaf.json
 cb73f5747f3c67d57251467433526023962b859a assets/wildaside/models/item/yellow_glowing_hickory_sapling.json

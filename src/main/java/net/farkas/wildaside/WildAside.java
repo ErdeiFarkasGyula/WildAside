@@ -119,6 +119,11 @@ public class WildAside
         ComposterBlock.COMPOSTABLES.put(ModBlocks.BROWN_GLOWING_HICKORY_LEAVES.get().asItem(), 0.5f);
         ComposterBlock.COMPOSTABLES.put(ModBlocks.YELLOW_GLOWING_HICKORY_LEAVES.get().asItem(), 0.5f);
         ComposterBlock.COMPOSTABLES.put(ModBlocks.GREEN_GLOWING_HICKORY_LEAVES.get().asItem(), 0.5f);
+        ComposterBlock.COMPOSTABLES.put(ModItems.HICKORY_LEAF.get(), 0.1f);
+        ComposterBlock.COMPOSTABLES.put(ModItems.RED_GLOWING_HICKORY_LEAF.get(), 0.15f);
+        ComposterBlock.COMPOSTABLES.put(ModItems.BROWN_GLOWING_HICKORY_LEAF.get(), 0.15f);
+        ComposterBlock.COMPOSTABLES.put(ModItems.YELLOW_GLOWING_HICKORY_LEAF.get(), 0.15f);
+        ComposterBlock.COMPOSTABLES.put(ModItems.GREEN_GLOWING_HICKORY_LEAF.get(), 0.15f);
         ComposterBlock.COMPOSTABLES.put(ModBlocks.HICKORY_SAPLING.get().asItem(), 0.3f);
         ComposterBlock.COMPOSTABLES.put(ModBlocks.RED_GLOWING_HICKORY_SAPLING.get().asItem(), 0.5f);
         ComposterBlock.COMPOSTABLES.put(ModBlocks.BROWN_GLOWING_HICKORY_SAPLING.get().asItem(), 0.5f);
@@ -174,6 +179,8 @@ public class WildAside
 
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.VIBRION_GLASS_PANE.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.LIT_VIBRION_GLASS_PANE.get(), RenderType.translucent());
+
+            ItemBlockRenderTypes.setRenderLayer(ModBlocks.FALLEN_HICKORY_LEAVES.get(), RenderType.cutout());
         }
     }
 

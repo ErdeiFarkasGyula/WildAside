@@ -170,9 +170,9 @@ public class ModPlacedFeatures {
                 List.of(RarityFilter.onAverageOnceEvery(8), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
 
         register(context, HICKORY_BUSH, configuredFeatures.getOrThrow(ModConfiguredFeatures.HICKORY_BUSH),
-                VegetationPlacements.treePlacement(PlacementUtils.countExtra(2, 0.5f, 2)));
+                VegetationPlacements.treePlacement(PlacementUtils.countExtra(3, 0.5f, 3)));
         register(context, GLOWING_HICKORY_BUSH, configuredFeatures.getOrThrow(ModConfiguredFeatures.GLOWING_HICKORY_BUSH),
-                VegetationPlacements.treePlacement(PlacementUtils.countExtra(2, 0.5f, 2)));
+                VegetationPlacements.treePlacement(PlacementUtils.countExtra(3, 0.5f, 3)));
         register(context, FALLEN_HICKORY_TREE, configuredFeatures.getOrThrow(ModConfiguredFeatures.FALLEN_HICKORY_TREE),
                 List.of(RarityFilter.onAverageOnceEvery(8), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
     }
