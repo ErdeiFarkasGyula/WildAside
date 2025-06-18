@@ -25,38 +25,36 @@ public class OvergrownEntoriumOre extends EntoriumOre {
 
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        if (!pLevel.isClientSide()) {
-            var playerItem = pPlayer.getItemInHand(pHand);
+        if (pLevel.isClientSide) return InteractionResult.PASS;
+        if (pHand == InteractionHand.OFF_HAND) return InteractionResult.PASS;
 
-            if (playerItem.getItem() == Items.SHEARS) {
-                BlockState newBlock = ModBlocks.ENTORIUM_ORE.get().defaultBlockState();
+        var playerItem = pPlayer.getItemInHand(pHand);
+        if (playerItem.getItem() == Items.SHEARS) {
+            BlockState newBlock = ModBlocks.ENTORIUM_ORE.get().defaultBlockState();
 
-                pLevel.setBlock(pPos, newBlock, 3);
-                pLevel.playSound(null, pPos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.mooshroom.shear")), SoundSource.BLOCKS, 1, 1);
-                pPlayer.swing(pHand);
+            pLevel.setBlock(pPos, newBlock, 3);
+            pLevel.playSound(null, pPos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.mooshroom.shear")), SoundSource.BLOCKS, 1, 1);
+            pPlayer.swing(pHand);
 
-                if (!pPlayer.isCreative()) {
-                    playerItem.hurt(1, RandomSource.create(), null);
-                }
+            if (!pPlayer.isCreative()) {
+                playerItem.hurt(1, RandomSource.create(), null);
+            }
 
-                if (playerItem.getItem().getEnchantmentLevel(playerItem, ModEnchantments.EXTENSIVE_RESEARCH.get()) > 0) {
-                    AdvancementHandler.givePlayerAdvancement((ServerPlayer) pPlayer, "extensive_research");
-                    for (int i = -1; i <= 1; i++) {
-                        for (int j = -1; j <= 1; j++) {
-                            for (int k = -1; k <= 1; k++) {
-                                BlockPos newPos = pPos.offset(i, j, k);
-                                if (pLevel.getBlockState(newPos).is(ModBlocks.OVERGROWN_ENTORIUM_ORE.get())) {
-                                    pLevel.setBlock(newPos, newBlock, 2);
-                                }
+            if (playerItem.getItem().getEnchantmentLevel(playerItem, ModEnchantments.EXTENSIVE_RESEARCH.get()) > 0) {
+                AdvancementHandler.givePlayerAdvancement((ServerPlayer) pPlayer, "extensive_research");
+                for (int i = -1; i <= 1; i++) {
+                    for (int j = -1; j <= 1; j++) {
+                        for (int k = -1; k <= 1; k++) {
+                            BlockPos newPos = pPos.offset(i, j, k);
+                            if (pLevel.getBlockState(newPos).is(ModBlocks.OVERGROWN_ENTORIUM_ORE.get())) {
+                                pLevel.setBlock(newPos, newBlock, 2);
                             }
                         }
                     }
                 }
-
-                return InteractionResult.SUCCESS;
-
             }
-            return InteractionResult.PASS;
+
+            return InteractionResult.SUCCESS;
         }
 
         return InteractionResult.PASS;

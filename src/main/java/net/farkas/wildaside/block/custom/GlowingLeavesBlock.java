@@ -61,6 +61,8 @@ public class GlowingLeavesBlock extends LeavesBlock {
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         if (pLevel.isClientSide) return InteractionResult.PASS;
         if (pState.getValue(GlowingLeavesBlock.FIXED_LIGHTING)) return InteractionResult.PASS;
+        if (pHand == InteractionHand.OFF_HAND) return InteractionResult.PASS;
+
         var playerItem = pPlayer.getItemInHand(pHand);
 
         if (playerItem.getItem().equals(ModItems.VIBRION.get())) {
@@ -69,7 +71,7 @@ public class GlowingLeavesBlock extends LeavesBlock {
             pPlayer.swing(pHand);
 
             if (!pPlayer.isCreative()) {
-                playerItem.hurt(1, RandomSource.create(), null);
+                playerItem.shrink(1);
             }
 
             return InteractionResult.SUCCESS;

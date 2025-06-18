@@ -29,6 +29,7 @@ public class HickoryLeafItem extends Item {
     public InteractionResult useOn(UseOnContext pContext) {
         var level = pContext.getLevel();
         if (level.isClientSide) return InteractionResult.PASS;
+        if (pContext.getHand() == InteractionHand.OFF_HAND) return InteractionResult.PASS;
 
         var pos = pContext.getClickedPos();
         var player = pContext.getPlayer();
@@ -80,10 +81,10 @@ public class HickoryLeafItem extends Item {
 
     private void onSuccesfullPlacement(Level level, BlockPos pos, Player player, InteractionHand hand) {
         var item = player.getItemInHand(hand);
-
+        
         level.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.big_dripleaf.place")), SoundSource.BLOCKS, 1, 1.1f);
         if (!player.isCreative()) {
-            item.hurt(1, level.getRandom(), null);
+            item.shrink(1);
         }
     }
 
