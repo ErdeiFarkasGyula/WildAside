@@ -1,7 +1,9 @@
 package net.farkas.wildaside.datagen.loot;
 
 import net.farkas.wildaside.block.ModBlocks;
+import net.farkas.wildaside.block.custom.FallenHickoryLeavesBlock;
 import net.farkas.wildaside.item.ModItems;
+import net.farkas.wildaside.util.HickoryColour;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
@@ -12,6 +14,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
@@ -146,7 +149,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
                 createBiggerLeavesDrops(block, ModBlocks.GREEN_GLOWING_HICKORY_SAPLING.get(), ModItems.HICKORY_NUT.get()));
 
         this.add(ModBlocks.FALLEN_HICKORY_LEAVES.get(), block ->
-                createBiggerLeavesDrops(Blocks.AIR, Blocks.AIR, ModItems.HICKORY_NUT.get()));
+                createBiggerLeavesDrops(Blocks.AIR, Blocks.AIR, Items.AIR));
 
         this.dropSelf(ModBlocks.HICKORY_SAPLING.get());
         this.dropSelf(ModBlocks.RED_GLOWING_HICKORY_SAPLING.get());

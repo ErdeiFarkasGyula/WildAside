@@ -28,12 +28,16 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.joml.Math;
+
+import java.util.Collections;
+import java.util.List;
 
 public class FallenHickoryLeavesBlock extends Block {
     private static final VoxelShape SHAPE = Block.box(1, 0, 1, 15, 0.5, 15);
@@ -55,6 +59,13 @@ public class FallenHickoryLeavesBlock extends Block {
                 .setValue(LIGHT, 0)
                 .setValue(FIXED_LIGHTING, false)
         );
+    }
+
+    @Override
+    public List<ItemStack> getDrops(BlockState pState, LootParams.Builder pParams) {
+        HickoryColour colour = pState.getValue(FallenHickoryLeavesBlock.COLOUR);
+        int count = pState.getValue(FallenHickoryLeavesBlock.COUNT);
+        return Collections.singletonList(new ItemStack(ModItems.LEAF_ITEMS.get(colour).get(), count));
     }
 
     @Override

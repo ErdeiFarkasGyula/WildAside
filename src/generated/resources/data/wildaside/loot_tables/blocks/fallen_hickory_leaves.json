@@ -183,7 +183,7 @@
               "enchantment": "minecraft:fortune"
             }
           ],
-          "name": "wildaside:hickory_nut"
+          "name": "minecraft:air"
         }
       ],
       "rolls": 1.0
