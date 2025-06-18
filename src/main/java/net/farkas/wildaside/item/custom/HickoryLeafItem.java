@@ -81,7 +81,7 @@ public class HickoryLeafItem extends Item {
 
     private void onSuccesfullPlacement(Level level, BlockPos pos, Player player, InteractionHand hand) {
         var item = player.getItemInHand(hand);
-        
+
         level.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.big_dripleaf.place")), SoundSource.BLOCKS, 1, 1.1f);
         if (!player.isCreative()) {
             item.shrink(1);
