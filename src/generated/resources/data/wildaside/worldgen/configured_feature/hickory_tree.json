@@ -5,6 +5,11 @@
       {
         "type": "minecraft:beehive",
         "probability": 0.01
+      },
+      {
+        "type": "wildaside:fallen_leaves",
+        "chance": 0.1,
+        "colour": "HICKORY"
       }
     ],
     "dirt_provider": {

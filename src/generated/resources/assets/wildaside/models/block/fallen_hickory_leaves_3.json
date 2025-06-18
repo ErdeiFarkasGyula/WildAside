@@ -1,5 +1,5 @@
 {
-  "parent": "wildaside:custom/flat_block",
+  "parent": "wildaside:custom/flat_tinted_block",
   "textures": {
     "leaves": "wildaside:block/fallen_hickory_leaves_3"
   }

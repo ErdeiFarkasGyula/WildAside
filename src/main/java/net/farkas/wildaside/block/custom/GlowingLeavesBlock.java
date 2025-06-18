@@ -60,6 +60,7 @@ public class GlowingLeavesBlock extends LeavesBlock {
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         if (pLevel.isClientSide) return InteractionResult.PASS;
+        if (pState.getValue(GlowingLeavesBlock.FIXED_LIGHTING)) return InteractionResult.PASS;
         var playerItem = pPlayer.getItemInHand(pHand);
 
         if (playerItem.getItem().equals(ModItems.VIBRION.get())) {

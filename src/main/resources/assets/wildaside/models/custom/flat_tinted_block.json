@@ -8,8 +8,8 @@
 			"from": [0, 0.5, 0],
 			"to": [16, 0.5, 16],
 			"faces": {
-				"up": {"uv": [1, 1, 15, 15], "texture": "#leaves"},
-				"down": {"uv": [1, 15, 15, 1], "texture": "#leaves"}
+				"up": {"uv": [1, 1, 15, 15], "texture": "#leaves", "tintindex":0},
+				"down": {"uv": [1, 15, 15, 1], "texture": "#leaves", "tintindex":0}
 			}
 		}
 	]

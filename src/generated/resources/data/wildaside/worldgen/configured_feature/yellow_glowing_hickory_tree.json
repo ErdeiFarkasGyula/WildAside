@@ -4,7 +4,12 @@
     "decorators": [
       {
         "type": "minecraft:beehive",
-        "probability": 0.02
+        "probability": 0.015
+      },
+      {
+        "type": "wildaside:fallen_leaves",
+        "chance": 0.1,
+        "colour": "YELLOW_GLOWING"
       }
     ],
     "dirt_provider": {

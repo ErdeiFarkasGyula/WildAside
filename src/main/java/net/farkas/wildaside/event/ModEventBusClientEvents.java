@@ -60,10 +60,8 @@ public class ModEventBusClientEvents {
     @SubscribeEvent
     public static void registerColoredBlocks(RegisterColorHandlersEvent.Block event) {
         event.register((pState, pLevel, pPos, pTintIndex) -> pLevel != null &&
-                pPos != null ? BiomeColors.getAverageFoliageColor(pLevel, pPos) : FoliageColor.getDefaultColor(), ModBlocks.HICKORY_LEAVES.get());
-        event.register((pState, pLevel, pPos, pTintIndex) -> pLevel != null &&
-                pPos != null ? BiomeColors.getAverageFoliageColor(pLevel, pPos) : FoliageColor.getDefaultColor(), ModBlocks.FALLEN_HICKORY_LEAVES.get());
-
+                pPos != null ? BiomeColors.getAverageFoliageColor(pLevel, pPos) : FoliageColor.getDefaultColor(),
+                ModBlocks.HICKORY_LEAVES.get(), ModBlocks.FALLEN_HICKORY_LEAVES.get());
     }
 
     @SubscribeEvent

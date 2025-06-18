@@ -3,7 +3,9 @@ package net.farkas.wildaside.worldgen;
 import com.google.common.collect.ImmutableList;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
+import net.farkas.wildaside.util.HickoryColour;
 import net.farkas.wildaside.worldgen.feature.ModFeatures;
+import net.farkas.wildaside.worldgen.feature.decorator.FallenLeavesDecorator;
 import net.farkas.wildaside.worldgen.feature.tree.hickory.HickoryTreeFoliagePlacer;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
@@ -158,40 +160,44 @@ public class ModConfiguredFeatures {
                 new RandomPatchConfiguration(32, 16, 2, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
                         new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.PINKSTER_FLOWER.get())))));
 
-        ImmutableList beehiveDecorator = ImmutableList.of(new BeehiveDecorator(0.01f));
-        ImmutableList glowingBeehiveDecorator = ImmutableList.of(new BeehiveDecorator(0.02f));
+        BeehiveDecorator glowingBeehive = new BeehiveDecorator(0.015f);
+        ImmutableList hickoryDecorator = ImmutableList.of(new BeehiveDecorator(0.01f), new FallenLeavesDecorator(0.1f, HickoryColour.HICKORY));
+        ImmutableList redGlowingHickoryDecorator = ImmutableList.of(glowingBeehive, new FallenLeavesDecorator(0.1f, HickoryColour.RED_GLOWING));
+        ImmutableList brownGlowingHickoryDecorator = ImmutableList.of(glowingBeehive, new FallenLeavesDecorator(0.1f, HickoryColour.BROWN_GLOWING));
+        ImmutableList yellowGlowingHickoryDecorator = ImmutableList.of(glowingBeehive, new FallenLeavesDecorator(0.1f, HickoryColour.YELLOW_GLOWING));
+        ImmutableList greenGlowingHickoryDecorator = ImmutableList.of(glowingBeehive, new FallenLeavesDecorator(0.1f, HickoryColour.GREEN_GLOWING));
 
         register(context, HICKORY_TREE, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.HICKORY_LOG.get()),
                 new StraightTrunkPlacer(18, 0, 6),
                 BlockStateProvider.simple(ModBlocks.HICKORY_LEAVES.get()),
                 new HickoryTreeFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 14),
-                new TwoLayersFeatureSize(1, 0, 2)).decorators(beehiveDecorator).build());
+                new TwoLayersFeatureSize(1, 0, 2)).decorators(hickoryDecorator).build());
 
         register(context, RED_GLOWING_HICKORY_TREE, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.HICKORY_LOG.get()),
                 new StraightTrunkPlacer(18, 0, 6),
                 BlockStateProvider.simple(ModBlocks.RED_GLOWING_HICKORY_LEAVES.get()),
                 new HickoryTreeFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 14),
-                new TwoLayersFeatureSize(1, 0, 2)).decorators(glowingBeehiveDecorator).build());
+                new TwoLayersFeatureSize(1, 0, 2)).decorators(redGlowingHickoryDecorator).build());
         register(context, BROWN_GLOWING_HICKORY_TREE, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.HICKORY_LOG.get()),
                 new StraightTrunkPlacer(18, 0, 6),
                 BlockStateProvider.simple(ModBlocks.BROWN_GLOWING_HICKORY_LEAVES.get()),
                 new HickoryTreeFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 14),
-                new TwoLayersFeatureSize(1, 0, 2)).decorators(glowingBeehiveDecorator).build());
+                new TwoLayersFeatureSize(1, 0, 2)).decorators(brownGlowingHickoryDecorator).build());
         register(context, YELLOW_GLOWING_HICKORY_TREE, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.HICKORY_LOG.get()),
                 new StraightTrunkPlacer(18, 0, 6),
                 BlockStateProvider.simple(ModBlocks.YELLOW_GLOWING_HICKORY_LEAVES.get()),
                 new HickoryTreeFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 14),
-                new TwoLayersFeatureSize(1, 0, 2)).decorators(glowingBeehiveDecorator).build());
+                new TwoLayersFeatureSize(1, 0, 2)).decorators(yellowGlowingHickoryDecorator).build());
         register(context, GREEN_GLOWING_HICKORY_TREE, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.HICKORY_LOG.get()),
                 new StraightTrunkPlacer(18, 0, 6),
                 BlockStateProvider.simple(ModBlocks.GREEN_GLOWING_HICKORY_LEAVES.get()),
                 new HickoryTreeFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 14),
-                new TwoLayersFeatureSize(1, 0, 2)).decorators(glowingBeehiveDecorator).build());
+                new TwoLayersFeatureSize(1, 0, 2)).decorators(greenGlowingHickoryDecorator).build());
 
         register(context, HICKORY_SAPLING, Feature.FLOWER,
                 new RandomPatchConfiguration(32, 16, 2, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,

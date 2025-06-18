@@ -84,12 +84,31 @@ public class FallenHickoryLeavesBlock extends Block {
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         if (pLevel.isClientSide) return InteractionResult.PASS;
+        if (pHand == InteractionHand.OFF_HAND) return InteractionResult.PASS;
         var playerItem = pPlayer.getItemInHand(pHand);
 
+        if (playerItem.isEmpty()) {
+            int count = pState.getValue(FallenHickoryLeavesBlock.COUNT);
+            if (count == 1) {
+                pLevel.removeBlock(pPos, false);
+            } else {
+                pLevel.setBlock(pPos, pState.setValue(FallenHickoryLeavesBlock.COUNT, count - 1), 3);
+            }
+
+            pPlayer.swing(pHand);
+            pPlayer.addItem(new ItemStack(ModItems.LEAF_ITEMS.get(pState.getValue(FallenHickoryLeavesBlock.COLOUR)).get()));
+            pLevel.playSound(null, pPos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.big_dripleaf.place")), SoundSource.BLOCKS, 1, 0.8f);
+            if (!pPlayer.isCreative()) {
+                playerItem.hurt(1, RandomSource.create(), null);
+            }
+
+            return InteractionResult.SUCCESS;
+        }
+        else
         if (playerItem.getItem().equals(ModItems.VIBRION.get())) {
+            if (pState.getValue(GlowingLeavesBlock.FIXED_LIGHTING)) return InteractionResult.PASS;
             pLevel.setBlock(pPos, pState.setValue(FallenHickoryLeavesBlock.FIXED_LIGHTING, true), 3);
             pLevel.playSound(null, pPos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.honeycomb.wax_on")), SoundSource.BLOCKS, 1, 1);
-            pPlayer.swing(pHand);
 
             if (!pPlayer.isCreative()) {
                 playerItem.hurt(1, RandomSource.create(), null);
@@ -97,6 +116,8 @@ public class FallenHickoryLeavesBlock extends Block {
 
             return InteractionResult.SUCCESS;
         }
+
+
         return InteractionResult.PASS;
     }
 

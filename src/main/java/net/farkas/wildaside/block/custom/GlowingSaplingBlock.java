@@ -59,7 +59,9 @@ public class GlowingSaplingBlock extends SaplingBlock {
         if (pLevel.isClientSide) return InteractionResult.PASS;
         var playerItem = pPlayer.getItemInHand(pHand);
 
+
         if (playerItem.getItem().equals(ModItems.VIBRION.get())) {
+            if (pState.getValue(GlowingLeavesBlock.FIXED_LIGHTING)) return InteractionResult.PASS;
             pLevel.setBlock(pPos, pState.setValue(GlowingSaplingBlock.FIXED_LIGHTING, true), 3);
             pLevel.playSound(null, pPos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.honeycomb.wax_on")), SoundSource.BLOCKS, 1, 1);
             pPlayer.swing(pHand);

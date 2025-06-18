@@ -127,6 +127,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         leavesBlock(ModBlocks.GREEN_GLOWING_HICKORY_LEAVES);
 
         ResourceLocation parentModel = modLoc("custom/flat_block");
+        ResourceLocation tintedModel = modLoc("custom/flat_tinted_block");
 
 
         ModelFile[][] models = new ModelFile[colours.length][3];
@@ -135,7 +136,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
             for (int count = 1; count <= 3; count++) {
                 String modelName = String.format("fallen_%s_leaves_%d", colName, count);
                 ResourceLocation tex = modLoc("block/" + modelName);
-                models[ci][count-1] = models().withExistingParent(modelName, parentModel).texture("leaves", tex);
+                ResourceLocation chosenModel = colName == "hickory" ? tintedModel : parentModel;
+                models[ci][count-1] = models().withExistingParent(modelName, chosenModel).texture("leaves", tex);
             }
         }
 
