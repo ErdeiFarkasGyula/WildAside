@@ -13,6 +13,7 @@ import net.farkas.wildaside.block.custom.vibrion.SporeBlaster;
 import net.farkas.wildaside.block.custom.BioengineeringWorkstation;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.particle.ModParticles;
+import net.farkas.wildaside.util.HickoryColour;
 import net.farkas.wildaside.util.ParticleUtils;
 import net.farkas.wildaside.util.ModWoodTypes;
 import net.farkas.wildaside.worldgen.feature.tree.hickory.*;
@@ -376,13 +377,13 @@ public class ModBlocks {
             });
 
     public static final RegistryObject<Block> RED_GLOWING_HICKORY_LEAVES = registerBlock("red_glowing_hickory_leaves",
-            () ->  new GlowingLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)));
+            () ->  new GlowingLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES), HickoryColour.RED_GLOWING));
     public static final RegistryObject<Block> BROWN_GLOWING_HICKORY_LEAVES = registerBlock("brown_glowing_hickory_leaves",
-            () ->  new GlowingLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)));
+            () ->  new GlowingLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES), HickoryColour.BROWN_GLOWING));
     public static final RegistryObject<Block> YELLOW_GLOWING_HICKORY_LEAVES = registerBlock("yellow_glowing_hickory_leaves",
-            () ->  new GlowingLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)));
+            () ->  new GlowingLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES), HickoryColour.YELLOW_GLOWING));
     public static final RegistryObject<Block> GREEN_GLOWING_HICKORY_LEAVES = registerBlock("green_glowing_hickory_leaves",
-            () ->  new GlowingLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)));
+            () ->  new GlowingLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES), HickoryColour.GREEN_GLOWING));
 
     public static final RegistryObject<Block> FALLEN_HICKORY_LEAVES = registerBlock("fallen_hickory_leaves",
             () ->  new FallenHickoryLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)));

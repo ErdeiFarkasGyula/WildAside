@@ -3,6 +3,7 @@ package net.farkas.wildaside.block.custom;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.particle.ModParticles;
+import net.farkas.wildaside.util.HickoryColour;
 import net.farkas.wildaside.util.ParticleUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -34,9 +35,11 @@ public class GlowingLeavesBlock extends LeavesBlock {
 
     private SimpleParticleType particle;
     private boolean particleChanged = false;
+    private final HickoryColour colour;
 
-    public GlowingLeavesBlock(Properties pProperties) {
+    public GlowingLeavesBlock(Properties pProperties, HickoryColour colour) {
         super(pProperties.lightLevel(s -> s.getValue(LIGHT)));
+        this.colour = colour;
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(DISTANCE, 7)
                 .setValue(PERSISTENT, false)
@@ -117,22 +120,9 @@ public class GlowingLeavesBlock extends LeavesBlock {
         super.animateTick(pState, pLevel, pPos, pRandom);
         if (!pLevel.getBlockState(pPos.below()).isAir()) return;
 
-        if (!particleChanged) {
-            if (pState.is(ModBlocks.RED_GLOWING_HICKORY_LEAVES.get())) {
-                particle = ModParticles.RED_GLOWING_HICKORY_PARTICLE.get();
-            } else
-                if (pState.is(ModBlocks.BROWN_GLOWING_HICKORY_LEAVES.get())) {
-                    particle = ModParticles.BROWN_GLOWING_HICKORY_PARTICLE.get();
-                } else
-                    if (pState.is(ModBlocks.YELLOW_GLOWING_HICKORY_LEAVES.get())) {
-                        particle = ModParticles.YELLOW_GLOWING_HICKORY_PARTICLE.get();
-                    } else {
-                        particle = ModParticles.GREEN_GLOWING_HICKORY_PARTICLE.get();
-                    }
-            particleChanged = true;
-        }
+        SimpleParticleType particle = ModParticles.HICKORY_PARTICLES.get(colour).get();
 
-        if (pRandom.nextFloat() < 0.02f) {
+        if (pRandom.nextFloat() < 0.025) {
             ParticleUtils.spawnHickoryParticles(pLevel, pPos, pRandom, particle);
         }
     }
