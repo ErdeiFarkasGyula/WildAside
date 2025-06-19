@@ -23,9 +23,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.joml.Math;
+
+import java.util.Collections;
+import java.util.List;
 
 public class GlowingLeavesBlock extends LeavesBlock {
     private static final int minLight = 0;
@@ -50,6 +54,11 @@ public class GlowingLeavesBlock extends LeavesBlock {
 
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
         pBuilder.add(DISTANCE, PERSISTENT, WATERLOGGED, LIGHT, FIXED_LIGHTING);
+    }
+
+    @Override
+    public List<ItemStack> getDrops(BlockState pState, LootParams.Builder pParams) {
+        return Collections.singletonList(new ItemStack(ModItems.LEAF_ITEMS.get(colour).get(), RandomSource.create().nextInt(5)));
     }
 
     @Override

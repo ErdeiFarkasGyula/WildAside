@@ -41,6 +41,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.EnumMap;
 import java.util.function.Supplier;
 
 public class ModBlocks {
@@ -385,8 +386,23 @@ public class ModBlocks {
     public static final RegistryObject<Block> GREEN_GLOWING_HICKORY_LEAVES = registerBlock("green_glowing_hickory_leaves",
             () ->  new GlowingLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES), HickoryColour.GREEN_GLOWING));
 
+    public static final EnumMap<HickoryColour, RegistryObject<Block>> HICKORY_LEAVES_BLOCKS = new EnumMap<>(HickoryColour.class);
+
+    static {
+        HICKORY_LEAVES_BLOCKS.put(HickoryColour.HICKORY, HICKORY_LEAVES);
+        HICKORY_LEAVES_BLOCKS.put(HickoryColour.RED_GLOWING, RED_GLOWING_HICKORY_LEAVES);
+        HICKORY_LEAVES_BLOCKS.put(HickoryColour.BROWN_GLOWING, BROWN_GLOWING_HICKORY_LEAVES);
+        HICKORY_LEAVES_BLOCKS.put(HickoryColour.YELLOW_GLOWING, YELLOW_GLOWING_HICKORY_LEAVES);
+        HICKORY_LEAVES_BLOCKS.put(HickoryColour.GREEN_GLOWING, GREEN_GLOWING_HICKORY_LEAVES);
+    }
+
     public static final RegistryObject<Block> FALLEN_HICKORY_LEAVES = registerBlock("fallen_hickory_leaves",
-            () ->  new FallenHickoryLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)));
+            () ->  new FallenHickoryLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)
+                    .noCollission()
+                    .noOcclusion()
+                    .instabreak()
+                    .replaceable()
+                    .pushReaction(PushReaction.DESTROY)));
 
     public static final RegistryObject<Block> HICKORY_SAPLING = registerBlock("hickory_sapling",
             () ->  new SaplingBlock(new HickoryTreeGrower(HickoryColour.HICKORY), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING)));

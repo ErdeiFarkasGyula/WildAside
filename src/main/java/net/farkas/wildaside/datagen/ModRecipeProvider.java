@@ -3,6 +3,7 @@ package net.farkas.wildaside.datagen;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.item.ModItems;
+import net.farkas.wildaside.util.HickoryColour;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.world.item.Items;
@@ -149,6 +150,10 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 ModItems.HICKORY_BOAT.get(), ModItems.HICKORY_CHEST_BOAT.get());
         defaultWoodSet(pWriter, HICKORY_WOODSET);
 
+        for (HickoryColour colour : HickoryColour.values()) {
+            simpleShapedRecipe(ModBlocks.HICKORY_LEAVES_BLOCKS.get(colour).get(), 1, ModItems.LEAF_ITEMS.get(colour).get()).save(pWriter);
+        }
+
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.HICKORY_NUT_TRAIL_MIX.get())
                 .requires(ModItems.HICKORY_NUT.get())
                 .requires(Items.BOWL)
@@ -168,6 +173,22 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .unlockedBy(getHasName(ModBlocks.SPOTTED_WINTERGREEN.get()), has(ModBlocks.SPOTTED_WINTERGREEN.get()))
                 .save(pWriter);
 
+    }
+
+    public ShapedRecipeBuilder simpleShapedRecipe(ItemLike output, int count, ItemLike input, RecipeCategory category) {
+        return ShapedRecipeBuilder.shaped(category, output, count)
+                .pattern("SS")
+                .pattern("SS")
+                .define('S', input)
+                .unlockedBy(getHasName(input), has(input));
+    }
+
+    public ShapedRecipeBuilder simpleShapedRecipe(ItemLike output, int count, ItemLike input) {
+        return ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output, count)
+                .pattern("SS")
+                .pattern("SS")
+                .define('S', input)
+                .unlockedBy(getHasName(input), has(input));
     }
 
     protected static void smelting(Consumer<FinishedRecipe> pFinishedRecipeConsumer, List<ItemLike> pIngredients, RecipeCategory pCategory, ItemLike pResult, float pExperience, int pCookingTIme, String pGroup) {
