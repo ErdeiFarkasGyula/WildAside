@@ -8,6 +8,7 @@ import net.farkas.wildaside.worldgen.feature.ModFeatures;
 import net.farkas.wildaside.worldgen.feature.decorator.FallenLeavesDecorator;
 import net.farkas.wildaside.worldgen.feature.tree.hickory.HickoryTreeFoliagePlacer;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
@@ -25,7 +26,9 @@ import net.minecraft.world.level.levelgen.feature.treedecorators.BeehiveDecorato
 import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
+import net.minecraftforge.registries.RegistryObject;
 
+import java.util.EnumMap;
 import java.util.List;
 
 public class ModConfiguredFeatures {
@@ -80,6 +83,15 @@ public class ModConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> GLOWING_HICKORY_BUSH = registerKey("glowing_hickory_bush");
     public static final ResourceKey<ConfiguredFeature<?, ?>> FALLEN_HICKORY_TREE = registerKey("fallen_hickory_tree");
 
+
+    public static final EnumMap<HickoryColour, ResourceKey<ConfiguredFeature<?, ?>>> HICKORY_TREES = new EnumMap<>(HickoryColour.class);
+    static {
+        HICKORY_TREES.put(HickoryColour.HICKORY, HICKORY_TREE);
+        HICKORY_TREES.put(HickoryColour.RED_GLOWING, RED_GLOWING_HICKORY_TREE);
+        HICKORY_TREES.put(HickoryColour.BROWN_GLOWING, BROWN_GLOWING_HICKORY_TREE);
+        HICKORY_TREES.put(HickoryColour.YELLOW_GLOWING, YELLOW_GLOWING_HICKORY_TREE);
+        HICKORY_TREES.put(HickoryColour.GREEN_GLOWING, GREEN_GLOWING_HICKORY_TREE);
+    }
 
     public static void bootstrap(BootstapContext<ConfiguredFeature<?, ?>> context) {
         RuleTest overgrown_entorium_ore_replaceables = new BlockMatchTest(ModBlocks.SUBSTILIUM_SOIL.get());

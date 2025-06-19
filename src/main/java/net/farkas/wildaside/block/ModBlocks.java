@@ -389,15 +389,15 @@ public class ModBlocks {
             () ->  new FallenHickoryLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)));
 
     public static final RegistryObject<Block> HICKORY_SAPLING = registerBlock("hickory_sapling",
-            () ->  new SaplingBlock(new HickoryTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING)));
+            () ->  new SaplingBlock(new HickoryTreeGrower(HickoryColour.HICKORY), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING)));
     public static final RegistryObject<Block> RED_GLOWING_HICKORY_SAPLING = registerBlock("red_glowing_hickory_sapling",
-            () ->  new GlowingSaplingBlock(new RedGlowingHickoryTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING)));
+            () ->  new GlowingSaplingBlock(new HickoryTreeGrower(HickoryColour.RED_GLOWING), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING)));
     public static final RegistryObject<Block> BROWN_GLOWING_HICKORY_SAPLING = registerBlock("brown_glowing_hickory_sapling",
-            () ->  new GlowingSaplingBlock(new BrownGlowingHickoryTreeGrower(), BlockBehaviour.Properties.copy(RED_GLOWING_HICKORY_SAPLING.get())));
+            () ->  new GlowingSaplingBlock(new HickoryTreeGrower(HickoryColour.BROWN_GLOWING), BlockBehaviour.Properties.copy(RED_GLOWING_HICKORY_SAPLING.get())));
     public static final RegistryObject<Block> YELLOW_GLOWING_HICKORY_SAPLING = registerBlock("yellow_glowing_hickory_sapling",
-            () ->  new GlowingSaplingBlock(new YellowGlowingHickoryTreeGrower(), BlockBehaviour.Properties.copy(RED_GLOWING_HICKORY_SAPLING.get())));
+            () ->  new GlowingSaplingBlock(new HickoryTreeGrower(HickoryColour.YELLOW_GLOWING), BlockBehaviour.Properties.copy(RED_GLOWING_HICKORY_SAPLING.get())));
     public static final RegistryObject<Block> GREEN_GLOWING_HICKORY_SAPLING = registerBlock("green_glowing_hickory_sapling",
-            () ->  new GlowingSaplingBlock(new GreenGlowingHickoryTreeGrower(), BlockBehaviour.Properties.copy(RED_GLOWING_HICKORY_SAPLING.get())));
+            () ->  new GlowingSaplingBlock(new HickoryTreeGrower(HickoryColour.GREEN_GLOWING), BlockBehaviour.Properties.copy(RED_GLOWING_HICKORY_SAPLING.get())));
 
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
