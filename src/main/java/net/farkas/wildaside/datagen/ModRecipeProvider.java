@@ -30,12 +30,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         smelting(pWriter, List.of(ModBlocks.VIBRION_GEL.get()), RecipeCategory.MISC, ModItems.VIBRION.get(), 0.25f, 200, "vibrion");
         smelting(pWriter, List.of(ModBlocks.LIT_VIBRION_GEL.get()), RecipeCategory.MISC, ModItems.VIBRION.get(), 0.25f, 200, "vibrion");
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.VIBRION_BLOCK.get())
-                .pattern("SS")
-                .pattern("SS")
-                .define('S', ModItems.VIBRION.get())
-                .unlockedBy(getHasName(ModItems.VIBRION.get()), has(ModItems.VIBRION.get()))
-                .save(pWriter);
+        simpleShapedRecipe(ModBlocks.VIBRION_BLOCK.get(), 1, ModItems.VIBRION.get()).save(pWriter);
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.VIBRION.get(), 4)
                 .requires(ModBlocks.VIBRION_BLOCK.get())
@@ -81,26 +76,10 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 ModItems.SUBSTILIUM_BOAT.get(), ModItems.SUBSTILIUM_CHEST_BOAT.get());
         defaultWoodSet(pWriter, SUBSTILIUM_WOODSET);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get(), 2)
-                .pattern("SS")
-                .pattern("SS")
-                .define('S', ModBlocks.SUBSTILIUM_SOIL.get())
-                .unlockedBy(getHasName(ModBlocks.SUBSTILIUM_SOIL.get()), has(ModBlocks.SUBSTILIUM_SOIL.get()))
-                .save(pWriter);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get(), 4)
-                .pattern("SS")
-                .pattern("SS")
-                .define('S', ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get())
-                .unlockedBy(getHasName(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get()), has(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get()))
-                .save(pWriter);
-
-        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.SUBSTILIUM_TILES.get(), 4)
-                .pattern("SS")
-                .pattern("SS")
-                .define('S', ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get())
-                .unlockedBy(getHasName(ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get()), has(ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get()))
-                .save(pWriter);
+        simpleShapedRecipe(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get(), 2, ModBlocks.SUBSTILIUM_SOIL.get(), RecipeCategory.BUILDING_BLOCKS).save(pWriter);
+        simpleShapedRecipe(ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get(), 4, ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get(), RecipeCategory.BUILDING_BLOCKS).save(pWriter);
+        simpleShapedRecipe(ModBlocks.SUBSTILIUM_TILES.get(), 4, ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get(), RecipeCategory.BUILDING_BLOCKS).save(pWriter);
 
         Block tiles = ModBlocks.SUBSTILIUM_TILES.get();
         stoneCutting(pWriter, ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get(), ModBlocks.CHISELED_SUBSTILIUM_SOIL.get());
