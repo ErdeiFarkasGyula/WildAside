@@ -25,7 +25,7 @@ public class EntoriumPill extends Item {
                 AdvancementHandler.givePlayerAdvancement(player, "purification_pill");
             }
 
-            player.addEffect(new MobEffectInstance(ModMobEffects.IMMUNITY.get(), 20 * 20, amplifier));
+            player.addEffect(new MobEffectInstance(ModMobEffects.IMMUNITY.get(), (amplifier + 1) * 10 * 20, amplifier));
             player.removeEffect(MobEffects.POISON);
 
         }
