@@ -39,7 +39,6 @@ public class ModParticles {
             PARTICLE_TYPES.register("green_glowing_hickory_particle", () -> new SimpleParticleType(true));
 
     public static final EnumMap<HickoryColour, RegistryObject<SimpleParticleType>> HICKORY_PARTICLES = new EnumMap<>(HickoryColour.class);
-
     static {
         HICKORY_PARTICLES.put(HickoryColour.HICKORY, HICKORY_PARTICLE);
         HICKORY_PARTICLES.put(HickoryColour.RED_GLOWING, RED_GLOWING_HICKORY_PARTICLE);
