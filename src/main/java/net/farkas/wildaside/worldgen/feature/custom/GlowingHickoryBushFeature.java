@@ -39,7 +39,7 @@ public class GlowingHickoryBushFeature extends Feature<NoneFeatureConfiguration>
 
         for (int x = -1; x <= 1; x++) {
             for (int z = -1; z <= 1; z++) {
-                if (x == 0 || z == 0 || random.nextFloat() < 0.5f) {
+                if (x == 0 || z == 0 || random.nextFloat() < 0.25f) {
                     var newPos = pos.offset(x, 0, z);
                     if (!level.getBlockState(newPos).isSolid()) {
                         level.setBlock(newPos, leaves, 3);
@@ -53,7 +53,6 @@ public class GlowingHickoryBushFeature extends Feature<NoneFeatureConfiguration>
         if (!level.getBlockState(topPos).isSolid()) {
             level.setBlock(topPos, leaves, 3);
             level.scheduleTick(topPos, level.getBlockState(topPos).getBlock(), 0);
-
         }
 
         return true;
