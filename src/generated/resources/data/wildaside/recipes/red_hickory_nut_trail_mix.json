@@ -15,16 +15,16 @@
       "item": "minecraft:sweet_berries"
     },
     {
-      "item": "wildaside:hickory_leaf"
+      "item": "wildaside:red_glowing_hickory_leaf"
     },
     {
-      "item": "wildaside:hickory_leaf"
+      "item": "wildaside:red_glowing_hickory_leaf"
     },
     {
-      "item": "wildaside:hickory_leaf"
+      "item": "wildaside:red_glowing_hickory_leaf"
     }
   ],
   "result": {
-    "item": "wildaside:hickory_nut_trail_mix"
+    "item": "wildaside:red_hickory_nut_trail_mix"
   }
 }

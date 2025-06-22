@@ -3,6 +3,7 @@ package net.farkas.wildaside.datagen;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.item.ModItems;
+import net.farkas.wildaside.item.custom.HickoryNutTrailMix;
 import net.farkas.wildaside.util.HickoryColour;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
@@ -131,16 +132,8 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
         for (HickoryColour colour : HickoryColour.values()) {
             simpleShapedRecipe(ModBlocks.HICKORY_LEAVES_BLOCKS.get(colour).get(), 1, ModItems.LEAF_ITEMS.get(colour).get()).save(pWriter);
+            hickoryNutTrailMix((HickoryNutTrailMix)ModItems.TRAIL_MIX_ITEMS.get(colour).get()).save(pWriter);
         }
-
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.HICKORY_NUT_TRAIL_MIX.get())
-                .requires(ModItems.HICKORY_NUT.get())
-                .requires(Items.BOWL)
-                .requires(Items.GLOW_BERRIES)
-                .requires(Items.SWEET_BERRIES)
-                .requires(Items.KELP)
-                .unlockedBy(getHasName(ModItems.HICKORY_NUT.get()), has(ModItems.HICKORY_NUT.get()))
-                .save(pWriter);
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.PINK_DYE, 1)
                 .requires(ModBlocks.PINKSTER_FLOWER.get())
@@ -154,7 +147,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
     }
 
-    public ShapedRecipeBuilder simpleShapedRecipe(ItemLike output, int count, ItemLike input, RecipeCategory category) {
+    private ShapedRecipeBuilder simpleShapedRecipe(ItemLike output, int count, ItemLike input, RecipeCategory category) {
         return ShapedRecipeBuilder.shaped(category, output, count)
                 .pattern("SS")
                 .pattern("SS")
@@ -162,12 +155,22 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .unlockedBy(getHasName(input), has(input));
     }
 
-    public ShapedRecipeBuilder simpleShapedRecipe(ItemLike output, int count, ItemLike input) {
+    private ShapedRecipeBuilder simpleShapedRecipe(ItemLike output, int count, ItemLike input) {
         return ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output, count)
                 .pattern("SS")
                 .pattern("SS")
                 .define('S', input)
                 .unlockedBy(getHasName(input), has(input));
+    }
+
+    private ShapelessRecipeBuilder hickoryNutTrailMix(HickoryNutTrailMix mixItem) {
+         return ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, mixItem)
+                .requires(ModItems.HICKORY_NUT.get())
+                .requires(Items.BOWL)
+                .requires(Items.GLOW_BERRIES)
+                .requires(Items.SWEET_BERRIES)
+                .requires(ModItems.LEAF_ITEMS.get(mixItem.getColour()).get(), 3)
+                .unlockedBy(getHasName(ModItems.HICKORY_NUT.get()), has(ModItems.HICKORY_NUT.get()));
     }
 
     protected static void smelting(Consumer<FinishedRecipe> pFinishedRecipeConsumer, List<ItemLike> pIngredients, RecipeCategory pCategory, ItemLike pResult, float pExperience, int pCookingTIme, String pGroup) {
@@ -211,7 +214,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
     }
 
-    protected static void defaultWoodSet(Consumer<FinishedRecipe> pWriter, List<ItemLike> blocks) {
+    private static void defaultWoodSet(Consumer<FinishedRecipe> pWriter, List<ItemLike> blocks) {
         ItemLike log = blocks.get(0);
         ItemLike str_log = blocks.get(1);
         ItemLike wood = blocks.get(2);

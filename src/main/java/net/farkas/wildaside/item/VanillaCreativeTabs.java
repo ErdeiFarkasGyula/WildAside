@@ -60,6 +60,10 @@ public class VanillaCreativeTabs {
         if (tab == CreativeModeTabs.FOOD_AND_DRINKS) {
             event.accept(ModItems.HICKORY_NUT);
             event.accept(ModItems.HICKORY_NUT_TRAIL_MIX);
+            event.accept(ModItems.RED_HICKORY_NUT_TRAIL_MIX);
+            event.accept(ModItems.BROWN_HICKORY_NUT_TRAIL_MIX);
+            event.accept(ModItems.YELLOW_HICKORY_NUT_TRAIL_MIX);
+            event.accept(ModItems.GREEN_HICKORY_NUT_TRAIL_MIX);
         }
         if (tab == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
             event.accept(ModBlocks.BIOENGINEERING_WORKSTATION);

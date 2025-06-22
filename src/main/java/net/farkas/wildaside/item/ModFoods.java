@@ -9,6 +9,6 @@ public class ModFoods {
             .saturationMod(0.2f).build();
     public static final FoodProperties ENTORIUM_PILL = new FoodProperties.Builder().nutrition(0).fast().alwaysEat()
             .saturationMod(0f).build();
-    public static final FoodProperties HICKORY_NUT_TRAIL_MIX = new FoodProperties.Builder().nutrition(2)
-            .saturationMod(8f).build();
+    public static final FoodProperties HICKORY_NUT_TRAIL_MIX = new FoodProperties.Builder().nutrition(2).alwaysEat()
+            .saturationMod(6f).build();
 }

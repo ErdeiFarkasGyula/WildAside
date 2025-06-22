@@ -61,18 +61,17 @@ public class ModItems {
             () ->  new FuelItem(new Item.Properties(), 100));
 
     public static final RegistryObject<Item> HICKORY_LEAF = ITEMS.register("hickory_leaf",
-            () ->  new HickoryLeafItem(new Item.Properties(), HickoryColour.HICKORY));
+            () ->  new HickoryLeafItem(new Item.Properties(), 50, HickoryColour.HICKORY));
     public static final RegistryObject<Item> RED_GLOWING_HICKORY_LEAF = ITEMS.register("red_glowing_hickory_leaf",
-            () ->  new HickoryLeafItem(new Item.Properties(), HickoryColour.RED_GLOWING));
+            () ->  new HickoryLeafItem(new Item.Properties(), 50, HickoryColour.RED_GLOWING));
     public static final RegistryObject<Item> BROWN_GLOWING_HICKORY_LEAF = ITEMS.register("brown_glowing_hickory_leaf",
-            () ->  new HickoryLeafItem(new Item.Properties(), HickoryColour.BROWN_GLOWING));
+            () ->  new HickoryLeafItem(new Item.Properties(), 50, HickoryColour.BROWN_GLOWING));
     public static final RegistryObject<Item> YELLOW_GLOWING_HICKORY_LEAF = ITEMS.register("yellow_glowing_hickory_leaf",
-            () ->  new HickoryLeafItem(new Item.Properties(), HickoryColour.YELLOW_GLOWING));
+            () ->  new HickoryLeafItem(new Item.Properties(), 50, HickoryColour.YELLOW_GLOWING));
     public static final RegistryObject<Item> GREEN_GLOWING_HICKORY_LEAF = ITEMS.register("green_glowing_hickory_leaf",
-            () ->  new HickoryLeafItem(new Item.Properties(), HickoryColour.GREEN_GLOWING));
+            () ->  new HickoryLeafItem(new Item.Properties(), 50, HickoryColour.GREEN_GLOWING));
 
     public static final EnumMap<HickoryColour, RegistryObject<Item>> LEAF_ITEMS = new EnumMap<>(HickoryColour.class);
-
     static {
         LEAF_ITEMS.put(HickoryColour.HICKORY, HICKORY_LEAF);
         LEAF_ITEMS.put(HickoryColour.RED_GLOWING, RED_GLOWING_HICKORY_LEAF);
@@ -81,9 +80,26 @@ public class ModItems {
         LEAF_ITEMS.put(HickoryColour.GREEN_GLOWING, GREEN_GLOWING_HICKORY_LEAF);
     }
 
-
     public static final RegistryObject<Item> HICKORY_NUT_TRAIL_MIX = ITEMS.register("hickory_nut_trail_mix",
-            () ->  new HickoryNutTrailMix(new Item.Properties().stacksTo(1).food(ModFoods.HICKORY_NUT_TRAIL_MIX)));
+            () ->  new HickoryNutTrailMix(new Item.Properties().stacksTo(1).food(ModFoods.HICKORY_NUT_TRAIL_MIX), HickoryColour.HICKORY));
+    public static final RegistryObject<Item> RED_HICKORY_NUT_TRAIL_MIX = ITEMS.register("red_hickory_nut_trail_mix",
+            () ->  new HickoryNutTrailMix(new Item.Properties().stacksTo(1).food(ModFoods.HICKORY_NUT_TRAIL_MIX), HickoryColour.RED_GLOWING));
+    public static final RegistryObject<Item> BROWN_HICKORY_NUT_TRAIL_MIX = ITEMS.register("brown_hickory_nut_trail_mix",
+            () ->  new HickoryNutTrailMix(new Item.Properties().stacksTo(1).food(ModFoods.HICKORY_NUT_TRAIL_MIX), HickoryColour.BROWN_GLOWING));
+    public static final RegistryObject<Item> YELLOW_HICKORY_NUT_TRAIL_MIX = ITEMS.register("yellow_hickory_nut_trail_mix",
+            () ->  new HickoryNutTrailMix(new Item.Properties().stacksTo(1).food(ModFoods.HICKORY_NUT_TRAIL_MIX), HickoryColour.YELLOW_GLOWING));
+    public static final RegistryObject<Item> GREEN_HICKORY_NUT_TRAIL_MIX = ITEMS.register("green_hickory_nut_trail_mix",
+            () ->  new HickoryNutTrailMix(new Item.Properties().stacksTo(1).food(ModFoods.HICKORY_NUT_TRAIL_MIX), HickoryColour.GREEN_GLOWING));
+
+    public static final EnumMap<HickoryColour, RegistryObject<Item>> TRAIL_MIX_ITEMS = new EnumMap<>(HickoryColour.class);
+    static {
+        TRAIL_MIX_ITEMS.put(HickoryColour.HICKORY, HICKORY_NUT_TRAIL_MIX);
+        TRAIL_MIX_ITEMS.put(HickoryColour.RED_GLOWING, RED_HICKORY_NUT_TRAIL_MIX);
+        TRAIL_MIX_ITEMS.put(HickoryColour.BROWN_GLOWING, BROWN_HICKORY_NUT_TRAIL_MIX);
+        TRAIL_MIX_ITEMS.put(HickoryColour.YELLOW_GLOWING, YELLOW_HICKORY_NUT_TRAIL_MIX);
+        TRAIL_MIX_ITEMS.put(HickoryColour.GREEN_GLOWING, GREEN_HICKORY_NUT_TRAIL_MIX);
+    }
+
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

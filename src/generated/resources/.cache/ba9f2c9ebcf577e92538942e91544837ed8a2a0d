@@ -1,12 +1,14 @@
-// 1.20.1	2025-06-17T17:16:58.6263621	Item Models: wildaside
+// 1.20.1	2025-06-22T17:36:28.8884376	Item Models: wildaside
 97ec986340aeed12ebc0d678c97ba34a7afb7b7c assets/wildaside/models/item/brown_glowing_hickory_leaf.json
 657a44b343b52d1185c119350b9599bc495c3976 assets/wildaside/models/item/brown_glowing_hickory_sapling.json
+9a615629962edb4ec1311e1782a12ec189c42bf4 assets/wildaside/models/item/brown_hickory_nut_trail_mix.json
 7c314b9855fa14cfb6f45f4b35479303da8c369e assets/wildaside/models/item/entorium.json
 72ebbdfaa5d8b7399ab25ba412fa3bfdc404a9a3 assets/wildaside/models/item/entorium_ore.json
 b9e8179243c134d4c8ef147d30f464ca785a6b5b assets/wildaside/models/item/entorium_pill.json
 e5f1479fbf76bd4d9780abf55c782b4291be7387 assets/wildaside/models/item/fertiliser_bomb.json
 152bdd71db57062082146bd01d115f9d7270f261 assets/wildaside/models/item/green_glowing_hickory_leaf.json
 38b74d994c2cdaad9628ff8db55869887a2feddf assets/wildaside/models/item/green_glowing_hickory_sapling.json
+af27ea3019e2bd5f09ad783611ca051d9dd082f7 assets/wildaside/models/item/green_hickory_nut_trail_mix.json
 8736fb3e4b7f17bd9161702e5696a8b936b15d90 assets/wildaside/models/item/hanging_vibrion_vines.json
 8736fb3e4b7f17bd9161702e5696a8b936b15d90 assets/wildaside/models/item/hanging_vibrion_vines_plant.json
 79072f42524870a091c9a2bb819a59c1661af479 assets/wildaside/models/item/hickory_boat.json
@@ -34,6 +36,7 @@ a26dc7269bff8cf5a6ca1d2ba5c2a4cd4928e57e assets/wildaside/models/item/hickory_ha
 968dcec5a5c71d9ad044f4e3738c602ffad2985d assets/wildaside/models/item/pinkster_flower.json
 11380195f4d9e1c90960c8ca0b1f71216178132c assets/wildaside/models/item/red_glowing_hickory_leaf.json
 d352d1091ffaa4c5a75c1920c4b91cb2664f1592 assets/wildaside/models/item/red_glowing_hickory_sapling.json
+e4b87ba63e474fc89fecd26dbd7bc629f6947abb assets/wildaside/models/item/red_hickory_nut_trail_mix.json
 886632645a8f997a9f6e142cdf190a3305f2bd99 assets/wildaside/models/item/spore_arrow.json
 8adc0b5bb5773db56c57a0374736715a147725ed assets/wildaside/models/item/spore_bomb.json
 5d6aa0d659537fe959c1581e669c5f9553426425 assets/wildaside/models/item/spotted_wintergreen.json
@@ -66,3 +69,4 @@ ba9b6c59e041ca210f319502611fc9d1be5045be assets/wildaside/models/item/vibrion.js
 78d1091c6bfee6f5eb6f3d286f67bc150b54208f assets/wildaside/models/item/vibrion_growth.json
 ba1aff45b7a91e03dcffd606c80c07ca2096b829 assets/wildaside/models/item/yellow_glowing_hickory_leaf.json
 cb73f5747f3c67d57251467433526023962b859a assets/wildaside/models/item/yellow_glowing_hickory_sapling.json
+3b9e2342f47d7b69b2b007383be39fe5ecf74e40 assets/wildaside/models/item/yellow_hickory_nut_trail_mix.json

@@ -120,6 +120,10 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModBlocks.GREEN_GLOWING_HICKORY_SAPLING.get());
                         pOutput.accept(ModItems.HICKORY_NUT.get());
                         pOutput.accept(ModItems.HICKORY_NUT_TRAIL_MIX.get());
+                        pOutput.accept(ModItems.RED_HICKORY_NUT_TRAIL_MIX.get());
+                        pOutput.accept(ModItems.BROWN_HICKORY_NUT_TRAIL_MIX.get());
+                        pOutput.accept(ModItems.YELLOW_HICKORY_NUT_TRAIL_MIX.get());
+                        pOutput.accept(ModItems.GREEN_HICKORY_NUT_TRAIL_MIX.get());
                         pOutput.accept(ModBlocks.SPOTTED_WINTERGREEN.get());
                         pOutput.accept(ModBlocks.PINKSTER_FLOWER.get());
 

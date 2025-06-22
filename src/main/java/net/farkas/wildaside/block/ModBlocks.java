@@ -49,14 +49,15 @@ public class ModBlocks {
 
     //VIBRION
     public static final RegistryObject<Block> VIBRION_BLOCK = registerBlock("vibrion_block",
-            () ->  new DropExperienceBlock(BlockBehaviour.Properties.of()
+            () ->  new BouncyExperienceBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_YELLOW)
                     .sound(SoundType.SHROOMLIGHT)
                     .strength(2F,  1F)
                     .lightLevel(l -> 7),  UniformInt.of(1, 2)));
 
     public static final RegistryObject<Block> COMPRESSED_VIBRION_BLOCK = registerBlock("compressed_vibrion_block",
-            () ->  new DropExperienceBlock(BlockBehaviour.Properties.copy(VIBRION_BLOCK.get()).lightLevel(s -> 15), UniformInt.of(4, 8)));
+            () ->  new DropExperienceBlock(BlockBehaviour.Properties.copy(VIBRION_BLOCK.get())
+                    .lightLevel(s -> 15), UniformInt.of(4, 8)));
 
     public static final RegistryObject<Block> VIBRION_GEL = registerBlock("vibrion_gel",
             () ->  new VibrionGel(BlockBehaviour.Properties.of()
@@ -94,7 +95,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> VIBRION_GROWTH = registerBlock("vibrion_growth",
             () ->  new FlowerBlock(() -> MobEffects.POISON, 5, BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_YELLOW)
-                    .lightLevel(l -> 3)
+                    .lightLevel(l -> 2)
                     .sound(SoundType.ROOTS)
                     .noCollission()
                     .noOcclusion()

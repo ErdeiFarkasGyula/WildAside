@@ -2,26 +2,25 @@ package net.farkas.wildaside.item.custom;
 
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.custom.FallenHickoryLeavesBlock;
+import net.farkas.wildaside.item.FuelItem;
 import net.farkas.wildaside.util.HickoryColour;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class HickoryLeafItem extends Item {
+public class HickoryLeafItem extends FuelItem {
     private final HickoryColour colour;
 
-    public HickoryLeafItem(Properties pProperties, HickoryColour colour) {
-        super(pProperties);
+    public HickoryLeafItem(Properties pProperties, int burnTime, HickoryColour colour) {
+        super(pProperties, burnTime);
         this.colour = colour;
     }
 
