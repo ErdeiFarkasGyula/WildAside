@@ -173,11 +173,11 @@ public class ModConfiguredFeatures {
                         new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.PINKSTER_FLOWER.get())))));
 
         BeehiveDecorator glowingBeehive = new BeehiveDecorator(0.015f);
-        ImmutableList hickoryDecorator = ImmutableList.of(new BeehiveDecorator(0.01f), new FallenLeavesDecorator(0.1f, HickoryColour.HICKORY));
-        ImmutableList redGlowingHickoryDecorator = ImmutableList.of(glowingBeehive, new FallenLeavesDecorator(0.1f, HickoryColour.RED_GLOWING));
-        ImmutableList brownGlowingHickoryDecorator = ImmutableList.of(glowingBeehive, new FallenLeavesDecorator(0.1f, HickoryColour.BROWN_GLOWING));
-        ImmutableList yellowGlowingHickoryDecorator = ImmutableList.of(glowingBeehive, new FallenLeavesDecorator(0.1f, HickoryColour.YELLOW_GLOWING));
-        ImmutableList greenGlowingHickoryDecorator = ImmutableList.of(glowingBeehive, new FallenLeavesDecorator(0.1f, HickoryColour.GREEN_GLOWING));
+        ImmutableList hickoryDecorator = ImmutableList.of(new BeehiveDecorator(0.01f), new FallenLeavesDecorator(0.075f, HickoryColour.HICKORY));
+        ImmutableList redGlowingHickoryDecorator = ImmutableList.of(glowingBeehive, new FallenLeavesDecorator(0.075f, HickoryColour.RED_GLOWING));
+        ImmutableList brownGlowingHickoryDecorator = ImmutableList.of(glowingBeehive, new FallenLeavesDecorator(0.075f, HickoryColour.BROWN_GLOWING));
+        ImmutableList yellowGlowingHickoryDecorator = ImmutableList.of(glowingBeehive, new FallenLeavesDecorator(0.075f, HickoryColour.YELLOW_GLOWING));
+        ImmutableList greenGlowingHickoryDecorator = ImmutableList.of(glowingBeehive, new FallenLeavesDecorator(0.075f, HickoryColour.GREEN_GLOWING));
 
         register(context, HICKORY_TREE, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.HICKORY_LOG.get()),

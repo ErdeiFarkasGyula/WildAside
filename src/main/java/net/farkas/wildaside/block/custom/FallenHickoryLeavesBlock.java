@@ -46,7 +46,7 @@ public class FallenHickoryLeavesBlock extends Block {
     public static final IntegerProperty COUNT = IntegerProperty.create("count", 1, MAX_COUNT);
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     private static final int minLight = 0;
-    private static final int maxLight = 7;
+    private static final int maxLight = 3;
     public static final IntegerProperty LIGHT = IntegerProperty.create("light", minLight, maxLight);
     public static BooleanProperty FIXED_LIGHTING = BooleanProperty.create("fixed_lighting");
 
@@ -152,16 +152,16 @@ public class FallenHickoryLeavesBlock extends Block {
         int newLight = 0;
 
         if (time > 22000) {
-            newLight = Math.round(7 - (maxLight * ((time - 22000f) / 2000f)));
+            newLight = Math.round(maxLight - (maxLight * ((time - 22000f) / 2000f)));
         } else
             if (time > 12000 && time < 14000) {
                 newLight = Math.round(maxLight * ((time - 12000f) / 2000f));
             } else
                 if (time > 14000) {
-                    newLight = 7;
+                    newLight = maxLight;
                 } else
                     if (time < 12000) {
-                        newLight = 0;
+                        newLight = minLight;
                     }
 
         newLight = Math.min(Math.max(0, newLight), 7);
