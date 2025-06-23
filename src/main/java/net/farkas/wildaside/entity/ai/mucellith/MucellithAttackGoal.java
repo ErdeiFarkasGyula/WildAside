@@ -93,6 +93,8 @@ public class MucellithAttackGoal extends Goal {
         } else
             if (attackTime == 7) {
                 entity.setAttacking(true);
+                entity.attackAnimation.start(entity.tickCount);
+                entity.attackAnimationTimeout = entity.attackAnimationMax;
             }
     }
 }
