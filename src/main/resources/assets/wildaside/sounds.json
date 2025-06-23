@@ -1,0 +1,12 @@
+{
+  "music.vibrion_hive": {
+    "subtitles": "sounds.wildaside.vibrion_hive_music",
+    "category": "music",
+    "sounds": [
+      {
+        "name": "wildaside:music/vibrion_hive",
+        "stream": true
+      }
+    ]
+  }
+}

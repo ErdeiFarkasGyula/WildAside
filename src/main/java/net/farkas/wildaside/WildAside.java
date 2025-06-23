@@ -19,6 +19,7 @@ import net.farkas.wildaside.recipe.ModRecipes;
 import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationScreen;
 import net.farkas.wildaside.screen.ModMenuTypes;
 import net.farkas.wildaside.screen.potion_blaster.PotionBlasterScreen;
+import net.farkas.wildaside.sound.ModSounds;
 import net.farkas.wildaside.util.ModWoodTypes;
 import net.farkas.wildaside.worldgen.biome.ModTerraBlenderAPI;
 import net.farkas.wildaside.worldgen.biome.surface.ModSurfaceRules;
@@ -67,6 +68,8 @@ public class WildAside
 
         ModCreativeModeTabs.register(modEventBus);
 
+        ModSounds.register(modEventBus);
+
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
 
@@ -95,7 +98,6 @@ public class WildAside
         modEventBus.addListener(VanillaCreativeTabs::addCreative);
 
         //context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
-
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {

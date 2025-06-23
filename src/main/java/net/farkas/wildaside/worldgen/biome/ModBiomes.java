@@ -3,13 +3,17 @@ package net.farkas.wildaside.worldgen.biome;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.particle.ModParticles;
+import net.farkas.wildaside.sound.ModSounds;
 import net.farkas.wildaside.worldgen.ModPlacedFeatures;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.Music;
 import net.minecraft.sounds.Musics;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -181,7 +185,7 @@ public class ModBiomes {
                         .fogColor(12638463)
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS)
                         .ambientParticle(new AmbientParticleSettings(ModParticles.STILL_SUBSTILIUM_PARTICLE.get(), 0.05f))
-                        .backgroundMusic(Musics.createGameMusic(SoundEvents.AMBIENT_CRIMSON_FOREST_LOOP)).build())
+                        .backgroundMusic(new Music(Holder.direct(ModSounds.VIBRION_HIVE_MUSIC.get()), 6000, 12000, true)).build())
                 .build();
     }
 

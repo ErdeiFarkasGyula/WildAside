@@ -18,10 +18,12 @@
       "tick_delay": 6000
     },
     "music": {
-      "max_delay": 24000,
-      "min_delay": 12000,
+      "max_delay": 12000,
+      "min_delay": 6000,
       "replace_current_music": false,
-      "sound": "minecraft:ambient.crimson_forest.loop"
+      "sound": {
+        "sound_id": "wildaside:music.vibrion_hive"
+      }
     },
     "particle": {
       "options": {
