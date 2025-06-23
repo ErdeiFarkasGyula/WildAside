@@ -3,10 +3,12 @@ package net.farkas.wildaside.entity.custom;
 import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.particle.ModParticles;
+import net.farkas.wildaside.util.AdvancementHandler;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
@@ -20,6 +22,7 @@ import java.util.List;
 
 public class SporeBombEntity extends ThrowableItemProjectile {
     private final float charge;
+    private LivingEntity thrower;
 
     public SporeBombEntity(EntityType<? extends ThrowableItemProjectile> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -34,6 +37,7 @@ public class SporeBombEntity extends ThrowableItemProjectile {
     public SporeBombEntity(Level pLevel, LivingEntity livingEntity, float charge) {
         super(ModEntities.SPORE_BOMB.get(), livingEntity, pLevel);
         this.charge = charge;
+        this.thrower = livingEntity;
     }
 
     @Override
@@ -44,9 +48,10 @@ public class SporeBombEntity extends ThrowableItemProjectile {
 
     @Override
     protected void onHitEntity(EntityHitResult pResult) {
-        if (!this.level().isClientSide) {
+        Level level = this.level();
+        if (!level.isClientSide) {
             pResult.getEntity().hurt(damageSources().thrown(this, this.getOwner()), 2f);
-            applySporeCloud((ServerLevel) pResult.getEntity().level(), pResult.getEntity().blockPosition(), charge);
+            applySporeCloud((ServerLevel)level, pResult.getEntity().blockPosition(), charge);
             this.discard();
         }
     }
@@ -54,7 +59,7 @@ public class SporeBombEntity extends ThrowableItemProjectile {
     @Override
     protected void onHitBlock(BlockHitResult pResult) {
         Level level = this.level();
-        if (!level.isClientSide()) {
+        if (!level.isClientSide) {
             level.broadcastEntityEvent(this, ((byte)3));
             BlockPos position = this.blockPosition();
             applySporeCloud((ServerLevel)level, position, charge);
@@ -62,7 +67,6 @@ public class SporeBombEntity extends ThrowableItemProjectile {
 
         this.discard();
         super.onHitBlock(pResult);
-
     }
 
     private void applySporeCloud(ServerLevel level, BlockPos center, float charge) {
@@ -89,11 +93,20 @@ public class SporeBombEntity extends ThrowableItemProjectile {
         AABB box = new AABB(center).inflate(radius);
         List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, box, e -> !e.isSpectator());
 
+        int entityCount = 0;
+
         for (LivingEntity entity : list) {
+            entityCount++;
             ContaminationHandler.giveContaminationDose(entity, Math.round((charge + entity.getRandom().nextFloat()) * 1000));
             level.sendParticles(particle,
                     entity.getX(), entity.getY() + 0.5, entity.getZ(),
                     5, 0.2, 0.2, 0.2, 0.01);
+        }
+
+        if (entityCount >= 5) {
+            if (this.getOwner() instanceof ServerPlayer serverPlayer) {
+                AdvancementHandler.givePlayerAdvancement(serverPlayer, "weapons_of_mass_infection");
+            }
         }
     }
 }
