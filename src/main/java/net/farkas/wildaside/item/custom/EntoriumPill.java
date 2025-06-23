@@ -18,11 +18,14 @@ public class EntoriumPill extends Item {
     @Override
     public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity) {
         if (!pLevel.isClientSide && pLivingEntity instanceof ServerPlayer player) {
-            MobEffectInstance cont = player.getEffect(ModMobEffects.CONTAMINATION.get());
-            int amplifier = cont != null ? cont.getAmplifier() + 1 : 0;
+            int amplifier = 0;
 
             if (player.hasEffect(ModMobEffects.CONTAMINATION.get())) {
-                AdvancementHandler.givePlayerAdvancement(player, "purification_pill");
+                MobEffectInstance cont = pLivingEntity.getEffect(ModMobEffects.CONTAMINATION.get());
+                amplifier = cont.getAmplifier() + 1;
+                if (amplifier >= 5) {
+                    AdvancementHandler.givePlayerAdvancement(player, "purification_pill");
+                }
             }
 
             player.addEffect(new MobEffectInstance(ModMobEffects.IMMUNITY.get(), (amplifier + 1) * 10 * 20, amplifier));
