@@ -114,7 +114,7 @@
         "type": "wildaside:mucellith",
         "maxCount": 2,
         "minCount": 1,
-        "weight": 20
+        "weight": 10
       },
       {
         "type": "minecraft:spider",
