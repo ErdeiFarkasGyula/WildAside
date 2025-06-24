@@ -1,6 +1,7 @@
 package net.farkas.wildaside.util;
 
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
@@ -10,9 +11,9 @@ public class WeightedFlowerChoice {
         public final int weight;
         public final BlockState state;
 
-        public WeightedFlower(int weight, BlockState state) {
+        public WeightedFlower(int weight, Block block) {
             this.weight = weight;
-            this.state = state;
+            this.state = block.defaultBlockState();
         }
     }
 

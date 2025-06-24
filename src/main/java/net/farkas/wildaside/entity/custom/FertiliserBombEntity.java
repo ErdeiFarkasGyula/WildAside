@@ -34,11 +34,17 @@ public class FertiliserBombEntity extends ThrowableItemProjectile {
     private final LivingEntity thrower;
 
     List<WeightedFlowerChoice.WeightedFlower> flowerList = new ArrayList<>(List.of(
-            new WeightedFlowerChoice.WeightedFlower(5, Blocks.DANDELION.defaultBlockState()),
-            new WeightedFlowerChoice.WeightedFlower(5, Blocks.POPPY.defaultBlockState()),
-            new WeightedFlowerChoice.WeightedFlower(3, Blocks.BLUE_ORCHID.defaultBlockState()),
-            new WeightedFlowerChoice.WeightedFlower(2, Blocks.ALLIUM.defaultBlockState()),
-            new WeightedFlowerChoice.WeightedFlower(1, Blocks.AZURE_BLUET.defaultBlockState())
+            new WeightedFlowerChoice.WeightedFlower(5, Blocks.DANDELION),
+            new WeightedFlowerChoice.WeightedFlower(5, Blocks.POPPY),
+            new WeightedFlowerChoice.WeightedFlower(3, Blocks.BLUE_ORCHID),
+            new WeightedFlowerChoice.WeightedFlower(2, Blocks.ALLIUM),
+            new WeightedFlowerChoice.WeightedFlower(2, Blocks.ORANGE_TULIP),
+            new WeightedFlowerChoice.WeightedFlower(2, Blocks.PINK_TULIP),
+            new WeightedFlowerChoice.WeightedFlower(2, Blocks.RED_TULIP),
+            new WeightedFlowerChoice.WeightedFlower(2, Blocks.WHITE_TULIP),
+            new WeightedFlowerChoice.WeightedFlower(2, Blocks.OXEYE_DAISY),
+            new WeightedFlowerChoice.WeightedFlower(2, Blocks.CORNFLOWER),
+            new WeightedFlowerChoice.WeightedFlower(1, Blocks.AZURE_BLUET)
     ));
     WeightedFlowerChoice flowerChoice = new WeightedFlowerChoice(flowerList);
 
@@ -82,8 +88,8 @@ public class FertiliserBombEntity extends ThrowableItemProjectile {
                 .orElse("");
         if (biomePath.contains("hickory")) {
             AdvancementHandler.givePlayerAdvancement((ServerPlayer)thrower, "fertile_forest");
-            flowerList.add(new WeightedFlowerChoice.WeightedFlower(4, ModBlocks.SPOTTED_WINTERGREEN.get().defaultBlockState()));
-            flowerList.add(new WeightedFlowerChoice.WeightedFlower(4, ModBlocks.PINKSTER_FLOWER.get().defaultBlockState()));
+            flowerList.add(new WeightedFlowerChoice.WeightedFlower(4, ModBlocks.SPOTTED_WINTERGREEN.get()));
+            flowerList.add(new WeightedFlowerChoice.WeightedFlower(4, ModBlocks.PINKSTER_FLOWER.get()));
         }
 
         for (int dx = -radius; dx <= radius; dx++) {
