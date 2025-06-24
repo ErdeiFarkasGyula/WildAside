@@ -361,10 +361,10 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
     @Override
     protected void saveAdditional(CompoundTag pTag) {
         pTag.put("inventory", itemHandler.serializeNBT());
-        pTag.putInt("spore_blaster.ticks_left", potionTicksLeft);
-        pTag.putInt("spore_blaster.max_ticks", maxPotionTicks);
-        pTag.putInt("spore_blaster.colour", potionColour);
-        pTag.put("spore_blaster.potion", activePotion.save(new CompoundTag()));
+        pTag.putInt("ticks_left", potionTicksLeft);
+        pTag.putInt("max_ticks", maxPotionTicks);
+        pTag.putInt("colour", potionColour);
+        pTag.put("potion", activePotion.save(new CompoundTag()));
 
         super.saveAdditional(pTag);
     }
@@ -373,11 +373,11 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
     public void load(CompoundTag pTag) {
         super.load(pTag);
         itemHandler.deserializeNBT(pTag.getCompound("inventory"));
-        potionTicksLeft = pTag.getInt("spore_blaster.ticks_left");
-        maxPotionTicks = pTag.getInt("spore_blaster.max_ticks");
-        potionColour = pTag.getInt("spore_blaster.colour");
-        if (pTag.contains("spore_blaster.potion")) {
-            activePotion = ItemStack.of(pTag.getCompound("spore_blaster.potion"));
+        potionTicksLeft = pTag.getInt("ticks_left");
+        maxPotionTicks = pTag.getInt("max_ticks");
+        potionColour = pTag.getInt("colour");
+        if (pTag.contains("potion")) {
+            activePotion = ItemStack.of(pTag.getCompound("potion"));
         } else {
             activePotion = ItemStack.EMPTY;
         }
