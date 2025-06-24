@@ -2,6 +2,7 @@ package net.farkas.wildaside.block.entity;
 
 import net.farkas.wildaside.block.custom.vibrion.SporeBlaster;
 import net.farkas.wildaside.particle.ModParticles;
+import net.farkas.wildaside.util.BlasterUtil;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -94,7 +95,7 @@ public class SporeBlasterBlockEntity extends BlockEntity {
                     Direction facing = nextBlock.getValue(TrapDoorBlock.FACING);
                     if (facing.getAxis() == Direction.Axis.X) {
                         Direction.Axis axis = originBlock.getValue(SporeBlaster.FACING).getAxis();
-                        if (axisToDirection(axis, dir.getStepX()) == facing) {
+                        if (BlasterUtil.axisToDirection(axis, dir.getStepX()) == facing) {
                             return false;
                         } else {
                             shouldBreakNext = true;
@@ -116,7 +117,7 @@ public class SporeBlasterBlockEntity extends BlockEntity {
                     }
                 } else {
                     if (facing.getAxis() != Direction.Axis.X) {
-                        if (doorDirectionCheck(dir.getAxis(), dir.getStepX(), facing)) {
+                        if (BlasterUtil.doorDirectionCheck(dir.getAxis(), dir.getStepX(), facing)) {
                             if (nextBlock.getValue(DoorBlock.HINGE) == DoorHingeSide.LEFT) {
                                 return false;
                             }
@@ -166,7 +167,7 @@ public class SporeBlasterBlockEntity extends BlockEntity {
                     }
                 } else {
                     if (facing.getAxis() != Direction.Axis.Z) {
-                        if (doorDirectionCheck(axis, dir.getStepZ(), facing)) {
+                        if (BlasterUtil.doorDirectionCheck(axis, dir.getStepZ(), facing)) {
                             if (nextBlock.getValue(DoorBlock.HINGE) == DoorHingeSide.RIGHT) {
                                 return false;
                             }
@@ -185,32 +186,6 @@ public class SporeBlasterBlockEntity extends BlockEntity {
         return true;
     }
 
-    private Direction axisToDirection(Direction.Axis axis, int offset) {
-        if (axis.equals(Direction.Axis.X)) {
-            if (offset == 1) return Direction.EAST;
-            else return Direction.WEST;
-        }
-        if (axis.equals(Direction.Axis.Y)) {
-            if (offset == 1) return Direction.UP;
-            else return Direction.DOWN;
-        }
-        if (axis.equals(Direction.Axis.Z)) {
-            if (offset == 1) return Direction.SOUTH;
-            else return Direction.NORTH;
-        }
-
-        return Direction.UP;
-    }
-
-    private Boolean doorDirectionCheck(Direction.Axis axis, int offset, Direction facing) {
-        if (axis.equals(Direction.Axis.X)) {
-            return axisToDirection(Direction.Axis.Z, -offset) == facing;
-        }
-        if (axis.equals(Direction.Axis.Z)) {
-            return axisToDirection(Direction.Axis.X, -offset) == facing;
-        }
-        return false;
-    }
 
     @Override
     public void load(CompoundTag tag) {

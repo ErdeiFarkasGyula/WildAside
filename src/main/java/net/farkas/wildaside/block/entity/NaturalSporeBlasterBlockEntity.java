@@ -1,6 +1,7 @@
 package net.farkas.wildaside.block.entity;
 
 import net.farkas.wildaside.particle.ModParticles;
+import net.farkas.wildaside.util.BlasterUtil;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -107,7 +108,7 @@ public class NaturalSporeBlasterBlockEntity extends BlockEntity {
                     Direction facing = nextBlock.getValue(TrapDoorBlock.FACING);
                     if (facing.getAxis() == Direction.Axis.X) {
                         Direction.Axis axis = originBlock.getValue(RotatedPillarBlock.AXIS);
-                        if (axisToDirection(axis, x) == facing) {
+                        if (BlasterUtil.axisToDirection(axis, x) == facing) {
                             return false;
                         } else {
                             shouldBreakNext = true;
@@ -122,7 +123,7 @@ public class NaturalSporeBlasterBlockEntity extends BlockEntity {
 
                 if (!open) {
                     if (facing.getAxis() == Direction.Axis.X) {
-                        if (axisToDirection(axis, x) == facing) {
+                        if (BlasterUtil.axisToDirection(axis, x) == facing) {
                             return false;
                         } else {
                             shouldBreakNext = true;
@@ -130,7 +131,7 @@ public class NaturalSporeBlasterBlockEntity extends BlockEntity {
                     }
                 } else {
                     if (facing.getAxis() != Direction.Axis.X) {
-                        if (doorDirectionCheck(axis, x, facing)) {
+                        if (BlasterUtil.doorDirectionCheck(axis, x, facing)) {
                             if (nextBlock.getValue(DoorBlock.HINGE) == DoorHingeSide.LEFT) {
                                 return false;
                             }
@@ -158,7 +159,7 @@ public class NaturalSporeBlasterBlockEntity extends BlockEntity {
                     Direction facing = nextBlock.getValue(TrapDoorBlock.FACING);
                     if (facing.getAxis() == Direction.Axis.Z) {
                         Direction.Axis axis = originBlock.getValue(RotatedPillarBlock.AXIS);
-                        if (axisToDirection(axis, z) == facing) {
+                        if (BlasterUtil.axisToDirection(axis, z) == facing) {
                             return false;
                         } else {
                             shouldBreakNext = true;
@@ -173,7 +174,7 @@ public class NaturalSporeBlasterBlockEntity extends BlockEntity {
 
                 if (!open) {
                     if (facing.getAxis() == Direction.Axis.Z) {
-                        if (axisToDirection(axis, z) == facing) {
+                        if (BlasterUtil.axisToDirection(axis, z) == facing) {
                             return false;
                         } else {
                             shouldBreakNext = true;
@@ -181,7 +182,7 @@ public class NaturalSporeBlasterBlockEntity extends BlockEntity {
                     }
                 } else {
                     if (facing.getAxis() != Direction.Axis.Z) {
-                        if (doorDirectionCheck(axis, z, facing)) {
+                        if (BlasterUtil.doorDirectionCheck(axis, z, facing)) {
                             if (nextBlock.getValue(DoorBlock.HINGE) == DoorHingeSide.RIGHT) {
                                 return false;
                             }
@@ -198,33 +199,6 @@ public class NaturalSporeBlasterBlockEntity extends BlockEntity {
             }
         }
         return true;
-    }
-
-    private Direction axisToDirection(Direction.Axis axis, int offset) {
-        if (axis.equals(Direction.Axis.X)) {
-            if (offset == 1) return Direction.EAST;
-            else return Direction.WEST;
-        }
-        if (axis.equals(Direction.Axis.Y)) {
-            if (offset == 1) return Direction.UP;
-            else return Direction.DOWN;
-        }
-        if (axis.equals(Direction.Axis.Z)) {
-            if (offset == 1) return Direction.SOUTH;
-            else return Direction.NORTH;
-        }
-
-        return Direction.UP;
-    }
-
-    private Boolean doorDirectionCheck(Direction.Axis axis, int offset, Direction facing) {
-        if (axis.equals(Direction.Axis.X)) {
-            return axisToDirection(Direction.Axis.Z, -offset) == facing;
-        }
-        if (axis.equals(Direction.Axis.Z)) {
-            return axisToDirection(Direction.Axis.X, -offset) == facing;
-        }
-        return false;
     }
 
     @Override
