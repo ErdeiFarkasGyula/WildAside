@@ -1,6 +1,5 @@
 package net.farkas.wildaside.block.custom.vibrion;
 
-import net.farkas.wildaside.block.entity.NaturalSporeBlasterBlockEntity;
 import net.farkas.wildaside.block.entity.SporeBlasterBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

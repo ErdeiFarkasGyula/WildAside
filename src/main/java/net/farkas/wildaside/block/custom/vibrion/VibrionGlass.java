@@ -12,6 +12,6 @@ public class VibrionGlass extends GlassBlock {
 
     @Override
     public boolean skipRendering(BlockState state, BlockState adjacentBlockState, Direction side) {
-        return adjacentBlockState.is(ModTags.Blocks.VIBRION_FULL_GLASSES)  ? true : super.skipRendering(state, adjacentBlockState, side);
+        return adjacentBlockState.is(ModTags.Blocks.VIBRION_FULL_GLASSES) || super.skipRendering(state, adjacentBlockState, side);
     }
 }

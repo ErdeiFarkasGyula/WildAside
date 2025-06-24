@@ -417,9 +417,7 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
     }
 
     public void clearActivePotion() {
-        System.out.println(activePotion);
         if (!activePotion.isEmpty()) {
-            System.out.println("YIPPE");
             activePotion = ItemStack.EMPTY;
             potionTicksLeft = 0;
             lastUsedSlot = -1;
