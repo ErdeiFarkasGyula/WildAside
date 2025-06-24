@@ -60,8 +60,8 @@ public class NaturalSporeBlaster extends RotatedPillarBlock {
         changePowerTimer++;
         if (changePowerTimer >= maxTimer) {
             changePowerTimer = 0;
-            power1 = pRandom.nextIntBetweenInclusive(0, 15);
-            power2 = pRandom.nextIntBetweenInclusive(0, 15);
+            power1 = pRandom.nextBoolean() ? pRandom.nextIntBetweenInclusive(0, 15) : 0;
+            power2 = pRandom.nextBoolean() ? pRandom.nextIntBetweenInclusive(0, 15) : 0;
         }
 
         int x = pLevel.getBlockState(pPos).getValue(AXIS).equals(Direction.Axis.X) ? 1 : 0;
@@ -216,7 +216,7 @@ public class NaturalSporeBlaster extends RotatedPillarBlock {
                     0.0);
 
             for (LivingEntity entity : hits) {
-                ContaminationHandler.giveContaminationDose(entity, 20);
+                ContaminationHandler.giveContaminationDose(entity, 40);
                 world.sendParticles(particle,
                         entity.getX(), entity.getY() + 0.5, entity.getZ(),
                         5, 0.2, 0.2, 0.2, 0.01);

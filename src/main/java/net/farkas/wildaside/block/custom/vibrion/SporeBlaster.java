@@ -203,7 +203,7 @@ public class SporeBlaster extends Block {
                     0.0);
 
             for (LivingEntity entity : hits) {
-                ContaminationHandler.giveContaminationDose(entity, 30);
+                ContaminationHandler.giveContaminationDose(entity, 50);
                 world.sendParticles(particle,
                         entity.getX(), entity.getY() + 0.5, entity.getZ(),
                         5, 0.2, 0.2, 0.2, 0.01);
