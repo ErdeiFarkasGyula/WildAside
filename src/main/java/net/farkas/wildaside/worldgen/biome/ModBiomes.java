@@ -185,7 +185,7 @@ public class ModBiomes {
                         .fogColor(12638463)
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS)
                         .ambientParticle(new AmbientParticleSettings(ModParticles.STILL_SUBSTILIUM_PARTICLE.get(), 0.05f))
-                        .backgroundMusic(new Music(Holder.direct(ModSounds.VIBRION_HIVE_MUSIC.get()), 6000, 12000, true)).build())
+                        .backgroundMusic(new Music(Holder.direct(ModSounds.VIBRION_HIVE_MUSIC.get()), 6000, 12000, false)).build())
                 .build();
     }
 
