@@ -2,15 +2,19 @@ package net.farkas.wildaside.entity.custom.hickory;
 
 import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.item.ModItems;
-import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.util.HickoryColour;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -18,8 +22,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 
-public class HickoryLeafProjectile extends ThrowableItemProjectile {
-    public HickoryColour colour = HickoryColour.HICKORY;
+public class HickoryLeafProjectile extends ThrowableItemProjectile implements ItemSupplier {
+    private static final EntityDataAccessor<Integer> COLOUR = SynchedEntityData.defineId(HickoryLeafProjectile.class, EntityDataSerializers.INT);
     public int phase = 0;
 
     public HickoryLeafProjectile(EntityType<? extends ThrowableItemProjectile> pEntityType, Level pLevel) {
@@ -28,7 +32,7 @@ public class HickoryLeafProjectile extends ThrowableItemProjectile {
 
     public HickoryLeafProjectile(Level world, LivingEntity shooter, HickoryColour colour) {
         super(ModEntities.HICKORY_LEAF_PROJECTILE.get(), shooter, world);
-        this.colour = colour;
+        this.entityData.set(COLOUR, colour.ordinal());
         if (shooter instanceof HickoryTreantEntity hickoryTreant) {
             this.phase = hickoryTreant.getPhase();
         }
@@ -36,18 +40,12 @@ public class HickoryLeafProjectile extends ThrowableItemProjectile {
 
     @Override
     protected Item getDefaultItem() {
-        return switch (colour) {
-            case RED_GLOWING -> ModItems.RED_GLOWING_HICKORY_LEAF.get();
-            case BROWN_GLOWING  -> ModItems.BROWN_GLOWING_HICKORY_LEAF.get();
-            case YELLOW_GLOWING -> ModItems.YELLOW_GLOWING_HICKORY_LEAF.get();
-            case GREEN_GLOWING  -> ModItems.GREEN_GLOWING_HICKORY_LEAF.get();
-            default -> ModItems.HICKORY_LEAF.get();
-        };
+        return ModItems.HICKORY_LEAF.get();
     }
 
     @Override
     public ItemStack getItem() {
-        return switch (colour) {
+        return switch (getColour()) {
             case RED_GLOWING -> new ItemStack(ModItems.RED_GLOWING_HICKORY_LEAF.get());
             case BROWN_GLOWING  -> new ItemStack(ModItems.BROWN_GLOWING_HICKORY_LEAF.get());
             case YELLOW_GLOWING -> new ItemStack(ModItems.YELLOW_GLOWING_HICKORY_LEAF.get());
@@ -60,7 +58,8 @@ public class HickoryLeafProjectile extends ThrowableItemProjectile {
     protected void onHitEntity(EntityHitResult result) {
         super.onHitEntity(result);
         if (result.getEntity() instanceof LivingEntity target) {
-            switch (colour) {
+            target.addEffect(new MobEffectInstance(MobEffects.HARM, 1, 0, true, false));
+            switch (getColour()) {
                 case RED_GLOWING:
                     target.setSecondsOnFire(4 + phase);
                     break;
@@ -75,15 +74,15 @@ public class HickoryLeafProjectile extends ThrowableItemProjectile {
                     this.healEffect();
                     break;
                 default:
-                    target.addEffect(new MobEffectInstance(MobEffects.HARM, 1, 0, true, false));
+
             }
         }
         this.discard();
     }
 
-//    @Override
-//    protected void onHitBlock(BlockHitResult result) {
-//        super.onHitBlock(result);
+    @Override
+    protected void onHitBlock(BlockHitResult result) {
+        super.onHitBlock(result);
 //        for (int i = 0; i < 8; i++) {
 //            this.level().addParticle(ModParticles.HICKORY_PARTICLES.get(colour).get(),
 //                    this.getX(), this.getY(), this.getZ(),
@@ -91,13 +90,12 @@ public class HickoryLeafProjectile extends ThrowableItemProjectile {
 //                    (this.random.nextDouble() - 0.5) * 0.2,
 //                    (this.random.nextDouble() - 0.5) * 0.2);
 //        }
-//        this.discard();
-//    }
+        this.discard();
+    }
 
     private void healEffect() {
         if (this.getOwner() instanceof LivingEntity shooter) {
-            shooter.heal(phase * 10);
-            System.out.println("Healed:" + (phase * 10));
+            shooter.heal(phase);
         }
     }
 
@@ -106,7 +104,14 @@ public class HickoryLeafProjectile extends ThrowableItemProjectile {
         return new ClientboundAddEntityPacket(this);
     }
 
-    public HickoryColour getColour() {
-        return colour;
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(COLOUR, HickoryColour.HICKORY.ordinal());
+    }
+
+    private HickoryColour getColour() {
+        int id = this.entityData.get(COLOUR);
+        return HickoryColour.values()[Mth.clamp(id, 0, HickoryColour.values().length - 1)];
     }
 }

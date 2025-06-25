@@ -12,16 +12,21 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SweetBerryBushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.List;
 
 public class RootBushBlock extends SweetBerryBushBlock {
+    private static final VoxelShape SAPLING_SHAPE = Block.box(2, 0.0D, 2, 14, 10, 14);
+
     public RootBushBlock(Properties pProperties) {
         super(pProperties);
     }
@@ -53,5 +58,10 @@ public class RootBushBlock extends SweetBerryBushBlock {
     @Override
     public List<ItemStack> getDrops(BlockState pState, LootParams.Builder pParams) {
         return List.of();
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+        return SAPLING_SHAPE;
     }
 }

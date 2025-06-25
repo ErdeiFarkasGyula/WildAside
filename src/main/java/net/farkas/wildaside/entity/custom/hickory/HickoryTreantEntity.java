@@ -20,15 +20,19 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -57,8 +61,8 @@ public class HickoryTreantEntity extends Monster {
                 .add(Attributes.MAX_HEALTH, 200.0)
                 .add(Attributes.MOVEMENT_SPEED, 0.2)
                 .add(Attributes.ATTACK_KNOCKBACK, 1.0)
-                .add(Attributes.ATTACK_DAMAGE, 6.0)
-                .add(Attributes.FOLLOW_RANGE, 24)
+                .add(Attributes.ATTACK_DAMAGE, 4.0)
+                .add(Attributes.FOLLOW_RANGE, 36)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.8);
     }
 
@@ -68,13 +72,15 @@ public class HickoryTreantEntity extends Monster {
         this.goalSelector.addGoal(0, new FloatGoal(this));
 
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, false));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Blaze.class, false));
 
         this.goalSelector.addGoal(3, new HickoryTreantRootAttackGoal(this));
         this.goalSelector.addGoal(3, new HickoryTreantBeamAttackGoal(this));
-        this.goalSelector.addGoal(3, new HickoryTreantMeleeAttackGoal(this, 1, true));
+        this.goalSelector.addGoal(4, new HickoryTreantMeleeAttackGoal(this, 0.5f, true));
 
-        this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 24));
+        this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 36));
+        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Blaze.class, 36));
     }
 
     @Override
@@ -205,7 +211,7 @@ public class HickoryTreantEntity extends Monster {
                     if (!(Math.abs(dx) == radius && Math.abs(dz) == radius)) {
                         BlockPos pos = rootPos.offset(dx, dy, dz);
                         BlockPos placePos = pos.above();
-                        if (level.isEmptyBlock(placePos) && level.getBlockState(pos).isFaceSturdy(level, pos, Direction.UP)) {
+                        if ((level.isEmptyBlock(placePos) || level.getBlockState(placePos).canBeReplaced()) && level.getBlockState(pos).isFaceSturdy(level, pos, Direction.UP)) {
                             level.setBlock(placePos, ModBlocks.HICKORY_ROOT_BUSH.get().defaultBlockState().setValue(RootBushBlock.AGE, phase - 1), 3);
                         }
                     }
@@ -225,7 +231,7 @@ public class HickoryTreantEntity extends Monster {
         Level level = level();
         BlockPos rootPos = new BlockPos(previousAttackX, previousAttackY, previousAttackZ);
 
-        int radius = getRootPatchRadius(phase);
+        int radius = 2;
         for (int dx = -radius; dx <= radius; dx++) {
             for (int dy = -radius; dy <= radius; dy++) {
                 for (int dz = -radius; dz <= radius; dz++) {
@@ -241,22 +247,23 @@ public class HickoryTreantEntity extends Monster {
 
     public void doBeamAttack(int phase) {
         Level level = level();
+        LivingEntity target = getTarget();
         RandomSource random = getRandom();
 
         HickoryColour[] values = HickoryColour.values();
         HickoryColour colour = values[random.nextInt(values.length)];
 
         int count = phase * 8;
-        float spread = (phase >= 3) ? 45f : 30f;
-        float speed = 2f;
+        float speed = (float) phase / 2;
+
+        Vec3 start = this.position().add(0, this.getEyeHeight() * 0.5, 0);
+        Vec3 targetPos = target.position().add(0, target.getEyeHeight() * 0.5, 0);
+        Vec3 delta = targetPos.subtract(start);
 
         for (int i = 0; i < count; i++) {
             HickoryLeafProjectile proj = new HickoryLeafProjectile(level, this, colour);
-            proj.setPos(getX(), getEyeY() - 0.1, getZ());
-            float yaw = getYRot() + (random.nextFloat() - 0.5f) * spread;
-            float pitch = getXRot() + (random.nextFloat() - 0.5f) * spread * 0.5f;
-            Vec3 dir = Vec3.directionFromRotation(pitch, yaw);
-            proj.shoot(dir.x, dir.y, dir.z, speed, 0.1f);
+            proj.setPos(start);
+            proj.shoot(delta.x, delta.y, delta.z, speed, 40 - (phase * 2));
             level.addFreshEntity(proj);
         }
     }
@@ -297,6 +304,14 @@ public class HickoryTreantEntity extends Monster {
     public void stopSeenByPlayer(ServerPlayer pServerPlayer) {
         super.stopSeenByPlayer(pServerPlayer);
         this.bossEvent.removePlayer(pServerPlayer);
+    }
+
+    @Override
+    public boolean hurt(DamageSource pSource, float pAmount) {
+        if (pSource.is(DamageTypes.ON_FIRE) || pSource.is(DamageTypes.IN_FIRE)) {
+            pAmount *= 2;
+        }
+        return super.hurt(pSource, pAmount);
     }
 
     @Override
