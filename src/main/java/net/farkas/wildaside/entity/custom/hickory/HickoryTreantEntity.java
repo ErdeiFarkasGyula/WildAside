@@ -33,6 +33,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class HickoryTreantEntity extends Monster {
     private static final EntityDataAccessor<Integer> PHASE = SynchedEntityData.defineId(HickoryTreantEntity.class, EntityDataSerializers.INT);
+    private boolean isPlayingAnimation;
     public int rootCooldown;
     public int beamCooldown;
     public int previousAttackX;
@@ -41,6 +42,7 @@ public class HickoryTreantEntity extends Monster {
 
     public HickoryTreantEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
+        this.isPlayingAnimation = false;
         this.rootCooldown = getRootInterval(1);
         this.beamCooldown = getBeamInterval(1);
         this.previousAttackX = 0;
@@ -234,17 +236,11 @@ public class HickoryTreantEntity extends Monster {
         RandomSource random = getRandom();
 
         HickoryColour[] values = HickoryColour.values();
-        HickoryColour colour = switch (phase) {
-            case 1, 2 -> values[random.nextInt(values.length)];
-            case 3 -> HickoryColour.GREEN_GLOWING;
-            case 4 -> HickoryColour.YELLOW_GLOWING;
-            default -> HickoryColour.RED_GLOWING;
-        };
+        HickoryColour colour = values[random.nextInt(values.length)];
 
-        System.out.println(colour);
-        int count = (phase >= 3) ? 24 : 12;
+        int count = phase * 8;
         float spread = (phase >= 3) ? 45f : 30f;
-        float speed = (phase >= 4) ? 2f : 1.5f;
+        float speed = 2f;
 
         for (int i = 0; i < count; i++) {
             HickoryLeafProjectile proj = new HickoryLeafProjectile(level, this, colour);
@@ -252,7 +248,7 @@ public class HickoryTreantEntity extends Monster {
             float yaw = getYRot() + (random.nextFloat() - 0.5f) * spread;
             float pitch = getXRot() + (random.nextFloat() - 0.5f) * spread * 0.5f;
             Vec3 dir = Vec3.directionFromRotation(pitch, yaw);
-            proj.shoot(dir.x, dir.y, dir.z, speed, 1f);
+            proj.shoot(dir.x, dir.y, dir.z, speed, 0.1f);
             level.addFreshEntity(proj);
         }
     }

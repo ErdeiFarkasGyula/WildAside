@@ -101,6 +101,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.GREEN_GLOWING_HICKORY_LEAF);
 
         simpleBlockItemBlockTexture(ModBlocks.HICKORY_ROOT_BUSH);
+        withExistingParent(ModItems.HICKORY_TREANT_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
 
         simpleBlockItemBlockTexture(ModBlocks.SPOTTED_WINTERGREEN);
         simpleBlockItemBlockTexture(ModBlocks.PINKSTER_FLOWER);
