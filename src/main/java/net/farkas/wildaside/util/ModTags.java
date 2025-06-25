@@ -10,7 +10,6 @@ public class ModTags {
     public static class Blocks {
         public static final TagKey<Block> VIBRION_GELS = tag("vibrion_gels");
         public static final TagKey<Block> VIBRION_FULL_GLASSES = tag("vibrion_full_glasses");
-        public static final TagKey<Block> SUBSTILIUM_WOODSET = tag("substilium_woodset");
         public static final TagKey<Block> NEEDS_ENTORIUM_TOOL = tag("needs_entorium_tool");
 
         private static TagKey<Block> tag(String name) {

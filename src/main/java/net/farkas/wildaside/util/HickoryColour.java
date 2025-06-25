@@ -10,7 +10,6 @@ public enum HickoryColour implements StringRepresentable {
     YELLOW_GLOWING("yellow_glowing_hickory"),
     GREEN_GLOWING("green_glowing_hickory");
 
-
     public static final Codec<HickoryColour> CODEC = StringRepresentable.fromEnum(HickoryColour::values);
     private final String name;
     HickoryColour(String name) { this.name = name; }
