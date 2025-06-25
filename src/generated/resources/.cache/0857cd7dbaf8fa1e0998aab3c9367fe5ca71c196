@@ -1,4 +1,4 @@
-// 1.20.1	2025-06-18T11:33:50.6890764	Block States: wildaside
+// 1.20.1	2025-06-25T16:26:43.264338	Block States: wildaside
 38a24b92f303bb5285d9a988d6c1d7ee8278e463 assets/wildaside/blockstates/bioengineering_workstation.json
 a6f417d7a5e3c62f22064fbdec6661e901c45ab1 assets/wildaside/blockstates/brown_glowing_hickory_leaves.json
 fa64f943551c3309b74c342bd1fa550093c63be0 assets/wildaside/blockstates/brown_glowing_hickory_sapling.json
@@ -23,6 +23,7 @@ bf283c746c497f9b6702be34463ced0c1e67b997 assets/wildaside/blockstates/hickory_le
 c94a8dfc0cea746eb7d4c490a1a69c22089e2dca assets/wildaside/blockstates/hickory_log.json
 27ae5c3c6c223ddadd079c1a7842de65c7ff3190 assets/wildaside/blockstates/hickory_planks.json
 79b634ded7ad3b4be06f5939312dec62c6961974 assets/wildaside/blockstates/hickory_pressure_plate.json
+2a71dc23d7b17f795ede9cc858304850af0e0d96 assets/wildaside/blockstates/hickory_root_bush.json
 d3f98d4191946db546f52662f13d3b85a8afa797 assets/wildaside/blockstates/hickory_sapling.json
 807ea792e1e7636a332fb345f2a6633f3b388442 assets/wildaside/blockstates/hickory_sign.json
 a3f80e0657e007dfdf23b4a8f649de93e26a822f assets/wildaside/blockstates/hickory_slab.json
@@ -137,6 +138,10 @@ c1ae761935363d7adbe8bb8037dde0c42ed70cb6 assets/wildaside/models/block/hickory_l
 1d1d6296cf7293c0bf82a2d77ac83ded38e0e691 assets/wildaside/models/block/hickory_planks.json
 9535f14ab561c3be6608a3006fdab7579485b811 assets/wildaside/models/block/hickory_pressure_plate.json
 78e5faeeacf21eb1a94bfc642949b0b017dbb094 assets/wildaside/models/block/hickory_pressure_plate_down.json
+68561a49fae63098d36523275a8382f1643d20de assets/wildaside/models/block/hickory_root_bush_0.json
+8e9b120234e4657620195d18a40a1d78bf642bce assets/wildaside/models/block/hickory_root_bush_1.json
+b50d8c53de85ea190c70b8d65c9e4513c0a4d75c assets/wildaside/models/block/hickory_root_bush_2.json
+2d7491852e1a92e3c8ffbc24555b4b8a69001286 assets/wildaside/models/block/hickory_root_bush_3.json
 c5d191487c2a64a9ab674798f488854706cab459 assets/wildaside/models/block/hickory_sapling.json
 1e9207604f11c525d5963b3e7855f3d049aaf9c0 assets/wildaside/models/block/hickory_sign.json
 8a1b1cb80dcf76b406d5f2a287a4eacec0958394 assets/wildaside/models/block/hickory_slab.json

@@ -100,6 +100,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.YELLOW_GLOWING_HICKORY_LEAF);
         simpleItem(ModItems.GREEN_GLOWING_HICKORY_LEAF);
 
+        simpleBlockItemBlockTexture(ModBlocks.HICKORY_ROOT_BUSH);
+
         simpleBlockItemBlockTexture(ModBlocks.SPOTTED_WINTERGREEN);
         simpleBlockItemBlockTexture(ModBlocks.PINKSTER_FLOWER);
 

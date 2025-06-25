@@ -100,6 +100,9 @@ public class ModItems {
         TRAIL_MIX_ITEMS.put(HickoryColour.GREEN_GLOWING, GREEN_HICKORY_NUT_TRAIL_MIX);
     }
 
+    public static final RegistryObject<Item> HICKORY_TREANT_SPAWN_EGG = ITEMS.register("hickory_treant_spawn_egg",
+            () ->  new ForgeSpawnEggItem(ModEntities.HICKORY_TREANT, 0x704626, 0x409312, new Item.Properties()));
+
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

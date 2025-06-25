@@ -1,4 +1,4 @@
-package net.farkas.wildaside.entity.custom;
+package net.farkas.wildaside.entity.custom.vibrion;
 
 import net.farkas.wildaside.entity.ai.mucellith.MucellithAttackGoal;
 import net.farkas.wildaside.entity.ai.mucellith.MucellithLookAtPlayerGoal;
@@ -14,9 +14,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.control.LookControl;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.IronGolem;

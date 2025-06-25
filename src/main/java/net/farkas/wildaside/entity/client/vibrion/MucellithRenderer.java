@@ -1,9 +1,8 @@
-package net.farkas.wildaside.entity.client;
+package net.farkas.wildaside.entity.client.vibrion;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.farkas.wildaside.WildAside;
-import net.farkas.wildaside.entity.custom.MucellithEntity;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.farkas.wildaside.entity.client.ModModelLayers;
+import net.farkas.wildaside.entity.custom.vibrion.MucellithEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;

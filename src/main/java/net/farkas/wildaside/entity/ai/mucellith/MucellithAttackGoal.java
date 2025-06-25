@@ -1,6 +1,6 @@
 package net.farkas.wildaside.entity.ai.mucellith;
 
-import net.farkas.wildaside.entity.custom.MucellithEntity;
+import net.farkas.wildaside.entity.custom.vibrion.MucellithEntity;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;

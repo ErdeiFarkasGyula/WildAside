@@ -2,19 +2,20 @@ package net.farkas.wildaside.event;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
-import net.farkas.wildaside.block.custom.FallenHickoryLeavesBlock;
 import net.farkas.wildaside.block.entity.ModBlockEntities;
+import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.entity.client.ModModelLayers;
-import net.farkas.wildaside.entity.client.MucellithModel;
-import net.farkas.wildaside.item.ModItems;
+import net.farkas.wildaside.entity.client.hickory.HickoryTreantRenderer;
+import net.farkas.wildaside.entity.client.vibrion.MucellithModel;
+import net.farkas.wildaside.entity.custom.hickory.HickoryTreantEntity;
 import net.farkas.wildaside.particle.*;
 import net.farkas.wildaside.particle.custom.*;
-import net.farkas.wildaside.util.HickoryColour;
 import net.minecraft.client.model.BoatModel;
 import net.minecraft.client.model.ChestBoatModel;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.block.state.BlockState;
@@ -38,9 +39,11 @@ public class ModEventBusClientEvents {
     }
 
     @SubscribeEvent
-    public static void registerBER(EntityRenderersEvent.RegisterRenderers event) {
+    public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(ModBlockEntities.MOD_SIGN.get(), SignRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.MOD_HANGING_SIGN.get(), HangingSignRenderer::new);
+        event.registerEntityRenderer(ModEntities.HICKORY_LEAF_PROJECTILE.get(), ThrownItemRenderer::new);
+        event.registerEntityRenderer(ModEntities.HICKORY_TREANT.get(), HickoryTreantRenderer::new);
     }
 
     @SubscribeEvent

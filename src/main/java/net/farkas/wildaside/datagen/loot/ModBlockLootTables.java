@@ -137,6 +137,8 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.add(ModBlocks.SUBSTILIUM_DOOR.get(),
                 block -> createDoorTable(ModBlocks.SUBSTILIUM_DOOR.get()));
 
+
+        //HICKORY
         this.add(ModBlocks.HICKORY_LEAVES.get(), block ->
                 createBiggerLeavesDrops(block, ModBlocks.HICKORY_SAPLING.get(), ModItems.HICKORY_NUT.get()));
         this.add(ModBlocks.RED_GLOWING_HICKORY_LEAVES.get(), block ->
@@ -182,6 +184,8 @@ public class ModBlockLootTables extends BlockLootSubProvider {
                 block -> createSlabItemTable(ModBlocks.HICKORY_SLAB.get()));
         this.add(ModBlocks.HICKORY_DOOR.get(),
                 block -> createDoorTable(ModBlocks.HICKORY_DOOR.get()));
+
+        this.dropSelf(ModBlocks.HICKORY_ROOT_BUSH.get());
 
         this.dropSelf(ModBlocks.SPOTTED_WINTERGREEN.get());
         this.dropSelf(ModBlocks.PINKSTER_FLOWER.get());

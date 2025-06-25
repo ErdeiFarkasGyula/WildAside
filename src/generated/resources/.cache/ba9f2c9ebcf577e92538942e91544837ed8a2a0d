@@ -1,4 +1,4 @@
-// 1.20.1	2025-06-22T17:36:28.8884376	Item Models: wildaside
+// 1.20.1	2025-06-25T16:26:43.2611628	Item Models: wildaside
 97ec986340aeed12ebc0d678c97ba34a7afb7b7c assets/wildaside/models/item/brown_glowing_hickory_leaf.json
 657a44b343b52d1185c119350b9599bc495c3976 assets/wildaside/models/item/brown_glowing_hickory_sapling.json
 9a615629962edb4ec1311e1782a12ec189c42bf4 assets/wildaside/models/item/brown_hickory_nut_trail_mix.json
@@ -23,6 +23,7 @@ a26dc7269bff8cf5a6ca1d2ba5c2a4cd4928e57e assets/wildaside/models/item/hickory_ha
 93348671ff1014ae2bd645589d703420ceb62294 assets/wildaside/models/item/hickory_nut.json
 58dc039a03c662bdc6a98815d1e8db72fd98ea70 assets/wildaside/models/item/hickory_nut_trail_mix.json
 03319db4bf5d455645952b5f2ef29a130a99cc3d assets/wildaside/models/item/hickory_pressure_plate.json
+bca321864b0b7fec2f767d30f7c73d2574a6752e assets/wildaside/models/item/hickory_root_bush.json
 38539f8dbcf382e0a870a176a6a288377e74be93 assets/wildaside/models/item/hickory_sapling.json
 45745fbfaa8eef505ed0c0205c6b00d9a49774e7 assets/wildaside/models/item/hickory_sign.json
 920daeee1e67d9091077b1bd44c3e956949b9ae5 assets/wildaside/models/item/hickory_slab.json

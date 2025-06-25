@@ -3,6 +3,7 @@ package net.farkas.wildaside.datagen;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.custom.FallenHickoryLeavesBlock;
+import net.farkas.wildaside.block.custom.RootBushBlock;
 import net.farkas.wildaside.util.HickoryColour;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
@@ -168,6 +169,13 @@ public class ModBlockStateProvider extends BlockStateProvider {
         crossBlock(ModBlocks.YELLOW_GLOWING_HICKORY_SAPLING);
         crossBlock(ModBlocks.GREEN_GLOWING_HICKORY_SAPLING);
 
+        getVariantBuilder(ModBlocks.HICKORY_ROOT_BUSH.get()).forAllStates(blockState -> {
+            int age = blockState.getValue(RootBushBlock.AGE);
+            String name = "block/hickory_root_bush_" + age;
+            ModelFile model = models().cross(name, modLoc(name));
+            return ConfiguredModel.builder().modelFile(model).build();
+        });
+
         crossBlock(ModBlocks.SPOTTED_WINTERGREEN);
         crossBlock(ModBlocks.PINKSTER_FLOWER);
 
@@ -212,25 +220,5 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockWithItem(blockRegistryObject.get(),
                 models().singleTexture(ForgeRegistries.BLOCKS.getKey(blockRegistryObject.get()).getPath(), new ResourceLocation("minecraft:block/leaves"),
                         "all", blockTexture(blockRegistryObject.get())));
-    }
-
-
-    private void makeFallenLeaves(Block block, String col, ResourceLocation parent) {
-        String base = "fallen_" + col + "_hickory_leaves";
-        ModelFile[] variants = new ModelFile[3];
-        for (int i = 0; i < 3; i++) {
-            String name = base + "_" + (i+1);
-            ResourceLocation tex = modLoc("block/" + name);
-            variants[i] = models().withExistingParent(name, parent).texture("leaves", tex);
-        }
-
-        getVariantBuilder(block).forAllStates(state -> {
-            int count = Mth.clamp(state.getValue(FallenHickoryLeavesBlock.COUNT), 1, 3);
-            Direction facing = state.getValue(FallenHickoryLeavesBlock.FACING);
-            return ConfiguredModel.builder()
-                    .modelFile(variants[count-1])
-                    .rotationY((int) facing.toYRot())
-                    .build();
-        });
     }
 }

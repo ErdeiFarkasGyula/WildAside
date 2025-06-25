@@ -1,12 +1,10 @@
 package net.farkas.wildaside.item.custom;
 
-import net.farkas.wildaside.entity.custom.FertiliserBombEntity;
+import net.farkas.wildaside.entity.custom.vibrion.FertiliserBombEntity;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -14,7 +12,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
-import org.joml.Math;
 
 public class FertiliserBomb extends Item {
     public FertiliserBomb(Properties pProperties) {

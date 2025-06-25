@@ -1,9 +1,9 @@
-package net.farkas.wildaside.entity.client;
+package net.farkas.wildaside.entity.client.vibrion;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.farkas.wildaside.entity.animations.MucellithAnimations;
-import net.farkas.wildaside.entity.custom.MucellithEntity;
+import net.farkas.wildaside.entity.custom.vibrion.MucellithEntity;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;

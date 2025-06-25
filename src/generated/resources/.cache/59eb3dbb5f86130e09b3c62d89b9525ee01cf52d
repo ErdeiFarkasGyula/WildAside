@@ -1,4 +1,4 @@
-// 1.20.1	2025-06-19T00:18:47.1748618	Loot Tables
+// 1.20.1	2025-06-25T16:26:43.263163	Loot Tables
 cb111f4aa2094610caccd6c93bb58846842f1adf data/wildaside/loot_tables/blocks/bioengineering_workstation.json
 9af05efdb1326dfab1d8ce52f3587c6b2314e19e data/wildaside/loot_tables/blocks/brown_glowing_hickory_leaves.json
 806c305e5b6bdf1e690e0d5df8ae5f63031a6a21 data/wildaside/loot_tables/blocks/brown_glowing_hickory_sapling.json
@@ -23,6 +23,7 @@ c3991cf4c73ebda8046045ad6a56244ffe19f900 data/wildaside/loot_tables/blocks/hicko
 3c97c0b64679b716e3ea29bd15cfd1c1ecb7aa08 data/wildaside/loot_tables/blocks/hickory_log.json
 7c6b700cece502f7879afd2ff7e19109629311d2 data/wildaside/loot_tables/blocks/hickory_planks.json
 1328137c09967231169f8731ebb00a548c7f8b35 data/wildaside/loot_tables/blocks/hickory_pressure_plate.json
+238e5107d589a0b7c315e4cccea792857b4e77f4 data/wildaside/loot_tables/blocks/hickory_root_bush.json
 924ef7dc59d3a0a0be74ecc29e5de1c60334b906 data/wildaside/loot_tables/blocks/hickory_sapling.json
 f1a8628748c4f2c073365437301193235d5f2d93 data/wildaside/loot_tables/blocks/hickory_sign.json
 df6245e5b1236cc2a7eaa320d2d9cf523b59676f data/wildaside/loot_tables/blocks/hickory_slab.json

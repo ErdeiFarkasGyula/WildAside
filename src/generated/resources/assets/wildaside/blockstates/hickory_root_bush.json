@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "wildaside:block/hickory_root_bush_0"
+    },
+    "age=1": {
+      "model": "wildaside:block/hickory_root_bush_1"
+    },
+    "age=2": {
+      "model": "wildaside:block/hickory_root_bush_2"
+    },
+    "age=3": {
+      "model": "wildaside:block/hickory_root_bush_3"
+    }
+  }
+}

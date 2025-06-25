@@ -2,7 +2,7 @@ package net.farkas.wildaside.util;
 
 import net.farkas.wildaside.capability.contamination.ContaminationCapability;
 import net.farkas.wildaside.effect.ModMobEffects;
-import net.farkas.wildaside.entity.custom.MucellithEntity;
+import net.farkas.wildaside.entity.custom.vibrion.MucellithEntity;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;

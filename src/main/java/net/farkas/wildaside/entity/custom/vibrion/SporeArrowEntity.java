@@ -1,4 +1,4 @@
-package net.farkas.wildaside.entity.custom;
+package net.farkas.wildaside.entity.custom.vibrion;
 
 import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.item.ModItems;

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "wildaside:block/hickory_root_bush_3"
+  }
+}
