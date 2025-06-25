@@ -14,6 +14,5 @@ import java.util.List;
 public class ModToolTiers {
     public static final Tier ENTORIUM = TierSortingRegistry.registerTier(
             new ForgeTier(2, 1250, 200f, 1f, 15, ModTags.Blocks.NEEDS_ENTORIUM_TOOL, () -> Ingredient.of(ModItems.ENTORIUM.get())),
-            new ResourceLocation(WildAside.MOD_ID, "sapphire"), List.of(Tiers.IRON), List.of(Tiers.DIAMOND));
-
+            new ResourceLocation(WildAside.MOD_ID, "entorium"), List.of(Tiers.IRON), List.of(Tiers.DIAMOND));
 }
