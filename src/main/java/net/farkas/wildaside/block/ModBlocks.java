@@ -416,7 +416,7 @@ public class ModBlocks {
             () ->  new GlowingSaplingBlock(new HickoryTreeGrower(HickoryColour.GREEN_GLOWING), BlockBehaviour.Properties.copy(RED_GLOWING_HICKORY_SAPLING.get())));
 
     public static final RegistryObject<Block> HICKORY_ROOT_BUSH = registerBlock("hickory_root_bush",
-            () ->  new RootBushBlock(BlockBehaviour.Properties.copy(Blocks.SWEET_BERRY_BUSH)));
+            () ->  new RootBushBlock(BlockBehaviour.Properties.copy(Blocks.SWEET_BERRY_BUSH).strength(0.5f)));
 
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {

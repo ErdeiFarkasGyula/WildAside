@@ -127,41 +127,12 @@ public class HickoryTreantEntity extends Monster {
                 break;
             case 4:
                 this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, MobEffectInstance.INFINITE_DURATION, 1, true, false));
+                this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, MobEffectInstance.INFINITE_DURATION, 1, true, false));
                 bossEvent.setColor(BossEvent.BossBarColor.WHITE);
                 break;
         }
 
         bossEvent.setOverlay(BossEvent.BossBarOverlay.NOTCHED_12);
-    }
-
-    public void doRootingAttack(int phase) {
-        resetRoots(phase);
-
-        Level level = this.level();
-        BlockPos rootPos = getTarget().blockPosition().below();
-        previousAttackX = rootPos.getX();
-        previousAttackY = rootPos.getY();
-        previousAttackZ = rootPos.getZ();
-
-        int radius = getRootPatchRadius(phase);
-        for (int dx = -radius; dx <= radius; dx++) {
-            for (int dy = -radius; dy <= radius; dy++) {
-                for (int dz = -radius; dz <= radius; dz++) {
-                    BlockPos pos = rootPos.offset(dx, dy, dz);
-                    BlockPos placePos = pos.above();
-                    if (level.isEmptyBlock(placePos) && level.getBlockState(pos).isFaceSturdy(level, pos, Direction.UP)) {
-                        level.setBlock(placePos, ModBlocks.HICKORY_ROOT_BUSH.get().defaultBlockState().setValue(RootBushBlock.AGE, 3), 3);
-                    }
-                }
-            }
-        }
-//           for (int i = 0; i < 10; i++) {
-//                entity.level.sendParticles(ParticleTypes.ENCHANT,
-//                        target.getX() + entity.random.nextDouble() - 0.5,
-//                        target.getY() + 0.1,
-//                        target.getZ() + entity.random.nextDouble() - 0.5,
-//                        1, 0, 0, 0, 0);
-//            }
     }
 
 
@@ -181,7 +152,7 @@ public class HickoryTreantEntity extends Monster {
         return switch (phase) {
             case 2 -> 120;
             case 3 -> 100;
-            case 4 -> 60;
+            case 4 -> 80;
             default -> 140;
         };
     }
@@ -206,6 +177,38 @@ public class HickoryTreantEntity extends Monster {
 
     public int getRootPatchRadius(int phase) {
         return phase >= 3 ? 2 : 1;
+    }
+
+    public void doRootingAttack(int phase) {
+        resetRoots(phase);
+
+        Level level = this.level();
+        BlockPos rootPos = getTarget().blockPosition().below();
+        previousAttackX = rootPos.getX();
+        previousAttackY = rootPos.getY();
+        previousAttackZ = rootPos.getZ();
+
+        int radius = getRootPatchRadius(phase);
+        for (int dx = -radius; dx <= radius; dx++) {
+            for (int dy = -radius; dy <= radius; dy++) {
+                for (int dz = -radius; dz <= radius; dz++) {
+                    if (!(Math.abs(dx) == radius && Math.abs(dz) == radius)) {
+                        BlockPos pos = rootPos.offset(dx, dy, dz);
+                        BlockPos placePos = pos.above();
+                        if (level.isEmptyBlock(placePos) && level.getBlockState(pos).isFaceSturdy(level, pos, Direction.UP)) {
+                            level.setBlock(placePos, ModBlocks.HICKORY_ROOT_BUSH.get().defaultBlockState().setValue(RootBushBlock.AGE, phase - 1), 3);
+                        }
+                    }
+                }
+            }
+        }
+//           for (int i = 0; i < 10; i++) {
+//                entity.level.sendParticles(ParticleTypes.ENCHANT,
+//                        target.getX() + entity.random.nextDouble() - 0.5,
+//                        target.getY() + 0.1,
+//                        target.getZ() + entity.random.nextDouble() - 0.5,
+//                        1, 0, 0, 0, 0);
+//            }
     }
 
     public void resetRoots(int phase) {
@@ -233,14 +236,12 @@ public class HickoryTreantEntity extends Monster {
         HickoryColour[] values = HickoryColour.values();
         HickoryColour colour = switch (phase) {
             case 1, 2 -> values[random.nextInt(values.length)];
-            case 3 -> {
-                int idx = (int) ((System.currentTimeMillis() / 200) % values.length);
-                yield values[idx];
-            }
+            case 3 -> HickoryColour.GREEN_GLOWING;
             case 4 -> HickoryColour.YELLOW_GLOWING;
             default -> HickoryColour.RED_GLOWING;
         };
 
+        System.out.println(colour);
         int count = (phase >= 3) ? 24 : 12;
         float spread = (phase >= 3) ? 45f : 30f;
         float speed = (phase >= 4) ? 2f : 1.5f;

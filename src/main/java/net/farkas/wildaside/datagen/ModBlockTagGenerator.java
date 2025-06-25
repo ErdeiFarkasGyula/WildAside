@@ -101,6 +101,9 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 .add(ModBlocks.HICKORY_HANGING_SIGN.get())
                 .add(ModBlocks.HICKORY_WALL_HANGING_SIGN.get());
 
+        this.tag(BlockTags.SWORD_EFFICIENT)
+                .add(ModBlocks.HICKORY_ROOT_BUSH.get());
+
         this.tag(BlockTags.NEEDS_STONE_TOOL)
                 .add(ModBlocks.SUBSTILIUM_LAPIS_ORE.get())
                 .add(ModBlocks.SUBSTILIUM_IRON_ORE.get())

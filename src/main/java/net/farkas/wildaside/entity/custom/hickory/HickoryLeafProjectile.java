@@ -36,12 +36,18 @@ public class HickoryLeafProjectile extends ThrowableItemProjectile {
 
     @Override
     protected Item getDefaultItem() {
-        return ModItems.HICKORY_LEAF.get();
+        return switch (colour) {
+            case RED_GLOWING -> ModItems.RED_GLOWING_HICKORY_LEAF.get();
+            case BROWN_GLOWING  -> ModItems.BROWN_GLOWING_HICKORY_LEAF.get();
+            case YELLOW_GLOWING -> ModItems.YELLOW_GLOWING_HICKORY_LEAF.get();
+            case GREEN_GLOWING  -> ModItems.GREEN_GLOWING_HICKORY_LEAF.get();
+            default -> ModItems.HICKORY_LEAF.get();
+        };
     }
 
     @Override
     public ItemStack getItem() {
-        return switch(colour) {
+        return switch (colour) {
             case RED_GLOWING -> new ItemStack(ModItems.RED_GLOWING_HICKORY_LEAF.get());
             case BROWN_GLOWING  -> new ItemStack(ModItems.BROWN_GLOWING_HICKORY_LEAF.get());
             case YELLOW_GLOWING -> new ItemStack(ModItems.YELLOW_GLOWING_HICKORY_LEAF.get());
@@ -62,8 +68,8 @@ public class HickoryLeafProjectile extends ThrowableItemProjectile {
                     target.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, phase - 1));
                     break;
                 case YELLOW_GLOWING:
-                    target.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100, phase - 1));
-                    target.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 100, phase - 1));
+                    target.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100, 0));
+                    target.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 100, 0));
                     break;
                 case GREEN_GLOWING:
                     this.healEffect();
@@ -75,23 +81,23 @@ public class HickoryLeafProjectile extends ThrowableItemProjectile {
         this.discard();
     }
 
-    @Override
-    protected void onHitBlock(BlockHitResult result) {
-        super.onHitBlock(result);
-        for (int i = 0; i < 8; i++) {
-            this.level().addParticle(ModParticles.HICKORY_PARTICLES.get(colour).get(),
-                    this.getX(), this.getY(), this.getZ(),
-                    (this.random.nextDouble() - 0.5) * 0.2,
-                    (this.random.nextDouble() - 0.5) * 0.2,
-                    (this.random.nextDouble() - 0.5) * 0.2);
-        }
-        this.discard();
-    }
+//    @Override
+//    protected void onHitBlock(BlockHitResult result) {
+//        super.onHitBlock(result);
+//        for (int i = 0; i < 8; i++) {
+//            this.level().addParticle(ModParticles.HICKORY_PARTICLES.get(colour).get(),
+//                    this.getX(), this.getY(), this.getZ(),
+//                    (this.random.nextDouble() - 0.5) * 0.2,
+//                    (this.random.nextDouble() - 0.5) * 0.2,
+//                    (this.random.nextDouble() - 0.5) * 0.2);
+//        }
+//        this.discard();
+//    }
 
     private void healEffect() {
         if (this.getOwner() instanceof LivingEntity shooter) {
-            shooter.heal(4f);
-            shooter.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 40, phase));
+            shooter.heal(phase * 10);
+            System.out.println("Healed:" + (phase * 10));
         }
     }
 
