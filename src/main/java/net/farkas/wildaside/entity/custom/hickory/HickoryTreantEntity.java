@@ -86,7 +86,7 @@ public class HickoryTreantEntity extends Monster {
     @Override
     public void remove(RemovalReason pReason) {
         super.remove(pReason);
-        resetRoots(getPhase());
+        resetRoots();
     }
 
     @Override
@@ -196,7 +196,7 @@ public class HickoryTreantEntity extends Monster {
     }
 
     public void doRootingAttack(int phase) {
-        resetRoots(phase);
+        resetRoots();
 
         Level level = this.level();
         BlockPos rootPos = getTarget().blockPosition().below();
@@ -227,7 +227,7 @@ public class HickoryTreantEntity extends Monster {
 //            }
     }
 
-    public void resetRoots(int phase) {
+    public void resetRoots() {
         Level level = level();
         BlockPos rootPos = new BlockPos(previousAttackX, previousAttackY, previousAttackZ);
 
