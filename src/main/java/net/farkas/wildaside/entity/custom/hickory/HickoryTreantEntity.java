@@ -33,7 +33,6 @@ import net.minecraft.world.phys.Vec3;
 
 public class HickoryTreantEntity extends Monster {
     private static final EntityDataAccessor<Integer> PHASE = SynchedEntityData.defineId(HickoryTreantEntity.class, EntityDataSerializers.INT);
-    private boolean isPlayingAnimation;
     public int rootCooldown;
     public int beamCooldown;
     public int previousAttackX;
@@ -42,7 +41,6 @@ public class HickoryTreantEntity extends Monster {
 
     public HickoryTreantEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
-        this.isPlayingAnimation = false;
         this.rootCooldown = getRootInterval(1);
         this.beamCooldown = getBeamInterval(1);
         this.previousAttackX = 0;
@@ -98,22 +96,30 @@ public class HickoryTreantEntity extends Monster {
     @Override
     public void tick() {
         super.tick();
-        rootCooldown--;
-        beamCooldown--;
 
-        if (!level().isClientSide) {
-            this.setPhase(updatePhase());
+        if (level().isClientSide) {
+            animationHandler();
         }
+    }
 
-        if (getTarget() != null) {
-            getNavigation().moveTo(getTarget(), 1.0);
-            getLookControl().setLookAt(getTarget(), 30, 30);
-        }
+    private void animationHandler() {
+
     }
 
     @Override
     public void aiStep() {
         super.aiStep();
+
+        rootCooldown--;
+        beamCooldown--;
+
+        this.setPhase(updatePhase());
+
+        if (getTarget() != null) {
+            getNavigation().moveTo(getTarget(), 1.0);
+            getLookControl().setLookAt(getTarget(), 30, 30);
+        }
+
         bossEvent.setProgress(healthPresentage());
 
         switch (getPhase()) {
@@ -133,8 +139,6 @@ public class HickoryTreantEntity extends Monster {
                 bossEvent.setColor(BossEvent.BossBarColor.WHITE);
                 break;
         }
-
-        bossEvent.setOverlay(BossEvent.BossBarOverlay.NOTCHED_12);
     }
 
 
@@ -277,7 +281,7 @@ public class HickoryTreantEntity extends Monster {
 
     private final ServerBossEvent bossEvent = new ServerBossEvent(
             Component.translatable("entity.wildaside.hickory_treant"),
-            BossEvent.BossBarColor.GREEN, BossEvent.BossBarOverlay.PROGRESS);
+            BossEvent.BossBarColor.GREEN, BossEvent.BossBarOverlay.NOTCHED_12);
 
     @Override
     public void startSeenByPlayer(ServerPlayer pServerPlayer) {
