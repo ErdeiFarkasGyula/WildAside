@@ -33,7 +33,7 @@ public class HickoryLeavesBlock extends LeavesBlock {
 
     @Override
     public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
-        if (pRandom.nextFloat() < 0.2) {
+        if (pRandom.nextFloat() < 0.025) {
             spawnNewFallenLeaves(pLevel, pPos, pRandom);
         }
         super.randomTick(pState, pLevel, pPos, pRandom);
@@ -50,8 +50,10 @@ public class HickoryLeavesBlock extends LeavesBlock {
         for (int y = pPos.getY(); y >= -64; y--) {
             BlockPos pos = new BlockPos(x, y, z);
             if (level.getBlockState(pos).isFaceSturdy(level, pos, Direction.UP)) {
-                if (level.isEmptyBlock(pos.above())) {
+                BlockState aboveState = level.getBlockState(pos.above());
+                if (aboveState.isAir() || aboveState.getBlock() instanceof FallenHickoryLeavesBlock) {
                     groundY = y;
+                    break;
                 }
             }
         }
