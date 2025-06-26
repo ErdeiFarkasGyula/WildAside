@@ -53,7 +53,7 @@ public class ModBlocks {
                     .mapColor(MapColor.COLOR_YELLOW)
                     .sound(SoundType.SHROOMLIGHT)
                     .strength(2F,  1F)
-                    .lightLevel(l -> 7),  UniformInt.of(1, 2)));
+                    .lightLevel(l -> 9),  UniformInt.of(1, 2)));
 
     public static final RegistryObject<Block> COMPRESSED_VIBRION_BLOCK = registerBlock("compressed_vibrion_block",
             () ->  new DropExperienceBlock(BlockBehaviour.Properties.copy(VIBRION_BLOCK.get())
@@ -72,7 +72,7 @@ public class ModBlocks {
                     .noOcclusion()));
 
     public static final RegistryObject<Block> LIT_VIBRION_GEL = registerBlock("lit_vibrion_gel",
-            () ->  new VibrionGel(BlockBehaviour.Properties.copy(VIBRION_GEL.get()).lightLevel(s -> 3)));
+            () ->  new VibrionGel(BlockBehaviour.Properties.copy(VIBRION_GEL.get()).lightLevel(s -> 5)));
 
     public static final RegistryObject<Block> VIBRION_GLASS = registerBlock("vibrion_glass",
             () ->  new VibrionGlass(BlockBehaviour.Properties.of()
@@ -96,7 +96,7 @@ public class ModBlocks {
             () ->  new FlowerBlock(() -> MobEffects.POISON, 5, BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_YELLOW)
                     .sound(SoundType.ROOTS)
-                    .lightLevel(s -> 2)
+                    .lightLevel(s -> 3)
                     .noCollission()
                     .noOcclusion()
                     .replaceable()
@@ -113,7 +113,7 @@ public class ModBlocks {
             () ->  new Sporeholder(new SubstiliumMushroomGrower(), BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_YELLOW)
                     .sound(SoundType.FUNGUS)
-                    .lightLevel(l -> 3)
+                    .lightLevel(l -> 5)
                     .noCollission()
                     .noOcclusion()
                     .strength(1.5f,  2f)
@@ -124,7 +124,7 @@ public class ModBlocks {
             () ->  new HangingVibrionVines(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_YELLOW)
                     .sound(SoundType.WEEPING_VINES)
-                    .lightLevel(l -> 3)
+                    .lightLevel(l -> 5)
                     .noCollission()
                     .noOcclusion()
                     .replaceable()
@@ -204,7 +204,7 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> NATURAL_SPORE_BLASTER = registerBlock("natural_spore_blaster",
             () ->  new NaturalSporeBlaster(BlockBehaviour.Properties.copy(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get())
-                    .noOcclusion().strength(2f, 12f).requiresCorrectToolForDrops()));
+                    .noOcclusion().strength(3f, 12f).requiresCorrectToolForDrops()));
 
     public static final RegistryObject<Block> SMOOTH_SUBSTILIUM_SOIL = registerBlock("smooth_substilium_soil",
             () ->  new Block(BlockBehaviour.Properties.copy(COMPRESSED_SUBSTILIUM_SOIL.get())));
