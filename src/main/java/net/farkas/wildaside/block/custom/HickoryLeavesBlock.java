@@ -33,7 +33,7 @@ public class HickoryLeavesBlock extends LeavesBlock {
 
     @Override
     public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
-        if (pRandom.nextFloat() < 0.1) {
+        if (pRandom.nextFloat() < 0.2) {
             spawnNewFallenLeaves(pLevel, pPos, pRandom);
         }
         super.randomTick(pState, pLevel, pPos, pRandom);
