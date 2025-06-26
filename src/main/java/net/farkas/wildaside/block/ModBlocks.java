@@ -366,16 +366,7 @@ public class ModBlocks {
 
 
     public static final RegistryObject<Block> HICKORY_LEAVES = registerBlock("hickory_leaves",
-            () ->  new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)) {
-                @Override
-                public void animateTick(BlockState pState, Level pLevel, BlockPos pPos, RandomSource pRandom) {
-                    super.animateTick(pState, pLevel, pPos, pRandom);
-                    if (!pLevel.getBlockState(pPos.below()).isAir()) return;
-                    if (pRandom.nextFloat() < 0.02f) {
-                        ParticleUtils.spawnHickoryParticles(pLevel, pPos, pRandom, ModParticles.HICKORY_PARTICLE.get());
-                    }
-                }
-            });
+            () ->  new HickoryLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)));
 
     public static final RegistryObject<Block> RED_GLOWING_HICKORY_LEAVES = registerBlock("red_glowing_hickory_leaves",
             () ->  new GlowingLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES), HickoryColour.RED_GLOWING));

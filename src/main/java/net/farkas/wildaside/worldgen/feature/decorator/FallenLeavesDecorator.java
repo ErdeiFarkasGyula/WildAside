@@ -61,7 +61,7 @@ public class FallenLeavesDecorator extends TreeDecorator {
                     int startY = logs.stream().mapToInt(BlockPos::getY).min().orElse(0) + 5;
 
                     int groundY = -100;
-                    for (int y = startY; y >= 0; y--) {
+                    for (int y = startY; y >= -64; y--) {
                         BlockPos pos = new BlockPos(x, y, z);
                         if (reader.isStateAtPosition(pos, bs -> bs.is(BlockTags.DIRT))) {
                             if (reader.isStateAtPosition(pos.above(), bs -> !bs.isSolid())) {
@@ -70,7 +70,7 @@ public class FallenLeavesDecorator extends TreeDecorator {
                         }
                     }
 
-                    if (groundY > 0) {
+                    if (groundY > -64) {
                         BlockPos target = new BlockPos(x, groundY + 1, z);
 
                         int count = 1 + random.nextInt(3);

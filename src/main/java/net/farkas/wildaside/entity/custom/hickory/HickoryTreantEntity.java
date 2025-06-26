@@ -5,6 +5,7 @@ import net.farkas.wildaside.block.custom.RootBushBlock;
 import net.farkas.wildaside.entity.ai.hickory.HickoryTreantBeamAttackGoal;
 import net.farkas.wildaside.entity.ai.hickory.HickoryTreantMeleeAttackGoal;
 import net.farkas.wildaside.entity.ai.hickory.HickoryTreantRootAttackGoal;
+import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.util.HickoryColour;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -166,10 +167,10 @@ public class HickoryTreantEntity extends Monster {
 
     public int getRootInterval(int phase) {
         return switch (phase) {
-            case 2 -> 120;
-            case 3 -> 100;
-            case 4 -> 80;
-            default -> 140;
+            case 2 -> 140;
+            case 3 -> 120;
+            case 4 -> 100;
+            default -> 160;
         };
     }
 
@@ -181,15 +182,6 @@ public class HickoryTreantEntity extends Monster {
         };
     }
 
-
-//        // 4) Sprinkle some leaf‐dust particles for visual flair
-//        for (int i = 0; i < 20; i++) {
-//            level.addParticle(ParticleTypes.FALLING_LEAVES,
-//                    getX() + (random.nextDouble() - 0.5) * 2,
-//                    getY() + random.nextDouble() * 2,
-//                    getZ() + (random.nextDouble() - 0.5) * 2,
-//                    1, 0, 0, 0, 0);
-//        }
 
     public int getRootPatchRadius(int phase) {
         return phase >= 3 ? 2 : 1;
@@ -254,7 +246,7 @@ public class HickoryTreantEntity extends Monster {
         HickoryColour colour = values[random.nextInt(values.length)];
 
         int count = phase * 8;
-        float speed = (float) phase / 2;
+        float speed = phase >= 3 ? 2 : 1.5f;
 
         Vec3 start = this.position().add(0, this.getEyeHeight() * 0.5, 0);
         Vec3 targetPos = target.position().add(0, target.getEyeHeight() * 0.5, 0);
@@ -266,6 +258,14 @@ public class HickoryTreantEntity extends Monster {
             proj.shoot(delta.x, delta.y, delta.z, speed, 40 - (phase * 2));
             level.addFreshEntity(proj);
         }
+
+//        for (int i = 0; i < 20; i++) {
+//            level.addParticle(ModParticles.HICKORY_PARTICLES.get(colour).get(),
+//                    getX() + (random.nextDouble() - 0.5) * 2,
+//                    getY() + random.nextDouble() * 2,
+//                    getZ() + (random.nextDouble() - 0.5) * 2,
+//                    1, 0, 0);
+//        }
     }
 
     @Override

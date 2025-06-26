@@ -7,7 +7,6 @@ import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.entity.client.ModModelLayers;
 import net.farkas.wildaside.entity.client.hickory.HickoryTreantRenderer;
 import net.farkas.wildaside.entity.client.vibrion.MucellithModel;
-import net.farkas.wildaside.entity.custom.hickory.HickoryTreantEntity;
 import net.farkas.wildaside.particle.*;
 import net.farkas.wildaside.particle.custom.*;
 import net.minecraft.client.model.BoatModel;
@@ -53,11 +52,11 @@ public class ModEventBusClientEvents {
         event.registerSpriteSet(ModParticles.STILL_SUBSTILIUM_PARTICLE.get(), StillSubstiliumParticle.Provider::new);
         event.registerSpriteSet(ModParticles.LIFESTEAL_PARTICLE.get(), LifestealParticle.Provider::new);
         event.registerSpriteSet(ModParticles.VIBRION_PARTICLE.get(), VibrionParticle.Provider::new);
-        event.registerSpriteSet(ModParticles.HICKORY_PARTICLE.get(), HickoryParticle.Provider::new);
-        event.registerSpriteSet(ModParticles.RED_GLOWING_HICKORY_PARTICLE.get(), HickoryParticle.Provider::new);
-        event.registerSpriteSet(ModParticles.BROWN_GLOWING_HICKORY_PARTICLE.get(), HickoryParticle.Provider::new);
-        event.registerSpriteSet(ModParticles.YELLOW_GLOWING_HICKORY_PARTICLE.get(), HickoryParticle.Provider::new);
-        event.registerSpriteSet(ModParticles.GREEN_GLOWING_HICKORY_PARTICLE.get(), HickoryParticle.Provider::new);
+        event.registerSpriteSet(ModParticles.HICKORY_LEAF_PARTICLE.get(), HickoryParticle.Provider::new);
+        event.registerSpriteSet(ModParticles.RED_GLOWING_HICKORY_LEAF_PARTICLE.get(), HickoryParticle.Provider::new);
+        event.registerSpriteSet(ModParticles.BROWN_GLOWING_HICKORY_LEAF_PARTICLE.get(), HickoryParticle.Provider::new);
+        event.registerSpriteSet(ModParticles.YELLOW_GLOWING_HICKORY_LEAF_PARTICLE.get(), HickoryParticle.Provider::new);
+        event.registerSpriteSet(ModParticles.GREEN_GLOWING_HICKORY_LEAF_PARTICLE.get(), HickoryParticle.Provider::new);
     }
 
     @SubscribeEvent

@@ -130,7 +130,7 @@ public class VanillaCreativeTabs {
         }
         if (tab == CreativeModeTabs.SPAWN_EGGS) {
             event.accept(ModItems.MUCELLITH_SPAWN_EGG);
-            event.accept(ModItems.HICKORY_TREANT_SPAWN_EGG);
+//            event.accept(ModItems.HICKORY_TREANT_SPAWN_EGG);
         }
     }
 }
