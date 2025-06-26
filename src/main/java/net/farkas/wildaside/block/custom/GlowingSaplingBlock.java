@@ -8,11 +8,13 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SaplingBlock;
-import net.minecraft.world.level.block.grower.AbstractTreeGrower;
+import net.minecraft.world.level.block.grower.TreeGrower;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -22,7 +24,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.joml.Math;
-import org.stringtemplate.v4.ST;
 
 public class GlowingSaplingBlock extends SaplingBlock {
     public static final IntegerProperty STAGE = BlockStateProperties.STAGE;
@@ -34,7 +35,7 @@ public class GlowingSaplingBlock extends SaplingBlock {
     public static final IntegerProperty LIGHT = IntegerProperty.create("light", minLight, maxLight);
     public static BooleanProperty FIXED_LIGHTING = BooleanProperty.create("fixed_lighting");
 
-    public GlowingSaplingBlock(AbstractTreeGrower pTreeGrower, Properties pProperties) {
+    public GlowingSaplingBlock(TreeGrower pTreeGrower, Properties pProperties) {
         super(pTreeGrower, pProperties.lightLevel(s -> s.getValue(LIGHT)));
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(STAGE, 0)
@@ -55,25 +56,25 @@ public class GlowingSaplingBlock extends SaplingBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        if (pLevel.isClientSide) return InteractionResult.PASS;
-        if (pHand == InteractionHand.OFF_HAND) return InteractionResult.PASS;
+    protected ItemInteractionResult useItemOn(ItemStack pStack, BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHitResult) {
+        if (pLevel.isClientSide) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        if (pHand == InteractionHand.OFF_HAND) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 
         var playerItem = pPlayer.getItemInHand(pHand);
 
         if (playerItem.getItem().equals(ModItems.VIBRION.get())) {
-            if (pState.getValue(GlowingLeavesBlock.FIXED_LIGHTING)) return InteractionResult.PASS;
+            if (pState.getValue(GlowingLeavesBlock.FIXED_LIGHTING)) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
             pLevel.setBlock(pPos, pState.setValue(GlowingSaplingBlock.FIXED_LIGHTING, true), 3);
-            pLevel.playSound(null, pPos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.honeycomb.wax_on")), SoundSource.BLOCKS, 1, 1);
+            pLevel.playSound(null, pPos, ForgeRegistries.SOUND_EVENTS.getValue(ResourceLocation.withDefaultNamespace("item.honeycomb.wax_on")), SoundSource.BLOCKS, 1, 1);
             pPlayer.swing(pHand);
 
             if (!pPlayer.isCreative()) {
                 playerItem.shrink(1);
             }
 
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
-        return InteractionResult.PASS;
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     @Override

@@ -1,9 +1,10 @@
 package net.farkas.wildaside.block.entity;
 
 import net.farkas.wildaside.particle.ModParticles;
-import net.farkas.wildaside.util.BlasterUtil;
+import net.farkas.wildaside.util.BlasterUtils;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -108,7 +109,7 @@ public class NaturalSporeBlasterBlockEntity extends BlockEntity {
                     Direction facing = nextBlock.getValue(TrapDoorBlock.FACING);
                     if (facing.getAxis() == Direction.Axis.X) {
                         Direction.Axis axis = originBlock.getValue(RotatedPillarBlock.AXIS);
-                        if (BlasterUtil.axisToDirection(axis, x) == facing) {
+                        if (BlasterUtils.axisToDirection(axis, x) == facing) {
                             return false;
                         } else {
                             shouldBreakNext = true;
@@ -123,7 +124,7 @@ public class NaturalSporeBlasterBlockEntity extends BlockEntity {
 
                 if (!open) {
                     if (facing.getAxis() == Direction.Axis.X) {
-                        if (BlasterUtil.axisToDirection(axis, x) == facing) {
+                        if (BlasterUtils.axisToDirection(axis, x) == facing) {
                             return false;
                         } else {
                             shouldBreakNext = true;
@@ -131,7 +132,7 @@ public class NaturalSporeBlasterBlockEntity extends BlockEntity {
                     }
                 } else {
                     if (facing.getAxis() != Direction.Axis.X) {
-                        if (BlasterUtil.doorDirectionCheck(axis, x, facing)) {
+                        if (BlasterUtils.doorDirectionCheck(axis, x, facing)) {
                             if (nextBlock.getValue(DoorBlock.HINGE) == DoorHingeSide.LEFT) {
                                 return false;
                             }
@@ -159,7 +160,7 @@ public class NaturalSporeBlasterBlockEntity extends BlockEntity {
                     Direction facing = nextBlock.getValue(TrapDoorBlock.FACING);
                     if (facing.getAxis() == Direction.Axis.Z) {
                         Direction.Axis axis = originBlock.getValue(RotatedPillarBlock.AXIS);
-                        if (BlasterUtil.axisToDirection(axis, z) == facing) {
+                        if (BlasterUtils.axisToDirection(axis, z) == facing) {
                             return false;
                         } else {
                             shouldBreakNext = true;
@@ -174,7 +175,7 @@ public class NaturalSporeBlasterBlockEntity extends BlockEntity {
 
                 if (!open) {
                     if (facing.getAxis() == Direction.Axis.Z) {
-                        if (BlasterUtil.axisToDirection(axis, z) == facing) {
+                        if (BlasterUtils.axisToDirection(axis, z) == facing) {
                             return false;
                         } else {
                             shouldBreakNext = true;
@@ -182,7 +183,7 @@ public class NaturalSporeBlasterBlockEntity extends BlockEntity {
                     }
                 } else {
                     if (facing.getAxis() != Direction.Axis.Z) {
-                        if (BlasterUtil.doorDirectionCheck(axis, z, facing)) {
+                        if (BlasterUtils.doorDirectionCheck(axis, z, facing)) {
                             if (nextBlock.getValue(DoorBlock.HINGE) == DoorHingeSide.RIGHT) {
                                 return false;
                             }
@@ -202,20 +203,20 @@ public class NaturalSporeBlasterBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
-        changePowerTimer = tag.getInt("changeTimer");
-        power1 = tag.getInt("power1");
-        power2 = tag.getInt("power2");
-        shouldBreakNext = tag.getBoolean("shouldBreakNext");
+    protected void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
+        super.loadAdditional(pTag, pRegistries);
+        changePowerTimer = pTag.getInt("changeTimer");
+        power1 = pTag.getInt("power1");
+        power2 = pTag.getInt("power2");
+        shouldBreakNext = pTag.getBoolean("shouldBreakNext");
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
-        tag.putInt("changeTimer", changePowerTimer);
-        tag.putInt("power1", power1);
-        tag.putInt("power2", power2);
-        tag.putBoolean("shouldBreakNext", shouldBreakNext);
+    protected void saveAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
+        super.saveAdditional(pTag, pRegistries);
+        pTag.putInt("changeTimer", changePowerTimer);
+        pTag.putInt("power1", power1);
+        pTag.putInt("power2", power2);
+        pTag.putBoolean("shouldBreakNext", shouldBreakNext);
     }
 }

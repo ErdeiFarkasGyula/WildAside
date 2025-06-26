@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "item": "wildaside:lit_vibrion_glass"
+      "id": "wildaside:lit_vibrion_glass"
     },
     "title": {
       "translate": "advancements.glimmering_glass.title"

@@ -2,10 +2,11 @@ package net.farkas.wildaside.block.entity;
 
 import net.farkas.wildaside.block.custom.vibrion.SporeBlaster;
 import net.farkas.wildaside.particle.ModParticles;
-import net.farkas.wildaside.util.BlasterUtil;
+import net.farkas.wildaside.util.BlasterUtils;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -95,7 +96,7 @@ public class SporeBlasterBlockEntity extends BlockEntity {
                     Direction facing = nextBlock.getValue(TrapDoorBlock.FACING);
                     if (facing.getAxis() == Direction.Axis.X) {
                         Direction.Axis axis = originBlock.getValue(SporeBlaster.FACING).getAxis();
-                        if (BlasterUtil.axisToDirection(axis, dir.getStepX()) == facing) {
+                        if (BlasterUtils.axisToDirection(axis, dir.getStepX()) == facing) {
                             return false;
                         } else {
                             shouldBreakNext = true;
@@ -117,7 +118,7 @@ public class SporeBlasterBlockEntity extends BlockEntity {
                     }
                 } else {
                     if (facing.getAxis() != Direction.Axis.X) {
-                        if (BlasterUtil.doorDirectionCheck(dir.getAxis(), dir.getStepX(), facing)) {
+                        if (BlasterUtils.doorDirectionCheck(dir.getAxis(), dir.getStepX(), facing)) {
                             if (nextBlock.getValue(DoorBlock.HINGE) == DoorHingeSide.LEFT) {
                                 return false;
                             }
@@ -167,7 +168,7 @@ public class SporeBlasterBlockEntity extends BlockEntity {
                     }
                 } else {
                     if (facing.getAxis() != Direction.Axis.Z) {
-                        if (BlasterUtil.doorDirectionCheck(axis, dir.getStepZ(), facing)) {
+                        if (BlasterUtils.doorDirectionCheck(axis, dir.getStepZ(), facing)) {
                             if (nextBlock.getValue(DoorBlock.HINGE) == DoorHingeSide.RIGHT) {
                                 return false;
                             }
@@ -186,18 +187,17 @@ public class SporeBlasterBlockEntity extends BlockEntity {
         return true;
     }
 
-
     @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
-        power = tag.getInt("power");
-        shouldBreakNext = tag.getBoolean("shouldBreakNext");
+    protected void saveAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
+        super.saveAdditional(pTag, pRegistries);
+        pTag.putInt("power", power);
+        pTag.putBoolean("shouldBreakNext", shouldBreakNext);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
-        tag.putInt("power", power);
-        tag.putBoolean("shouldBreakNext", shouldBreakNext);
+    protected void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
+        super.loadAdditional(pTag, pRegistries);
+        power = pTag.getInt("power");
+        shouldBreakNext = pTag.getBoolean("shouldBreakNext");
     }
 }

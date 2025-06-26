@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "item": "wildaside:bioengineering_workstation"
+      "id": "wildaside:bioengineering_workstation"
     },
     "title": {
       "translate": "advancements.we_need_to_cook.title"

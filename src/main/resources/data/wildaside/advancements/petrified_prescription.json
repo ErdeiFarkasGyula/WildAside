@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "item": "wildaside:entorium"
+      "id": "wildaside:entorium"
     },
     "title": {
       "translate": "advancements.petrified_prescription.title"

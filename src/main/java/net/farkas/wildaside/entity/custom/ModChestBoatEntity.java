@@ -40,9 +40,10 @@ public class ModChestBoatEntity extends ChestBoat {
         this.entityData.set(DATA_ID_TYPE, pVariant.ordinal());
     }
 
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_ID_TYPE, ModBoatEntity.Type.SUBSTILIUM.ordinal());
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder pBuilder) {
+        super.defineSynchedData(pBuilder);
+        pBuilder.define(DATA_ID_TYPE, ModBoatEntity.Type.SUBSTILIUM.ordinal());
     }
 
     protected void addAdditionalSaveData(CompoundTag pCompound) {

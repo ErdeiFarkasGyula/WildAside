@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smelting",
+  "category": "food",
+  "cookingtime": 200,
+  "experience": 0.25,
+  "group": "vibrion",
+  "ingredient": {
+    "item": "wildaside:lit_vibrion_gel"
+  },
+  "result": {
+    "id": "wildaside:vibrion"
+  }
+}

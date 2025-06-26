@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "item": "wildaside:vibrion"
+      "id": "wildaside:vibrion"
     },
     "title": {
       "translate": "advancements.through_hundreds_of_mutations.title"

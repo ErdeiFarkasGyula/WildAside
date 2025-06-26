@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_hickory_leaf": {
+      "conditions": {
+        "items": [
+          {
+            "items": "wildaside:hickory_leaf"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "wildaside:hickory_leaves"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_hickory_leaf"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "wildaside:hickory_leaves"
+    ]
+  }
+}

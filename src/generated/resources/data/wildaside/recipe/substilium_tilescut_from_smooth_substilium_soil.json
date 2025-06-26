@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "wildaside:smooth_substilium_soil"
+  },
+  "result": {
+    "count": 1,
+    "id": "wildaside:substilium_tiles"
+  }
+}

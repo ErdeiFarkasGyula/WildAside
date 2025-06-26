@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
 public class HickoryTreantRenderer extends MobRenderer<HickoryTreantEntity, HumanoidModel<HickoryTreantEntity>> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(WildAside.MOD_ID, "textures/entity/hickory_treant.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(WildAside.MOD_ID, "textures/entity/hickory_treant.png");
 
     public HickoryTreantRenderer(EntityRendererProvider.Context pContext) {
         super(pContext, new HumanoidModel<>(pContext.bakeLayer(ModelLayers.HUSK)), 1.4f);

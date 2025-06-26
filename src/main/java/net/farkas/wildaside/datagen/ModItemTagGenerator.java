@@ -3,11 +3,13 @@ package net.farkas.wildaside.datagen;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.item.ModItems;
+import net.farkas.wildaside.util.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
@@ -22,6 +24,9 @@ public class ModItemTagGenerator extends ItemTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider pProvider) {
+        this.tag(ModTags.Items.SHEARS)
+                .add(Items.SHEARS);
+
         this.tag(ItemTags.LOGS_THAT_BURN)
                 .add(ModBlocks.SUBSTILIUM_STEM.get().asItem())
                 .add(ModBlocks.STRIPPED_SUBSTILIUM_STEM.get().asItem())

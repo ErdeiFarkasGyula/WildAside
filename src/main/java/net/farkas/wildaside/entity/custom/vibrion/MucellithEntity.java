@@ -19,6 +19,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidType;
 import org.jetbrains.annotations.Nullable;
@@ -157,11 +158,11 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(ATTACKING, false);
-        this.entityData.define(DEFENDING, false);
-        this.entityData.define(HAS_DEFENDED, false);
+    protected void defineSynchedData(SynchedEntityData.Builder pBuilder) {
+        super.defineSynchedData(pBuilder);
+        pBuilder.define(ATTACKING, false);
+        pBuilder.define(DEFENDING, false);
+        pBuilder.define(HAS_DEFENDED, false);
     }
 
     @Override
@@ -199,9 +200,7 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
     }
 
     @Override
-    public boolean ignoreExplosion() {
-        return true;
-    }
+    public boolean ignoreExplosion(Explosion pExplosion) { return true; }
 
     public void setAttacking(boolean attacking) {
         this.entityData.set(ATTACKING, attacking);

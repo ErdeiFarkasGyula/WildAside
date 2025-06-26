@@ -1,50 +1,44 @@
 package net.farkas.wildaside.recipe;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
-import com.google.gson.JsonObject;
-import net.farkas.wildaside.WildAside;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.world.SimpleContainer;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class BioengineeringWorkstationRecipe implements Recipe<SimpleContainer> {
-    private final NonNullList<Ingredient> inputItems;
-    private final ItemStack output;
-    private final ResourceLocation id;
+public record BioengineeringWorkstationRecipe(List<Ingredient> ingredients, ItemStack output) implements Recipe<BioengineeringWorkstationRecipeInput> {
 
-    public BioengineeringWorkstationRecipe(NonNullList<Ingredient> inputItems, ItemStack output, ResourceLocation id) {
-        this.inputItems = inputItems;
-        this.output = output;
-        this.id = id;
+    @Override
+    public NonNullList<Ingredient> getIngredients() {
+        NonNullList<Ingredient> list = NonNullList.create();
+        list.addAll(ingredients);
+        return list;
     }
 
     @Override
-    public boolean matches(SimpleContainer inv, Level level) {
-        if (level.isClientSide()) return false;
+    public boolean matches(BioengineeringWorkstationRecipeInput pInput, Level pLevel) {
+        if (pLevel.isClientSide()) return false;
 
         List<ItemStack> stacks = new ArrayList<>();
 
-        for (int i = 0; i < inv.getContainerSize(); i++) {
-            ItemStack s = inv.getItem(i);
+        for (int i = 0; i < pInput.size(); i++) {
+            ItemStack s = pInput.getItem(i);
             if (!s.isEmpty()) {
                 stacks.add(s.copy());
             }
         }
 
-        for (Ingredient ing : inputItems) {
+        for (Ingredient ing : ingredients) {
             if (ing == Ingredient.EMPTY) continue;
 
             boolean matched = false;
@@ -64,12 +58,7 @@ public class BioengineeringWorkstationRecipe implements Recipe<SimpleContainer> 
     }
 
     @Override
-    public NonNullList<Ingredient> getIngredients() {
-        return inputItems;
-    }
-
-    @Override
-    public ItemStack assemble(SimpleContainer pContainer, RegistryAccess pRegistryAccess) {
+    public ItemStack assemble(BioengineeringWorkstationRecipeInput pInput, HolderLookup.Provider pRegistries) {
         return output.copy();
     }
 
@@ -79,75 +68,59 @@ public class BioengineeringWorkstationRecipe implements Recipe<SimpleContainer> 
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess pRegistryAccess) {
-        return output.copy();
-    }
-
-    @Override
-    public ResourceLocation getId() {
-        return id;
+    public ItemStack getResultItem(HolderLookup.Provider pRegistries) {
+        return output;
     }
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return Serializer.INSTANCE;
+        return ModRecipes.BIOENGINEERING_SERIALIZER.get();
     }
 
     @Override
     public RecipeType<?> getType() {
-        return Type.INSTANCE;
-    }
-
-    public static class Type implements RecipeType<BioengineeringWorkstationRecipe> {
-        public static final Type INSTANCE = new Type();
-        public static final String ID = "bioengineering";
+        return ModRecipes.BIOENGINEERING_TYPE.get();
     }
 
     public static class Serializer implements RecipeSerializer<BioengineeringWorkstationRecipe> {
-        public static final Serializer INSTANCE = new Serializer();
-        public static final ResourceLocation ID = new ResourceLocation(WildAside.MOD_ID, "bioengineering");
+        public static final MapCodec<BioengineeringWorkstationRecipe> CODEC =
+                RecordCodecBuilder.mapCodec(inst -> inst.group(
+                        Codec.list(Ingredient.CODEC_NONEMPTY)
+                                .fieldOf("ingredients")
+                                .forGetter(BioengineeringWorkstationRecipe::ingredients),
+                        ItemStack.CODEC
+                                .fieldOf("output")
+                                .forGetter(BioengineeringWorkstationRecipe::output)
+                ).apply(inst, BioengineeringWorkstationRecipe::new));
+
+        public static final StreamCodec<RegistryFriendlyByteBuf, BioengineeringWorkstationRecipe> STREAM_CODEC =
+                StreamCodec.of(
+                        (buf, recipe) -> {
+                            for (Ingredient ing : recipe.ingredients()) {
+                                Ingredient.CONTENTS_STREAM_CODEC.encode(buf, ing);
+                            }
+                            ItemStack.STREAM_CODEC.encode(buf, recipe.output());
+                        },
+                        buf -> {
+                            List<Ingredient> ings = new ArrayList<>(5);
+                            for (int i = 0; i < 5; i++) {
+                                ings.add(Ingredient.CONTENTS_STREAM_CODEC.decode(buf));
+                            }
+                            ItemStack out = ItemStack.STREAM_CODEC.decode(buf);
+                            return new BioengineeringWorkstationRecipe(ings, out);
+                        }
+                );
+
+
 
         @Override
-        public BioengineeringWorkstationRecipe fromJson(ResourceLocation pRecipeId, JsonObject pSerializedRecipe) {
-            ItemStack output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(pSerializedRecipe, "output"));
-
-            JsonArray ingredients = GsonHelper.getAsJsonArray(pSerializedRecipe, "ingredients");
-            NonNullList<Ingredient> inputs = NonNullList.withSize(5, Ingredient.EMPTY);
-
-            for (int i = 0; i < inputs.size(); i++) {
-                JsonElement element = ingredients.size() > i ? ingredients.get(i) : JsonNull.INSTANCE;
-
-                if (element.isJsonNull() || (element.isJsonObject() && element.getAsJsonObject().entrySet().isEmpty())) {
-                    inputs.set(i, Ingredient.EMPTY);
-                } else {
-                    inputs.set(i, Ingredient.fromJson(element));
-                }
-            }
-
-            return new BioengineeringWorkstationRecipe(inputs, output, pRecipeId);
+        public MapCodec<BioengineeringWorkstationRecipe> codec() {
+            return CODEC;
         }
 
         @Override
-        public @Nullable BioengineeringWorkstationRecipe fromNetwork(ResourceLocation pRecipeId, FriendlyByteBuf pBuffer) {
-            NonNullList<Ingredient> inputs = NonNullList.withSize(pBuffer.readInt(), Ingredient.EMPTY);
-
-            for (int i = 0; i < inputs.size(); i++) {
-                inputs.set(i, Ingredient.fromNetwork(pBuffer));
-            }
-
-            ItemStack output = pBuffer.readItem();
-            return new BioengineeringWorkstationRecipe(inputs, output, pRecipeId);
-        }
-
-        @Override
-        public void toNetwork(FriendlyByteBuf pBuffer, BioengineeringWorkstationRecipe pRecipe) {
-            pBuffer.writeInt(pRecipe.inputItems.size());
-
-            for (Ingredient ingredient : pRecipe.getIngredients()) {
-                ingredient.toNetwork(pBuffer);
-            }
-
-            pBuffer.writeItemStack(pRecipe.getResultItem(null), false);
+        public StreamCodec<RegistryFriendlyByteBuf, BioengineeringWorkstationRecipe> streamCodec() {
+            return STREAM_CODEC;
         }
     }
 }

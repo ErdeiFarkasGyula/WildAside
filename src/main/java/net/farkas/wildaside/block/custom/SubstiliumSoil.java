@@ -27,8 +27,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class SubstiliumSoil extends DropExperienceBlock implements BonemealableBlock {
-    public SubstiliumSoil(Properties pProperties, IntProvider pXpRange) {
-        super(pProperties, pXpRange);
+    public SubstiliumSoil(IntProvider p_221084_, Properties p_221083_) {
+        super(p_221084_, p_221083_);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class SubstiliumSoil extends DropExperienceBlock implements BonemealableB
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader pLevel, BlockPos pPos, BlockState pState, boolean pIsClient) {
+    public boolean isValidBonemealTarget(LevelReader pLevel, BlockPos pPos, BlockState pState) {
         return pLevel.getBlockState(pPos.above()).isAir();
     }
 

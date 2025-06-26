@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_red_glowing_hickory_leaf": {
+      "conditions": {
+        "items": [
+          {
+            "items": "wildaside:red_glowing_hickory_leaf"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "wildaside:red_glowing_hickory_leaves"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_red_glowing_hickory_leaf"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "wildaside:red_glowing_hickory_leaves"
+    ]
+  }
+}

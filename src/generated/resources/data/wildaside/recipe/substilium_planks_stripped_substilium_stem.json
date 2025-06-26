@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "substilium_planks",
+  "ingredients": [
+    {
+      "item": "wildaside:stripped_substilium_stem"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "id": "wildaside:substilium_planks"
+  }
+}

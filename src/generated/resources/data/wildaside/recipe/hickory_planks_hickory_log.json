@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "hickory_planks",
+  "ingredients": [
+    {
+      "item": "wildaside:hickory_log"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "id": "wildaside:hickory_planks"
+  }
+}

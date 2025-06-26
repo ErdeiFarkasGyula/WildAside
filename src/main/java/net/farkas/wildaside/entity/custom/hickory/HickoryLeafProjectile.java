@@ -9,6 +9,7 @@ import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerEntity;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -61,7 +62,7 @@ public class HickoryLeafProjectile extends ThrowableItemProjectile implements It
             target.addEffect(new MobEffectInstance(MobEffects.HARM, 1, 0, true, false));
             switch (getColour()) {
                 case RED_GLOWING:
-                    target.setSecondsOnFire(4 + phase);
+                    target.igniteForSeconds(4 + phase);
                     break;
                 case BROWN_GLOWING:
                     target.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, phase - 1));
@@ -100,14 +101,9 @@ public class HickoryLeafProjectile extends ThrowableItemProjectile implements It
     }
 
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return new ClientboundAddEntityPacket(this);
-    }
-
-    @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(COLOUR, HickoryColour.HICKORY.ordinal());
+    protected void defineSynchedData(SynchedEntityData.Builder pBuilder) {
+        super.defineSynchedData(pBuilder);
+        pBuilder.define(COLOUR, HickoryColour.HICKORY.ordinal());
     }
 
     private HickoryColour getColour() {

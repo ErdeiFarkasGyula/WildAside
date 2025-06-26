@@ -14,6 +14,6 @@ public class MucellithRenderer extends MobRenderer<MucellithEntity, MucellithMod
 
     @Override
     public ResourceLocation getTextureLocation(MucellithEntity pEntity) {
-        return new ResourceLocation(WildAside.MOD_ID, "textures/entity/mucellith.png");
+        return ResourceLocation.fromNamespaceAndPath(WildAside.MOD_ID, "textures/entity/mucellith.png");
     }
 }

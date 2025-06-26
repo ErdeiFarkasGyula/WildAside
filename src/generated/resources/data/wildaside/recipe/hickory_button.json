@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [
+    {
+      "item": "wildaside:hickory_planks"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "wildaside:hickory_button"
+  }
+}

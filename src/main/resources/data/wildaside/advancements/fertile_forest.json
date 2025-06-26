@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "item": "wildaside:fertiliser_bomb"
+      "id": "wildaside:fertiliser_bomb"
     },
     "title": {
       "translate": "advancements.fertile_forest.title"

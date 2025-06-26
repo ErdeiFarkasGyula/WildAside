@@ -2,10 +2,10 @@ package net.farkas.wildaside.block.custom.vibrion;
 
 import net.farkas.wildaside.util.ModTags;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.GlassBlock;
+import net.minecraft.world.level.block.TransparentBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class VibrionGlass extends GlassBlock {
+public class VibrionGlass extends TransparentBlock {
     public VibrionGlass(Properties p_53640_) {
         super(p_53640_);
     }

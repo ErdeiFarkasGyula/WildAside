@@ -8,14 +8,20 @@ import net.farkas.wildaside.capability.contamination.IContamination;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.enchantment.ModEnchantments;
 import net.farkas.wildaside.item.ModItems;
+import net.farkas.wildaside.potion.BetterBrewingRecipe;
+import net.farkas.wildaside.potion.ModPotions;
 import net.farkas.wildaside.util.AdvancementHandler;
 import net.farkas.wildaside.util.ContaminationHandler;
+import net.farkas.wildaside.util.HickoryColour;
 import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
@@ -28,7 +34,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
+import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.biome.Biome;
@@ -36,6 +44,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.brewing.BrewingRecipeRegisterEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
@@ -45,8 +54,10 @@ import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.event.village.WandererTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mod.EventBusSubscriber(modid = WildAside.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModEvents {
@@ -59,7 +70,8 @@ public class ModEvents {
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            Advancement advancement = player.server.getAdvancements().getAdvancement(new ResourceLocation(WildAside.MOD_ID,"wild_wilder_wildest"));
+            AdvancementHolder advancement = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(WildAside.MOD_ID,"wild_wilder_wildest"));
+            if (advancement == null) return;
             AdvancementProgress progress = player.getAdvancements().getOrStartProgress(advancement);
             if (!progress.isDone()) {
                 for (String criteria : progress.getRemainingCriteria()) {
@@ -70,31 +82,54 @@ public class ModEvents {
     }
 
     @SubscribeEvent
+    public static void brewingRecipesEvent(BrewingRecipeRegisterEvent event) {
+//        event.addRecipe(new BetterBrewingRecipe(Potions.AWKWARD, ModItems.VIBRION.get(), ModPotions.CONTAMINATION_POTION.get()));
+//        event.addRecipe(new BetterBrewingRecipe(ModPotions.CONTAMINATION_POTION.get(), Items.REDSTONE, ModPotions.CONTAMINATION_POTION_2.get()));
+//        event.addRecipe(new BetterBrewingRecipe(ModPotions.IMMUNITY_POTION.get(), Items.FERMENTED_SPIDER_EYE, ModPotions.IMMUNITY_POTION.get()));
+
+//        event.addRecipe(new BetterBrewingRecipe(Potions.AWKWARD, ModItems.ENTORIUM.get(), ModPotions.IMMUNITY_POTION.get()));
+//        event.addRecipe(new BetterBrewingRecipe(ModPotions.CONTAMINATION_POTION.get(), Items.FERMENTED_SPIDER_EYE, ModPotions.IMMUNITY_POTION.get()));
+//        event.addRecipe(new BetterBrewingRecipe(ModPotions.IMMUNITY_POTION.get(), Items.REDSTONE, ModPotions.IMMUNITY_POTION_2.get()));
+//        event.addRecipe(new BetterBrewingRecipe(ModPotions.CONTAMINATION_POTION_2.get(), Items.FERMENTED_SPIDER_EYE, ModPotions.IMMUNITY_POTION_2.get()));
+
+        event.addRecipe(new BetterBrewingRecipe(Potions.AWKWARD.get(), ModItems.MUCELLITH_JAW.get(), ModPotions.LIFESTEAL_POTION.get()));
+        event.addRecipe(new BetterBrewingRecipe(ModPotions.LIFESTEAL_POTION.get(), Items.REDSTONE, ModPotions.LIFESTEAL_POTION_2.get()));
+    }
+
+    @SubscribeEvent
     public static void addCustomTrades(VillagerTradesEvent event) {
+        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+        RegistryAccess registryAccess = server.registryAccess();
+
         if (event.getType() == VillagerProfession.FARMER) {
             int villagerLevel = 1;
             ItemStack emerald = new ItemStack(Items.EMERALD);
             event.getTrades().get(villagerLevel).add((pTrader, pRandom) -> new MerchantOffer(
-                    new ItemStack(ModItems.HICKORY_NUT.get(), 16), emerald, 20, 2, 0.05f
+                    new ItemCost(ModItems.HICKORY_NUT.get(), 16), emerald, 20, 2, 0.05f
             ));
+            for (HickoryColour colour : HickoryColour.values()) {
+                event.getTrades().get(villagerLevel).add((pTrader, pRandom) -> new MerchantOffer(
+                        new ItemCost(ModItems.LEAF_ITEMS.get(colour).get(), 32), emerald, 20, 2, 0.05f
+                ));
+            }
         }
 
         if (event.getType() == VillagerProfession.TOOLSMITH) {
             int villagerLevel = 3;
             event.getTrades().get(villagerLevel).add((pTrader, pRandom) -> new MerchantOffer(
-                    new ItemStack(Items.EMERALD, 6), new ItemStack(ModItems.SPORE_BOMB.get()), 2, 5, 0.06f
+                    new ItemCost(Items.EMERALD, 6), new ItemStack(ModItems.SPORE_BOMB.get()), 2, 5, 0.06f
             ));
         }
 
         if (event.getType() == VillagerProfession.LIBRARIAN) {
             int villagerLevel = 5;
-            ItemStack book = new ItemStack(Items.BOOK);
-            ItemStack emerald = new ItemStack(Items.EMERALD, 8);
-            EnchantmentInstance enchantmentInstance = new EnchantmentInstance(ModEnchantments.CUSHIONING.get(), 1);
+            ItemCost book = new ItemCost(Items.BOOK);
+            ItemCost emerald = new ItemCost(Items.EMERALD, 8);
+            EnchantmentInstance enchantmentInstance = new EnchantmentInstance(ModEnchantments.CUSHIONING.getOrThrow(registryAccess), 1);
             ItemStack enchantedBook = EnchantedBookItem.createForEnchantment(enchantmentInstance);
 
             event.getTrades().get(villagerLevel).add(((pTrader, pRandom) -> new MerchantOffer(
-                    book, emerald, enchantedBook, 1, 5, 0.05f)
+                    book, Optional.of(emerald), enchantedBook, 1, 5, 0.05f)
             ));
         }
     }
@@ -105,19 +140,19 @@ public class ModEvents {
         //List<VillagerTrades.ItemListing> rareTrades = event.getRareTrades();
 
         genericTrades.add((pTrader, pRandom) -> new MerchantOffer(
-                new ItemStack(Items.EMERALD, 4), new ItemStack(ModBlocks.HICKORY_SAPLING.get()), 8, 2, 0.03f
+                new ItemCost(Items.EMERALD, 4), new ItemStack(ModBlocks.HICKORY_SAPLING.get()), 8, 2, 0.03f
         ));
         genericTrades.add((pTrader, pRandom) -> new MerchantOffer(
-                new ItemStack(Items.EMERALD, 5), new ItemStack(ModBlocks.RED_GLOWING_HICKORY_SAPLING.get()), 8, 2, 0.03f
+                new ItemCost(Items.EMERALD, 5), new ItemStack(ModBlocks.RED_GLOWING_HICKORY_SAPLING.get()), 8, 2, 0.03f
         ));
         genericTrades.add((pTrader, pRandom) -> new MerchantOffer(
-                new ItemStack(Items.EMERALD, 5), new ItemStack(ModBlocks.BROWN_GLOWING_HICKORY_SAPLING.get()), 8, 2, 0.03f
+                new ItemCost(Items.EMERALD, 5), new ItemStack(ModBlocks.BROWN_GLOWING_HICKORY_SAPLING.get()), 8, 2, 0.03f
         ));
         genericTrades.add((pTrader, pRandom) -> new MerchantOffer(
-                new ItemStack(Items.EMERALD, 5), new ItemStack(ModBlocks.YELLOW_GLOWING_HICKORY_SAPLING.get()), 8, 2, 0.03f
+                new ItemCost(Items.EMERALD, 5), new ItemStack(ModBlocks.YELLOW_GLOWING_HICKORY_SAPLING.get()), 8, 2, 0.03f
         ));
         genericTrades.add((pTrader, pRandom) -> new MerchantOffer(
-                new ItemStack(Items.EMERALD, 5), new ItemStack(ModBlocks.GREEN_GLOWING_HICKORY_SAPLING.get()), 8, 2, 0.03f
+                new ItemCost(Items.EMERALD, 5), new ItemStack(ModBlocks.GREEN_GLOWING_HICKORY_SAPLING.get()), 8, 2, 0.03f
         ));
     }
 
@@ -128,7 +163,7 @@ public class ModEvents {
         bacteriaBarrierAdvancement(event);
     }
 
-    private static final ResourceLocation GLOWING_FOREST = new ResourceLocation(WildAside.MOD_ID, "glowing_hickory_forest");
+    private static final ResourceLocation GLOWING_FOREST = ResourceLocation.fromNamespaceAndPath(WildAside.MOD_ID, "glowing_hickory_forest");
 
     private static void glowUpAdvancement(TickEvent.PlayerTickEvent event) {
         if (event.phase == TickEvent.Phase.END && !event.player.level().isClientSide) {
@@ -201,7 +236,7 @@ public class ModEvents {
         if (entity instanceof Player) {
             MobEffectInstance mobEffectInstance = event.getEffectInstance();
             if (mobEffectInstance != null && mobEffectInstance.getEffect() == ModMobEffects.CONTAMINATION.get()) {
-                entity.addEffect(new MobEffectInstance(ModMobEffects.IMMUNITY.get(), (mobEffectInstance.getAmplifier() + 1 ) * 5 * 20, mobEffectInstance.getAmplifier()));
+                entity.addEffect(new MobEffectInstance(ModMobEffects.IMMUNITY.getHolder().get(), (mobEffectInstance.getAmplifier() + 1 ) * 5 * 20, mobEffectInstance.getAmplifier()));
             }
         }
     }
@@ -211,12 +246,11 @@ public class ModEvents {
         if (event.isCanceled()) return;
 
         ModMobEffects.CONTAMINATION.getHolder().ifPresent(contamEffect -> {
-            var contamination = contamEffect.get();
             Player attacker = event.getEntity();
             if (attacker == null) return;
-            if (attacker.hasEffect(contamination)) {
+            if (attacker.hasEffect(contamEffect)) {
                 RandomSource random = attacker.getRandom();
-                if ((float)attacker.getEffect(contamination).getAmplifier() / 5 > random.nextFloat()) {
+                if ((float)attacker.getEffect(contamEffect).getAmplifier() / 5 > random.nextFloat()) {
                     if (event.getTarget() instanceof LivingEntity target) {
                         attacker.getCapability(ContaminationCapability.INSTANCE).ifPresent(data -> {
                             ContaminationHandler.giveContaminationDose(target, data.getDose() / 5);

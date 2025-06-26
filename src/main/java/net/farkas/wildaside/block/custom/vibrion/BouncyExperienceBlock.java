@@ -2,6 +2,7 @@ package net.farkas.wildaside.block.custom.vibrion;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,8 +14,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.IPlantable;
 
 public class BouncyExperienceBlock extends DropExperienceBlock {
-    public BouncyExperienceBlock(Properties pProperties, UniformInt uniformInt) {
-        super(pProperties);
+    public BouncyExperienceBlock(IntProvider p_221084_, Properties p_221083_) {
+        super(p_221084_, p_221083_);
     }
 
     @Override

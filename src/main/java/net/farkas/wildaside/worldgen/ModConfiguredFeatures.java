@@ -1,6 +1,5 @@
 package net.farkas.wildaside.worldgen;
 
-import com.google.common.collect.ImmutableList;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.util.HickoryColour;
@@ -8,9 +7,8 @@ import net.farkas.wildaside.worldgen.feature.ModFeatures;
 import net.farkas.wildaside.worldgen.feature.decorator.FallenLeavesDecorator;
 import net.farkas.wildaside.worldgen.feature.tree.hickory.HickoryTreeFoliagePlacer;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -26,8 +24,6 @@ import net.minecraft.world.level.levelgen.feature.treedecorators.BeehiveDecorato
 import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
-import net.minecraftforge.registries.RegistryObject;
-
 import java.util.EnumMap;
 import java.util.List;
 
@@ -93,7 +89,7 @@ public class ModConfiguredFeatures {
         HICKORY_TREES.put(HickoryColour.GREEN_GLOWING, GREEN_GLOWING_HICKORY_TREE);
     }
 
-    public static void bootstrap(BootstapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         RuleTest overgrown_entorium_ore_replaceables = new BlockMatchTest(ModBlocks.SUBSTILIUM_SOIL.get());
         RuleTest compressed_substilium_soil_replaceables = new BlockMatchTest(ModBlocks.SUBSTILIUM_SOIL.get());
         RuleTest substilium_ore_replaceables = new BlockMatchTest(ModBlocks.SUBSTILIUM_SOIL.get());
@@ -173,11 +169,11 @@ public class ModConfiguredFeatures {
                         new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.PINKSTER_FLOWER.get())))));
 
         BeehiveDecorator glowingBeehive = new BeehiveDecorator(0.015f);
-        ImmutableList hickoryDecorator = ImmutableList.of(new BeehiveDecorator(0.01f), new FallenLeavesDecorator(0.075f, HickoryColour.HICKORY));
-        ImmutableList redGlowingHickoryDecorator = ImmutableList.of(glowingBeehive, new FallenLeavesDecorator(0.075f, HickoryColour.RED_GLOWING));
-        ImmutableList brownGlowingHickoryDecorator = ImmutableList.of(glowingBeehive, new FallenLeavesDecorator(0.075f, HickoryColour.BROWN_GLOWING));
-        ImmutableList yellowGlowingHickoryDecorator = ImmutableList.of(glowingBeehive, new FallenLeavesDecorator(0.075f, HickoryColour.YELLOW_GLOWING));
-        ImmutableList greenGlowingHickoryDecorator = ImmutableList.of(glowingBeehive, new FallenLeavesDecorator(0.075f, HickoryColour.GREEN_GLOWING));
+        List hickoryDecorator = List.of(new BeehiveDecorator(0.01f), new FallenLeavesDecorator(0.075f, HickoryColour.HICKORY));
+        List redGlowingHickoryDecorator = List.of(glowingBeehive, new FallenLeavesDecorator(0.075f, HickoryColour.RED_GLOWING));
+        List brownGlowingHickoryDecorator = List.of(glowingBeehive, new FallenLeavesDecorator(0.075f, HickoryColour.BROWN_GLOWING));
+        List yellowGlowingHickoryDecorator = List.of(glowingBeehive, new FallenLeavesDecorator(0.075f, HickoryColour.YELLOW_GLOWING));
+        List greenGlowingHickoryDecorator = List.of(glowingBeehive, new FallenLeavesDecorator(0.075f, HickoryColour.GREEN_GLOWING));
 
         register(context, HICKORY_TREE, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.HICKORY_LOG.get()),
@@ -233,10 +229,10 @@ public class ModConfiguredFeatures {
     }
 
     public static ResourceKey<ConfiguredFeature<?, ?>> registerKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(WildAside.MOD_ID, name));
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(WildAside.MOD_ID, name));
     }
 
-    private static <FC extends FeatureConfiguration, F extends Feature<FC>> void register(BootstapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, F feature, FC configuration) {
+    private static <FC extends FeatureConfiguration, F extends Feature<FC>> void register(BootstrapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, F feature, FC configuration) {
         context.register(key, new ConfiguredFeature<>(feature, configuration));
     }
 }

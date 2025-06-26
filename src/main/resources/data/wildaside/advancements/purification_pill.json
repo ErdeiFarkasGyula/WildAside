@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "item": "wildaside:entorium_pill"
+      "id": "wildaside:entorium_pill"
     },
     "title": {
       "translate": "advancements.purification_pill.title"

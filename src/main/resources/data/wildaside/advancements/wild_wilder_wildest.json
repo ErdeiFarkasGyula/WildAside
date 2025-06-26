@@ -2,7 +2,7 @@
   "display": {
     "background": "wildaside:textures/gui/compressed_vibrion_block.png",
     "icon": {
-      "item": "wildaside:vibrion_block"
+      "id": "wildaside:vibrion_block"
     },
     "title": {
       "translate": "advancements.wildaside.wild_wilder_wildest.title"

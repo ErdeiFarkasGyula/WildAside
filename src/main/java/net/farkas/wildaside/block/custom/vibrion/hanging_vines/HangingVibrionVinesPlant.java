@@ -31,7 +31,7 @@ public class HangingVibrionVinesPlant extends WeepingVinesPlantBlock {
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
+    public ItemStack getCloneItemStack(LevelReader pLevel, BlockPos pPos, BlockState pState) {
         return new ItemStack(ModBlocks.HANGING_VIBRION_VINES.get());
     }
 

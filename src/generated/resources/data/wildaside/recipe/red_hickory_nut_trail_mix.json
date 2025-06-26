@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "wildaside:hickory_nut"
+    },
+    {
+      "item": "minecraft:bowl"
+    },
+    {
+      "item": "minecraft:glow_berries"
+    },
+    {
+      "item": "minecraft:sweet_berries"
+    },
+    {
+      "item": "wildaside:red_glowing_hickory_leaf"
+    },
+    {
+      "item": "wildaside:red_glowing_hickory_leaf"
+    },
+    {
+      "item": "wildaside:red_glowing_hickory_leaf"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "wildaside:red_hickory_nut_trail_mix"
+  }
+}

@@ -1,41 +1,291 @@
-[26jún.2025 14:58:28.015] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgedatauserdev, --assetIndex, 5, --assetsDir, C:\Users\Gyula\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.3.27, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412, --mod, wildaside, --all, --output, D:\Wild Aside\remake\forge-1.20.1\src\generated\resources, --existing, D:\Wild Aside\remake\forge-1.20.1\src\main\resources]
-[26jún.2025 14:58:28.019] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.14 by Eclipse Adoptium; OS Windows 11 arch amd64 version 10.0
-[26jún.2025 14:58:28.121] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgedatauserdev
-[26jún.2025 14:58:28.164] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/C:/Users/Gyula/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23132!/ Service=ModLauncher Env=CLIENT
-[26jún.2025 14:58:28.409] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Gyula\.gradle\caches\modules-2\files-2.1\net.minecraftforge\javafmllanguage\1.20.1-47.3.27\8001575a8be1ded39093805ca80ef976b5149b3f\javafmllanguage-1.20.1-47.3.27.jar is missing mods.toml file
-[26jún.2025 14:58:28.413] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Gyula\.gradle\caches\modules-2\files-2.1\net.minecraftforge\lowcodelanguage\1.20.1-47.3.27\17ff592420fbc1f933420f0a473783943ac176ce\lowcodelanguage-1.20.1-47.3.27.jar is missing mods.toml file
-[26jún.2025 14:58:28.415] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Gyula\.gradle\caches\modules-2\files-2.1\net.minecraftforge\mclanguage\1.20.1-47.3.27\48269e2cdbd3c44641fb99a6b05f205b63efa37b\mclanguage-1.20.1-47.3.27.jar is missing mods.toml file
-[26jún.2025 14:58:28.417] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Gyula\.gradle\caches\modules-2\files-2.1\net.minecraftforge\fmlcore\1.20.1-47.3.27\8e7f3f29ab42d8116b9ee3f9f06fc8e8fa0fd12f\fmlcore-1.20.1-47.3.27.jar is missing mods.toml file
-[26jún.2025 14:58:28.505] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: No dependencies to load found. Skipping!
-[26jún.2025 14:58:29.721] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
-[26jún.2025 14:58:29.723] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgedatauserdev' with arguments [--gameDir, ., --assetsDir, C:\Users\Gyula\.gradle\caches\forge_gradle\assets, --assetIndex, 5, --mod, wildaside, --all, --output, D:\Wild Aside\remake\forge-1.20.1\src\generated\resources, --existing, D:\Wild Aside\remake\forge-1.20.1\src\main\resources]
-[26jún.2025 14:58:29.992] [main/INFO] [mixin/]: Remapping refMap terrablender.refmap.json using D:\Wild Aside\remake\forge-1.20.1\build\createSrgToMcp\output.srg
-[26jún.2025 14:58:29.993] [main/INFO] [mixin/]: Remapping refMap terrablender.refmap.json using D:\Wild Aside\remake\forge-1.20.1\build\createSrgToMcp\output.srg
-[26jún.2025 14:58:30.314] [main/INFO] [net.minecraftforge.data.loading.DatagenModLoader/]: Initializing Data Gatherer for mods [wildaside]
-[26jún.2025 14:58:33.859] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.3.27, for MC 1.20.1 with MCP 20230612.114412
-[26jún.2025 14:58:33.860] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.3.27 Initialized
-[26jún.2025 14:58:33.944] [modloading-worker-0/INFO] [terrablender/]: Registered region minecraft:overworld to index 0 for type OVERWORLD
-[26jún.2025 14:58:33.945] [modloading-worker-0/INFO] [terrablender/]: Registered region minecraft:nether to index 0 for type NETHER
-[26jún.2025 14:58:33.945] [modloading-worker-0/INFO] [terrablender/]: Registered region wildaside:hickory_forest to index 1 for type OVERWORLD
-[26jún.2025 14:58:33.945] [modloading-worker-0/INFO] [terrablender/]: Registered region wildaside:glowing_hickory_forest to index 2 for type OVERWORLD
-[26jún.2025 14:58:33.945] [modloading-worker-0/INFO] [terrablender/]: Registered region wildaside:vibrion_hive to index 3 for type OVERWORLD
-[26jún.2025 14:58:34.050] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager...
-[26jún.2025 14:58:34.055] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager took 3.514 ms
-[26jún.2025 14:58:34.410] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/Gyula/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.3.27_mapped_parchment_2023.09.03-1.20.1/forge-1.20.1-47.3.27_mapped_parchment_2023.09.03-1.20.1-recomp.jar%23191!/assets/.mcassetsroot' uses unexpected schema
-[26jún.2025 14:58:34.410] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/Gyula/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.3.27_mapped_parchment_2023.09.03-1.20.1/forge-1.20.1-47.3.27_mapped_parchment_2023.09.03-1.20.1-recomp.jar%23191!/data/.mcassetsroot' uses unexpected schema
-[26jún.2025 14:58:34.566] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Recipes
-[26jún.2025 14:58:34.622] [main/INFO] [net.minecraft.data.DataGenerator/]: Recipes finished after 57 ms
-[26jún.2025 14:58:34.623] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Loot Tables
-[26jún.2025 14:58:34.689] [main/INFO] [net.minecraft.data.DataGenerator/]: Loot Tables finished after 66 ms
-[26jún.2025 14:58:34.690] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Block States: wildaside
-[26jún.2025 14:58:34.848] [main/INFO] [net.minecraft.data.DataGenerator/]: Block States: wildaside finished after 158 ms
-[26jún.2025 14:58:34.849] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Item Models: wildaside
-[26jún.2025 14:58:34.856] [main/INFO] [net.minecraft.data.DataGenerator/]: Item Models: wildaside finished after 7 ms
-[26jún.2025 14:58:34.856] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:block mod id wildaside
-[26jún.2025 14:58:34.870] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:block mod id wildaside finished after 14 ms
-[26jún.2025 14:58:34.870] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:item mod id wildaside
-[26jún.2025 14:58:34.872] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:item mod id wildaside finished after 1 ms
-[26jún.2025 14:58:34.872] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Registries
-[26jún.2025 14:58:34.901] [main/INFO] [net.minecraft.data.DataGenerator/]: Registries finished after 29 ms
-[26jún.2025 14:58:34.901] [main/INFO] [net.minecraft.data.DataGenerator/]: All providers took: 336 ms
-[26jún.2025 14:58:34.915] [main/INFO] [net.minecraft.data.HashCache/]: Caching: total files: 754, old count: 760, new count: 755, removed stale: 0, written: 0
+[27jún.2025 00:19:48.012] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forge_userdev_data, --assetIndex, 17, --assetsDir, C:\Users\Gyula\.gradle\caches\forge_gradle\assets, --gameDir, ., --mod, wildaside, --all, --output, D:\Wild Aside\remake\forge-1.20.1\src\generated\resources, --existing, D:\Wild Aside\remake\forge-1.20.1\src\main\resources]
+[27jún.2025 00:19:48.024] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: JVM identified as Eclipse Adoptium OpenJDK 64-Bit Server VM 21.0.7+6-LTS
+[27jún.2025 00:19:48.024] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.2.4 starting: java version 21.0.7 by Eclipse Adoptium; OS Windows 11 arch amd64 version 10.0
+[27jún.2025 00:19:48.102] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forge_userdev_data
+[27jún.2025 00:19:48.173] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.7 Source=jar:file:///C:/Users/Gyula/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.7/8ab114ac385e6dbdad5efafe28aba4df8120915f/mixin-0.8.7.jar!/ Service=ModLauncher Env=UNKNOWN
+[27jún.2025 00:19:48.811] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: No dependencies to load found. Skipping!
+[27jún.2025 00:19:49.318] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
+[27jún.2025 00:19:49.321] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forge_userdev_data' with arguments [--gameDir, ., --assetsDir, C:\Users\Gyula\.gradle\caches\forge_gradle\assets, --assetIndex, 17, --mod, wildaside, --all, --output, D:\Wild Aside\remake\forge-1.20.1\src\generated\resources, --existing, D:\Wild Aside\remake\forge-1.20.1\src\main\resources]
+[27jún.2025 00:19:49.343] [main/WARN] [mixin/]: Reference map 'terrablender.refmap.json' for terrablender.mixins.json could not be read. If this is a development environment you can ignore this message
+[27jún.2025 00:19:49.343] [main/WARN] [mixin/]: Reference map 'terrablender.refmap.json' for terrablender_forge.mixins.json could not be read. If this is a development environment you can ignore this message
+[27jún.2025 00:19:49.384] [main/WARN] [mixin/]: Mixin environment was unable to detect the current side, sided mixins will not be applied
+[27jún.2025 00:19:49.384] [main/WARN] [mixin/]: Mixin environment was unable to detect the current side, sided mixins will not be applied
+[27jún.2025 00:19:52.670] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 52.1.0, for MC 1.21.1 with MCP 20240808.132146
+[27jún.2025 00:19:52.671] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v52.1.0 Initialized
+[27jún.2025 00:19:52.683] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Opening jdk.naming.dns/com.sun.jndi.dns to java.naming
+[27jún.2025 00:19:52.729] [modloading-worker-0/INFO] [terrablender/]: Registered region minecraft:overworld to index 0 for type OVERWORLD
+[27jún.2025 00:19:52.730] [modloading-worker-0/INFO] [terrablender/]: Registered region minecraft:nether to index 0 for type NETHER
+[27jún.2025 00:19:52.730] [modloading-worker-0/INFO] [terrablender/]: Registered region wildaside:hickory_forest to index 1 for type OVERWORLD
+[27jún.2025 00:19:52.730] [modloading-worker-0/INFO] [terrablender/]: Registered region wildaside:glowing_hickory_forest to index 2 for type OVERWORLD
+[27jún.2025 00:19:52.730] [modloading-worker-0/INFO] [terrablender/]: Registered region wildaside:vibrion_hive to index 3 for type OVERWORLD
+[27jún.2025 00:19:52.749] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: 'DebugMode' is not a valid config key for config category 'debug'.
+Valid keys: [debugMode, debugGuis, debugInputs, debugInfoTooltipsEnabled, crashingTestItemsEnabled, logSuffixTreeStats]
+Skipping this key.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-debug.ini
+Line #5: "	DebugMode = false"
+[27jún.2025 00:19:52.750] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: 'DebugGuis' is not a valid config key for config category 'debug'.
+Valid keys: [debugMode, debugGuis, debugInputs, debugInfoTooltipsEnabled, crashingTestItemsEnabled, logSuffixTreeStats]
+Skipping this key.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-debug.ini
+Line #10: "	DebugGuis = false"
+[27jún.2025 00:19:52.750] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: 'DebugInputs' is not a valid config key for config category 'debug'.
+Valid keys: [debugMode, debugGuis, debugInputs, debugInfoTooltipsEnabled, crashingTestItemsEnabled, logSuffixTreeStats]
+Skipping this key.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-debug.ini
+Line #15: "	DebugInputs = false"
+[27jún.2025 00:19:52.750] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: 'DebugIngredients' is not a valid config key for config category 'debug'.
+Valid keys: [debugMode, debugGuis, debugInputs, debugInfoTooltipsEnabled, crashingTestItemsEnabled, logSuffixTreeStats]
+Skipping this key.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-debug.ini
+Line #20: "	DebugIngredients = true"
+[27jún.2025 00:19:52.750] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: 'CrashingTestItemsEnabled' is not a valid config key for config category 'debug'.
+Valid keys: [debugMode, debugGuis, debugInputs, debugInfoTooltipsEnabled, crashingTestItemsEnabled, logSuffixTreeStats]
+Skipping this key.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-debug.ini
+Line #25: "	CrashingTestItemsEnabled = false"
+[27jún.2025 00:19:52.755] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: '[modname]' is not a valid category name.
+Valid names are: [modName]
+Skipping all values until the first valid category is declared.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-mod-id-format.ini
+Line #1: "[modname]"
+[27jún.2025 00:19:52.755] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: Expected a '[category]' here.
+Configs must start with a category before defining values.
+Skipping all lines until the first valid category is declared.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-mod-id-format.ini
+Line #9: "	ModNameFormat = blue italic"
+[27jún.2025 00:19:52.760] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: 'SearchColors' is not a valid config key for config category 'colors'.
+Valid keys: [searchColors]
+Skipping this key.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-colors.ini
+Line #6: "	SearchColors = White:EEEEEE, LightBlue:7492CC, Cyan:00EEEE, Blue:2222DD, LapisBlue:25418B, Teal:008080, Yellow:CACB58, GoldenYellow:EED700, Orange:D97634, Pink:D1899D, HotPink:FC0FC0, Magenta:B24BBB, Purple:813EB9, EvilPurple:2E1649, Lavender:B57EDC, Indigo:480082, Sand:DBD3A0, Tan:BB9B63, LightBrown:A0522D, Brown:634B33, DarkBrown:3A2D13, LimeGreen:43B239, SlimeGreen:83CB73, Green:008000, DarkGreen:224D22, GrassGreen:548049, Red:963430, BrickRed:B0604B, NetherBrick:2A1516, Redstone:CE3E36, Black:181515, CharcoalGray:464646, IronGray:646464, Gray:808080, Silver:C0C0C0"
+[27jún.2025 00:19:52.773] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: 'CenterSearch' is not a valid config key for config category 'appearance'.
+Valid keys: [centerSearch, recipeGuiHeight]
+Skipping this key.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #5: "	CenterSearch = false"
+[27jún.2025 00:19:52.773] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: 'RecipeGuiHeight' is not a valid config key for config category 'appearance'.
+Valid keys: [centerSearch, recipeGuiHeight]
+Skipping this key.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #10: "	RecipeGuiHeight = 350"
+[27jún.2025 00:19:52.773] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: '[cheat_mode]' is not a valid category name.
+Valid names are: [appearance, cheating, bookmarks, tooltips, performance, lookups, advanced, input, sorting, search, ingredientList, bookmarkList]
+Skipping all values until the first valid category is declared.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #13: "[cheat_mode]"
+[27jún.2025 00:19:52.773] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: Expected a '[category]' here.
+Configs must start with a category before defining values.
+Skipping all lines until the first valid category is declared.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #17: "	GiveMode = MOUSE_PICKUP"
+[27jún.2025 00:19:52.773] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: Expected a '[category]' here.
+Configs must start with a category before defining values.
+Skipping all lines until the first valid category is declared.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #22: "	CheatToHotbarUsingHotkeysEnabled = false"
+[27jún.2025 00:19:52.773] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: Expected a '[category]' here.
+Configs must start with a category before defining values.
+Skipping all lines until the first valid category is declared.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #27: "	ShowHiddenItems = false"
+[27jún.2025 00:19:52.773] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: 'AddBookmarksToFrontEnabled' is not a valid config key for config category 'bookmarks'.
+Valid keys: [addBookmarksToFrontEnabled, dragToRearrangeBookmarksEnabled]
+Skipping this key.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #34: "	AddBookmarksToFrontEnabled = false"
+[27jún.2025 00:19:52.773] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: 'BookmarkTooltipFeatures' is not a valid config key for config category 'bookmarks'.
+Valid keys: [addBookmarksToFrontEnabled, dragToRearrangeBookmarksEnabled]
+Skipping this key.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #40: "	BookmarkTooltipFeatures = PREVIEW"
+[27jún.2025 00:19:52.773] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: 'HoldShiftToShowBookmarkTooltipFeatures' is not a valid config key for config category 'bookmarks'.
+Valid keys: [addBookmarksToFrontEnabled, dragToRearrangeBookmarksEnabled]
+Skipping this key.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #45: "	HoldShiftToShowBookmarkTooltipFeatures = true"
+[27jún.2025 00:19:52.773] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: 'DragToRearrangeBookmarksEnabled' is not a valid config key for config category 'bookmarks'.
+Valid keys: [addBookmarksToFrontEnabled, dragToRearrangeBookmarksEnabled]
+Skipping this key.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #50: "	DragToRearrangeBookmarksEnabled = true"
+[27jún.2025 00:19:52.774] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: 'LowMemorySlowSearchEnabled' is not a valid config key for config category 'advanced'.
+Valid keys: [catchRenderErrorsEnabled]
+Skipping this key.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #57: "	LowMemorySlowSearchEnabled = false"
+[27jún.2025 00:19:52.774] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: 'CatchRenderErrorsEnabled' is not a valid config key for config category 'advanced'.
+Valid keys: [catchRenderErrorsEnabled]
+Skipping this key.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #62: "	CatchRenderErrorsEnabled = false"
+[27jún.2025 00:19:52.774] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: 'lookupFluidContentsEnabled' is not a valid config key for config category 'advanced'.
+Valid keys: [catchRenderErrorsEnabled]
+Skipping this key.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #67: "	lookupFluidContentsEnabled = false"
+[27jún.2025 00:19:52.774] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: 'lookupBlockTagsEnabled' is not a valid config key for config category 'advanced'.
+Valid keys: [catchRenderErrorsEnabled]
+Skipping this key.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #72: "	lookupBlockTagsEnabled = true"
+[27jún.2025 00:19:52.774] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: 'dragDelayInMilliseconds' is not a valid config key for config category 'advanced'.
+Valid keys: [catchRenderErrorsEnabled]
+Skipping this key.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #77: "	dragDelayInMilliseconds = 150"
+[27jún.2025 00:19:52.774] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: 'IngredientSortStages' is not a valid config key for config category 'sorting'.
+Valid keys: [ingredientSortStages, recipeSorterStages]
+Skipping this key.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #85: "	IngredientSortStages = MOD_NAME, INGREDIENT_TYPE, CREATIVE_MENU"
+[27jún.2025 00:19:52.774] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: 'RecipeSorterStages' is not a valid config key for config category 'sorting'.
+Valid keys: [ingredientSortStages, recipeSorterStages]
+Skipping this key.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #91: "	RecipeSorterStages = BOOKMARKED, CRAFTABLE"
+[27jún.2025 00:19:52.774] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: '[tags]' is not a valid category name.
+Valid names are: [appearance, cheating, bookmarks, tooltips, performance, lookups, advanced, input, sorting, search, ingredientList, bookmarkList]
+Skipping all values until the first valid category is declared.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #94: "[tags]"
+[27jún.2025 00:19:52.774] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: Expected a '[category]' here.
+Configs must start with a category before defining values.
+Skipping all lines until the first valid category is declared.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #98: "	TagContentTooltipEnabled = true"
+[27jún.2025 00:19:52.774] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: Expected a '[category]' here.
+Configs must start with a category before defining values.
+Skipping all lines until the first valid category is declared.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #103: "	HideSingleIngredientTagsEnabled = true"
+[27jún.2025 00:19:52.774] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: 'ModNameSearchMode' is not a valid config key for config category 'search'.
+Valid keys: [modNameSearchMode, tagSearchMode, tooltipSearchMode, colorSearchMode, resourceLocationSearchMode, creativeTabSearchMode, searchAdvancedTooltips, searchModIds, searchModAliases, searchShortModNames, searchIngredientAliases]
+Skipping this key.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #110: "	ModNameSearchMode = REQUIRE_PREFIX"
+[27jún.2025 00:19:52.774] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: 'TooltipSearchMode' is not a valid config key for config category 'search'.
+Valid keys: [modNameSearchMode, tagSearchMode, tooltipSearchMode, colorSearchMode, resourceLocationSearchMode, creativeTabSearchMode, searchAdvancedTooltips, searchModIds, searchModAliases, searchShortModNames, searchIngredientAliases]
+Skipping this key.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #115: "	TooltipSearchMode = ENABLED"
+[27jún.2025 00:19:52.774] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: 'TagSearchMode' is not a valid config key for config category 'search'.
+Valid keys: [modNameSearchMode, tagSearchMode, tooltipSearchMode, colorSearchMode, resourceLocationSearchMode, creativeTabSearchMode, searchAdvancedTooltips, searchModIds, searchModAliases, searchShortModNames, searchIngredientAliases]
+Skipping this key.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #120: "	TagSearchMode = REQUIRE_PREFIX"
+[27jún.2025 00:19:52.774] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: 'ColorSearchMode' is not a valid config key for config category 'search'.
+Valid keys: [modNameSearchMode, tagSearchMode, tooltipSearchMode, colorSearchMode, resourceLocationSearchMode, creativeTabSearchMode, searchAdvancedTooltips, searchModIds, searchModAliases, searchShortModNames, searchIngredientAliases]
+Skipping this key.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #125: "	ColorSearchMode = DISABLED"
+[27jún.2025 00:19:52.774] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: 'ResourceLocationSearchMode' is not a valid config key for config category 'search'.
+Valid keys: [modNameSearchMode, tagSearchMode, tooltipSearchMode, colorSearchMode, resourceLocationSearchMode, creativeTabSearchMode, searchAdvancedTooltips, searchModIds, searchModAliases, searchShortModNames, searchIngredientAliases]
+Skipping this key.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #130: "	ResourceLocationSearchMode = DISABLED"
+[27jún.2025 00:19:52.774] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: 'SearchAdvancedTooltips' is not a valid config key for config category 'search'.
+Valid keys: [modNameSearchMode, tagSearchMode, tooltipSearchMode, colorSearchMode, resourceLocationSearchMode, creativeTabSearchMode, searchAdvancedTooltips, searchModIds, searchModAliases, searchShortModNames, searchIngredientAliases]
+Skipping this key.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #135: "	SearchAdvancedTooltips = false"
+[27jún.2025 00:19:52.774] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: 'SearchModIds' is not a valid config key for config category 'search'.
+Valid keys: [modNameSearchMode, tagSearchMode, tooltipSearchMode, colorSearchMode, resourceLocationSearchMode, creativeTabSearchMode, searchAdvancedTooltips, searchModIds, searchModAliases, searchShortModNames, searchIngredientAliases]
+Skipping this key.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #140: "	SearchModIds = true"
+[27jún.2025 00:19:52.774] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: 'SearchShortModNames' is not a valid config key for config category 'search'.
+Valid keys: [modNameSearchMode, tagSearchMode, tooltipSearchMode, colorSearchMode, resourceLocationSearchMode, creativeTabSearchMode, searchAdvancedTooltips, searchModIds, searchModAliases, searchShortModNames, searchIngredientAliases]
+Skipping this key.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #145: "	SearchShortModNames = true"
+[27jún.2025 00:19:52.774] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: '[IngredientList]' is not a valid category name.
+Valid names are: [appearance, cheating, bookmarks, tooltips, performance, lookups, advanced, input, sorting, search, ingredientList, bookmarkList]
+Skipping all values until the first valid category is declared.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #148: "[IngredientList]"
+[27jún.2025 00:19:52.775] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: Expected a '[category]' here.
+Configs must start with a category before defining values.
+Skipping all lines until the first valid category is declared.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #152: "	MaxRows = 16"
+[27jún.2025 00:19:52.775] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: Expected a '[category]' here.
+Configs must start with a category before defining values.
+Skipping all lines until the first valid category is declared.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #157: "	MaxColumns = 9"
+[27jún.2025 00:19:52.775] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: Expected a '[category]' here.
+Configs must start with a category before defining values.
+Skipping all lines until the first valid category is declared.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #162: "	HorizontalAlignment = RIGHT"
+[27jún.2025 00:19:52.775] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: Expected a '[category]' here.
+Configs must start with a category before defining values.
+Skipping all lines until the first valid category is declared.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #167: "	VerticalAlignment = TOP"
+[27jún.2025 00:19:52.775] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: Expected a '[category]' here.
+Configs must start with a category before defining values.
+Skipping all lines until the first valid category is declared.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #172: "	ButtonNavigationVisibility = ENABLED"
+[27jún.2025 00:19:52.775] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: Expected a '[category]' here.
+Configs must start with a category before defining values.
+Skipping all lines until the first valid category is declared.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #177: "	DrawBackground = false"
+[27jún.2025 00:19:52.775] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: '[BookmarkList]' is not a valid category name.
+Valid names are: [appearance, cheating, bookmarks, tooltips, performance, lookups, advanced, input, sorting, search, ingredientList, bookmarkList]
+Skipping all values until the first valid category is declared.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #180: "[BookmarkList]"
+[27jún.2025 00:19:52.775] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: Expected a '[category]' here.
+Configs must start with a category before defining values.
+Skipping all lines until the first valid category is declared.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #184: "	MaxRows = 16"
+[27jún.2025 00:19:52.775] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: Expected a '[category]' here.
+Configs must start with a category before defining values.
+Skipping all lines until the first valid category is declared.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #189: "	MaxColumns = 9"
+[27jún.2025 00:19:52.775] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: Expected a '[category]' here.
+Configs must start with a category before defining values.
+Skipping all lines until the first valid category is declared.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #194: "	HorizontalAlignment = LEFT"
+[27jún.2025 00:19:52.775] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: Expected a '[category]' here.
+Configs must start with a category before defining values.
+Skipping all lines until the first valid category is declared.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #199: "	VerticalAlignment = TOP"
+[27jún.2025 00:19:52.775] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: Expected a '[category]' here.
+Configs must start with a category before defining values.
+Skipping all lines until the first valid category is declared.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #204: "	ButtonNavigationVisibility = ENABLED"
+[27jún.2025 00:19:52.775] [modloading-worker-0/ERROR] [mezz.jei.common.config.file.ConfigSerializer/]: Expected a '[category]' here.
+Configs must start with a category before defining values.
+Skipping all lines until the first valid category is declared.
+Config file: D:\Wild Aside\remake\forge-1.20.1\run-data\config\jei\jei-client.ini
+Line #209: "	DrawBackground = false"
+[27jún.2025 00:19:52.782] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager...
+[27jún.2025 00:19:52.787] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager took 3.481 milliseconds
+[27jún.2025 00:19:52.997] [main/INFO] [net.minecraftforge.data.loading.DatagenModLoader/]: Initializing Data Gatherer for mods [wildaside]
+[27jún.2025 00:19:53.041] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/Gyula/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.21.1-52.1.0_mapped_parchment_2024.11.17-1.21.1/forge-1.21.1-52.1.0_mapped_parchment_2024.11.17-1.21.1-recomp.jar%230!/assets/.mcassetsroot' uses unexpected schema
+[27jún.2025 00:19:53.041] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/Gyula/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.21.1-52.1.0_mapped_parchment_2024.11.17-1.21.1/forge-1.21.1-52.1.0_mapped_parchment_2024.11.17-1.21.1-recomp.jar%230!/data/.mcassetsroot' uses unexpected schema
+[27jún.2025 00:19:53.153] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Loot Tables
+[27jún.2025 00:19:53.289] [main/INFO] [net.minecraft.data.DataGenerator/]: Loot Tables finished after 135 ms
+[27jún.2025 00:19:53.289] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Recipes
+[27jún.2025 00:19:53.355] [main/INFO] [net.minecraft.data.DataGenerator/]: Recipes finished after 66 ms
+[27jún.2025 00:19:53.355] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:block mod id wildaside
+[27jún.2025 00:19:53.364] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:block mod id wildaside finished after 8 ms
+[27jún.2025 00:19:53.364] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:item mod id wildaside
+[27jún.2025 00:19:53.366] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:item mod id wildaside finished after 1 ms
+[27jún.2025 00:19:53.366] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Block States: wildaside
+[27jún.2025 00:19:53.484] [main/INFO] [net.minecraft.data.DataGenerator/]: Block States: wildaside finished after 118 ms
+[27jún.2025 00:19:53.485] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Item Models: wildaside
+[27jún.2025 00:19:53.490] [main/INFO] [net.minecraft.data.DataGenerator/]: Item Models: wildaside finished after 4 ms
+[27jún.2025 00:19:53.490] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Registries
+[27jún.2025 00:19:53.509] [main/INFO] [net.minecraft.data.DataGenerator/]: Registries finished after 19 ms
+[27jún.2025 00:19:53.510] [main/INFO] [net.minecraft.data.DataGenerator/]: All providers took: 357 ms
+[27jún.2025 00:19:53.519] [main/INFO] [net.minecraft.data.HashCache/]: Caching: total files: 757, old count: 762, new count: 758, removed stale: 0, written: 2

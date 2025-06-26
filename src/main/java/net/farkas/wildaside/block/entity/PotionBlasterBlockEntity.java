@@ -5,8 +5,10 @@ import net.farkas.wildaside.screen.potion_blaster.PotionBlasterMenu;
 import net.farkas.wildaside.util.AdvancementHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -22,14 +24,13 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.PotionItem;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoorHingeSide;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
@@ -41,8 +42,12 @@ import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvider {
+
+
     private final ItemStackHandler itemHandler = new ItemStackHandler(10);
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
@@ -110,16 +115,13 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
     public void shootPotionBeam(Direction direction, ServerLevel level, BlockPos pos) {
         if (activePotion.isEmpty()) return;
 
-        List<MobEffectInstance> effects = PotionUtils.getMobEffects(activePotion);
-        if (effects.isEmpty()) return;
-
+        Iterable<MobEffectInstance> effects = activePotion.get(DataComponents.POTION_CONTENTS).getAllEffects();
+        this.potionColour = PotionContents.getColor(effects);
         int power = level.getBestNeighborSignal(pos);
 
-        this.potionColour = PotionUtils.getColor(activePotion);
         setChanged();
-        level.sendBlockUpdated( // push an update to clients
-                worldPosition, getBlockState(), getBlockState(), 3
-        );
+        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+
         float r = ((potionColour >> 16) & 0xFF) / 255.0f;
         float g = ((potionColour >> 8) & 0xFF) / 255.0f;
         float b = (potionColour & 0xFF) / 255.0f;
@@ -321,7 +323,9 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
         activePotion = potionStack.copy();
         setChanged();
 
-        List<MobEffectInstance> effects = PotionUtils.getMobEffects(activePotion);
+        Iterable<MobEffectInstance> effectInstances = activePotion.get(DataComponents.POTION_CONTENTS).getAllEffects();
+        List<MobEffectInstance> effects = StreamSupport.stream(effectInstances.spliterator(), false).toList();
+
         if (effects.isEmpty()) {
             maxPotionTicks = 200;
         } else {
@@ -358,26 +362,26 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
         lazyItemHandler.invalidate();
     }
 
+
     @Override
-    protected void saveAdditional(CompoundTag pTag) {
-        pTag.put("inventory", itemHandler.serializeNBT());
+    protected void saveAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
+        super.saveAdditional(pTag, pRegistries);
+        pTag.put("inventory", itemHandler.serializeNBT(pRegistries));
         pTag.putInt("ticks_left", potionTicksLeft);
         pTag.putInt("max_ticks", maxPotionTicks);
         pTag.putInt("colour", potionColour);
-        pTag.put("potion", activePotion.save(new CompoundTag()));
-
-        super.saveAdditional(pTag);
+        pTag.put("potion", activePotion.save(pRegistries));
     }
 
     @Override
-    public void load(CompoundTag pTag) {
-        super.load(pTag);
-        itemHandler.deserializeNBT(pTag.getCompound("inventory"));
+    protected void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
+        super.loadAdditional(pTag, pRegistries);
+        itemHandler.deserializeNBT(pRegistries, pTag.getCompound("inventory"));
         potionTicksLeft = pTag.getInt("ticks_left");
         maxPotionTicks = pTag.getInt("max_ticks");
         potionColour = pTag.getInt("colour");
         if (pTag.contains("potion")) {
-            activePotion = ItemStack.of(pTag.getCompound("potion"));
+            activePotion = ItemStack.parseOptional(pRegistries, pTag.getCompound("potion"));
         } else {
             activePotion = ItemStack.EMPTY;
         }

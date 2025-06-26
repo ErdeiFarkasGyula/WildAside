@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_hickory_log": {
+      "conditions": {
+        "items": [
+          {
+            "items": "wildaside:hickory_log"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "wildaside:hickory_planks_hickory_log"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_hickory_log"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "wildaside:hickory_planks_hickory_log"
+    ]
+  }
+}

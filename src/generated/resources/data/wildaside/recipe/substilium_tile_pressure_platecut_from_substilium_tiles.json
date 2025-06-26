@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "wildaside:substilium_tiles"
+  },
+  "result": {
+    "count": 1,
+    "id": "wildaside:substilium_tile_pressure_plate"
+  }
+}

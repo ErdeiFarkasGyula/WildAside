@@ -8,7 +8,7 @@ import net.farkas.wildaside.worldgen.ModPlacedFeatures;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.Music;
@@ -24,7 +24,7 @@ public class ModBiomes {
     public static final ResourceKey<Biome> GLOWING_HICKORY_FOREST = register("glowing_hickory_forest");
     public static final ResourceKey<Biome> VIBRION_HIVE = register("vibrion_hive");
 
-    public static void boostrap(BootstapContext<Biome> context) {
+    public static void boostrap(BootstrapContext<Biome> context) {
         context.register(HICKORY_FOREST, hickoryForest(context));
         context.register(GLOWING_HICKORY_FOREST, glowingHickoryForest(context));
         context.register(VIBRION_HIVE, vibrionHive(context));
@@ -38,7 +38,7 @@ public class ModBiomes {
         BiomeDefaultFeatures.addDefaultSprings(builder);
     }
 
-    public static Biome hickoryForest(BootstapContext<Biome> context) {
+    public static Biome hickoryForest(BootstrapContext<Biome> context) {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
 
         spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.WOLF, 2, 3, 4));
@@ -81,7 +81,7 @@ public class ModBiomes {
                 .build();
     }
 
-    public static Biome glowingHickoryForest(BootstapContext<Biome> context) {
+    public static Biome glowingHickoryForest(BootstrapContext<Biome> context) {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
 
         spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.WOLF, 2, 3, 4));
@@ -133,7 +133,7 @@ public class ModBiomes {
                 .build();
     }
 
-    public static Biome vibrionHive(BootstapContext<Biome> context) {
+    public static Biome vibrionHive(BootstrapContext<Biome> context) {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
 
@@ -184,11 +184,11 @@ public class ModBiomes {
                         .fogColor(12638463)
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS)
                         .ambientParticle(new AmbientParticleSettings(ModParticles.STILL_SUBSTILIUM_PARTICLE.get(), 0.05f))
-                        .backgroundMusic(new Music(Holder.direct(ModSounds.VIBRION_HIVE_MUSIC.get()), 6000, 12000, false)).build())
+                        .backgroundMusic(new Music(ModSounds.VIBRION_HIVE_MUSIC.getHolder().get(), 6000, 12000, false)).build())
                 .build();
     }
 
     public static ResourceKey<Biome> register(String name) {
-        return ResourceKey.create(Registries.BIOME, new ResourceLocation(WildAside.MOD_ID, name));
+        return ResourceKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(WildAside.MOD_ID, name));
     }
 }

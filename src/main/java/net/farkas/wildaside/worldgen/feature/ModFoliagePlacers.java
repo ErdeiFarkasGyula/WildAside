@@ -1,5 +1,6 @@
 package net.farkas.wildaside.worldgen.feature;
 
+import com.mojang.serialization.MapCodec;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.worldgen.feature.tree.hickory.HickoryTreeFoliagePlacer;
 import net.minecraft.core.registries.Registries;
@@ -13,9 +14,7 @@ public class ModFoliagePlacers {
             DeferredRegister.create(Registries.FOLIAGE_PLACER_TYPE, WildAside.MOD_ID);
 
     public static final RegistryObject<FoliagePlacerType<HickoryTreeFoliagePlacer>> HICKORY_FOLIAGE_PLACER =
-            FOLIAGE_PLACERS.register("hickory_foliage_placer", () -> new FoliagePlacerType<>(HickoryTreeFoliagePlacer.CODEC));
-    public static final RegistryObject<FoliagePlacerType<HickoryTreeFoliagePlacer>> SUBSTILIUM_STICK_MUSHROOM_FOLIAGE_PLACER =
-            FOLIAGE_PLACERS.register("substilium_stick_mushroom_foliage_placer", () -> new FoliagePlacerType<>(HickoryTreeFoliagePlacer.CODEC));
+            FOLIAGE_PLACERS.register("hickory_foliage_placer", () -> new FoliagePlacerType<>(MapCodec.assumeMapUnsafe(HickoryTreeFoliagePlacer.CODEC)));
 
     public static void register(IEventBus eventBus) {
         FOLIAGE_PLACERS.register(eventBus);

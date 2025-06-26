@@ -1,10 +1,9 @@
 package net.farkas.wildaside;
 
-import com.mojang.logging.LogUtils;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.ModBlockEntities;
 import net.farkas.wildaside.effect.ModMobEffects;
-import net.farkas.wildaside.enchantment.ModEnchantments;
+import net.farkas.wildaside.enchantment.ModEnchantmentEffects;
 import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.entity.client.ModBoatRenderer;
 import net.farkas.wildaside.entity.client.vibrion.MucellithRenderer;
@@ -13,7 +12,6 @@ import net.farkas.wildaside.item.ModCreativeModeTabs;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.item.VanillaCreativeTabs;
 import net.farkas.wildaside.particle.ModParticles;
-import net.farkas.wildaside.potion.BetterBrewingRecipe;
 import net.farkas.wildaside.potion.ModPotions;
 import net.farkas.wildaside.recipe.ModRecipes;
 import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationScreen;
@@ -34,14 +32,11 @@ import net.minecraft.client.renderer.entity.ArrowRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -49,14 +44,16 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.slf4j.Logger;
 import terrablender.api.SurfaceRuleManager;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Mod(WildAside.MOD_ID)
 public class WildAside
 {
     public static final String MOD_ID = "wildaside";
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
     public WildAside(FMLJavaModLoadingContext context)
     {
@@ -72,8 +69,6 @@ public class WildAside
         ModEntities.register(modEventBus);
         ModBlockEntities.register(modEventBus);
 
-        ModEnchantments.register(modEventBus);
-
         ModMenuTypes.register(modEventBus);
         ModRecipes.register(modEventBus);
 
@@ -87,6 +82,8 @@ public class WildAside
         ModTerraBlenderAPI.registerRegions();
 
         ModFoliagePlacers.register(modEventBus);
+
+        ModEnchantmentEffects.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
 
@@ -132,18 +129,6 @@ public class WildAside
         ComposterBlock.COMPOSTABLES.put(ModBlocks.SPOTTED_WINTERGREEN.get().asItem(), 0.65f);
         ComposterBlock.COMPOSTABLES.put(ModBlocks.PINKSTER_FLOWER.get().asItem(), 0.65f);
         ComposterBlock.COMPOSTABLES.put(ModItems.HICKORY_NUT.get(), 0.65f);
-
-//        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(Potions.AWKWARD, ModItems.VIBRION.get(), ModPotions.CONTAMINATION_POTION.get()));
-//        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(ModPotions.CONTAMINATION_POTION.get(), Items.REDSTONE, ModPotions.CONTAMINATION_POTION_2.get()));
-//        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(ModPotions.IMMUNITY_POTION.get(), Items.FERMENTED_SPIDER_EYE, ModPotions.IMMUNITY_POTION.get()));
-
-//        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(Potions.AWKWARD, ModItems.ENTORIUM.get(), ModPotions.IMMUNITY_POTION.get()));
-//        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(ModPotions.CONTAMINATION_POTION.get(), Items.FERMENTED_SPIDER_EYE, ModPotions.IMMUNITY_POTION.get()));
-//        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(ModPotions.IMMUNITY_POTION.get(), Items.REDSTONE, ModPotions.IMMUNITY_POTION_2.get()));
-//        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(ModPotions.CONTAMINATION_POTION_2.get(), Items.FERMENTED_SPIDER_EYE, ModPotions.IMMUNITY_POTION_2.get()));
-
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(Potions.AWKWARD, ModItems.MUCELLITH_JAW.get(), ModPotions.LIFESTEAL_POTION.get()));
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(ModPotions.LIFESTEAL_POTION.get(), Items.REDSTONE, ModPotions.LIFESTEAL_POTION_2.get()));
     }
 
     @SubscribeEvent
@@ -169,7 +154,7 @@ public class WildAside
             EntityRenderers.register(ModEntities.SPORE_ARROW.get(),pContext -> new ArrowRenderer<SporeArrowEntity>(pContext) {
                 @Override
                 public ResourceLocation getTextureLocation(SporeArrowEntity pEntity) {
-                    return new ResourceLocation(WildAside.MOD_ID, "textures/entity/projectiles/spore_arrow.png");
+                    return ResourceLocation.fromNamespaceAndPath(WildAside.MOD_ID, "textures/entity/projectiles/spore_arrow.png");
                 }
             });
             EntityRenderers.register(ModEntities.MUCELLITH.get(), MucellithRenderer::new);

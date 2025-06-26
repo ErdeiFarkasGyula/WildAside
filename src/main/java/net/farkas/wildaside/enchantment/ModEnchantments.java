@@ -1,29 +1,48 @@
 package net.farkas.wildaside.enchantment;
 
 import net.farkas.wildaside.WildAside;
-import net.farkas.wildaside.enchantment.custom.Cushioning;
-import net.farkas.wildaside.enchantment.custom.ExtensiveResearch;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.farkas.wildaside.util.ModTags;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.EnchantmentTags;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 
 public class ModEnchantments {
-    public static final DeferredRegister<Enchantment> ENCHANTMENTS =
-            DeferredRegister.create(ForgeRegistries.ENCHANTMENTS, WildAside.MOD_ID);
+    public static final ResourceKey<Enchantment> EXTENSIVE_RESEARCH = ResourceKey.create(Registries.ENCHANTMENT,
+            ResourceLocation.fromNamespaceAndPath(WildAside.MOD_ID, "extensive_research"));
+    public static final ResourceKey<Enchantment> CUSHIONING = ResourceKey.create(Registries.ENCHANTMENT,
+            ResourceLocation.fromNamespaceAndPath(WildAside.MOD_ID, "cushioning"));
 
-    public static final RegistryObject<Enchantment> EXTENSIVE_RESEARCH =
-            ENCHANTMENTS.register("extensive_research",
-                    () -> new ExtensiveResearch(Enchantment.Rarity.UNCOMMON, EnchantmentCategory.BREAKABLE, new EquipmentSlot[] { EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND }));
+    public static void bootstrap(BootstrapContext<Enchantment> context) {
+        var enchantments = context.lookup(Registries.ENCHANTMENT);
+        var items = context.lookup(Registries.ITEM);
 
-    public static final RegistryObject<Enchantment> CUSHIONING =
-            ENCHANTMENTS.register("cushioning",
-                    () -> new Cushioning(Enchantment.Rarity.UNCOMMON, EnchantmentCategory.ARMOR_FEET, new EquipmentSlot[] { EquipmentSlot.FEET }));
+        register(context, CUSHIONING, Enchantment.enchantment(Enchantment.definition(
+                        items.getOrThrow(ItemTags.FOOT_ARMOR_ENCHANTABLE),
+                        5,
+                        3,
+                        Enchantment.dynamicCost(5, 10),
+                        Enchantment.dynamicCost(20, 10),
+                        2,
+                        EquipmentSlotGroup.FEET))
+                .exclusiveWith(enchantments.getOrThrow(EnchantmentTags.BOOTS_EXCLUSIVE)));
 
-    public static void register(IEventBus eventBus) {
-        ENCHANTMENTS.register(eventBus);
+        register(context, EXTENSIVE_RESEARCH, Enchantment.enchantment(Enchantment.definition(
+                        items.getOrThrow(ModTags.Items.SHEARS),
+                        5,
+                        1,
+                        Enchantment.dynamicCost(5, 10),
+                        Enchantment.dynamicCost(20, 10),
+                        2,
+                        EquipmentSlotGroup.MAINHAND)));
+
+    }
+
+    private static void register(BootstrapContext<Enchantment> registry, ResourceKey<Enchantment> key, Enchantment.Builder builder) {
+        registry.register(key, builder.build(key.location()));
     }
 }

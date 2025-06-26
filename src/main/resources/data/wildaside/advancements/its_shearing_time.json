@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "item": "wildaside:overgrown_entorium_ore"
+      "id": "wildaside:overgrown_entorium_ore"
     },
     "title": {
       "translate": "advancements.its_shearing_time.title"

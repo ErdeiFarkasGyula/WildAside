@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "wildaside:vibrion_glass_pane"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_vibrion_glass": {
+      "conditions": {
+        "items": [
+          {
+            "items": "wildaside:vibrion_glass"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_vibrion_glass"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "wildaside:vibrion_glass_pane"
+    ]
+  }
+}

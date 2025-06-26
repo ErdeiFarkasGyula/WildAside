@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 public class PotionBlasterScreen extends AbstractContainerScreen<PotionBlasterMenu> {
-    private static final ResourceLocation BACKGROUND = new ResourceLocation(WildAside.MOD_ID, "textures/gui/potion_blaster.png");
+    private static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(WildAside.MOD_ID, "textures/gui/potion_blaster.png");
 
     public PotionBlasterScreen(PotionBlasterMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
@@ -52,7 +52,6 @@ public class PotionBlasterScreen extends AbstractContainerScreen<PotionBlasterMe
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
-        renderBackground(guiGraphics);
         super.render(guiGraphics, mouseX, mouseY, delta);
         renderTooltip(guiGraphics, mouseX, mouseY);
     }

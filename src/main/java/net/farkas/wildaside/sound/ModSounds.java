@@ -14,7 +14,7 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> VIBRION_HIVE_MUSIC = registerSoundEvent("music.vibrion_hive");
 
     private static RegistryObject<SoundEvent> registerSoundEvent(String name) {
-        return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(WildAside.MOD_ID, name)));
+        return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(WildAside.MOD_ID, name)));
     }
 
     public static void register(IEventBus bus) {

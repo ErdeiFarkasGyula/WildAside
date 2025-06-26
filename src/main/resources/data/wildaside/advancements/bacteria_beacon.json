@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "item": "wildaside:spore_blaster"
+      "id": "wildaside:spore_blaster"
     },
     "title": {
       "translate": "advancements.bacteria_beacon.title"

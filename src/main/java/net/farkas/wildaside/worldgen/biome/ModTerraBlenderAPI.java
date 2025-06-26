@@ -9,8 +9,8 @@ import terrablender.api.Regions;
 
 public class ModTerraBlenderAPI {
     public static void registerRegions() {
-        Regions.register(new ModHickoryForestRegion(new ResourceLocation(WildAside.MOD_ID, "hickory_forest"), 3));
-        Regions.register(new ModGlowingHickoryForestRegion(new ResourceLocation(WildAside.MOD_ID, "glowing_hickory_forest"), 1));
-        Regions.register(new ModVibrionHiveRegion(new ResourceLocation(WildAside.MOD_ID, "vibrion_hive"), 4));
+        Regions.register(new ModHickoryForestRegion(ResourceLocation.fromNamespaceAndPath(WildAside.MOD_ID, "hickory_forest"), 3));
+        Regions.register(new ModGlowingHickoryForestRegion(ResourceLocation.fromNamespaceAndPath(WildAside.MOD_ID, "glowing_hickory_forest"), 1));
+        Regions.register(new ModVibrionHiveRegion(ResourceLocation.fromNamespaceAndPath(WildAside.MOD_ID, "vibrion_hive"), 4));
     }
 }

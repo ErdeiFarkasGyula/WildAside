@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "item": "wildaside:substilium_soil"
+      "id": "wildaside:substilium_soil"
     },
     "title": {
       "translate": "advancements.descent.title"

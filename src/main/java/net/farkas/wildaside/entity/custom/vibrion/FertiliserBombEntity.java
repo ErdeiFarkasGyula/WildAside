@@ -125,7 +125,7 @@ public class FertiliserBombEntity extends ThrowableItemProjectile {
                     }
 
                     if (state.getBlock() instanceof BonemealableBlock bonemealBlock) {
-                        if (bonemealBlock.isValidBonemealTarget(level, pos, state, false)) {
+                        if (bonemealBlock.isValidBonemealTarget(level, pos, state)) {
                             if (random.nextFloat() < charge * 0.3f) {
                                 bonemealBlock.performBonemeal(level, random, pos, state);
                                 level.levelEvent(2005, pos, 0);
@@ -136,7 +136,7 @@ public class FertiliserBombEntity extends ThrowableItemProjectile {
                         BlockPos belowPos = pos.below();
                         BlockState belowState = level.getBlockState(belowPos);
                         if (belowState.getBlock() instanceof BonemealableBlock bonemealBlockBelow &&
-                                bonemealBlockBelow.isValidBonemealTarget(level, belowPos, belowState, false)) {
+                                bonemealBlockBelow.isValidBonemealTarget(level, belowPos, belowState)) {
                             if (random.nextFloat() < charge * 0.2f) {
                                 bonemealBlockBelow.performBonemeal(level, random, belowPos, belowState);
                                 level.levelEvent(2005, belowPos, 0);

@@ -25,9 +25,9 @@ import net.minecraft.world.phys.BlockHitResult;
 public class SubstiliumRedstoneOre extends SubstiliumSoil {
     public static final BooleanProperty LIT = RedstoneTorchBlock.LIT;
 
-    public SubstiliumRedstoneOre(Properties pProperties, IntProvider pXpRange) {
-        super(pProperties, pXpRange);
-        this.registerDefaultState(this.defaultBlockState().setValue(LIT, Boolean.valueOf(false)));
+    public SubstiliumRedstoneOre(IntProvider p_221084_, Properties p_221083_) {
+        super(p_221084_, p_221083_);
+        this.registerDefaultState(this.defaultBlockState().setValue(LIT, false));
     }
 
     public void attack(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer) {

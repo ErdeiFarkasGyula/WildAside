@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "item": "wildaside:yellow_glowing_hickory_leaves"
+      "id": "wildaside:yellow_glowing_hickory_leaves"
     },
     "title": {
       "translate": "advancements.colourful_innit.title"

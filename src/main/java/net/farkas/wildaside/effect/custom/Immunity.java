@@ -15,12 +15,12 @@ public class Immunity extends MobEffect {
     }
 
     @Override
-    public void applyEffectTick(LivingEntity pLivingEntity, int pAmplifier) {
+    public boolean applyEffectTick(LivingEntity pLivingEntity, int pAmplifier) {
         if (!pLivingEntity.level().isClientSide()) {
             if (pLivingEntity instanceof ServerPlayer serverPlayer) {
                 List<MobEffectInstance> effects = new ArrayList<>(serverPlayer.getActiveEffects());
                 for (MobEffectInstance effectInstance : effects) {
-                    if (!effectInstance.getEffect().isBeneficial() && effectInstance.getEffect() != this) {
+                    if (!effectInstance.getEffect().get().isBeneficial() && effectInstance.getEffect().get() != this) {
                         serverPlayer.removeEffect(effectInstance.getEffect());
                     }
                 }
@@ -28,5 +28,6 @@ public class Immunity extends MobEffect {
         }
 
         super.applyEffectTick(pLivingEntity, pAmplifier);
+        return true;
     }
 }

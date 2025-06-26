@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "item": "wildaside:spore_bomb"
+      "id": "wildaside:spore_bomb"
     },
     "title": {
       "translate": "advancements.weapons_of_mass_infection.title"

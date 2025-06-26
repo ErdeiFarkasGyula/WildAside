@@ -131,9 +131,10 @@ public class MucellithModel<T extends Entity> extends HierarchicalModel<T> {
 		return LayerDefinition.create(meshdefinition, 128, 128);
 	}
 
+
 	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		mucellith.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+	public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, int pColor) {
+		mucellith.render(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, pColor);
 	}
 
 	@Override

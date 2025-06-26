@@ -4,6 +4,7 @@ import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.util.AdvancementHandler;
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -54,7 +55,7 @@ class LifestealHandler {
         DamageSource src = event.getSource();
         if (!(src.getEntity() instanceof Player attacker)) return;
 
-        MobEffectInstance lifesteal = attacker.getEffect(ModMobEffects.LIFESTEAL.get());
+        MobEffectInstance lifesteal = attacker.getEffect(ModMobEffects.LIFESTEAL.getHolder().get());
         if (lifesteal == null) return;
 
         float perc = (lifesteal.getAmplifier() + 1) / 10f;

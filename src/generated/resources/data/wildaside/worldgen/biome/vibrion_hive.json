@@ -21,9 +21,7 @@
       "max_delay": 12000,
       "min_delay": 6000,
       "replace_current_music": false,
-      "sound": {
-        "sound_id": "wildaside:music.vibrion_hive"
-      }
+      "sound": "wildaside:music.vibrion_hive"
     },
     "particle": {
       "options": {

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_smooth_substilium_soil": {
+      "conditions": {
+        "items": [
+          {
+            "items": "wildaside:smooth_substilium_soil"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "wildaside:substilium_tiles"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_smooth_substilium_soil"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "wildaside:substilium_tiles"
+    ]
+  }
+}

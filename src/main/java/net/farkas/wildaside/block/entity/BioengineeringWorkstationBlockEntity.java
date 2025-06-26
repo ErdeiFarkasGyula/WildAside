@@ -1,9 +1,12 @@
 package net.farkas.wildaside.block.entity;
 
 import net.farkas.wildaside.recipe.BioengineeringWorkstationRecipe;
+import net.farkas.wildaside.recipe.BioengineeringWorkstationRecipeInput;
+import net.farkas.wildaside.recipe.ModRecipes;
 import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Containers;
@@ -15,6 +18,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -26,6 +31,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Optional;
 
 public class  BioengineeringWorkstationBlockEntity extends BlockEntity implements MenuProvider {
@@ -113,17 +119,16 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
     }
 
     @Override
-    protected void saveAdditional(CompoundTag pTag) {
-        pTag.put("inventory", itemHandler.serializeNBT());
+    protected void saveAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
+        super.saveAdditional(pTag, pRegistries);
+        pTag.put("inventory", itemHandler.serializeNBT(pRegistries));
         pTag.putInt("bioengineering_workstation.progress", progress);
-
-        super.saveAdditional(pTag);
     }
 
     @Override
-    public void load(CompoundTag pTag) {
-        super.load(pTag);
-        itemHandler.deserializeNBT(pTag.getCompound("inventory"));
+    protected void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries) {
+        super.loadAdditional(pTag, pRegistries);
+        itemHandler.deserializeNBT(pRegistries, pTag.getCompound("inventory"));
         progress = pTag.getInt("bioengineering_workstation.progress");
     }
 
@@ -146,8 +151,8 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
     }
 
     private void craftItem() {
-        Optional<BioengineeringWorkstationRecipe> recipe = getCurrentRecipe();
-        ItemStack result = recipe.get().getResultItem(null);
+        Optional<RecipeHolder<BioengineeringWorkstationRecipe>> recipe = getCurrentRecipe();
+        ItemStack result = recipe.get().value().output();
 
         this.itemHandler.extractItem(INPUT_1, 1, false);
         this.itemHandler.extractItem(INPUT_2, 1, false);
@@ -159,23 +164,21 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
     }
 
     private boolean hasRecipe() {
-        Optional<BioengineeringWorkstationRecipe> recipe = getCurrentRecipe();
+        Optional<RecipeHolder<BioengineeringWorkstationRecipe>> recipe = getCurrentRecipe();
 
         if (recipe.isEmpty()) return false;
 
-        ItemStack result = recipe.get().getResultItem(getLevel().registryAccess());
-
+        ItemStack result = recipe.get().value().output();
         return canInsertAmountIntoOutputSlot(result.getCount()) && canInsertItemIntoOutputSlot(result.getItem());
     }
 
-    private Optional<BioengineeringWorkstationRecipe> getCurrentRecipe() {
-        SimpleContainer inventory = new SimpleContainer(this.itemHandler.getSlots());
-
-        for (int i = 0; i < itemHandler.getSlots(); i++) {
-            inventory.setItem(i, this.itemHandler.getStackInSlot(i));
-        }
-
-        return this.level.getRecipeManager().getRecipeFor(BioengineeringWorkstationRecipe.Type.INSTANCE, inventory, level);
+    private Optional<RecipeHolder<BioengineeringWorkstationRecipe>> getCurrentRecipe() {
+        var list = List.of(itemHandler.getStackInSlot(INPUT_1),
+                itemHandler.getStackInSlot(INPUT_2),
+                itemHandler.getStackInSlot(INPUT_3),
+                itemHandler.getStackInSlot(INPUT_4),
+                itemHandler.getStackInSlot(INPUT_5));
+        return this.level.getRecipeManager().getRecipeFor(ModRecipes.BIOENGINEERING_TYPE.get(), new BioengineeringWorkstationRecipeInput(list), level);
     }
 
     private boolean canInsertItemIntoOutputSlot(Item item) {

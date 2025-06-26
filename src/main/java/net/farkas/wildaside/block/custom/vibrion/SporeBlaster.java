@@ -1,5 +1,6 @@
 package net.farkas.wildaside.block.custom.vibrion;
 
+import com.mojang.serialization.MapCodec;
 import net.farkas.wildaside.block.entity.SporeBlasterBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -15,9 +16,16 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import org.jetbrains.annotations.Nullable;
 
 public class SporeBlaster extends DirectionalBlock implements EntityBlock{
+
+
     public SporeBlaster(Properties properties) {
         super(properties);
         this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH));
+    }
+
+    @Override
+    protected MapCodec<? extends DirectionalBlock> codec() {
+        return null;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package net.farkas.wildaside.item.custom;
 
 import net.farkas.wildaside.util.HickoryColour;
+import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -22,7 +23,7 @@ public class HickoryNutTrailMix extends Item {
     public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity) {
         if (!pLevel.isClientSide) {
             MobEffectInstance saturation = new MobEffectInstance(MobEffects.SATURATION, 400, 0);
-            MobEffect effect;
+            Holder<MobEffect> effect;
 
             switch (colour) {
                 case RED_GLOWING -> effect = MobEffects.DAMAGE_BOOST;

@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "item": "wildaside:natural_spore_blaster"
+      "id": "wildaside:natural_spore_blaster"
     },
     "title": {
       "translate": "advancements.blaster_busted.title"

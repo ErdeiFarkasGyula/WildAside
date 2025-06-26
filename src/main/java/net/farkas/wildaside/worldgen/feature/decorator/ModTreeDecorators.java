@@ -1,5 +1,6 @@
 package net.farkas.wildaside.worldgen.feature.decorator;
 
+import com.mojang.serialization.MapCodec;
 import net.farkas.wildaside.WildAside;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -12,7 +13,7 @@ public class ModTreeDecorators {
             DeferredRegister.create(ForgeRegistries.TREE_DECORATOR_TYPES, WildAside.MOD_ID);
 
     public static final RegistryObject<TreeDecoratorType<FallenLeavesDecorator>> FALLEN_LEAVES =
-            DECORATORS.register("fallen_leaves", () -> new TreeDecoratorType<>(FallenLeavesDecorator.CODEC));
+            DECORATORS.register("fallen_leaves", () -> new TreeDecoratorType<>(MapCodec.assumeMapUnsafe(FallenLeavesDecorator.CODEC)));
 
     public static void register(IEventBus bus) {
         DECORATORS.register(bus);

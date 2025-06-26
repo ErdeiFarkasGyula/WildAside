@@ -17,7 +17,9 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
+
+import net.minecraft.world.level.pathfinder.PathType;
+import org.jetbrains.annotations.Nullable;
 
 public class VibrionGel extends Block implements SimpleWaterloggedBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -29,7 +31,7 @@ public class VibrionGel extends Block implements SimpleWaterloggedBlock {
 
     @Override
     public boolean skipRendering(BlockState state, BlockState adjacentBlockState, Direction side) {
-        return adjacentBlockState.is(ModTags.Blocks.VIBRION_GELS) ? true : super.skipRendering(state, adjacentBlockState, side);
+        return adjacentBlockState.is(ModTags.Blocks.VIBRION_GELS) || super.skipRendering(state, adjacentBlockState, side);
     }
 
     @Override
@@ -67,8 +69,8 @@ public class VibrionGel extends Block implements SimpleWaterloggedBlock {
     }
 
     @Override
-    public BlockPathTypes getBlockPathType(BlockState state, BlockGetter world, BlockPos pos, Mob entity) {
-        return BlockPathTypes.STICKY_HONEY;
+    public @Nullable PathType getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob mob) {
+        return PathType.STICKY_HONEY;
     }
 
     @Override

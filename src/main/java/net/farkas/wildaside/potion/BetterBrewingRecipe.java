@@ -1,14 +1,20 @@
 package net.farkas.wildaside.potion;
 
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraftforge.common.brewing.IBrewingRecipe;
 
 // BetterBrewingRecipe Class by CAS-ual-TY from https://github.com/CAS-ual-TY/Extra-Potions (GPL-3.0 License)
 // https://github.com/CAS-ual-TY/Extra-Potions/blob/main/LICENSE
+
+//Updated to 1.21.1 by Erdei Farkas Gyula
+
 public class BetterBrewingRecipe implements IBrewingRecipe {
     private final Potion input;
     private final Item ingredient;
@@ -22,7 +28,7 @@ public class BetterBrewingRecipe implements IBrewingRecipe {
 
     @Override
     public boolean isInput(ItemStack input) {
-        return PotionUtils.getPotion(input) == this.input;
+        return input.get(DataComponents.POTION_CONTENTS).getAllEffects() == this.input.getEffects();
     }
 
     @Override
@@ -36,9 +42,6 @@ public class BetterBrewingRecipe implements IBrewingRecipe {
             return ItemStack.EMPTY;
         }
 
-        ItemStack itemStack = new ItemStack(input.getItem());
-        itemStack.setTag(new CompoundTag());
-        PotionUtils.setPotion(itemStack, this.output);
-        return itemStack;
+        return PotionContents.createItemStack(PotionContents.createItemStack(input.getItem(), Holder.direct(this.output)).getItem(), Holder.direct(this.output));
     }
 }

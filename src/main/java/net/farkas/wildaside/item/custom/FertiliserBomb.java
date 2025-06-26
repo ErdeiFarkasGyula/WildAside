@@ -24,7 +24,7 @@ public class FertiliserBomb extends Item {
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack pStack, LivingEntity pEntity) {
         return 200;
     }
 
@@ -37,7 +37,7 @@ public class FertiliserBomb extends Item {
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
         if (!(entity instanceof Player player) || level.isClientSide) return;
 
-        int chargeTime = this.getUseDuration(stack) - timeLeft;
+        int chargeTime = this.getUseDuration(stack, entity) - timeLeft;
         float charge = Mth.clamp((float) chargeTime / 20f, 0f, 1f);
 
         level.playSound((Player)null, player.getX(), player.getY(), player.getZ(), SoundEvents.SNOWBALL_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (player.getRandom().nextFloat() * 0.4F + 0.8F));

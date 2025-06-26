@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "item": "wildaside:mucellith_jaw"
+      "id": "wildaside:mucellith_jaw"
     },
     "title": {
       "translate": "advancements.life_leech.title"

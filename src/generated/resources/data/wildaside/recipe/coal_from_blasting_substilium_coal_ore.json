@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.3,
+  "group": "coal",
+  "ingredient": {
+    "item": "wildaside:substilium_coal_ore"
+  },
+  "result": {
+    "id": "minecraft:coal"
+  }
+}

@@ -1,5 +1,6 @@
 package net.farkas.wildaside.capability.contamination;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 
 public class ContaminationImplementation implements IContamination {
@@ -26,14 +27,14 @@ public class ContaminationImplementation implements IContamination {
     }
 
     @Override
-    public CompoundTag serializeNBT() {
+    public CompoundTag serializeNBT(HolderLookup.Provider registryAccess) {
         final CompoundTag tag = new CompoundTag();
         tag.putInt("contamination_dose", this.dose);
         return tag;
     }
 
     @Override
-    public void deserializeNBT(CompoundTag nbt) {
+    public void deserializeNBT(HolderLookup.Provider registryAccess, CompoundTag nbt) {
         this.dose = nbt.getInt("contamination_dose");
     }
 }

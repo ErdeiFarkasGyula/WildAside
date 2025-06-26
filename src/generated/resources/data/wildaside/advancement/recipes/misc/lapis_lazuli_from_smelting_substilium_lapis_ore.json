@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_substilium_lapis_ore": {
+      "conditions": {
+        "items": [
+          {
+            "items": "wildaside:substilium_lapis_ore"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "wildaside:lapis_lazuli_from_smelting_substilium_lapis_ore"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_substilium_lapis_ore"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "wildaside:lapis_lazuli_from_smelting_substilium_lapis_ore"
+    ]
+  }
+}

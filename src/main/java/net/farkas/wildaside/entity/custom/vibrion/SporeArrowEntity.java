@@ -17,11 +17,7 @@ public class SporeArrowEntity extends AbstractArrow {
     }
 
     public SporeArrowEntity(Level pLevel, LivingEntity thrower) {
-        super(ModEntities.SPORE_ARROW.get(), thrower, pLevel);
-    }
-
-    public SporeArrowEntity(Level pLevel, double pX, double pY, double pZ) {
-        super(ModEntities.SPORE_ARROW.get(), pX, pY, pZ, pLevel);
+        super(ModEntities.SPORE_ARROW.get(), pLevel);
     }
 
     @Override
@@ -33,7 +29,7 @@ public class SporeArrowEntity extends AbstractArrow {
     }
 
     @Override
-    protected ItemStack getPickupItem() {
+    protected ItemStack getDefaultPickupItem() {
         return new ItemStack(ModItems.SPORE_ARROW.get());
     }
 
