@@ -58,7 +58,7 @@ public class ModItems {
             () ->  new ModBoatItem(true, ModBoatEntity.Type.HICKORY, new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> HICKORY_NUT = ITEMS.register("hickory_nut",
-            () ->  new FuelItem(new Item.Properties(), 100));
+            () ->  new FuelItem(new Item.Properties().food(ModFoods.HICKORY_NUT), 100));
 
     public static final RegistryObject<Item> HICKORY_LEAF = ITEMS.register("hickory_leaf",
             () ->  new HickoryLeafItem(new Item.Properties(), 50, HickoryColour.HICKORY));
