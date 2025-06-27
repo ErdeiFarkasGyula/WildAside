@@ -105,23 +105,23 @@ public class ModEvents {
     @SubscribeEvent
     public static void addCustomTrades(VillagerTradesEvent event) {
         if (event.getType() == VillagerProfession.FARMER) {
-            int villagerLevel = 1;
             ItemStack emerald = new ItemStack(Items.EMERALD);
-            event.getTrades().get(villagerLevel).add((pTrader, pRandom) -> new MerchantOffer(
+
+            event.getTrades().get(2).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemCost(ModItems.HICKORY_NUT.get(), 16), emerald, 20, 2, 0.05f
             ));
             for (HickoryColour colour : HickoryColour.values()) {
-                event.getTrades().get(villagerLevel).add((pTrader, pRandom) -> new MerchantOffer(
+                event.getTrades().get(2).add((pTrader, pRandom) -> new MerchantOffer(
                         new ItemCost(ModItems.LEAF_ITEMS.get(colour).get(), 32), emerald, 20, 2, 0.05f
                 ));
             }
         }
 
         if (event.getType() == VillagerProfession.TOOLSMITH) {
-            int villagerLevel = 3;
-            event.getTrades().get(villagerLevel).add((pTrader, pRandom) -> new MerchantOffer(
-                    new ItemCost(Items.EMERALD, 6), new ItemStack(ModItems.SPORE_BOMB.get()), 2, 5, 0.06f
+            event.getTrades().get(3).add((pTrader, pRandom) -> new MerchantOffer(
+                    new ItemCost(Items.EMERALD, 6), new ItemStack(ModItems.ENTORIUM_PILL.get()), 2, 5, 0.06f
             ));
+
         }
     }
 
