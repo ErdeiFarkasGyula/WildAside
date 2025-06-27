@@ -18,17 +18,11 @@
     "descent": {
       "trigger": "minecraft:location",
       "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "biome": "wildaside:vibrion_hive"
-              }
-            }
+        "player": {
+          "location": {
+            "biomes": "wildaside:vibrion_hive"
           }
-        ]
+        }
       }
     }
   },

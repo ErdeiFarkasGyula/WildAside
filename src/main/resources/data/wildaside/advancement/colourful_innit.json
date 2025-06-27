@@ -18,17 +18,11 @@
     "colourful_innit": {
       "trigger": "minecraft:location",
       "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "biome": "wildaside:glowing_hickory_forest"
-              }
-            }
+        "player": {
+          "location": {
+            "biomes": "wildaside:glowing_hickory_forest"
           }
-        ]
+        }
       }
     }
   },

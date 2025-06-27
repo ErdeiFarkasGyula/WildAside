@@ -164,7 +164,6 @@ public class ModEvents {
             long time = world.getDayTime();
 
             if (time >= 14000 && time <= 22000) {
-
                 Holder<Biome> biomeHolder = world.getBiome(player.blockPosition());
                 ResourceKey<Biome> biomeKey = biomeHolder.unwrapKey().orElse(null);
 
