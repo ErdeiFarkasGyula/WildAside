@@ -370,7 +370,12 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
         pTag.putInt("ticks_left", potionTicksLeft);
         pTag.putInt("max_ticks", maxPotionTicks);
         pTag.putInt("colour", potionColour);
-        pTag.put("potion", activePotion.save(pRegistries));
+        if (activePotion.isEmpty()) {
+            pTag.remove("potion");
+        } else {
+            pTag.put("potion", activePotion.save(pRegistries));
+        }
+
     }
 
     @Override
