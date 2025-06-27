@@ -165,9 +165,7 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
 
     private boolean hasRecipe() {
         Optional<RecipeHolder<BioengineeringWorkstationRecipe>> recipe = getCurrentRecipe();
-
         if (recipe.isEmpty()) return false;
-
         ItemStack result = recipe.get().value().output();
         return canInsertAmountIntoOutputSlot(result.getCount()) && canInsertItemIntoOutputSlot(result.getItem());
     }
@@ -186,7 +184,10 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
     }
 
     private boolean canInsertAmountIntoOutputSlot(int count) {
-        return this.itemHandler.getStackInSlot(OUTPUT_1).getCount() + count <= this.itemHandler.getStackInSlot(OUTPUT_1).getMaxStackSize();
+        int maxCount = itemHandler.getStackInSlot(OUTPUT_1).isEmpty() ? 64 : itemHandler.getStackInSlot(OUTPUT_1).getMaxStackSize();
+        int currentCount = itemHandler.getStackInSlot(OUTPUT_1).getCount();
+
+        return maxCount >= currentCount + count;
     }
 
     private boolean hasProgressFinished() {

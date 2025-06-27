@@ -1,5 +1,6 @@
 package net.farkas.wildaside.recipe;
 
+import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -82,10 +83,19 @@ public record BioengineeringWorkstationRecipe(List<Ingredient> ingredients, Item
         return ModRecipes.BIOENGINEERING_TYPE.get();
     }
 
+    public static final Codec<Ingredient> INGREDIENT_ALLOW_EMPTY =
+            Codec.either(Ingredient.CODEC_NONEMPTY, Codec.unit(Ingredient.EMPTY))
+                    .xmap(
+                            e -> e.map(i -> i, i -> i),
+                            ing -> ing.isEmpty()
+                                    ? Either.right(Ingredient.EMPTY)
+                                    : Either.left(ing)
+                    );
+
     public static class Serializer implements RecipeSerializer<BioengineeringWorkstationRecipe> {
         public static final MapCodec<BioengineeringWorkstationRecipe> CODEC =
                 RecordCodecBuilder.mapCodec(inst -> inst.group(
-                        Codec.list(Ingredient.CODEC_NONEMPTY)
+                        Codec.list(INGREDIENT_ALLOW_EMPTY)
                                 .fieldOf("ingredients")
                                 .forGetter(BioengineeringWorkstationRecipe::ingredients),
                         ItemStack.CODEC
@@ -110,7 +120,6 @@ public record BioengineeringWorkstationRecipe(List<Ingredient> ingredients, Item
                             return new BioengineeringWorkstationRecipe(ings, out);
                         }
                 );
-
 
 
         @Override
