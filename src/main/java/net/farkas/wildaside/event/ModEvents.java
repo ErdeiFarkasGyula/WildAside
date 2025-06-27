@@ -25,8 +25,12 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -35,6 +39,7 @@ import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
@@ -46,6 +51,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.brewing.BrewingRecipeRegisterEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -98,9 +104,6 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void addCustomTrades(VillagerTradesEvent event) {
-        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-        RegistryAccess registryAccess = server.registryAccess();
-
         if (event.getType() == VillagerProfession.FARMER) {
             int villagerLevel = 1;
             ItemStack emerald = new ItemStack(Items.EMERALD);
@@ -118,18 +121,6 @@ public class ModEvents {
             int villagerLevel = 3;
             event.getTrades().get(villagerLevel).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemCost(Items.EMERALD, 6), new ItemStack(ModItems.SPORE_BOMB.get()), 2, 5, 0.06f
-            ));
-        }
-
-        if (event.getType() == VillagerProfession.LIBRARIAN) {
-            int villagerLevel = 5;
-            ItemCost book = new ItemCost(Items.BOOK);
-            ItemCost emerald = new ItemCost(Items.EMERALD, 8);
-            EnchantmentInstance enchantmentInstance = new EnchantmentInstance(ModEnchantments.CUSHIONING.getOrThrow(registryAccess), 1);
-            ItemStack enchantedBook = EnchantedBookItem.createForEnchantment(enchantmentInstance);
-
-            event.getTrades().get(villagerLevel).add(((pTrader, pRandom) -> new MerchantOffer(
-                    book, Optional.of(emerald), enchantedBook, 1, 5, 0.05f)
             ));
         }
     }

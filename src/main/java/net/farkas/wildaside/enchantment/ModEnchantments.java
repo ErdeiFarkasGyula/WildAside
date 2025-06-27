@@ -10,26 +10,16 @@ import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
+import net.minecraft.world.item.enchantment.EnchantmentTarget;
 
 public class ModEnchantments {
     public static final ResourceKey<Enchantment> EXTENSIVE_RESEARCH = ResourceKey.create(Registries.ENCHANTMENT,
             ResourceLocation.fromNamespaceAndPath(WildAside.MOD_ID, "extensive_research"));
-    public static final ResourceKey<Enchantment> CUSHIONING = ResourceKey.create(Registries.ENCHANTMENT,
-            ResourceLocation.fromNamespaceAndPath(WildAside.MOD_ID, "cushioning"));
 
     public static void bootstrap(BootstrapContext<Enchantment> context) {
         var enchantments = context.lookup(Registries.ENCHANTMENT);
         var items = context.lookup(Registries.ITEM);
-
-        register(context, CUSHIONING, Enchantment.enchantment(Enchantment.definition(
-                        items.getOrThrow(ItemTags.FOOT_ARMOR_ENCHANTABLE),
-                        5,
-                        3,
-                        Enchantment.dynamicCost(5, 10),
-                        Enchantment.dynamicCost(20, 10),
-                        2,
-                        EquipmentSlotGroup.FEET))
-                .exclusiveWith(enchantments.getOrThrow(EnchantmentTags.BOOTS_EXCLUSIVE)));
 
         register(context, EXTENSIVE_RESEARCH, Enchantment.enchantment(Enchantment.definition(
                         items.getOrThrow(ModTags.Items.SHEARS),
