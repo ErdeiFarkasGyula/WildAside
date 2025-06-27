@@ -85,18 +85,6 @@ public class ModEvents {
                     new ItemStack(Items.EMERALD, 6), new ItemStack(ModItems.SPORE_BOMB.get()), 2, 5, 0.06f
             ));
         }
-
-        if (event.getType() == VillagerProfession.LIBRARIAN) {
-            int villagerLevel = 5;
-            ItemStack book = new ItemStack(Items.BOOK);
-            ItemStack emerald = new ItemStack(Items.EMERALD, 8);
-            EnchantmentInstance enchantmentInstance = new EnchantmentInstance(ModEnchantments.CUSHIONING.get(), 1);
-            ItemStack enchantedBook = EnchantedBookItem.createForEnchantment(enchantmentInstance);
-
-            event.getTrades().get(villagerLevel).add(((pTrader, pRandom) -> new MerchantOffer(
-                    book, emerald, enchantedBook, 1, 5, 0.05f)
-            ));
-        }
     }
 
     @SubscribeEvent
