@@ -80,10 +80,10 @@ public class ModEvents {
             ));
             for (HickoryColour colour : HickoryColour.values()) {
                 event.getTrades().get(2).add((pTrader, pRandom) -> new MerchantOffer(
-                        new ItemStack(ModItems.LEAF_ITEMS.get(colour).get(), 16), emerald, 20, 2, 0.05f
+                        new ItemStack(ModItems.LEAF_ITEMS.get(colour).get(), 32), emerald, 20, 2, 0.05f
                 ));
             }
-            
+
         }
 
         if (event.getType() == VillagerProfession.TOOLSMITH) {
