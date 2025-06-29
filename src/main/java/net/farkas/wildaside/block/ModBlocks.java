@@ -57,7 +57,7 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> COMPRESSED_VIBRION_BLOCK = registerBlock("compressed_vibrion_block",
             () ->  new DropExperienceBlock(BlockBehaviour.Properties.copy(VIBRION_BLOCK.get())
-                    .lightLevel(s -> 15), UniformInt.of(4, 8)));
+                    .lightLevel(s -> 15), UniformInt.of(0, 0)));
 
     public static final RegistryObject<Block> VIBRION_GEL = registerBlock("vibrion_gel",
             () ->  new VibrionGel(BlockBehaviour.Properties.of()
@@ -196,11 +196,11 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> NATURAL_SPORE_BLASTER = registerBlock("natural_spore_blaster",
             () ->  new NaturalSporeBlaster(BlockBehaviour.Properties.copy(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get())
-                    .noOcclusion().strength(4f, 12f).requiresCorrectToolForDrops()));
+                    .noOcclusion().strength(6f, 12f).requiresCorrectToolForDrops()));
 
     public static final RegistryObject<Block> SPORE_BLASTER = registerBlock("spore_blaster",
             () ->  new SporeBlaster(BlockBehaviour.Properties.copy(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get())
-                    .noOcclusion().strength(2f, 12f).requiresCorrectToolForDrops()));
+                    .noOcclusion().strength(6f, 12f).requiresCorrectToolForDrops()));
 
     public static final RegistryObject<Block> POTION_BLASTER = registerBlock("potion_blaster",
             () ->  new PotionBlaster(BlockBehaviour.Properties.copy(ModBlocks.SPORE_BLASTER.get())));

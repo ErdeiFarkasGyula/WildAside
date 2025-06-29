@@ -28,8 +28,6 @@ public class HickoryParticle extends TextureSheetParticle {
     private float driftAmplitudeX;
     private float driftAmplitudeZ;
     private float rollAmplitude;
-    private int groundTicks = -1;
-    private static final int fadeDuration = 40;
 
     protected HickoryParticle(ClientLevel world, double x, double y, double z, double vx, double vy, double vz, SpriteSet spriteSet) {
         super(world, x, y, z);
@@ -62,18 +60,7 @@ public class HickoryParticle extends TextureSheetParticle {
         if (this.removed) return;
 
         if (this.onGround) {
-            if (groundTicks < 0) {
-                groundTicks = 0;
-                this.xd = 0;
-                this.yd = 0;
-                this.zd = 0;
-            } else {
-                groundTicks++;
-                this.alpha = 1.0f - (float) groundTicks / fadeDuration;
-                if (groundTicks >= fadeDuration) {
-                    this.remove();
-                }
-            }
+            this.remove();
             return;
         }
 
