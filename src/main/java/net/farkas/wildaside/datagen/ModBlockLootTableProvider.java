@@ -70,9 +70,9 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
         this.add(ModBlocks.LIT_VIBRION_GLASS_PANE.get(),
                 block -> createSilktouchedDrops(ModBlocks.VIBRION_BLOCK.get(), ModItems.VIBRION.get()));
 
+        this.add(ModBlocks.NATURAL_SPORE_BLASTER.get(), block -> createSilktouchedDrops(ModBlocks.NATURAL_SPORE_BLASTER.get(), Items.AIR));
         this.dropSelf(ModBlocks.SPORE_BLASTER.get());
         this.dropSelf(ModBlocks.POTION_BLASTER.get());
-        this.dropSelf(ModBlocks.NATURAL_SPORE_BLASTER.get());
         this.dropSelf(ModBlocks.BIOENGINEERING_WORKSTATION.get());
 
         //ENTORIUM

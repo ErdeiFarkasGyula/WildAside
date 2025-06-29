@@ -51,7 +51,7 @@ public class ModBlocks {
                                 .lightLevel(l -> 9)));
 
     public static final RegistryObject<Block> COMPRESSED_VIBRION_BLOCK = registerBlock("compressed_vibrion_block",
-            () ->  new DropExperienceBlock(UniformInt.of(4, 8), BlockBehaviour.Properties.ofFullCopy(VIBRION_BLOCK.get())
+            () ->  new DropExperienceBlock(UniformInt.of(0, 0), BlockBehaviour.Properties.ofFullCopy(VIBRION_BLOCK.get())
                                 .lightLevel(s -> 15)));
 
     public static final RegistryObject<Block> VIBRION_GEL = registerBlock("vibrion_gel",
@@ -173,7 +173,7 @@ public class ModBlocks {
 
     //SUBSTILIUM
     public static final RegistryObject<Block> SUBSTILIUM_SOIL = registerBlock("substilium_soil",
-            () ->  new SubstiliumSoil(UniformInt.of(0, 1), BlockBehaviour.Properties.of()
+            () ->  new SubstiliumSoil(UniformInt.of(0, 0), BlockBehaviour.Properties.of()
                                 .mapColor(MapColor.COLOR_CYAN)
                                 .sound(SoundType.ROOTED_DIRT)
                                 .strength(1,  2)));
@@ -190,16 +190,16 @@ public class ModBlocks {
                 }
             });
 
+    public static final RegistryObject<Block> NATURAL_SPORE_BLASTER = registerBlock("natural_spore_blaster",
+            () ->  new NaturalSporeBlaster(BlockBehaviour.Properties.ofFullCopy(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get())
+                    .noOcclusion().strength(6f, 12f).requiresCorrectToolForDrops()));
+
     public static final RegistryObject<Block> SPORE_BLASTER = registerBlock("spore_blaster",
             () ->  new SporeBlaster(BlockBehaviour.Properties.ofFullCopy(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get())
-                    .noOcclusion().strength(2f, 12f).requiresCorrectToolForDrops()));
+                    .noOcclusion().strength(6f, 12f).requiresCorrectToolForDrops()));
 
     public static final RegistryObject<Block> POTION_BLASTER = registerBlock("potion_blaster",
             () ->  new PotionBlaster(BlockBehaviour.Properties.ofFullCopy(ModBlocks.SPORE_BLASTER.get())));
-
-    public static final RegistryObject<Block> NATURAL_SPORE_BLASTER = registerBlock("natural_spore_blaster",
-            () ->  new NaturalSporeBlaster(BlockBehaviour.Properties.ofFullCopy(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get())
-                    .noOcclusion().strength(3f, 12f).requiresCorrectToolForDrops()));
 
     public static final RegistryObject<Block> SMOOTH_SUBSTILIUM_SOIL = registerBlock("smooth_substilium_soil",
             () ->  new Block(BlockBehaviour.Properties.ofFullCopy(COMPRESSED_SUBSTILIUM_SOIL.get())));

@@ -65,7 +65,9 @@ public class FallenLeavesDecorator extends TreeDecorator {
                         if (reader.isStateAtPosition(pos, bs -> bs.is(BlockTags.DIRT))) {
                             if (reader.isStateAtPosition(pos.above(), bs -> !bs.isSolid())) {
                                 groundY = y;
+                                break;
                             }
+                            break;
                         }
                     }
 

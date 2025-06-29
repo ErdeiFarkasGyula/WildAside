@@ -55,6 +55,7 @@ public class HickoryLeavesBlock extends LeavesBlock {
                     groundY = y;
                     break;
                 }
+                break;
             }
         }
 
