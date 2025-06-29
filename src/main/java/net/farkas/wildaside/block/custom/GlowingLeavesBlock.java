@@ -147,6 +147,7 @@ public class GlowingLeavesBlock extends LeavesBlock {
                     groundY = y;
                     break;
                 }
+                break;
             }
         }
 
