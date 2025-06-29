@@ -175,13 +175,12 @@ public class ModBlocks {
     public static final RegistryObject<Block> SUBSTILIUM_EMERALD_ORE = registerBlock("substilium_emerald_ore",
             () ->  new SubstiliumSoil(BlockBehaviour.Properties.copy(Blocks.EMERALD_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(3, 8)));
 
-
     //SUBSTILIUM
     public static final RegistryObject<Block> SUBSTILIUM_SOIL = registerBlock("substilium_soil",
             () ->  new SubstiliumSoil(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_CYAN)
                     .sound(SoundType.ROOTED_DIRT)
-                    .strength(1,  2), UniformInt.of(0, 1)));
+                    .strength(1,  2), UniformInt.of(0, 0)));
 
     public static final RegistryObject<Block> COMPRESSED_SUBSTILIUM_SOIL = registerBlock("compressed_substilium_soil",
             () ->  new Block(BlockBehaviour.Properties.of()
@@ -195,16 +194,16 @@ public class ModBlocks {
                 }
             });
 
+    public static final RegistryObject<Block> NATURAL_SPORE_BLASTER = registerBlock("natural_spore_blaster",
+            () ->  new NaturalSporeBlaster(BlockBehaviour.Properties.copy(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get())
+                    .noOcclusion().strength(4f, 12f).requiresCorrectToolForDrops()));
+
     public static final RegistryObject<Block> SPORE_BLASTER = registerBlock("spore_blaster",
             () ->  new SporeBlaster(BlockBehaviour.Properties.copy(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get())
                     .noOcclusion().strength(2f, 12f).requiresCorrectToolForDrops()));
 
     public static final RegistryObject<Block> POTION_BLASTER = registerBlock("potion_blaster",
             () ->  new PotionBlaster(BlockBehaviour.Properties.copy(ModBlocks.SPORE_BLASTER.get())));
-
-    public static final RegistryObject<Block> NATURAL_SPORE_BLASTER = registerBlock("natural_spore_blaster",
-            () ->  new NaturalSporeBlaster(BlockBehaviour.Properties.copy(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get())
-                    .noOcclusion().strength(3f, 12f).requiresCorrectToolForDrops()));
 
     public static final RegistryObject<Block> SMOOTH_SUBSTILIUM_SOIL = registerBlock("smooth_substilium_soil",
             () ->  new Block(BlockBehaviour.Properties.copy(COMPRESSED_SUBSTILIUM_SOIL.get())));
