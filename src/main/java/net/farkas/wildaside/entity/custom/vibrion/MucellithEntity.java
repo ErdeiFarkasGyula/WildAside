@@ -53,7 +53,6 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new MucellithAttackGoal(this, 60, 8f));
-//        this.goalSelector.addGoal(3, new MucellithLookAtPlayerGoal(this, Player.class, 6f));
         this.goalSelector.addGoal(4, new MucellithRandomLookAroundGoal(this));
 
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
@@ -66,8 +65,8 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
 
     public static AttributeSupplier.Builder createAttributes() {
         return PathfinderMob.createLivingAttributes()
-                .add(Attributes.MAX_HEALTH, 30)
-                .add(Attributes.FOLLOW_RANGE, 20)
+                .add(Attributes.MAX_HEALTH, 40)
+                .add(Attributes.FOLLOW_RANGE, 24)
                 .add(Attributes.MOVEMENT_SPEED, 0)
                 .add(Attributes.JUMP_STRENGTH, 0)
                 .add(Attributes.FLYING_SPEED, 0)
