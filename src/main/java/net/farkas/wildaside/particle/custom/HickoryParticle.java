@@ -71,6 +71,6 @@ public class HickoryParticle extends TextureSheetParticle {
         this.z = initialZ + swayZ;
 
         this.oRoll = this.roll;
-        this.roll = (float) (Mth.sin(ageFactor * 0.5f) * rollAmplitude - (Math.PI / 4));
+        this.roll = (float) (Mth.sin(ageFactor * 0.5f) * rollAmplitude - (Math.PI / 8));
     }
 }

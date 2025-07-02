@@ -8,7 +8,6 @@ import net.farkas.wildaside.worldgen.feature.ModFeatures;
 import net.farkas.wildaside.worldgen.feature.decorator.FallenLeavesDecorator;
 import net.farkas.wildaside.worldgen.feature.tree.hickory.HickoryTreeFoliagePlacer;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
@@ -16,6 +15,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.util.valueproviders.*;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -26,7 +26,6 @@ import net.minecraft.world.level.levelgen.feature.treedecorators.BeehiveDecorato
 import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -83,6 +82,9 @@ public class ModConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> GLOWING_HICKORY_BUSH = registerKey("glowing_hickory_bush");
     public static final ResourceKey<ConfiguredFeature<?, ?>> FALLEN_HICKORY_TREE = registerKey("fallen_hickory_tree");
 
+    public static final ResourceKey<ConfiguredFeature<?, ?>> PODZOL_VEIN = registerKey("podzol_vein");
+//    public static final ResourceKey<ConfiguredFeature<?, ?>> COARSE_DIRT_VEIN = registerKey("coarse_dirt_vein");
+
 
     public static final EnumMap<HickoryColour, ResourceKey<ConfiguredFeature<?, ?>>> HICKORY_TREES = new EnumMap<>(HickoryColour.class);
     static {
@@ -94,21 +96,22 @@ public class ModConfiguredFeatures {
     }
 
     public static void bootstrap(BootstapContext<ConfiguredFeature<?, ?>> context) {
-        RuleTest overgrown_entorium_ore_replaceables = new BlockMatchTest(ModBlocks.SUBSTILIUM_SOIL.get());
-        RuleTest compressed_substilium_soil_replaceables = new BlockMatchTest(ModBlocks.SUBSTILIUM_SOIL.get());
-        RuleTest substilium_ore_replaceables = new BlockMatchTest(ModBlocks.SUBSTILIUM_SOIL.get());
+        RuleTest substilium_soil_replace = new BlockMatchTest(ModBlocks.SUBSTILIUM_SOIL.get());
+        RuleTest grass_replace = new BlockMatchTest(Blocks.GRASS_BLOCK);
 
-        List<OreConfiguration.TargetBlockState> overgrown_entorium_ore = List.of(OreConfiguration.target(overgrown_entorium_ore_replaceables, ModBlocks.OVERGROWN_ENTORIUM_ORE.get().defaultBlockState()));
-        List<OreConfiguration.TargetBlockState> compressed_substilium_soil = List.of(OreConfiguration.target(compressed_substilium_soil_replaceables, ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get().defaultBlockState()));
+        List<OreConfiguration.TargetBlockState> overgrown_entorium_ore = List.of(OreConfiguration.target(substilium_soil_replace, ModBlocks.OVERGROWN_ENTORIUM_ORE.get().defaultBlockState()));
+        List<OreConfiguration.TargetBlockState> compressed_substilium_soil = List.of(OreConfiguration.target(substilium_soil_replace, ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get().defaultBlockState()));
 
-        List<OreConfiguration.TargetBlockState> substilium_coal_ore = List.of(OreConfiguration.target(substilium_ore_replaceables, ModBlocks.SUBSTILIUM_COAL_ORE.get().defaultBlockState()));
-        List<OreConfiguration.TargetBlockState> substilium_copper_ore = List.of(OreConfiguration.target(substilium_ore_replaceables, ModBlocks.SUBSTILIUM_COPPER_ORE.get().defaultBlockState()));
-        List<OreConfiguration.TargetBlockState> substilium_lapis_ore = List.of(OreConfiguration.target(substilium_ore_replaceables, ModBlocks.SUBSTILIUM_LAPIS_ORE.get().defaultBlockState()));
-        List<OreConfiguration.TargetBlockState> substilium_iron_ore = List.of(OreConfiguration.target(substilium_ore_replaceables, ModBlocks.SUBSTILIUM_IRON_ORE.get().defaultBlockState()));
-        List<OreConfiguration.TargetBlockState> substilium_gold_ore = List.of(OreConfiguration.target(substilium_ore_replaceables, ModBlocks.SUBSTILIUM_GOLD_ORE.get().defaultBlockState()));
-        List<OreConfiguration.TargetBlockState> substilium_redstone_ore = List.of(OreConfiguration.target(substilium_ore_replaceables, ModBlocks.SUBSTILIUM_REDSTONE_ORE.get().defaultBlockState()));
-        List<OreConfiguration.TargetBlockState> substilium_diamond_ore = List.of(OreConfiguration.target(substilium_ore_replaceables, ModBlocks.SUBSTILIUM_DIAMOND_ORE.get().defaultBlockState()));
-        List<OreConfiguration.TargetBlockState> substilium_emerald_ore = List.of(OreConfiguration.target(substilium_ore_replaceables, ModBlocks.SUBSTILIUM_EMERALD_ORE.get().defaultBlockState()));
+        List<OreConfiguration.TargetBlockState> substilium_coal_ore = List.of(OreConfiguration.target(substilium_soil_replace, ModBlocks.SUBSTILIUM_COAL_ORE.get().defaultBlockState()));
+        List<OreConfiguration.TargetBlockState> substilium_copper_ore = List.of(OreConfiguration.target(substilium_soil_replace, ModBlocks.SUBSTILIUM_COPPER_ORE.get().defaultBlockState()));
+        List<OreConfiguration.TargetBlockState> substilium_lapis_ore = List.of(OreConfiguration.target(substilium_soil_replace, ModBlocks.SUBSTILIUM_LAPIS_ORE.get().defaultBlockState()));
+        List<OreConfiguration.TargetBlockState> substilium_iron_ore = List.of(OreConfiguration.target(substilium_soil_replace, ModBlocks.SUBSTILIUM_IRON_ORE.get().defaultBlockState()));
+        List<OreConfiguration.TargetBlockState> substilium_gold_ore = List.of(OreConfiguration.target(substilium_soil_replace, ModBlocks.SUBSTILIUM_GOLD_ORE.get().defaultBlockState()));
+        List<OreConfiguration.TargetBlockState> substilium_redstone_ore = List.of(OreConfiguration.target(substilium_soil_replace, ModBlocks.SUBSTILIUM_REDSTONE_ORE.get().defaultBlockState()));
+        List<OreConfiguration.TargetBlockState> substilium_diamond_ore = List.of(OreConfiguration.target(substilium_soil_replace, ModBlocks.SUBSTILIUM_DIAMOND_ORE.get().defaultBlockState()));
+        List<OreConfiguration.TargetBlockState> substilium_emerald_ore = List.of(OreConfiguration.target(substilium_soil_replace, ModBlocks.SUBSTILIUM_EMERALD_ORE.get().defaultBlockState()));
+
+        List<OreConfiguration.TargetBlockState> podzol_vein = List.of(OreConfiguration.target(grass_replace, Blocks.PODZOL.defaultBlockState()));
 
         register(context, OVERGROWN_ENTORIUM_ORE, Feature.ORE, new OreConfiguration(overgrown_entorium_ore, 16));
 
@@ -230,6 +233,8 @@ public class ModConfiguredFeatures {
         register(context, HICKORY_BUSH, ModFeatures.HICKORY_BUSH.get(), new NoneFeatureConfiguration());
         register(context, GLOWING_HICKORY_BUSH, ModFeatures.GLOWING_HICKORY_BUSH.get(), new NoneFeatureConfiguration());
         register(context, FALLEN_HICKORY_TREE, ModFeatures.FALLEN_HICKORY_TREE.get(), new NoneFeatureConfiguration());
+
+        register(context, PODZOL_VEIN, Feature.ORE, new OreConfiguration(podzol_vein, 32));
     }
 
     public static ResourceKey<ConfiguredFeature<?, ?>> registerKey(String name) {

@@ -73,6 +73,9 @@ public class ModPlacedFeatures {
     public static final ResourceKey<PlacedFeature> GLOWING_HICKORY_BUSH = registerKey("glowing_hickory_bush");
     public static final ResourceKey<PlacedFeature> FALLEN_HICKORY_TREE = registerKey("fallen_hickory_tree");
 
+    public static final ResourceKey<PlacedFeature> PODZOL_VEIN = registerKey("podzol_vein");
+//    public static final ResourceKey<PlacedFeature> COARSE_DIRT_VEIN = registerKey("coarse_dirt_vein");
+
     public static void bootstrap(BootstapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
         HeightRangePlacement VibrionHivePlacement = HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80));
@@ -175,6 +178,9 @@ public class ModPlacedFeatures {
                 VegetationPlacements.treePlacement(PlacementUtils.countExtra(7, 0.5f, 3)));
         register(context, FALLEN_HICKORY_TREE, configuredFeatures.getOrThrow(ModConfiguredFeatures.FALLEN_HICKORY_TREE),
                 List.of(RarityFilter.onAverageOnceEvery(8), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
+
+        register(context, PODZOL_VEIN, configuredFeatures.getOrThrow(ModConfiguredFeatures.PODZOL_VEIN),
+                ModOrePlacement.commonOrePlacement(16, HeightRangePlacement.triangle(VerticalAnchor.absolute(50), VerticalAnchor.absolute(100))));
     }
 
     private static ResourceKey<PlacedFeature> registerKey(String name) {

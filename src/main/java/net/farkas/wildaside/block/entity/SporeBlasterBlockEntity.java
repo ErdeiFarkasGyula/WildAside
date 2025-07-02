@@ -64,7 +64,7 @@ public class SporeBlasterBlockEntity extends BlockEntity {
 
             List<LivingEntity> hits = world.getEntitiesOfClass(LivingEntity.class, new AABB(step), e -> !e.isSpectator());
             for (LivingEntity entity : hits) {
-                ContaminationHandler.giveContaminationDose(entity, 70);
+                ContaminationHandler.giveContaminationDose(entity, 60);
                 world.sendParticles(particle, entity.getX(), entity.getY() + 0.5, entity.getZ(), 5, 0.2, 0.2, 0.2, 0.01);
             }
         }

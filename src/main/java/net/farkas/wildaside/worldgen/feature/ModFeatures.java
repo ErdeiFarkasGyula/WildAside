@@ -2,7 +2,6 @@ package net.farkas.wildaside.worldgen.feature;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.worldgen.feature.custom.*;
-import net.minecraft.core.Direction;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.HugeMushroomFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
