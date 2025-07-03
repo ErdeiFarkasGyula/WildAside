@@ -83,7 +83,6 @@ public class ModConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> FALLEN_HICKORY_TREE = registerKey("fallen_hickory_tree");
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> PODZOL_VEIN = registerKey("podzol_vein");
-//    public static final ResourceKey<ConfiguredFeature<?, ?>> COARSE_DIRT_VEIN = registerKey("coarse_dirt_vein");
 
 
     public static final EnumMap<HickoryColour, ResourceKey<ConfiguredFeature<?, ?>>> HICKORY_TREES = new EnumMap<>(HickoryColour.class);
@@ -103,7 +102,6 @@ public class ModConfiguredFeatures {
         HICKORY_SAPLINGS.put(HickoryColour.YELLOW_GLOWING, YELLOW_GLOWING_HICKORY_SAPLING);
         HICKORY_SAPLINGS.put(HickoryColour.GREEN_GLOWING, GREEN_GLOWING_HICKORY_SAPLING);
     }
-
 
     static BeehiveDecorator glowingBeehive = new BeehiveDecorator(0.015f);
     static ImmutableList hickoryDecorator = ImmutableList.of(new BeehiveDecorator(0.01f), new FallenLeavesDecorator(0.075f, HickoryColour.HICKORY));

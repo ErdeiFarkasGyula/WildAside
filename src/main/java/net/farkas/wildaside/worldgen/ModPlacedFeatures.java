@@ -76,7 +76,6 @@ public class ModPlacedFeatures {
     public static final ResourceKey<PlacedFeature> FALLEN_HICKORY_TREE = registerKey("fallen_hickory_tree");
 
     public static final ResourceKey<PlacedFeature> PODZOL_VEIN = registerKey("podzol_vein");
-//    public static final ResourceKey<PlacedFeature> COARSE_DIRT_VEIN = registerKey("coarse_dirt_vein");
 
     public static final EnumMap<HickoryColour, ResourceKey<PlacedFeature>> HICKORY_TREES = new EnumMap<>(HickoryColour.class);
     static {
