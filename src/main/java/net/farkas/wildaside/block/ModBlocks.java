@@ -377,7 +377,6 @@ public class ModBlocks {
             () ->  new GlowingLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES), HickoryColour.GREEN_GLOWING));
 
     public static final EnumMap<HickoryColour, RegistryObject<Block>> HICKORY_LEAVES_BLOCKS = new EnumMap<>(HickoryColour.class);
-
     static {
         HICKORY_LEAVES_BLOCKS.put(HickoryColour.HICKORY, HICKORY_LEAVES);
         HICKORY_LEAVES_BLOCKS.put(HickoryColour.RED_GLOWING, RED_GLOWING_HICKORY_LEAVES);
@@ -404,6 +403,15 @@ public class ModBlocks {
             () ->  new GlowingSaplingBlock(new HickoryTreeGrower(HickoryColour.YELLOW_GLOWING), BlockBehaviour.Properties.copy(RED_GLOWING_HICKORY_SAPLING.get())));
     public static final RegistryObject<Block> GREEN_GLOWING_HICKORY_SAPLING = registerBlock("green_glowing_hickory_sapling",
             () ->  new GlowingSaplingBlock(new HickoryTreeGrower(HickoryColour.GREEN_GLOWING), BlockBehaviour.Properties.copy(RED_GLOWING_HICKORY_SAPLING.get())));
+
+    public static final EnumMap<HickoryColour, RegistryObject<Block>> HICKORY_SAPLINGS = new EnumMap<>(HickoryColour.class);
+    static {
+        HICKORY_SAPLINGS.put(HickoryColour.HICKORY, HICKORY_SAPLING);
+        HICKORY_SAPLINGS.put(HickoryColour.RED_GLOWING, RED_GLOWING_HICKORY_SAPLING);
+        HICKORY_SAPLINGS.put(HickoryColour.BROWN_GLOWING, BROWN_GLOWING_HICKORY_SAPLING);
+        HICKORY_SAPLINGS.put(HickoryColour.YELLOW_GLOWING, YELLOW_GLOWING_HICKORY_SAPLING);
+        HICKORY_SAPLINGS.put(HickoryColour.GREEN_GLOWING, GREEN_GLOWING_HICKORY_SAPLING);
+    }
 
     public static final RegistryObject<Block> HICKORY_ROOT_BUSH = registerBlock("hickory_root_bush",
             () ->  new RootBushBlock(BlockBehaviour.Properties.copy(Blocks.SWEET_BERRY_BUSH).strength(0.5f)));
