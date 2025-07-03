@@ -2,6 +2,7 @@ package net.farkas.wildaside.worldgen;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
+import net.farkas.wildaside.util.HickoryColour;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
@@ -18,6 +19,7 @@ import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.placement.*;
 
+import java.util.EnumMap;
 import java.util.List;
 
 public class ModPlacedFeatures {
@@ -75,6 +77,24 @@ public class ModPlacedFeatures {
 
     public static final ResourceKey<PlacedFeature> PODZOL_VEIN = registerKey("podzol_vein");
 //    public static final ResourceKey<PlacedFeature> COARSE_DIRT_VEIN = registerKey("coarse_dirt_vein");
+
+    public static final EnumMap<HickoryColour, ResourceKey<PlacedFeature>> HICKORY_TREES = new EnumMap<>(HickoryColour.class);
+    static {
+        HICKORY_TREES.put(HickoryColour.HICKORY, HICKORY_TREE);
+        HICKORY_TREES.put(HickoryColour.RED_GLOWING, RED_GLOWING_HICKORY_TREE);
+        HICKORY_TREES.put(HickoryColour.BROWN_GLOWING, BROWN_GLOWING_HICKORY_TREE);
+        HICKORY_TREES.put(HickoryColour.YELLOW_GLOWING, YELLOW_GLOWING_HICKORY_TREE);
+        HICKORY_TREES.put(HickoryColour.GREEN_GLOWING, GREEN_GLOWING_HICKORY_TREE);
+    }
+
+    public static final EnumMap<HickoryColour, ResourceKey<PlacedFeature>> HICKORY_SAPLINGS = new EnumMap<>(HickoryColour.class);
+    static {
+        HICKORY_SAPLINGS.put(HickoryColour.HICKORY, HICKORY_SAPLING);
+        HICKORY_SAPLINGS.put(HickoryColour.RED_GLOWING, RED_GLOWING_HICKORY_SAPLING);
+        HICKORY_SAPLINGS.put(HickoryColour.BROWN_GLOWING, BROWN_GLOWING_HICKORY_SAPLING );
+        HICKORY_SAPLINGS.put(HickoryColour.YELLOW_GLOWING, YELLOW_GLOWING_HICKORY_SAPLING);
+        HICKORY_SAPLINGS.put(HickoryColour.GREEN_GLOWING, GREEN_GLOWING_HICKORY_SAPLING);
+    }
 
     public static void bootstrap(BootstapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
@@ -150,27 +170,10 @@ public class ModPlacedFeatures {
         register(context, PINKSTER_FLOWER, configuredFeatures.getOrThrow(ModConfiguredFeatures.PINKSTER_FLOWER),
                 List.of(RarityFilter.onAverageOnceEvery(16), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
 
-        register(context, HICKORY_TREE, configuredFeatures.getOrThrow(ModConfiguredFeatures.HICKORY_TREE),
-                VegetationPlacements.treePlacement(PlacementUtils.countExtra(8, 0.1f, 2), ModBlocks.HICKORY_SAPLING.get()));
-        register(context, RED_GLOWING_HICKORY_TREE, configuredFeatures.getOrThrow(ModConfiguredFeatures.RED_GLOWING_HICKORY_TREE),
-                VegetationPlacements.treePlacement(PlacementUtils.countExtra(2, 0.1f, 2), ModBlocks.RED_GLOWING_HICKORY_SAPLING.get()));
-        register(context, BROWN_GLOWING_HICKORY_TREE, configuredFeatures.getOrThrow(ModConfiguredFeatures.BROWN_GLOWING_HICKORY_TREE),
-                VegetationPlacements.treePlacement(PlacementUtils.countExtra(2, 0.1f, 2), ModBlocks.BROWN_GLOWING_HICKORY_SAPLING.get()));
-        register(context, YELLOW_GLOWING_HICKORY_TREE, configuredFeatures.getOrThrow(ModConfiguredFeatures.YELLOW_GLOWING_HICKORY_TREE),
-                VegetationPlacements.treePlacement(PlacementUtils.countExtra(2, 0.1f, 2), ModBlocks.YELLOW_GLOWING_HICKORY_SAPLING.get()));
-        register(context, GREEN_GLOWING_HICKORY_TREE, configuredFeatures.getOrThrow(ModConfiguredFeatures.GREEN_GLOWING_HICKORY_TREE),
-                VegetationPlacements.treePlacement(PlacementUtils.countExtra(2, 0.1f, 2), ModBlocks.GREEN_GLOWING_HICKORY_SAPLING.get()));
-
-        register(context, HICKORY_SAPLING, configuredFeatures.getOrThrow(ModConfiguredFeatures.HICKORY_SAPLING),
-                List.of(RarityFilter.onAverageOnceEvery(2), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
-        register(context, RED_GLOWING_HICKORY_SAPLING, configuredFeatures.getOrThrow(ModConfiguredFeatures.RED_GLOWING_HICKORY_SAPLING),
-                List.of(RarityFilter.onAverageOnceEvery(8), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
-        register(context, BROWN_GLOWING_HICKORY_SAPLING, configuredFeatures.getOrThrow(ModConfiguredFeatures.BROWN_GLOWING_HICKORY_SAPLING),
-                List.of(RarityFilter.onAverageOnceEvery(8), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
-        register(context, YELLOW_GLOWING_HICKORY_SAPLING, configuredFeatures.getOrThrow(ModConfiguredFeatures.YELLOW_GLOWING_HICKORY_SAPLING),
-                List.of(RarityFilter.onAverageOnceEvery(8), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
-        register(context, GREEN_GLOWING_HICKORY_SAPLING, configuredFeatures.getOrThrow(ModConfiguredFeatures.GREEN_GLOWING_HICKORY_SAPLING),
-                List.of(RarityFilter.onAverageOnceEvery(8), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
+        for (HickoryColour colour : HickoryColour.values()) {
+            registerHickoryTree(context, configuredFeatures, colour);
+            registerHickorySapling(context, configuredFeatures, colour);
+        }
 
         register(context, HICKORY_BUSH, configuredFeatures.getOrThrow(ModConfiguredFeatures.HICKORY_BUSH),
                 VegetationPlacements.treePlacement(PlacementUtils.countExtra(7, 0.5f, 3)));
@@ -185,6 +188,18 @@ public class ModPlacedFeatures {
 
     private static ResourceKey<PlacedFeature> registerKey(String name) {
         return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(WildAside.MOD_ID, name));
+    }
+
+    private static void registerHickoryTree(BootstapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures, HickoryColour colour) {
+        int count = colour == HickoryColour.HICKORY ? 8 : 2;
+        register(context, HICKORY_TREES.get(colour), configuredFeatures.getOrThrow(ModConfiguredFeatures.HICKORY_TREES.get(colour)),
+                VegetationPlacements.treePlacement(PlacementUtils.countExtra(count, 0.1f, 2), ModBlocks.HICKORY_SAPLINGS.get(colour).get()));
+    }
+
+    private static void registerHickorySapling(BootstapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures, HickoryColour colour) {
+        int chance = colour == HickoryColour.HICKORY ? 2 : 8;
+        register(context, HICKORY_SAPLINGS.get(colour), configuredFeatures.getOrThrow(ModConfiguredFeatures.HICKORY_SAPLINGS.get(colour)),
+                List.of(RarityFilter.onAverageOnceEvery(chance), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
     }
 
     private static void register(BootstapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, Holder<ConfiguredFeature<?, ?>> configuration,
