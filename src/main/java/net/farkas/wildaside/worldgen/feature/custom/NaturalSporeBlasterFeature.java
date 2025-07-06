@@ -42,8 +42,6 @@ public class NaturalSporeBlasterFeature extends ReplaceBlockFeature {
                     boolean isFree1 = !worldgenlevel.getBlockState(pos1).isCollisionShapeFullBlock(worldgenlevel, pos1);
                     boolean isFree2 = !worldgenlevel.getBlockState(pos2).isCollisionShapeFullBlock(worldgenlevel, pos2);
 
-                    boolean foundFreeAxis = false;
-
                     if (isFree1 || isFree2) {
                         freeAxes.add(candidate);
                     }
