@@ -79,7 +79,7 @@ public class ModBiomes {
                         .grassColorOverride(0x4db92c)
                         .fogColor(0xBADAFF)
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS)
-                        .backgroundMusic(Musics.createGameMusic(SoundEvents.AMBIENT_CRIMSON_FOREST_LOOP)).build())
+                        .backgroundMusic(null).build())
                 .build();
     }
 
@@ -133,7 +133,7 @@ public class ModBiomes {
                         .grassColorOverride(0x4db92c)
                         .fogColor(0xBADAFF)
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS)
-                        .backgroundMusic(Musics.createGameMusic(SoundEvents.AMBIENT_CRIMSON_FOREST_LOOP)).build())
+                        .backgroundMusic(null).build())
                 .build();
     }
 
