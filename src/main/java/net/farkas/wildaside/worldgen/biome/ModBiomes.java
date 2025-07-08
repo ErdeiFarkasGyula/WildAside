@@ -144,7 +144,7 @@ public class ModBiomes {
 //        spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntities.MUCELLITH.get(),
 //                ModConfig.MUCELLITH_SPAWN_WEIGHT.get(), ModConfig.MUCELLITH_SPAWN_MIN.get(), ModConfig.MUCELLITH_SPAWN_MAX.get()));
 
-        spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntities.MUCELLITH.get(), 15, 2, 3));
+        spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntities.MUCELLITH.get(), 10, 2, 3));
 
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
