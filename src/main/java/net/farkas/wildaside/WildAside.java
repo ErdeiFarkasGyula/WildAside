@@ -3,6 +3,7 @@ package net.farkas.wildaside;
 import com.mojang.logging.LogUtils;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.ModBlockEntities;
+import net.farkas.wildaside.config.Config;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.enchantment.ModEnchantments;
 import net.farkas.wildaside.entity.ModEntities;
@@ -62,7 +63,8 @@ public class WildAside
     public WildAside(FMLJavaModLoadingContext context)
     {
         IEventBus modEventBus = context.getModEventBus();
-        context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+
+        context.registerConfig(ModConfig.Type.COMMON, Config.COMMON_SPEC);
 
         ModCreativeModeTabs.register(modEventBus);
         ModSounds.register(modEventBus);
@@ -79,6 +81,7 @@ public class WildAside
         ModTreeDecorators.register(modEventBus);
         ModFeatures.register(modEventBus);
         ModFoliagePlacers.register(modEventBus);
+
         MinecraftForge.EVENT_BUS.register(this);
 
         modEventBus.addListener(this::commonSetup);
