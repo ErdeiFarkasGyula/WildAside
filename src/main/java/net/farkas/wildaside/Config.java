@@ -1,11 +1,10 @@
-package net.farkas.wildaside.config;
+package net.farkas.wildaside;
 
-import net.farkas.wildaside.WildAside;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = WildAside.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class ModConfig {
+public class Config {
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
     public static final ForgeConfigSpec.ConfigValue<Integer> HICKORY_FOREST_WEIGHT = BUILDER
