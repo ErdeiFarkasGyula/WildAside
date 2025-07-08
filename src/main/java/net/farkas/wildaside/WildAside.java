@@ -3,6 +3,7 @@ package net.farkas.wildaside;
 import com.mojang.logging.LogUtils;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.ModBlockEntities;
+import net.farkas.wildaside.config.ModConfig;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.enchantment.ModEnchantments;
 import net.farkas.wildaside.entity.ModEntities;
@@ -21,6 +22,7 @@ import net.farkas.wildaside.screen.ModMenuTypes;
 import net.farkas.wildaside.screen.potion_blaster.PotionBlasterScreen;
 import net.farkas.wildaside.sound.ModSounds;
 import net.farkas.wildaside.util.ModWoodTypes;
+import net.farkas.wildaside.worldgen.biome.ModBiomes;
 import net.farkas.wildaside.worldgen.biome.ModTerraBlenderAPI;
 import net.farkas.wildaside.worldgen.biome.surface.ModSurfaceRules;
 import net.farkas.wildaside.worldgen.feature.ModFeatures;
@@ -33,15 +35,20 @@ import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.entity.ArrowRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
+import net.minecraftforge.common.world.ForgeBiomeModifiers;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -49,6 +56,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 import terrablender.api.SurfaceRuleManager;
 
@@ -61,6 +69,7 @@ public class WildAside
     public WildAside(FMLJavaModLoadingContext context)
     {
         IEventBus modEventBus = context.getModEventBus();
+        context.registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, ModConfig.SPEC);
 
         ModCreativeModeTabs.register(modEventBus);
 
@@ -84,21 +93,21 @@ public class WildAside
 
         ModTreeDecorators.register(modEventBus);
         ModFeatures.register(modEventBus);
-        ModTerraBlenderAPI.registerRegions();
 
         ModFoliagePlacers.register(modEventBus);
 
+        MinecraftForge.EVENT_BUS.register(this);
+
         modEventBus.addListener(this::commonSetup);
 
-        MinecraftForge.EVENT_BUS.register(this);
         modEventBus.addListener(VanillaCreativeTabs::addCreative);
-
-        //context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
+            ModTerraBlenderAPI.registerRegions();
             ((FlowerPotBlock)Blocks.FLOWER_POT).addPlant(ModBlocks.VIBRION_GROWTH.getId(), ModBlocks.POTTED_VIBRION_GROWTH);
+
         });
 
         SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MOD_ID, ModSurfaceRules.makeRules());

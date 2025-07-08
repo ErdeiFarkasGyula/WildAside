@@ -1,16 +1,17 @@
 package net.farkas.wildaside.worldgen.biome;
 
 import net.farkas.wildaside.WildAside;
-import net.farkas.wildaside.worldgen.biome.region.ModGlowingHickoryForestRegion;
-import net.farkas.wildaside.worldgen.biome.region.ModVibrionHiveRegion;
-import net.farkas.wildaside.worldgen.biome.region.ModHickoryForestRegion;
+import net.farkas.wildaside.config.ModConfig;
+import net.farkas.wildaside.worldgen.biome.region.HickoryForestRegion;
+import net.farkas.wildaside.worldgen.biome.region.GlowingHickoryForestRegion;
+import net.farkas.wildaside.worldgen.biome.region.VibrionHiveRegion;
 import net.minecraft.resources.ResourceLocation;
 import terrablender.api.Regions;
 
 public class ModTerraBlenderAPI {
     public static void registerRegions() {
-        Regions.register(new ModHickoryForestRegion(new ResourceLocation(WildAside.MOD_ID, "hickory_forest"), 3));
-        Regions.register(new ModGlowingHickoryForestRegion(new ResourceLocation(WildAside.MOD_ID, "glowing_hickory_forest"), 1));
-        Regions.register(new ModVibrionHiveRegion(new ResourceLocation(WildAside.MOD_ID, "vibrion_hive"), 4));
+        Regions.register(new HickoryForestRegion(new ResourceLocation(WildAside.MOD_ID, "hickory_forest"), ModConfig.HICKORY_FOREST_WEIGHT.get()));
+        Regions.register(new GlowingHickoryForestRegion(new ResourceLocation(WildAside.MOD_ID, "glowing_hickory_forest"), ModConfig.GLOWING_HICKORY_FOREST_WEIGHT.get()));
+        Regions.register(new VibrionHiveRegion(new ResourceLocation(WildAside.MOD_ID, "vibrion_hive"), ModConfig.VIBRION_HIVE_WEIGHT.get()));
     }
 }

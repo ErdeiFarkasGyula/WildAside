@@ -24,7 +24,7 @@ public class ModBiomes {
     public static final ResourceKey<Biome> GLOWING_HICKORY_FOREST = register("glowing_hickory_forest");
     public static final ResourceKey<Biome> VIBRION_HIVE = register("vibrion_hive");
 
-    public static void boostrap(BootstapContext<Biome> context) {
+    public static void bootstrap(BootstapContext<Biome> context) {
         context.register(HICKORY_FOREST, hickoryForest(context));
         context.register(GLOWING_HICKORY_FOREST, glowingHickoryForest(context));
         context.register(VIBRION_HIVE, vibrionHive(context));
@@ -141,7 +141,11 @@ public class ModBiomes {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
 
+//        spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntities.MUCELLITH.get(),
+//                ModConfig.MUCELLITH_SPAWN_WEIGHT.get(), ModConfig.MUCELLITH_SPAWN_MIN.get(), ModConfig.MUCELLITH_SPAWN_MAX.get()));
+
         spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntities.MUCELLITH.get(), 15, 2, 3));
+
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
         globalOverworldGeneration(biomeBuilder);

@@ -13,8 +13,8 @@ import terrablender.api.RegionType;
 
 import java.util.function.Consumer;
 
-public class ModGlowingHickoryForestRegion extends Region {
-    public ModGlowingHickoryForestRegion(ResourceLocation name, int weight) {
+public class GlowingHickoryForestRegion extends Region {
+    public GlowingHickoryForestRegion(ResourceLocation name, int weight) {
         super(name, RegionType.OVERWORLD, weight);
     }
 
