@@ -195,7 +195,7 @@ public class ModBlocks {
             });
 
     public static final RegistryObject<Block> NATURAL_SPORE_BLASTER = registerBlock("natural_spore_blaster",
-            () ->  new NaturalSporeBlaster(BlockBehaviour.Properties.copy(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get())
+            () ->  new NaturalSporeBlaster(BlockBehaviour.Properties.copy(ModBlocks.SUBSTILIUM_SOIL.get())
                     .noOcclusion().strength(6f, 12f).requiresCorrectToolForDrops()));
 
     public static final RegistryObject<Block> SPORE_BLASTER = registerBlock("spore_blaster",
