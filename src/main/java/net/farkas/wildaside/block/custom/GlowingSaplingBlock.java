@@ -67,7 +67,7 @@ public class GlowingSaplingBlock extends SaplingBlock {
             pLevel.playSound(null, pPos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.honeycomb.wax_on")), SoundSource.BLOCKS, 1, 1);
             pPlayer.swing(pHand);
 
-            if (!pPlayer.isCreative()) {
+            if (!pPlayer.isInvulnerable()) {
                 playerItem.shrink(1);
             }
 

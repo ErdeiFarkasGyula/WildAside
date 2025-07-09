@@ -60,7 +60,7 @@ public class MucellithAttackGoal extends Goal {
     @Override
     public void tick() {
         if (target instanceof Player player) {
-            if (player.isCreative() || player.isSpectator()) {
+            if (player.isInvulnerable()) {
                 target = null;
             }
         }

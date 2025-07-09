@@ -36,7 +36,7 @@ public class OvergrownEntoriumOre extends EntoriumOre {
             pLevel.playSound(null, pPos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.mooshroom.shear")), SoundSource.BLOCKS, 1, 1);
             pPlayer.swing(pHand);
 
-            if (!pPlayer.isCreative()) {
+            if (!pPlayer.isInvulnerable()) {
                 playerItem.hurt(1, RandomSource.create(), null);
             }
 

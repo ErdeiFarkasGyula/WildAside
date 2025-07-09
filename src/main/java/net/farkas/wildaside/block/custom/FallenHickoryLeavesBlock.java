@@ -109,7 +109,7 @@ public class FallenHickoryLeavesBlock extends Block {
             pPlayer.swing(pHand);
             pPlayer.addItem(new ItemStack(ModItems.LEAF_ITEMS.get(pState.getValue(FallenHickoryLeavesBlock.COLOUR)).get()));
             pLevel.playSound(null, pPos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.big_dripleaf.place")), SoundSource.BLOCKS, 1, 0.8f);
-            if (!pPlayer.isCreative()) {
+            if (!pPlayer.isInvulnerable()) {
                 playerItem.shrink(1);
             }
 
@@ -121,7 +121,7 @@ public class FallenHickoryLeavesBlock extends Block {
             pLevel.setBlock(pPos, pState.setValue(FallenHickoryLeavesBlock.FIXED_LIGHTING, true), 3);
             pLevel.playSound(null, pPos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.honeycomb.wax_on")), SoundSource.BLOCKS, 1, 1);
 
-            if (!pPlayer.isCreative()) {
+            if (!pPlayer.isInvulnerable()) {
                 playerItem.shrink(1);
             }
 
