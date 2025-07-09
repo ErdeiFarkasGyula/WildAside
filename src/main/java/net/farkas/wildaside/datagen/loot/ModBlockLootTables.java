@@ -44,8 +44,8 @@ public class ModBlockLootTables extends BlockLootSubProvider {
     protected void generate() {
         //VIBRION
         this.dropSelf(ModBlocks.VIBRION_GEL.get());
-        this.dropSelf(ModBlocks.COMPRESSED_VIBRION_BLOCK.get());
         this.dropSelf(ModBlocks.LIT_VIBRION_GEL.get());
+        this.dropSelf(ModBlocks.COMPRESSED_VIBRION_BLOCK.get());
         this.dropSelf(ModBlocks.VIBRION_GROWTH.get());
         this.dropSelf(ModBlocks.HANGING_VIBRION_VINES.get());
 
@@ -58,13 +58,13 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.add(ModBlocks.VIBRION_SPOREHOLDER.get(),
                 block -> createSilktouchedFortuneDrops(ModBlocks.VIBRION_SPOREHOLDER.get(), ModItems.VIBRION.get(), 1, 2));
         this.add(ModBlocks.VIBRION_GLASS.get(),
-                block -> createSilktouchedDrops(ModBlocks.VIBRION_BLOCK.get(), ModItems.VIBRION.get()));
+                block -> createSilktouchedDrops(ModBlocks.VIBRION_GLASS.get(), ModItems.VIBRION.get()));
         this.add(ModBlocks.LIT_VIBRION_GLASS.get(),
-                block -> createSilktouchedDrops(ModBlocks.VIBRION_BLOCK.get(), ModItems.VIBRION.get()));
+                block -> createSilktouchedDrops(ModBlocks.LIT_VIBRION_GLASS.get(), ModItems.VIBRION.get()));
         this.add(ModBlocks.VIBRION_GLASS_PANE.get(),
-                block -> createSilktouchedDrops(ModBlocks.VIBRION_BLOCK.get(), ModItems.VIBRION.get()));
+                block -> createSilktouchedDrops(ModBlocks.VIBRION_GLASS_PANE.get(), ModItems.VIBRION.get()));
         this.add(ModBlocks.LIT_VIBRION_GLASS_PANE.get(),
-                block -> createSilktouchedDrops(ModBlocks.VIBRION_BLOCK.get(), ModItems.VIBRION.get()));
+                block -> createSilktouchedDrops(ModBlocks.LIT_VIBRION_GLASS_PANE.get(), ModItems.VIBRION.get()));
 
         this.add(ModBlocks.NATURAL_SPORE_BLASTER.get(), block -> createSilktouchedDrops(ModBlocks.NATURAL_SPORE_BLASTER.get(), Items.AIR));
         this.dropSelf(ModBlocks.SPORE_BLASTER.get());
@@ -139,25 +139,13 @@ public class ModBlockLootTables extends BlockLootSubProvider {
 
 
         //HICKORY
-        this.add(ModBlocks.HICKORY_LEAVES.get(), block ->
-                createBiggerLeavesDrops(block, ModBlocks.HICKORY_SAPLING.get(), ModItems.HICKORY_NUT.get()));
-        this.add(ModBlocks.RED_GLOWING_HICKORY_LEAVES.get(), block ->
-                createBiggerLeavesDrops(block, ModBlocks.RED_GLOWING_HICKORY_SAPLING.get(), ModItems.HICKORY_NUT.get()));
-        this.add(ModBlocks.BROWN_GLOWING_HICKORY_LEAVES.get(), block ->
-                createBiggerLeavesDrops(block, ModBlocks.BROWN_GLOWING_HICKORY_SAPLING.get(), ModItems.HICKORY_NUT.get()));
-        this.add(ModBlocks.YELLOW_GLOWING_HICKORY_LEAVES.get(), block ->
-                createBiggerLeavesDrops(block, ModBlocks.YELLOW_GLOWING_HICKORY_SAPLING.get(), ModItems.HICKORY_NUT.get()));
-        this.add(ModBlocks.GREEN_GLOWING_HICKORY_LEAVES.get(), block ->
-                createBiggerLeavesDrops(block, ModBlocks.GREEN_GLOWING_HICKORY_SAPLING.get(), ModItems.HICKORY_NUT.get()));
+        for (HickoryColour colour : HickoryColour.values()) {
+            this.add(ModBlocks.HICKORY_LEAVES_BLOCKS.get(colour).get(), block -> createBiggerLeavesDrops(block, ModBlocks.HICKORY_SAPLINGS.get(colour).get(), ModItems.HICKORY_NUT.get()));
+            this.dropSelf(ModBlocks.HICKORY_SAPLINGS.get(colour).get());
+        }
 
         this.add(ModBlocks.FALLEN_HICKORY_LEAVES.get(), block ->
                 createBiggerLeavesDrops(Blocks.AIR, Blocks.AIR, Items.AIR));
-
-        this.dropSelf(ModBlocks.HICKORY_SAPLING.get());
-        this.dropSelf(ModBlocks.RED_GLOWING_HICKORY_SAPLING.get());
-        this.dropSelf(ModBlocks.BROWN_GLOWING_HICKORY_SAPLING.get());
-        this.dropSelf(ModBlocks.YELLOW_GLOWING_HICKORY_SAPLING.get());
-        this.dropSelf(ModBlocks.GREEN_GLOWING_HICKORY_SAPLING.get());
 
         this.dropSelf(ModBlocks.HICKORY_LOG.get());
         this.dropSelf(ModBlocks.STRIPPED_HICKORY_LOG.get());
@@ -215,7 +203,12 @@ public class ModBlockLootTables extends BlockLootSubProvider {
     }
 
     protected LootTable.Builder createBiggerLeavesDrops(Block leaves, Block sapling, Item otherDrop) {
-        return createLeavesDrops(leaves, sapling, NORMAL_LEAVES_SAPLING_CHANCES).withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).when(HAS_NO_SHEARS_OR_SILK_TOUCH).add(this.applyExplosionCondition(leaves, LootItem.lootTableItem(otherDrop)).when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.1F, 0.15f, 0.2f, 0.3f, 0.35f))));
+        return createLeavesDrops(leaves, sapling, NORMAL_LEAVES_SAPLING_CHANCES)
+                .withPool(LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1.0F))
+                        .when(HAS_NO_SHEARS_OR_SILK_TOUCH)
+                        .add(this.applyExplosionCondition(leaves, LootItem.lootTableItem(otherDrop))
+                                .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.1F, 0.15f, 0.2f, 0.3f, 0.35f))));
     }
 
     @Override

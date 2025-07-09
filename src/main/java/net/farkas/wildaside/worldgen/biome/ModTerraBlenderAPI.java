@@ -6,7 +6,6 @@ import net.farkas.wildaside.worldgen.biome.region.HickoryForestRegion;
 import net.farkas.wildaside.worldgen.biome.region.GlowingHickoryForestRegion;
 import net.farkas.wildaside.worldgen.biome.region.VibrionHiveRegion;
 import net.minecraft.resources.ResourceLocation;
-import terrablender.api.RegionType;
 import terrablender.api.Regions;
 
 public class ModTerraBlenderAPI {
