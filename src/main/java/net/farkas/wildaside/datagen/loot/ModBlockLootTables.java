@@ -58,24 +58,26 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.add(ModBlocks.VIBRION_SPOREHOLDER.get(),
                 block -> createSilktouchedFortuneDrops(ModBlocks.VIBRION_SPOREHOLDER.get(), ModItems.VIBRION.get(), 1, 2));
         this.add(ModBlocks.VIBRION_GLASS.get(),
-                block -> createSilktouchedDrops(ModBlocks.VIBRION_GLASS.get(), ModItems.VIBRION.get()));
+                block -> createSilkTouchOnlyTable(ModBlocks.VIBRION_GLASS.get()));
         this.add(ModBlocks.LIT_VIBRION_GLASS.get(),
-                block -> createSilktouchedDrops(ModBlocks.LIT_VIBRION_GLASS.get(), ModItems.VIBRION.get()));
+                block -> createSilkTouchOnlyTable(ModBlocks.LIT_VIBRION_GLASS.get()));
         this.add(ModBlocks.VIBRION_GLASS_PANE.get(),
-                block -> createSilktouchedDrops(ModBlocks.VIBRION_GLASS_PANE.get(), ModItems.VIBRION.get()));
+                block -> createSilkTouchOnlyTable(ModBlocks.VIBRION_GLASS_PANE.get()));
         this.add(ModBlocks.LIT_VIBRION_GLASS_PANE.get(),
-                block -> createSilktouchedDrops(ModBlocks.LIT_VIBRION_GLASS_PANE.get(), ModItems.VIBRION.get()));
+                block -> createSilkTouchOnlyTable(ModBlocks.LIT_VIBRION_GLASS_PANE.get()));
 
-        this.add(ModBlocks.NATURAL_SPORE_BLASTER.get(), block -> createSilktouchedDrops(ModBlocks.NATURAL_SPORE_BLASTER.get(), Items.AIR));
+        this.add(ModBlocks.NATURAL_SPORE_BLASTER.get(),
+                block -> createSilkTouchOnlyTable(ModBlocks.NATURAL_SPORE_BLASTER.get()));
         this.dropSelf(ModBlocks.SPORE_BLASTER.get());
         this.dropSelf(ModBlocks.POTION_BLASTER.get());
         this.dropSelf(ModBlocks.BIOENGINEERING_WORKSTATION.get());
 
         //ENTORIUM
         this.dropSelf(ModBlocks.ENTORIUM_SHROOM.get());
+        this.add(ModBlocks.OVERGROWN_ENTORIUM_ORE.get(),
+                block -> createSilkTouchOnlyTable(ModBlocks.OVERGROWN_ENTORIUM_ORE.get()));
         this.add(ModBlocks.ENTORIUM_ORE.get(),
                 block -> createSilktouchedFortuneDrops(ModBlocks.ENTORIUM_ORE.get(), ModItems.ENTORIUM.get(), 1, 1));
-        this.add(ModBlocks.OVERGROWN_ENTORIUM_ORE.get(), block -> createSilktouchedDrops(ModBlocks.OVERGROWN_ENTORIUM_ORE.get(), Blocks.AIR.asItem()));
 
 
         //SUBSTILIUM
