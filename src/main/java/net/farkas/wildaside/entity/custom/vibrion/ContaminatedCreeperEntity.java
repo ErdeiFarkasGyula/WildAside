@@ -62,10 +62,10 @@ public class ContaminatedCreeperEntity extends Creeper {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(5, new RandomStrollGoal(this, 0.8D, 40));
-        this.goalSelector.addGoal(1, new ApproachWhenLookedAtGoal(this, 1D, 48, 5D));
-        this.goalSelector.addGoal(2, new BurrowedGoal(this, 1.2D, 2D));
+        this.goalSelector.addGoal(1, new ApproachWhenLookedAtGoal(this, 1D, 48, 10D));
+        this.goalSelector.addGoal(2, new BurrowedGoal(this, 1.4D, 2D));
 
-        this.goalSelector.addGoal(2, new FloatGoal(this));
+        this.goalSelector.addGoal(1, new FloatGoal(this));
     }
 
     @Override
