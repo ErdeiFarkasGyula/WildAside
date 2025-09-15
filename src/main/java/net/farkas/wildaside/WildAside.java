@@ -8,6 +8,7 @@ import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.enchantment.ModEnchantments;
 import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.entity.client.ModBoatRenderer;
+import net.farkas.wildaside.entity.client.vibrion.ContaminatedCreeperRenderer;
 import net.farkas.wildaside.entity.client.vibrion.MucellithRenderer;
 import net.farkas.wildaside.entity.custom.vibrion.SporeArrowEntity;
 import net.farkas.wildaside.item.ModCreativeModeTabs;
@@ -167,6 +168,7 @@ public class WildAside
                 }
             });
             EntityRenderers.register(ModEntities.MUCELLITH.get(), MucellithRenderer::new);
+            EntityRenderers.register(ModEntities.CONTAMINATED_CREEPER.get(), ContaminatedCreeperRenderer::new);
 
             MenuScreens.register(ModMenuTypes.BIOENGINEERING_WORKSTATION_MENU.get(), BioengineeringWorkstationScreen::new);
             MenuScreens.register(ModMenuTypes.POTION_BLASTER_MENU.get(), PotionBlasterScreen::new);

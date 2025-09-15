@@ -4,10 +4,7 @@ import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.entity.custom.*;
 import net.farkas.wildaside.entity.custom.hickory.HickoryLeafProjectile;
 import net.farkas.wildaside.entity.custom.hickory.HickoryTreantEntity;
-import net.farkas.wildaside.entity.custom.vibrion.FertiliserBombEntity;
-import net.farkas.wildaside.entity.custom.vibrion.MucellithEntity;
-import net.farkas.wildaside.entity.custom.vibrion.SporeArrowEntity;
-import net.farkas.wildaside.entity.custom.vibrion.SporeBombEntity;
+import net.farkas.wildaside.entity.custom.vibrion.*;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -39,6 +36,10 @@ public class ModEntities {
     public static final RegistryObject<EntityType<MucellithEntity>> MUCELLITH =
             ENTITIES.register("mucellith", () -> EntityType.Builder.<MucellithEntity>of(MucellithEntity::new, MobCategory.MONSTER)
                     .sized(0.75f, 2.2f).build("mucellith"));
+    public static final RegistryObject<EntityType<ContaminatedCreeperEntity>> CONTAMINATED_CREEPER =
+            ENTITIES.register("contaminated_creeper", () -> EntityType.Builder.<ContaminatedCreeperEntity>of(ContaminatedCreeperEntity::new, MobCategory.MONSTER)
+                            .sized(0.6F, 1.7F)
+                            .build("contaminated_creeper"));
 
     public static final RegistryObject<EntityType<HickoryTreantEntity>> HICKORY_TREANT =
             ENTITIES.register("hickory_treant", () -> EntityType.Builder.<HickoryTreantEntity>of(HickoryTreantEntity::new, MobCategory.MONSTER)

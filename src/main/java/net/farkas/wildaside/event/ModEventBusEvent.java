@@ -4,6 +4,7 @@ import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.capability.contamination.IContamination;
 import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.entity.custom.hickory.HickoryTreantEntity;
+import net.farkas.wildaside.entity.custom.vibrion.ContaminatedCreeperEntity;
 import net.farkas.wildaside.entity.custom.vibrion.MucellithEntity;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
@@ -16,6 +17,7 @@ public class ModEventBusEvent {
     public static void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(ModEntities.MUCELLITH.get(), MucellithEntity.createAttributes().build());
         event.put(ModEntities.HICKORY_TREANT.get(), HickoryTreantEntity.createAttributes().build());
+        event.put(ModEntities.CONTAMINATED_CREEPER.get(), ContaminatedCreeperEntity.createAttributes().build());
     }
 
     @SubscribeEvent

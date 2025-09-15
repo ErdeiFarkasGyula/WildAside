@@ -86,6 +86,7 @@ public class FertiliserBombEntity extends ThrowableItemProjectile {
         String biomePath = biomeHolder.unwrapKey()
                 .map((ResourceKey<Biome> key) -> key.location().getPath())
                 .orElse("");
+
         if (biomePath.contains("hickory")) {
             AdvancementHandler.givePlayerAdvancement((ServerPlayer)thrower, "fertile_forest");
             flowerList.add(new WeightedFlowerChoice.WeightedFlower(4, ModBlocks.SPOTTED_WINTERGREEN.get()));
@@ -129,7 +130,9 @@ public class FertiliserBombEntity extends ThrowableItemProjectile {
                             if (random.nextFloat() < charge * 0.3f) {
                                 bonemealBlock.performBonemeal(level, random, pos, state);
                                 level.levelEvent(2005, pos, 0);
-                                continue;
+                                level.sendParticles(ParticleTypes.SPLASH,
+                                        pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5,
+                                        5, 0.2, 0.2, 0.2, 0.05);
                             }
                         }
                     } else if (state.isAir()) {
@@ -140,6 +143,9 @@ public class FertiliserBombEntity extends ThrowableItemProjectile {
                             if (random.nextFloat() < charge * 0.2f) {
                                 bonemealBlockBelow.performBonemeal(level, random, belowPos, belowState);
                                 level.levelEvent(2005, belowPos, 0);
+                                level.sendParticles(ParticleTypes.SPLASH,
+                                        pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5,
+                                        5, 0.2, 0.2, 0.2, 0.05);
                             }
                         }
                     }
