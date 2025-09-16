@@ -69,6 +69,22 @@ public class ContaminatedCreeperEntity extends Creeper {
     }
 
     @Override
+    public void tick() {
+        super.tick();
+
+        if (this.level().isClientSide) {
+            if (this.getState() == STATE_BURROWED) {
+                for (int i = 0; i < 3; i++) {
+                    double dx = this.getX() + (this.random.nextDouble() - 0.5) * 0.5;
+                    double dy = this.getY();
+                    double dz = this.getZ() + (this.random.nextDouble() - 0.5) * 0.5;
+                    this.level().addParticle(new DustParticleOptions(new Vector3f(), 1), dx, dy, dz, 0, 0.05, 0);
+                }
+            }
+        }
+    }
+
+    @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(STATE, STATE_IDLE);
@@ -82,23 +98,6 @@ public class ContaminatedCreeperEntity extends Creeper {
         return this.entityData.get(STATE);
     }
 
-    @Override
-    public void tick() {
-        super.tick();
-
-        System.out.println(this.getState());
-
-        if (this.level().isClientSide) {
-            if (this.getState() == STATE_BURROWED) {
-                for (int i = 0; i < 3; i++) {
-                    double dx = this.getX() + (this.random.nextDouble() - 0.5) * 0.5;
-                    double dy = this.getY();
-                    double dz = this.getZ() + (this.random.nextDouble() - 0.5) * 0.5;
-                    this.level().addParticle(new DustParticleOptions(new Vector3f(), 1), dx, dy, dz, 0, 0.05, 0);
-                }
-            }
-        }
-    }
 
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
