@@ -15,11 +15,13 @@ import java.util.EnumSet;
 public class BurrowedGoal extends Goal {
     private final ContaminatedCreeperEntity creeper;
     private final double triggerDistance;
+    private final double speed;
     private Player target;
     private int stuckTicks = 0;
 
     public BurrowedGoal(ContaminatedCreeperEntity creeper, double moveSpeed, double triggerDistance) {
         this.creeper = creeper;
+        this.speed = moveSpeed;
         this.triggerDistance = triggerDistance;
         this.setFlags(EnumSet.of(Flag.MOVE));
     }
@@ -36,7 +38,7 @@ public class BurrowedGoal extends Goal {
     @Override
     public void start() {
         stuckTicks = 0;
-        creeper.noPhysics = true; // needed so it can "phase" into soil blocks
+        creeper.noPhysics = true;
         creeper.getNavigation().stop();
     }
 
@@ -53,7 +55,6 @@ public class BurrowedGoal extends Goal {
             return;
         }
 
-        // Check if close enough to blow
         if (creeper.distanceTo(target) < triggerDistance) {
             creeper.level().playSound(null, creeper.blockPosition(),
                     SoundEvents.GRASS_BREAK, SoundSource.HOSTILE, 1.0F, 0.8F);
@@ -62,7 +63,6 @@ public class BurrowedGoal extends Goal {
             return;
         }
 
-        // Try to step toward target through burrowable blocks
         BlockPos creeperPos = creeper.blockPosition();
         BlockPos targetPos = target.blockPosition();
 
@@ -77,11 +77,10 @@ public class BurrowedGoal extends Goal {
 
         if (canBurrow(nextState)) {
             creeper.setPos(nextPos.getX() + 0.5, nextPos.getY(), nextPos.getZ() + 0.5);
-            stuckTicks = 0; // reset stuck counter if we move
+            stuckTicks = 0;
         } else {
             stuckTicks++;
             if (stuckTicks > 20) { // ~1 second stuck
-                // fail-safe: surface and try normal AI
                 creeper.setState(ContaminatedCreeperEntity.STATE_IDLE);
                 creeper.noPhysics = false;
                 stuckTicks = 0;

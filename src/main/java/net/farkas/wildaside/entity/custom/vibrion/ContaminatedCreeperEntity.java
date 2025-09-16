@@ -3,29 +3,29 @@ package net.farkas.wildaside.entity.custom.vibrion;
 import net.farkas.wildaside.entity.ai.contaminated.ApproachWhenLookedAtGoal;
 import net.farkas.wildaside.entity.ai.contaminated.BurrowedGoal;
 import net.farkas.wildaside.particle.ModParticles;
-import net.farkas.wildaside.util.AdvancementHandler;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 
 import java.util.List;
@@ -33,7 +33,9 @@ import java.util.List;
 public class ContaminatedCreeperEntity extends Creeper {
     private static final EntityDataAccessor<Integer> STATE = SynchedEntityData.defineId(ContaminatedCreeperEntity.class, EntityDataSerializers.INT);
     public static final int STATE_IDLE = 0;
-    public static final int STATE_BURROWED = 1;
+    public static final int STATE_FOLLOWING = 1;
+    public static final int STATE_BURROWED = 2;
+    public static final int STATE_ANGRY = 3;
 
     public ContaminatedCreeperEntity(EntityType<? extends Creeper> type, Level level) {
         super(type, level);
@@ -41,7 +43,7 @@ public class ContaminatedCreeperEntity extends Creeper {
         ((GroundPathNavigation) this.getNavigation()).setCanOpenDoors(false);
     }
 
-    public static AttributeSupplier.Builder createAttributes() {
+    public static AttributeSupplier.@NotNull Builder createAttributes() {
         return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 20.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25D)
@@ -61,9 +63,11 @@ public class ContaminatedCreeperEntity extends Creeper {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(5, new RandomStrollGoal(this, 0.8D, 40));
-        this.goalSelector.addGoal(1, new ApproachWhenLookedAtGoal(this, 1D, 48, 10D));
-        this.goalSelector.addGoal(2, new BurrowedGoal(this, 1.4D, 2D));
+        this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 48));
+        this.goalSelector.addGoal(5, new RandomStrollGoal(this, 0.95D, 40));
+
+        this.goalSelector.addGoal(1, new BurrowedGoal(this, 1.4D, 2D));
+        this.goalSelector.addGoal(2, new ApproachWhenLookedAtGoal(this, 1D, 48, 10D));
 
         this.goalSelector.addGoal(1, new FloatGoal(this));
     }
@@ -137,7 +141,7 @@ public class ContaminatedCreeperEntity extends Creeper {
         List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, box, e -> !e.isSpectator());
 
         for (LivingEntity entity : list) {
-            ContaminationHandler.giveContaminationDose(entity, rand.nextInt(1500, 2500));
+            ContaminationHandler.giveContaminationDose(entity, rand.nextInt(1500, 2500) * (isPowered() ? 2 : 1));
             level.addParticle(particle,
                     entity.getX(), entity.getY() + 0.5, entity.getZ(),
                     5, 0.2, 0.2);

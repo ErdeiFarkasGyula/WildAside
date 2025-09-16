@@ -3,6 +3,7 @@ package net.farkas.wildaside.entity.ai.contaminated;
 import net.farkas.wildaside.entity.custom.vibrion.ContaminatedCreeperEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
@@ -13,12 +14,14 @@ public class ApproachWhenLookedAtGoal extends Goal {
     private final double detectDistance;
     private final double triggerDistance;
     private final double speed;
+    private final Level level;
 
     public ApproachWhenLookedAtGoal(ContaminatedCreeperEntity creeper, double speed, double detectDistance, double triggerDistance) {
         this.creeper = creeper;
         this.detectDistance = detectDistance;
         this.triggerDistance = triggerDistance;
         this.speed = speed;
+        this.level = creeper.level();
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
@@ -26,7 +29,7 @@ public class ApproachWhenLookedAtGoal extends Goal {
     public boolean canUse() {
         if (creeper.getState() == ContaminatedCreeperEntity.STATE_BURROWED) return false;
 
-        List<Player> players = creeper.level().getEntitiesOfClass(Player.class, creeper.getBoundingBox().inflate(detectDistance / 2));
+        List<Player> players = level.getEntitiesOfClass(Player.class, creeper.getBoundingBox().inflate(detectDistance / 2));
         for (Player player : players) {
             if (player.isAttackable() && player.hasLineOfSight(creeper) && isLookingAt(player, creeper)) {
                 creeper.setTarget(player);
