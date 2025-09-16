@@ -38,17 +38,14 @@ public class ModEntities {
                     .sized(0.75f, 2.2f).build("mucellith"));
     public static final RegistryObject<EntityType<ContaminatedCreeperEntity>> CONTAMINATED_CREEPER =
             ENTITIES.register("contaminated_creeper", () -> EntityType.Builder.<ContaminatedCreeperEntity>of(ContaminatedCreeperEntity::new, MobCategory.MONSTER)
-                            .sized(0.6F, 1.7F)
-                            .build("contaminated_creeper"));
+                    .sized(0.6F, 1.7F).build("contaminated_creeper"));
 
     public static final RegistryObject<EntityType<HickoryTreantEntity>> HICKORY_TREANT =
             ENTITIES.register("hickory_treant", () -> EntityType.Builder.<HickoryTreantEntity>of(HickoryTreantEntity::new, MobCategory.MONSTER)
                     .sized(1f, 3f).build("hickory_treant"));
-    public static final RegistryObject<EntityType<HickoryLeafProjectile>> HICKORY_LEAF_PROJECTILE = ENTITIES.register(
-            "hickory_leaf_projectile",
-            () -> EntityType.Builder.<HickoryLeafProjectile>of(HickoryLeafProjectile::new, MobCategory.MISC)
-                    .sized(0.5f, 0.5f).build("hickory_leaf_projectile")
-    );
+    public static final RegistryObject<EntityType<HickoryLeafProjectile>> HICKORY_LEAF_PROJECTILE =
+            ENTITIES.register("hickory_leaf_projectile", () -> EntityType.Builder.<HickoryLeafProjectile>of(HickoryLeafProjectile::new, MobCategory.MISC)
+                    .sized(0.5f, 0.5f).build("hickory_leaf_projectile"));
 
     public static void register(IEventBus eventBus) {
         ENTITIES.register(eventBus);
