@@ -54,6 +54,12 @@ public class ApproachWhenLookedAtGoal extends Goal {
     }
 
     @Override
+    public void start() {
+        super.start();
+        creeper.setState(ContaminatedCreeperEntity.STATE_FOLLOWING);
+    }
+
+    @Override
     public boolean requiresUpdateEveryTick() {
         return true;
     }

@@ -1,7 +1,9 @@
 package net.farkas.wildaside.entity.custom.vibrion;
 
 import net.farkas.wildaside.entity.ai.contaminated.ApproachWhenLookedAtGoal;
-import net.farkas.wildaside.entity.ai.contaminated.BurrowedGoal;
+import net.farkas.wildaside.entity.ai.contaminated.BurrowedChaseGoal;
+import net.farkas.wildaside.entity.ai.contaminated.BurrowedNavigation;
+import net.farkas.wildaside.entity.ai.contaminated.ChaseTargetGoal;
 import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.minecraft.core.BlockPos;
@@ -32,15 +34,15 @@ import java.util.List;
 
 public class ContaminatedCreeperEntity extends Creeper {
     private static final EntityDataAccessor<Integer> STATE = SynchedEntityData.defineId(ContaminatedCreeperEntity.class, EntityDataSerializers.INT);
+
     public static final int STATE_IDLE = 0;
     public static final int STATE_FOLLOWING = 1;
-    public static final int STATE_BURROWED = 2;
-    public static final int STATE_ANGRY = 3;
+    public static final int STATE_CHASE = 2;
+    public static final int STATE_BURROWED = 3;
 
     public ContaminatedCreeperEntity(EntityType<? extends Creeper> type, Level level) {
         super(type, level);
         this.setPersistenceRequired();
-        ((GroundPathNavigation) this.getNavigation()).setCanOpenDoors(false);
     }
 
     public static AttributeSupplier.@NotNull Builder createAttributes() {
@@ -63,13 +65,14 @@ public class ContaminatedCreeperEntity extends Creeper {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 48));
+        this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 64));
         this.goalSelector.addGoal(5, new RandomStrollGoal(this, 0.95D, 40));
 
-        this.goalSelector.addGoal(1, new BurrowedGoal(this, 1.4D, 2D));
-        this.goalSelector.addGoal(2, new ApproachWhenLookedAtGoal(this, 1D, 48, 10D));
+        this.goalSelector.addGoal(1, new BurrowedChaseGoal(this, 1.5D, 48, 200));
+        this.goalSelector.addGoal(2, new ChaseTargetGoal(this, 1.5D, 48));
+        this.goalSelector.addGoal(3, new ApproachWhenLookedAtGoal(this, 1D, 48, 24D));
 
-        this.goalSelector.addGoal(1, new FloatGoal(this));
+        this.goalSelector.addGoal(4, new FloatGoal(this));
     }
 
     @Override
@@ -83,6 +86,19 @@ public class ContaminatedCreeperEntity extends Creeper {
                     double dy = this.getY();
                     double dz = this.getZ() + (this.random.nextDouble() - 0.5) * 0.5;
                     this.level().addParticle(new DustParticleOptions(new Vector3f(), 1), dx, dy, dz, 0, 0.05, 0);
+                }
+            }
+        } else {
+            if (this.getState() == STATE_BURROWED) {
+                this.navigation = new BurrowedNavigation(this, this.level());
+                this.noPhysics = true;
+            } else {
+                this.navigation = new GroundPathNavigation(this, this.level());
+                this.noPhysics = false;
+                if (this.getTarget() != null) {
+                    this.setState(STATE_CHASE);
+                } else {
+                    this.setState(STATE_IDLE);
                 }
             }
         }
@@ -101,7 +117,6 @@ public class ContaminatedCreeperEntity extends Creeper {
     public int getState() {
         return this.entityData.get(STATE);
     }
-
 
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
