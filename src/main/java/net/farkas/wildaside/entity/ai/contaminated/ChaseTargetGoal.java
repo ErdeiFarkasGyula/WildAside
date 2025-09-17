@@ -12,11 +12,6 @@ public class ChaseTargetGoal extends MoveTowardsTargetGoal {
     }
 
     @Override
-    public boolean canUse() {
-        return false;
-    }
-
-    @Override
     public void start() {
         super.start();
         creeper.setState(ContaminatedCreeperEntity.STATE_CHASE);

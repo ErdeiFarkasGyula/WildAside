@@ -68,7 +68,7 @@ public class ContaminatedCreeperEntity extends Creeper {
         this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 64));
         this.goalSelector.addGoal(5, new RandomStrollGoal(this, 0.95D, 40));
 
-        this.goalSelector.addGoal(1, new BurrowedChaseGoal(this, 1.5D, 48, 200));
+        this.goalSelector.addGoal(1, new BurrowedChaseGoal(this, 1.5D, 2.0D, 200));
         this.goalSelector.addGoal(2, new ChaseTargetGoal(this, 1.5D, 48));
         this.goalSelector.addGoal(3, new ApproachWhenLookedAtGoal(this, 1D, 48, 24D));
 

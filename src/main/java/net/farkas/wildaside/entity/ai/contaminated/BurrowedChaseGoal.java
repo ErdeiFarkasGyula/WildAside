@@ -28,9 +28,7 @@ public class BurrowedChaseGoal extends Goal {
         LivingEntity target = creeper.getTarget();
         if (target == null) return false;
 
-        return target.distanceTo(creeper) > triggerDistance
-                || creeper.isInWaterOrBubble()
-                || creeper.getState() == ContaminatedCreeperEntity.STATE_CHASE;
+        return target.distanceTo(creeper) > triggerDistance || creeper.getState() == ContaminatedCreeperEntity.STATE_CHASE;
     }
 
     @Override
