@@ -3,10 +3,10 @@ package net.farkas.wildaside.entity.ai.contaminated;
 import net.farkas.wildaside.entity.custom.vibrion.ContaminatedCreeperEntity;
 import net.minecraft.world.entity.ai.goal.MoveTowardsTargetGoal;
 
-public class ChaseTargetGoal extends MoveTowardsTargetGoal {
+public class SurfaceChaseGoal extends MoveTowardsTargetGoal {
     private final ContaminatedCreeperEntity creeper;
 
-    public ChaseTargetGoal(ContaminatedCreeperEntity creeper, double pSpeedModifier, float pWithin) {
+    public SurfaceChaseGoal(ContaminatedCreeperEntity creeper, double pSpeedModifier, float pWithin) {
         super(creeper, pSpeedModifier, pWithin);
         this.creeper = creeper;
     }

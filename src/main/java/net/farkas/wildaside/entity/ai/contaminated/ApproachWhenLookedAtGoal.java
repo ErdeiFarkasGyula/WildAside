@@ -48,7 +48,7 @@ public class ApproachWhenLookedAtGoal extends Goal {
         creeper.getNavigation().moveTo(target, speed);
 
         if (creeper.distanceTo(target) < triggerDistance) {
-            creeper.setState(ContaminatedCreeperEntity.STATE_BURROWED);
+            creeper.setState(ContaminatedCreeperEntity.STATE_CHASE);
             stop();
         }
     }

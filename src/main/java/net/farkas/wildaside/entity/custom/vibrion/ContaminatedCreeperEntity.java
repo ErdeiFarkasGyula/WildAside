@@ -3,10 +3,11 @@ package net.farkas.wildaside.entity.custom.vibrion;
 import net.farkas.wildaside.entity.ai.contaminated.ApproachWhenLookedAtGoal;
 import net.farkas.wildaside.entity.ai.contaminated.BurrowedChaseGoal;
 import net.farkas.wildaside.entity.ai.contaminated.BurrowedNavigation;
-import net.farkas.wildaside.entity.ai.contaminated.ChaseTargetGoal;
+import net.farkas.wildaside.entity.ai.contaminated.SurfaceChaseGoal;
 import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
@@ -26,6 +27,7 @@ import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
@@ -69,7 +71,7 @@ public class ContaminatedCreeperEntity extends Creeper {
         this.goalSelector.addGoal(5, new RandomStrollGoal(this, 0.95D, 40));
 
         this.goalSelector.addGoal(1, new BurrowedChaseGoal(this, 1.5D, 2.0D, 200));
-        this.goalSelector.addGoal(2, new ChaseTargetGoal(this, 1.5D, 48));
+        this.goalSelector.addGoal(2, new SurfaceChaseGoal(this, 1.5D, 48));
         this.goalSelector.addGoal(3, new ApproachWhenLookedAtGoal(this, 1D, 48, 24D));
 
         this.goalSelector.addGoal(4, new FloatGoal(this));
@@ -160,6 +162,12 @@ public class ContaminatedCreeperEntity extends Creeper {
             level.addParticle(particle,
                     entity.getX(), entity.getY() + 0.5, entity.getZ(),
                     5, 0.2, 0.2);
+        }
+    }
+
+    public boolean hasAdjacentBlock(Block block) {
+        for (Direction direction : Direction.values()) {
+            if (level().getBlockState())
         }
     }
 }
