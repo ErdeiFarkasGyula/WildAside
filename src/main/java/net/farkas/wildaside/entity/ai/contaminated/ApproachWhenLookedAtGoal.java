@@ -47,10 +47,10 @@ public class ApproachWhenLookedAtGoal extends Goal {
         creeper.getLookControl().setLookAt(creeper.getTarget());
         creeper.getNavigation().moveTo(target, speed);
 
-        if (creeper.distanceTo(target) < triggerDistance) {
-            creeper.setState(ContaminatedCreeperEntity.STATE_CHASE);
-            stop();
-        }
+//        if (creeper.distanceTo(target) < triggerDistance) {
+//            creeper.setState(ContaminatedCreeperEntity.STATE_CHASE);
+//            stop();
+//        }
     }
 
     @Override
@@ -81,6 +81,10 @@ public class ApproachWhenLookedAtGoal extends Goal {
         Vec3 look = player.getLookAngle().normalize();
         double dot = dx * look.x + dy * look.y + dz * look.z;
 
-        return dot > 0.95D;
+        double trigger = 0.99D;
+
+        System.out.println(dot);
+        System.out.println(dot > trigger);
+        return dot > trigger;
     }
 }

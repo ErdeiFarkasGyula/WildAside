@@ -1,9 +1,6 @@
 package net.farkas.wildaside.entity.custom.vibrion;
 
 import net.farkas.wildaside.entity.ai.contaminated.ApproachWhenLookedAtGoal;
-import net.farkas.wildaside.entity.ai.contaminated.BurrowedChaseGoal;
-import net.farkas.wildaside.entity.ai.contaminated.BurrowedNavigation;
-import net.farkas.wildaside.entity.ai.contaminated.SurfaceChaseGoal;
 import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.minecraft.core.BlockPos;
@@ -68,10 +65,8 @@ public class ContaminatedCreeperEntity extends Creeper {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 64));
-        this.goalSelector.addGoal(5, new RandomStrollGoal(this, 0.95D, 40));
+//        this.goalSelector.addGoal(5, new RandomStrollGoal(this, 0.95D, 40));
 
-        this.goalSelector.addGoal(1, new BurrowedChaseGoal(this, 1.5D, 2.0D, 200));
-        this.goalSelector.addGoal(2, new SurfaceChaseGoal(this, 1.5D, 48));
         this.goalSelector.addGoal(3, new ApproachWhenLookedAtGoal(this, 1D, 48, 24D));
 
         this.goalSelector.addGoal(4, new FloatGoal(this));
@@ -88,19 +83,6 @@ public class ContaminatedCreeperEntity extends Creeper {
                     double dy = this.getY();
                     double dz = this.getZ() + (this.random.nextDouble() - 0.5) * 0.5;
                     this.level().addParticle(new DustParticleOptions(new Vector3f(), 1), dx, dy, dz, 0, 0.05, 0);
-                }
-            }
-        } else {
-            if (this.getState() == STATE_BURROWED) {
-                this.navigation = new BurrowedNavigation(this, this.level());
-                this.noPhysics = true;
-            } else {
-                this.navigation = new GroundPathNavigation(this, this.level());
-                this.noPhysics = false;
-                if (this.getTarget() != null) {
-                    this.setState(STATE_CHASE);
-                } else {
-                    this.setState(STATE_IDLE);
                 }
             }
         }
@@ -167,7 +149,10 @@ public class ContaminatedCreeperEntity extends Creeper {
 
     public boolean hasAdjacentBlock(Block block) {
         for (Direction direction : Direction.values()) {
-            if (level().getBlockState())
+            if (level().getBlockState(this.blockPosition().relative(direction, 1)).is(block)) {
+                return true;
+            }
         }
+        return false;
     }
 }
