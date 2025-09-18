@@ -32,6 +32,8 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModBlocks.LIT_VIBRION_GLASS_PANE.get());
                         pOutput.accept(ModItems.MUCELLITH_SPAWN_EGG.get());
                         pOutput.accept(ModItems.MUCELLITH_JAW.get());
+                        pOutput.accept(ModItems.CONTAMINATED_CREEPER_SPAWN_EGG.get());
+
 
                         pOutput.accept(ModBlocks.SUBSTILIUM_SPROUTS.get());
                         pOutput.accept(ModBlocks.SUBSTILIUM_SOIL.get());
