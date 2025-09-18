@@ -81,10 +81,6 @@ public class ApproachWhenLookedAtGoal extends Goal {
         Vec3 look = player.getLookAngle().normalize();
         double dot = dx * look.x + dy * look.y + dz * look.z;
 
-        double trigger = 0.99D;
-
-        System.out.println(dot);
-        System.out.println(dot > trigger);
-        return dot > trigger;
+        return dot > 0.99D;
     }
 }
