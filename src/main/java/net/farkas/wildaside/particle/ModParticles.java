@@ -17,6 +17,8 @@ public class ModParticles {
 
     public static final RegistryObject<SimpleParticleType> VIBRION_PARTICLE =
             PARTICLES.register("vibrion_particle", () -> new SimpleParticleType(true));
+    public static final RegistryObject<SimpleParticleType> VIBRION_DRIP_PARTICLE =
+            PARTICLES.register("vibrion_drip_particle", () -> new SimpleParticleType(true));
     public static final RegistryObject<SimpleParticleType> ENTORIUM_PARTICLE =
             PARTICLES.register("entorium_particle", () -> new SimpleParticleType(true));
     public static final RegistryObject<SimpleParticleType> SUBSTILIUM_PARTICLE =

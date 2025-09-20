@@ -1,12 +1,15 @@
 package net.farkas.wildaside.block.custom.vibrion;
 
+import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.util.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -76,4 +79,18 @@ public class VibrionGel extends Block implements SimpleWaterloggedBlock {
         return true;
     }
 
+    @Override
+    public void animateTick(BlockState pState, Level pLevel, BlockPos pPos, RandomSource pRandom) {
+        super.animateTick(pState, pLevel, pPos, pRandom);
+        if (pRandom.nextInt(20) == 0) {
+            BlockPos below = pPos.below();
+            if (!pLevel.getBlockState(below).isSolidRender(pLevel, below)) {
+                double x = pPos.getX() + pRandom.nextDouble();
+                double y = pPos.getY() - 0.05D;
+                double z = pPos.getZ() + pRandom.nextDouble();
+
+                pLevel.addParticle(ModParticles.VIBRION_DRIP_PARTICLE.get(), x, y, z, 0.0D, 0.0D, 0.0D);
+            }
+        }
+    }
 }

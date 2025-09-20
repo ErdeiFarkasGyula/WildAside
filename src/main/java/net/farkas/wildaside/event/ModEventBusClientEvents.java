@@ -52,6 +52,7 @@ public class ModEventBusClientEvents {
         event.registerSpriteSet(ModParticles.STILL_SUBSTILIUM_PARTICLE.get(), StillSubstiliumParticle.Provider::new);
         event.registerSpriteSet(ModParticles.LIFESTEAL_PARTICLE.get(), LifestealParticle.Provider::new);
         event.registerSpriteSet(ModParticles.VIBRION_PARTICLE.get(), VibrionParticle.Provider::new);
+        event.registerSpriteSet(ModParticles.VIBRION_DRIP_PARTICLE.get(), ModDripParticle.Provider::new);
         event.registerSpriteSet(ModParticles.HICKORY_LEAF_PARTICLE.get(), HickoryParticle.Provider::new);
         event.registerSpriteSet(ModParticles.RED_GLOWING_HICKORY_LEAF_PARTICLE.get(), HickoryParticle.Provider::new);
         event.registerSpriteSet(ModParticles.BROWN_GLOWING_HICKORY_LEAF_PARTICLE.get(), HickoryParticle.Provider::new);

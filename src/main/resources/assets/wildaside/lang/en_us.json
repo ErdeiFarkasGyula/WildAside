@@ -160,6 +160,7 @@
   "biome.wildaside.vibrion_hive": "Vibrion Hive",
 
   "particle.wildaside.vibrion_particle": "Vibrion Particle",
+  "particle.wildaside.vibrion_drip_particle": "Vibrion Drip Particle",
   "particle.wildaside.entorium_particle": "Entorium Particle",
   "particle.wildaside.substilium_particle": "Substilium Particle",
   "particle.wildaside.still_substilium_particle": "Still Substilium Particle",
@@ -173,6 +174,7 @@
   "entity.wildaside.mod_boat": "Boat",
   "entity.wildaside.mod_chest_boat": "Boat with Chest",
   "entity.wildaside.mucellith": "Mucellith",
+  "entity.wildaside.contaminated_creeper": "Contaminated Creeper",
   "entity.wildaside.fertiliser_bomb": "Fertiliser Bomb",
   "entity.wildaside.spore_arrow": "Spore Arrow",
   "entity.wildaside.spore_bomb": "Spore Bomb",
