@@ -12,9 +12,15 @@ import net.minecraft.world.level.levelgen.feature.AbstractHugeMushroomFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.HugeMushroomFeatureConfiguration;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 public class RedlikeSubstiliumMushroomFeature extends AbstractHugeMushroomFeature {
-    private static final List<Block> blocks = List.of(ModBlocks.VIBRION_BLOCK.get(), ModBlocks.VIBRION_BLOCK.get(), ModBlocks.VIBRION_GEL.get(), ModBlocks.LIT_VIBRION_GEL.get());
+    private static final List<Supplier<? extends Block>> BLOCKS = List.of(
+            ModBlocks.VIBRION_BLOCK,
+            ModBlocks.VIBRION_BLOCK,
+            ModBlocks.VIBRION_GEL,
+            ModBlocks.LIT_VIBRION_GEL
+    );
 
     public RedlikeSubstiliumMushroomFeature(Codec<HugeMushroomFeatureConfiguration> pCodec) {
         super(pCodec);
@@ -33,7 +39,6 @@ public class RedlikeSubstiliumMushroomFeature extends AbstractHugeMushroomFeatur
         } else if (pY == p_65095_) {
             i = pFoliageRadius;
         }
-
         return i;
     }
 
@@ -55,8 +60,17 @@ public class RedlikeSubstiliumMushroomFeature extends AbstractHugeMushroomFeatur
                         pMutablePos.setWithOffset(pPos, l, i, i1);
                         if (!pLevel.getBlockState(pMutablePos).isSolidRender(pLevel, pMutablePos)) {
                             BlockState blockstate = pConfig.capProvider.getState(pRandom, pPos);
-                            if (blockstate.hasProperty(HugeMushroomBlock.WEST) && blockstate.hasProperty(HugeMushroomBlock.EAST) && blockstate.hasProperty(HugeMushroomBlock.NORTH) && blockstate.hasProperty(HugeMushroomBlock.SOUTH) && blockstate.hasProperty(HugeMushroomBlock.UP)) {
-                                blockstate = blockstate.setValue(HugeMushroomBlock.UP, Boolean.valueOf(i >= pTreeHeight - 1)).setValue(HugeMushroomBlock.WEST, Boolean.valueOf(l < -k)).setValue(HugeMushroomBlock.EAST, Boolean.valueOf(l > k)).setValue(HugeMushroomBlock.NORTH, Boolean.valueOf(i1 < -k)).setValue(HugeMushroomBlock.SOUTH, Boolean.valueOf(i1 > k));
+                            if (blockstate.hasProperty(HugeMushroomBlock.WEST) &&
+                                    blockstate.hasProperty(HugeMushroomBlock.EAST) &&
+                                    blockstate.hasProperty(HugeMushroomBlock.NORTH) &&
+                                    blockstate.hasProperty(HugeMushroomBlock.SOUTH) &&
+                                    blockstate.hasProperty(HugeMushroomBlock.UP)) {
+                                blockstate = blockstate
+                                        .setValue(HugeMushroomBlock.UP, i >= pTreeHeight - 1)
+                                        .setValue(HugeMushroomBlock.WEST, l < -k)
+                                        .setValue(HugeMushroomBlock.EAST, l > k)
+                                        .setValue(HugeMushroomBlock.NORTH, i1 < -k)
+                                        .setValue(HugeMushroomBlock.SOUTH, i1 > k);
                             }
 
                             this.setBlock(pLevel, pMutablePos, blockstate);
@@ -69,7 +83,7 @@ public class RedlikeSubstiliumMushroomFeature extends AbstractHugeMushroomFeatur
         RandomSource random = RandomSource.create();
         for (int i = 1; i < 4; i++) {
             for (int j = 0; j < random.nextInt(3, 7 - i); j++) {
-                Block block = blocks.get(random.nextInt(0, blocks.size()));
+                Block block = BLOCKS.get(random.nextInt(BLOCKS.size())).get();
                 int offX = random.nextBoolean() ? -2 : 0;
                 int offZ = random.nextBoolean() ? -2 : 0;
                 BlockPos pos = pMutablePos.offset(offX, -i, offZ);
