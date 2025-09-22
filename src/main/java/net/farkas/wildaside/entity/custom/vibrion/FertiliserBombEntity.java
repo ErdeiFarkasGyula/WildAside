@@ -33,7 +33,7 @@ public class FertiliserBombEntity extends ThrowableItemProjectile {
     private final float charge;
     private final LivingEntity thrower;
 
-    List<WeightedFlowerChoice.WeightedFlower> flowerList = new ArrayList<>(List.of(
+    final List<WeightedFlowerChoice.WeightedFlower> flowerList = new ArrayList<>(List.of(
             new WeightedFlowerChoice.WeightedFlower(5, Blocks.DANDELION),
             new WeightedFlowerChoice.WeightedFlower(5, Blocks.POPPY),
             new WeightedFlowerChoice.WeightedFlower(3, Blocks.BLUE_ORCHID),
@@ -46,7 +46,7 @@ public class FertiliserBombEntity extends ThrowableItemProjectile {
             new WeightedFlowerChoice.WeightedFlower(2, Blocks.CORNFLOWER),
             new WeightedFlowerChoice.WeightedFlower(1, Blocks.AZURE_BLUET)
     ));
-    WeightedFlowerChoice flowerChoice = new WeightedFlowerChoice(flowerList);
+    final WeightedFlowerChoice flowerChoice = new WeightedFlowerChoice(flowerList);
 
     public FertiliserBombEntity(EntityType<? extends ThrowableItemProjectile> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);

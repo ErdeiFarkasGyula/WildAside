@@ -1,32 +1,20 @@
 package net.farkas.wildaside.item.custom;
 
-import net.farkas.wildaside.block.custom.GlowingLeavesBlock;
-import net.farkas.wildaside.effect.ModMobEffects;
-import net.farkas.wildaside.particle.ModParticles;
-import net.farkas.wildaside.util.AdvancementHandler;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.BaseCoralWallFanBlock;
 import net.minecraft.world.level.block.Blocks;
@@ -101,9 +89,7 @@ public class Vibrion extends Item {
 
     public static boolean growWaterPlant(ItemStack pStack, Level pLevel, BlockPos pPos, @Nullable Direction pClickedSide) {
         if (pLevel.getBlockState(pPos).is(Blocks.WATER) && pLevel.getFluidState(pPos).getAmount() == 8) {
-            if (!(pLevel instanceof ServerLevel)) {
-                return true;
-            } else {
+            if (pLevel instanceof ServerLevel) {
                 RandomSource randomsource = pLevel.getRandom();
 
                 label78:
@@ -111,7 +97,7 @@ public class Vibrion extends Item {
                     BlockPos blockpos = pPos;
                     BlockState blockstate = Blocks.SEAGRASS.defaultBlockState();
 
-                    for(int j = 0; j < i / 16; ++j) {
+                    for (int j = 0; j < i / 16; ++j) {
                         blockpos = blockpos.offset(randomsource.nextInt(3) - 1, (randomsource.nextInt(3) - 1) * randomsource.nextInt(3) / 2, randomsource.nextInt(3) - 1);
                         if (pLevel.getBlockState(blockpos).isCollisionShapeFullBlock(pLevel, blockpos)) {
                             continue label78;
@@ -129,13 +115,14 @@ public class Vibrion extends Item {
                             if (blockstate.hasProperty(BaseCoralWallFanBlock.FACING)) {
                                 blockstate = blockstate.setValue(BaseCoralWallFanBlock.FACING, pClickedSide);
                             }
-                        } else if (randomsource.nextInt(4) == 0) {
-                            blockstate = BuiltInRegistries.BLOCK.getTag(BlockTags.UNDERWATER_BONEMEALS).flatMap((p_204091_) -> {
-                                return p_204091_.getRandomElement(pLevel.random);
-                            }).map((p_204095_) -> {
-                                return p_204095_.value().defaultBlockState();
-                            }).orElse(blockstate);
-                        }
+                        } else
+                            if (randomsource.nextInt(4) == 0) {
+                                blockstate = BuiltInRegistries.BLOCK.getTag(BlockTags.UNDERWATER_BONEMEALS).flatMap((p_204091_) -> {
+                                    return p_204091_.getRandomElement(pLevel.random);
+                                }).map((p_204095_) -> {
+                                    return p_204095_.value().defaultBlockState();
+                                }).orElse(blockstate);
+                            }
                     }
 
                     if (blockstate.is(BlockTags.WALL_CORALS, (p_204093_) -> {
@@ -150,15 +137,16 @@ public class Vibrion extends Item {
                         BlockState blockstate1 = pLevel.getBlockState(blockpos);
                         if (blockstate1.is(Blocks.WATER) && pLevel.getFluidState(blockpos).getAmount() == 8) {
                             pLevel.setBlock(blockpos, blockstate, 3);
-                        } else if (blockstate1.is(Blocks.SEAGRASS) && randomsource.nextInt(10) == 0) {
-                            ((BonemealableBlock)Blocks.SEAGRASS).performBonemeal((ServerLevel)pLevel, randomsource, blockpos, blockstate1);
-                        }
+                        } else
+                            if (blockstate1.is(Blocks.SEAGRASS) && randomsource.nextInt(10) == 0) {
+                                ((BonemealableBlock) Blocks.SEAGRASS).performBonemeal((ServerLevel) pLevel, randomsource, blockpos, blockstate1);
+                            }
                     }
                 }
 
                 pStack.shrink(1);
-                return true;
             }
+            return true;
         } else {
             return false;
         }

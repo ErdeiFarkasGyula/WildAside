@@ -6,8 +6,6 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
-import java.util.List;
-
 public class HickoryBushFeature extends Feature<NoneFeatureConfiguration> {
     public HickoryBushFeature(Codec<NoneFeatureConfiguration> pCodec) {
         super(pCodec);

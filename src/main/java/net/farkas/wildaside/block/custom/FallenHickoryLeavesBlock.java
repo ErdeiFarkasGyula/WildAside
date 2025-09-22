@@ -2,11 +2,13 @@ package net.farkas.wildaside.block.custom;
 
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.item.custom.HickoryLeafItem;
+import net.farkas.wildaside.util.GlowingHickoryLightUtil;
 import net.farkas.wildaside.util.HickoryColour;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -20,7 +22,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -45,10 +46,10 @@ public class FallenHickoryLeavesBlock extends Block {
     public static final EnumProperty<HickoryColour> COLOUR = EnumProperty.create("colour", HickoryColour.class);
     public static final IntegerProperty COUNT = IntegerProperty.create("count", 1, MAX_COUNT);
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
-    private static final int minLight = 0;
-    private static final int maxLight = 3;
-    public static final IntegerProperty LIGHT = IntegerProperty.create("light", minLight, maxLight);
-    public static BooleanProperty FIXED_LIGHTING = BooleanProperty.create("fixed_lighting");
+    private static final int MIN_LIGHT = 0;
+    private static final int MAX_LIGHT = 3;
+    public static final IntegerProperty LIGHT = IntegerProperty.create("light", MIN_LIGHT, MAX_LIGHT);
+    public static final BooleanProperty FIXED_LIGHTING = BooleanProperty.create("fixed_lighting");
 
     public FallenHickoryLeavesBlock(Properties pProperties) {
         super(pProperties.lightLevel(s -> s.getValue(LIGHT)));
@@ -94,9 +95,8 @@ public class FallenHickoryLeavesBlock extends Block {
 
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        if (pLevel.isClientSide) return InteractionResult.PASS;
-        if (pHand == InteractionHand.OFF_HAND) return InteractionResult.PASS;
-        var playerItem = pPlayer.getItemInHand(pHand);
+        if (pLevel.isClientSide || pHand == InteractionHand.OFF_HAND) return InteractionResult.PASS;
+        ItemStack playerItem = pPlayer.getItemInHand(pHand);
 
         if (playerItem.isEmpty()) {
             int count = pState.getValue(FallenHickoryLeavesBlock.COUNT);
@@ -108,7 +108,7 @@ public class FallenHickoryLeavesBlock extends Block {
 
             pPlayer.swing(pHand);
             pPlayer.addItem(new ItemStack(ModItems.LEAF_ITEMS.get(pState.getValue(FallenHickoryLeavesBlock.COLOUR)).get()));
-            pLevel.playSound(null, pPos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.big_dripleaf.place")), SoundSource.BLOCKS, 1, 0.8f);
+            pLevel.playSound(null, pPos, SoundEvents.BIG_DRIPLEAF_PLACE, SoundSource.BLOCKS, 1, 0.8f);
             if (!pPlayer.isInvulnerable()) {
                 playerItem.shrink(1);
             }
@@ -119,7 +119,7 @@ public class FallenHickoryLeavesBlock extends Block {
         if (playerItem.getItem().equals(ModItems.VIBRION.get())) {
             if (pState.getValue(GlowingLeavesBlock.FIXED_LIGHTING)) return InteractionResult.PASS;
             pLevel.setBlock(pPos, pState.setValue(FallenHickoryLeavesBlock.FIXED_LIGHTING, true), 3);
-            pLevel.playSound(null, pPos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.honeycomb.wax_on")), SoundSource.BLOCKS, 1, 1);
+            pLevel.playSound(null, pPos, SoundEvents.HONEYCOMB_WAX_ON, SoundSource.BLOCKS, 1, 1);
 
             if (!pPlayer.isInvulnerable()) {
                 playerItem.shrink(1);
@@ -149,22 +149,7 @@ public class FallenHickoryLeavesBlock extends Block {
 
         int time = (int)pLevel.dayTime();
         int currentLight = pState.getValue(LIGHT);
-        int newLight = 0;
-
-        if (time > 22000) {
-            newLight = Math.round(maxLight - (maxLight * ((time - 22000f) / 2000f)));
-        } else
-            if (time > 12000 && time < 14000) {
-                newLight = Math.round(maxLight * ((time - 12000f) / 2000f));
-            } else
-                if (time > 14000) {
-                    newLight = maxLight;
-                } else
-                    if (time < 12000) {
-                        newLight = minLight;
-                    }
-
-        newLight = Math.min(Math.max(0, newLight), 7);
+        int newLight = GlowingHickoryLightUtil.getLight(time, MIN_LIGHT, MAX_LIGHT);
 
         if (newLight != currentLight) {
             pLevel.setBlockAndUpdate(pPos, pState.setValue(LIGHT, newLight));

@@ -1,9 +1,6 @@
 package net.farkas.wildaside.screen.bioengineering_workstation;
 
-import net.farkas.wildaside.WildAside;
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementProgress;
-import net.minecraft.resources.ResourceLocation;
+import net.farkas.wildaside.util.AdvancementHandler;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -28,17 +25,8 @@ public class BioengineeringWorkstationResultSlot extends SlotItemHandler {
     public void onTake(Player pPlayer, ItemStack pStack) {
         super.onTake(pPlayer, pStack);
 
-        if (!player.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
-            ResourceLocation id = new ResourceLocation(WildAside.MOD_ID, "we_need_to_cook");
-            Advancement adv = serverPlayer.server.getAdvancements().getAdvancement(id);
-            if (adv != null) {
-                AdvancementProgress progress = serverPlayer.getAdvancements().getOrStartProgress(adv);
-                if (!progress.isDone()) {
-                    for (String criterion : progress.getRemainingCriteria()) {
-                        serverPlayer.getAdvancements().award(adv, criterion);
-                    }
-                }
-            }
+        if (player instanceof ServerPlayer serverPlayer) {
+            AdvancementHandler.givePlayerAdvancement(serverPlayer, "we_need_to_cook");
         }
     }
 }

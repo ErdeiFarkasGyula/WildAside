@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import net.farkas.wildaside.block.custom.vibrion.NaturalSporeBlaster;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.ReplaceBlockFeature;

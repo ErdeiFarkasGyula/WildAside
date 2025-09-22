@@ -2,7 +2,6 @@ package net.farkas.wildaside.entity.custom.vibrion;
 
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.entity.ai.mucellith.MucellithAttackGoal;
-import net.farkas.wildaside.entity.ai.mucellith.MucellithLookAtPlayerGoal;
 import net.farkas.wildaside.entity.ai.mucellith.MucellithRandomLookAroundGoal;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -15,10 +14,8 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.behavior.LookAtTargetSink;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -31,7 +28,7 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
     private static final EntityDataAccessor<Boolean> HAS_DEFENDED = SynchedEntityData.defineId(MucellithEntity.class, EntityDataSerializers.BOOLEAN);
 
     private int soundCooldown = 0;
-    private int soundCooldownMax = 20;
+    private final int soundCooldownMax = 20;
 
     public final AnimationState idleAnimation = new AnimationState();
     private final int idleAnimationMax = 40;

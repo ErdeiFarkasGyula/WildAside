@@ -7,6 +7,7 @@ import net.farkas.wildaside.util.HickoryColour;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -26,19 +27,18 @@ public class HickoryLeafItem extends FuelItem {
 
     @Override
     public InteractionResult useOn(UseOnContext pContext) {
-        var level = pContext.getLevel();
-        if (level.isClientSide) return InteractionResult.PASS;
-        if (pContext.getHand() == InteractionHand.OFF_HAND) return InteractionResult.PASS;
+        Level level = pContext.getLevel();
+        if (level.isClientSide() || pContext.getHand() == InteractionHand.OFF_HAND) return InteractionResult.PASS;
 
-        var pos = pContext.getClickedPos();
-        var player = pContext.getPlayer();
-        var hand = pContext.getHand();
-        var blockstate = level.getBlockState(pos);
+        BlockPos pos = pContext.getClickedPos();
+        Player player = pContext.getPlayer();
+        InteractionHand hand = pContext.getHand();
+        BlockState blockState = level.getBlockState(pos);
 
-        if (blockstate.getBlock() instanceof FallenHickoryLeavesBlock) {
+        if (blockState.getBlock() instanceof FallenHickoryLeavesBlock) {
             return addLeaf(level, pos, player, hand);
         }
-        else if (blockstate.isFaceSturdy(level, pos, Direction.UP)) {
+        else if (blockState.isFaceSturdy(level, pos, Direction.UP)) {
             return placeLeaf(level, pos, player, hand);
         }
 
@@ -58,10 +58,11 @@ public class HickoryLeafItem extends FuelItem {
                 .setValue(FallenHickoryLeavesBlock.COLOUR, this.colour)
                 .setValue(FallenHickoryLeavesBlock.FACING, player.getDirection().getOpposite());
         level.setBlock(abovePos, newState, 3);
-        onSuccesfullPlacement(level, abovePos, player, hand);
+        onSuccessfulPlacement(level, abovePos, player, hand);
 
         return InteractionResult.SUCCESS;
     }
+
 
     private InteractionResult addLeaf(Level level, BlockPos pos, Player player, InteractionHand hand) {
         BlockState leaves = level.getBlockState(pos);
@@ -73,15 +74,15 @@ public class HickoryLeafItem extends FuelItem {
 
         BlockState newState = leaves.setValue(FallenHickoryLeavesBlock.COUNT, count + 1);
         level.setBlock(pos, newState, 3);
-        onSuccesfullPlacement(level, pos, player, hand);
+        onSuccessfulPlacement(level, pos, player, hand);
 
         return InteractionResult.SUCCESS;
     }
 
-    private void onSuccesfullPlacement(Level level, BlockPos pos, Player player, InteractionHand hand) {
+    private void onSuccessfulPlacement(Level level, BlockPos pos, Player player, InteractionHand hand) {
         var item = player.getItemInHand(hand);
 
-        level.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.big_dripleaf.place")), SoundSource.BLOCKS, 1, 1.1f);
+        level.playSound(null, pos, SoundEvents.BIG_DRIPLEAF_PLACE, SoundSource.BLOCKS, 1, 1.1f);
         if (!player.isInvulnerable()) {
             item.shrink(1);
         }

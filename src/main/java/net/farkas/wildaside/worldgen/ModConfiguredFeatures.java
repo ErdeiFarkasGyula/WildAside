@@ -103,12 +103,12 @@ public class ModConfiguredFeatures {
         HICKORY_SAPLINGS.put(HickoryColour.GREEN_GLOWING, GREEN_GLOWING_HICKORY_SAPLING);
     }
 
-    static BeehiveDecorator glowingBeehive = new BeehiveDecorator(0.015f);
-    static ImmutableList hickoryDecorator = ImmutableList.of(new BeehiveDecorator(0.01f), new FallenLeavesDecorator(0.075f, HickoryColour.HICKORY));
-    static ImmutableList redGlowingHickoryDecorator = ImmutableList.of(glowingBeehive, new FallenLeavesDecorator(0.075f, HickoryColour.RED_GLOWING));
-    static ImmutableList brownGlowingHickoryDecorator = ImmutableList.of(glowingBeehive, new FallenLeavesDecorator(0.075f, HickoryColour.BROWN_GLOWING));
-    static ImmutableList yellowGlowingHickoryDecorator = ImmutableList.of(glowingBeehive, new FallenLeavesDecorator(0.075f, HickoryColour.YELLOW_GLOWING));
-    static ImmutableList greenGlowingHickoryDecorator = ImmutableList.of(glowingBeehive, new FallenLeavesDecorator(0.075f, HickoryColour.GREEN_GLOWING));
+    static final BeehiveDecorator glowingBeehive = new BeehiveDecorator(0.015f);
+    static final ImmutableList hickoryDecorator = ImmutableList.of(new BeehiveDecorator(0.01f), new FallenLeavesDecorator(0.075f, HickoryColour.HICKORY));
+    static final ImmutableList redGlowingHickoryDecorator = ImmutableList.of(glowingBeehive, new FallenLeavesDecorator(0.075f, HickoryColour.RED_GLOWING));
+    static final ImmutableList brownGlowingHickoryDecorator = ImmutableList.of(glowingBeehive, new FallenLeavesDecorator(0.075f, HickoryColour.BROWN_GLOWING));
+    static final ImmutableList yellowGlowingHickoryDecorator = ImmutableList.of(glowingBeehive, new FallenLeavesDecorator(0.075f, HickoryColour.YELLOW_GLOWING));
+    static final ImmutableList greenGlowingHickoryDecorator = ImmutableList.of(glowingBeehive, new FallenLeavesDecorator(0.075f, HickoryColour.GREEN_GLOWING));
 
     public static final EnumMap<HickoryColour, ImmutableList> DECORATORS = new EnumMap<>(HickoryColour.class);
     static {

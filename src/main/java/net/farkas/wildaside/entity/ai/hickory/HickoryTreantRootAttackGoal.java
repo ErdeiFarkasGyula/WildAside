@@ -8,7 +8,6 @@ import java.util.EnumSet;
 
 public class HickoryTreantRootAttackGoal extends Goal {
     private final HickoryTreantEntity entity;
-    private LivingEntity target;
     private static final int minRange = 3;
     private static final int maxRange = 24;
 
@@ -19,7 +18,7 @@ public class HickoryTreantRootAttackGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        target = entity.getTarget();
+        LivingEntity target = entity.getTarget();
         if (target == null || !target.isAlive()) return false;
         double distance = entity.distanceTo(target);
         return entity.rootCooldown <= 0 && distance > minRange && distance <= maxRange;

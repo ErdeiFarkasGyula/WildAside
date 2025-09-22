@@ -1,12 +1,10 @@
 package net.farkas.wildaside.block.custom;
 
 import net.farkas.wildaside.block.ModBlocks;
-import net.farkas.wildaside.enchantment.ModEnchantments;
 import net.farkas.wildaside.particle.ModParticles;
-import net.farkas.wildaside.util.AdvancementHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -33,7 +31,7 @@ public class OvergrownEntoriumOre extends EntoriumOre {
             BlockState newBlock = ModBlocks.ENTORIUM_ORE.get().defaultBlockState();
 
             pLevel.setBlock(pPos, newBlock, 3);
-            pLevel.playSound(null, pPos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.mooshroom.shear")), SoundSource.BLOCKS, 1, 1);
+            pLevel.playSound(null, pPos, SoundEvents.MOOSHROOM_SHEAR, SoundSource.BLOCKS, 1, 1);
             pPlayer.swing(pHand);
 
             if (!pPlayer.isInvulnerable()) {

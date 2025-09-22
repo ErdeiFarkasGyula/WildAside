@@ -17,7 +17,7 @@ public class ParticleUtils {
         if (!level.getBlockState(pos.above()).isCollisionShapeFullBlock(level, pos.above())) {
             if (random.nextFloat() < 0.5f) {
                 level.addParticle(ModParticles.SUBSTILIUM_PARTICLE.get(), (pos.getX() + random.nextFloat()), (pos.getY() + 1), (pos.getZ() + random.nextFloat()),
-                        0, (Mth.nextInt(random, 7, 13) / 1000), 0);
+                        0, ((double) Mth.nextInt(random, 7, 13) / 1000), 0);
             }
         }
     }

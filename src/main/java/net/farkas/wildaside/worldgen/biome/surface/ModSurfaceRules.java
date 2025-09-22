@@ -2,11 +2,8 @@ package net.farkas.wildaside.worldgen.biome.surface;
 
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.worldgen.biome.ModBiomes;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.placement.CaveSurface;
@@ -19,7 +16,7 @@ public class ModSurfaceRules {
     private static final SurfaceRules.RuleSource STONE = makeStateRule(Blocks.STONE);
     private static final SurfaceRules.RuleSource BEDROCK = makeStateRule(Blocks.BEDROCK);
 
-    private static Supplier<SurfaceRules.RuleSource> SUBSTILIUM = () -> makeStateRule(ModBlocks.SUBSTILIUM_SOIL.get());
+    private static final Supplier<SurfaceRules.RuleSource> SUBSTILIUM = () -> makeStateRule(ModBlocks.SUBSTILIUM_SOIL.get());
     public static SurfaceRules.RuleSource substilium() { return SUBSTILIUM.get(); }
 
     public static SurfaceRules.RuleSource makeRules() {

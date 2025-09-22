@@ -32,7 +32,7 @@ public class VibrionGel extends Block implements SimpleWaterloggedBlock {
 
     @Override
     public boolean skipRendering(BlockState state, BlockState adjacentBlockState, Direction side) {
-        return adjacentBlockState.is(ModTags.Blocks.VIBRION_GELS) ? true : super.skipRendering(state, adjacentBlockState, side);
+        return adjacentBlockState.is(ModTags.Blocks.VIBRION_GELS) || super.skipRendering(state, adjacentBlockState, side);
     }
 
     @Override

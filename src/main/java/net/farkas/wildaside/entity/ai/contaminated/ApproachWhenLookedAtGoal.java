@@ -12,14 +12,12 @@ import java.util.List;
 public class ApproachWhenLookedAtGoal extends Goal {
     private final ContaminatedCreeperEntity creeper;
     private final double detectDistance;
-    private final double triggerDistance;
     private final double speed;
     private final Level level;
 
     public ApproachWhenLookedAtGoal(ContaminatedCreeperEntity creeper, double speed, double detectDistance, double triggerDistance) {
         this.creeper = creeper;
         this.detectDistance = detectDistance;
-        this.triggerDistance = triggerDistance;
         this.speed = speed;
         this.level = creeper.level();
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));

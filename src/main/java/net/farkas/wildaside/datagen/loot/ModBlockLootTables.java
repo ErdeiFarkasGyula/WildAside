@@ -1,7 +1,6 @@
 package net.farkas.wildaside.datagen.loot;
 
 import net.farkas.wildaside.block.ModBlocks;
-import net.farkas.wildaside.block.custom.FallenHickoryLeavesBlock;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.util.HickoryColour;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
@@ -14,7 +13,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;

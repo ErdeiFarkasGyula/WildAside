@@ -22,7 +22,6 @@ import java.util.List;
 
 public class SporeBombEntity extends ThrowableItemProjectile {
     private final float charge;
-    private LivingEntity thrower;
 
     public SporeBombEntity(EntityType<? extends ThrowableItemProjectile> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -37,7 +36,6 @@ public class SporeBombEntity extends ThrowableItemProjectile {
     public SporeBombEntity(Level pLevel, LivingEntity livingEntity, float charge) {
         super(ModEntities.SPORE_BOMB.get(), livingEntity, pLevel);
         this.charge = charge;
-        this.thrower = livingEntity;
     }
 
     @Override
@@ -71,7 +69,7 @@ public class SporeBombEntity extends ThrowableItemProjectile {
 
     private void applySporeCloud(ServerLevel level, BlockPos center, float charge) {
         int radius = Mth.ceil(1 + charge * 4);
-        RandomSource rand = level.getRandom();
+        RandomSource random = level.getRandom();
         SimpleParticleType particle = ModParticles.VIBRION_PARTICLE.get();
 
         for (int dx = -radius; dx <= radius; dx++) {
@@ -79,9 +77,9 @@ public class SporeBombEntity extends ThrowableItemProjectile {
                 for (int dz = -radius; dz <= radius; dz++) {
                     if (dx * dx + dy * dy + dz * dz <= radius * radius) {
                         for (int i = 0; i < 3; i++) {
-                            double x = center.getX() + 0.5 + dx + (rand.nextDouble() - 0.5);
-                            double y = center.getY() + 0.5 + dy + (rand.nextDouble() - 0.5);
-                            double z = center.getZ() + 0.5 + dz + (rand.nextDouble() - 0.5);
+                            double x = center.getX() + 0.5 + dx + (random.nextDouble() - 0.5);
+                            double y = center.getY() + 0.5 + dy + (random.nextDouble() - 0.5);
+                            double z = center.getZ() + 0.5 + dz + (random.nextDouble() - 0.5);
                             level.sendParticles(particle, x, y, z,
                                     1, 0, 0, 0, 0.0);
                         }
@@ -97,7 +95,7 @@ public class SporeBombEntity extends ThrowableItemProjectile {
 
         for (LivingEntity entity : list) {
             entityCount++;
-            ContaminationHandler.giveContaminationDose(entity, Math.round((charge + rand.nextFloat()) * 1000));
+            ContaminationHandler.giveContaminationDose(entity, Math.round((charge + random.nextFloat()) * 1000));
             level.sendParticles(particle,
                     entity.getX(), entity.getY() + 0.5, entity.getZ(),
                     5, 0.2, 0.2, 0.2, 0.01);

@@ -4,7 +4,7 @@ import net.farkas.wildaside.entity.custom.vibrion.MucellithEntity;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 
 public class MucellithRandomLookAroundGoal extends RandomLookAroundGoal {
-    MucellithEntity entity;
+    final MucellithEntity entity;
 
     public MucellithRandomLookAroundGoal(MucellithEntity pMob) {
         super(pMob);

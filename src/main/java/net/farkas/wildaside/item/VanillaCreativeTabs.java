@@ -3,7 +3,6 @@ package net.farkas.wildaside.item;
 import net.farkas.wildaside.block.ModBlocks;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import org.checkerframework.checker.units.qual.A;
 
 public class VanillaCreativeTabs {
     public static void addCreative(BuildCreativeModeTabContentsEvent event) {

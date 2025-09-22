@@ -22,12 +22,12 @@ public class HickoryParticle extends TextureSheetParticle {
         }
     }
 
-    private double initialX;
-    private double initialZ;
-    private float phaseOffset;
-    private float driftAmplitudeX;
-    private float driftAmplitudeZ;
-    private float rollAmplitude;
+    private final double initialX;
+    private final double initialZ;
+    private final float phaseOffset;
+    private final float driftAmplitudeX;
+    private final float driftAmplitudeZ;
+    private final float rollAmplitude;
 
     protected HickoryParticle(ClientLevel world, double x, double y, double z, double vx, double vy, double vz, SpriteSet spriteSet) {
         super(world, x, y, z);

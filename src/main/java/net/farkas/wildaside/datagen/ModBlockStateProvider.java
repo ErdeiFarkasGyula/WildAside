@@ -17,9 +17,6 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.List;
-import java.util.Locale;
-
 public class ModBlockStateProvider extends BlockStateProvider {
     public ModBlockStateProvider(PackOutput output, ExistingFileHelper exFileHelper) {
         super(output, WildAside.MOD_ID, exFileHelper);
@@ -151,12 +148,10 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
                     ModelFile chosen = models[ci][cnt - 1];
 
-                    ConfiguredModel[] model = ConfiguredModel.builder()
+                    return ConfiguredModel.builder()
                             .modelFile(chosen)
                             .rotationY(yRot)
                             .build();
-
-                    return model;
                 },
 
                 FallenHickoryLeavesBlock.LIGHT,

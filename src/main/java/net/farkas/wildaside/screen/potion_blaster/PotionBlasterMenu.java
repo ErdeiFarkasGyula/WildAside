@@ -16,9 +16,9 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class PotionBlasterMenu extends AbstractContainerMenu {
-    public PotionBlasterBlockEntity blockEntity;
-    public Level level;
-    public ContainerData data;
+    public final PotionBlasterBlockEntity blockEntity;
+    public final Level level;
+    public final ContainerData data;
 
     public PotionBlasterMenu(int pContainerId, Inventory inv, FriendlyByteBuf extraData) {
         this(pContainerId, inv, getBlockEntityFromBuffer(inv, extraData));

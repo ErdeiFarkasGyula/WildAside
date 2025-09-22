@@ -23,7 +23,7 @@ public class EntoriumParticle extends TextureSheetParticle {
 
     private final SpriteSet spriteSet;
     private float angularVelocity;
-    private float angularAcceleration;
+    private final float angularAcceleration;
 
     protected EntoriumParticle(ClientLevel world, double x, double y, double z, double vx, double vy, double vz, SpriteSet spriteSet) {
         super(world, x, y, z);
@@ -55,7 +55,7 @@ public class EntoriumParticle extends TextureSheetParticle {
         //this.alpha = 1 - (this.age / this.lifetime);
 
         if (!this.removed) {
-            this.setSprite(this.spriteSet.get((this.age / 1) % 32 + 1, 32));
+            this.setSprite(this.spriteSet.get((this.age) % 32 + 1, 32));
         }
     }
 }

@@ -39,8 +39,9 @@ public class SporeArrowEntity extends AbstractArrow {
 
     public void tick() {
         super.tick();
-        if (this.level().isClientSide && !inGround) {
-            this.level().addParticle(ModParticles.VIBRION_PARTICLE.get(), this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
+        Level level = this.level();
+        if (level.isClientSide && !inGround) {
+            level.addParticle(ModParticles.VIBRION_PARTICLE.get(), this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
         }
     }
 }

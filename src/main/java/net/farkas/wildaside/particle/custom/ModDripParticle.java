@@ -19,20 +19,17 @@ public class ModDripParticle extends TextureSheetParticle {
         }
 
         @Override
-        public Particle createParticle(SimpleParticleType typeIn, ClientLevel level, double x, double y, double z,
-                                       double xSpeed, double ySpeed, double zSpeed) {
+        public Particle createParticle(SimpleParticleType typeIn, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
             return new ModDripParticle(level, x, y, z, this.spriteSet);
         }
     }
 
-    private final SpriteSet spriteSet;
     private final int hangTime = 60;
     private final int stretchTime = 30;
     private float stretchFactor = 1f;
 
     protected ModDripParticle(ClientLevel level, double x, double y, double z, SpriteSet spriteSet) {
         super(level, x, y, z);
-        this.spriteSet = spriteSet;
         this.setSize(0.01F, 0.01F);
         this.lifetime = hangTime + stretchTime + 60 + this.random.nextInt(20);
         this.gravity = 0.0F;

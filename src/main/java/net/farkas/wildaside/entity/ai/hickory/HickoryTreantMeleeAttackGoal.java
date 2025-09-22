@@ -3,14 +3,12 @@ package net.farkas.wildaside.entity.ai.hickory;
 import net.farkas.wildaside.entity.custom.hickory.HickoryTreantEntity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 
 import java.util.EnumSet;
 
 public class HickoryTreantMeleeAttackGoal extends MeleeAttackGoal {
     private final HickoryTreantEntity entity;
-    private LivingEntity target;
     private static final int maxRange = 3;
 
     public HickoryTreantMeleeAttackGoal(PathfinderMob pMob, double pSpeedModifier, boolean pFollowingTargetEvenIfNotSeen) {
@@ -21,7 +19,7 @@ public class HickoryTreantMeleeAttackGoal extends MeleeAttackGoal {
 
     @Override
     public boolean canUse() {
-        target = entity.getTarget();
+        LivingEntity target = entity.getTarget();
         if (target == null || !target.isAlive()) return false;
         double distance = entity.distanceTo(target);
 //        return distance >= 0 && distance <= maxRange;

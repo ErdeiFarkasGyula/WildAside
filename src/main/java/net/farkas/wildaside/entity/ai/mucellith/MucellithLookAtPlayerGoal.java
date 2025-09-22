@@ -5,7 +5,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 
 public class MucellithLookAtPlayerGoal extends LookAtPlayerGoal {
-    MucellithEntity entity;
+    final MucellithEntity entity;
 
     public MucellithLookAtPlayerGoal(MucellithEntity pMob, Class<? extends LivingEntity> pLookAtType, float pLookDistance) {
         super(pMob, pLookAtType, pLookDistance);
