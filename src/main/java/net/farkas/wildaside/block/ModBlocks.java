@@ -56,7 +56,7 @@ public class ModBlocks {
                     .lightLevel(l -> 9),  UniformInt.of(1, 2)));
 
     public static final RegistryObject<Block> COMPRESSED_VIBRION_BLOCK = registerBlock("compressed_vibrion_block",
-            () ->  new DropExperienceBlock(BlockBehaviour.Properties.copy(VIBRION_BLOCK.get())
+            () ->  new DropExperienceBlock(BlockBehaviour.Properties.copy(ModBlocks.VIBRION_BLOCK.get())
                     .lightLevel(s -> 15), UniformInt.of(0, 0)));
 
     public static final RegistryObject<Block> VIBRION_GEL = registerBlock("vibrion_gel",
@@ -72,7 +72,7 @@ public class ModBlocks {
                     .noOcclusion()));
 
     public static final RegistryObject<Block> LIT_VIBRION_GEL = registerBlock("lit_vibrion_gel",
-            () ->  new VibrionGel(BlockBehaviour.Properties.copy(VIBRION_GEL.get()).lightLevel(s -> 5)));
+            () ->  new VibrionGel(BlockBehaviour.Properties.copy(ModBlocks.VIBRION_GEL.get()).lightLevel(s -> 5)));
 
     public static final RegistryObject<Block> VIBRION_GLASS = registerBlock("vibrion_glass",
             () ->  new VibrionGlass(BlockBehaviour.Properties.of()
@@ -84,13 +84,13 @@ public class ModBlocks {
                     .instrument(NoteBlockInstrument.HAT)));
 
     public static final RegistryObject<Block> LIT_VIBRION_GLASS = registerBlock("lit_vibrion_glass",
-            () ->  new VibrionGlass(BlockBehaviour.Properties.copy(VIBRION_GLASS.get()).lightLevel(s -> 5)));
+            () ->  new VibrionGlass(BlockBehaviour.Properties.copy(ModBlocks.VIBRION_GLASS.get()).lightLevel(s -> 5)));
 
     public static final RegistryObject<Block> VIBRION_GLASS_PANE = registerBlock("vibrion_glass_pane",
-            () ->  new IronBarsBlock(BlockBehaviour.Properties.copy(VIBRION_GLASS.get())));
+            () ->  new IronBarsBlock(BlockBehaviour.Properties.copy(ModBlocks.VIBRION_GLASS.get())));
 
     public static final RegistryObject<Block> LIT_VIBRION_GLASS_PANE = registerBlock("lit_vibrion_glass_pane",
-            () ->  new IronBarsBlock(BlockBehaviour.Properties.copy(VIBRION_GLASS_PANE.get()).lightLevel(s -> 5)));
+            () ->  new IronBarsBlock(BlockBehaviour.Properties.copy(ModBlocks.VIBRION_GLASS_PANE.get()).lightLevel(s -> 5)));
 
     public static final RegistryObject<Block> VIBRION_GROWTH = registerBlock("vibrion_growth",
             () ->  new FlowerBlock(() -> MobEffects.POISON, 5, BlockBehaviour.Properties.of()
@@ -206,23 +206,23 @@ public class ModBlocks {
             () ->  new PotionBlaster(BlockBehaviour.Properties.copy(ModBlocks.SPORE_BLASTER.get())));
 
     public static final RegistryObject<Block> SMOOTH_SUBSTILIUM_SOIL = registerBlock("smooth_substilium_soil",
-            () ->  new Block(BlockBehaviour.Properties.copy(COMPRESSED_SUBSTILIUM_SOIL.get())));
+            () ->  new Block(BlockBehaviour.Properties.copy(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get())));
 
     public static final RegistryObject<Block> CHISELED_SUBSTILIUM_SOIL = registerBlock("chiseled_substilium_soil",
-            () ->  new Block(BlockBehaviour.Properties.copy(COMPRESSED_SUBSTILIUM_SOIL.get())));
+            () ->  new Block(BlockBehaviour.Properties.copy(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get())));
 
     public static final RegistryObject<Block> SUBSTILIUM_TILES = registerBlock("substilium_tiles",
-            () ->  new Block(BlockBehaviour.Properties.copy(COMPRESSED_SUBSTILIUM_SOIL.get())));
+            () ->  new Block(BlockBehaviour.Properties.copy(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get())));
 
     public static final RegistryObject<Block> CRACKED_SUBSTILIUM_TILES = registerBlock("cracked_substilium_tiles",
-            () ->  new Block(BlockBehaviour.Properties.copy(COMPRESSED_SUBSTILIUM_SOIL.get())));
+            () ->  new Block(BlockBehaviour.Properties.copy(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get())));
 
     public static final RegistryObject<Block> SUBSTILIUM_TILE_STAIRS = registerBlock("substilium_tile_stairs",
             () ->  new StairBlock(() -> ModBlocks.SUBSTILIUM_TILES.get().defaultBlockState(),
-                    BlockBehaviour.Properties.copy(SUBSTILIUM_TILES.get())));
+                    BlockBehaviour.Properties.copy(ModBlocks.SUBSTILIUM_TILES.get())));
 
     public static final RegistryObject<Block> SUBSTILIUM_TILE_SLAB = registerBlock("substilium_tile_slab",
-            () ->  new SlabBlock(BlockBehaviour.Properties.copy(SUBSTILIUM_TILES.get())));
+            () ->  new SlabBlock(BlockBehaviour.Properties.copy(ModBlocks.SUBSTILIUM_TILES.get())));
 
     public static final RegistryObject<Block> SUBSTILIUM_TILE_BUTTON = registerBlock("substilium_tile_button",
             () ->  new ButtonBlock(BlockBehaviour.Properties.of()
@@ -231,11 +231,11 @@ public class ModBlocks {
                     .strength(1,  12), BlockSetType.STONE, 30, true));
 
     public static final RegistryObject<Block> SUBSTILIUM_TILE_PRESSURE_PLATE = registerBlock("substilium_tile_pressure_plate",
-            () ->  new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING,BlockBehaviour.Properties.copy(SUBSTILIUM_TILE_BUTTON.get()),
-                    BlockSetType.STONE));
+            () ->  new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING,
+                    BlockBehaviour.Properties.copy(ModBlocks.SUBSTILIUM_TILE_BUTTON.get()), BlockSetType.STONE));
 
     public static final RegistryObject<Block> SUBSTILIUM_TILE_WALLS = registerBlock("substilium_tile_walls",
-            () ->  new WallBlock(BlockBehaviour.Properties.copy(SUBSTILIUM_TILES.get())));
+            () ->  new WallBlock(BlockBehaviour.Properties.copy(ModBlocks.SUBSTILIUM_TILES.get())));
 
     public static final RegistryObject<Block> SUBSTILIUM_STEM = registerBlock("substilium_stem",
             () ->  new ModFlammableRotatedPillarBlock(BlockBehaviour.Properties.of()
@@ -249,53 +249,54 @@ public class ModBlocks {
             () ->  new ModFlammableRotatedPillarBlock(BlockBehaviour.Properties.copy(ModBlocks.SUBSTILIUM_STEM.get())));
 
     public static final RegistryObject<Block> SUBSTILIUM_WOOD = registerBlock("substilium_wood",
-            () ->  new ModFlammableRotatedPillarBlock(BlockBehaviour.Properties.copy(SUBSTILIUM_STEM.get())));
+            () ->  new ModFlammableRotatedPillarBlock(BlockBehaviour.Properties.copy(ModBlocks.SUBSTILIUM_STEM.get())));
 
     public static final RegistryObject<Block> STRIPPED_SUBSTILIUM_WOOD = registerBlock("stripped_substilium_wood",
             () ->  new ModFlammableRotatedPillarBlock(BlockBehaviour.Properties.copy(ModBlocks.SUBSTILIUM_WOOD.get())));
 
     public static final RegistryObject<Block> SUBSTILIUM_PLANKS = registerBlock("substilium_planks",
-            () ->  new ModFlammableBlock(BlockBehaviour.Properties.copy(SUBSTILIUM_STEM.get()).sound(SoundType.WOOD), 10, 5));
+            () ->  new ModFlammableBlock(BlockBehaviour.Properties.copy(ModBlocks.SUBSTILIUM_STEM.get()).sound(SoundType.WOOD), 10, 5));
 
     public static final RegistryObject<Block> SUBSTILIUM_STAIRS = registerBlock("substilium_stairs",
             () ->  new StairBlock(() -> ModBlocks.SUBSTILIUM_PLANKS.get().defaultBlockState(),
-                    BlockBehaviour.Properties.copy(SUBSTILIUM_PLANKS.get())));
+                    BlockBehaviour.Properties.copy(ModBlocks.SUBSTILIUM_PLANKS.get())));
 
     public static final RegistryObject<Block> SUBSTILIUM_SLAB = registerBlock("substilium_slab",
-            () ->  new SlabBlock(BlockBehaviour.Properties.copy(SUBSTILIUM_PLANKS.get())));
+            () ->  new SlabBlock(BlockBehaviour.Properties.copy(ModBlocks.SUBSTILIUM_PLANKS.get())));
 
     public static final RegistryObject<Block> SUBSTILIUM_BUTTON = registerBlock("substilium_button",
-            () ->  new ButtonBlock(BlockBehaviour.Properties.copy(SUBSTILIUM_PLANKS.get()).strength(1, 1), BlockSetType.OAK, 5, true));
+            () ->  new ButtonBlock(BlockBehaviour.Properties.copy(ModBlocks.SUBSTILIUM_PLANKS.get())
+                    .strength(1, 1), BlockSetType.OAK, 5, true));
 
     public static final RegistryObject<Block> SUBSTILIUM_PRESSURE_PLATE = registerBlock("substilium_pressure_plate",
-            () ->  new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING,BlockBehaviour.Properties.copy(SUBSTILIUM_BUTTON.get()),
-                    BlockSetType.OAK));
+            () ->  new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING,
+                    BlockBehaviour.Properties.copy(ModBlocks.SUBSTILIUM_BUTTON.get()), BlockSetType.OAK));
 
     public static final RegistryObject<Block> SUBSTILIUM_FENCE = registerBlock("substilium_fence",
-            () ->  new FenceBlock(BlockBehaviour.Properties.copy(SUBSTILIUM_PLANKS.get())));
+            () ->  new FenceBlock(BlockBehaviour.Properties.copy(ModBlocks.SUBSTILIUM_PLANKS.get())));
 
     public static final RegistryObject<Block> SUBSTILIUM_FENCE_GATE = registerBlock("substilium_fence_gate",
-            () ->  new FenceGateBlock(BlockBehaviour.Properties.copy(SUBSTILIUM_PLANKS.get()),
+            () ->  new FenceGateBlock(BlockBehaviour.Properties.copy(ModBlocks.SUBSTILIUM_PLANKS.get()),
                     SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
 
     public static final RegistryObject<Block> SUBSTILIUM_DOOR = registerBlock("substilium_door",
-            () ->  new DoorBlock(BlockBehaviour.Properties.copy(SUBSTILIUM_PLANKS.get()), BlockSetType.OAK));
+            () ->  new DoorBlock(BlockBehaviour.Properties.copy(ModBlocks.SUBSTILIUM_PLANKS.get()), BlockSetType.OAK));
 
     public static final RegistryObject<Block> SUBSTILIUM_TRAPDOOR = registerBlock("substilium_trapdoor",
-            () ->  new TrapDoorBlock(BlockBehaviour.Properties.copy(SUBSTILIUM_PLANKS.get()).noOcclusion(), BlockSetType.OAK));
+            () ->  new TrapDoorBlock(BlockBehaviour.Properties.copy(ModBlocks.SUBSTILIUM_PLANKS.get()).noOcclusion(), BlockSetType.OAK));
 
     public static final RegistryObject<Block> SUBSTILIUM_SIGN = BLOCKS.register("substilium_sign",
-            () ->  new ModStandingSignBlock(BlockBehaviour.Properties.copy(SUBSTILIUM_PLANKS.get()).strength(1).forceSolidOn().noCollission(), ModWoodTypes.SUBSTILIUM));
+            () ->  new ModStandingSignBlock(BlockBehaviour.Properties.copy(ModBlocks.SUBSTILIUM_PLANKS.get()).strength(1).forceSolidOn().noCollission(), ModWoodTypes.SUBSTILIUM));
     public static final RegistryObject<Block> SUBSTILIUM_WALL_SIGN = BLOCKS.register("substilium_wall_sign",
-            () ->  new ModWallSignBlock(BlockBehaviour.Properties.copy(SUBSTILIUM_PLANKS.get()).strength(1).forceSolidOn().noCollission(), ModWoodTypes.SUBSTILIUM));
+            () ->  new ModWallSignBlock(BlockBehaviour.Properties.copy(ModBlocks.SUBSTILIUM_PLANKS.get()).strength(1).forceSolidOn().noCollission(), ModWoodTypes.SUBSTILIUM));
 
     public static final RegistryObject<Block> SUBSTILIUM_HANGING_SIGN = BLOCKS.register("substilium_hanging_sign",
-            () ->  new ModHangingSignBlock(BlockBehaviour.Properties.copy(SUBSTILIUM_PLANKS.get()).strength(1).forceSolidOn().noCollission(), ModWoodTypes.SUBSTILIUM));
+            () ->  new ModHangingSignBlock(BlockBehaviour.Properties.copy(ModBlocks.SUBSTILIUM_PLANKS.get()).strength(1).forceSolidOn().noCollission(), ModWoodTypes.SUBSTILIUM));
     public static final RegistryObject<Block> SUBSTILIUM_WALL_HANGING_SIGN = BLOCKS.register("substilium_hanging_wall_sign",
-            () ->  new ModWallHangingSignBlock(BlockBehaviour.Properties.copy(SUBSTILIUM_PLANKS.get()).strength(1).forceSolidOn().noCollission(),  ModWoodTypes.SUBSTILIUM));
+            () ->  new ModWallHangingSignBlock(BlockBehaviour.Properties.copy(ModBlocks.SUBSTILIUM_PLANKS.get()).strength(1).forceSolidOn().noCollission(),  ModWoodTypes.SUBSTILIUM));
 
     public static final RegistryObject<Block> SUBSTILIUM_SPROUTS = registerBlock("substilium_sprouts",
-            () ->  new FlowerBlock(() -> MobEffects.CONFUSION, 5, BlockBehaviour.Properties.copy(VIBRION_GROWTH.get())
+            () ->  new FlowerBlock(() -> MobEffects.CONFUSION, 5, BlockBehaviour.Properties.copy(ModBlocks.VIBRION_GROWTH.get())
                     .mapColor(MapColor.COLOR_CYAN)
                     .lightLevel(l -> 0)));
 
@@ -310,7 +311,7 @@ public class ModBlocks {
                     .strength(2.5f, 4)));
 
     public static final RegistryObject<Block> HICKORY_WOOD = registerBlock("hickory_wood",
-            () ->  new ModFlammableRotatedPillarBlock(BlockBehaviour.Properties.copy(HICKORY_LOG.get())));
+            () ->  new ModFlammableRotatedPillarBlock(BlockBehaviour.Properties.copy(ModBlocks.HICKORY_LOG.get())));
 
     public static final RegistryObject<Block> STRIPPED_HICKORY_LOG = registerBlock("stripped_hickory_log",
             () ->  new ModFlammableRotatedPillarBlock(BlockBehaviour.Properties.copy(ModBlocks.HICKORY_LOG.get())));
@@ -319,44 +320,44 @@ public class ModBlocks {
             () ->  new ModFlammableRotatedPillarBlock(BlockBehaviour.Properties.copy(ModBlocks.HICKORY_LOG.get())));
 
     public static final RegistryObject<Block> HICKORY_PLANKS = registerBlock("hickory_planks",
-            () ->  new ModFlammableBlock(BlockBehaviour.Properties.copy(HICKORY_LOG.get()), 10, 5));
+            () ->  new ModFlammableBlock(BlockBehaviour.Properties.copy(ModBlocks.HICKORY_LOG.get()), 10, 5));
 
     public static final RegistryObject<Block> HICKORY_STAIRS = registerBlock("hickory_stairs",
             () ->  new StairBlock(() -> ModBlocks.HICKORY_PLANKS.get().defaultBlockState(),
-                    BlockBehaviour.Properties.copy(HICKORY_PLANKS.get())));
+                    BlockBehaviour.Properties.copy(ModBlocks.HICKORY_PLANKS.get())));
 
     public static final RegistryObject<Block> HICKORY_SLAB = registerBlock("hickory_slab",
-            () ->  new SlabBlock(BlockBehaviour.Properties.copy(HICKORY_PLANKS.get())));
+            () ->  new SlabBlock(BlockBehaviour.Properties.copy(ModBlocks.HICKORY_PLANKS.get())));
 
     public static final RegistryObject<Block> HICKORY_BUTTON = registerBlock("hickory_button",
-            () ->  new ButtonBlock(BlockBehaviour.Properties.copy(HICKORY_PLANKS.get()).strength(1, 1), BlockSetType.OAK, 5, true));
+            () ->  new ButtonBlock(BlockBehaviour.Properties.copy(ModBlocks.HICKORY_PLANKS.get()).strength(1, 1), BlockSetType.OAK, 5, true));
 
     public static final RegistryObject<Block> HICKORY_PRESSURE_PLATE = registerBlock("hickory_pressure_plate",
-            () ->  new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING,BlockBehaviour.Properties.copy(HICKORY_BUTTON.get()),
-                    BlockSetType.OAK));
+            () ->  new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING,
+                    BlockBehaviour.Properties.copy(ModBlocks.HICKORY_BUTTON.get()), BlockSetType.OAK));
 
     public static final RegistryObject<Block> HICKORY_FENCE = registerBlock("hickory_fence",
-            () ->  new FenceBlock(BlockBehaviour.Properties.copy(HICKORY_PLANKS.get())));
+            () ->  new FenceBlock(BlockBehaviour.Properties.copy(ModBlocks.HICKORY_PLANKS.get())));
 
     public static final RegistryObject<Block> HICKORY_FENCE_GATE = registerBlock("hickory_fence_gate",
-            () ->  new FenceGateBlock(BlockBehaviour.Properties.copy(HICKORY_PLANKS.get()),
+            () ->  new FenceGateBlock(BlockBehaviour.Properties.copy(ModBlocks.HICKORY_PLANKS.get()),
                     SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
 
     public static final RegistryObject<Block> HICKORY_DOOR = registerBlock("hickory_door",
-            () ->  new DoorBlock(BlockBehaviour.Properties.copy(HICKORY_PLANKS.get()), BlockSetType.OAK));
+            () ->  new DoorBlock(BlockBehaviour.Properties.copy(ModBlocks.HICKORY_PLANKS.get()), BlockSetType.OAK));
 
     public static final RegistryObject<Block> HICKORY_TRAPDOOR = registerBlock("hickory_trapdoor",
-            () ->  new TrapDoorBlock(BlockBehaviour.Properties.copy(HICKORY_PLANKS.get()).noOcclusion(), BlockSetType.OAK));
+            () ->  new TrapDoorBlock(BlockBehaviour.Properties.copy(ModBlocks.HICKORY_PLANKS.get()).noOcclusion(), BlockSetType.OAK));
 
     public static final RegistryObject<Block> HICKORY_SIGN = BLOCKS.register("hickory_sign",
-            () ->  new ModStandingSignBlock(BlockBehaviour.Properties.copy(HICKORY_PLANKS.get()).strength(1).forceSolidOn().noCollission(), ModWoodTypes.HICKORY));
+            () ->  new ModStandingSignBlock(BlockBehaviour.Properties.copy(ModBlocks.HICKORY_PLANKS.get()).strength(1).forceSolidOn().noCollission(), ModWoodTypes.HICKORY));
     public static final RegistryObject<Block> HICKORY_WALL_SIGN = BLOCKS.register("hickory_wall_sign",
-            () ->  new ModWallSignBlock(BlockBehaviour.Properties.copy(HICKORY_PLANKS.get()).strength(1).forceSolidOn().noCollission(), ModWoodTypes.HICKORY));
+            () ->  new ModWallSignBlock(BlockBehaviour.Properties.copy(ModBlocks.HICKORY_PLANKS.get()).strength(1).forceSolidOn().noCollission(), ModWoodTypes.HICKORY));
 
     public static final RegistryObject<Block> HICKORY_HANGING_SIGN = BLOCKS.register("hickory_hanging_sign",
-            () ->  new ModHangingSignBlock(BlockBehaviour.Properties.copy(HICKORY_PLANKS.get()).strength(1).forceSolidOn().noCollission(), ModWoodTypes.HICKORY));
+            () ->  new ModHangingSignBlock(BlockBehaviour.Properties.copy(ModBlocks.HICKORY_PLANKS.get()).strength(1).forceSolidOn().noCollission(), ModWoodTypes.HICKORY));
     public static final RegistryObject<Block> HICKORY_WALL_HANGING_SIGN = BLOCKS.register("hickory_hanging_wall_sign",
-            () ->  new ModWallHangingSignBlock(BlockBehaviour.Properties.copy(HICKORY_PLANKS.get()).strength(1).forceSolidOn().noCollission(),  ModWoodTypes.HICKORY));
+            () ->  new ModWallHangingSignBlock(BlockBehaviour.Properties.copy(ModBlocks.HICKORY_PLANKS.get()).strength(1).forceSolidOn().noCollission(),  ModWoodTypes.HICKORY));
 
     public static final RegistryObject<Block> SPOTTED_WINTERGREEN = registerBlock("spotted_wintergreen",
             () ->  new FlowerBlock(() -> MobEffects.MOVEMENT_SPEED, 10, BlockBehaviour.Properties.copy(Blocks.RED_TULIP)));
@@ -398,11 +399,11 @@ public class ModBlocks {
     public static final RegistryObject<Block> RED_GLOWING_HICKORY_SAPLING = registerBlock("red_glowing_hickory_sapling",
             () ->  new GlowingSaplingBlock(new HickoryTreeGrower(HickoryColour.RED_GLOWING), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING)));
     public static final RegistryObject<Block> BROWN_GLOWING_HICKORY_SAPLING = registerBlock("brown_glowing_hickory_sapling",
-            () ->  new GlowingSaplingBlock(new HickoryTreeGrower(HickoryColour.BROWN_GLOWING), BlockBehaviour.Properties.copy(RED_GLOWING_HICKORY_SAPLING.get())));
+            () ->  new GlowingSaplingBlock(new HickoryTreeGrower(HickoryColour.BROWN_GLOWING), BlockBehaviour.Properties.copy(ModBlocks.RED_GLOWING_HICKORY_SAPLING.get())));
     public static final RegistryObject<Block> YELLOW_GLOWING_HICKORY_SAPLING = registerBlock("yellow_glowing_hickory_sapling",
-            () ->  new GlowingSaplingBlock(new HickoryTreeGrower(HickoryColour.YELLOW_GLOWING), BlockBehaviour.Properties.copy(RED_GLOWING_HICKORY_SAPLING.get())));
+            () ->  new GlowingSaplingBlock(new HickoryTreeGrower(HickoryColour.YELLOW_GLOWING), BlockBehaviour.Properties.copy(ModBlocks.RED_GLOWING_HICKORY_SAPLING.get())));
     public static final RegistryObject<Block> GREEN_GLOWING_HICKORY_SAPLING = registerBlock("green_glowing_hickory_sapling",
-            () ->  new GlowingSaplingBlock(new HickoryTreeGrower(HickoryColour.GREEN_GLOWING), BlockBehaviour.Properties.copy(RED_GLOWING_HICKORY_SAPLING.get())));
+            () ->  new GlowingSaplingBlock(new HickoryTreeGrower(HickoryColour.GREEN_GLOWING), BlockBehaviour.Properties.copy(ModBlocks.RED_GLOWING_HICKORY_SAPLING.get())));
 
     public static final EnumMap<HickoryColour, RegistryObject<Block>> HICKORY_SAPLINGS = new EnumMap<>(HickoryColour.class);
     static {
