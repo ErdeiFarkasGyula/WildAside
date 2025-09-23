@@ -212,7 +212,7 @@
   "advancements.bacteria_beacon.title":  "Bacteria Beacon",
   "advancements.bacteria_beacon.descr":  "Place down a Spore Blaster",
   "advancements.weapons_of_mass_infection.title":  "Weapons of Mass Infection",
-  "advancements.weapons_of_mass_infection.descr":  "Infect at least 5 mobs with a Spore Bomb",
+  "advancements.weapons_of_mass_infection.descr":  "Infect at least 5 mobs with a single Spore Bomb",
 
   "advancements.colourful_innit.title": "Colourful, Innit?",
   "advancements.colourful_innit.descr": "Enter the Glowing Hickory Forest",
@@ -221,5 +221,5 @@
   "advancements.fertile_forest.title": "Fertile Forest",
   "advancements.fertile_forest.descr": "Detonate a Fertiliser Bomb in a Hickory Forest",
 
-  "sounds.wildaside.vibrion_hive_music": "Kaptár - Erdei Farkas Gyula"
+  "sounds.wildaside.vibrion_hive_music": "Vibrion Hive - Erdei Farkas Gyula"
 }

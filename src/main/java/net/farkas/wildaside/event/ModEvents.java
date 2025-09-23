@@ -65,13 +65,7 @@ public class ModEvents {
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            Advancement advancement = player.server.getAdvancements().getAdvancement(new ResourceLocation(WildAside.MOD_ID,"wild_wilder_wildest"));
-            AdvancementProgress progress = player.getAdvancements().getOrStartProgress(advancement);
-            if (!progress.isDone()) {
-                for (String criteria : progress.getRemainingCriteria()) {
-                    player.getAdvancements().award(advancement, criteria);
-                }
-            }
+            AdvancementHandler.givePlayerAdvancement(player, "wild_wilder_wildest");
         }
     }
 
