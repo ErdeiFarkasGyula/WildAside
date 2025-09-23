@@ -32,12 +32,12 @@ public class MucellithAttackGoal extends Goal {
         if (entity.isDefending()) return false;
 
         LivingEntity livingentity = this.mob.getTarget();
-        if (livingentity != null && livingentity.isAlive()) {
+        if (livingentity != null && livingentity.isAlive() && !(livingentity instanceof MucellithEntity)) {
             this.target = livingentity;
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     @Override

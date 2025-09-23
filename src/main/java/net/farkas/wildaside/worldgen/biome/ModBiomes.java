@@ -139,11 +139,7 @@ public class ModBiomes {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
 
-//        spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntities.MUCELLITH.get(),
-//                ModConfig.MUCELLITH_SPAWN_WEIGHT.get(), ModConfig.MUCELLITH_SPAWN_MIN.get(), ModConfig.MUCELLITH_SPAWN_MAX.get()));
-
-        spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntities.MUCELLITH.get(), 10, 2, 3));
-
+        spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntities.MUCELLITH.get(), 67, 2, 4));
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
         globalOverworldGeneration(biomeBuilder);

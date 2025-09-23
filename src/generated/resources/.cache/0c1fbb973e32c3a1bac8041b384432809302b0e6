@@ -1,4 +1,4 @@
-// 1.20.1	2025-06-25T21:14:59.2396581	Tags for minecraft:block mod id wildaside
+// 1.20.1	2025-09-23T22:43:55.7213785	Tags for minecraft:block mod id wildaside
 ddf19a729f5b237a0f88a859d9867a0e1f3b557f data/minecraft/tags/blocks/all_signs.json
 01a79869d5644bc64ab2f3475173c3c664ff6180 data/minecraft/tags/blocks/buttons.json
 26866758f9f1bc8f1276df7c9b84fbc6a773bb58 data/minecraft/tags/blocks/doors.json
@@ -27,5 +27,6 @@ aac2886eb687f32aa991509e6ac7f1dc53c6979b data/minecraft/tags/blocks/trapdoors.js
 547fae9aa3760825065e09d29c048a1b7e5d6d68 data/minecraft/tags/blocks/walls.json
 cf63a51f004815103561b426a9886051b6c0575e data/minecraft/tags/blocks/wall_hanging_signs.json
 7ffb1c1423832a63af090f32f2560995551e43f1 data/minecraft/tags/blocks/wall_signs.json
+d75dc75a5b2bc3f09e494d174fb092eb3ade153c data/wildaside/tags/blocks/mucellith_spawn_blocks.json
 90860656b872f340e1f6298b9f0a10b63c956387 data/wildaside/tags/blocks/vibrion_full_glasses.json
 11bf3fcfd93bfa959ca08451d04147319f01bbae data/wildaside/tags/blocks/vibrion_gels.json

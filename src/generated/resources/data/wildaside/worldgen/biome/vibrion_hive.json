@@ -114,9 +114,9 @@
     "monster": [
       {
         "type": "wildaside:mucellith",
-        "maxCount": 3,
+        "maxCount": 4,
         "minCount": 2,
-        "weight": 10
+        "weight": 67
       },
       {
         "type": "minecraft:spider",

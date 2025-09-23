@@ -27,6 +27,10 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 .add(ModBlocks.VIBRION_GLASS.get())
                 .add(ModBlocks.LIT_VIBRION_GLASS.get());
 
+        this.tag(ModTags.Blocks.MUCELLITH_SPAWN_BLOCKS)
+                .add(ModBlocks.SUBSTILIUM_SOIL.get())
+                .add(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get());
+
         //
 
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
