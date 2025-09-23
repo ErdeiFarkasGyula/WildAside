@@ -181,8 +181,6 @@
   "entity.wildaside.hickory_treant": "Hickory Treant",
   "entity.wildaside.hickory_leaf_projectile": "Hickory Leaf Projectile",
 
-  "enchantment.wildaside.extensive_research": "Extensive Research",
-
   "advancements.wildaside.wild_wilder_wildest.title": "Wild, Wilder, Wildest!",
   "advancements.wildaside.wild_wilder_wildest.descr": "Thank you for using Wild Aside! <3",
   "advancements.descent.title": "Descent",
@@ -199,8 +197,6 @@
   "advancements.its_shearing_time.descr":  "Spot an Overgrown Entorium Ore",
   "advancements.petrified_prescription.title":  "Petrified Prescription",
   "advancements.petrified_prescription.descr":  "Obtain an Entorium",
-  "advancements.extensive_research.title":  "Extensive Research",
-  "advancements.extensive_research.descr":  "Reveal Entorium Ores using shears with the Extensive Research enchantment",
   "advancements.blaster_busted.title":  "Blaster? Busted!",
   "advancements.blaster_busted.descr":  "Destroy a Natural Spore Blaster",
   "advancements.purification_pill.title":  "Purification Pill",
