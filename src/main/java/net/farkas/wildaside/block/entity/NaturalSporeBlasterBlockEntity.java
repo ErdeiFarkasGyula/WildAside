@@ -77,7 +77,7 @@ public class NaturalSporeBlasterBlockEntity extends BlockEntity {
 
             List<LivingEntity> hits = world.getEntitiesOfClass(LivingEntity.class, new AABB(pos), e -> !e.isSpectator());
             for (LivingEntity e : hits) {
-                ContaminationHandler.giveContaminationDose(e, 50);
+                ContaminationHandler.addDose(e, 50);
                 world.sendParticles(particle, e.getX(), e.getY() + 0.5, e.getZ(), 5, 0.2, 0.2, 0.2, 0.01);
             }
         }

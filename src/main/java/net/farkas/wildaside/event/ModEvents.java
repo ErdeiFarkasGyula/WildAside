@@ -1,9 +1,11 @@
 package net.farkas.wildaside.event;
 
+import com.mojang.brigadier.CommandDispatcher;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.capability.contamination.ContaminationAttacher;
 import net.farkas.wildaside.capability.contamination.ContaminationCapability;
+import net.farkas.wildaside.command.ContaminationCommand;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.util.AdvancementHandler;
@@ -11,6 +13,7 @@ import net.farkas.wildaside.util.ContaminationHandler;
 import net.farkas.wildaside.util.HickoryColour;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
@@ -31,6 +34,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
@@ -50,6 +54,12 @@ public class ModEvents {
     public static void attach(AttachCapabilitiesEvent<Entity> event) {
         final ContaminationAttacher.ContaminationProvider provider = new ContaminationAttacher.ContaminationProvider();
         event.addCapability(ContaminationAttacher.ContaminationProvider.IDENTIFIER, provider);
+    }
+
+    @SubscribeEvent
+    public static void registerCommands(RegisterCommandsEvent event) {
+        CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
+        ContaminationCommand.register(dispatcher);
     }
 
     @SubscribeEvent
@@ -208,7 +218,7 @@ public class ModEvents {
                 if ((float)attacker.getEffect(contamination).getAmplifier() / 5 > random.nextFloat()) {
                     if (event.getTarget() instanceof LivingEntity target) {
                         attacker.getCapability(ContaminationCapability.INSTANCE).ifPresent(data -> {
-                            ContaminationHandler.giveContaminationDose(target, data.getDose() / 5);
+                            ContaminationHandler.addDose(target, data.getDose() / 5);
                         });
                     }
                 }
