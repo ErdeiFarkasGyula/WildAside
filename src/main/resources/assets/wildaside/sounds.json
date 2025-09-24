@@ -8,5 +8,31 @@
         "stream": true
       }
     ]
+  },
+  "entity.mucellith.ambient": {
+    "subtitles": "sounds.wildaside.entity.mucellith_ambient",
+    "category": "hostile",
+    "sounds": [
+      "wildaside:entity/mucellith/mucellith_ambient1",
+      "wildaside:entity/mucellith/mucellith_ambient2",
+      "wildaside:entity/mucellith/mucellith_ambient3",
+      "wildaside:entity/mucellith/mucellith_ambient4"
+    ]
+  },
+  "entity.mucellith.hurt": {
+    "subtitles": "sounds.wildaside.entity.mucellith.hurt",
+    "category": "hostile",
+    "sounds": [
+      "wildaside:entity/mucellith/mucellith_hurt1",
+      "wildaside:entity/mucellith/mucellith_hurt2",
+      "wildaside:entity/mucellith/mucellith_hurt3"
+    ]
+  },
+  "entity.mucellith.death": {
+    "subtitles": "sounds.wildaside.entity.mucellith.death",
+    "category": "hostile",
+    "sounds": [
+      "wildaside:entity/mucellith/mucellith_death"
+    ]
   }
 }

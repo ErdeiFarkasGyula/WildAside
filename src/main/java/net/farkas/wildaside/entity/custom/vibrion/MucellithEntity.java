@@ -4,6 +4,7 @@ import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.entity.ai.mucellith.MucellithAttackGoal;
 import net.farkas.wildaside.entity.ai.mucellith.MucellithLookAtPlayerGoal;
 import net.farkas.wildaside.entity.ai.mucellith.MucellithRandomLookAroundGoal;
+import net.farkas.wildaside.sound.ModSounds;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -231,16 +232,30 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
 
     @Override
     protected @Nullable SoundEvent getAmbientSound() {
-        return SoundEvents.WARDEN_AMBIENT;
+        SoundEvent[] sounds = new SoundEvent[]{
+                ModSounds.MUCELLITH_AMBIENT_1.get(),
+                ModSounds.MUCELLITH_AMBIENT_2.get(),
+                ModSounds.MUCELLITH_AMBIENT_3.get(),
+                ModSounds.MUCELLITH_AMBIENT_4.get()
+        };
+        return sounds[this.random.nextInt(sounds.length)];
     }
 
     @Override
     protected @Nullable SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return SoundEvents.WARDEN_HURT;
+        SoundEvent[] sounds = new SoundEvent[]{
+                ModSounds.MUCELLITH_HURT_1.get(),
+                ModSounds.MUCELLITH_HURT_2.get(),
+                ModSounds.MUCELLITH_HURT_3.get(),
+        };
+        return sounds[this.random.nextInt(sounds.length)];
     }
 
     @Override
     protected @Nullable SoundEvent getDeathSound() {
-        return SoundEvents.WARDEN_DEATH;
+        SoundEvent[] sounds = new SoundEvent[]{
+                ModSounds.MUCELLITH_DEATH.get()
+        };
+        return sounds[this.random.nextInt(sounds.length)];
     }
 }
