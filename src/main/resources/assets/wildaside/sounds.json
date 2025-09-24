@@ -1,6 +1,6 @@
 {
   "music.vibrion_hive": {
-    "subtitles": "sounds.wildaside.music.vibrion_hive",
+    "subtitle": "sounds.wildaside.music.vibrion_hive",
     "category": "music",
     "sounds": [
       {
@@ -10,7 +10,7 @@
     ]
   },
   "entity.mucellith.ambient": {
-    "subtitles": "sounds.wildaside.entity.mucellith_ambient",
+    "subtitle": "sounds.wildaside.entity.mucellith.ambient",
     "category": "hostile",
     "sounds": [
       "wildaside:entity/mucellith/mucellith_ambient1",
@@ -20,7 +20,7 @@
     ]
   },
   "entity.mucellith.hurt": {
-    "subtitles": "sounds.wildaside.entity.mucellith.hurt",
+    "subtitle": "sounds.wildaside.entity.mucellith.hurt",
     "category": "hostile",
     "sounds": [
       "wildaside:entity/mucellith/mucellith_hurt1",
@@ -29,7 +29,7 @@
     ]
   },
   "entity.mucellith.death": {
-    "subtitles": "sounds.wildaside.entity.mucellith.death",
+    "subtitle": "sounds.wildaside.entity.mucellith.death",
     "category": "hostile",
     "sounds": [
       "wildaside:entity/mucellith/mucellith_death"

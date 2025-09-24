@@ -218,7 +218,7 @@
   "advancements.fertile_forest.descr": "Detonate a Fertiliser Bomb in a Hickory Forest",
 
   "sounds.wildaside.music.vibrion_hive": "Vibrion Hive - Erdei Farkas Gyula",
-  "sounds.wildaside.entity.mucellith_ambient": "Mucellith growls",
-  "sounds.wildaside.entity.mucellith_hurt": "Mucellith hurts",
-  "sounds.wildaside.entity.mucellith_death": "Mucellith dies"
+  "sounds.wildaside.entity.mucellith.ambient": "Mucellith growls",
+  "sounds.wildaside.entity.mucellith.hurt": "Mucellith hurts",
+  "sounds.wildaside.entity.mucellith.death": "Mucellith dies"
 }
