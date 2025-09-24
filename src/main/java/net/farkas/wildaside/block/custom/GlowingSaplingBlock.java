@@ -3,7 +3,6 @@ package net.farkas.wildaside.block.custom;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.util.GlowingHickoryLightUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -23,8 +22,6 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.ForgeRegistries;
-import org.joml.Math;
 
 public class GlowingSaplingBlock extends SaplingBlock {
     public static final IntegerProperty STAGE = BlockStateProperties.STAGE;

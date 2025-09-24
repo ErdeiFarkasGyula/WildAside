@@ -6,7 +6,6 @@ import net.farkas.wildaside.util.GlowingHickoryLightUtil;
 import net.farkas.wildaside.util.HickoryColour;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -34,8 +33,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.ForgeRegistries;
-import org.joml.Math;
 
 import java.util.Collections;
 import java.util.List;

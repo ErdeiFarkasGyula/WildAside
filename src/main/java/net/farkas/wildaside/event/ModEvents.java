@@ -11,8 +11,6 @@ import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.util.AdvancementHandler;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.farkas.wildaside.util.HickoryColour;
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;

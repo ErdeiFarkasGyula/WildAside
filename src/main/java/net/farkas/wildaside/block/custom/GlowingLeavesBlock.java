@@ -25,7 +25,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import org.joml.Math;
 
 public class GlowingLeavesBlock extends LeavesBlock {
     private static final int MIN_LIGHT = 0;
