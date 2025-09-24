@@ -35,7 +35,7 @@ public class ModEntities {
 
     public static final RegistryObject<EntityType<MucellithEntity>> MUCELLITH =
             ENTITIES.register("mucellith", () -> EntityType.Builder.<MucellithEntity>of(MucellithEntity::new, MobCategory.MONSTER)
-                    .sized(0.75f, 2.2f).build("mucellith"));
+                    .sized(0.75f, 2f).build("mucellith"));
     public static final RegistryObject<EntityType<ContaminatedCreeperEntity>> CONTAMINATED_CREEPER =
             ENTITIES.register("contaminated_creeper", () -> EntityType.Builder.<ContaminatedCreeperEntity>of(ContaminatedCreeperEntity::new, MobCategory.MONSTER)
                     .sized(0.6F, 1.7F).build("contaminated_creeper"));
