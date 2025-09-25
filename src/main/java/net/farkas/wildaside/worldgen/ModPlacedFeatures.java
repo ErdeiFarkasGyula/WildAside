@@ -100,9 +100,9 @@ public class ModPlacedFeatures {
         HeightRangePlacement VibrionHivePlacement = HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80));
 
         register(context, REDLIKE_SUBSTILIUM_MUSHROOM, configuredFeatures.getOrThrow(ModConfiguredFeatures.REDLIKE_SUBSTILIUM_MUSHROOM),
-                List.of(PlacementUtils.countExtra(128, 0.5f, 32), InSquarePlacement.spread(), VibrionHivePlacement, BiomeFilter.biome()));
+                List.of(PlacementUtils.countExtra(200, 0.5f, 56), InSquarePlacement.spread(), VibrionHivePlacement, BiomeFilter.biome()));
         register(context, BROWNLIKE_SUBSTILIUM_MUSHROOM, configuredFeatures.getOrThrow(ModConfiguredFeatures.BROWNLIKE_SUBSTILIUM_MUSHROOM),
-                List.of(PlacementUtils.countExtra(128, 0.5f, 32), InSquarePlacement.spread(), VibrionHivePlacement, BiomeFilter.biome()));
+                List.of(PlacementUtils.countExtra(200, 0.5f, 56), InSquarePlacement.spread(), VibrionHivePlacement, BiomeFilter.biome()));
 
         register(context, VIBRION_GROWTH, configuredFeatures.getOrThrow(ModConfiguredFeatures.VIBRION_GROWTH),
                 List.of(PlacementUtils.countExtra(128, 1f, 32), InSquarePlacement.spread(), VibrionHivePlacement, BiomeFilter.biome()));
