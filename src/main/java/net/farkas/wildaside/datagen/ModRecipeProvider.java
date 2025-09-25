@@ -59,9 +59,9 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.BIOENGINEERING_WORKSTATION.get())
                 .pattern("ECE")
-                .pattern("VQV")
-                .pattern("QQQ")
-                .define('Q', Blocks.QUARTZ_BLOCK)
+                .pattern("VDV")
+                .pattern("DDD")
+                .define('D', Blocks.POLISHED_DIORITE)
                 .define('C', Blocks.CRAFTING_TABLE)
                 .define('V', ModBlocks.VIBRION_BLOCK.get())
                 .define('E', ModItems.ENTORIUM.get())
