@@ -222,7 +222,7 @@ public class ModBlocks {
             () ->  new ButtonBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_CYAN)
                     .sound(SoundType.DEEPSLATE)
-                    .strength(1,  12), BlockSetType.STONE, 30, true));
+                    .strength(1,  12), BlockSetType.STONE, 20, true));
 
     public static final RegistryObject<Block> SUBSTILIUM_TILE_PRESSURE_PLATE = registerBlock("substilium_tile_pressure_plate",
             () ->  new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING,
@@ -260,7 +260,7 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> SUBSTILIUM_BUTTON = registerBlock("substilium_button",
             () ->  new ButtonBlock(BlockBehaviour.Properties.copy(ModBlocks.SUBSTILIUM_PLANKS.get())
-                    .strength(1, 1), BlockSetType.OAK, 5, true));
+                    .strength(1, 1), BlockSetType.OAK, 30, true));
 
     public static final RegistryObject<Block> SUBSTILIUM_PRESSURE_PLATE = registerBlock("substilium_pressure_plate",
             () ->  new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING,
@@ -324,7 +324,8 @@ public class ModBlocks {
             () ->  new SlabBlock(BlockBehaviour.Properties.copy(ModBlocks.HICKORY_PLANKS.get())));
 
     public static final RegistryObject<Block> HICKORY_BUTTON = registerBlock("hickory_button",
-            () ->  new ButtonBlock(BlockBehaviour.Properties.copy(ModBlocks.HICKORY_PLANKS.get()).strength(1, 1), BlockSetType.OAK, 5, true));
+            () ->  new ButtonBlock(BlockBehaviour.Properties.copy(ModBlocks.HICKORY_PLANKS.get())
+                    .strength(1, 1), BlockSetType.OAK, 30, true));
 
     public static final RegistryObject<Block> HICKORY_PRESSURE_PLATE = registerBlock("hickory_pressure_plate",
             () ->  new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING,
