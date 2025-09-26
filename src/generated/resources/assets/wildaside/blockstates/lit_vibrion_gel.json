@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "wildaside:block/vibrion_gel"
+      "model": "wildaside:block/lit_vibrion_gel"
     }
   }
 }

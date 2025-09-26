@@ -66,7 +66,7 @@ public class ModBlocks {
                     .noOcclusion()));
 
     public static final RegistryObject<Block> LIT_VIBRION_GEL = registerBlock("lit_vibrion_gel",
-            () ->  new VibrionGel(BlockBehaviour.Properties.copy(ModBlocks.VIBRION_GEL.get()).lightLevel(s -> 5)));
+            () ->  new VibrionGel(BlockBehaviour.Properties.copy(ModBlocks.VIBRION_GEL.get()).lightLevel(s -> 9)));
 
     public static final RegistryObject<Block> VIBRION_GLASS = registerBlock("vibrion_glass",
             () ->  new VibrionGlass(BlockBehaviour.Properties.of()
@@ -78,13 +78,13 @@ public class ModBlocks {
                     .instrument(NoteBlockInstrument.HAT)));
 
     public static final RegistryObject<Block> LIT_VIBRION_GLASS = registerBlock("lit_vibrion_glass",
-            () ->  new VibrionGlass(BlockBehaviour.Properties.copy(ModBlocks.VIBRION_GLASS.get()).lightLevel(s -> 5)));
+            () ->  new VibrionGlass(BlockBehaviour.Properties.copy(ModBlocks.VIBRION_GLASS.get()).lightLevel(s -> 7)));
 
     public static final RegistryObject<Block> VIBRION_GLASS_PANE = registerBlock("vibrion_glass_pane",
             () ->  new IronBarsBlock(BlockBehaviour.Properties.copy(ModBlocks.VIBRION_GLASS.get())));
 
     public static final RegistryObject<Block> LIT_VIBRION_GLASS_PANE = registerBlock("lit_vibrion_glass_pane",
-            () ->  new IronBarsBlock(BlockBehaviour.Properties.copy(ModBlocks.VIBRION_GLASS_PANE.get()).lightLevel(s -> 5)));
+            () ->  new IronBarsBlock(BlockBehaviour.Properties.copy(ModBlocks.VIBRION_GLASS_PANE.get()).lightLevel(s -> 7)));
 
     public static final RegistryObject<Block> VIBRION_GROWTH = registerBlock("vibrion_growth",
             () ->  new FlowerBlock(() -> MobEffects.POISON, 5, BlockBehaviour.Properties.of()

@@ -31,7 +31,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         blockWithItem(ModBlocks.VIBRION_BLOCK);
         blockWithItem(ModBlocks.COMPRESSED_VIBRION_BLOCK);
         translucentBlockWithItem(ModBlocks.VIBRION_GEL);
-        simpleBlockWithItem(ModBlocks.LIT_VIBRION_GEL.get(), translucentAll(ModBlocks.VIBRION_GEL.get()));
+        translucentBlockWithItem(ModBlocks.LIT_VIBRION_GEL);
 
         translucentBlockWithItem(ModBlocks.VIBRION_GLASS);
         simpleBlockWithItem(ModBlocks.LIT_VIBRION_GLASS.get(), translucentAll(ModBlocks.VIBRION_GLASS.get()));

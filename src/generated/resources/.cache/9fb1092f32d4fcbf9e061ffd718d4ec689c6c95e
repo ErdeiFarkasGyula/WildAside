@@ -1,4 +1,4 @@
-// 1.20.1	2025-06-22T20:14:05.9544706	Recipes
+// 1.20.1	2025-09-26T19:40:47.9709493	Recipes
 5b465bf35c1e00856e7257bae2fff66fe82f57d2 data/minecraft/advancements/recipes/misc/pink_dye.json
 014dd0b0a092b0f828ef3ffa797760789fac71c3 data/minecraft/advancements/recipes/misc/white_dye.json
 bbb8f19ec76f96d30bceac1d6e41467033513f70 data/minecraft/recipes/pink_dye.json
@@ -99,7 +99,7 @@ b9df1c03771848da7a3f0327476ec6a3271562cb data/wildaside/advancements/recipes/red
 ffddc4f5e9d4eff9738353132b3919bcdc9b3ef7 data/wildaside/advancements/recipes/transportation/hickory_chest_boat.json
 6b7fa323b7521bd34298bf7190454cc77b464c7e data/wildaside/advancements/recipes/transportation/substilium_boat.json
 dc7828ae483588e664195ef47bbafa5910145605 data/wildaside/advancements/recipes/transportation/substilium_chest_boat.json
-2593048c82711b0711f66d4269d35e1c8065d950 data/wildaside/recipes/bioengineering_workstation.json
+c8149e027004b351e9505352430d4c0cdc72eaa6 data/wildaside/recipes/bioengineering_workstation.json
 3c2fef5a1c34c07ff1dfe5c4cff2ba8732e921ad data/wildaside/recipes/brown_glowing_hickory_leaves.json
 0245db34839f95d828467f816021c56bbe0210f0 data/wildaside/recipes/brown_hickory_nut_trail_mix.json
 48749778616cfd64e9fe13d5dd8f17f5639bc05c data/wildaside/recipes/chiseled_substilium_soilcut_from_compressed_substilium_soil.json
