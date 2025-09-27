@@ -20,6 +20,12 @@ public class Config {
             .comment("Spawn weight of the Vibrion Hive biome (def: 4)")
             .define("vibrion_hive_weight", 4);
 
+    public static final ForgeConfigSpec.ConfigValue<Integer> HICKORY_COLOUR_NOISE_SEED = COMMON_BUILDER
+            .pop()
+            .push("Seeds")
+            .comment("Seed of the noise used to generate Hickory colour placements (def: 20080424)")
+            .define("hickory_colour_noise_seed", 20080424);
+
 //    public static final ForgeConfigSpec.ConfigValue<Integer> MUCELLITH_SPAWN_WEIGHT = BUILDER
 //            .pop()
 //            .push("Mucellith mob")

@@ -2,6 +2,7 @@ package net.farkas.wildaside.worldgen.modifier;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.farkas.wildaside.config.Config;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.placement.PlacementContext;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class LargePatchNoiseModifier extends PlacementModifier {
-    private static final PerlinSimplexNoise NOISE = new PerlinSimplexNoise(RandomSource.create(1984), List.of(0));
+    private static final PerlinSimplexNoise NOISE = new PerlinSimplexNoise(RandomSource.create(Config.HICKORY_COLOUR_NOISE_SEED.get()), List.of(0));
 
     private final double scale;
     private final float min;
