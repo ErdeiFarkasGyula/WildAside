@@ -22,9 +22,12 @@ public class Config {
 
     public static final ForgeConfigSpec.ConfigValue<Integer> HICKORY_COLOUR_NOISE_SEED = COMMON_BUILDER
             .pop()
-            .push("Seeds")
+            .push("Hickory colour noise")
             .comment("Seed of the noise used to generate Hickory colour placements (def: 20080424)")
             .define("hickory_colour_noise_seed", 20080424);
+    public static final ForgeConfigSpec.ConfigValue<Double> HICKORY_COLOUR_NOISE_SCALE = COMMON_BUILDER
+            .comment("Scale of the noise used to generate Hickory colour placements (higher -> smaller patches) (def: 0.01)")
+            .define("hickory_colour_noise_scale", 0.010);
 
 //    public static final ForgeConfigSpec.ConfigValue<Integer> MUCELLITH_SPAWN_WEIGHT = BUILDER
 //            .pop()

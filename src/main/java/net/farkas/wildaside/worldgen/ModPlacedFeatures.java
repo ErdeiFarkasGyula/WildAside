@@ -2,6 +2,7 @@ package net.farkas.wildaside.worldgen;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
+import net.farkas.wildaside.config.Config;
 import net.farkas.wildaside.util.HickoryColour;
 import net.farkas.wildaside.worldgen.modifier.LargePatchNoiseModifier;
 import net.minecraft.core.Direction;
@@ -84,7 +85,7 @@ public class ModPlacedFeatures {
 
     public static final ResourceKey<PlacedFeature> PODZOL_VEIN = registerKey("podzol_vein");
 
-    static final double NOISE_SCALE = 0.010;
+
     public static final EnumMap<HickoryColour, Vector2f> HICKORY_NOISES = new EnumMap<>(HickoryColour.class);
     static {
         HICKORY_NOISES.put(HickoryColour.HICKORY, null);
@@ -123,31 +124,31 @@ public class ModPlacedFeatures {
 
     public static void bootstrap(BootstapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
-        HeightRangePlacement VibrionHivePlacement = HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80));
+        HeightRangePlacement vibrionHivePlacement = HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80));
 
         register(context, REDLIKE_SUBSTILIUM_MUSHROOM, configuredFeatures.getOrThrow(ModConfiguredFeatures.REDLIKE_SUBSTILIUM_MUSHROOM),
-                List.of(PlacementUtils.countExtra(200, 0.5f, 56), InSquarePlacement.spread(), VibrionHivePlacement, BiomeFilter.biome()));
+                List.of(PlacementUtils.countExtra(200, 0.5f, 56), InSquarePlacement.spread(), vibrionHivePlacement, BiomeFilter.biome()));
         register(context, BROWNLIKE_SUBSTILIUM_MUSHROOM, configuredFeatures.getOrThrow(ModConfiguredFeatures.BROWNLIKE_SUBSTILIUM_MUSHROOM),
-                List.of(PlacementUtils.countExtra(200, 0.5f, 56), InSquarePlacement.spread(), VibrionHivePlacement, BiomeFilter.biome()));
+                List.of(PlacementUtils.countExtra(200, 0.5f, 56), InSquarePlacement.spread(), vibrionHivePlacement, BiomeFilter.biome()));
 
         register(context, VIBRION_GROWTH, configuredFeatures.getOrThrow(ModConfiguredFeatures.VIBRION_GROWTH),
-                List.of(PlacementUtils.countExtra(128, 1f, 32), InSquarePlacement.spread(), VibrionHivePlacement, BiomeFilter.biome()));
+                List.of(PlacementUtils.countExtra(128, 1f, 32), InSquarePlacement.spread(), vibrionHivePlacement, BiomeFilter.biome()));
         register(context, VIBRION_SPOREHOLDER, configuredFeatures.getOrThrow(ModConfiguredFeatures.VIBRION_SPOREHOLDER),
-                List.of(PlacementUtils.countExtra(64, 0.5f, 32), InSquarePlacement.spread(), VibrionHivePlacement, BiomeFilter.biome()));
+                List.of(PlacementUtils.countExtra(64, 0.5f, 32), InSquarePlacement.spread(), vibrionHivePlacement, BiomeFilter.biome()));
         register(context, SUBSTILIUM_SPROUTS, configuredFeatures.getOrThrow(ModConfiguredFeatures.SUBSTILIUM_SPROUTS),
-                List.of(PlacementUtils.countExtra(128, 1f, 32), InSquarePlacement.spread(), VibrionHivePlacement, BiomeFilter.biome()));
+                List.of(PlacementUtils.countExtra(128, 1f, 32), InSquarePlacement.spread(), vibrionHivePlacement, BiomeFilter.biome()));
 
         register(context, HANGING_VIBRION_VINES, configuredFeatures.getOrThrow(ModConfiguredFeatures.HANGING_VIBRION_VINES), List.of(
-                CountPlacement.of(256), InSquarePlacement.spread(), VibrionHivePlacement,
+                CountPlacement.of(256), InSquarePlacement.spread(), vibrionHivePlacement,
                 EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.hasSturdyFace(Direction.DOWN),
                         BlockPredicate.ONLY_IN_AIR_PREDICATE, 32), RandomOffsetPlacement.vertical(ConstantInt.of(-1)), BiomeFilter.biome()));
 
         register(context, HANGING_VIBRION_GEL, configuredFeatures.getOrThrow(ModConfiguredFeatures.HANGING_VIBRION_GEL), List.of(
-                CountPlacement.of(64), InSquarePlacement.spread(), VibrionHivePlacement,
+                CountPlacement.of(64), InSquarePlacement.spread(), vibrionHivePlacement,
                 EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.hasSturdyFace(Direction.DOWN),
                         BlockPredicate.ONLY_IN_AIR_PREDICATE, 32), RandomOffsetPlacement.vertical(ConstantInt.of(-1)), BiomeFilter.biome()));
         register(context, HANGING_LIT_VIBRION_GEL, configuredFeatures.getOrThrow(ModConfiguredFeatures.HANGING_LIT_VIBRION_GEL), List.of(
-                CountPlacement.of(64), InSquarePlacement.spread(), VibrionHivePlacement,
+                CountPlacement.of(64), InSquarePlacement.spread(), vibrionHivePlacement,
                 EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.hasSturdyFace(Direction.DOWN),
                         BlockPredicate.ONLY_IN_AIR_PREDICATE, 32), RandomOffsetPlacement.vertical(ConstantInt.of(-1)), BiomeFilter.biome()));
 
@@ -204,12 +205,13 @@ public class ModPlacedFeatures {
                 VegetationPlacements.treePlacement(PlacementUtils.countExtra(48, 0.5f, 16)));
 
 
+        double noiseScale = Config.HICKORY_COLOUR_NOISE_SCALE.get();
         for (HickoryColour colour : HickoryColour.values()) {
             if (colour != HickoryColour.HICKORY) {
                 Vector2f noise = HICKORY_NOISES.get(colour);
-                registerGlowingHickoryTree(context, configuredFeatures, colour, NOISE_SCALE, noise.x, noise.y);
-                registerGlowingHickorySapling(context, configuredFeatures, colour, NOISE_SCALE, noise.x, noise.y);
-                registerGlowingHickoryBush(context, configuredFeatures, colour, NOISE_SCALE, noise.x, noise.y);
+                registerGlowingHickoryTree(context, configuredFeatures, colour, noiseScale, noise.x, noise.y);
+                registerGlowingHickorySapling(context, configuredFeatures, colour, noiseScale, noise.x, noise.y);
+                registerGlowingHickoryBush(context, configuredFeatures, colour, noiseScale, noise.x, noise.y);
             }
         }
 
