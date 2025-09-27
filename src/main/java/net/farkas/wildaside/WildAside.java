@@ -7,7 +7,6 @@ import net.farkas.wildaside.config.Config;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.enchantment.ModEnchantments;
 import net.farkas.wildaside.entity.ModEntities;
-import net.farkas.wildaside.entity.ModEntitySpawns;
 import net.farkas.wildaside.entity.client.ModBoatRenderer;
 import net.farkas.wildaside.entity.client.vibrion.ContaminatedCreeperRenderer;
 import net.farkas.wildaside.entity.client.vibrion.MucellithRenderer;
@@ -65,9 +64,9 @@ public class WildAside
 
     public WildAside(FMLJavaModLoadingContext context)
     {
-        IEventBus modEventBus = context.getModEventBus();
-
         context.registerConfig(ModConfig.Type.COMMON, Config.COMMON_SPEC);
+
+        IEventBus modEventBus = context.getModEventBus();
 
         ModCreativeModeTabs.register(modEventBus);
         ModSounds.register(modEventBus);
@@ -96,7 +95,6 @@ public class WildAside
         event.enqueueWork(() -> {
             ModTerraBlenderAPI.registerRegions();
             ((FlowerPotBlock)Blocks.FLOWER_POT).addPlant(ModBlocks.VIBRION_GROWTH.getId(), ModBlocks.POTTED_VIBRION_GROWTH);
-            ModEntitySpawns.registerSpawnPlacements();
         });
 
         SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MOD_ID, ModSurfaceRules.makeRules());

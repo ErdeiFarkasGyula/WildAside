@@ -3,6 +3,7 @@ package net.farkas.wildaside.event;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.capability.contamination.IContamination;
 import net.farkas.wildaside.entity.ModEntities;
+import net.farkas.wildaside.entity.ModEntitySpawns;
 import net.farkas.wildaside.entity.custom.hickory.HickoryTreantEntity;
 import net.farkas.wildaside.entity.custom.vibrion.ContaminatedCreeperEntity;
 import net.farkas.wildaside.entity.custom.vibrion.MucellithEntity;
@@ -14,6 +15,7 @@ import net.minecraft.server.packs.repository.PackSource;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
@@ -27,6 +29,11 @@ public class ModEventBusEvent {
         event.put(ModEntities.MUCELLITH.get(), MucellithEntity.createAttributes().build());
         event.put(ModEntities.HICKORY_TREANT.get(), HickoryTreantEntity.createAttributes().build());
         event.put(ModEntities.CONTAMINATED_CREEPER.get(), ContaminatedCreeperEntity.createAttributes().build());
+    }
+
+    @SubscribeEvent
+    public static void onRegisterSpawnPlacements(SpawnPlacementRegisterEvent event) {
+        ModEntitySpawns.registerSpawnPlacements();
     }
 
     @SubscribeEvent

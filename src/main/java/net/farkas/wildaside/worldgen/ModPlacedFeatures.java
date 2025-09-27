@@ -205,13 +205,12 @@ public class ModPlacedFeatures {
                 VegetationPlacements.treePlacement(PlacementUtils.countExtra(48, 0.5f, 16)));
 
 
-        double noiseScale = Config.HICKORY_COLOUR_NOISE_SCALE.get();
         for (HickoryColour colour : HickoryColour.values()) {
             if (colour != HickoryColour.HICKORY) {
                 Vector2f noise = HICKORY_NOISES.get(colour);
-                registerGlowingHickoryTree(context, configuredFeatures, colour, noiseScale, noise.x, noise.y);
-                registerGlowingHickorySapling(context, configuredFeatures, colour, noiseScale, noise.x, noise.y);
-                registerGlowingHickoryBush(context, configuredFeatures, colour, noiseScale, noise.x, noise.y);
+                registerGlowingHickoryTree(context, configuredFeatures, colour, noise.x, noise.y);
+                registerGlowingHickorySapling(context, configuredFeatures, colour, noise.x, noise.y);
+                registerGlowingHickoryBush(context, configuredFeatures, colour, noise.x, noise.y);
             }
         }
 
@@ -222,10 +221,10 @@ public class ModPlacedFeatures {
                 ModOrePlacement.commonOrePlacement(16, HeightRangePlacement.triangle(VerticalAnchor.absolute(50), VerticalAnchor.absolute(100))));
     }
 
-    private static void registerGlowingHickoryTree(BootstapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures, HickoryColour colour, double scale, float minNoise, float maxNoise) {
+    private static void registerGlowingHickoryTree(BootstapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures, HickoryColour colour, float minNoise, float maxNoise) {
         int count = 16;
         List<PlacementModifier> treeMods = VegetationPlacements.treePlacement(PlacementUtils.countExtra(count, 0.25f, 8), ModBlocks.HICKORY_SAPLINGS.get(colour).get());
-        List<PlacementModifier> patchMods = List.of(new LargePatchNoiseModifier(scale, minNoise, maxNoise));
+        List<PlacementModifier> patchMods = List.of(new LargePatchNoiseModifier(minNoise, maxNoise));
 
         List<PlacementModifier> allMods = Stream.concat(treeMods.stream(), patchMods.stream()).toList();
 
@@ -233,21 +232,21 @@ public class ModPlacedFeatures {
     }
 
 
-    private static void registerGlowingHickorySapling(BootstapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures, HickoryColour colour, double scale, float minNoise, float maxNoise) {
+    private static void registerGlowingHickorySapling(BootstapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures, HickoryColour colour, float minNoise, float maxNoise) {
         int chance = 4;
         List<PlacementModifier> saplingMods = List.of(RarityFilter.onAverageOnceEvery(chance), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome());
-        List<PlacementModifier> patchMods = List.of(new LargePatchNoiseModifier(scale, minNoise, maxNoise));
+        List<PlacementModifier> patchMods = List.of(new LargePatchNoiseModifier(minNoise, maxNoise));
 
         List<PlacementModifier> allMods = Stream.concat(saplingMods.stream(), patchMods.stream()).toList();
 
         register(context, HICKORY_SAPLINGS.get(colour), configuredFeatures.getOrThrow(ModConfiguredFeatures.HICKORY_SAPLINGS.get(colour)), allMods);
     }
 
-    private static void registerGlowingHickoryBush(BootstapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures, HickoryColour colour, double scale, float minNoise, float maxNoise) {
+    private static void registerGlowingHickoryBush(BootstapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures, HickoryColour colour, float minNoise, float maxNoise) {
         int value = 8;
 
         List<PlacementModifier> bushMods = VegetationPlacements.treePlacement(PlacementUtils.countExtra(value, 0.5f, 4));
-        List<PlacementModifier> patchMods = List.of(new LargePatchNoiseModifier(scale, minNoise, maxNoise));
+        List<PlacementModifier> patchMods = List.of(new LargePatchNoiseModifier(minNoise, maxNoise));
 
         List<PlacementModifier> allMods = Stream.concat(bushMods.stream(), patchMods.stream()).toList();
 
