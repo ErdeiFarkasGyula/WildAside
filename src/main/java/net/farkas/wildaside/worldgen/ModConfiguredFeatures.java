@@ -39,6 +39,7 @@ public class ModConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> SUBSTILIUM_SPROUTS = registerKey("substilium_sprouts");
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> HANGING_VIBRION_VINES = registerKey("hanging_vibrion_vines");
+
     public static final ResourceKey<ConfiguredFeature<?, ?>> HANGING_VIBRION_GEL = registerKey("hanging_vibrion_gel");
     public static final ResourceKey<ConfiguredFeature<?, ?>> HANGING_LIT_VIBRION_GEL = registerKey("hanging_lit_vibrion_gel");
 
@@ -79,7 +80,11 @@ public class ModConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> GREEN_GLOWING_HICKORY_SAPLING = registerKey("green_glowing_hickory_sapling");
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> HICKORY_BUSH = registerKey("hickory_bush");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> GLOWING_HICKORY_BUSH = registerKey("glowing_hickory_bush");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> RED_GLOWING_HICKORY_BUSH = registerKey("red_glowing_hickory_bush");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> BROWN_GLOWING_HICKORY_BUSH = registerKey("brown_glowing_hickory_bush");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> YELLOW_GLOWING_HICKORY_BUSH = registerKey("yellow_glowing_hickory_bush");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GREEN_GLOWING_HICKORY_BUSH = registerKey("green_glowing_hickory_bush");
+
     public static final ResourceKey<ConfiguredFeature<?, ?>> FALLEN_HICKORY_TREE = registerKey("fallen_hickory_tree");
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> PODZOL_VEIN = registerKey("podzol_vein");
@@ -101,6 +106,15 @@ public class ModConfiguredFeatures {
         HICKORY_SAPLINGS.put(HickoryColour.BROWN_GLOWING, BROWN_GLOWING_HICKORY_SAPLING );
         HICKORY_SAPLINGS.put(HickoryColour.YELLOW_GLOWING, YELLOW_GLOWING_HICKORY_SAPLING);
         HICKORY_SAPLINGS.put(HickoryColour.GREEN_GLOWING, GREEN_GLOWING_HICKORY_SAPLING);
+    }
+
+    public static final EnumMap<HickoryColour, ResourceKey<ConfiguredFeature<?, ?>>> HICKORY_BUSHES = new EnumMap<>(HickoryColour.class);
+    static {
+        HICKORY_BUSHES.put(HickoryColour.HICKORY, HICKORY_BUSH);
+        HICKORY_BUSHES.put(HickoryColour.RED_GLOWING, RED_GLOWING_HICKORY_BUSH);
+        HICKORY_BUSHES.put(HickoryColour.BROWN_GLOWING, BROWN_GLOWING_HICKORY_BUSH);
+        HICKORY_BUSHES.put(HickoryColour.YELLOW_GLOWING, YELLOW_GLOWING_HICKORY_BUSH);
+        HICKORY_BUSHES.put(HickoryColour.GREEN_GLOWING, GREEN_GLOWING_HICKORY_BUSH);
     }
 
     static final BeehiveDecorator glowingBeehive = new BeehiveDecorator(0.015f);
@@ -176,15 +190,10 @@ public class ModConfiguredFeatures {
                         .add(UniformInt.of(0, 2), 3).add(UniformInt.of(0, 6), 7).build()), vines_plant),
                 BlockColumnConfiguration.layer(ConstantInt.of(1), vines)), Direction.DOWN, BlockPredicate.ONLY_IN_AIR_PREDICATE, true));
 
-        register(context, HANGING_VIBRION_GEL, Feature.BLOCK_COLUMN, new BlockColumnConfiguration(List.of(BlockColumnConfiguration.layer(
-                        new WeightedListInt(SimpleWeightedRandomList.<IntProvider>builder().add(UniformInt.of(0, 19), 3)
-                                .add(UniformInt.of(0, 2), 3).add(UniformInt.of(0, 6), 7).build()),
-                BlockStateProvider.simple(ModBlocks.VIBRION_GEL.get()))), Direction.DOWN, BlockPredicate.ONLY_IN_AIR_PREDICATE, true));
-
-        register(context, HANGING_LIT_VIBRION_GEL, Feature.BLOCK_COLUMN, new BlockColumnConfiguration(List.of(BlockColumnConfiguration.layer(
-                new WeightedListInt(SimpleWeightedRandomList.<IntProvider>builder().add(UniformInt.of(0, 19), 3)
-                        .add(UniformInt.of(0, 2), 3).add(UniformInt.of(0, 6), 7).build()),
-                BlockStateProvider.simple(ModBlocks.LIT_VIBRION_GEL.get()))), Direction.DOWN, BlockPredicate.ONLY_IN_AIR_PREDICATE, true));
+        register(context, HANGING_VIBRION_GEL, ModFeatures.HANGING_STRING.get(),
+                new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.VIBRION_GEL.get())));
+        register(context, HANGING_LIT_VIBRION_GEL, ModFeatures.HANGING_STRING.get(),
+                new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.LIT_VIBRION_GEL.get())));
 
         register(context, REDLIKE_SUBSTILIUM_MUSHROOM, ModFeatures.REDLIKE_SUBSTILIUM_MUSHROOM.get(), new HugeMushroomFeatureConfiguration(
                 BlockStateProvider.simple(ModBlocks.ENTORIUM_SHROOM.get()), BlockStateProvider.simple(ModBlocks.SUBSTILIUM_STEM.get()), 2));
@@ -202,17 +211,16 @@ public class ModConfiguredFeatures {
         for (HickoryColour colour : HickoryColour.values()) {
             registerHickoryTree(context, colour);
             registerHickorySapling(context, colour);
+            registerHickoryBush(context, colour);
         }
 
-        register(context, HICKORY_BUSH, ModFeatures.HICKORY_BUSH.get(), new NoneFeatureConfiguration());
-        register(context, GLOWING_HICKORY_BUSH, ModFeatures.GLOWING_HICKORY_BUSH.get(), new NoneFeatureConfiguration());
         register(context, FALLEN_HICKORY_TREE, ModFeatures.FALLEN_HICKORY_TREE.get(), new NoneFeatureConfiguration());
 
         register(context, PODZOL_VEIN, Feature.ORE, new OreConfiguration(podzol_vein, 32));
     }
 
     private static void registerHickoryTree(BootstapContext<ConfiguredFeature<?, ?>> context, HickoryColour colour) {
-        register(context, HICKORY_TREES.get(colour),Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
+        register(context, HICKORY_TREES.get(colour), Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.HICKORY_LOG.get()),
                 new StraightTrunkPlacer(18, 0, 6),
                 BlockStateProvider.simple(ModBlocks.HICKORY_LEAVES_BLOCKS.get(colour).get()),
@@ -227,6 +235,11 @@ public class ModConfiguredFeatures {
         register(context, HICKORY_SAPLINGS.get(colour), Feature.FLOWER,
                 new RandomPatchConfiguration(count, 16, 2, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
                         new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.HICKORY_SAPLINGS.get(colour).get())))));
+    }
+
+    private static void registerHickoryBush(BootstapContext<ConfiguredFeature<?, ?>> context, HickoryColour colour) {
+        register(context, HICKORY_BUSHES.get(colour), ModFeatures.HICKORY_BUSH.get(),
+                new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.HICKORY_LEAVES_BLOCKS.get(colour).get())));
     }
 
     public static ResourceKey<ConfiguredFeature<?, ?>> registerKey(String name) {

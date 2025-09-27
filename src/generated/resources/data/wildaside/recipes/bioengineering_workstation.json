@@ -5,11 +5,11 @@
     "C": {
       "item": "minecraft:crafting_table"
     },
-    "D": {
-      "item": "minecraft:polished_diorite"
-    },
     "E": {
       "item": "wildaside:entorium"
+    },
+    "Q": {
+      "item": "minecraft:quartz_block"
     },
     "V": {
       "item": "wildaside:vibrion_block"
@@ -17,8 +17,7 @@
   },
   "pattern": [
     "ECE",
-    "VDV",
-    "DDD"
+    "VQV"
   ],
   "result": {
     "item": "wildaside:bioengineering_workstation"

@@ -11,6 +11,7 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 public class MucellithAttackGoal extends Goal {
+    private static final int WINDUP_DURATION = 7;
     private final Mob mob;
     private final MucellithEntity entity;
     @Nullable
@@ -18,6 +19,7 @@ public class MucellithAttackGoal extends Goal {
     private int attackTime = 60;
     private final int attackTimeMax;
     private final float attackRadius;
+    private int windupTicks;
 
     public MucellithAttackGoal(MucellithEntity entity, int pAttackInterval, float pAttackRadius) {
         this.entity = entity;
@@ -73,28 +75,35 @@ public class MucellithAttackGoal extends Goal {
         shoot();
     }
 
-    private void shoot() {
-        double d0 = this.mob.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
-        boolean flag = this.mob.getSensing().hasLineOfSight(this.target);
-
+    public void shoot() {
+        --this.attackTime;
         this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
 
-        --this.attackTime;
-
         if (attackTime <= 0) {
-            if (!flag) {
-                return;
-            }
+            if (!mob.getSensing().hasLineOfSight(target)) return;
 
-            float f = (float) Math.sqrt(d0) / this.attackRadius;
-            float f1 = Mth.clamp(f, 0.1F, 1.0F);
-            this.entity.performRangedAttack(this.target, f1);
+            entity.setAttacking(true);
+            entity.attackAnimation.start(entity.tickCount);
+            entity.attackAnimationTimeout = entity.attackAnimationMax;
+
             this.attackTime = attackTimeMax;
-        } else
-            if (attackTime == 7) {
-                entity.setAttacking(true);
-                entity.attackAnimation.start(entity.tickCount);
-                entity.attackAnimationTimeout = entity.attackAnimationMax;
+            this.windupTicks = WINDUP_DURATION;
+        }
+
+        if (windupTicks > 0) {
+            --windupTicks;
+            if (windupTicks == 0) {
+                float dist = (float) Math.sqrt(mob.distanceToSqr(target)) / this.attackRadius;
+                float power = Mth.clamp(dist, 0.1F, 1.0F);
+                this.entity.performRangedAttack(this.target, power);
             }
+        }
+
+        if (entity.isAttacking()) {
+            if (--entity.attackAnimationTimeout <= 0) {
+                entity.attackAnimation.stop();
+                entity.setAttacking(false);
+            }
+        }
     }
 }

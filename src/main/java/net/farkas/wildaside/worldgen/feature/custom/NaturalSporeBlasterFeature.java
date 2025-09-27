@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NaturalSporeBlasterFeature extends ReplaceBlockFeature {
-
     public NaturalSporeBlasterFeature(Codec<ReplaceBlockConfiguration> p_66651_) {
         super(p_66651_);
     }

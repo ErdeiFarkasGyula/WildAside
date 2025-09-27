@@ -1,4 +1,16 @@
 {
   "type": "wildaside:hickory_bush",
-  "config": {}
+  "config": {
+    "to_place": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "wildaside:hickory_leaves",
+        "Properties": {
+          "distance": "7",
+          "persistent": "false",
+          "waterlogged": "false"
+        }
+      }
+    }
+  }
 }

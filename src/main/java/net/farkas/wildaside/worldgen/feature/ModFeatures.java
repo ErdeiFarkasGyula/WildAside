@@ -6,6 +6,7 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.HugeMushroomFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.ReplaceBlockConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -24,10 +25,11 @@ public class ModFeatures {
     public static final RegistryObject<BrownlikeSubstiliumMushroomFeature> BROWNLIKE_SUBSTILIUM_MUSHROOM = FEATURES.register("brownlike_substilium_mushroom",
             () -> new BrownlikeSubstiliumMushroomFeature(HugeMushroomFeatureConfiguration.CODEC));
 
+    public static final RegistryObject<HangingStringFeature> HANGING_STRING = FEATURES.register("hanging_string",
+            () -> new HangingStringFeature(SimpleBlockConfiguration.CODEC));
+
     public static final RegistryObject<HickoryBushFeature> HICKORY_BUSH = FEATURES.register("hickory_bush",
-            () -> new HickoryBushFeature(NoneFeatureConfiguration.CODEC));
-    public static final RegistryObject<GlowingHickoryBushFeature> GLOWING_HICKORY_BUSH = FEATURES.register("glowing_hickory_bush",
-            () -> new GlowingHickoryBushFeature(NoneFeatureConfiguration.CODEC));
+            () -> new HickoryBushFeature(SimpleBlockConfiguration.CODEC));
     public static final RegistryObject<FallenHickoryTreeFeature> FALLEN_HICKORY_TREE = FEATURES.register("fallen_hickory_tree",
             () -> new FallenHickoryTreeFeature(NoneFeatureConfiguration.CODEC));
 

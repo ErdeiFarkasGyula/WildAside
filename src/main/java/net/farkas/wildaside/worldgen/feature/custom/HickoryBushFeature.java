@@ -2,19 +2,20 @@ package net.farkas.wildaside.worldgen.feature.custom;
 
 import com.mojang.serialization.Codec;
 import net.farkas.wildaside.block.ModBlocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
 
-public class HickoryBushFeature extends Feature<NoneFeatureConfiguration> {
-    public HickoryBushFeature(Codec<NoneFeatureConfiguration> pCodec) {
+public class HickoryBushFeature extends Feature<SimpleBlockConfiguration> {
+    public HickoryBushFeature(Codec<SimpleBlockConfiguration> pCodec) {
         super(pCodec);
     }
 
     @Override
-    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> pContext) {
-        var level = pContext.level();
-        var pos = pContext.origin();
+    public boolean place(FeaturePlaceContext<SimpleBlockConfiguration> context) {
+        var level = context.level();
+        var pos = context.origin();
 
         for (int x = -1; x <= 1; x++) {
             for (int z = -1; z <= 1; z++) {
@@ -24,11 +25,11 @@ public class HickoryBushFeature extends Feature<NoneFeatureConfiguration> {
             }
         }
 
-        var leaves = ModBlocks.HICKORY_LEAVES.get().defaultBlockState();
+        BlockState leaves = context.config().toPlace().getState(context.random(), pos);
 
         level.setBlock(pos, ModBlocks.HICKORY_LOG.get().defaultBlockState(), 3);
 
-        var random = pContext.random();
+        var random = context.random();
 
         for (int x = -1; x <= 1; x++) {
             for (int z = -1; z <= 1; z++) {
