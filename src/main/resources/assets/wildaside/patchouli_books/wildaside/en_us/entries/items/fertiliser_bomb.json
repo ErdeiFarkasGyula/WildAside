@@ -1,0 +1,16 @@
+{
+  "name": "Fertiliser Bomb",
+  "icon": "wildaside:fertiliser_bomb",
+  "category": "wildaside:items",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "wildaside:fertiliser_bomb"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Acts a throwable bonemeal. It's radius is controlled by its charge."
+    }
+  ]
+}

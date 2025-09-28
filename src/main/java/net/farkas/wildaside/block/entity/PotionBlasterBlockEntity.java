@@ -281,18 +281,9 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
     }
 
     public void consumePotionBottle() {
-        if (lastUsedSlot >= 0 && lastUsedSlot < 9) {
-            ItemStack stack = itemHandler.getStackInSlot(lastUsedSlot);
-            if (!stack.isEmpty()) {
-                itemHandler.setStackInSlot(lastUsedSlot, stack);
-            }
-        }
-
         activePotion = ItemStack.EMPTY;
         potionTicksLeft = 0;
-
         lastUsedSlot = -1;
-
         setChanged();
     }
 
@@ -315,7 +306,11 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
         int slot = validSlots.get(level.random.nextInt(validSlots.size()));
         ItemStack potionStack = itemHandler.getStackInSlot(slot);
 
-        itemHandler.insertItem(OUTPUT_1, new ItemStack(Items.GLASS_BOTTLE), false);
+        ItemStack bottle = new ItemStack(Items.GLASS_BOTTLE);
+        ItemStack leftover = itemHandler.insertItem(OUTPUT_1, bottle, false);
+        if (!leftover.isEmpty()) {
+            return;
+        }
 
         activePotion = potionStack.copy();
         setChanged();
@@ -326,15 +321,12 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
         } else {
             maxPotionTicks = effects.stream().mapToInt(MobEffectInstance::getDuration).max().orElse(200);
         }
-        setChanged();
-
         potionTicksLeft = maxPotionTicks;
 
         potionStack.shrink(1);
         itemHandler.setStackInSlot(slot, potionStack);
 
         lastUsedSlot = slot;
-
     }
 
     @Override

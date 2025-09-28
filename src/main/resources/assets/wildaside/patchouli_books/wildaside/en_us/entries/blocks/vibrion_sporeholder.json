@@ -1,0 +1,15 @@
+{
+  "name": "Vibrion Sporeholder",
+  "icon": "wildaside:vibrion_sporeholder",
+  "category": "wildaside:blocks",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "wildaside:vibrion_sporeholder"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Part of the natural vegetation of the Vibrion Hive. Contaminates anyone who walks through it. Leaves a momentary contaminating spore cloud when mined."
+    }
+  ]
+}

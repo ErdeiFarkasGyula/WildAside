@@ -1,0 +1,15 @@
+{
+  "name": "Potion Blaster",
+  "icon": "wildaside:potion_blaster",
+  "category": "wildaside:blocks",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "wildaside:potion_blaster"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Shoots out a beam of dust, applying the currently chosen potion effect. The length of the beam is based on the redstone signal strength the block receives.$(br2)The current potion effect can be skipped by powering it from two sides."
+    }
+  ]
+}

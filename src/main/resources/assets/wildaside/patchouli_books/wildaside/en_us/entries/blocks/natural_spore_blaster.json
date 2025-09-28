@@ -1,0 +1,15 @@
+{
+  "name": "Natural Potion Blaster",
+  "icon": "wildaside:natural_spore_blaster",
+  "category": "wildaside:blocks",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "wildaside:natural_spore_blaster"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Naturally generates in Vibrion Hives. It shoots out two beams of contaminating spores in a straight line with random length."
+    }
+  ]
+}

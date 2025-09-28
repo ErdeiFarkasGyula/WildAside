@@ -1,0 +1,15 @@
+{
+  "name": "Bioengineering Workstation",
+  "icon": "wildaside:bioengineering_workstation",
+  "category": "wildaside:blocks",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "wildaside:bioengineering_workstation"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Used to craft items connected to Vibrion and Entorium."
+    }
+  ]
+}

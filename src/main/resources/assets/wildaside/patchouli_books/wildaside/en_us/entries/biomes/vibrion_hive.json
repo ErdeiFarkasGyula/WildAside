@@ -1,0 +1,12 @@
+{
+  "name": "Vibrion Hive",
+  "icon": "wildaside:substilium_soil",
+  "category": "wildaside:biomes",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A bacteria infected cave.$(br2)Not a threat until you make a mistake."
+    }
+  ]
+}

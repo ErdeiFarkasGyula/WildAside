@@ -76,6 +76,9 @@ dependencies {
 
     runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}"))
 
+    compileOnly fg.deobf("vazkii.patchouli:Patchouli:${minecraft_version}-84.1-FORGE")
+    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${minecraft_version}-84.1-FORGE")
+
     implementation fg.deobf("com.github.glitchfiend:TerraBlender-forge:${minecraft_version}-${terrablender_version}")
 }
 

@@ -1,0 +1,17 @@
+{
+  "name": "Mucellith",
+  "icon": "wildaside:mucellith_jaw",
+  "category": "wildaside:entities",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "wildaside:mucellith",
+      "name": "Mucellith",
+      "scale": 1
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Found in the Vibrion Hive, this bacteria monster shoots Spore Bombs towards those who are Contaminated.$(br2)When falling below a certain health threshold for the first time, it stops attacking, becomes extra resistant and starts regenerating health, afterwards which it resumes combat."
+    }
+  ]
+}

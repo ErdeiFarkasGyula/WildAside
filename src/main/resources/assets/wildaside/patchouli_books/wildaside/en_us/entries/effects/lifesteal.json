@@ -1,0 +1,11 @@
+{
+  "name": "Lifesteal",
+  "icon": "wildaside:textures/mob_effect/lifesteal.png",
+  "category": "wildaside:effects",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Heals your for a portion of the damage you deal.$(br2)Granted from drinking the potion brewed from a Mucellith's jaw."
+    }
+  ]
+}

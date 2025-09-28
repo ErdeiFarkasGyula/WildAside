@@ -1,0 +1,15 @@
+{
+  "name": "Spore Blaster",
+  "icon": "wildaside:spore_blaster",
+  "category": "wildaside:blocks",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "wildaside:spore_blaster"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Shoots out a beam of contaminating spores, the length of which is based on the redstone signal strength the block receives."
+    }
+  ]
+}

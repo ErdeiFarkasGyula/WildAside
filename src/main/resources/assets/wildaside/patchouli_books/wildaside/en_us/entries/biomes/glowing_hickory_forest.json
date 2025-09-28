@@ -1,0 +1,12 @@
+{
+  "name": "Glowing Hickory Forest",
+  "icon": "wildaside:yellow_glowing_hickory_leaves",
+  "category": "wildaside:biomes",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The cooler hickory forest. The leaves with 4 colours glow during the night."
+    }
+  ]
+}

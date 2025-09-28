@@ -1,0 +1,11 @@
+{
+  "name": "Contamination",
+  "icon": "wildaside:textures/mob_effect/contamination.png",
+  "category": "wildaside:effects",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Lowers the attack damage and armor of the infected.$(br2)Applies poison if has an amplifier of 4 or higher."
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "Spore Bomb",
+  "icon": "wildaside:spore_bomb",
+  "category": "wildaside:items",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "wildaside:spore_bomb"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Contaminates entities in a sphere where thrown. It's radius is controlled by its charge."
+    }
+  ]
+}

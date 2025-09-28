@@ -1,0 +1,12 @@
+{
+  "name": "Hickory Forest",
+  "icon": "wildaside:hickory_log",
+  "category": "wildaside:biomes",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The hickory trees tower before you as their leaves fall graciously."
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Immunity",
+  "icon": "wildaside:textures/mob_effect/immunity.png",
+  "category": "wildaside:effects",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Grants immunity to Contamination up to its own amplifier.$(br2)Granted after surviving a Contamination or consuming an Entorium Pill."
+    }
+  ]
+}

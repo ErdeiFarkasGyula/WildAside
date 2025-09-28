@@ -1,0 +1,15 @@
+{
+  "name": "Substilium Soil",
+  "icon": "wildaside:substilium_soil",
+  "category": "wildaside:blocks",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "wildaside:substilium_soil"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Makes up the majority of the ground in the Vibrion Hive. It and all ore variants are best mined with shovels."
+    }
+  ]
+}
