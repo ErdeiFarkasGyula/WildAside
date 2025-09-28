@@ -13,15 +13,15 @@ public class ModPotions {
     public static final DeferredRegister<Potion> POTIONS =
             DeferredRegister.create(ForgeRegistries.POTIONS, WildAside.MOD_ID);
 
-    public static final RegistryObject<Potion> CONTAMINATION_POTION = POTIONS.register("contamination_potion",
-            () -> new Potion(new MobEffectInstance(ModMobEffects.CONTAMINATION.get(), 400, 0)));
-    public static final RegistryObject<Potion> CONTAMINATION_POTION_2 = POTIONS.register("contamination_potion_2",
-            () -> new Potion(new MobEffectInstance(ModMobEffects.CONTAMINATION.get(), 400, 1)));
-
-    public static final RegistryObject<Potion> IMMUNITY_POTION = POTIONS.register("immunity_potion",
-            () -> new Potion(new MobEffectInstance(ModMobEffects.IMMUNITY.get(), 400, 0)));
-    public static final RegistryObject<Potion> IMMUNITY_POTION_2 = POTIONS.register("immunity_potion_2",
-            () -> new Potion(new MobEffectInstance(ModMobEffects.IMMUNITY.get(), 400, 1)));
+//    public static final RegistryObject<Potion> CONTAMINATION_POTION = POTIONS.register("contamination_potion",
+//            () -> new Potion(new MobEffectInstance(ModMobEffects.CONTAMINATION.get(), 400, 0)));
+//    public static final RegistryObject<Potion> CONTAMINATION_POTION_2 = POTIONS.register("contamination_potion_2",
+//            () -> new Potion(new MobEffectInstance(ModMobEffects.CONTAMINATION.get(), 400, 1)));
+//
+//    public static final RegistryObject<Potion> IMMUNITY_POTION = POTIONS.register("immunity_potion",
+//            () -> new Potion(new MobEffectInstance(ModMobEffects.IMMUNITY.get(), 400, 0)));
+//    public static final RegistryObject<Potion> IMMUNITY_POTION_2 = POTIONS.register("immunity_potion_2",
+//            () -> new Potion(new MobEffectInstance(ModMobEffects.IMMUNITY.get(), 400, 1)));
 
     public static final RegistryObject<Potion> LIFESTEAL_POTION = POTIONS.register("lifesteal_potion",
             () -> new Potion(new MobEffectInstance(ModMobEffects.LIFESTEAL.get(), 1800, 0)));
