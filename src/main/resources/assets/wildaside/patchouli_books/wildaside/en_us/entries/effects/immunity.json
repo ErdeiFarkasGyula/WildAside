@@ -2,6 +2,7 @@
   "name": "Immunity",
   "icon": "wildaside:textures/mob_effect/immunity.png",
   "category": "wildaside:effects",
+  "advancement": "wildaside:immunity",
   "pages": [
     {
       "type": "patchouli:text",

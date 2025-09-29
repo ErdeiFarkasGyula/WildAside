@@ -1,5 +1,6 @@
 {
   "name": "Biomes",
   "description": "Wild Aside's Biomes",
-  "icon": "wildaside:red_glowing_hickory_sapling"
+  "icon": "wildaside:red_glowing_hickory_sapling",
+  "sortnum": 0
 }

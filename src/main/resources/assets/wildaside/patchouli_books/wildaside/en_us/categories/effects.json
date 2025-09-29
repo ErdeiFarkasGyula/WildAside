@@ -1,5 +1,6 @@
 {
   "name": "Effects",
   "description": "Wild Aside's Effects",
-  "icon": "wildaside:textures/mob_effect/contamination.png"
+  "icon": "wildaside:textures/mob_effect/contamination.png",
+  "sortnum": 4
 }

@@ -1,0 +1,15 @@
+{
+  "criteria": {
+    "immunity": {
+      "trigger": "minecraft:effects_changed",
+      "conditions": {
+        "player": {
+          "effects": {
+            "wildaside:immunity": {}
+          }
+        }
+      }
+    }
+  },
+  "parent": "wildaside:wild_wilder_wildest"
+}

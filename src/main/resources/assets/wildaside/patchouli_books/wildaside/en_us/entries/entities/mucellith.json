@@ -2,6 +2,7 @@
   "name": "Mucellith",
   "icon": "wildaside:mucellith_jaw",
   "category": "wildaside:entities",
+  "advancement": "wildaside:mucellith",
   "pages": [
     {
       "type": "patchouli:entity",

@@ -2,6 +2,7 @@
   "name": "Vibrion Hive",
   "icon": "wildaside:substilium_soil",
   "category": "wildaside:biomes",
+  "advancement": "wildaside:descent",
   "sortnum": 1,
   "pages": [
     {

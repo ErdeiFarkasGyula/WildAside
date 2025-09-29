@@ -1,0 +1,15 @@
+{
+  "criteria": {
+    "contamination": {
+      "trigger": "minecraft:effects_changed",
+      "conditions": {
+        "player": {
+          "effects": {
+            "wildaside:contamination": {}
+          }
+        }
+      }
+    }
+  },
+  "parent": "wildaside:wild_wilder_wildest"
+}

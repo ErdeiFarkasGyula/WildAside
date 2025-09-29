@@ -2,6 +2,7 @@
   "name": "Lifesteal",
   "icon": "wildaside:textures/mob_effect/lifesteal.png",
   "category": "wildaside:effects",
+  "advancement": "wildaside:lifesteal",
   "pages": [
     {
       "type": "patchouli:text",

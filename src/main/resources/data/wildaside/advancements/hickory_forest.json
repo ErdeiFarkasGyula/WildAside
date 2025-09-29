@@ -1,0 +1,22 @@
+{
+  "criteria": {
+    "hickory_forest_enter": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "biomes": "wildaside:hickory_forest"
+          }
+        }
+      }
+    }
+  },
+  "rewards": {
+    "experience": 3,
+    "recipes": [
+      "wildaside:spotted_wintergreen_to_dye",
+      "wildaside:pinkster_flower_to_dye"
+    ]
+  },
+  "parent": "wildaside:wild_wilder_wildest"
+}

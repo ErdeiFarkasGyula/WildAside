@@ -1,5 +1,6 @@
 {
   "name": "Items",
   "description": "Wild Aside's Items",
-  "icon": "wildaside:spore_bomb"
+  "icon": "wildaside:spore_bomb",
+  "sortnum": 2
 }

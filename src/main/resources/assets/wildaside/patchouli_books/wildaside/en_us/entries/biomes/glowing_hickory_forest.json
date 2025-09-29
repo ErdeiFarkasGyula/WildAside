@@ -2,6 +2,7 @@
   "name": "Glowing Hickory Forest",
   "icon": "wildaside:yellow_glowing_hickory_leaves",
   "category": "wildaside:biomes",
+  "advancement": "wildaside:colourful_innit",
   "sortnum": 3,
   "pages": [
     {

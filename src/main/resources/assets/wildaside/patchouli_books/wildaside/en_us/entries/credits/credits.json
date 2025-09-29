@@ -1,0 +1,15 @@
+{
+  "name": "Credits",
+  "icon": "wildaside:paper",
+  "category": "wildaside:credits",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Created by Erdei Farkas Gyula."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "New textures by CEntertain. Old textures by Farkas & Dylanvhs. Mucellith sounds by MSF. Special thanks to Dylanvhs, Toma400 & Lyof429."
+    }
+  ]
+}

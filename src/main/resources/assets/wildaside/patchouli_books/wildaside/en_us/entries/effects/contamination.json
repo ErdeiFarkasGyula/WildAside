@@ -2,6 +2,7 @@
   "name": "Contamination",
   "icon": "wildaside:textures/mob_effect/contamination.png",
   "category": "wildaside:effects",
+  "advancement": "wildaside:contamination",
   "pages": [
     {
       "type": "patchouli:text",

@@ -1,0 +1,15 @@
+{
+  "criteria": {
+    "lifesteal": {
+      "trigger": "minecraft:effects_changed",
+      "conditions": {
+        "player": {
+          "effects": {
+            "wildaside:lifesteal": {}
+          }
+        }
+      }
+    }
+  },
+  "parent": "wildaside:wild_wilder_wildest"
+}

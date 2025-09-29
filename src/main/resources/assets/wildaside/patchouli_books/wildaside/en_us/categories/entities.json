@@ -1,5 +1,6 @@
 {
   "name": "Entities",
   "description": "Wild Aside's Entities",
-  "icon": "wildaside:mucellith_jaw"
+  "icon": "wildaside:mucellith_jaw",
+  "sortnum": 3
 }
