@@ -35,7 +35,7 @@ public class HangingStringFeature extends Feature<SimpleBlockConfiguration> {
         BlockPos wallPos = findWall(level, origin, 20, 10, random);
         if (wallPos == null) return false;
 
-        placeSaggingLine(level, origin, wallPos, stringBlock.getState(random, context.origin()), (float) random.nextInt(2, 11) / 10);
+        placeSaggingLine(level, origin, wallPos, stringBlock.getState(random, context.origin()), (float) random.nextInt(1, 11) / 10);
 
         return true;
     }
