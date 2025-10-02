@@ -138,3 +138,9 @@ publishing {
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
+
+tasks.jar {
+    archiveBaseName.set("wildaside")
+    archiveVersion.set(mod_version)
+    archiveClassifier.set("forge-${minecraft_version}")
+}
