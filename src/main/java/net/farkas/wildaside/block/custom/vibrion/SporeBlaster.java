@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jetbrains.annotations.Nullable;
 
-public class SporeBlaster extends DirectionalBlock implements EntityBlock{
+public class SporeBlaster extends DirectionalBlock implements EntityBlock {
     public SporeBlaster(Properties properties) {
         super(properties);
         this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH));
