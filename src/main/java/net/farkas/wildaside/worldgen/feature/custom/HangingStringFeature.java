@@ -88,7 +88,7 @@ public class HangingStringFeature extends Feature<SimpleBlockConfiguration> {
             y -= sag;
 
             BlockPos pos = new BlockPos(Mth.floor(x), Mth.floor(y), Mth.floor(z));
-            if (world.isEmptyBlock(pos)) {
+            if (world.isEmptyBlock(pos) || world.getBlockState(pos).canBeReplaced()) {
                 world.setBlock(pos, state, 3);
             }
         }
