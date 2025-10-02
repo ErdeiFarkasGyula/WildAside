@@ -77,4 +77,10 @@ public class Sporeholder extends SaplingBlock {
                     5, 0.2, 0.2, 0.2, 0.01);
         }
     }
+
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        if (random.nextFloat() < 0.5) return;
+        level.addParticle(ModParticles.VIBRION_PARTICLE.get(), pos.getX() + random.nextFloat(), pos.getY() + random.nextFloat() / 5, pos.getZ() + random.nextFloat(), 0, 0, 0);
+    }
 }
