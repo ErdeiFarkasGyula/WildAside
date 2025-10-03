@@ -30,6 +30,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -115,8 +116,7 @@ public class ModEvents {
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         glowUpAdvancement(event);
-        itsShearingTimeAdvancement(event);
-        bacteriaBarrierAdvancement(event);
+        clipContextCheckingTickEvent(event);
     }
 
     private static final ResourceLocation GLOWING_FOREST = new ResourceLocation(WildAside.MOD_ID, "glowing_hickory_forest");
@@ -140,7 +140,7 @@ public class ModEvents {
         }
     }
 
-    private static void itsShearingTimeAdvancement(TickEvent.PlayerTickEvent event) {
+    private static void clipContextCheckingTickEvent(TickEvent.PlayerTickEvent event) {
         if (!event.player.level().isClientSide) {
             ServerPlayer player = (ServerPlayer) event.player;
             ServerLevel level = player.serverLevel();
@@ -152,26 +152,11 @@ public class ModEvents {
                     player);
 
             BlockPos blockPos = level.clip(clipContext).getBlockPos();
+            Block block = level.getBlockState(blockPos).getBlock();
 
-            if (level.getBlockState(blockPos).getBlock() == ModBlocks.OVERGROWN_ENTORIUM_ORE.get()) {
+            if (block.equals(ModBlocks.OVERGROWN_ENTORIUM_ORE.get())) {
                 AdvancementHandler.givePlayerAdvancement(player, "its_shearing_time");
-            }
-        }
-    }
-
-    private static void bacteriaBarrierAdvancement(TickEvent.PlayerTickEvent event) {
-        if (!event.player.level().isClientSide) {
-            ServerPlayer player = (ServerPlayer) event.player;
-            ServerLevel level = player.serverLevel();
-
-            ClipContext clipContext = new ClipContext(player.getEyePosition(1f),
-                    player.getEyePosition(1f).add(player.getViewVector(1f).scale(5)),
-                    ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player);
-
-            BlockPos blockPos = level.clip(clipContext).getBlockPos();
-
-            BlockState blockState = level.getBlockState(blockPos);
-            if (blockState.getBlock() == ModBlocks.SPORE_BLASTER.get() && level.getBestNeighborSignal(blockPos) > 0) {
+            } else if (block.equals(ModBlocks.SPORE_BLASTER.get())) {
                 AdvancementHandler.givePlayerAdvancement(player, "bacteria_barrier");
             }
         }
