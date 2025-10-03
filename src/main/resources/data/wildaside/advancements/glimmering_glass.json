@@ -15,7 +15,7 @@
     "hidden": false
   },
   "criteria": {
-    "player": {
+    "glimmering_glass": {
       "trigger": "minecraft:placed_block",
       "conditions": {
         "location": [

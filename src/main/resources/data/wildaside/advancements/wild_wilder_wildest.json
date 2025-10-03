@@ -16,19 +16,8 @@
     "hidden": false
   },
   "criteria": {
-    "player": {
-      "trigger": "minecraft:location",
-      "conditions": {
-        "player": {
-          "location": {
-            "biomes": [
-              "wildaside:vibrion_hive",
-              "wildaside:hickory_forest",
-              "wildaside:lit_hickory_forest"
-            ]
-          }
-        }
-      }
+    "wild_wilder_wildest": {
+      "trigger": "minecraft:impossible"
     }
   }
 }
