@@ -31,10 +31,10 @@ import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingBreatheEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
@@ -115,77 +115,85 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if (event.player.level().isClientSide) return;
         glowUpAdvancement(event);
         clipContextCheckingTickEvent(event);
     }
 
-    private static final ResourceLocation GLOWING_FOREST = new ResourceLocation(WildAside.MOD_ID, "glowing_hickory_forest");
+    private static final ResourceLocation GLOWING_HICKORY_FOREST = new ResourceLocation(WildAside.MOD_ID, "glowing_hickory_forest");
 
     private static void glowUpAdvancement(TickEvent.PlayerTickEvent event) {
-        if (event.phase == TickEvent.Phase.END && !event.player.level().isClientSide) {
-            ServerPlayer player = (ServerPlayer) event.player;
-            ServerLevel world = player.serverLevel();
+        if (event.phase != TickEvent.Phase.END) return;
+        ServerPlayer player = (ServerPlayer) event.player;
+        ServerLevel world = player.serverLevel();
 
-            long time = world.getDayTime();
+        long time = world.getDayTime();
 
-            if (time >= 14000 && time <= 22000) {
+        if (time >= 14000 && time <= 22000) {
 
-                Holder<Biome> biomeHolder = world.getBiome(player.blockPosition());
-                ResourceKey<Biome> biomeKey = biomeHolder.unwrapKey().orElse(null);
+            Holder<Biome> biomeHolder = world.getBiome(player.blockPosition());
+            ResourceKey<Biome> biomeKey = biomeHolder.unwrapKey().orElse(null);
 
-                if (biomeKey != null && biomeKey.location().equals(GLOWING_FOREST)) {
-                    AdvancementHandler.givePlayerAdvancement(player, "glow_up");
-                }
+            if (biomeKey != null && biomeKey.location().equals(GLOWING_HICKORY_FOREST)) {
+                AdvancementHandler.givePlayerAdvancement(player, "glow_up");
             }
         }
     }
 
     private static void clipContextCheckingTickEvent(TickEvent.PlayerTickEvent event) {
-        if (!event.player.level().isClientSide) {
-            ServerPlayer player = (ServerPlayer) event.player;
-            ServerLevel level = player.serverLevel();
+        ServerPlayer player = (ServerPlayer) event.player;
+        ServerLevel level = player.serverLevel();
 
-            ClipContext clipContext = new ClipContext(player.getEyePosition(1f),
-                    player.getEyePosition(1f).add(player.getViewVector(1f).scale(5)),
-                    ClipContext.Block.OUTLINE,
-                    ClipContext.Fluid.NONE,
-                    player);
+        ClipContext clipContext = new ClipContext(player.getEyePosition(1f),
+                player.getEyePosition(1f).add(player.getViewVector(1f).scale(5)),
+                ClipContext.Block.OUTLINE,
+                ClipContext.Fluid.NONE,
+                player);
 
-            BlockPos blockPos = level.clip(clipContext).getBlockPos();
-            Block block = level.getBlockState(blockPos).getBlock();
+        BlockPos blockPos = level.clip(clipContext).getBlockPos();
+        Block block = level.getBlockState(blockPos).getBlock();
 
-            if (block.equals(ModBlocks.OVERGROWN_ENTORIUM_ORE.get())) {
-                AdvancementHandler.givePlayerAdvancement(player, "its_shearing_time");
-            } else if (block.equals(ModBlocks.SPORE_BLASTER.get())) {
-                AdvancementHandler.givePlayerAdvancement(player, "bacteria_barrier");
-            }
+        if (block.equals(ModBlocks.OVERGROWN_ENTORIUM_ORE.get())) {
+            AdvancementHandler.givePlayerAdvancement(player, "its_shearing_time");
+        } else if (block.equals(ModBlocks.SPORE_BLASTER.get()) && level.getBestNeighborSignal(blockPos) > 0) {
+            AdvancementHandler.givePlayerAdvancement(player, "bacteria_barrier");
         }
     }
 
     @SubscribeEvent
+    public static void onBlockBroken(BlockEvent.BreakEvent event) {
+        if (event.getPlayer().level().isClientSide) return;
+        blasterBustedAdvancement(event);
+
+    }
+
     public static void blasterBustedAdvancement(BlockEvent.BreakEvent event) {
-        if (!event.getPlayer().level().isClientSide) {
-            if (event.getLevel().getBlockState(event.getPos()).getBlock() == ModBlocks.NATURAL_SPORE_BLASTER.get()) {
-                AdvancementHandler.givePlayerAdvancement((ServerPlayer)event.getPlayer(), "blaster_busted");
-            }
+        if (event.getLevel().getBlockState(event.getPos()).getBlock() == ModBlocks.NATURAL_SPORE_BLASTER.get()) {
+            AdvancementHandler.givePlayerAdvancement((ServerPlayer)event.getPlayer(), "blaster_busted");
         }
     }
 
     @SubscribeEvent
+    public static void onMobEffectExpired(MobEffectEvent.Expired event) {
+        if (event.getEntity().level().isClientSide) return;
+        onContaminationEffectExpired(event);
+    }
+
     public static void onContaminationEffectExpired(MobEffectEvent.Expired event) {
         LivingEntity entity = event.getEntity();
-        if (entity instanceof Player) {
-            MobEffectInstance mobEffectInstance = event.getEffectInstance();
-            if (mobEffectInstance != null && mobEffectInstance.getEffect() == ModMobEffects.CONTAMINATION.get()) {
-                entity.addEffect(new MobEffectInstance(ModMobEffects.IMMUNITY.get(), (mobEffectInstance.getAmplifier() + 1 ) * 5 * 20, mobEffectInstance.getAmplifier()));
-            }
+        MobEffectInstance mobEffectInstance = event.getEffectInstance();
+        if (mobEffectInstance != null && mobEffectInstance.getEffect() == ModMobEffects.CONTAMINATION.get()) {
+            entity.addEffect(new MobEffectInstance(ModMobEffects.IMMUNITY.get(), (mobEffectInstance.getAmplifier() + 1 ) * 5 * 20, mobEffectInstance.getAmplifier()));
         }
     }
 
     @SubscribeEvent
-    public static void playerDoesCriticalStrike(CriticalHitEvent event) {
-        if (event.isCanceled()) return;
+    public static void onCriticalHit(CriticalHitEvent event) {
+        if (event.getEntity().level().isClientSide || !event.isVanillaCritical()) return;
+        spreadContaminationOnCriticalHit(event);
+    }
 
+    public static void spreadContaminationOnCriticalHit(CriticalHitEvent event) {
         ModMobEffects.CONTAMINATION.getHolder().ifPresent(contamEffect -> {
             var contamination = contamEffect.get();
             Player attacker = event.getEntity();
@@ -205,9 +213,12 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void livingEntityTick(LivingEvent.LivingTickEvent event) {
-        LivingEntity entity = event.getEntity();
+        if (event.getEntity().level().isClientSide) return;
+        passiveContaminationDoseReduction(event);
+    }
 
-        entity.getCapability(ContaminationCapability.INSTANCE).ifPresent(data -> {
+    public static void passiveContaminationDoseReduction(LivingBreatheEvent.LivingTickEvent event) {
+        event.getEntity().getCapability(ContaminationCapability.INSTANCE).ifPresent(data -> {
             data.addDose(-10);
         });
     }

@@ -364,13 +364,13 @@ public class ModBlocks {
             () ->  new HickoryLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)));
 
     public static final RegistryObject<Block> RED_GLOWING_HICKORY_LEAVES = registerBlock("red_glowing_hickory_leaves",
-            () ->  new GlowingLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES), HickoryColour.RED_GLOWING));
+            () ->  new GlowingHickoryLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES), HickoryColour.RED_GLOWING));
     public static final RegistryObject<Block> BROWN_GLOWING_HICKORY_LEAVES = registerBlock("brown_glowing_hickory_leaves",
-            () ->  new GlowingLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES), HickoryColour.BROWN_GLOWING));
+            () ->  new GlowingHickoryLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES), HickoryColour.BROWN_GLOWING));
     public static final RegistryObject<Block> YELLOW_GLOWING_HICKORY_LEAVES = registerBlock("yellow_glowing_hickory_leaves",
-            () ->  new GlowingLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES), HickoryColour.YELLOW_GLOWING));
+            () ->  new GlowingHickoryLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES), HickoryColour.YELLOW_GLOWING));
     public static final RegistryObject<Block> GREEN_GLOWING_HICKORY_LEAVES = registerBlock("green_glowing_hickory_leaves",
-            () ->  new GlowingLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES), HickoryColour.GREEN_GLOWING));
+            () ->  new GlowingHickoryLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES), HickoryColour.GREEN_GLOWING));
 
     public static final EnumMap<HickoryColour, RegistryObject<Block>> HICKORY_LEAVES_BLOCKS = new EnumMap<>(HickoryColour.class);
     static {
@@ -392,13 +392,13 @@ public class ModBlocks {
     public static final RegistryObject<Block> HICKORY_SAPLING = registerBlock("hickory_sapling",
             () ->  new SaplingBlock(new HickoryTreeGrower(HickoryColour.HICKORY), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING)));
     public static final RegistryObject<Block> RED_GLOWING_HICKORY_SAPLING = registerBlock("red_glowing_hickory_sapling",
-            () ->  new GlowingSaplingBlock(new HickoryTreeGrower(HickoryColour.RED_GLOWING), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING)));
+            () ->  new GlowingHickorySaplingBlock(new HickoryTreeGrower(HickoryColour.RED_GLOWING), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING)));
     public static final RegistryObject<Block> BROWN_GLOWING_HICKORY_SAPLING = registerBlock("brown_glowing_hickory_sapling",
-            () ->  new GlowingSaplingBlock(new HickoryTreeGrower(HickoryColour.BROWN_GLOWING), BlockBehaviour.Properties.copy(ModBlocks.RED_GLOWING_HICKORY_SAPLING.get())));
+            () ->  new GlowingHickorySaplingBlock(new HickoryTreeGrower(HickoryColour.BROWN_GLOWING), BlockBehaviour.Properties.copy(ModBlocks.RED_GLOWING_HICKORY_SAPLING.get())));
     public static final RegistryObject<Block> YELLOW_GLOWING_HICKORY_SAPLING = registerBlock("yellow_glowing_hickory_sapling",
-            () ->  new GlowingSaplingBlock(new HickoryTreeGrower(HickoryColour.YELLOW_GLOWING), BlockBehaviour.Properties.copy(ModBlocks.RED_GLOWING_HICKORY_SAPLING.get())));
+            () ->  new GlowingHickorySaplingBlock(new HickoryTreeGrower(HickoryColour.YELLOW_GLOWING), BlockBehaviour.Properties.copy(ModBlocks.RED_GLOWING_HICKORY_SAPLING.get())));
     public static final RegistryObject<Block> GREEN_GLOWING_HICKORY_SAPLING = registerBlock("green_glowing_hickory_sapling",
-            () ->  new GlowingSaplingBlock(new HickoryTreeGrower(HickoryColour.GREEN_GLOWING), BlockBehaviour.Properties.copy(ModBlocks.RED_GLOWING_HICKORY_SAPLING.get())));
+            () ->  new GlowingHickorySaplingBlock(new HickoryTreeGrower(HickoryColour.GREEN_GLOWING), BlockBehaviour.Properties.copy(ModBlocks.RED_GLOWING_HICKORY_SAPLING.get())));
 
     public static final EnumMap<HickoryColour, RegistryObject<Block>> HICKORY_SAPLINGS = new EnumMap<>(HickoryColour.class);
     static {

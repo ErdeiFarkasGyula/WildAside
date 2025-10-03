@@ -114,7 +114,7 @@ public class FallenHickoryLeavesBlock extends Block {
         }
         else
         if (playerItem.getItem().equals(ModItems.VIBRION.get())) {
-            if (pState.getValue(GlowingLeavesBlock.FIXED_LIGHTING)) return InteractionResult.PASS;
+            if (pState.getValue(GlowingHickoryLeavesBlock.FIXED_LIGHTING)) return InteractionResult.PASS;
             pLevel.setBlock(pPos, pState.setValue(FallenHickoryLeavesBlock.FIXED_LIGHTING, true), 3);
             pLevel.playSound(null, pPos, SoundEvents.HONEYCOMB_WAX_ON, SoundSource.BLOCKS, 1, 1);
 

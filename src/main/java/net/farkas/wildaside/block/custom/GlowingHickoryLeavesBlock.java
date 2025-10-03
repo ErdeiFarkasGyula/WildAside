@@ -26,14 +26,14 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class GlowingLeavesBlock extends LeavesBlock {
+public class GlowingHickoryLeavesBlock extends LeavesBlock {
     private static final int MIN_LIGHT = 0;
     private static final int MAX_LIGHT = 7;
     public static final IntegerProperty LIGHT = IntegerProperty.create("light", MIN_LIGHT, MAX_LIGHT);
     public static final BooleanProperty FIXED_LIGHTING = BooleanProperty.create("fixed_lighting");
     private final HickoryColour colour;
 
-    public GlowingLeavesBlock(Properties pProperties, HickoryColour colour) {
+    public GlowingHickoryLeavesBlock(Properties pProperties, HickoryColour colour) {
         super(pProperties.lightLevel(s -> s.getValue(LIGHT)));
         this.colour = colour;
         this.registerDefaultState(this.stateDefinition.any()
@@ -58,12 +58,12 @@ public class GlowingLeavesBlock extends LeavesBlock {
 
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        if (pLevel.isClientSide || pHand == InteractionHand.OFF_HAND || pState.getValue(GlowingLeavesBlock.FIXED_LIGHTING)) return InteractionResult.PASS;
+        if (pLevel.isClientSide || pHand == InteractionHand.OFF_HAND || pState.getValue(GlowingHickoryLeavesBlock.FIXED_LIGHTING)) return InteractionResult.PASS;
 
         ItemStack playerItem = pPlayer.getItemInHand(pHand);
 
         if (playerItem.getItem().equals(ModItems.VIBRION.get())) {
-            pLevel.setBlock(pPos, pState.setValue(GlowingLeavesBlock.FIXED_LIGHTING, true), 3);
+            pLevel.setBlock(pPos, pState.setValue(GlowingHickoryLeavesBlock.FIXED_LIGHTING, true), 3);
             pLevel.playSound(null, pPos, SoundEvents.HONEYCOMB_WAX_ON, SoundSource.BLOCKS, 1, 1);
             pPlayer.swing(pHand);
 
@@ -80,7 +80,7 @@ public class GlowingLeavesBlock extends LeavesBlock {
     public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
         super.tick(pState, pLevel, pPos, pRandom);
 
-        if (pState.getValue(GlowingLeavesBlock.FIXED_LIGHTING)) return;
+        if (pState.getValue(GlowingHickoryLeavesBlock.FIXED_LIGHTING)) return;
 
         int time = (int)pLevel.dayTime();
         int currentLight = pState.getValue(LIGHT);

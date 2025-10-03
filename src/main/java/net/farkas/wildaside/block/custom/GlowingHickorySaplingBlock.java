@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class GlowingSaplingBlock extends SaplingBlock {
+public class GlowingHickorySaplingBlock extends SaplingBlock {
     public static final IntegerProperty STAGE = BlockStateProperties.STAGE;
     protected static final float AABB_OFFSET = 6.0F;
     protected static final VoxelShape SHAPE = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
@@ -33,7 +33,7 @@ public class GlowingSaplingBlock extends SaplingBlock {
     public static final IntegerProperty LIGHT = IntegerProperty.create("light", MIN_LIGHT, MAX_LIGHT);
     public static final BooleanProperty FIXED_LIGHTING = BooleanProperty.create("fixed_lighting");
 
-    public GlowingSaplingBlock(AbstractTreeGrower pTreeGrower, Properties pProperties) {
+    public GlowingHickorySaplingBlock(AbstractTreeGrower pTreeGrower, Properties pProperties) {
         super(pTreeGrower, pProperties.lightLevel(s -> s.getValue(LIGHT)));
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(STAGE, 0)
@@ -60,8 +60,8 @@ public class GlowingSaplingBlock extends SaplingBlock {
         ItemStack playerItem = pPlayer.getItemInHand(pHand);
 
         if (playerItem.getItem().equals(ModItems.VIBRION.get())) {
-            if (pState.getValue(GlowingLeavesBlock.FIXED_LIGHTING)) return InteractionResult.PASS;
-            pLevel.setBlock(pPos, pState.setValue(GlowingSaplingBlock.FIXED_LIGHTING, true), 3);
+            if (pState.getValue(GlowingHickoryLeavesBlock.FIXED_LIGHTING)) return InteractionResult.PASS;
+            pLevel.setBlock(pPos, pState.setValue(GlowingHickorySaplingBlock.FIXED_LIGHTING, true), 3);
             pLevel.playSound(null, pPos, SoundEvents.HONEYCOMB_WAX_ON, SoundSource.BLOCKS, 1, 1);
             pPlayer.swing(pHand);
 
@@ -78,7 +78,7 @@ public class GlowingSaplingBlock extends SaplingBlock {
     public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
         super.tick(pState, pLevel, pPos, pRandom);
 
-        if (pState.getValue(GlowingSaplingBlock.FIXED_LIGHTING)) return;
+        if (pState.getValue(GlowingHickorySaplingBlock.FIXED_LIGHTING)) return;
 
         int time = (int)pLevel.dayTime();
         int currentLight = pLevel.getBlockState(pPos).getValue(LIGHT);
