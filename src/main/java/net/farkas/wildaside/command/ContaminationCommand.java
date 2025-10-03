@@ -60,7 +60,7 @@ public class ContaminationCommand {
                     affected++;
                 }
                 case "clear" -> {
-                    ContaminationHandler.setDose(living ,0);
+                    ContaminationHandler.setDose(living, 0);
                     source.sendSuccess(() -> Component.literal("Cleared contamination of " + living.getName().getString()), false);
                     affected++;
                 }
@@ -69,6 +69,7 @@ public class ContaminationCommand {
                     return 0;
                 }
             }
+        }
 
         if (affected > 0) {
             int finalAffected = affected;
