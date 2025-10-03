@@ -18,7 +18,7 @@ public class ContaminationCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("contamination")
                 .then(Commands.argument("action", StringArgumentType.word())
-                        .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(new String[]{"add", "set", "clear"}, builder))
+                        .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(new String[]{"add", "get", "set", "clear"}, builder))
                         .then(Commands.argument("targets", EntityArgument.entities())
                                 .then(Commands.argument("amount", IntegerArgumentType.integer(0))
                                         .executes(ctx -> {
@@ -46,14 +46,22 @@ public class ContaminationCommand {
             switch (action.toLowerCase()) {
                 case "add" -> {
                     ContaminationHandler.addDose(living, amount);
+                    source.sendSuccess(() -> Component.literal("Added " + amount + " of contamination to " + living.getName().getString()), false);
+                    affected++;
+                }
+                case "get" -> {
+                    int current = ContaminationHandler.getDose(living);
+                    source.sendSuccess(() -> Component.literal(living.getName().getString() + " has " + current + " contamination"), false);
                     affected++;
                 }
                 case "set" -> {
                     ContaminationHandler.setDose(living, amount);
+                    source.sendSuccess(() -> Component.literal("Set contamination of " + living.getName().getString() + " to " + amount), false);
                     affected++;
                 }
                 case "clear" -> {
                     ContaminationHandler.setDose(living ,0);
+                    source.sendSuccess(() -> Component.literal("Cleared contamination of " + living.getName().getString()), false);
                     affected++;
                 }
                 default -> {
@@ -61,7 +69,6 @@ public class ContaminationCommand {
                     return 0;
                 }
             }
-        }
 
         if (affected > 0) {
             int finalAffected = affected;

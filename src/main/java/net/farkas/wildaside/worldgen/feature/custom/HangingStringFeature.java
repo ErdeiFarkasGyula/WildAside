@@ -1,6 +1,7 @@
 package net.farkas.wildaside.worldgen.feature.custom;
 
 import com.mojang.serialization.Codec;
+import net.farkas.wildaside.block.custom.vibrion.VibrionGel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -89,6 +90,9 @@ public class HangingStringFeature extends Feature<SimpleBlockConfiguration> {
 
             BlockPos pos = new BlockPos(Mth.floor(x), Mth.floor(y), Mth.floor(z));
             if (world.isEmptyBlock(pos) || world.getBlockState(pos).canBeReplaced()) {
+                if (world.isWaterAt(pos)) {
+                    state = state.setValue(VibrionGel.WATERLOGGED, true);
+                }
                 world.setBlock(pos, state, 3);
             }
         }

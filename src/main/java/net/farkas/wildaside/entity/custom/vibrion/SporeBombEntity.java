@@ -48,7 +48,7 @@ public class SporeBombEntity extends ThrowableItemProjectile {
     protected void onHitEntity(EntityHitResult pResult) {
         Level level = this.level();
         if (!level.isClientSide) {
-            pResult.getEntity().hurt(damageSources().thrown(this, this.getOwner()), 3f);
+            pResult.getEntity().hurt(damageSources().thrown(this, this.getOwner()), 2f);
             applySporeCloud((ServerLevel)level, pResult.getEntity().blockPosition(), charge);
             this.discard();
         }
@@ -95,7 +95,7 @@ public class SporeBombEntity extends ThrowableItemProjectile {
 
         for (LivingEntity entity : list) {
             entityCount++;
-            ContaminationHandler.addDose(entity, Math.round((charge + random.nextFloat()) * 1000));
+            ContaminationHandler.addDose(entity, Math.round((1 + (charge / 2)) * 1000));
             level.sendParticles(particle,
                     entity.getX(), entity.getY() + 0.5, entity.getZ(),
                     5, 0.2, 0.2, 0.2, 0.01);

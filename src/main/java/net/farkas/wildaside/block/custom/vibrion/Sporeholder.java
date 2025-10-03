@@ -34,7 +34,7 @@ public class Sporeholder extends SaplingBlock {
     @Override
     public void entityInside(BlockState pState, Level pLevel, BlockPos pPos, Entity pEntity) {
         pLevel.addParticle(ModParticles.VIBRION_PARTICLE.get(), (pPos.getX() + 0.5), pPos.getY(), (pPos.getZ() + 0.5), 0, 0, 0);
-        ContaminationHandler.addDose(pEntity, 20);
+        ContaminationHandler.addDose(pEntity, 40);
         super.entityInside(pState, pLevel, pPos, pEntity);
     }
 

@@ -1,6 +1,7 @@
 package net.farkas.wildaside.util;
 
 import net.farkas.wildaside.capability.contamination.ContaminationCapability;
+import net.farkas.wildaside.capability.contamination.IContamination;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.entity.custom.vibrion.MucellithEntity;
 import net.minecraft.world.effect.MobEffect;
@@ -30,7 +31,17 @@ public class ContaminationHandler {
         });
     }
 
+    public static int getDose(Entity entity) {
+        if (!(entity instanceof LivingEntity livingEntity)) return 0;
+
+        return livingEntity.getCapability(ContaminationCapability.INSTANCE)
+                .map(IContamination::getDose)
+                .orElse(0);
+    }
+
     public static void applyContamination(LivingEntity entity, int dose) {
+        if (dose == 0) return;
+
         if (entity instanceof MucellithEntity) return;
 
         MobEffect immunity = ModMobEffects.IMMUNITY.get();
@@ -52,7 +63,10 @@ public class ContaminationHandler {
 
         entity.addEffect(new MobEffectInstance(contamination, (amplifier + 1) * 10 * 20, amplifier));
         if (amplifier >= 4) {
-            entity.addEffect(new MobEffectInstance(MobEffects.POISON, (amplifier + 1) * 5 * 20, amplifier - 4));
+            entity.addEffect(new MobEffectInstance(MobEffects.POISON, (amplifier + 1) * 3 * 20, amplifier - 3, true, false));
+            if (amplifier >= 5) {
+                entity.addEffect(new MobEffectInstance(MobEffects.DARKNESS, (amplifier + 1) * 5 * 20, amplifier - 4, true, false));
+            }
         }
     }
 }
