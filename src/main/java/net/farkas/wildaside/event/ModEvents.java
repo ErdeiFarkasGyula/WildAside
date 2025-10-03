@@ -156,7 +156,7 @@ public class ModEvents {
         if (block.equals(ModBlocks.OVERGROWN_ENTORIUM_ORE.get())) {
             AdvancementHandler.givePlayerAdvancement(player, "its_shearing_time");
         } else if (block.equals(ModBlocks.SPORE_BLASTER.get()) && level.getBestNeighborSignal(blockPos) > 0) {
-            AdvancementHandler.givePlayerAdvancement(player, "bacteria_barrier");
+            AdvancementHandler.givePlayerAdvancement(player, "bacteria_beacon");
         }
     }
 

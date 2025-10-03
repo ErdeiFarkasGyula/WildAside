@@ -82,9 +82,8 @@ public class VibrionGel extends Block implements SimpleWaterloggedBlock {
     @Override
     public void animateTick(BlockState pState, Level pLevel, BlockPos pPos, RandomSource pRandom) {
         super.animateTick(pState, pLevel, pPos, pRandom);
-        if (pRandom.nextInt(20) == 0) {
-            BlockPos below = pPos.below();
-            if (!pLevel.getBlockState(below).isSolidRender(pLevel, below)) {
+        if (pRandom.nextInt(5) == 0) {
+            if (pLevel.isEmptyBlock(pPos.below())) {
                 double x = pPos.getX() + pRandom.nextDouble();
                 double y = pPos.getY() - 0.05D;
                 double z = pPos.getZ() + pRandom.nextDouble();
