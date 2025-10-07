@@ -11,6 +11,6 @@ import org.jetbrains.annotations.Nullable;
 public class SubstiliumMushroomGrower extends AbstractTreeGrower {
     @Override
     protected @Nullable ResourceKey<ConfiguredFeature<?, ?>> getConfiguredFeature(RandomSource randomSource, boolean b) {
-        return Math.random() > 0.5f ? ModConfiguredFeatures.REDLIKE_SUBSTILIUM_MUSHROOM : ModConfiguredFeatures.BROWNLIKE_SUBSTILIUM_MUSHROOM;
+        return ModConfiguredFeatures.LARGE_SUBSTILIUM_MUSHROOM;
     }
 }

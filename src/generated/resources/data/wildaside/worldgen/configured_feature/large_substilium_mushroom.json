@@ -1,0 +1,87 @@
+{
+  "type": "wildaside:large_substilium_mushroom",
+  "config": {
+    "capBlock": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "wildaside:entorium_shroom",
+        "Properties": {
+          "down": "true",
+          "east": "true",
+          "north": "true",
+          "south": "true",
+          "up": "true",
+          "west": "true"
+        }
+      }
+    },
+    "capShapeWeights": {
+      "DOME": 0.4,
+      "FLAT": 0.3
+    },
+    "decoratorBlocks": [
+      {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "wildaside:vibrion_block"
+        }
+      },
+      {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "wildaside:vibrion_gel",
+          "Properties": {
+            "waterlogged": "false"
+          }
+        }
+      },
+      {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "wildaside:lit_vibrion_gel",
+          "Properties": {
+            "waterlogged": "false"
+          }
+        }
+      }
+    ],
+    "hangingVinesBlock": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "wildaside:hanging_vibrion_vines",
+        "Properties": {
+          "age": "0"
+        }
+      }
+    },
+    "maxBranches": 3,
+    "maxHeight": 18,
+    "minHeight": 6,
+    "stemBlock": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "wildaside:substilium_stem",
+        "Properties": {
+          "axis": "y"
+        }
+      }
+    },
+    "validBaseBlocks": [
+      {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "wildaside:substilium_soil"
+        }
+      }
+    ],
+    "woodBlock": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "wildaside:substilium_wood",
+        "Properties": {
+          "axis": "y"
+        }
+      }
+    }
+  }
+}

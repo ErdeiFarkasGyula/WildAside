@@ -2,7 +2,6 @@ package net.farkas.wildaside.worldgen;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
-import net.farkas.wildaside.config.Config;
 import net.farkas.wildaside.util.HickoryColour;
 import net.farkas.wildaside.worldgen.modifier.LargePatchNoiseModifier;
 import net.minecraft.core.Direction;
@@ -27,8 +26,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class ModPlacedFeatures {
-    public static final ResourceKey<PlacedFeature> REDLIKE_SUBSTILIUM_MUSHROOM = registerKey("redlike_substilium_mushroom");
-    public static final ResourceKey<PlacedFeature> BROWNLIKE_SUBSTILIUM_MUSHROOM = registerKey("brownlike_substilium_mushroom");
+    public static final ResourceKey<PlacedFeature> LARGE_SUBSTILIUM_MUSHROOM = registerKey("large_substilium_mushroom");
 
     public static final ResourceKey<PlacedFeature> VIBRION_GROWTH = registerKey("vibrion_growth");
     public static final ResourceKey<PlacedFeature> VIBRION_SPOREHOLDER = registerKey("vibrion_sporeholder");
@@ -126,9 +124,7 @@ public class ModPlacedFeatures {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
         HeightRangePlacement vibrionHivePlacement = HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80));
 
-        register(context, REDLIKE_SUBSTILIUM_MUSHROOM, configuredFeatures.getOrThrow(ModConfiguredFeatures.REDLIKE_SUBSTILIUM_MUSHROOM),
-                List.of(PlacementUtils.countExtra(200, 0.5f, 56), InSquarePlacement.spread(), vibrionHivePlacement, BiomeFilter.biome()));
-        register(context, BROWNLIKE_SUBSTILIUM_MUSHROOM, configuredFeatures.getOrThrow(ModConfiguredFeatures.BROWNLIKE_SUBSTILIUM_MUSHROOM),
+        register(context, LARGE_SUBSTILIUM_MUSHROOM, configuredFeatures.getOrThrow(ModConfiguredFeatures.LARGE_SUBSTILIUM_MUSHROOM),
                 List.of(PlacementUtils.countExtra(200, 0.5f, 56), InSquarePlacement.spread(), vibrionHivePlacement, BiomeFilter.biome()));
 
         register(context, VIBRION_GROWTH, configuredFeatures.getOrThrow(ModConfiguredFeatures.VIBRION_GROWTH),

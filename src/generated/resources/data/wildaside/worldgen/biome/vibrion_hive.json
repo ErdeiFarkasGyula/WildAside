@@ -81,18 +81,14 @@
     ],
     [
       "wildaside:vibrion_growth",
-      "wildaside:vibrion_sporeholder",
       "wildaside:substilium_sprouts",
+      "wildaside:large_substilium_mushroom",
+      "wildaside:vibrion_sporeholder",
       "wildaside:hanging_vibrion_vines",
       "wildaside:hanging_vibrion_gel",
-      "wildaside:hanging_lit_vibrion_gel",
-      "wildaside:redlike_substilium_mushroom",
-      "wildaside:brownlike_substilium_mushroom"
+      "wildaside:hanging_lit_vibrion_gel"
     ],
-    [
-      "minecraft:spring_water",
-      "minecraft:spring_lava"
-    ],
+    [],
     [
       "minecraft:glow_lichen"
     ]

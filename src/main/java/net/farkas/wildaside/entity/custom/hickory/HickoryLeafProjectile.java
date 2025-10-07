@@ -58,7 +58,7 @@ public class HickoryLeafProjectile extends ThrowableItemProjectile implements It
     protected void onHitEntity(EntityHitResult result) {
         super.onHitEntity(result);
         if (result.getEntity() instanceof LivingEntity target) {
-            target.addEffect(new MobEffectInstance(MobEffects.HARM, 1, 0, true, false));
+            target.addEffect(new MobEffectInstance(MobEffects.HARM, 1, 0, false, false));
             switch (getColour()) {
                 case RED_GLOWING:
                     target.setSecondsOnFire(4 + phase);

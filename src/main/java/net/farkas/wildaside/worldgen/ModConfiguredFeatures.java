@@ -4,7 +4,9 @@ import com.google.common.collect.ImmutableList;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.util.HickoryColour;
+import net.farkas.wildaside.util.LargeMushroomCapShape;
 import net.farkas.wildaside.worldgen.feature.ModFeatures;
+import net.farkas.wildaside.worldgen.feature.configuration.LargeMushroomConfiguration;
 import net.farkas.wildaside.worldgen.feature.decorator.FallenLeavesDecorator;
 import net.farkas.wildaside.worldgen.feature.tree.hickory.HickoryTreeFoliagePlacer;
 import net.minecraft.core.Direction;
@@ -29,10 +31,10 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 public class ModConfiguredFeatures {
-    public static final ResourceKey<ConfiguredFeature<?, ?>> REDLIKE_SUBSTILIUM_MUSHROOM = registerKey("redlike_substilium_mushroom");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> BROWNLIKE_SUBSTILIUM_MUSHROOM = registerKey("brownlike_substilium_mushroom");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> LARGE_SUBSTILIUM_MUSHROOM = registerKey("large_substilium_mushroom");
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> VIBRION_GROWTH = registerKey("vibrion_growth");
     public static final ResourceKey<ConfiguredFeature<?, ?>> VIBRION_SPOREHOLDER = registerKey("vibrion_sporeholder");
@@ -195,10 +197,27 @@ public class ModConfiguredFeatures {
         register(context, HANGING_LIT_VIBRION_GEL, ModFeatures.HANGING_STRING.get(),
                 new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.LIT_VIBRION_GEL.get())));
 
-        register(context, REDLIKE_SUBSTILIUM_MUSHROOM, ModFeatures.REDLIKE_SUBSTILIUM_MUSHROOM.get(), new HugeMushroomFeatureConfiguration(
-                BlockStateProvider.simple(ModBlocks.ENTORIUM_SHROOM.get()), BlockStateProvider.simple(ModBlocks.SUBSTILIUM_STEM.get()), 2));
-        register(context, BROWNLIKE_SUBSTILIUM_MUSHROOM, ModFeatures.BROWNLIKE_SUBSTILIUM_MUSHROOM.get(), new HugeMushroomFeatureConfiguration(
-                BlockStateProvider.simple(ModBlocks.ENTORIUM_SHROOM.get()), BlockStateProvider.simple(ModBlocks.SUBSTILIUM_STEM.get()), 3));
+        register(context, LARGE_SUBSTILIUM_MUSHROOM, ModFeatures.LARGE_SUBSTILIUM_MUSHROOM.get(), new LargeMushroomConfiguration(
+                6, 18, 3,
+                BlockStateProvider.simple(ModBlocks.ENTORIUM_SHROOM.get()),
+                BlockStateProvider.simple(ModBlocks.SUBSTILIUM_STEM.get()),
+                BlockStateProvider.simple(ModBlocks.SUBSTILIUM_WOOD.get()),
+                BlockStateProvider.simple(ModBlocks.HANGING_VIBRION_VINES.get()),
+                List.of(BlockStateProvider.simple(ModBlocks.SUBSTILIUM_SOIL.get())),
+                List.of(BlockStateProvider.simple(ModBlocks.VIBRION_BLOCK.get()),
+                        BlockStateProvider.simple(ModBlocks.VIBRION_GEL.get()),
+                        BlockStateProvider.simple(ModBlocks.LIT_VIBRION_GEL.get())),
+                Map.of(LargeMushroomCapShape.DOME, 0.4f,
+                        LargeMushroomCapShape.FLAT, 0.3f
+//                        ,LargeMushroomCapShape.CONCAVE, 0f,
+//                        LargeMushroomCapShape.VANILLA_LARGE, 0f,
+//                        LargeMushroomCapShape.BELL, 0f,
+//                        LargeMushroomCapShape.FLARED, 0f,
+//                        LargeMushroomCapShape.PARABOLIC, 0f,
+//                        LargeMushroomCapShape.CONE, 0f,
+//                        LargeMushroomCapShape.LOBED, 0f,
+//                        LargeMushroomCapShape.PILZ, 0f)
+                )));
 
         register(context, SPOTTED_EVERGREEN, Feature.FLOWER,
                 new RandomPatchConfiguration(32, 16, 2, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,

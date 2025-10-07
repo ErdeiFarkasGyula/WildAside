@@ -1,6 +1,7 @@
 package net.farkas.wildaside.item.custom;
 
 import net.farkas.wildaside.entity.custom.vibrion.SporeBombEntity;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -10,8 +11,12 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class SporeBomb extends Item {
     public SporeBomb(Properties pProperties) {
@@ -52,5 +57,10 @@ public class SporeBomb extends Item {
             player.getCooldowns().addCooldown(this, 100);
             stack.shrink(1);
         }
+    }
+
+    @Override
+    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+        pTooltipComponents.add(Component.translatable("item.wildaside.spore_bomb.tooltip"));
     }
 }

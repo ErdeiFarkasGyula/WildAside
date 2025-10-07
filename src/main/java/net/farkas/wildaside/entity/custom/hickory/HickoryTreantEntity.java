@@ -139,12 +139,12 @@ public class HickoryTreantEntity extends Monster {
                 bossEvent.setColor(BossEvent.BossBarColor.YELLOW);
                 break;
             case 3:
-                this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, MobEffectInstance.INFINITE_DURATION, 0, true, false));
+                this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, MobEffectInstance.INFINITE_DURATION, 0, false, false));
                 bossEvent.setColor(BossEvent.BossBarColor.RED);
                 break;
             case 4:
-                this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, MobEffectInstance.INFINITE_DURATION, 1, true, false));
-                this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, MobEffectInstance.INFINITE_DURATION, 1, true, false));
+                this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, MobEffectInstance.INFINITE_DURATION, 1, false, false));
+                this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, MobEffectInstance.INFINITE_DURATION, 1, false, false));
                 bossEvent.setColor(BossEvent.BossBarColor.WHITE);
                 break;
         }

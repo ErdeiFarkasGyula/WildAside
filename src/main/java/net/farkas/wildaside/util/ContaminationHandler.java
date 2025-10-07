@@ -63,9 +63,9 @@ public class ContaminationHandler {
 
         entity.addEffect(new MobEffectInstance(contamination, (amplifier + 1) * 10 * 20, amplifier));
         if (amplifier >= 4) {
-            entity.addEffect(new MobEffectInstance(MobEffects.POISON, (amplifier + 1) * 3 * 20, amplifier - 3, true, false));
+            entity.addEffect(new MobEffectInstance(MobEffects.POISON, (amplifier + 1) * 3 * 20, amplifier - 3, false, false));
             if (amplifier >= 5) {
-                entity.addEffect(new MobEffectInstance(MobEffects.DARKNESS, (amplifier + 1) * 5 * 20, amplifier - 4, true, false));
+                entity.addEffect(new MobEffectInstance(MobEffects.DARKNESS, (amplifier + 1) * 5 * 20, amplifier - 4, false, false));
             }
         }
     }
