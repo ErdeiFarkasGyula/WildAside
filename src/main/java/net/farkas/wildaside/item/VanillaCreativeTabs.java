@@ -53,8 +53,8 @@ public class VanillaCreativeTabs {
             event.accept(ModBlocks.HICKORY_BUTTON);
         }
         if (tab == CreativeModeTabs.COMBAT) {
-            event.accept(ModItems.SPORE_ARROW);
             event.accept(ModItems.SPORE_BOMB);
+            event.accept(ModItems.SPORE_ARROW);
         }
         if (tab == CreativeModeTabs.FOOD_AND_DRINKS) {
             event.accept(ModItems.HICKORY_NUT);
@@ -118,14 +118,14 @@ public class VanillaCreativeTabs {
             event.accept(ModBlocks.POTION_BLASTER);
         }
         if (tab == CreativeModeTabs.TOOLS_AND_UTILITIES) {
-            event.accept(ModItems.ENTORIUM_PILL);
-            event.accept(ModItems.SPORE_ARROW);
-            event.accept(ModItems.SPORE_BOMB);
-            event.accept(ModItems.FERTILISER_BOMB);
             event.accept(ModItems.SUBSTILIUM_BOAT);
             event.accept(ModItems.SUBSTILIUM_CHEST_BOAT);
             event.accept(ModItems.HICKORY_BOAT);
             event.accept(ModItems.HICKORY_CHEST_BOAT);
+            event.accept(ModItems.ENTORIUM_PILL);
+            event.accept(ModItems.FERTILISER_BOMB);
+            event.accept(ModItems.SPORE_BOMB);
+            event.accept(ModItems.SPORE_ARROW);
         }
         if (tab == CreativeModeTabs.SPAWN_EGGS) {
             event.accept(ModItems.MUCELLITH_SPAWN_EGG);
