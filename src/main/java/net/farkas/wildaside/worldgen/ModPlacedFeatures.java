@@ -194,19 +194,18 @@ public class ModPlacedFeatures {
                 List.of(RarityFilter.onAverageOnceEvery(16), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
 
         register(context, HICKORY_TREE, configuredFeatures.getOrThrow(ModConfiguredFeatures.HICKORY_TREE),
-                VegetationPlacements.treePlacement(PlacementUtils.countExtra(32, 0.25f, 16), ModBlocks.HICKORY_SAPLING.get()));
+                VegetationPlacements.treePlacement(PlacementUtils.countExtra(48, 0.5f, 16), ModBlocks.HICKORY_SAPLING.get()));
         register(context, HICKORY_SAPLING, configuredFeatures.getOrThrow(ModConfiguredFeatures.HICKORY_SAPLING),
                 List.of(RarityFilter.onAverageOnceEvery(1), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
         register(context, HICKORY_BUSH, configuredFeatures.getOrThrow(ModConfiguredFeatures.HICKORY_BUSH),
-                VegetationPlacements.treePlacement(PlacementUtils.countExtra(48, 0.5f, 16)));
-
+                VegetationPlacements.treePlacement(PlacementUtils.countExtra(32, 0.5f, 20)));
 
         for (HickoryColour colour : HickoryColour.values()) {
             if (colour != HickoryColour.HICKORY) {
                 Vector2f noise = HICKORY_NOISES.get(colour);
                 registerGlowingHickoryTree(context, configuredFeatures, colour, noise.x, noise.y);
-                registerGlowingHickorySapling(context, configuredFeatures, colour, noise.x, noise.y);
                 registerGlowingHickoryBush(context, configuredFeatures, colour, noise.x, noise.y);
+                registerGlowingHickorySapling(context, configuredFeatures, colour, noise.x, noise.y);
             }
         }
 
@@ -214,12 +213,13 @@ public class ModPlacedFeatures {
                 List.of(RarityFilter.onAverageOnceEvery(8), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
 
         register(context, PODZOL_VEIN, configuredFeatures.getOrThrow(ModConfiguredFeatures.PODZOL_VEIN),
-                ModOrePlacement.commonOrePlacement(16, HeightRangePlacement.triangle(VerticalAnchor.absolute(50), VerticalAnchor.absolute(100))));
+                ModOrePlacement.commonOrePlacement(16, HeightRangePlacement.uniform(VerticalAnchor.absolute(40), VerticalAnchor.absolute(256))));
     }
 
     private static void registerGlowingHickoryTree(BootstapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures, HickoryColour colour, float minNoise, float maxNoise) {
-        int count = 16;
-        List<PlacementModifier> treeMods = VegetationPlacements.treePlacement(PlacementUtils.countExtra(count, 0.25f, 8), ModBlocks.HICKORY_SAPLINGS.get(colour).get());
+        int count = 24; int extraCount = 10;
+
+        List<PlacementModifier> treeMods = VegetationPlacements.treePlacement(PlacementUtils.countExtra(count, 0.25f, extraCount), ModBlocks.HICKORY_SAPLINGS.get(colour).get());
         List<PlacementModifier> patchMods = List.of(new LargePatchNoiseModifier(minNoise, maxNoise));
 
         List<PlacementModifier> allMods = Stream.concat(treeMods.stream(), patchMods.stream()).toList();
@@ -227,9 +227,20 @@ public class ModPlacedFeatures {
         register(context, HICKORY_TREES.get(colour), configuredFeatures.getOrThrow(ModConfiguredFeatures.HICKORY_TREES.get(colour)), allMods);
     }
 
+    private static void registerGlowingHickoryBush(BootstapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures, HickoryColour colour, float minNoise, float maxNoise) {
+        int count = 14; int extraCount = 10;
+
+        List<PlacementModifier> bushMods = VegetationPlacements.treePlacement(PlacementUtils.countExtra(count, 0.5f, extraCount));
+        List<PlacementModifier> patchMods = List.of(new LargePatchNoiseModifier(minNoise, maxNoise));
+
+        List<PlacementModifier> allMods = Stream.concat(bushMods.stream(), patchMods.stream()).toList();
+
+        register(context, HICKORY_BUSHES.get(colour), configuredFeatures.getOrThrow(ModConfiguredFeatures.HICKORY_BUSHES.get(colour)), allMods);
+    }
 
     private static void registerGlowingHickorySapling(BootstapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures, HickoryColour colour, float minNoise, float maxNoise) {
         int chance = 4;
+
         List<PlacementModifier> saplingMods = List.of(RarityFilter.onAverageOnceEvery(chance), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome());
         List<PlacementModifier> patchMods = List.of(new LargePatchNoiseModifier(minNoise, maxNoise));
 
@@ -238,16 +249,6 @@ public class ModPlacedFeatures {
         register(context, HICKORY_SAPLINGS.get(colour), configuredFeatures.getOrThrow(ModConfiguredFeatures.HICKORY_SAPLINGS.get(colour)), allMods);
     }
 
-    private static void registerGlowingHickoryBush(BootstapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures, HickoryColour colour, float minNoise, float maxNoise) {
-        int value = 8;
-
-        List<PlacementModifier> bushMods = VegetationPlacements.treePlacement(PlacementUtils.countExtra(value, 0.5f, 4));
-        List<PlacementModifier> patchMods = List.of(new LargePatchNoiseModifier(minNoise, maxNoise));
-
-        List<PlacementModifier> allMods = Stream.concat(bushMods.stream(), patchMods.stream()).toList();
-
-        register(context, HICKORY_BUSHES.get(colour), configuredFeatures.getOrThrow(ModConfiguredFeatures.HICKORY_BUSHES.get(colour)), allMods);
-    }
 
     private static ResourceKey<PlacedFeature> registerKey(String name) {
         return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(WildAside.MOD_ID, name));
