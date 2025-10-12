@@ -16,6 +16,7 @@ import net.farkas.wildaside.entity.custom.vibrion.SporeBombEntity;
 import net.farkas.wildaside.item.ModCreativeModeTabs;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.item.VanillaCreativeTabs;
+import net.farkas.wildaside.network.NetworkHandler;
 import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.potion.BetterBrewingRecipe;
 import net.farkas.wildaside.potion.ModPotions;
@@ -68,7 +69,7 @@ import terrablender.api.SurfaceRuleManager;
 public class WildAside
 {
     public static final String MOD_ID = "wildaside";
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public WildAside(FMLJavaModLoadingContext context)
     {
@@ -100,6 +101,8 @@ public class WildAside
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
+        NetworkHandler.init(event);
+
         event.enqueueWork(() -> {
             ModTerraBlenderAPI.registerRegions();
             ((FlowerPotBlock)Blocks.FLOWER_POT).addPlant(ModBlocks.VIBRION_GROWTH.getId(), ModBlocks.POTTED_VIBRION_GROWTH);

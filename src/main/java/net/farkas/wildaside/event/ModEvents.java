@@ -6,11 +6,13 @@ import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.capability.contamination.ContaminationAttacher;
 import net.farkas.wildaside.capability.contamination.ContaminationCapability;
 import net.farkas.wildaside.command.ContaminationCommand;
+import net.farkas.wildaside.command.WindCommand;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.util.AdvancementHandler;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.farkas.wildaside.util.HickoryColour;
+import net.farkas.wildaside.util.WindManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -31,6 +33,7 @@ import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
@@ -59,6 +62,7 @@ public class ModEvents {
     public static void registerCommands(RegisterCommandsEvent event) {
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
         ContaminationCommand.register(dispatcher);
+        WindCommand.register(dispatcher);
     }
 
     @SubscribeEvent
@@ -110,6 +114,22 @@ public class ModEvents {
         genericTrades.add((pTrader, pRandom) -> new MerchantOffer(
                 new ItemStack(Items.EMERALD, 5), new ItemStack(ModBlocks.GREEN_GLOWING_HICKORY_SAPLING.get()), 8, 2, 0.03f
         ));
+    }
+
+    @SubscribeEvent
+    public static void onServerTick(TickEvent.ServerTickEvent event) {
+        setWind(event);
+    }
+
+    public static void setWind(TickEvent.ServerTickEvent event) {
+        int time = 100;
+        if (event.phase == TickEvent.Phase.END && event.getServer().getTickCount() % time == 0) {
+            RandomSource randomSource = RandomSource.create();
+            double angle = randomSource.nextDouble() * 2 * Math.PI;
+            Vec3 newDir = new Vec3(Math.cos(angle), 0, Math.sin(angle));
+            float strength = 0.05f + randomSource.nextFloat() * 0.15f;
+            WindManager.setWind(newDir, strength);
+        }
     }
 
     @SubscribeEvent
