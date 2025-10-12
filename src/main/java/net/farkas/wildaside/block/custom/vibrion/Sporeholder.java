@@ -34,17 +34,19 @@ public class Sporeholder extends SaplingBlock {
     @Override
     public void entityInside(BlockState pState, Level pLevel, BlockPos pPos, Entity pEntity) {
         pLevel.addParticle(ModParticles.VIBRION_PARTICLE.get(), (pPos.getX() + 0.5), pPos.getY(), (pPos.getZ() + 0.5), 0, 0, 0);
-        ContaminationHandler.addDose(pEntity, 40);
+        if (pLevel.isClientSide()) {
+            ContaminationHandler.addDose(pEntity, 40);
+        }
         super.entityInside(pState, pLevel, pPos, pEntity);
     }
 
     @Override
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
         super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
-        if (pLevel.isClientSide) return;
-        applySporeCloud((ServerLevel) pLevel, pPos);
+        if (!pLevel.isClientSide) {
+            applySporeCloud((ServerLevel) pLevel, pPos);
+        }
     }
-
 
     private void applySporeCloud(ServerLevel level, BlockPos center) {
         int radius = 2;

@@ -5,6 +5,7 @@ import net.farkas.wildaside.util.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -28,6 +29,16 @@ public class VibrionGel extends Block implements SimpleWaterloggedBlock {
     public VibrionGel(Properties pProperties) {
         super(pProperties);
         this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false));
+    }
+
+    @Override
+    public void entityInside(BlockState pState, Level pLevel, BlockPos pPos, Entity pEntity) {
+        super.entityInside(pState, pLevel, pPos, pEntity);
+
+        double slowFactor = 0.3f;
+        double verticalFactor = 0.4f;
+
+        pEntity.setDeltaMovement(pEntity.getDeltaMovement().multiply(slowFactor, verticalFactor, slowFactor));
     }
 
     @Override

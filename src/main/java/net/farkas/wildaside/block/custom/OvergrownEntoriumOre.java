@@ -21,8 +21,7 @@ public class OvergrownEntoriumOre extends EntoriumOre {
 
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        if (pLevel.isClientSide) return InteractionResult.PASS;
-        if (pHand == InteractionHand.OFF_HAND) return InteractionResult.PASS;
+        if (pLevel.isClientSide || pHand == InteractionHand.OFF_HAND) return InteractionResult.PASS;
 
         var playerItem = pPlayer.getItemInHand(pHand);
         if (playerItem.getItem() == Items.SHEARS) {

@@ -131,19 +131,19 @@ public class FallenHickoryLeavesBlock extends Block {
 
     @Override
     public void onPlace(BlockState pState, Level pLevel, BlockPos pPos, BlockState pOldState, boolean pMovedByPiston) {
+        super.onPlace(pState, pLevel, pPos, pOldState, pMovedByPiston);
         if (!pLevel.isClientSide) {
             pLevel.scheduleTick(pPos, this, 0);
         }
-        super.onPlace(pState, pLevel, pPos, pOldState, pMovedByPiston);
     }
 
     @Override
     public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
         super.tick(pState, pLevel, pPos, pRandom);
 
-        if (pState.getValue(FallenHickoryLeavesBlock.FIXED_LIGHTING) || pState.getValue(FallenHickoryLeavesBlock.COLOUR) == HickoryColour.HICKORY) return;
-        int maxLight = pState.getValue(COUNT);
+        if (pLevel.isClientSide() || pState.getValue(FallenHickoryLeavesBlock.FIXED_LIGHTING) || pState.getValue(FallenHickoryLeavesBlock.COLOUR) == HickoryColour.HICKORY) return;
 
+        int maxLight = pState.getValue(COUNT);
         int time = (int)pLevel.dayTime();
         int currentLight = pState.getValue(LIGHT);
         int newLight = GlowingHickoryLightUtil.getLight(time, MIN_LIGHT, maxLight);

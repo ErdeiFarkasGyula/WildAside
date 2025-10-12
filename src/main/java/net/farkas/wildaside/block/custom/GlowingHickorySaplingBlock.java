@@ -78,7 +78,7 @@ public class GlowingHickorySaplingBlock extends SaplingBlock {
     public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
         super.tick(pState, pLevel, pPos, pRandom);
 
-        if (pState.getValue(GlowingHickorySaplingBlock.FIXED_LIGHTING)) return;
+        if (pLevel.isClientSide() || pState.getValue(GlowingHickorySaplingBlock.FIXED_LIGHTING)) return;
 
         int time = (int)pLevel.dayTime();
         int currentLight = pLevel.getBlockState(pPos).getValue(LIGHT);

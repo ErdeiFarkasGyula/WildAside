@@ -46,7 +46,7 @@ public class MucellithAnimations {
                             new Keyframe(1f, KeyframeAnimations.degreeVec(2f, 0f, 0f),
                                     AnimationChannel.Interpolations.CATMULLROM),
                             new Keyframe(1.75f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
-                                    AnimationChannel.Interpolations.CATMULLROM))).build();
+                                    AnimationChannel.Interpolations.CATMULLROM))).looping().build();
     public static final AnimationDefinition ATTACK = AnimationDefinition.Builder.withLength(0.75f)
             .addAnimation("bottom",
                     new AnimationChannel(AnimationChannel.Targets.POSITION,

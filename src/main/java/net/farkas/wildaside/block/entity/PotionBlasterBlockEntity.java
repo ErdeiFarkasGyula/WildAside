@@ -4,6 +4,7 @@ import net.farkas.wildaside.block.custom.vibrion.PotionBlaster;
 import net.farkas.wildaside.screen.potion_blaster.PotionBlasterMenu;
 import net.farkas.wildaside.util.AdvancementHandler;
 import net.farkas.wildaside.util.BlasterUtil;
+import net.farkas.wildaside.util.BlasterUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -15,6 +16,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.*;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -40,12 +42,11 @@ import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.StreamSupport;
 
-public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvider {
+public class PotionBlasterBlockEntity extends BlasterBlockEntity implements MenuProvider {
     private final ItemStackHandler itemHandler = new ItemStackHandler(10);
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
-
-    private boolean shouldBreakNext;
 
     public static final int OUTPUT_1 = 9;
 
@@ -137,119 +138,8 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
 
             var nextBlock = level.getBlockState(target);
             var originBlock = level.getBlockState(this.getBlockPos());
-            var axis = originBlock.getValue(PotionBlaster.FACING).getAxis();
 
-            if (axis == Direction.Axis.Y) {
-                if (nextBlock.getBlock() instanceof SlabBlock) {
-                    break;
-                }
-                if (nextBlock.getBlock() instanceof TrapDoorBlock) {
-                    if (!nextBlock.getValue(TrapDoorBlock.OPEN)) {
-                        break;
-                    }
-                }
-                if (nextBlock.getBlock() instanceof StairBlock) {
-                    break;
-                }
-            }
-            else
-            if (axis == Direction.Axis.X) {
-                if (nextBlock.getBlock() instanceof StairBlock) {
-                    if (nextBlock.getValue(StairBlock.FACING).getAxis() == Direction.Axis.X) {
-                        break;
-                    }
-                }
-                if (nextBlock.getBlock() instanceof TrapDoorBlock) {
-                    if (nextBlock.getValue(TrapDoorBlock.OPEN)) {
-                        Direction facing = nextBlock.getValue(TrapDoorBlock.FACING);
-                        if (facing.getAxis() == Direction.Axis.X) {
-                            if (direction == facing) {
-                                break;
-                            } else {
-                                shouldBreakNext = true;
-                            }
-                        }
-                    }
-                }
-                if (nextBlock.getBlock() instanceof DoorBlock) {
-                    var open = nextBlock.getValue(DoorBlock.OPEN);
-                    Direction facing = nextBlock.getValue(DoorBlock.FACING);
-
-                    if (!open) {
-                        if (facing.getAxis() == Direction.Axis.X) {
-                            if (BlasterUtil.axisToDirection(axis, direction.getStepX()) == facing) {
-                                break;
-                            } else {
-                                shouldBreakNext = true;
-                            }
-                        }
-                    } else {
-                        if (facing.getAxis() != Direction.Axis.X) {
-                            if (BlasterUtil.doorDirectionCheck(axis, direction.getStepX(), facing)) {
-                                if (nextBlock.getValue(DoorBlock.HINGE) == DoorHingeSide.LEFT) {
-                                    break;
-                                }
-                                shouldBreakNext = true;
-                            } else {
-                                if (nextBlock.getValue(DoorBlock.HINGE) == DoorHingeSide.LEFT) {
-                                    shouldBreakNext = true;
-                                } else {
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            if (axis == Direction.Axis.Z) {
-                if (nextBlock.getBlock() instanceof StairBlock) {
-                    if (nextBlock.getValue(StairBlock.FACING).getAxis() == Direction.Axis.Z) {
-                        break;
-                    }
-                }
-                if (nextBlock.getBlock() instanceof TrapDoorBlock) {
-                    if (nextBlock.getValue(TrapDoorBlock.OPEN)) {
-                        Direction facing = nextBlock.getValue(TrapDoorBlock.FACING);
-                        if (facing.getAxis() == Direction.Axis.Z) {
-                            if (direction == facing) {
-                                break;
-                            } else {
-                                shouldBreakNext = true;
-                            }
-                        }
-                    }
-                }
-                if (nextBlock.getBlock() instanceof DoorBlock) {
-                    var open = nextBlock.getValue(DoorBlock.OPEN);
-                    Direction facing = nextBlock.getValue(DoorBlock.FACING);
-
-                    if (!open) {
-                        if (facing.getAxis() == Direction.Axis.Z) {
-                            if (direction == facing) {
-                                break;
-                            } else {
-                                shouldBreakNext = true;
-                            }
-                        }
-                    } else {
-                        if (facing.getAxis() != Direction.Axis.Z) {
-                            if (BlasterUtil.doorDirectionCheck(axis, direction.getStepZ(), facing)) {
-                                if (nextBlock.getValue(DoorBlock.HINGE) == DoorHingeSide.RIGHT) {
-                                    break;
-                                }
-                                shouldBreakNext = true;
-                            } else {
-                                if (nextBlock.getValue(DoorBlock.HINGE) == DoorHingeSide.RIGHT) {
-                                    shouldBreakNext = true;
-                                } else {
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            if (!BlasterUtils.canTraverse(direction, nextBlock, originBlock, this)) return;
 
             for (int k = 0; k < 2; k++) {
                 double x = target.getX() + random.nextDouble();
@@ -283,8 +173,14 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
     public void consumePotionBottle() {
         activePotion = ItemStack.EMPTY;
         potionTicksLeft = 0;
+        maxPotionTicks = 200;
         lastUsedSlot = -1;
+        shouldSelectNewPotion = true;
+
         setChanged();
+        if (level != null && !level.isClientSide) {
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+        }
     }
 
     public void selectNewPotion() {
@@ -293,40 +189,51 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
         List<Integer> validSlots = new ArrayList<>();
         for (int i = 0; i < 9; i++) {
             ItemStack stack = itemHandler.getStackInSlot(i);
-            if (i != lastUsedSlot && stack.getItem() instanceof PotionItem && !stack.isEmpty()) {
+            if (!stack.isEmpty() && stack.getItem() instanceof PotionItem) {
                 validSlots.add(i);
             }
         }
 
         if (validSlots.isEmpty()) {
             activePotion = ItemStack.EMPTY;
+            lastUsedSlot = -1;
+            shouldSelectNewPotion = true;
             return;
         }
 
         int slot = validSlots.get(level.random.nextInt(validSlots.size()));
-        ItemStack potionStack = itemHandler.getStackInSlot(slot);
 
-        ItemStack bottle = new ItemStack(Items.GLASS_BOTTLE);
-        ItemStack leftover = itemHandler.insertItem(OUTPUT_1, bottle, false);
-        if (!leftover.isEmpty()) {
+        ItemStack extracted = itemHandler.extractItem(slot, 1, false);
+        if (extracted.isEmpty()) {
+            shouldSelectNewPotion = true;
+            lastUsedSlot = -1;
+            activePotion = ItemStack.EMPTY;
             return;
         }
 
-        activePotion = potionStack.copy();
-        setChanged();
-
-        List<MobEffectInstance> effects = PotionUtils.getMobEffects(activePotion);
-        if (effects.isEmpty()) {
-            maxPotionTicks = 200;
-        } else {
-            maxPotionTicks = effects.stream().mapToInt(MobEffectInstance::getDuration).max().orElse(200);
+        ItemStack remainder = itemHandler.insertItem(OUTPUT_1, new ItemStack(Items.GLASS_BOTTLE), false);
+        if (!remainder.isEmpty() && level instanceof ServerLevel serverLevel) {
+            serverLevel.addFreshEntity(new ItemEntity(serverLevel,
+                    worldPosition.getX() + 0.5,
+                    worldPosition.getY() + 1.0,
+                    worldPosition.getZ() + 0.5,
+                    remainder));
         }
+
+        activePotion = extracted.copy();
+        lastUsedSlot = slot;
+        shouldSelectNewPotion = false;
+
+        Iterable<MobEffectInstance> effectInstances = PotionUtils.getMobEffects(activePotion);
+        List<MobEffectInstance> effects = StreamSupport.stream(effectInstances.spliterator(), false).toList();
+        maxPotionTicks = effects.isEmpty() ? 200 : effects.stream().mapToInt(MobEffectInstance::getDuration).max().orElse(200);
+
         potionTicksLeft = maxPotionTicks;
 
-        potionStack.shrink(1);
-        itemHandler.setStackInSlot(slot, potionStack);
-
-        lastUsedSlot = slot;
+        setChanged();
+        if (level != null && !level.isClientSide) {
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+        }
     }
 
     @Override
@@ -375,6 +282,8 @@ public class PotionBlasterBlockEntity extends BlockEntity implements MenuProvide
     }
 
     public void tick(Level level, BlockPos pos, BlockState state) {
+        if (level.isClientSide()) return;
+
         if (level.getBlockEntity(pos) instanceof PotionBlasterBlockEntity be) {
             if (level.getBestNeighborSignal(pos) > 0) {
                 int poweredSides = 0;

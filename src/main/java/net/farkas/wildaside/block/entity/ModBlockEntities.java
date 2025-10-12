@@ -10,6 +10,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.function.Supplier;
+
 public class ModBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, WildAside.MOD_ID);
 
@@ -38,6 +40,10 @@ public class ModBlockEntities {
     public static final RegistryObject<BlockEntityType<NaturalSporeBlasterBlockEntity>> NATURAL_SPORE_BLASTER =
             BLOCK_ENTITIES.register("natural_spore_blaster",
                     () -> BlockEntityType.Builder.of(NaturalSporeBlasterBlockEntity::new, ModBlocks.NATURAL_SPORE_BLASTER.get()).build(null));
+
+    public static final Supplier<BlockEntityType<WindBlasterBlockEntity>> WIND_BLASTER =
+            BLOCK_ENTITIES.register("wind_blaster",
+                    () -> BlockEntityType.Builder.of(WindBlasterBlockEntity::new, ModBlocks.POTION_BLASTER.get()).build(null));
 
 
     public static void register(IEventBus eventBus) {

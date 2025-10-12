@@ -26,6 +26,7 @@ public class HickoryTreantRootAttackGoal extends Goal {
 
     @Override
     public void tick() {
+        if (entity.level().isClientSide()) return;
         int phase = entity.getPhase();
 
         entity.doRootingAttack(phase);

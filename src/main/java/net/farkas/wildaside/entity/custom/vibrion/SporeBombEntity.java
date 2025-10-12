@@ -25,12 +25,7 @@ public class SporeBombEntity extends ThrowableItemProjectile {
 
     public SporeBombEntity(EntityType<? extends ThrowableItemProjectile> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
-        this.charge = 0;
-    }
-
-    public SporeBombEntity(Level pLevel) {
-        super(ModEntities.SPORE_BOMB.get(), pLevel);
-        this.charge = 0;
+        this.charge = level().random.nextFloat();
     }
 
     public SporeBombEntity(Level pLevel, LivingEntity livingEntity, float charge) {
@@ -38,11 +33,20 @@ public class SporeBombEntity extends ThrowableItemProjectile {
         this.charge = charge;
     }
 
+    public SporeBombEntity(Level pLevel, double pX, double pY, double pZ) {
+        super(ModEntities.SPORE_BOMB.get(), pX, pY, pZ, pLevel);
+        this.charge = level().random.nextFloat();
+    }
+
+    public SporeBombEntity(Level pLevel) {
+        super(ModEntities.SPORE_BOMB.get(), pLevel);
+        this.charge = level().random.nextFloat();
+    }
+
     @Override
     protected Item getDefaultItem() {
         return ModItems.SPORE_BOMB.get();
     }
-
 
     @Override
     protected void onHitEntity(EntityHitResult pResult) {
@@ -52,6 +56,7 @@ public class SporeBombEntity extends ThrowableItemProjectile {
             applySporeCloud((ServerLevel)level, pResult.getEntity().blockPosition(), charge);
             this.discard();
         }
+        super.onHitEntity(pResult);
     }
 
     @Override
@@ -63,8 +68,8 @@ public class SporeBombEntity extends ThrowableItemProjectile {
             applySporeCloud((ServerLevel)level, position, charge);
         }
 
-        this.discard();
         super.onHitBlock(pResult);
+        this.discard();
     }
 
     private void applySporeCloud(ServerLevel level, BlockPos center, float charge) {
@@ -96,15 +101,11 @@ public class SporeBombEntity extends ThrowableItemProjectile {
         for (LivingEntity entity : list) {
             entityCount++;
             ContaminationHandler.addDose(entity, Math.round((1 + (charge / 2)) * 1000));
-            level.sendParticles(particle,
-                    entity.getX(), entity.getY() + 0.5, entity.getZ(),
-                    5, 0.2, 0.2, 0.2, 0.01);
+            level.sendParticles(particle, entity.getX(), entity.getY() + 0.5, entity.getZ(), 5, 0.2, 0.2, 0.2, 0.01);
         }
 
         if (entityCount >= 5) {
-            if (this.getOwner() instanceof ServerPlayer serverPlayer) {
-                AdvancementHandler.givePlayerAdvancement(serverPlayer, "weapons_of_mass_infection");
-            }
+            AdvancementHandler.givePlayerAdvancement(this.getOwner(), "weapons_of_mass_infection");
         }
     }
 }

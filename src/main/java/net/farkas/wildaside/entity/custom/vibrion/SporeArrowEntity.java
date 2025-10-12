@@ -16,20 +16,24 @@ public class SporeArrowEntity extends AbstractArrow {
         super(pEntityType, pLevel);
     }
 
-    public SporeArrowEntity(Level pLevel, LivingEntity thrower) {
-        super(ModEntities.SPORE_ARROW.get(), thrower, pLevel);
-    }
-
     public SporeArrowEntity(Level pLevel, double pX, double pY, double pZ) {
         super(ModEntities.SPORE_ARROW.get(), pX, pY, pZ, pLevel);
     }
 
+    public SporeArrowEntity(Level pLevel, LivingEntity thrower) {
+        super(ModEntities.SPORE_ARROW.get(), thrower, pLevel);
+    }
+
+    public SporeArrowEntity(Level pLevel) {
+        super(ModEntities.SPORE_ARROW.get(), pLevel);
+    }
+
     @Override
     protected void onHitEntity(EntityHitResult pResult) {
-        super.onHitEntity(pResult);
-        if (pResult.getEntity() instanceof LivingEntity entity) {
+        if (pResult.getEntity() instanceof LivingEntity entity && !level().isClientSide()) {
             ContaminationHandler.addDose(entity, Math.round(entity.getRandom().nextFloat() + 1) * 500);
         }
+        super.onHitEntity(pResult);
     }
 
     @Override

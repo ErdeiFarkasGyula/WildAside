@@ -45,6 +45,8 @@ public class SubstiliumSoil extends DropExperienceBlock implements BonemealableB
 
     @Override
     public void performBonemeal(ServerLevel pLevel, RandomSource pRandom, BlockPos pPos, BlockState pState) {
+        if (pLevel.isClientSide()) return;
+
         BlockPos blockpos = pPos.above();
         BlockState blockstate = ModBlocks.SUBSTILIUM_SOIL.get().defaultBlockState();
 

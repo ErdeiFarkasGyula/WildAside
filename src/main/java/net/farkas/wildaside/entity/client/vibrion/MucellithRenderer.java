@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 public class MucellithRenderer extends MobRenderer<MucellithEntity, MucellithModel<MucellithEntity>> {
     public MucellithRenderer(EntityRendererProvider.Context pContext) {
         super(pContext, new MucellithModel<>(pContext.bakeLayer(ModModelLayers.MUCELLITH_LAYER)), 0.5f);
+        this.addLayer(new MucellithTextureLayer(this));
     }
 
     @Override

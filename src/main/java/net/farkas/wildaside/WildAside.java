@@ -10,7 +10,9 @@ import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.entity.client.ModBoatRenderer;
 import net.farkas.wildaside.entity.client.vibrion.ContaminatedCreeperRenderer;
 import net.farkas.wildaside.entity.client.vibrion.MucellithRenderer;
+import net.farkas.wildaside.entity.custom.vibrion.FertiliserBombEntity;
 import net.farkas.wildaside.entity.custom.vibrion.SporeArrowEntity;
+import net.farkas.wildaside.entity.custom.vibrion.SporeBombEntity;
 import net.farkas.wildaside.item.ModCreativeModeTabs;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.item.VanillaCreativeTabs;
@@ -36,11 +38,17 @@ import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.entity.ArrowRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.core.Position;
+import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ComposterBlock;
+import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -95,6 +103,24 @@ public class WildAside
         event.enqueueWork(() -> {
             ModTerraBlenderAPI.registerRegions();
             ((FlowerPotBlock)Blocks.FLOWER_POT).addPlant(ModBlocks.VIBRION_GROWTH.getId(), ModBlocks.POTTED_VIBRION_GROWTH);
+            DispenserBlock.registerBehavior(ModItems.FERTILISER_BOMB.get(), new AbstractProjectileDispenseBehavior() {
+                @Override
+                protected Projectile getProjectile(Level pLevel, Position pPosition, ItemStack pStack) {
+                    return new FertiliserBombEntity(pLevel, pPosition.x(), pPosition.y(), pPosition.z());
+                }
+            });
+            DispenserBlock.registerBehavior(ModItems.SPORE_BOMB.get(), new AbstractProjectileDispenseBehavior() {
+                @Override
+                protected Projectile getProjectile(Level pLevel, Position pPosition, ItemStack pStack) {
+                    return new SporeBombEntity(pLevel, pPosition.x(), pPosition.y(), pPosition.z());
+                }
+            });
+            DispenserBlock.registerBehavior(ModItems.SPORE_ARROW.get(), new AbstractProjectileDispenseBehavior() {
+                @Override
+                protected Projectile getProjectile(Level pLevel, Position pPosition, ItemStack pStack) {
+                    return new SporeArrowEntity(pLevel, pPosition.x(), pPosition.y(), pPosition.z());
+                }
+            });
         });
 
         SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MOD_ID, ModSurfaceRules.makeRules());

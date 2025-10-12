@@ -32,18 +32,13 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
     private int soundCooldown = 0;
     private final int soundCooldownMax = 20;
 
-    public final AnimationState idleAnimation = new AnimationState();
-    private final int idleAnimationMax = 40;
-    private int idleAnimationTimeout = 0;
-
-    public final AnimationState attackAnimation = new AnimationState();
     public final int attackAnimationMax = 60;
     public int attackAnimationTimeout = 0;
 
+    public final AnimationState idleAnimation = new AnimationState();
+    public final AnimationState attackAnimation = new AnimationState();
     public final AnimationState defenseAnimation = new AnimationState();
     public final AnimationState defenseAnimationReverse = new AnimationState();
-    private final int defenseAnimationReverseMax = 15;
-    private int defenseAnimationReverseTimeout = 15;
 
     public MucellithEntity(EntityType<? extends PathfinderMob> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -118,39 +113,31 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
                 defenseAnimation.start(tickCount);
             }
         } else {
-            if (this.idleAnimationTimeout <= 0) {
-                this.idleAnimationTimeout = idleAnimationMax;
-                this.idleAnimation.start(this.tickCount);
-            } else {
-                --this.idleAnimationTimeout;
-            }
+            defenseAnimation.stop();
 
             if (hasDefended()) {
-                if (defenseAnimationReverseTimeout == defenseAnimationReverseMax) {
+                if (!defenseAnimationReverse.isStarted()) {
                     defenseAnimationReverse.start(tickCount);
-                    --defenseAnimationReverseTimeout;
-                } else
-                    if (defenseAnimationReverseTimeout > 0) {
-                        --defenseAnimationReverseTimeout;
-                    } else {
-                        defenseAnimationReverse.stop();
-                    }
-
+                }
+            } else {
+                defenseAnimationReverse.stop();
             }
-            defenseAnimation.stop();
+
+            if (!isAttacking()) {
+                if (!idleAnimation.isStarted()) {
+                    idleAnimation.start(tickCount);
+                }
+            } else {
+                idleAnimation.stop();
+            }
         }
 
         if (isAttacking()) {
-            if (attackAnimationTimeout <= 0) {
+            if (!attackAnimation.isStarted()) {
                 attackAnimation.start(tickCount);
-                attackAnimationTimeout = attackAnimationMax;
             }
-            --attackAnimationTimeout;
         } else {
-            if (attackAnimation.isStarted()) {
-                attackAnimation.stop();
-                attackAnimationTimeout = 0;
-            }
+            attackAnimation.stop();
         }
     }
 
