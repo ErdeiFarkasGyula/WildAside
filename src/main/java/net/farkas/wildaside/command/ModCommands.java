@@ -9,16 +9,16 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.farkas.wildaside.network.WindSavedData;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.farkas.wildaside.util.WindData;
 import net.farkas.wildaside.util.WindManager;
-import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.RandomSource;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
@@ -55,7 +55,15 @@ public class ModCommands {
                                                                     double y = DoubleArgumentType.getDouble(ctx, "y");
                                                                     double z = DoubleArgumentType.getDouble(ctx, "z");
                                                                     float s = FloatArgumentType.getFloat(ctx, "strength");
-                                                                    WindManager.setWind(new Vec3(x, y, z), s);
+
+                                                                    Vec3 vec = new Vec3(x, y ,z);
+                                                                    WindManager.setWind(vec, s);
+
+                                                                    ServerLevel serverLevel = ctx.getSource().getLevel();
+                                                                    WindSavedData windSavedData = WindSavedData.get(serverLevel);
+                                                                    windSavedData.setWeather(serverLevel.isRaining(), serverLevel.isThundering());
+                                                                    windSavedData.setWind(vec, s);
+
                                                                     ctx.getSource().sendSuccess(
                                                                             () -> Component.literal("Set wind to (" + x + ", " + y + ", " + z + ") strength=" + s),
                                                                             true
@@ -70,8 +78,10 @@ public class ModCommands {
 
                         .then(Commands.literal("random")
                                 .executes(ctx -> {
-                                    WindData windData = WindManager.calculateWind(RandomSource.create());
+                                    ServerLevel serverLevel = ctx.getSource().getLevel();
+                                    WindData windData = WindManager.calculateAndSetWind(serverLevel);
                                     Vec3 dir = windData.direction();
+
                                     ctx.getSource().sendSuccess(
                                             () -> Component.literal("Set random wind to (" + dir.x + ", " + dir.y + ", " + dir.z + ") strength=" + windData.strength()),
                                             true

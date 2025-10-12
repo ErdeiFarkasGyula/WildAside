@@ -8,7 +8,7 @@ import net.farkas.wildaside.capability.contamination.ContaminationCapability;
 import net.farkas.wildaside.command.ModCommands;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.item.ModItems;
-import net.farkas.wildaside.network.WindWeatherData;
+import net.farkas.wildaside.network.WindSavedData;
 import net.farkas.wildaside.util.AdvancementHandler;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.farkas.wildaside.util.HickoryColour;
@@ -22,7 +22,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.profiling.jfr.event.WorldLoadFinishedEvent;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -120,6 +119,23 @@ public class ModEvents {
     }
 
     @SubscribeEvent
+    public static void onWorldLoad(LevelEvent.Load event) {
+        loadWind(event);
+    }
+
+    public static void loadWind(LevelEvent.Load event) {
+        if (!(event.getLevel() instanceof ServerLevel serverLevel)) return;
+        if (!serverLevel.dimension().equals(ServerLevel.OVERWORLD)) return;
+
+        WindSavedData data = WindSavedData.get(serverLevel);
+        Vec3 dir = data.getWindDirection();
+        float strength = data.getWindStrength();
+        WindManager.setWind(dir, strength);
+
+        System.out.println("Applied saved wind on world load: dir=" + dir + ", strength=" + strength);
+    }
+
+    @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent event) {
         manageWeather(event);
     }
@@ -131,44 +147,19 @@ public class ModEvents {
         ServerLevel overworld = server.getLevel(Level.OVERWORLD);
         if (overworld == null) return;
 
-        RandomSource randomSource = RandomSource.create();
-        WindWeatherData weatherData = WindWeatherData.get(overworld);
+        WindSavedData weatherData = WindSavedData.get(overworld);
 
         boolean raining = overworld.isRaining();
         boolean thundering = overworld.isThundering();
 
         if (raining != weatherData.wasRaining() || thundering != weatherData.wasThundering()) {
-            setWindMultiplier(weatherData.wasRaining(), weatherData.wasThundering(), raining, thundering);
+            WindManager.calculateAndSetWind(overworld);
         }
-
-        weatherData.set(raining, thundering);
 
         int time = 600;
         if (server.getTickCount() % time == 0) {
-            WindManager.calculateWind(randomSource);
-            setWindMultiplier(weatherData.wasRaining(), weatherData.wasThundering(), raining, thundering);
+            WindManager.calculateAndSetWind(overworld);
         }
-    }
-
-    private static void setWindMultiplier(boolean oldRaining, boolean oldThundering, boolean newRaining, boolean newThundering) {
-        float oldMultiplier = 1f;
-        if (oldRaining) oldMultiplier = 3f;
-        if (oldThundering) oldMultiplier = 7f;
-
-        float newMultiplier = 1f;
-        if (newRaining) newMultiplier = 3f;
-        if (newThundering) newMultiplier = 7f;
-
-        float correction = newMultiplier / oldMultiplier;
-
-        Vec3 currentDir = WindManager.getDirection();
-        float currentStrength = WindManager.getStrength();
-
-        Vec3 newDir = currentDir.scale(correction);
-        float newStrength = currentStrength * correction;
-
-        System.out.println("Weather changed! Old multiplier=" + oldMultiplier + ", new=" + newMultiplier + ", correction=" + correction);
-        WindManager.setWind(newDir, newStrength);
     }
 
     @SubscribeEvent

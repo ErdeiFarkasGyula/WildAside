@@ -1,6 +1,8 @@
 package net.farkas.wildaside.util;
 
 import net.farkas.wildaside.network.NetworkHandler;
+import net.farkas.wildaside.network.WindSavedData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
 
@@ -24,11 +26,36 @@ public class WindManager {
     public static float getStrength() { return strength; }
     public static WindData getWindData() { return new WindData(getDirection(), getStrength()); }
 
-    public static WindData calculateWind(RandomSource randomSource) {
+    public static WindData calculateAndSetWind(ServerLevel serverLevel) {
+        RandomSource randomSource = serverLevel.random;
+        WindSavedData windSavedData = WindSavedData.get(serverLevel);
+
+        boolean raining = serverLevel.isRaining();
+        boolean thundering = serverLevel.isThundering();
+
+        float correction = getWindCorrection(windSavedData.wasRaining(), windSavedData.wasThundering(), raining, thundering);
+
         double angle = randomSource.nextDouble() * 2 * Math.PI;
-        Vec3 newDir = new Vec3(Math.cos(angle), (randomSource.nextFloat() - 0.5f) * 0.02f, Math.sin(angle));
-        float strength = 0.05f + randomSource.nextFloat() * 0.15f;
+        Vec3 newDir = new Vec3(Math.cos(angle), (randomSource.nextFloat() - 0.5f) * 0.02f, Math.sin(angle)).scale(correction);
+        float strength = (0.05f + randomSource.nextFloat() * 0.15f) * correction;
+
         WindManager.setWind(newDir, strength);
-        return new WindData(direction, strength);
+
+        windSavedData.setWeather(raining, thundering);
+        windSavedData.setWind(newDir, strength);
+
+        return new WindData(newDir, strength);
+    }
+
+    public static float getWindCorrection(boolean oldRaining, boolean oldThundering, boolean newRaining, boolean newThundering) {
+        float oldMultiplier = 1f;
+        if (oldRaining) oldMultiplier = 3f;
+        if (oldThundering) oldMultiplier = 7f;
+
+        float newMultiplier = 1f;
+        if (newRaining) newMultiplier = 3f;
+        if (newThundering) newMultiplier = 7f;
+
+        return newMultiplier / oldMultiplier;
     }
 }
