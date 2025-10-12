@@ -14,37 +14,39 @@ import net.minecraft.world.phys.Vec3;
 public class HickoryFallingLeafParticle extends TextureSheetParticle {
     public static class Provider implements ParticleProvider<SimpleParticleType> {
         private final SpriteSet spriteSet;
-        public Provider(SpriteSet spriteSet) { this.spriteSet = spriteSet; }
+
+        public Provider(SpriteSet spriteSet) {
+            this.spriteSet = spriteSet;
+        }
 
         @Override
-        public Particle createParticle(SimpleParticleType typeIn, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
-            return new HickoryFallingLeafParticle(level, x, y, z, xSpeed, ySpeed, zSpeed, spriteSet);
+        public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+            return new HickoryFallingLeafParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed, this.spriteSet);
         }
     }
 
     private final float phaseOffset;
-    private final float driftBaseAmplitude;
-    private final float rollBaseAmplitude;
-
-    private float swayTimer = 0f;
+    private final float driftAmplitudeX;
+    private final float driftAmplitudeZ;
+    private final float rollAmplitude;
 
     protected HickoryFallingLeafParticle(ClientLevel level, double x, double y, double z, double vx, double vy, double vz, SpriteSet spriteSet) {
         super(level, x, y, z);
         this.phaseOffset = level.random.nextFloat() * (float)Math.PI * 2;
-        this.driftBaseAmplitude = 0.05f + level.random.nextFloat() * 0.05f;
-        this.rollBaseAmplitude = 0.5f + level.random.nextFloat() * 0.5f;
+        this.driftAmplitudeX = 0.1f + level.random.nextFloat() * 0.1f;
+        this.driftAmplitudeZ = 0.1f + level.random.nextFloat() * 0.1f;
+        this.rollAmplitude = 0.5f + level.random.nextFloat() * 0.5f;
         this.setSize(0.2f, 0.2f);
         this.quadSize = (this.random.nextFloat() + 1) / 4f;
-        this.lifetime = 800 + this.random.nextInt(400);
-        this.gravity = 0.03f + level.random.nextFloat() * 0.02f;
+        this.lifetime = 1024;
+        this.gravity = 0.05f + level.random.nextFloat() * 0.02f;
         this.hasPhysics = true;
 
         this.xd = vx * 0.1;
-        this.yd = vy * 0.1 - (0.02 + level.random.nextFloat() * 0.02);
+        this.yd = vy * 0.1 - (0.01 + level.random.nextFloat() * 0.02);
         this.zd = vz * 0.1;
 
         this.roll = level.random.nextFloat() * (float)Math.PI * 2;
-
         this.setSpriteFromAge(spriteSet);
     }
 
@@ -56,33 +58,35 @@ public class HickoryFallingLeafParticle extends TextureSheetParticle {
     @Override
     public void tick() {
         if (this.removed) return;
-        if (this.onGround) {
-            this.remove();
-            return;
+
+        float multiplier = 1;
+        if (level.isRaining()) {
+            multiplier = 1.3f;
+        }
+        else
+        if (level.isThundering()) {
+            multiplier = 2f;
         }
 
-        Vec3 wind = ClientWindData.getWind();
-        double windStrength = wind.length();
+        Vec3 wind = ClientWindData.getWind().scale(multiplier);
 
-        this.xd += wind.x * 0.04;
-        this.zd += wind.z * 0.04;
+        double windInfluence = 0.025;
+        this.xd += wind.x * windInfluence;
+        this.zd += wind.z * windInfluence;
 
-        double horizontalSpeed = Math.sqrt(this.xd * this.xd + this.zd * this.zd);
-        swayTimer += horizontalSpeed * 2.5f;
+        float ageFactor = (this.age + this.phaseOffset) * 0.15f;
+        this.xd += Mth.sin(ageFactor) * driftAmplitudeX * 0.01;
+        this.zd += Mth.cos(ageFactor) * driftAmplitudeZ * 0.01;
 
-        float swayX = Mth.sin(swayTimer + phaseOffset) * driftBaseAmplitude * (0.5f + (float)windStrength * 2f);
-        float swayZ = Mth.cos(swayTimer + phaseOffset) * driftBaseAmplitude * (0.5f + (float)windStrength * 2f);
-        this.xd += swayX * 0.02;
-        this.zd += swayZ * 0.02;
-
-        if (this.random.nextFloat() < 0.002) {
-            this.yd += 0.08f + this.random.nextFloat() * 0.05f;
-        }
-        
-        this.xd *= 0.97;
+        this.xd *= 0.98;
         this.yd *= 0.98;
-        this.zd *= 0.97;
+        this.zd *= 0.98;
 
         super.tick();
+
+        this.oRoll = this.roll;
+        this.roll = (float)(Mth.sin(ageFactor * 0.5f) * rollAmplitude - (Math.PI / 8));
+
+        if (this.onGround) this.remove();
     }
 }

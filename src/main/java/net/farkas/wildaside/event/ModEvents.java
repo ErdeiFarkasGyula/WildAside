@@ -5,8 +5,7 @@ import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.capability.contamination.ContaminationAttacher;
 import net.farkas.wildaside.capability.contamination.ContaminationCapability;
-import net.farkas.wildaside.command.ContaminationCommand;
-import net.farkas.wildaside.command.WindCommand;
+import net.farkas.wildaside.command.ModCommands;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.util.AdvancementHandler;
@@ -18,9 +17,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.profiling.jfr.event.WorldLoadFinishedEvent;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -31,6 +32,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
@@ -43,6 +45,7 @@ import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.level.BlockEvent;
+import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.event.village.WandererTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -61,8 +64,7 @@ public class ModEvents {
     @SubscribeEvent
     public static void registerCommands(RegisterCommandsEvent event) {
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
-        ContaminationCommand.register(dispatcher);
-        WindCommand.register(dispatcher);
+        ModCommands.register(dispatcher);
     }
 
     @SubscribeEvent
@@ -118,17 +120,66 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent event) {
-        setWind(event);
+        RandomSource randomSource = RandomSource.create();
+        checkWeather(event);
+        setWind(event, randomSource);
+        checkWeatherChange();
     }
 
-    public static void setWind(TickEvent.ServerTickEvent event) {
-        int time = 100;
-        if (event.phase == TickEvent.Phase.END && event.getServer().getTickCount() % time == 0) {
-            RandomSource randomSource = RandomSource.create();
-            double angle = randomSource.nextDouble() * 2 * Math.PI;
-            Vec3 newDir = new Vec3(Math.cos(angle), 0, Math.sin(angle));
-            float strength = 0.05f + randomSource.nextFloat() * 0.15f;
-            WindManager.setWind(newDir, strength);
+    private static boolean lastRaining = false;
+    private static boolean lastThundering = false;
+
+    private static boolean raining = false;
+    private static boolean thundering = false;
+
+    public static void checkWeather(TickEvent.ServerTickEvent event) {
+        if (event.phase != TickEvent.Phase.END) return;
+
+        MinecraftServer server = event.getServer();
+        ServerLevel overworld = server.getLevel(Level.OVERWORLD);
+        if (overworld == null) return;
+
+        raining = overworld.isRaining();
+        thundering = overworld.isThundering();
+    }
+
+    public static void checkWeatherChange() {
+        if (raining != lastRaining || thundering != lastThundering) {
+            setWindMultiplier();
+        }
+    }
+
+    public static void setWindMultiplier() {
+        float oldMultiplier = 1f;
+        if (lastRaining) oldMultiplier = 3f;
+        if (lastThundering) oldMultiplier = 7f;
+
+        float newMultiplier = 1f;
+        if (raining) newMultiplier = 3f;
+        if (thundering) newMultiplier = 7f;
+
+        lastRaining = raining;
+        lastThundering = thundering;
+
+        float correction = newMultiplier / oldMultiplier;
+
+        Vec3 currentDir = WindManager.getDirection();
+        float currentStrength = WindManager.getStrength();
+
+        Vec3 newDir = currentDir.scale(correction);
+        float newStrength = currentStrength * correction;
+
+        System.out.println("Weather changed! Old multiplier=" + oldMultiplier + ", new=" + newMultiplier + ", correction=" + correction);
+        WindManager.setWind(newDir, newStrength);
+    }
+
+    public static void setWind(TickEvent.ServerTickEvent event, RandomSource randomSource) {
+        if (event.phase != TickEvent.Phase.END) return;
+
+        int time = 600;
+        if (event.getServer().getTickCount() % time == 0) {
+            WindManager.calculateWind(randomSource);
+            setWindMultiplier();
         }
     }
 
