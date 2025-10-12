@@ -34,22 +34,24 @@ public class AnimatedModelTextureLayer<T extends LivingEntity, M extends Hierarc
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         int totalTicks = (int) (entity.tickCount + partialTicks);
         int frameIndex = (totalTicks / frameTime) % totalFrames;
+        int nextFrameIndex = (frameIndex + 1) % totalFrames;
         int currentFrame = sequence[frameIndex];
-        int nextFrame = sequence[(frameIndex + 1) % sequence.length];
+        int nextFrame = sequence[nextFrameIndex];
 
-        float interp = (float) (totalTicks % frameTime) / frameTime;
-        float alpha = Mth.clamp(interp, 0f, 1f);
+        float interp = (totalTicks % frameTime + partialTicks) / (float) frameTime;
 
         ResourceLocation texA = currentFrame == 0 ? frame_0 : frame_1;
         ResourceLocation texB = nextFrame == 0 ? frame_0 : frame_1;
 
+        VertexConsumer buffer = bufferSource.getBuffer(RenderType.entityTranslucent(texA));
 
-        VertexConsumer baseBuffer = bufferSource.getBuffer(RenderType.entityTranslucent(texA));
-        getParentModel().renderToBuffer(poseStack, baseBuffer, packedLight, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, 1f);
+        float alphaA = 1f - interp;
+        getParentModel().renderToBuffer(poseStack, buffer, packedLight, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, alphaA);
 
         if (texB != texA) {
-            VertexConsumer overlay = bufferSource.getBuffer(RenderType.entityTranslucent(texB));
-            getParentModel().renderToBuffer(poseStack, overlay, packedLight, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, alpha);
+            VertexConsumer bufferB = bufferSource.getBuffer(RenderType.entityTranslucent(texB));
+            float alphaB = interp;
+            getParentModel().renderToBuffer(poseStack, bufferB, packedLight, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, alphaB);
         }
     }
 }
