@@ -8,6 +8,7 @@ import net.farkas.wildaside.capability.contamination.ContaminationCapability;
 import net.farkas.wildaside.command.ModCommands;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.item.ModItems;
+import net.farkas.wildaside.network.WindWeatherData;
 import net.farkas.wildaside.util.AdvancementHandler;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.farkas.wildaside.util.HickoryColour;
@@ -120,46 +121,43 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent event) {
-        RandomSource randomSource = RandomSource.create();
-        checkWeather(event);
-        setWind(event, randomSource);
-        checkWeatherChange();
+        manageWeather(event);
     }
 
-    private static boolean lastRaining = false;
-    private static boolean lastThundering = false;
-
-    private static boolean raining = false;
-    private static boolean thundering = false;
-
-    public static void checkWeather(TickEvent.ServerTickEvent event) {
+    public static void manageWeather(TickEvent.ServerTickEvent event) {
         if (event.phase != TickEvent.Phase.END) return;
 
         MinecraftServer server = event.getServer();
         ServerLevel overworld = server.getLevel(Level.OVERWORLD);
         if (overworld == null) return;
 
-        raining = overworld.isRaining();
-        thundering = overworld.isThundering();
-    }
+        RandomSource randomSource = RandomSource.create();
+        WindWeatherData weatherData = WindWeatherData.get(overworld);
 
-    public static void checkWeatherChange() {
-        if (raining != lastRaining || thundering != lastThundering) {
-            setWindMultiplier();
+        boolean raining = overworld.isRaining();
+        boolean thundering = overworld.isThundering();
+
+        if (raining != weatherData.wasRaining() || thundering != weatherData.wasThundering()) {
+            setWindMultiplier(weatherData.wasRaining(), weatherData.wasThundering(), raining, thundering);
+        }
+
+        weatherData.set(raining, thundering);
+
+        int time = 600;
+        if (server.getTickCount() % time == 0) {
+            WindManager.calculateWind(randomSource);
+            setWindMultiplier(weatherData.wasRaining(), weatherData.wasThundering(), raining, thundering);
         }
     }
 
-    public static void setWindMultiplier() {
+    private static void setWindMultiplier(boolean oldRaining, boolean oldThundering, boolean newRaining, boolean newThundering) {
         float oldMultiplier = 1f;
-        if (lastRaining) oldMultiplier = 3f;
-        if (lastThundering) oldMultiplier = 7f;
+        if (oldRaining) oldMultiplier = 3f;
+        if (oldThundering) oldMultiplier = 7f;
 
         float newMultiplier = 1f;
-        if (raining) newMultiplier = 3f;
-        if (thundering) newMultiplier = 7f;
-
-        lastRaining = raining;
-        lastThundering = thundering;
+        if (newRaining) newMultiplier = 3f;
+        if (newThundering) newMultiplier = 7f;
 
         float correction = newMultiplier / oldMultiplier;
 
@@ -171,16 +169,6 @@ public class ModEvents {
 
         System.out.println("Weather changed! Old multiplier=" + oldMultiplier + ", new=" + newMultiplier + ", correction=" + correction);
         WindManager.setWind(newDir, newStrength);
-    }
-
-    public static void setWind(TickEvent.ServerTickEvent event, RandomSource randomSource) {
-        if (event.phase != TickEvent.Phase.END) return;
-
-        int time = 600;
-        if (event.getServer().getTickCount() % time == 0) {
-            WindManager.calculateWind(randomSource);
-            setWindMultiplier();
-        }
     }
 
     @SubscribeEvent

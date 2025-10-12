@@ -10,6 +10,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.farkas.wildaside.util.ContaminationHandler;
+import net.farkas.wildaside.util.WindData;
 import net.farkas.wildaside.util.WindManager;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -69,11 +70,23 @@ public class ModCommands {
 
                         .then(Commands.literal("random")
                                 .executes(ctx -> {
-                                    Vec3 randomWind = WindManager.calculateWind(RandomSource.create());
-                                    WindManager.setWind(randomWind, (float) randomWind.length());
+                                    WindData windData = WindManager.calculateWind(RandomSource.create());
+                                    Vec3 dir = windData.direction();
                                     ctx.getSource().sendSuccess(
-                                            () -> Component.literal("Set random wind to (" + randomWind.x + ", " + randomWind.y + ", " + randomWind.z + ")"),
+                                            () -> Component.literal("Set random wind to (" + dir.x + ", " + dir.y + ", " + dir.z + ") strength=" + windData.strength()),
                                             true
+                                    );
+                                    return Command.SINGLE_SUCCESS;
+                                })
+                        )
+
+                        .then(Commands.literal("get")
+                                .executes(ctx -> {
+                                    float strength = WindManager.getStrength();
+                                    Vec3 dir = WindManager.getDirection();
+                                    ctx.getSource().sendSuccess(
+                                            () -> Component.literal("Current wind: (" + dir.x + ", " + dir.y + ", " + dir.z + ") strength=" + strength),
+                                            false
                                     );
                                     return Command.SINGLE_SUCCESS;
                                 })

@@ -1,6 +1,7 @@
 package net.farkas.wildaside.network;
 
 import net.farkas.wildaside.client.ClientWindData;
+import net.farkas.wildaside.util.WindData;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkEvent;
@@ -8,19 +9,22 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 public class WindSyncPacket {
-    private final Vec3 direction;
-    private final float strength;
+    private final WindData windData;
 
     public WindSyncPacket(Vec3 direction, float strength) {
-        this.direction = direction;
-        this.strength = strength;
+        this.windData = new WindData(direction, strength);
+    }
+
+    public WindSyncPacket(WindData windData) {
+        this.windData = windData;
     }
 
     public static void encode(WindSyncPacket msg, FriendlyByteBuf buf) {
-        buf.writeDouble(msg.direction.x);
-        buf.writeDouble(msg.direction.y);
-        buf.writeDouble(msg.direction.z);
-        buf.writeFloat(msg.strength);
+        Vec3 direction = msg.windData.direction();
+        buf.writeDouble(direction.x);
+        buf.writeDouble(direction.y);
+        buf.writeDouble(direction.z);
+        buf.writeFloat(msg.windData.strength());
     }
 
     public static WindSyncPacket decode(FriendlyByteBuf buf) {
@@ -33,7 +37,8 @@ public class WindSyncPacket {
         NetworkEvent.Context context = ctx.get();
         context.enqueueWork(() -> {
             if (context.getDirection().getReceptionSide().isClient()) {
-                ClientWindData.setWind(msg.direction, msg.strength);
+                WindData data = msg.windData;
+                ClientWindData.setWind(data.direction(), data.strength());
             }
         });
         context.setPacketHandled(true);
