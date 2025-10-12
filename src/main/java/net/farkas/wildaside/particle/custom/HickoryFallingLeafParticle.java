@@ -72,6 +72,7 @@ public class HickoryFallingLeafParticle extends TextureSheetParticle {
 
         double windInfluence = 0.025;
         this.xd += wind.x * windInfluence;
+        this.yd += wind.y * windInfluence;
         this.zd += wind.z * windInfluence;
 
         float ageFactor = (this.age + this.phaseOffset) * 0.15f;
