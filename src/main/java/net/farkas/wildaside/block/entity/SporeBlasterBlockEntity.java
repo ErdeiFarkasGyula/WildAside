@@ -52,7 +52,6 @@ public class SporeBlasterBlockEntity extends BlasterBlockEntity {
             if (world.getBlockState(step).isCollisionShapeFullBlock(world, step)) break;
             if (!BlasterUtils.canTraverse(dir, nextBlock, originBlock, this)) break;
 
-
             double x = step.getX() + rand.nextDouble();
             double y = step.getY() + rand.nextDouble();
             double z = step.getZ() + rand.nextDouble();

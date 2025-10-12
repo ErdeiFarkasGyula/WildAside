@@ -71,8 +71,8 @@ public class ModEvents {
     @SubscribeEvent
     public static void addCustomTrades(VillagerTradesEvent event) {
         if (event.getType() == VillagerProfession.FARMER) {
-
             ItemStack emerald = new ItemStack(Items.EMERALD);
+
             event.getTrades().get(2).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemStack(ModItems.HICKORY_NUT.get(), 16), emerald, 20, 2, 0.05f
             ));
@@ -81,7 +81,6 @@ public class ModEvents {
                         new ItemStack(ModItems.LEAF_ITEMS.get(colour).get(), 32), emerald, 20, 2, 0.05f
                 ));
             }
-
         }
 
         if (event.getType() == VillagerProfession.TOOLSMITH) {
@@ -130,7 +129,6 @@ public class ModEvents {
         long time = world.getDayTime();
 
         if (time >= 14000 && time <= 22000) {
-
             Holder<Biome> biomeHolder = world.getBiome(player.blockPosition());
             ResourceKey<Biome> biomeKey = biomeHolder.unwrapKey().orElse(null);
 
@@ -164,7 +162,6 @@ public class ModEvents {
     public static void onBlockBroken(BlockEvent.BreakEvent event) {
         if (event.getPlayer().level().isClientSide) return;
         blasterBustedAdvancement(event);
-
     }
 
     public static void blasterBustedAdvancement(BlockEvent.BreakEvent event) {

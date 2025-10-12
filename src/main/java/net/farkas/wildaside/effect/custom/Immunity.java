@@ -7,5 +7,4 @@ public class Immunity extends MobEffect {
     public Immunity(MobEffectCategory pCategory, int pColor) {
         super(pCategory, pColor);
     }
-
 }

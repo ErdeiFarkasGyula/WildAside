@@ -4,7 +4,6 @@ import net.farkas.wildaside.capability.contamination.ContaminationCapability;
 import net.farkas.wildaside.capability.contamination.IContamination;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.entity.custom.vibrion.MucellithEntity;
-import net.minecraft.core.Holder;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;

@@ -11,6 +11,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -61,7 +62,6 @@ public class HickoryLeafItem extends FuelItem {
         return InteractionResult.SUCCESS;
     }
 
-
     private InteractionResult addLeaf(Level level, BlockPos pos, Player player, InteractionHand hand) {
         BlockState leaves = level.getBlockState(pos);
 
@@ -78,7 +78,7 @@ public class HickoryLeafItem extends FuelItem {
     }
 
     private void onSuccessfulPlacement(Level level, BlockPos pos, Player player, InteractionHand hand) {
-        var item = player.getItemInHand(hand);
+        ItemStack item = player.getItemInHand(hand);
 
         level.playSound(null, pos, SoundEvents.BIG_DRIPLEAF_PLACE, SoundSource.BLOCKS, 1, 1.1f);
         if (!player.isInvulnerable()) {

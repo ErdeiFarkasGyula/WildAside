@@ -33,7 +33,6 @@ public class SporeBomb extends Item {
         return 200;
     }
 
-
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pHand) {
         pPlayer.startUsingItem(pHand);
         return InteractionResultHolder.consume(pPlayer.getItemInHand(pHand));

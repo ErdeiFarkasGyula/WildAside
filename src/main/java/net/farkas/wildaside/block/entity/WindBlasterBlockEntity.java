@@ -43,7 +43,6 @@ public class WindBlasterBlockEntity extends BlasterBlockEntity {
         super.load(pTag);
     }
 
-
     @Override
     protected void saveAdditional(CompoundTag pTag) {
         super.saveAdditional(pTag);

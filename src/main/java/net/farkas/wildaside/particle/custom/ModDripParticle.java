@@ -51,6 +51,7 @@ public class ModDripParticle extends TextureSheetParticle {
             this.yd = 0;
             stretchFactor = 1.0f;
         } else if (this.age < hangTime + stretchTime) {
+            this.gravity = 0.001f;
             float progress = (this.age - hangTime) / (float) stretchTime;
             this.yd = 0;
             stretchFactor = 1.0f + 1.5f * progress;
@@ -58,9 +59,9 @@ public class ModDripParticle extends TextureSheetParticle {
             if (this.gravity == 0.0f) {
                 this.gravity = 0.05F;
             }
-            this.yd -= this.gravity;
         }
 
+        this.yd -= this.gravity;
         this.move(this.xd, this.yd, this.zd);
         this.xd *= 0.98F;
         this.yd *= 0.98F;

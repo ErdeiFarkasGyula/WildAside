@@ -16,7 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-public class BioengineeringCategory implements IRecipeCategory<BioengineeringWorkstationRecipe> {
+public class BioengineeringRecipeCategory implements IRecipeCategory<BioengineeringWorkstationRecipe> {
     public static final ResourceLocation UID = new ResourceLocation(WildAside.MOD_ID, "bioengineering");
     public static final ResourceLocation TEXTURE = new ResourceLocation(WildAside.MOD_ID, "textures/gui/bioengineering_workstation.png");
 
@@ -26,7 +26,7 @@ public class BioengineeringCategory implements IRecipeCategory<BioengineeringWor
     private final IDrawable background;
     private final IDrawable icon;
 
-    public BioengineeringCategory(IGuiHelper helper) {
+    public BioengineeringRecipeCategory(IGuiHelper helper) {
         this.background = helper.createDrawable(TEXTURE, 17, 10, 140, 65);
         this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModBlocks.BIOENGINEERING_WORKSTATION.get()));
     }

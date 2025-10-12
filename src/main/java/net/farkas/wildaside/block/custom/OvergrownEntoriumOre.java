@@ -32,7 +32,7 @@ public class OvergrownEntoriumOre extends EntoriumOre {
             pPlayer.swing(pHand);
 
             if (!pPlayer.isInvulnerable()) {
-                playerItem.hurt(1, RandomSource.create(), null);
+                playerItem.hurtAndBreak(1, pPlayer, player -> player.broadcastBreakEvent(pHand));
             }
 
             return InteractionResult.SUCCESS;

@@ -80,6 +80,7 @@ class LifestealHandler {
 
             var attacker = t.level.getEntity(t.attackerId);
             var target   = t.level.getEntity(t.targetId);
+
             if (!(attacker instanceof LivingEntity a) || !(target instanceof LivingEntity b)) {
                 it.remove();
                 continue;

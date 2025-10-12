@@ -23,7 +23,7 @@ public class JEIWildAsidePlugin implements IModPlugin {
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
-        registration.addRecipeCategories(new BioengineeringCategory(registration.getJeiHelpers().getGuiHelper()));
+        registration.addRecipeCategories(new BioengineeringRecipeCategory(registration.getJeiHelpers().getGuiHelper()));
     }
 
     @Override
@@ -31,11 +31,11 @@ public class JEIWildAsidePlugin implements IModPlugin {
         RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
 
         List<BioengineeringWorkstationRecipe> bioengineeringRecipes = recipeManager.getAllRecipesFor(BioengineeringWorkstationRecipe.Type.INSTANCE);
-        registration.addRecipes(BioengineeringCategory.BIOENGINEERING_TYPE, bioengineeringRecipes);
+        registration.addRecipes(BioengineeringRecipeCategory.BIOENGINEERING_TYPE, bioengineeringRecipes);
     }
 
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
-        registration.addRecipeClickArea(BioengineeringWorkstationScreen.class, 88, 35, 29, 14, BioengineeringCategory.BIOENGINEERING_TYPE);
+        registration.addRecipeClickArea(BioengineeringWorkstationScreen.class, 88, 35, 29, 14, BioengineeringRecipeCategory.BIOENGINEERING_TYPE);
     }
 }
