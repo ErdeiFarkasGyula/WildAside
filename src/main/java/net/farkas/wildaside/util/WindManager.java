@@ -26,7 +26,7 @@ public class WindManager {
 
     public static WindData calculateWind(RandomSource randomSource) {
         double angle = randomSource.nextDouble() * 2 * Math.PI;
-        Vec3 newDir = new Vec3(Math.cos(angle), 0, Math.sin(angle));
+        Vec3 newDir = new Vec3(Math.cos(angle), (randomSource.nextFloat() - 0.5f) * 0.02f, Math.sin(angle));
         float strength = 0.05f + randomSource.nextFloat() * 0.15f;
         WindManager.setWind(newDir, strength);
         return new WindData(direction, strength);
