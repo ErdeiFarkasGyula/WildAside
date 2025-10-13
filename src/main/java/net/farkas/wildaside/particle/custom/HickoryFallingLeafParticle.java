@@ -59,16 +59,7 @@ public class HickoryFallingLeafParticle extends TextureSheetParticle {
     public void tick() {
         if (this.removed) return;
 
-        float multiplier = 1;
-        if (level.isRaining()) {
-            multiplier = 1.3f;
-        }
-        else
-        if (level.isThundering()) {
-            multiplier = 2f;
-        }
-
-        Vec3 wind = ClientWindData.getWind().scale(multiplier);
+        Vec3 wind = ClientWindData.getWind();
 
         double windInfluence = 0.025;
         this.xd += wind.x * windInfluence;

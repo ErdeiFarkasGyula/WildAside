@@ -1,6 +1,5 @@
 package net.farkas.wildaside.client;
 
-
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
