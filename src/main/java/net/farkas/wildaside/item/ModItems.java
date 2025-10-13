@@ -26,7 +26,7 @@ public class ModItems {
             () ->  new Item(new Item.Properties()));
 
     public static final RegistryObject<Item> MUCELLITH_SPAWN_EGG = ITEMS.register("mucellith_spawn_egg",
-            () ->  new ForgeSpawnEggItem(ModEntities.MUCELLITH, 0xc8e3ff, 0xfff571, new Item.Properties()));
+            () ->  new ForgeSpawnEggItem(ModEntities.MUCELLITH, 0xbfd8f2, 0xf6e392, new Item.Properties()));
     public static final RegistryObject<Item> MUCELLITH_JAW = ITEMS.register("mucellith_jaw",
             () ->  new Item(new Item.Properties()));
     public static final RegistryObject<Item> CONTAMINATED_CREEPER_SPAWN_EGG = ITEMS.register("contaminated_creeper_spawn_egg",
