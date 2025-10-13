@@ -79,7 +79,7 @@ public class ModCommands {
                         .then(Commands.literal("random")
                                 .executes(ctx -> {
                                     ServerLevel serverLevel = ctx.getSource().getLevel();
-                                    WindData windData = WindManager.calculateAndSetWind(serverLevel);
+                                    WindData windData = WindManager.calculateAndSetWind(serverLevel, true);
                                     Vec3 dir = windData.direction();
 
                                     ctx.getSource().sendSuccess(

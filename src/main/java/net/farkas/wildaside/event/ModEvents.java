@@ -98,12 +98,12 @@ public class ModEvents {
         boolean thundering = overworld.isThundering();
 
         if (raining != weatherData.wasRaining() || thundering != weatherData.wasThundering()) {
-            WindManager.calculateAndSetWind(overworld);
+            WindManager.calculateAndSetWind(overworld, false);
         }
 
-        int time = 600;
+        int time = 1200;
         if (server.getTickCount() % time == 0) {
-            WindManager.calculateAndSetWind(overworld);
+            WindManager.calculateAndSetWind(overworld, true);
         }
     }
 
