@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Lowers the attack damage and armor of the infected.$(br2)Applies poison if it has an amplifier of 4 or higher.$(br1)Applies darkness if it has an amplifier of 5 or higher."
+      "text": "Lowers the attack damage and armor of the infected.$(br2)Applies poison if it has an amplifier of 4 or higher.Applies darkness if it has an amplifier of 5 or higher."
     }
   ]
 }
