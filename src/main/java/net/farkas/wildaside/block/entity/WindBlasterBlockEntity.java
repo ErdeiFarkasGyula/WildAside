@@ -5,7 +5,6 @@ import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.util.BlasterUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;

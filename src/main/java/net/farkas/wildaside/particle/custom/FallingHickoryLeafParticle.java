@@ -11,7 +11,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 
-public class HickoryFallingLeafParticle extends TextureSheetParticle {
+public class FallingHickoryLeafParticle extends TextureSheetParticle {
     public static class Provider implements ParticleProvider<SimpleParticleType> {
         private final SpriteSet spriteSet;
 
@@ -21,7 +21,7 @@ public class HickoryFallingLeafParticle extends TextureSheetParticle {
 
         @Override
         public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
-            return new HickoryFallingLeafParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed, this.spriteSet);
+            return new FallingHickoryLeafParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed, this.spriteSet);
         }
     }
 
@@ -30,7 +30,7 @@ public class HickoryFallingLeafParticle extends TextureSheetParticle {
     private final float driftAmplitudeZ;
     private final float rollAmplitude;
 
-    protected HickoryFallingLeafParticle(ClientLevel level, double x, double y, double z, double vx, double vy, double vz, SpriteSet spriteSet) {
+    protected FallingHickoryLeafParticle(ClientLevel level, double x, double y, double z, double vx, double vy, double vz, SpriteSet spriteSet) {
         super(level, x, y, z);
         this.phaseOffset = level.random.nextFloat() * (float)Math.PI * 2;
         this.driftAmplitudeX = 0.1f + level.random.nextFloat() * 0.1f;

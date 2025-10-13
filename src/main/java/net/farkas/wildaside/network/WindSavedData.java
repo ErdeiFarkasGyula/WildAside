@@ -1,6 +1,5 @@
 package net.farkas.wildaside.network;
 
-import net.farkas.wildaside.util.WindData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;

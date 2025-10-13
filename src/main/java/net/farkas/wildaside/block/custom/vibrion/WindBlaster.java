@@ -1,6 +1,5 @@
 package net.farkas.wildaside.block.custom.vibrion;
 
-import com.mojang.serialization.MapCodec;
 import net.farkas.wildaside.block.entity.ModBlockEntities;
 import net.farkas.wildaside.block.entity.WindBlasterBlockEntity;
 import net.minecraft.core.BlockPos;

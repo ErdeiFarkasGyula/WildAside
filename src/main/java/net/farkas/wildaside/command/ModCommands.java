@@ -11,7 +11,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.farkas.wildaside.network.WindSavedData;
 import net.farkas.wildaside.util.ContaminationHandler;
-import net.farkas.wildaside.util.WindData;
+import net.farkas.wildaside.network.WindData;
 import net.farkas.wildaside.util.WindManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;

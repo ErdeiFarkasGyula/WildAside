@@ -1,6 +1,7 @@
 package net.farkas.wildaside.util;
 
 import net.farkas.wildaside.network.NetworkHandler;
+import net.farkas.wildaside.network.WindData;
 import net.farkas.wildaside.network.WindSavedData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;

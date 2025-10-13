@@ -1,7 +1,6 @@
 package net.farkas.wildaside.network;
 
 import net.farkas.wildaside.client.ClientWindData;
-import net.farkas.wildaside.util.WindData;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkEvent;

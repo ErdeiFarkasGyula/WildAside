@@ -1,7 +1,6 @@
 package net.farkas.wildaside.block.entity;
 
 import net.farkas.wildaside.particle.ModParticles;
-import net.farkas.wildaside.util.BlasterUtil;
 import net.farkas.wildaside.util.BlasterUtils;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.minecraft.core.BlockPos;
@@ -10,14 +9,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.SlabBlock;
-import net.minecraft.world.level.block.TrapDoorBlock;
-import net.minecraft.world.level.block.StairBlock;
-import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.DoorHingeSide;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.nbt.CompoundTag;
 import java.util.List;

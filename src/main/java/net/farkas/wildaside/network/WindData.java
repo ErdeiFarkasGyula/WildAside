@@ -1,4 +1,4 @@
-package net.farkas.wildaside.util;
+package net.farkas.wildaside.network;
 
 import net.minecraft.world.phys.Vec3;
 

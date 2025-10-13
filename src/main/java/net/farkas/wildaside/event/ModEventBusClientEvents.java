@@ -53,11 +53,11 @@ public class ModEventBusClientEvents {
         event.registerSpriteSet(ModParticles.LIFESTEAL_PARTICLE.get(), LifestealParticle.Provider::new);
         event.registerSpriteSet(ModParticles.VIBRION_PARTICLE.get(), VibrionParticle.Provider::new);
         event.registerSpriteSet(ModParticles.VIBRION_DRIP_PARTICLE.get(), ModDripParticle.Provider::new);
-        event.registerSpriteSet(ModParticles.HICKORY_LEAF_PARTICLE.get(), HickoryFallingLeafParticle.Provider::new);
-        event.registerSpriteSet(ModParticles.RED_GLOWING_HICKORY_LEAF_PARTICLE.get(), HickoryFallingLeafParticle.Provider::new);
-        event.registerSpriteSet(ModParticles.BROWN_GLOWING_HICKORY_LEAF_PARTICLE.get(), HickoryFallingLeafParticle.Provider::new);
-        event.registerSpriteSet(ModParticles.YELLOW_GLOWING_HICKORY_LEAF_PARTICLE.get(), HickoryFallingLeafParticle.Provider::new);
-        event.registerSpriteSet(ModParticles.GREEN_GLOWING_HICKORY_LEAF_PARTICLE.get(), HickoryFallingLeafParticle.Provider::new);
+        event.registerSpriteSet(ModParticles.HICKORY_LEAF_PARTICLE.get(), FallingHickoryLeafParticle.Provider::new);
+        event.registerSpriteSet(ModParticles.RED_GLOWING_HICKORY_LEAF_PARTICLE.get(), FallingHickoryLeafParticle.Provider::new);
+        event.registerSpriteSet(ModParticles.BROWN_GLOWING_HICKORY_LEAF_PARTICLE.get(), FallingHickoryLeafParticle.Provider::new);
+        event.registerSpriteSet(ModParticles.YELLOW_GLOWING_HICKORY_LEAF_PARTICLE.get(), FallingHickoryLeafParticle.Provider::new);
+        event.registerSpriteSet(ModParticles.GREEN_GLOWING_HICKORY_LEAF_PARTICLE.get(), FallingHickoryLeafParticle.Provider::new);
     }
 
     @SubscribeEvent

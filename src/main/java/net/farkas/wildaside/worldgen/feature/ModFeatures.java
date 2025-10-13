@@ -4,7 +4,6 @@ import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.worldgen.feature.configuration.LargeMushroomConfiguration;
 import net.farkas.wildaside.worldgen.feature.custom.*;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.HugeMushroomFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.ReplaceBlockConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
