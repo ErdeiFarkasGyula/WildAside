@@ -75,50 +75,6 @@ public class ModEvents {
     }
 
     @SubscribeEvent
-    public static void addCustomTrades(VillagerTradesEvent event) {
-        if (event.getType() == VillagerProfession.FARMER) {
-            ItemStack emerald = new ItemStack(Items.EMERALD);
-
-            event.getTrades().get(2).add((pTrader, pRandom) -> new MerchantOffer(
-                    new ItemStack(ModItems.HICKORY_NUT.get(), 16), emerald, 20, 2, 0.05f
-            ));
-            for (HickoryColour colour : HickoryColour.values()) {
-                event.getTrades().get(2).add((pTrader, pRandom) -> new MerchantOffer(
-                        new ItemStack(ModItems.LEAF_ITEMS.get(colour).get(), 32), emerald, 20, 2, 0.05f
-                ));
-            }
-        }
-
-        if (event.getType() == VillagerProfession.TOOLSMITH) {
-            event.getTrades().get(3).add((pTrader, pRandom) -> new MerchantOffer(
-                    new ItemStack(Items.EMERALD, 6), new ItemStack(ModItems.ENTORIUM_PILL.get()), 2, 5, 0.06f
-            ));
-        }
-    }
-
-    @SubscribeEvent
-    public static void addCustomWanderingTrades(WandererTradesEvent event) {
-        List<VillagerTrades.ItemListing> genericTrades = event.getGenericTrades();
-        //List<VillagerTrades.ItemListing> rareTrades = event.getRareTrades();
-
-        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(
-                new ItemStack(Items.EMERALD, 4), new ItemStack(ModBlocks.HICKORY_SAPLING.get()), 8, 2, 0.03f
-        ));
-        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(
-                new ItemStack(Items.EMERALD, 5), new ItemStack(ModBlocks.RED_GLOWING_HICKORY_SAPLING.get()), 8, 2, 0.03f
-        ));
-        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(
-                new ItemStack(Items.EMERALD, 5), new ItemStack(ModBlocks.BROWN_GLOWING_HICKORY_SAPLING.get()), 8, 2, 0.03f
-        ));
-        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(
-                new ItemStack(Items.EMERALD, 5), new ItemStack(ModBlocks.YELLOW_GLOWING_HICKORY_SAPLING.get()), 8, 2, 0.03f
-        ));
-        genericTrades.add((pTrader, pRandom) -> new MerchantOffer(
-                new ItemStack(Items.EMERALD, 5), new ItemStack(ModBlocks.GREEN_GLOWING_HICKORY_SAPLING.get()), 8, 2, 0.03f
-        ));
-    }
-
-    @SubscribeEvent
     public static void onWorldLoad(LevelEvent.Load event) {
         loadWind(event);
     }
@@ -128,11 +84,11 @@ public class ModEvents {
         if (!serverLevel.dimension().equals(ServerLevel.OVERWORLD)) return;
 
         WindSavedData data = WindSavedData.get(serverLevel);
+
         Vec3 dir = data.getWindDirection();
         float strength = data.getWindStrength();
-        WindManager.setWind(dir, strength);
 
-        System.out.println("Applied saved wind on world load: dir=" + dir + ", strength=" + strength);
+        WindManager.setWind(dir, strength);
     }
 
     @SubscribeEvent
