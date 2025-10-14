@@ -40,13 +40,13 @@ public class ModEventBusEvent {
     public static void addPackFinders(AddPackFindersEvent event) {
         if (event.getPackType() != PackType.CLIENT_RESOURCES) return;
 
-        String id = "wildaside_ce";
+        String id = "wildaside_legacy";
         Path packPath = ModList.get().getModFileById(WildAside.MOD_ID).getFile().findResource("resourcepacks/" + id);
 
         event.addRepositorySource(consumer -> {
             Pack pack = Pack.readMetaAndCreate(
                     id,
-                    Component.literal("Wild Aside CEntertain"),
+                    Component.literal("Wild Aside Legacy"),
                     false,
                     (name) -> new PathPackResources(name, packPath, false),
                     event.getPackType(),

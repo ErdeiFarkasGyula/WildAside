@@ -1,0 +1,10 @@
+{
+  "pack": {
+    "description": "The old textures of Wild Aside by Farkas and Dylanvhs",
+    "pack_format": 15,
+    "supported_formats": [
+      15,
+      48
+    ]
+  }
+}
