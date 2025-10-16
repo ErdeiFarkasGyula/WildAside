@@ -1,7 +1,7 @@
-// 1.20.1	2025-10-08T22:04:24.1692578	Registries
-17b21f0c825ef521f8eaf009f88471d28f10f68a data/wildaside/worldgen/biome/glowing_hickory_forest.json
-84e3cc98650bbae664e766c1bbdfd9eb8aae02fe data/wildaside/worldgen/biome/hickory_forest.json
-9522b43d780e551efb49050e1c35b2b2412206bf data/wildaside/worldgen/biome/vibrion_hive.json
+// 1.20.1	2025-10-15T18:57:59.3765115	Registries
+5be18d4760899054800050a035e5d7e0271b40c9 data/wildaside/worldgen/biome/glowing_hickory_forest.json
+c93e345c2bf5a873125dc6afc54a2c07a747116f data/wildaside/worldgen/biome/hickory_forest.json
+a7a16ed6870d0f7bf7a9998827668d743be81f76 data/wildaside/worldgen/biome/vibrion_hive.json
 52e572e74bce0668505f5ff806e2e5e2e806d44e data/wildaside/worldgen/configured_feature/brown_glowing_hickory_bush.json
 a31fb6acb1a341619b51f62f491e48fabc74d5b5 data/wildaside/worldgen/configured_feature/brown_glowing_hickory_sapling.json
 0e2ca5e96c508add6afd73ceee1d78934269737a data/wildaside/worldgen/configured_feature/brown_glowing_hickory_tree.json
