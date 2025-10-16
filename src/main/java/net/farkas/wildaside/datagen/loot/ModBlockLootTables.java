@@ -176,7 +176,11 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.dropSelf(ModBlocks.HICKORY_ROOT_BUSH.get());
 
         this.dropSelf(ModBlocks.SPOTTED_WINTERGREEN.get());
+        this.add(ModBlocks.POTTED_SPOTTED_WINTERGREEN.get(),
+                createPotFlowerItemTable(ModBlocks.SPOTTED_WINTERGREEN.get()));
         this.dropSelf(ModBlocks.PINKSTER_FLOWER.get());
+        this.add(ModBlocks.POTTED_PINKSTER_FLOWER.get(),
+                createPotFlowerItemTable(ModBlocks.PINKSTER_FLOWER.get()));
 
     }
 

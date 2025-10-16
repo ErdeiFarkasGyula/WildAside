@@ -38,17 +38,17 @@ public class ModBlockStateProvider extends BlockStateProvider {
         paneBlockWithRenderType(((IronBarsBlock)ModBlocks.VIBRION_GLASS_PANE.get()), modLoc("block/vibrion_glass"), modLoc("block/vibrion_glass"), "translucent");
         paneBlockWithRenderType(((IronBarsBlock)ModBlocks.LIT_VIBRION_GLASS_PANE.get()), modLoc("block/vibrion_glass"), modLoc("block/vibrion_glass"), "translucent");
 
-
-        simpleBlockWithItem(ModBlocks.VIBRION_GROWTH.get(), models().cross(blockTexture(ModBlocks.VIBRION_GROWTH.get()).getPath(), blockTexture(ModBlocks.VIBRION_GROWTH.get())).renderType("cutout"));
-        simpleBlockWithItem(ModBlocks.POTTED_VIBRION_GROWTH.get(), models().singleTexture("potted_vibrion_growth", new ResourceLocation("flower_pot_cross"), "plant", blockTexture(ModBlocks.POTTED_VIBRION_GROWTH.get())).renderType("cutout"));
+        crossBlock(ModBlocks.VIBRION_GROWTH);
+        pottedBlock(ModBlocks.POTTED_VIBRION_GROWTH);
         simpleBlockWithItem(ModBlocks.VIBRION_SPOREHOLDER.get(),  new ModelFile.UncheckedModelFile(modLoc("custom/vibrion_sporeholder")));
-        simpleBlockWithItem(ModBlocks.HANGING_VIBRION_VINES.get(), models().cross(blockTexture(ModBlocks.HANGING_VIBRION_VINES.get()).getPath(), blockTexture(ModBlocks.HANGING_VIBRION_VINES.get())).renderType("cutout"));
-        simpleBlockWithItem(ModBlocks.HANGING_VIBRION_VINES_PLANT.get(), models().cross(blockTexture(ModBlocks.HANGING_VIBRION_VINES_PLANT.get()).getPath(), blockTexture(ModBlocks.HANGING_VIBRION_VINES_PLANT.get())).renderType("cutout"));
+        crossBlock(ModBlocks.HANGING_VIBRION_VINES);
+        crossBlock(ModBlocks.HANGING_VIBRION_VINES_PLANT);
 
         directionalBlock(ModBlocks.SPORE_BLASTER.get(),  new ModelFile.UncheckedModelFile(modLoc("custom/spore_blaster")));
         simpleBlockItem(ModBlocks.SPORE_BLASTER.get(), new ModelFile.UncheckedModelFile(modLoc("custom/spore_blaster")));
         directionalBlock(ModBlocks.POTION_BLASTER.get(),  new ModelFile.UncheckedModelFile(modLoc("custom/potion_blaster")));
         simpleBlockItem(ModBlocks.POTION_BLASTER.get(), new ModelFile.UncheckedModelFile(modLoc("custom/potion_blaster")));
+
         blockWithItem(ModBlocks.SPORE_AIR);
         axisBlock(((RotatedPillarBlock)ModBlocks.NATURAL_SPORE_BLASTER.get()), modLoc("block/substilium_soil"), modLoc("block/natural_spore_blaster"));
         simpleBlockItem(ModBlocks.NATURAL_SPORE_BLASTER.get(), new ModelFile.UncheckedModelFile(modLoc("custom/natural_spore_blaster")));
@@ -92,7 +92,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         signBlock(((StandingSignBlock) ModBlocks.SUBSTILIUM_SIGN.get()), ((WallSignBlock) ModBlocks.SUBSTILIUM_WALL_SIGN.get()), blockTexture(ModBlocks.SUBSTILIUM_PLANKS.get()));
         hangingSignBlock((ModBlocks.SUBSTILIUM_HANGING_SIGN.get()), (ModBlocks.SUBSTILIUM_WALL_HANGING_SIGN.get()), blockTexture(ModBlocks.SUBSTILIUM_PLANKS.get()));
 
-        simpleBlockWithItem(ModBlocks.SUBSTILIUM_SPROUTS.get(), models().cross(blockTexture(ModBlocks.SUBSTILIUM_SPROUTS.get()).getPath(), blockTexture(ModBlocks.SUBSTILIUM_SPROUTS.get())).renderType("cutout"));
+        crossBlock(ModBlocks.SUBSTILIUM_SPROUTS);
 
         simpleBlock(ModBlocks.BIOENGINEERING_WORKSTATION.get(), new ModelFile.UncheckedModelFile(modLoc("custom/bioengineering_workstation")));
         simpleBlockItem(ModBlocks.BIOENGINEERING_WORKSTATION.get(), new ModelFile.UncheckedModelFile(modLoc("custom/bioengineering_workstation")));
@@ -127,7 +127,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
         ResourceLocation parentModel = modLoc("custom/flat_block");
         ResourceLocation tintedModel = modLoc("custom/flat_tinted_block");
-
 
         ModelFile[][] models = new ModelFile[colours.length][3];
         for (int ci = 0; ci < colours.length; ci++) {
@@ -173,13 +172,19 @@ public class ModBlockStateProvider extends BlockStateProvider {
         });
 
         crossBlock(ModBlocks.SPOTTED_WINTERGREEN);
+        pottedBlock(ModBlocks.POTTED_SPOTTED_WINTERGREEN);
         crossBlock(ModBlocks.PINKSTER_FLOWER);
+        pottedBlock(ModBlocks.POTTED_PINKSTER_FLOWER);
 
     }
 
     private void crossBlock(RegistryObject<Block> blockRegistryObject) {
         simpleBlock(blockRegistryObject.get(),
                 models().cross(ForgeRegistries.BLOCKS.getKey(blockRegistryObject.get()).getPath(), blockTexture(blockRegistryObject.get())).renderType("cutout"));
+    }
+
+    private void pottedBlock(RegistryObject<Block> block) {
+        simpleBlockWithItem(block.get(), models().singleTexture(ForgeRegistries.BLOCKS.getKey(block.get()).getPath(), new ResourceLocation("flower_pot_cross"), "plant", blockTexture(block.get())).renderType("cutout"));
     }
 
     public void hangingSignBlock(Block signBlock, Block wallSignBlock, ResourceLocation texture) {

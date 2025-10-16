@@ -1,4 +1,4 @@
-// 1.20.1	2025-09-10T17:58:26.7632484	Loot Tables
+// 1.20.1	2025-10-16T20:20:59.7864855	Loot Tables
 cb111f4aa2094610caccd6c93bb58846842f1adf data/wildaside/loot_tables/blocks/bioengineering_workstation.json
 9af05efdb1326dfab1d8ce52f3587c6b2314e19e data/wildaside/loot_tables/blocks/brown_glowing_hickory_leaves.json
 806c305e5b6bdf1e690e0d5df8ae5f63031a6a21 data/wildaside/loot_tables/blocks/brown_glowing_hickory_sapling.json
@@ -38,6 +38,8 @@ c3e45623ef522c898f54bf61c7cc6dee5490e9ec data/wildaside/loot_tables/blocks/natur
 a4d1dcb95931cd7cbf2333d527d18ac6fabfa4bf data/wildaside/loot_tables/blocks/overgrown_entorium_ore.json
 9cff9fa985b38020b7b01ef2ad2b885096da2b55 data/wildaside/loot_tables/blocks/pinkster_flower.json
 ce4c65fb7b8379a416dc13189b7e46053d5e6191 data/wildaside/loot_tables/blocks/potion_blaster.json
+f9e0b442062140c0cac9f80311f7021607df0994 data/wildaside/loot_tables/blocks/potted_pinkster_flower.json
+c0b68b94aa45a7c9707a0d5ff6c24fd3750968f7 data/wildaside/loot_tables/blocks/potted_spotted_wintergreen.json
 2cb5b5d8b37cbd4e705a80f1af8d47ce607e2ffa data/wildaside/loot_tables/blocks/potted_vibrion_growth.json
 9f276b52aca738999718f2524fd3a9e41d3094cb data/wildaside/loot_tables/blocks/red_glowing_hickory_leaves.json
 e928ca40de410c55fa7ae34dc96f758f5d6ed7a7 data/wildaside/loot_tables/blocks/red_glowing_hickory_sapling.json

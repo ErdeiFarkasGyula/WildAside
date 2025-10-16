@@ -354,9 +354,13 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> SPOTTED_WINTERGREEN = registerBlock("spotted_wintergreen",
             () ->  new FlowerBlock(() -> MobEffects.MOVEMENT_SPEED, 10, BlockBehaviour.Properties.copy(Blocks.RED_TULIP)));
+    public static final RegistryObject<Block> POTTED_SPOTTED_WINTERGREEN = BLOCKS.register("potted_spotted_wintergreen",
+            () ->  new FlowerPotBlock(() -> (FlowerPotBlock)Blocks.FLOWER_POT, ModBlocks.SPOTTED_WINTERGREEN, BlockBehaviour.Properties.copy(ModBlocks.POTTED_VIBRION_GROWTH.get()).mapColor(MapColor.TERRACOTTA_WHITE)));
+
     public static final RegistryObject<Block> PINKSTER_FLOWER = registerBlock("pinkster_flower",
             () ->  new FlowerBlock(() -> MobEffects.CONFUSION, 10, BlockBehaviour.Properties.copy(Blocks.RED_TULIP)));
-
+    public static final RegistryObject<Block> POTTED_PINKSTER_FLOWER = BLOCKS.register("potted_pinkster_flower",
+            () ->  new FlowerPotBlock(() -> (FlowerPotBlock)Blocks.FLOWER_POT, ModBlocks.PINKSTER_FLOWER, BlockBehaviour.Properties.copy(ModBlocks.POTTED_VIBRION_GROWTH.get()).mapColor(MapColor.COLOR_PINK)));
 
     public static final RegistryObject<Block> HICKORY_LEAVES = registerBlock("hickory_leaves",
             () ->  new HickoryLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)));

@@ -105,7 +105,11 @@ public class WildAside
 
         event.enqueueWork(() -> {
             ModTerraBlenderAPI.registerRegions();
+
             ((FlowerPotBlock)Blocks.FLOWER_POT).addPlant(ModBlocks.VIBRION_GROWTH.getId(), ModBlocks.POTTED_VIBRION_GROWTH);
+            ((FlowerPotBlock)Blocks.FLOWER_POT).addPlant(ModBlocks.SPOTTED_WINTERGREEN.getId(), ModBlocks.POTTED_SPOTTED_WINTERGREEN);
+            ((FlowerPotBlock)Blocks.FLOWER_POT).addPlant(ModBlocks.PINKSTER_FLOWER.getId(), ModBlocks.POTTED_PINKSTER_FLOWER);
+
             DispenserBlock.registerBehavior(ModItems.FERTILISER_BOMB.get(), new AbstractProjectileDispenseBehavior() {
                 @Override
                 protected Projectile getProjectile(Level pLevel, Position pPosition, ItemStack pStack) {
@@ -157,15 +161,6 @@ public class WildAside
         ComposterBlock.COMPOSTABLES.put(ModBlocks.SPOTTED_WINTERGREEN.get().asItem(), 0.65f);
         ComposterBlock.COMPOSTABLES.put(ModBlocks.PINKSTER_FLOWER.get().asItem(), 0.65f);
         ComposterBlock.COMPOSTABLES.put(ModItems.HICKORY_NUT.get(), 0.65f);
-
-//        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(Potions.AWKWARD, ModItems.VIBRION.get(), ModPotions.CONTAMINATION_POTION.get()));
-//        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(ModPotions.CONTAMINATION_POTION.get(), Items.REDSTONE, ModPotions.CONTAMINATION_POTION_2.get()));
-//        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(ModPotions.IMMUNITY_POTION.get(), Items.FERMENTED_SPIDER_EYE, ModPotions.IMMUNITY_POTION.get()));
-
-//        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(Potions.AWKWARD, ModItems.ENTORIUM.get(), ModPotions.IMMUNITY_POTION.get()));
-//        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(ModPotions.CONTAMINATION_POTION.get(), Items.FERMENTED_SPIDER_EYE, ModPotions.IMMUNITY_POTION.get()));
-//        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(ModPotions.IMMUNITY_POTION.get(), Items.REDSTONE, ModPotions.IMMUNITY_POTION_2.get()));
-//        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(ModPotions.CONTAMINATION_POTION_2.get(), Items.FERMENTED_SPIDER_EYE, ModPotions.IMMUNITY_POTION_2.get()));
 
         BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(Potions.AWKWARD, ModItems.MUCELLITH_JAW.get(), ModPotions.LIFESTEAL_POTION.get()));
         BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(ModPotions.LIFESTEAL_POTION.get(), Items.REDSTONE, ModPotions.LIFESTEAL_POTION_2.get()));
