@@ -38,8 +38,9 @@ public class ModBlockStateProvider extends BlockStateProvider {
         paneBlockWithRenderType(((IronBarsBlock)ModBlocks.VIBRION_GLASS_PANE.get()), modLoc("block/vibrion_glass"), modLoc("block/vibrion_glass"), "translucent");
         paneBlockWithRenderType(((IronBarsBlock)ModBlocks.LIT_VIBRION_GLASS_PANE.get()), modLoc("block/vibrion_glass"), modLoc("block/vibrion_glass"), "translucent");
 
+
         simpleBlockWithItem(ModBlocks.VIBRION_GROWTH.get(), models().cross(blockTexture(ModBlocks.VIBRION_GROWTH.get()).getPath(), blockTexture(ModBlocks.VIBRION_GROWTH.get())).renderType("cutout"));
-        simpleBlockWithItem(ModBlocks.POTTED_VIBRION_GROWTH.get(), models().singleTexture("potted_vibrion_growth", new ResourceLocation("flower_pot_cross"), "plant", blockTexture(ModBlocks.VIBRION_GROWTH.get())).renderType("cutout"));
+        simpleBlockWithItem(ModBlocks.POTTED_VIBRION_GROWTH.get(), models().singleTexture("potted_vibrion_growth", new ResourceLocation("flower_pot_cross"), "plant", blockTexture(ModBlocks.POTTED_VIBRION_GROWTH.get())).renderType("cutout"));
         simpleBlockWithItem(ModBlocks.VIBRION_SPOREHOLDER.get(),  new ModelFile.UncheckedModelFile(modLoc("custom/vibrion_sporeholder")));
         simpleBlockWithItem(ModBlocks.HANGING_VIBRION_VINES.get(), models().cross(blockTexture(ModBlocks.HANGING_VIBRION_VINES.get()).getPath(), blockTexture(ModBlocks.HANGING_VIBRION_VINES.get())).renderType("cutout"));
         simpleBlockWithItem(ModBlocks.HANGING_VIBRION_VINES_PLANT.get(), models().cross(blockTexture(ModBlocks.HANGING_VIBRION_VINES_PLANT.get()).getPath(), blockTexture(ModBlocks.HANGING_VIBRION_VINES_PLANT.get())).renderType("cutout"));
