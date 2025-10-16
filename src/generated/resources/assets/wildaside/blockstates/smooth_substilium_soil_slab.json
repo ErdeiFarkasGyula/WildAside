@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "wildaside:block/smooth_substilium_soil_slab"
+    },
+    "type=double": {
+      "model": "wildaside:block/smooth_substilium_soil"
+    },
+    "type=top": {
+      "model": "wildaside:block/smooth_substilium_soil_slab_top"
+    }
+  }
+}

@@ -3,12 +3,14 @@ package net.farkas.wildaside.datagen;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.item.ModItems;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
+import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -20,68 +22,20 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        //VIBRION
+        //SPAWNEGG
+        spawnEggItem(ModItems.MUCELLITH_SPAWN_EGG.getId());
+        spawnEggItem(ModItems.HICKORY_TREANT_SPAWN_EGG.getId());
+        spawnEggItem(ModItems.CONTAMINATED_CREEPER_SPAWN_EGG.getId());
+
+        //SIMPLE
         simpleItem(ModItems.VIBRION);
         simpleItem(ModItems.MUCELLITH_JAW);
-        withExistingParent(ModItems.MUCELLITH_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
-        withExistingParent(ModItems.CONTAMINATED_CREEPER_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
-        simpleBlockItemBlockTexture(ModBlocks.VIBRION_GROWTH);
-        simpleBlockItem(ModBlocks.VIBRION_GLASS_PANE, ModBlocks.VIBRION_GLASS);
-        simpleBlockItem(ModBlocks.LIT_VIBRION_GLASS_PANE, ModBlocks.VIBRION_GLASS);
-        simpleBlockItem(ModBlocks.HANGING_VIBRION_VINES, ModBlocks.HANGING_VIBRION_VINES_PLANT);
-        simpleBlockItem(ModBlocks.HANGING_VIBRION_VINES_PLANT, ModBlocks.HANGING_VIBRION_VINES_PLANT);
 
-        //ENTORIUM
         simpleItem(ModItems.ENTORIUM);
         simpleItem(ModItems.ENTORIUM_PILL);
         simpleItem(ModItems.SPORE_ARROW);
         simpleItem(ModItems.SPORE_BOMB);
         simpleItem(ModItems.FERTILISER_BOMB);
-        evenSimplerBlockItem(ModBlocks.ENTORIUM_ORE);
-        evenSimplerBlockItem(ModBlocks.OVERGROWN_ENTORIUM_ORE);
-
-        //SUBSTILIUM
-        simpleBlockItem(ModBlocks.SUBSTILIUM_DOOR);
-        trapdoorItem(ModBlocks.SUBSTILIUM_TRAPDOOR);
-        evenSimplerBlockItem(ModBlocks.SUBSTILIUM_STEM);
-        evenSimplerBlockItem(ModBlocks.SUBSTILIUM_WOOD);
-        evenSimplerBlockItem(ModBlocks.STRIPPED_SUBSTILIUM_STEM);
-        evenSimplerBlockItem(ModBlocks.STRIPPED_SUBSTILIUM_WOOD);
-        evenSimplerBlockItem(ModBlocks.SUBSTILIUM_STAIRS);
-        evenSimplerBlockItem(ModBlocks.SUBSTILIUM_TILE_STAIRS);
-        evenSimplerBlockItem(ModBlocks.SUBSTILIUM_SLAB);
-        evenSimplerBlockItem(ModBlocks.SUBSTILIUM_TILE_SLAB);
-        evenSimplerBlockItem(ModBlocks.SUBSTILIUM_FENCE_GATE);
-        evenSimplerBlockItem(ModBlocks.SUBSTILIUM_PRESSURE_PLATE);
-        evenSimplerBlockItem(ModBlocks.SUBSTILIUM_TILE_PRESSURE_PLATE);
-        wallItem(ModBlocks.SUBSTILIUM_TILE_WALLS, ModBlocks.SUBSTILIUM_TILES);
-        fenceItem(ModBlocks.SUBSTILIUM_FENCE, ModBlocks.SUBSTILIUM_PLANKS);
-        buttonItem(ModBlocks.SUBSTILIUM_BUTTON, ModBlocks.SUBSTILIUM_PLANKS);
-        buttonItem(ModBlocks.SUBSTILIUM_TILE_BUTTON, ModBlocks.SUBSTILIUM_TILES);
-        simpleItem(ModItems.SUBSTILIUM_SIGN);
-        simpleItem(ModItems.SUBSTILIUM_HANGING_SIGN);
-        simpleItem(ModItems.SUBSTILIUM_BOAT);
-        simpleItem(ModItems.SUBSTILIUM_CHEST_BOAT);
-        simpleBlockItemBlockTexture(ModBlocks.SUBSTILIUM_SPROUTS);
-
-
-        //HICKORY
-        simpleBlockItem(ModBlocks.HICKORY_DOOR);
-        trapdoorItem(ModBlocks.HICKORY_TRAPDOOR);
-        evenSimplerBlockItem(ModBlocks.HICKORY_LOG);
-        evenSimplerBlockItem(ModBlocks.HICKORY_WOOD);
-        evenSimplerBlockItem(ModBlocks.STRIPPED_HICKORY_LOG);
-        evenSimplerBlockItem(ModBlocks.STRIPPED_HICKORY_WOOD);
-        evenSimplerBlockItem(ModBlocks.HICKORY_STAIRS);
-        evenSimplerBlockItem(ModBlocks.HICKORY_SLAB);
-        evenSimplerBlockItem(ModBlocks.HICKORY_FENCE_GATE);
-        evenSimplerBlockItem(ModBlocks.HICKORY_PRESSURE_PLATE);
-        fenceItem(ModBlocks.HICKORY_FENCE, ModBlocks.HICKORY_PLANKS);
-        buttonItem(ModBlocks.HICKORY_BUTTON, ModBlocks.HICKORY_PLANKS);
-        simpleItem(ModItems.HICKORY_SIGN);
-        simpleItem(ModItems.HICKORY_HANGING_SIGN);
-        simpleItem(ModItems.HICKORY_BOAT);
-        simpleItem(ModItems.HICKORY_CHEST_BOAT);
 
         simpleItem(ModItems.HICKORY_NUT);
         simpleItem(ModItems.HICKORY_NUT_TRAIL_MIX);
@@ -89,11 +43,6 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.BROWN_HICKORY_NUT_TRAIL_MIX);
         simpleItem(ModItems.YELLOW_HICKORY_NUT_TRAIL_MIX);
         simpleItem(ModItems.GREEN_HICKORY_NUT_TRAIL_MIX);
-        simpleBlockItemBlockTexture(ModBlocks.HICKORY_SAPLING);
-        simpleBlockItemBlockTexture(ModBlocks.RED_GLOWING_HICKORY_SAPLING);
-        simpleBlockItemBlockTexture(ModBlocks.BROWN_GLOWING_HICKORY_SAPLING);
-        simpleBlockItemBlockTexture(ModBlocks.YELLOW_GLOWING_HICKORY_SAPLING);
-        simpleBlockItemBlockTexture(ModBlocks.GREEN_GLOWING_HICKORY_SAPLING);
 
         simpleItem(ModItems.HICKORY_LEAF);
         simpleItem(ModItems.RED_GLOWING_HICKORY_LEAF);
@@ -101,12 +50,93 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.YELLOW_GLOWING_HICKORY_LEAF);
         simpleItem(ModItems.GREEN_GLOWING_HICKORY_LEAF);
 
-        simpleBlockItemBlockTexture(ModBlocks.HICKORY_ROOT_BUSH);
-        withExistingParent(ModItems.HICKORY_TREANT_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
 
+        //SIMPLE BLOCK ITEM
+        simpleBlockItem(ModBlocks.VIBRION_GLASS_PANE, ModBlocks.VIBRION_GLASS);
+        simpleBlockItem(ModBlocks.LIT_VIBRION_GLASS_PANE, ModBlocks.VIBRION_GLASS);
+        simpleBlockItem(ModBlocks.HANGING_VIBRION_VINES, ModBlocks.HANGING_VIBRION_VINES_PLANT);
+        simpleBlockItem(ModBlocks.HANGING_VIBRION_VINES_PLANT, ModBlocks.HANGING_VIBRION_VINES_PLANT);
+
+        //EVEN SIMPLER
+        evenSimplerBlockItem(ModBlocks.SUBSTILIUM_STEM);
+        evenSimplerBlockItem(ModBlocks.SUBSTILIUM_WOOD);
+        evenSimplerBlockItem(ModBlocks.STRIPPED_SUBSTILIUM_STEM);
+        evenSimplerBlockItem(ModBlocks.STRIPPED_SUBSTILIUM_WOOD);
+
+        evenSimplerBlockItem(ModBlocks.HICKORY_LOG);
+        evenSimplerBlockItem(ModBlocks.HICKORY_WOOD);
+        evenSimplerBlockItem(ModBlocks.STRIPPED_HICKORY_LOG);
+        evenSimplerBlockItem(ModBlocks.STRIPPED_HICKORY_WOOD);
+
+        //SIMPLE BLOCK ITEM BLOCK TEXTURE
+        simpleBlockItemBlockTexture(ModBlocks.SUBSTILIUM_SPROUTS);
+        simpleBlockItemBlockTexture(ModBlocks.VIBRION_GROWTH);
+
+        simpleBlockItemBlockTexture(ModBlocks.HICKORY_SAPLING);
+        simpleBlockItemBlockTexture(ModBlocks.RED_GLOWING_HICKORY_SAPLING);
+        simpleBlockItemBlockTexture(ModBlocks.BROWN_GLOWING_HICKORY_SAPLING);
+        simpleBlockItemBlockTexture(ModBlocks.YELLOW_GLOWING_HICKORY_SAPLING);
+        simpleBlockItemBlockTexture(ModBlocks.GREEN_GLOWING_HICKORY_SAPLING);
+
+        simpleBlockItemBlockTexture(ModBlocks.HICKORY_ROOT_BUSH);
         simpleBlockItemBlockTexture(ModBlocks.SPOTTED_WINTERGREEN);
         simpleBlockItemBlockTexture(ModBlocks.PINKSTER_FLOWER);
 
+        //STAIRS
+        evenSimplerBlockItem(ModBlocks.SUBSTILIUM_STAIRS);
+        evenSimplerBlockItem(ModBlocks.SMOOTH_SUBSTILIUM_SOIL_STAIRS);
+        evenSimplerBlockItem(ModBlocks.SUBSTILIUM_TILE_STAIRS);
+        evenSimplerBlockItem(ModBlocks.HICKORY_STAIRS);
+
+        //SLAB
+        evenSimplerBlockItem(ModBlocks.SUBSTILIUM_SLAB);
+        evenSimplerBlockItem(ModBlocks.SMOOTH_SUBSTILIUM_SOIL_SLAB);
+        evenSimplerBlockItem(ModBlocks.SUBSTILIUM_TILE_SLAB);
+        evenSimplerBlockItem(ModBlocks.HICKORY_SLAB);
+
+        //WALLS
+        wallItem(ModBlocks.SUBSTILIUM_TILE_WALLS, ModBlocks.SUBSTILIUM_TILES);
+        wallItem(ModBlocks.SMOOTH_SUBSTILIUM_SOIL_WALLS, ModBlocks.SMOOTH_SUBSTILIUM_SOIL);
+
+        //FENCE
+        fenceItem(ModBlocks.SUBSTILIUM_FENCE, ModBlocks.SUBSTILIUM_PLANKS);
+        fenceItem(ModBlocks.HICKORY_FENCE, ModBlocks.HICKORY_PLANKS);
+
+        //FENCEGATE
+        evenSimplerBlockItem(ModBlocks.SUBSTILIUM_FENCE_GATE);
+        evenSimplerBlockItem(ModBlocks.HICKORY_FENCE_GATE);
+
+        //PRESSUREPLATE
+        evenSimplerBlockItem(ModBlocks.SUBSTILIUM_PRESSURE_PLATE);
+        evenSimplerBlockItem(ModBlocks.SMOOTH_SUBSTILIUM_SOIL_PRESSURE_PLATE);
+        evenSimplerBlockItem(ModBlocks.SUBSTILIUM_TILE_PRESSURE_PLATE);
+        evenSimplerBlockItem(ModBlocks.HICKORY_PRESSURE_PLATE);
+
+        //BUTTON
+        buttonItem(ModBlocks.SUBSTILIUM_BUTTON, ModBlocks.SUBSTILIUM_PLANKS);
+        buttonItem(ModBlocks.SMOOTH_SUBSTILIUM_SOIL_BUTTON, ModBlocks.SMOOTH_SUBSTILIUM_SOIL);
+        buttonItem(ModBlocks.SUBSTILIUM_TILE_BUTTON, ModBlocks.SUBSTILIUM_TILES);
+        buttonItem(ModBlocks.HICKORY_BUTTON, ModBlocks.HICKORY_PLANKS);
+
+        //DOOR
+        simpleBlockItem(ModBlocks.SUBSTILIUM_DOOR);
+        simpleBlockItem(ModBlocks.HICKORY_DOOR);
+
+        //TRAPDOOR
+        trapdoorItem(ModBlocks.SUBSTILIUM_TRAPDOOR);
+        trapdoorItem(ModBlocks.HICKORY_TRAPDOOR);
+
+        //SIGN
+        simpleItem(ModItems.SUBSTILIUM_SIGN);
+        simpleItem(ModItems.SUBSTILIUM_HANGING_SIGN);
+        simpleItem(ModItems.HICKORY_SIGN);
+        simpleItem(ModItems.HICKORY_HANGING_SIGN);
+
+        //BOAT
+        simpleItem(ModItems.SUBSTILIUM_BOAT);
+        simpleItem(ModItems.SUBSTILIUM_CHEST_BOAT);
+        simpleItem(ModItems.HICKORY_BOAT);
+        simpleItem(ModItems.HICKORY_CHEST_BOAT);
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item) {
@@ -118,26 +148,6 @@ public class ModItemModelProvider extends ItemModelProvider {
     public void evenSimplerBlockItem(RegistryObject<Block> block) {
         this.withExistingParent(WildAside.MOD_ID + ":" + ForgeRegistries.BLOCKS.getKey(block.get()).getPath(),
                 modLoc("block/" + ForgeRegistries.BLOCKS.getKey(block.get()).getPath()));
-    }
-
-    public void trapdoorItem(RegistryObject<Block> block) {
-        this.withExistingParent(ForgeRegistries.BLOCKS.getKey(block.get()).getPath(),
-                modLoc("block/" + ForgeRegistries.BLOCKS.getKey(block.get()).getPath() + "_bottom"));
-    }
-
-    public void fenceItem(RegistryObject<Block> block, RegistryObject<Block> baseBlock) {
-        this.withExistingParent(ForgeRegistries.BLOCKS.getKey(block.get()).getPath(), mcLoc("block/fence_inventory"))
-                .texture("texture",  new ResourceLocation(WildAside.MOD_ID, "block/" + ForgeRegistries.BLOCKS.getKey(baseBlock.get()).getPath()));
-    }
-
-    public void buttonItem(RegistryObject<Block> block, RegistryObject<Block> baseBlock) {
-        this.withExistingParent(ForgeRegistries.BLOCKS.getKey(block.get()).getPath(), mcLoc("block/button_inventory"))
-                .texture("texture",  new ResourceLocation(WildAside.MOD_ID, "block/" + ForgeRegistries.BLOCKS.getKey(baseBlock.get()).getPath()));
-    }
-
-    public void wallItem(RegistryObject<Block> block, RegistryObject<Block> baseBlock) {
-        this.withExistingParent(ForgeRegistries.BLOCKS.getKey(block.get()).getPath(), mcLoc("block/wall_inventory"))
-                .texture("wall",  new ResourceLocation(WildAside.MOD_ID, "block/" + ForgeRegistries.BLOCKS.getKey(baseBlock.get()).getPath()));
     }
 
     private ItemModelBuilder simpleBlockItem(RegistryObject<Block> item) {
@@ -162,5 +172,29 @@ public class ModItemModelProvider extends ItemModelProvider {
         return withExistingParent(item.getId().getPath(),
                 new ResourceLocation("item/handheld")).texture("layer0",
                 new ResourceLocation(WildAside.MOD_ID,"item/" + item.getId().getPath()));
+    }
+
+    public ItemModelBuilder spawnEggItem(ResourceLocation item) {
+        return (ItemModelBuilder)((ItemModelBuilder)this.getBuilder(item.toString())).parent(new ModelFile.UncheckedModelFile("item/template_spawn_egg"));
+    }
+
+    public void wallItem(RegistryObject<Block> block, RegistryObject<Block> baseBlock) {
+        this.withExistingParent(ForgeRegistries.BLOCKS.getKey(block.get()).getPath(), mcLoc("block/wall_inventory"))
+                .texture("wall",  new ResourceLocation(WildAside.MOD_ID, "block/" + ForgeRegistries.BLOCKS.getKey(baseBlock.get()).getPath()));
+    }
+
+    public void fenceItem(RegistryObject<Block> block, RegistryObject<Block> baseBlock) {
+        this.withExistingParent(ForgeRegistries.BLOCKS.getKey(block.get()).getPath(), mcLoc("block/fence_inventory"))
+                .texture("texture",  new ResourceLocation(WildAside.MOD_ID, "block/" + ForgeRegistries.BLOCKS.getKey(baseBlock.get()).getPath()));
+    }
+
+    public void buttonItem(RegistryObject<Block> block, RegistryObject<Block> baseBlock) {
+        this.withExistingParent(ForgeRegistries.BLOCKS.getKey(block.get()).getPath(), mcLoc("block/button_inventory"))
+                .texture("texture",  new ResourceLocation(WildAside.MOD_ID, "block/" + ForgeRegistries.BLOCKS.getKey(baseBlock.get()).getPath()));
+    }
+
+    public void trapdoorItem(RegistryObject<Block> block) {
+        this.withExistingParent(ForgeRegistries.BLOCKS.getKey(block.get()).getPath(),
+                modLoc("block/" + ForgeRegistries.BLOCKS.getKey(block.get()).getPath() + "_bottom"));
     }
 }

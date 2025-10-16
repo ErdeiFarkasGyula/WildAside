@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [
+    {
+      "item": "wildaside:smooth_substilium_soil"
+    }
+  ],
+  "result": {
+    "item": "wildaside:smooth_substilium_soil_button"
+  }
+}

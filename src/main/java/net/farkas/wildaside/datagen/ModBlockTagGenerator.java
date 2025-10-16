@@ -19,6 +19,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider pProvider) {
+        //CUSTOM
         this.tag(ModTags.Blocks.VIBRION_GELS)
                 .add(ModBlocks.VIBRION_GEL.get())
                 .add(ModBlocks.LIT_VIBRION_GEL.get());
@@ -31,12 +32,17 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 .add(ModBlocks.SUBSTILIUM_SOIL.get())
                 .add(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get());
 
-        //
+        //VANILLA
 
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(ModBlocks.SPORE_BLASTER.get())
                 .add(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get())
                 .add(ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get())
+                .add(ModBlocks.SMOOTH_SUBSTILIUM_SOIL_STAIRS.get())
+                .add(ModBlocks.SMOOTH_SUBSTILIUM_SOIL_SLAB.get())
+                .add(ModBlocks.SMOOTH_SUBSTILIUM_SOIL_BUTTON.get())
+                .add(ModBlocks.SMOOTH_SUBSTILIUM_SOIL_PRESSURE_PLATE.get())
+                .add(ModBlocks.SMOOTH_SUBSTILIUM_SOIL_WALLS.get())
                 .add(ModBlocks.CHISELED_SUBSTILIUM_SOIL.get())
                 .add(ModBlocks.SUBSTILIUM_TILES.get())
                 .add(ModBlocks.CRACKED_SUBSTILIUM_TILES.get())
@@ -122,41 +128,54 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 .add(ModBlocks.ENTORIUM_ORE.get())
                 .add(ModBlocks.OVERGROWN_ENTORIUM_ORE.get());
 
-        //
         this.tag(BlockTags.STAIRS)
                 .add(ModBlocks.SUBSTILIUM_STAIRS.get())
+                .add(ModBlocks.SMOOTH_SUBSTILIUM_SOIL_STAIRS.get())
                 .add(ModBlocks.SUBSTILIUM_TILE_STAIRS.get())
                 .add(ModBlocks.HICKORY_STAIRS.get());
+
         this.tag(BlockTags.SLABS)
                 .add(ModBlocks.SUBSTILIUM_SLAB.get())
+                .add(ModBlocks.SMOOTH_SUBSTILIUM_SOIL_SLAB.get())
                 .add(ModBlocks.SUBSTILIUM_TILE_SLAB.get())
                 .add(ModBlocks.HICKORY_SLAB.get());
+
         this.tag(BlockTags.BUTTONS)
                 .add(ModBlocks.SUBSTILIUM_BUTTON.get())
+                .add(ModBlocks.SMOOTH_SUBSTILIUM_SOIL_BUTTON.get())
                 .add(ModBlocks.SUBSTILIUM_TILE_BUTTON.get())
                 .add(ModBlocks.HICKORY_BUTTON.get());
+
         this.tag(BlockTags.PRESSURE_PLATES)
                 .add(ModBlocks.SUBSTILIUM_PRESSURE_PLATE.get())
+                .add(ModBlocks.SMOOTH_SUBSTILIUM_SOIL_PRESSURE_PLATE.get())
                 .add(ModBlocks.SUBSTILIUM_TILE_PRESSURE_PLATE.get())
                 .add(ModBlocks.HICKORY_PRESSURE_PLATE.get());
+
         this.tag(BlockTags.DOORS)
                 .add(ModBlocks.SUBSTILIUM_DOOR.get())
                 .add(ModBlocks.SUBSTILIUM_DOOR.get());
+
         this.tag(BlockTags.TRAPDOORS)
                 .add(ModBlocks.SUBSTILIUM_TRAPDOOR.get())
                 .add(ModBlocks.HICKORY_TRAPDOOR.get());
+
         this.tag(BlockTags.SIGNS)
                 .add(ModBlocks.SUBSTILIUM_SIGN.get())
                 .add(ModBlocks.HICKORY_SIGN.get());
+
         this.tag(BlockTags.WALL_SIGNS)
                 .add(ModBlocks.SUBSTILIUM_WALL_SIGN.get())
                 .add(ModBlocks.HICKORY_WALL_SIGN.get());
+
         this.tag(BlockTags.STANDING_SIGNS)
                 .add(ModBlocks.HICKORY_SIGN.get())
                 .add(ModBlocks.SUBSTILIUM_SIGN.get());
+
         this.tag(BlockTags.WALL_HANGING_SIGNS)
                 .add(ModBlocks.HICKORY_WALL_HANGING_SIGN.get())
                 .add(ModBlocks.SUBSTILIUM_WALL_HANGING_SIGN.get());
+
         this.tag(BlockTags.ALL_SIGNS)
                 .add(ModBlocks.SUBSTILIUM_SIGN.get())
                 .add(ModBlocks.SUBSTILIUM_WALL_SIGN.get())
@@ -166,13 +185,17 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 .add(ModBlocks.HICKORY_WALL_SIGN.get())
                 .add(ModBlocks.HICKORY_HANGING_SIGN.get())
                 .add(ModBlocks.HICKORY_WALL_HANGING_SIGN.get());
+
         this.tag(BlockTags.FENCES)
                 .add(ModBlocks.SUBSTILIUM_FENCE.get())
                 .add(ModBlocks.HICKORY_FENCE.get());
+
         this.tag(BlockTags.FENCE_GATES)
                 .add(ModBlocks.SUBSTILIUM_FENCE_GATE.get())
                 .add(ModBlocks.HICKORY_FENCE_GATE.get());
+
         this.tag(BlockTags.WALLS)
+                .add(ModBlocks.SMOOTH_SUBSTILIUM_SOIL_WALLS.get())
                 .add(ModBlocks.SUBSTILIUM_TILE_WALLS.get());
 
         this.tag(BlockTags.LOGS_THAT_BURN)

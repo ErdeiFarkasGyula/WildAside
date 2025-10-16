@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/button_pressed",
+  "textures": {
+    "texture": "wildaside:block/smooth_substilium_soil"
+  }
+}

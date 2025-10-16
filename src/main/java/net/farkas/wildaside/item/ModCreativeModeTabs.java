@@ -34,12 +34,15 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.MUCELLITH_JAW.get());
 //                        pOutput.accept(ModItems.CONTAMINATED_CREEPER_SPAWN_EGG.get());
 
-
                         pOutput.accept(ModBlocks.SUBSTILIUM_SPROUTS.get());
                         pOutput.accept(ModBlocks.SUBSTILIUM_SOIL.get());
                         pOutput.accept(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get());
                         pOutput.accept(ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get());
-                        pOutput.accept(ModBlocks.CHISELED_SUBSTILIUM_SOIL.get());
+                        pOutput.accept(ModBlocks.SMOOTH_SUBSTILIUM_SOIL_STAIRS.get());
+                        pOutput.accept(ModBlocks.SMOOTH_SUBSTILIUM_SOIL_SLAB.get());
+                        pOutput.accept(ModBlocks.SMOOTH_SUBSTILIUM_SOIL_WALLS.get());
+                        pOutput.accept(ModBlocks.SMOOTH_SUBSTILIUM_SOIL_PRESSURE_PLATE.get());
+                        pOutput.accept(ModBlocks.SMOOTH_SUBSTILIUM_SOIL_BUTTON.get());
                         pOutput.accept(ModBlocks.SUBSTILIUM_TILES.get());
                         pOutput.accept(ModBlocks.CRACKED_SUBSTILIUM_TILES.get());
                         pOutput.accept(ModBlocks.SUBSTILIUM_TILE_STAIRS.get());
@@ -47,6 +50,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModBlocks.SUBSTILIUM_TILE_WALLS.get());
                         pOutput.accept(ModBlocks.SUBSTILIUM_TILE_PRESSURE_PLATE.get());
                         pOutput.accept(ModBlocks.SUBSTILIUM_TILE_BUTTON.get());
+                        pOutput.accept(ModBlocks.CHISELED_SUBSTILIUM_SOIL.get());
 
                         pOutput.accept(ModBlocks.SUBSTILIUM_COAL_ORE.get());
                         pOutput.accept(ModBlocks.SUBSTILIUM_IRON_ORE.get());

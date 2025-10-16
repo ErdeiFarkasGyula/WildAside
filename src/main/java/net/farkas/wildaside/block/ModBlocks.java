@@ -200,6 +200,27 @@ public class ModBlocks {
     public static final RegistryObject<Block> SMOOTH_SUBSTILIUM_SOIL = registerBlock("smooth_substilium_soil",
             () ->  new Block(BlockBehaviour.Properties.copy(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get())));
 
+    public static final RegistryObject<Block> SMOOTH_SUBSTILIUM_SOIL_STAIRS = registerBlock("smooth_substilium_soil_stairs",
+            () -> new StairBlock(() -> ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get().defaultBlockState(),
+                    BlockBehaviour.Properties.copy(ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get())));
+
+    public static final RegistryObject<Block> SMOOTH_SUBSTILIUM_SOIL_SLAB = registerBlock("smooth_substilium_soil_slab",
+            () -> new SlabBlock(BlockBehaviour.Properties.copy(ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get())));
+
+    public static final RegistryObject<Block> SMOOTH_SUBSTILIUM_SOIL_WALLS = registerBlock("smooth_substilium_soil_walls",
+            () -> new WallBlock(BlockBehaviour.Properties.copy(ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get())));
+
+    public static final RegistryObject<Block> SMOOTH_SUBSTILIUM_SOIL_PRESSURE_PLATE = registerBlock("smooth_substilium_soil_pressure_plate",
+            () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, BlockBehaviour.Properties.of()
+                            .mapColor(MapColor.COLOR_CYAN)
+                            .sound(SoundType.DEEPSLATE)
+                            .strength(1, 12), BlockSetType.STONE));
+
+    public static final RegistryObject<Block> SMOOTH_SUBSTILIUM_SOIL_BUTTON = registerBlock("smooth_substilium_soil_button",
+            () -> new ButtonBlock(BlockBehaviour.Properties.copy(ModBlocks.SMOOTH_SUBSTILIUM_SOIL_PRESSURE_PLATE.get()),
+                    BlockSetType.STONE, 20, true));
+
+
     public static final RegistryObject<Block> CHISELED_SUBSTILIUM_SOIL = registerBlock("chiseled_substilium_soil",
             () ->  new Block(BlockBehaviour.Properties.copy(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get())));
 
