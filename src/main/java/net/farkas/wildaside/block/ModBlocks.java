@@ -409,6 +409,7 @@ public class ModBlocks {
                     .noOcclusion()
                     .instabreak()
                     .replaceable()
+                    .offsetType(BlockBehaviour.OffsetType.XZ)
                     .pushReaction(PushReaction.DESTROY)));
 
     public static final RegistryObject<Block> HICKORY_SAPLING = registerBlock("hickory_sapling",
