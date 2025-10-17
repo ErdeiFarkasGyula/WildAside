@@ -1,0 +1,15 @@
+{
+  "name": "Vibrion spóratartó",
+  "icon": "wildaside:vibrion_sporeholder",
+  "category": "wildaside:blocks",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "wildaside:vibrion_sporeholder"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "A vibrion kaptár természetes növényzetének része. Mindenkit megfertőz, aki átsétál rajta. Egy pillanatnyi spóra felhőt hagy, miután kiszedik."
+    }
+  ]
+}

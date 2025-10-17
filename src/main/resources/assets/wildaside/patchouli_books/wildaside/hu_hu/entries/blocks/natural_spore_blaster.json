@@ -1,0 +1,15 @@
+{
+  "name": "Természetes spóra ágyú",
+  "icon": "wildaside:natural_spore_blaster",
+  "category": "wildaside:blocks",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "wildaside:natural_spore_blaster"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Természetes helye a vibrion kaptár. Fertőző spóra sugarat lő ki két irányba, véletlenszerű hosszúsággal."
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Fertőzés",
+  "icon": "wildaside:textures/mob_effect/contamination.png",
+  "category": "wildaside:effects",
+  "advancement": "wildaside:contamination",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A fertőzött sebzését és páncélzatát csökkenti.$(br2)Mérgezést produkál ha 4, vagy magasabb szintű. Sötétség hatást ad, ha 5, vagy magasabb szintű."
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "Spóra bomba",
+  "icon": "wildaside:spore_bomb",
+  "category": "wildaside:items",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "wildaside:spore_bomb"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Eldobva, egy körben fertőz, aminek sugara a felhúzottságtól függ."
+    }
+  ]
+}

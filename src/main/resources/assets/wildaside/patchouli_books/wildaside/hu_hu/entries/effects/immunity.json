@@ -1,0 +1,12 @@
+{
+  "name": "Immunitás",
+  "icon": "wildaside:textures/mob_effect/immunity.png",
+  "category": "wildaside:effects",
+  "advancement": "wildaside:immunity",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Immunitást biztosít a fertőzöttség ellen, a saját szintjéig.$(br2)Fertőzöttség túlélésével, vagy egy entorium kapszula elfogyasztásával kapható."
+    }
+  ]
+}

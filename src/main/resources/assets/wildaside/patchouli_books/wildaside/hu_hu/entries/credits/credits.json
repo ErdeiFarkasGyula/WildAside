@@ -1,0 +1,15 @@
+{
+  "name": "Stáblista",
+  "icon": "minecraft:paper",
+  "category": "wildaside:credits",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Készítette Erdei Farkas Gyula."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Új textúrák: CEntertain.$(br2)Régi textúrák: Farkas & Dylanvhs.$(br2)Mucellith hangja: MSF.$(br2)Külön köszönet: Dylanvhs, Toma400 & Lyof429."
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Vibrion kaptár",
+  "icon": "wildaside:substilium_soil",
+  "category": "wildaside:biomes",
+  "advancement": "wildaside:descent",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Baktérium fertőzött bánya.$(br2)Nem veszélyes, amíg nem vétesz egy hibát."
+    }
+  ]
+}

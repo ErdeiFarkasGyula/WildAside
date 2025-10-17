@@ -1,0 +1,15 @@
+{
+  "name": "Szubsztílium föld",
+  "icon": "wildaside:substilium_soil",
+  "category": "wildaside:blocks",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "wildaside:substilium_soil"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "A vibrion kaptár talajának legnagyobb részét teszi ki. A blokk maga, és a érc variánsai is ásóval szedhetőek ki a leggyorsabban."
+    }
+  ]
+}

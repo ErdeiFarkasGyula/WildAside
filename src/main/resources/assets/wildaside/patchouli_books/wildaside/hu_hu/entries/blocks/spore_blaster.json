@@ -1,0 +1,15 @@
+{
+  "name": "Spóra ágyú",
+  "icon": "wildaside:spore_blaster",
+  "category": "wildaside:blocks",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "wildaside:spore_blaster"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Egy fertőző spóra sugarat lő ki, aminek a hossza a kapott redstone jel erősségétől függ."
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "Bájital ágyú",
+  "icon": "wildaside:potion_blaster",
+  "category": "wildaside:blocks",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "wildaside:potion_blaster"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Egy sugarat lő ki, ami a jelengleg kiválasztott hatást applikálja az azon áthaladókra. A sugár hossza a redstone jel erősségtől függ.$(br2)A jelenlegi hatást át lehet ugrani, ha két oldalról adunk neki jelet."
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "Trágya bomba",
+  "icon": "wildaside:fertiliser_bomb",
+  "category": "wildaside:items",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "wildaside:fertiliser_bomb"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Dobható csontliszt, nagyobb hatókörrel, aminek sugara a felhúzottságától függ."
+    }
+  ]
+}

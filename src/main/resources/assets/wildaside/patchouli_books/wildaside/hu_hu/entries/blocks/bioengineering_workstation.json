@@ -1,0 +1,15 @@
+{
+  "name": "Biomérnöki munkaállomás",
+  "icon": "wildaside:bioengineering_workstation",
+  "category": "wildaside:blocks",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "wildaside:bioengineering_workstation"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Vibrion és entorium tárgyak elkészítésére alkalmas."
+    }
+  ]
+}

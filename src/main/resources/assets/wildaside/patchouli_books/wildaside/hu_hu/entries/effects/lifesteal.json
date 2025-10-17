@@ -1,0 +1,12 @@
+{
+  "name": "Életerőszívás",
+  "icon": "wildaside:textures/mob_effect/lifesteal.png",
+  "category": "wildaside:effects",
+  "advancement": "wildaside:lifesteal",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Az általad kiosztott sebzés egy részéért gyógyítást biztosít.$(br2)Egy mucellith állkapocsból főzött bájitalból kapható."
+    }
+  ]
+}

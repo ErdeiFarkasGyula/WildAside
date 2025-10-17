@@ -1,5 +1,5 @@
 {
-  "name": "Overgrown Entorium Ore",
+  "name": "Benőtt entorium érc",
   "icon": "wildaside:overgrown_entorium_ore",
   "category": "wildaside:blocks",
   "advancement": "wildaside:its_shearing_time",
@@ -10,7 +10,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Shear the block to reveal what's hiding inside."
+      "text": "Használj egy metszőollót, hogy megtudd mi rejlik a blokkban."
     }
   ]
 }

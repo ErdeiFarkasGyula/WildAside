@@ -1,0 +1,13 @@
+{
+  "name": "Hikori erdő",
+  "icon": "wildaside:hickory_log",
+  "category": "wildaside:biomes",
+  "advancement": "wildaside:hickory_forest",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Hikori fák tornyosulnak előtted, ahogyan annak levelei kecsesen hullanak körülötted."
+    }
+  ]
+}
