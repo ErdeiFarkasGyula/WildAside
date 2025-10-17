@@ -220,7 +220,6 @@ public class ModBlocks {
             () -> new ButtonBlock(BlockBehaviour.Properties.copy(ModBlocks.SMOOTH_SUBSTILIUM_SOIL_PRESSURE_PLATE.get()),
                     BlockSetType.STONE, 20, true));
 
-
     public static final RegistryObject<Block> CHISELED_SUBSTILIUM_SOIL = registerBlock("chiseled_substilium_soil",
             () ->  new Block(BlockBehaviour.Properties.copy(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get())));
 

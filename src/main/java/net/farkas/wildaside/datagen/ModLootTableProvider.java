@@ -1,6 +1,5 @@
 package net.farkas.wildaside.datagen;
 
-import net.farkas.wildaside.datagen.loot.ModBlockLootTables;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;

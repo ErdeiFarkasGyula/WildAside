@@ -26,13 +26,13 @@ public class ModDripParticle extends TextureSheetParticle {
 
     private final int hangTime = 60;
     private final int stretchTime = 30;
-    private float stretchFactor = 1f;
+    private float stretchFactor = 0f;
 
     protected ModDripParticle(ClientLevel level, double x, double y, double z, SpriteSet spriteSet) {
         super(level, x, y, z);
-        this.setSize(0.01F, 0.01F);
+        this.setSize(0.01f, 0.01f);
         this.lifetime = hangTime + stretchTime + 60 + this.random.nextInt(20);
-        this.gravity = 0.0F;
+        this.gravity = 0.0f;
         this.pickSprite(spriteSet);
     }
 

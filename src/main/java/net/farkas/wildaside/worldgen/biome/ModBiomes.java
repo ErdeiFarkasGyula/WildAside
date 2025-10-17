@@ -148,6 +148,7 @@ public class ModBiomes {
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
 
         spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntities.MUCELLITH.get(), 67, 2, 4));
+
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
         globalOverworldGeneration(biomeBuilder);

@@ -1,4 +1,4 @@
-package net.farkas.wildaside.datagen.loot;
+package net.farkas.wildaside.datagen;
 
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.item.ModItems;
