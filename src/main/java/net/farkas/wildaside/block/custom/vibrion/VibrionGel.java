@@ -96,7 +96,7 @@ public class VibrionGel extends Block implements SimpleWaterloggedBlock {
         if (pRandom.nextInt(5) == 0) {
             if (pLevel.isEmptyBlock(pPos.below())) {
                 double x = pPos.getX() + pRandom.nextDouble();
-                double y = pPos.getY() - 0.05D;
+                double y = pPos.getY() - 0.02D;
                 double z = pPos.getZ() + pRandom.nextDouble();
 
                 pLevel.addParticle(ModParticles.VIBRION_DRIP_PARTICLE.get(), x, y, z, 0.0D, 0.0D, 0.0D);

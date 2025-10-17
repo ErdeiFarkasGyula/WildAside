@@ -56,9 +56,7 @@ public class ModDripParticle extends TextureSheetParticle {
             this.yd = 0;
             stretchFactor = 1.0f + 1.5f * progress;
         } else {
-            if (this.gravity == 0.0f) {
-                this.gravity = 0.05F;
-            }
+            this.gravity = 0.05F;
         }
 
         this.yd -= this.gravity;
