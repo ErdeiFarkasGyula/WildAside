@@ -25,6 +25,8 @@ import net.minecraft.world.level.levelgen.feature.configurations.*;
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.treedecorators.BeehiveDecorator;
+import net.minecraft.world.level.levelgen.feature.treedecorators.LeaveVineDecorator;
+import net.minecraft.world.level.levelgen.feature.treedecorators.TrunkVineDecorator;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
@@ -68,6 +70,10 @@ public class ModConfiguredFeatures {
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> SPOTTED_EVERGREEN = registerKey("spotted_evergreen");
     public static final ResourceKey<ConfiguredFeature<?, ?>> PINKSTER_FLOWER = registerKey("pinkster_flower");
+
+    public static final ResourceKey<ConfiguredFeature<?, ?>> EXTRA_TALL_GRASS  = registerKey("extra_tall_grass");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> EXTRA_FERNS = registerKey("extra_ferns");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> EXTRA_TALL_FERNS = registerKey("extra_tall_ferns");
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> HICKORY_TREE = registerKey("hickory_tree");
     public static final ResourceKey<ConfiguredFeature<?, ?>> RED_GLOWING_HICKORY_TREE = registerKey("red_glowing_hickory_tree");
@@ -119,8 +125,8 @@ public class ModConfiguredFeatures {
         HICKORY_BUSHES.put(HickoryColour.GREEN_GLOWING, GREEN_GLOWING_HICKORY_BUSH);
     }
 
-    static final BeehiveDecorator glowingBeehive = new BeehiveDecorator(0.015f);
-    static final ImmutableList hickoryDecorator = ImmutableList.of(new BeehiveDecorator(0.01f), new FallenLeavesDecorator(0.075f, HickoryColour.HICKORY));
+    static final BeehiveDecorator glowingBeehive = new BeehiveDecorator(0.0075f);
+    static final ImmutableList hickoryDecorator = ImmutableList.of(new BeehiveDecorator(0.007f), new FallenLeavesDecorator(0.075f, HickoryColour.HICKORY));
     static final ImmutableList redGlowingHickoryDecorator = ImmutableList.of(glowingBeehive, new FallenLeavesDecorator(0.075f, HickoryColour.RED_GLOWING));
     static final ImmutableList brownGlowingHickoryDecorator = ImmutableList.of(glowingBeehive, new FallenLeavesDecorator(0.075f, HickoryColour.BROWN_GLOWING));
     static final ImmutableList yellowGlowingHickoryDecorator = ImmutableList.of(glowingBeehive, new FallenLeavesDecorator(0.075f, HickoryColour.YELLOW_GLOWING));
@@ -219,14 +225,6 @@ public class ModConfiguredFeatures {
 //                        LargeMushroomCapShape.PILZ, 0f)
                 )));
 
-        register(context, SPOTTED_EVERGREEN, Feature.FLOWER,
-                new RandomPatchConfiguration(32, 16, 2, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.SPOTTED_WINTERGREEN.get())))));
-
-        register(context, PINKSTER_FLOWER, Feature.FLOWER,
-                new RandomPatchConfiguration(32, 16, 2, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
-                        new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.PINKSTER_FLOWER.get())))));
-
         for (HickoryColour colour : HickoryColour.values()) {
             registerHickoryTree(context, colour);
             registerHickorySapling(context, colour);
@@ -235,15 +233,35 @@ public class ModConfiguredFeatures {
 
         register(context, FALLEN_HICKORY_TREE, ModFeatures.FALLEN_HICKORY_TREE.get(), new NoneFeatureConfiguration());
 
+        register(context, SPOTTED_EVERGREEN, Feature.FLOWER,
+                new RandomPatchConfiguration(32, 16, 2, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.SPOTTED_WINTERGREEN.get())))));
+
+        register(context, PINKSTER_FLOWER, Feature.FLOWER,
+                new RandomPatchConfiguration(32, 16, 2, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.PINKSTER_FLOWER.get())))));
+
+        register(context, EXTRA_TALL_GRASS, Feature.RANDOM_PATCH,
+                new RandomPatchConfiguration(32, 16, 2, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.TALL_GRASS)))));
+
+        register(context, EXTRA_FERNS, Feature.RANDOM_PATCH,
+                new RandomPatchConfiguration(32, 16, 2, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.FERN)))));
+
+        register(context, EXTRA_TALL_FERNS, Feature.RANDOM_PATCH,
+                new RandomPatchConfiguration(32, 16, 2, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.LARGE_FERN)))));
+
         register(context, PODZOL_VEIN, Feature.ORE, new OreConfiguration(podzol_vein, 32));
     }
 
     private static void registerHickoryTree(BootstapContext<ConfiguredFeature<?, ?>> context, HickoryColour colour) {
         register(context, HICKORY_TREES.get(colour), Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.HICKORY_LOG.get()),
-                new StraightTrunkPlacer(18, 0, 6),
+                new StraightTrunkPlacer(14, 2, 12),
                 BlockStateProvider.simple(ModBlocks.HICKORY_LEAVES_BLOCKS.get(colour).get()),
-                new HickoryTreeFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 14),
+                new HickoryTreeFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 15),
                 new TwoLayersFeatureSize(1, 0, 2))
                 .decorators(DECORATORS.get(colour)).build()
         );

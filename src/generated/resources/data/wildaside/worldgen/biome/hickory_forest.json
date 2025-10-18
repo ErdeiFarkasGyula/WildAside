@@ -10,7 +10,7 @@
   "effects": {
     "fog_color": 12245759,
     "foliage_color": 3776026,
-    "grass_color": 6273345,
+    "grass_color": 5420593,
     "mood_sound": {
       "block_search_extent": 8,
       "offset": 2.0,
@@ -76,12 +76,15 @@
       "minecraft:patch_grass_jungle",
       "minecraft:patch_sugar_cane",
       "minecraft:patch_pumpkin",
-      "wildaside:spotted_wintergreen",
-      "wildaside:pinkster_flower",
       "wildaside:hickory_tree",
       "wildaside:hickory_sapling",
       "wildaside:hickory_bush",
-      "wildaside:fallen_hickory_tree"
+      "wildaside:fallen_hickory_tree",
+      "wildaside:spotted_wintergreen",
+      "wildaside:pinkster_flower",
+      "wildaside:extra_tall_grass",
+      "wildaside:extra_ferns",
+      "wildaside:extra_tall_ferns"
     ]
   ],
   "has_precipitation": true,
