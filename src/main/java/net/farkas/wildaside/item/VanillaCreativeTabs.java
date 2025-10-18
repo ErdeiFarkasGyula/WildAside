@@ -121,6 +121,7 @@ public class VanillaCreativeTabs {
         if (tab == CreativeModeTabs.REDSTONE_BLOCKS) {
             event.accept(ModBlocks.SPORE_BLASTER);
             event.accept(ModBlocks.POTION_BLASTER);
+            event.accept(ModBlocks.WIND_BLASTER);
         }
         if (tab == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             event.accept(ModItems.SUBSTILIUM_BOAT);

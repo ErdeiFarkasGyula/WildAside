@@ -67,7 +67,6 @@ public class WindBlasterBlockEntity extends BlasterBlockEntity {
         double force = BASE_FORCE * (strength / 15.0);
 
         RandomSource rand = world.random;
-        SimpleParticleType particle = ModParticles.LIFESTEAL_PARTICLE.get();
         Vec3 start = Vec3.atCenterOf(worldPosition);
 
         double step = 0.1D;
@@ -132,7 +131,7 @@ public class WindBlasterBlockEntity extends BlasterBlockEntity {
 
                     double speed = 0.05 + 0.15 * (force / BASE_FORCE);
                     if (rand.nextFloat() < 0.8f) {
-                        world.sendParticles(ModParticles.LIFESTEAL_PARTICLE.get(),
+                        world.sendParticles(ModParticles.WIND_PARTICLE.get(),
                                 particlePos.x, particlePos.y, particlePos.z, 1,
                                 facing.getStepX() * speed, facing.getStepY() * speed, facing.getStepZ() * speed, 0.0);
                     }

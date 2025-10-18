@@ -49,6 +49,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.dropSelf(ModBlocks.HANGING_VIBRION_VINES.get());
         this.dropSelf(ModBlocks.SPORE_BLASTER.get());
         this.dropSelf(ModBlocks.POTION_BLASTER.get());
+        this.dropSelf(ModBlocks.WIND_BLASTER.get());
         this.dropSelf(ModBlocks.ENTORIUM_SHROOM.get());
         this.dropSelf(ModBlocks.BIOENGINEERING_WORKSTATION.get());
 

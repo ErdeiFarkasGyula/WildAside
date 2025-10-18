@@ -29,21 +29,21 @@ public class ModBlockEntities {
             BLOCK_ENTITIES.register("bioengineering_workstation", () -> BlockEntityType.Builder.of(BioengineeringWorkstationBlockEntity::new,
                     ModBlocks.BIOENGINEERING_WORKSTATION.get()).build(null));
 
-    public static final RegistryObject<BlockEntityType<PotionBlasterBlockEntity>> POTION_BLASTER =
-            BLOCK_ENTITIES.register("potion_blaster",
-                    () -> BlockEntityType.Builder.of(PotionBlasterBlockEntity::new, ModBlocks.POTION_BLASTER.get()).build(null));
+    public static final RegistryObject<BlockEntityType<NaturalSporeBlasterBlockEntity>> NATURAL_SPORE_BLASTER =
+            BLOCK_ENTITIES.register("natural_spore_blaster",
+                    () -> BlockEntityType.Builder.of(NaturalSporeBlasterBlockEntity::new, ModBlocks.NATURAL_SPORE_BLASTER.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<SporeBlasterBlockEntity>> SPORE_BLASTER =
             BLOCK_ENTITIES.register("spore_blaster",
                     () -> BlockEntityType.Builder.of(SporeBlasterBlockEntity::new, ModBlocks.SPORE_BLASTER.get()).build(null));
 
-    public static final RegistryObject<BlockEntityType<NaturalSporeBlasterBlockEntity>> NATURAL_SPORE_BLASTER =
-            BLOCK_ENTITIES.register("natural_spore_blaster",
-                    () -> BlockEntityType.Builder.of(NaturalSporeBlasterBlockEntity::new, ModBlocks.NATURAL_SPORE_BLASTER.get()).build(null));
+    public static final RegistryObject<BlockEntityType<PotionBlasterBlockEntity>> POTION_BLASTER =
+            BLOCK_ENTITIES.register("potion_blaster",
+                    () -> BlockEntityType.Builder.of(PotionBlasterBlockEntity::new, ModBlocks.POTION_BLASTER.get()).build(null));
 
     public static final Supplier<BlockEntityType<WindBlasterBlockEntity>> WIND_BLASTER =
             BLOCK_ENTITIES.register("wind_blaster",
-                    () -> BlockEntityType.Builder.of(WindBlasterBlockEntity::new, ModBlocks.POTION_BLASTER.get()).build(null));
+                    () -> BlockEntityType.Builder.of(WindBlasterBlockEntity::new, ModBlocks.WIND_BLASTER.get()).build(null));
 
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
