@@ -1,4 +1,4 @@
-// 1.20.1	2025-10-16T23:39:31.0220498	Block States: wildaside
+// 1.20.1	2025-10-18T15:26:38.8612046	Block States: wildaside
 38a24b92f303bb5285d9a988d6c1d7ee8278e463 assets/wildaside/blockstates/bioengineering_workstation.json
 a6f417d7a5e3c62f22064fbdec6661e901c45ab1 assets/wildaside/blockstates/brown_glowing_hickory_leaves.json
 fa64f943551c3309b74c342bd1fa550093c63be0 assets/wildaside/blockstates/brown_glowing_hickory_sapling.json
@@ -93,6 +93,7 @@ cfc9ebef6a36da6415f6b3057d30d763b8992de3 assets/wildaside/blockstates/vibrion_ge
 1da20ea1a942265988d2777eadd0196abeadfdda assets/wildaside/blockstates/vibrion_glass_pane.json
 53e1b343f10d8b68dcb4060ad64f6e90976e697b assets/wildaside/blockstates/vibrion_growth.json
 e0794ae67558db6c791c4792c64bfd13feed9203 assets/wildaside/blockstates/vibrion_sporeholder.json
+6abefdbf360d269fcc618e33cca3c55ca1ac4ca8 assets/wildaside/blockstates/wind_blaster.json
 5ade378c1137a1f95071c70c2004d2e3df49bf15 assets/wildaside/blockstates/yellow_glowing_hickory_leaves.json
 71d7604a0a782b407dcd6fb61c1153c8fef4601d assets/wildaside/blockstates/yellow_glowing_hickory_sapling.json
 83442530484681adb2619315a0ae890a55e528e7 assets/wildaside/models/block/brown_glowing_hickory_leaves.json
@@ -304,4 +305,5 @@ c2d2e640459432583eeabe20d4bf089e23b6f6de assets/wildaside/models/item/vibrion_bl
 0699e358f4bb3746ebf6f9feacd18c865e9cfd6c assets/wildaside/models/item/vibrion_gel.json
 a93a91ed561f430e5d889ea95c75699ab516c65d assets/wildaside/models/item/vibrion_glass.json
 7a2dd00d28a010a3b33c7835e53c7952818d205b assets/wildaside/models/item/vibrion_sporeholder.json
+8fe4aa15770aed86a8e750485e6585e80a0a4a7c assets/wildaside/models/item/wind_blaster.json
 39116125e55d06f14066fafc438f7770d0df450c assets/wildaside/models/item/yellow_glowing_hickory_leaves.json
