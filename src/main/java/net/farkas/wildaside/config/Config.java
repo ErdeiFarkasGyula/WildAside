@@ -29,11 +29,11 @@ public class Config {
             .comment("Scale of the noise used to generate Hickory colour placements (higher -> smaller patches) (def: 0.01)")
             .define("hickory_colour_noise_scale", 0.010);
 
-    public static final ForgeConfigSpec.BooleanValue GLOWING_HICKORY_LEAVES_TICK = COMMON_BUILDER
+    public static final ForgeConfigSpec.BooleanValue GLOWING_HICKORY_TICK = COMMON_BUILDER
             .pop()
             .push("Enable/disable features")
-            .comment("Enable/disable the glowing tick of the leaves in the Glowing Hickory Forest, making them not change their light levels anymore (true = enable, false = disable) (def: true)")
-            .define("glowing_hickory_leaves_tick", true);
+            .comment("Enable/disable the glowing tick of glowing blocks in the Glowing Hickory Forest, making them not change their light levels anymore (true = enable, false = disable) (def: true)")
+            .define("glowing_hickory_tick", true);
 
 //    public static final ForgeConfigSpec.ConfigValue<Integer> MUCELLITH_SPAWN_WEIGHT = BUILDER
 //            .pop()

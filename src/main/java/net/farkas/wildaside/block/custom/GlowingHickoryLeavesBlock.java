@@ -81,7 +81,7 @@ public class GlowingHickoryLeavesBlock extends LeavesBlock {
     public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
         super.tick(pState, pLevel, pPos, pRandom);
 
-        if (pLevel.isClientSide() || pState.getValue(GlowingHickoryLeavesBlock.FIXED_LIGHTING) || !Config.GLOWING_HICKORY_LEAVES_TICK.get()) return;
+        if (pLevel.isClientSide() || pState.getValue(GlowingHickoryLeavesBlock.FIXED_LIGHTING) || !Config.GLOWING_HICKORY_TICK.get()) return;
 
         int time = (int)pLevel.dayTime();
         int currentLight = pState.getValue(LIGHT);

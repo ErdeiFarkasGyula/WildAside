@@ -1,5 +1,6 @@
 package net.farkas.wildaside.block.custom;
 
+import net.farkas.wildaside.config.Config;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.item.custom.HickoryLeafItem;
 import net.farkas.wildaside.util.GlowingHickoryLightUtil;
@@ -143,7 +144,8 @@ public class FallenHickoryLeavesBlock extends Block {
     public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
         super.tick(pState, pLevel, pPos, pRandom);
 
-        if (pLevel.isClientSide() || pState.getValue(FallenHickoryLeavesBlock.FIXED_LIGHTING) || pState.getValue(FallenHickoryLeavesBlock.COLOUR) == HickoryColour.HICKORY) return;
+        if (pLevel.isClientSide() || pState.getValue(FallenHickoryLeavesBlock.FIXED_LIGHTING)
+                || pState.getValue(FallenHickoryLeavesBlock.COLOUR) == HickoryColour.HICKORY || !Config.GLOWING_HICKORY_TICK.get()) return;
 
         int maxLight = pState.getValue(COUNT);
         int time = (int)pLevel.dayTime();
