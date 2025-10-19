@@ -21,7 +21,7 @@ public class NetworkHandler {
         if (CHANNEL != null) return;
 
         CHANNEL = NetworkRegistry.newSimpleChannel(
-                ResourceLocation.fromNamespaceAndPath(WildAside.MOD_ID, "main"),
+                new ResourceLocation(WildAside.MOD_ID, "main"),
                 () -> PROTOCOL_VERSION,
                 PROTOCOL_VERSION::equals,
                 PROTOCOL_VERSION::equals
