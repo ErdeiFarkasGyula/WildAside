@@ -2,13 +2,11 @@ package net.farkas.wildaside.command;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.DoubleArgumentType;
-import com.mojang.brigadier.arguments.FloatArgumentType;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
-import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.arguments.*;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.farkas.wildaside.config.Config;
 import net.farkas.wildaside.network.WindSavedData;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.farkas.wildaside.network.WindData;
@@ -99,6 +97,20 @@ public class ModCommands {
                                             false
                                     );
                                     return Command.SINGLE_SUCCESS;
+                                })
+                        )
+        );
+
+        root.then(
+                Commands.literal("update_notification")
+                        .requires(cs -> cs.hasPermission(0))
+                        .then(Commands.argument("enabled", BoolArgumentType.bool())
+                                .executes(context -> {
+                                        boolean value = BoolArgumentType.getBool(context, "enabled");
+                                        Config.setShowUpdates(value);
+                                        context.getSource().sendSuccess(() ->
+                                                Component.literal("§7[Wild Aside] Update notifications " + (value ? "enabled" : "disabled") + "."), false);
+                                        return Command.SINGLE_SUCCESS;
                                 })
                         )
         );

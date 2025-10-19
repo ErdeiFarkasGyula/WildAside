@@ -74,6 +74,7 @@ public class WildAside
     public WildAside(FMLJavaModLoadingContext context)
     {
         context.registerConfig(ModConfig.Type.COMMON, Config.COMMON_SPEC);
+        context.registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_SPEC);
 
         IEventBus modEventBus = context.getModEventBus();
 
