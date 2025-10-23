@@ -4,6 +4,7 @@ import net.farkas.wildaside.dna.Dna;
 import net.farkas.wildaside.dna.Traits;
 import net.farkas.wildaside.dna.genes.AbilityGene;
 import net.farkas.wildaside.dna.genes.CoreGene;
+import net.farkas.wildaside.util.ContaminationHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -159,13 +160,7 @@ public class Vibrion extends Item {
     @Override
     public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity) {
         if (!pLevel.isClientSide) {
-//            ContaminationHandler.addDose(pLivingEntity, pLevel.random.nextInt(250, 750));
-            Dna dna = new Dna(pLivingEntity,
-                    List.of(new CoreGene(Traits.Core.MOVEMENT_SPEED, 1, 3)),
-                    List.of(),
-                    List.of(new AbilityGene(Traits.Ability.LIFESTEAL, 1, 6)), 75);
-
-            dna.applyTo(pLivingEntity);
+            ContaminationHandler.addDose(pLivingEntity, pLevel.random.nextInt(250, 750));
         }
 
         return super.finishUsingItem(pStack, pLevel, pLivingEntity);

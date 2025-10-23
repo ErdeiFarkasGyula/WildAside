@@ -40,14 +40,6 @@ public class EntoriumPill extends Item {
 
             player.addEffect(new MobEffectInstance(ModMobEffects.IMMUNITY.get(), (amplifier + 1) * 10 * 20, amplifier));
             player.removeEffect(MobEffects.POISON);
-
-            Dna dna = new Dna(pLivingEntity,
-                    List.of(new CoreGene(Traits.Core.ARMOR, 0.2f, 3)),
-                    List.of(),
-                    List.of(new AbilityGene(Traits.Ability.REGENERATION, 1, 6)), 75);
-
-            dna.applyTo(pLivingEntity);
-
         }
 
         return super.finishUsingItem(pStack, pLevel, pLivingEntity);

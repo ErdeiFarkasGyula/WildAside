@@ -1,5 +1,6 @@
 package net.farkas.wildaside.dna;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 
@@ -14,7 +15,14 @@ public class Traits {
         KNOCKBACK_RESISTANCE(Attributes.KNOCKBACK_RESISTANCE);
 
         public final Attribute attribute;
-        Core(Attribute attribute) { this.attribute = attribute; }
+
+        Core(Attribute attribute) {
+            this.attribute = attribute;
+        }
+
+        public static Core getRandom(RandomSource randomSource) {
+            return Traits.Core.values()[randomSource.nextInt(Core.values().length)];
+        }
     }
 
     public enum Resistance {

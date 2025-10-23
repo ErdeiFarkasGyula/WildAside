@@ -7,15 +7,23 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
-import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 public record CoreGene(Traits.Core stat, float value, float stabilityCost) implements Gene {
     @Override
     public void apply(Entity entity) {
         if (entity instanceof LivingEntity livingEntity) {
+            if (stat.attribute != null) {
+                var instance = livingEntity.getAttribute(stat.attribute);
+                if (instance != null) {
+                    UUID id = DnaUtils.getUuid(fullName());
+                    instance.removeModifier(id);
+                    instance.removePermanentModifier(id);
+                }
+            }
+
             livingEntity.getAttribute(stat.attribute).addPermanentModifier(
-                    new AttributeModifier(UUID.nameUUIDFromBytes(uuid().getBytes(StandardCharsets.UTF_8)), uuid(), value, AttributeModifier.Operation.MULTIPLY_BASE));
+                    new AttributeModifier(DnaUtils.getUuid(fullName()), fullName(), value, AttributeModifier.Operation.MULTIPLY_BASE));
         }
     }
 
@@ -25,7 +33,11 @@ public record CoreGene(Traits.Core stat, float value, float stabilityCost) imple
     @Override
     public float stabilityCost() { return stabilityCost; }
 
-    public String uuid() {
+    public static String fullName(String id) {
+        return DnaUtils.DNA_PREFIX + id;
+    }
+
+    public String fullName() {
         return DnaUtils.DNA_PREFIX + id();
     }
 }
