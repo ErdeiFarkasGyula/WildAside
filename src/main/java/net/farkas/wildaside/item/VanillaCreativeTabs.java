@@ -132,6 +132,7 @@ public class VanillaCreativeTabs {
             event.accept(ModItems.FERTILISER_BOMB);
             event.accept(ModItems.SPORE_BOMB);
             event.accept(ModItems.SPORE_ARROW);
+            event.accept(ModItems.DNA_EXTRACTOR);
         }
         if (tab == CreativeModeTabs.SPAWN_EGGS) {
             event.accept(ModItems.MUCELLITH_SPAWN_EGG);

@@ -16,6 +16,7 @@ public class Traits {
         public final Attribute attribute;
         Core(Attribute attribute) { this.attribute = attribute; }
     }
+
     public enum Resistance {
         FIRE,
         POISON,

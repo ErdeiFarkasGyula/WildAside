@@ -11,7 +11,8 @@ public record CoreGene(Traits.Core stat, float value, float stabilityCost) imple
     @Override
     public void apply(Entity entity) {
         if (entity instanceof LivingEntity livingEntity) {
-            livingEntity.getAttribute(stat.attribute).addTransientModifier(new AttributeModifier(uuid(), value, AttributeModifier.Operation.MULTIPLY_TOTAL));
+            livingEntity.getAttribute(stat.attribute).addPermanentModifier(new AttributeModifier(uuid(), value, AttributeModifier.Operation.MULTIPLY_TOTAL));
+            entity.getPersistentData().putFloat("dna_modifier_" + stat.name(), value);
         }
     }
 

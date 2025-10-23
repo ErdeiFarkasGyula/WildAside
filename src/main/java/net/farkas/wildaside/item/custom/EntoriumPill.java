@@ -1,5 +1,10 @@
 package net.farkas.wildaside.item.custom;
 
+import net.farkas.wildaside.dna.Dna;
+import net.farkas.wildaside.dna.Gene;
+import net.farkas.wildaside.dna.Traits;
+import net.farkas.wildaside.dna.genes.AbilityGene;
+import net.farkas.wildaside.dna.genes.CoreGene;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.util.AdvancementHandler;
 import net.minecraft.network.chat.Component;
@@ -35,6 +40,13 @@ public class EntoriumPill extends Item {
 
             player.addEffect(new MobEffectInstance(ModMobEffects.IMMUNITY.get(), (amplifier + 1) * 10 * 20, amplifier));
             player.removeEffect(MobEffects.POISON);
+
+            Dna dna = new Dna(pLivingEntity,
+                    List.of(new CoreGene(Traits.Core.ARMOR, 0.25f, 3)),
+                    List.of(),
+                    List.of(new AbilityGene(Traits.Ability.REGENERATION, 1, 6)), 75);
+
+            dna.applyTo(pLivingEntity);
 
         }
 
