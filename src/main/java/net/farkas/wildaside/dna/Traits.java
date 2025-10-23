@@ -28,7 +28,7 @@ public class Traits {
 
     public enum Ability {
         REGENERATION,
-        OMNIVAMP,
+        LIFESTEAL,
         SPORE_ATTACK,
         PROJECTILE_ATTACK,
         AOE_EFFECT;

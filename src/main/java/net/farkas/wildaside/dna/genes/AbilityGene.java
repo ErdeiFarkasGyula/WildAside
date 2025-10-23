@@ -3,6 +3,7 @@ package net.farkas.wildaside.dna.genes;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.Traits;
+import net.farkas.wildaside.effect.ModMobEffects;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -16,6 +17,11 @@ public record AbilityGene(Traits.Ability type, float amplifier, float stabilityC
                 livingEntity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, MobEffectInstance.INFINITE_DURATION, (int) amplifier, false, false));
                 entity.getPersistentData().putFloat(DnaUtils.DNA_PREFIX + type.name(), amplifier);
             }
+            if (type == Traits.Ability.LIFESTEAL) {
+                livingEntity.addEffect(new MobEffectInstance(ModMobEffects.LIFESTEAL.get(), MobEffectInstance.INFINITE_DURATION, (int) amplifier, false, false));
+                entity.getPersistentData().putFloat(DnaUtils.DNA_PREFIX + type.name(), amplifier);
+            }
+
         }
     }
 
