@@ -1,29 +1,35 @@
 package net.farkas.wildaside.dna;
 
-import com.mojang.serialization.Codec;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 
 public class Traits {
-    public interface Trait {
-        String id();
+    public enum Core {
+        MAX_HEALTH(Attributes.MAX_HEALTH),
+        MOVEMENT_SPEED(Attributes.MOVEMENT_SPEED),
+        ATTACK_DAMAGE(Attributes.ATTACK_DAMAGE),
+        ATTACK_SPEED(Attributes.ATTACK_SPEED),
+        ARMOR(Attributes.ARMOR),
+        ARMOR_TOUGHNESS(Attributes.ARMOR_TOUGHNESS),
+        KNOCKBACK_RESISTANCE(Attributes.KNOCKBACK_RESISTANCE);
+
+        public final Attribute attribute;
+        Core(Attribute attribute) { this.attribute = attribute; }
+    }
+    public enum Resistance {
+        FIRE,
+        POISON,
+        EXPLOSION,
+        FALL,
+        TOXIN,
+        TEMPERATURE;
     }
 
-    public enum Core implements Trait {
-        HEALTH("health"),
-        KNOCKBACK_RESISTANCE("knockback_resistance"),
-        SPEED("speed"),
-        ATTACK_DAMAGE("attack_damage"),
-        KNOCKBACK("knockback"),
-        ATTACK_SPEED("attack_speed"),
-        ARMOR("armor"),
-        ARMOR_TOUGHNESS("armor_toughness");
-
-        public static final Codec<Core> CODEC = Codec.STRING.xmap(Core::valueOf, Core::name);
-
-        Core(String id) {}
-
-        @Override
-        public String id() {
-            return "";
-        }
+    public enum Ability {
+        REGENERATION,
+        OMNIVAMP,
+        SPORE_ATTACK,
+        PROJECTILE_ATTACK,
+        AOE_EFFECT;
     }
 }
