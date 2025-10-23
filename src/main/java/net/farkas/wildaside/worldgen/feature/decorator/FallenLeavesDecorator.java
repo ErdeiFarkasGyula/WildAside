@@ -87,7 +87,6 @@ public class FallenLeavesDecorator extends TreeDecorator {
                         pContext.setBlock(target, leafSt);
                     }
                 }
-
             }
         }
     }
