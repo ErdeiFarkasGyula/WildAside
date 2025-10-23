@@ -10,6 +10,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelSimulatedReader;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
@@ -62,7 +63,7 @@ public class FallenLeavesDecorator extends TreeDecorator {
                     for (int y = startY; y >= -64; y--) {
                         BlockPos pos = new BlockPos(x, y, z);
                         if (reader.isStateAtPosition(pos, bs -> bs.is(BlockTags.DIRT))) {
-                            if (reader.isStateAtPosition(pos.above(), bs -> !bs.isSolid())) {
+                            if (reader.isStateAtPosition(pos.above(), bs -> !bs.isSolid() && !bs.is(Blocks.WATER))) {
                                 groundY = y;
                                 break;
                             }

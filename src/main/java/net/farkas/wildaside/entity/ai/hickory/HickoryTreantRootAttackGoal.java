@@ -8,7 +8,7 @@ import java.util.EnumSet;
 
 public class HickoryTreantRootAttackGoal extends Goal {
     private final HickoryTreantEntity entity;
-    private static final int minRange = 3;
+    private static final int minRange = 0;
     private static final int maxRange = 24;
 
     public HickoryTreantRootAttackGoal(HickoryTreantEntity entity) {

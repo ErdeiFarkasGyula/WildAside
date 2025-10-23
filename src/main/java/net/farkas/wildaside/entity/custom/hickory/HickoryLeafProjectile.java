@@ -2,6 +2,7 @@ package net.farkas.wildaside.entity.custom.hickory;
 
 import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.item.ModItems;
+import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.util.HickoryColour;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -10,6 +11,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
@@ -58,17 +60,17 @@ public class HickoryLeafProjectile extends ThrowableItemProjectile implements It
     protected void onHitEntity(EntityHitResult result) {
         super.onHitEntity(result);
         if (result.getEntity() instanceof LivingEntity target) {
-            target.addEffect(new MobEffectInstance(MobEffects.HARM, 1, 0, false, false));
+            target.hurt(this.damageSources().mobProjectile(this, null), 2);
             switch (getColour()) {
                 case RED_GLOWING:
-                    target.setSecondsOnFire(4 + phase);
+                    target.hurt(this.damageSources().mobProjectile(this, null), 2);
                     break;
                 case BROWN_GLOWING:
                     target.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, phase - 1));
+                    target.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 100, 0));
                     break;
                 case YELLOW_GLOWING:
-                    target.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100, 0));
-                    target.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 100, 0));
+                    target.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 200, 0));
                     break;
                 case GREEN_GLOWING:
                     this.healEffect();
@@ -83,13 +85,13 @@ public class HickoryLeafProjectile extends ThrowableItemProjectile implements It
     @Override
     protected void onHitBlock(BlockHitResult result) {
         super.onHitBlock(result);
-//        for (int i = 0; i < 8; i++) {
-//            this.level().addParticle(ModParticles.HICKORY_PARTICLES.get(colour).get(),
-//                    this.getX(), this.getY(), this.getZ(),
-//                    (this.random.nextDouble() - 0.5) * 0.2,
-//                    (this.random.nextDouble() - 0.5) * 0.2,
-//                    (this.random.nextDouble() - 0.5) * 0.2);
-//        }
+        for (int i = 0; i < 8; i++) {
+            this.level().addParticle(ModParticles.HICKORY_PARTICLES.get(getColour()).get(),
+                    this.getX(), this.getY(), this.getZ(),
+                    (this.random.nextDouble() - 0.5) * 0.2,
+                    (this.random.nextDouble() - 0.5) * 0.2,
+                    (this.random.nextDouble() - 0.5) * 0.2);
+        }
         this.discard();
     }
 

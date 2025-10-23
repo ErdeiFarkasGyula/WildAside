@@ -5,9 +5,11 @@ import net.farkas.wildaside.block.custom.RootBushBlock;
 import net.farkas.wildaside.entity.ai.hickory.HickoryTreantBeamAttackGoal;
 import net.farkas.wildaside.entity.ai.hickory.HickoryTreantMeleeAttackGoal;
 import net.farkas.wildaside.entity.ai.hickory.HickoryTreantRootAttackGoal;
+import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.util.HickoryColour;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -74,9 +76,9 @@ public class HickoryTreantEntity extends Monster {
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, false));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Blaze.class, false));
 
+        this.goalSelector.addGoal(4, new HickoryTreantMeleeAttackGoal(this, 0.2f, true));
         this.goalSelector.addGoal(3, new HickoryTreantRootAttackGoal(this));
         this.goalSelector.addGoal(3, new HickoryTreantBeamAttackGoal(this));
-        this.goalSelector.addGoal(4, new HickoryTreantMeleeAttackGoal(this, 0.5f, true));
 
         this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 36));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Blaze.class, 36));
@@ -148,6 +150,14 @@ public class HickoryTreantEntity extends Monster {
                 bossEvent.setColor(BossEvent.BossBarColor.WHITE);
                 break;
         }
+
+        if (getTarget() != null) {
+            if (this.getNavigation().isDone() && this.distanceTo(getTarget()) > 2.0F) {
+                if (this.onGround() && this.distanceTo(getTarget()) < 4.0D) {
+                    this.getJumpControl().jump();
+                }
+            }
+        }
     }
 
 
@@ -208,13 +218,13 @@ public class HickoryTreantEntity extends Monster {
                 }
             }
         }
-//           for (int i = 0; i < 10; i++) {
-//                entity.level.sendParticles(ParticleTypes.ENCHANT,
-//                        target.getX() + entity.random.nextDouble() - 0.5,
-//                        target.getY() + 0.1,
-//                        target.getZ() + entity.random.nextDouble() - 0.5,
-//                        1, 0, 0, 0, 0);
-//            }
+        for (int i = 0; i < 10; i++) {
+            level.addParticle(ParticleTypes.ENCHANT,
+                    getX() + (random.nextDouble() - 0.5) * 2,
+                    getY() + random.nextDouble() * 2,
+                    getZ() + (random.nextDouble() - 0.5) * 2,
+                    1, 0, 0);
+        }
     }
 
     public void resetRoots() {
@@ -257,13 +267,13 @@ public class HickoryTreantEntity extends Monster {
             level.addFreshEntity(proj);
         }
 
-//        for (int i = 0; i < 20; i++) {
-//            level.addParticle(ModParticles.HICKORY_PARTICLES.get(colour).get(),
-//                    getX() + (random.nextDouble() - 0.5) * 2,
-//                    getY() + random.nextDouble() * 2,
-//                    getZ() + (random.nextDouble() - 0.5) * 2,
-//                    1, 0, 0);
-//        }
+        for (int i = 0; i < 20; i++) {
+            level.addParticle(ModParticles.HICKORY_PARTICLES.get(colour).get(),
+                    getX() + (random.nextDouble() - 0.5) * 2,
+                    getY() + random.nextDouble() * 2,
+                    getZ() + (random.nextDouble() - 0.5) * 2,
+                    1, 0, 0);
+        }
     }
 
     @Override

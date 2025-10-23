@@ -77,7 +77,7 @@ public class FallingHickoryLeafParticle extends TextureSheetParticle {
         super.tick();
 
         this.oRoll = this.roll;
-        this.roll = (float)(Mth.sin(ageFactor * 0.5f) * rollAmplitude - (Math.PI / 8));
+        this.roll = (float)(Mth.sin(ageFactor * 0.5f) * rollAmplitude + (Math.PI / 6));
 
         if (this.onGround) this.remove();
     }

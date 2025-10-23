@@ -13,7 +13,7 @@ public class HickoryTreantMeleeAttackGoal extends MeleeAttackGoal {
 
     public HickoryTreantMeleeAttackGoal(PathfinderMob pMob, double pSpeedModifier, boolean pFollowingTargetEvenIfNotSeen) {
         super(pMob, pSpeedModifier, pFollowingTargetEvenIfNotSeen);
-        this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK, Flag.JUMP));
+        this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
         this.entity = (HickoryTreantEntity) mob;
     }
 
@@ -22,23 +22,11 @@ public class HickoryTreantMeleeAttackGoal extends MeleeAttackGoal {
         LivingEntity target = entity.getTarget();
         if (target == null || !target.isAlive()) return false;
         double distance = entity.distanceTo(target);
-//        return distance >= 0 && distance <= maxRange;
-        return true;
+        return distance <= maxRange;
     }
 
     @Override
     public boolean canContinueToUse() {
         return canUse();
     }
-
-    //    @Override
-//    protected void checkAndPerformAttack(LivingEntity enemy, double distSqr) {
-//        double reach = this.mob.getBbWidth() * 2.0F + enemy.getBbWidth();
-//        if (distSqr <= reach * reach) {
-//            if (this.mob instanceof HickoryTreantEntity entity) {
-//                entity.doRootingSlam(enemy);
-//                this.resetAttackCooldown();
-//            }
-//        }
-//    }
 }

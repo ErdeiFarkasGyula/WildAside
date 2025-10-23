@@ -42,7 +42,7 @@ public class ModEntities {
 
     public static final RegistryObject<EntityType<HickoryTreantEntity>> HICKORY_TREANT =
             ENTITIES.register("hickory_treant", () -> EntityType.Builder.<HickoryTreantEntity>of(HickoryTreantEntity::new, MobCategory.MONSTER)
-                    .sized(1f, 3f).build("hickory_treant"));
+                    .sized(1f, 2f).build("hickory_treant"));
     public static final RegistryObject<EntityType<HickoryLeafProjectile>> HICKORY_LEAF_PROJECTILE =
             ENTITIES.register("hickory_leaf_projectile", () -> EntityType.Builder.<HickoryLeafProjectile>of(HickoryLeafProjectile::new, MobCategory.MISC)
                     .sized(0.5f, 0.5f).build("hickory_leaf_projectile"));
