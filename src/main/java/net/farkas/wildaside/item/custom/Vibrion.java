@@ -1,5 +1,9 @@
 package net.farkas.wildaside.item.custom;
 
+import net.farkas.wildaside.dna.Dna;
+import net.farkas.wildaside.dna.Traits;
+import net.farkas.wildaside.dna.genes.AbilityGene;
+import net.farkas.wildaside.dna.genes.CoreGene;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,6 +26,7 @@ import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class Vibrion extends Item {
     public static final int GRASS_SPREAD_WIDTH = 8;
@@ -155,7 +160,13 @@ public class Vibrion extends Item {
     @Override
     public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity) {
         if (!pLevel.isClientSide) {
-            ContaminationHandler.addDose(pLivingEntity, pLevel.random.nextInt(250, 750));
+//            ContaminationHandler.addDose(pLivingEntity, pLevel.random.nextInt(250, 750));
+            Dna dna = new Dna(pLivingEntity,
+                    List.of(new CoreGene(Traits.Core.ARMOR, 0.5f, 3)),
+                    List.of(),
+                    List.of(new AbilityGene(Traits.Ability.REGENERATION, 1, 6)), 75);
+
+            dna.applyTo(pLivingEntity);
         }
 
         return super.finishUsingItem(pStack, pLevel, pLivingEntity);

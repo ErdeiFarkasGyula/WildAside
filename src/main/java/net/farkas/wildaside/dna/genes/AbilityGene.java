@@ -1,5 +1,6 @@
 package net.farkas.wildaside.dna.genes;
 
+import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.Traits;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -13,13 +14,14 @@ public record AbilityGene(Traits.Ability type, float amplifier, float stabilityC
         if (entity instanceof LivingEntity livingEntity) {
             if (type == Traits.Ability.REGENERATION) {
                 livingEntity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, MobEffectInstance.INFINITE_DURATION, (int) amplifier, false, false));
-                entity.getPersistentData().putFloat("dna_effect_" + type.name(), amplifier);
+                entity.getPersistentData().putFloat(DnaUtils.DNA_PREFIX + type.name(), amplifier);
             }
         }
     }
 
     @Override
     public String id() { return type.name(); }
+
     @Override
     public float stabilityCost() { return stabilityCost; }
 }

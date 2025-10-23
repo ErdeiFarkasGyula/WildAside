@@ -1,18 +1,21 @@
 package net.farkas.wildaside.dna.genes;
 
-import net.farkas.wildaside.WildAside;
+import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.Traits;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
+import java.nio.charset.StandardCharsets;
+import java.util.UUID;
+
 public record CoreGene(Traits.Core stat, float value, float stabilityCost) implements Gene {
     @Override
     public void apply(Entity entity) {
         if (entity instanceof LivingEntity livingEntity) {
-            livingEntity.getAttribute(stat.attribute).addPermanentModifier(new AttributeModifier(uuid(), value, AttributeModifier.Operation.MULTIPLY_TOTAL));
-            entity.getPersistentData().putFloat("dna_modifier_" + stat.name(), value);
+            livingEntity.getAttribute(stat.attribute).addPermanentModifier(
+                    new AttributeModifier(UUID.nameUUIDFromBytes(uuid().getBytes(StandardCharsets.UTF_8)), uuid(), value, AttributeModifier.Operation.MULTIPLY_BASE));
         }
     }
 
@@ -23,6 +26,6 @@ public record CoreGene(Traits.Core stat, float value, float stabilityCost) imple
     public float stabilityCost() { return stabilityCost; }
 
     public String uuid() {
-        return WildAside.MOD_ID + "_dna_" + id();
+        return DnaUtils.DNA_PREFIX + id();
     }
 }

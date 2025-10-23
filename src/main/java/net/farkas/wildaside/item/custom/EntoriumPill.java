@@ -42,7 +42,7 @@ public class EntoriumPill extends Item {
             player.removeEffect(MobEffects.POISON);
 
             Dna dna = new Dna(pLivingEntity,
-                    List.of(new CoreGene(Traits.Core.ARMOR, 0.25f, 3)),
+                    List.of(new CoreGene(Traits.Core.ARMOR, 0.2f, 3)),
                     List.of(),
                     List.of(new AbilityGene(Traits.Ability.REGENERATION, 1, 6)), 75);
 

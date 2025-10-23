@@ -30,6 +30,7 @@ public class Dna {
     }
 
     public void applyTo(Entity entity) {
+        DnaUtils.clearDnaEffects(entity);
         for (Gene gene : genes) {
             gene.apply(entity);
         }
