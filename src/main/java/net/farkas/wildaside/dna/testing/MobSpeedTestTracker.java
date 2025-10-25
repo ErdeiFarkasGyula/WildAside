@@ -24,7 +24,6 @@ public class MobSpeedTestTracker {
             System.out.println("✅ Test batch finished: " + testName);
         }
 
-        // If all test batches are empty, all tests are done
         boolean allEmpty = activeTests.values().stream().allMatch(Set::isEmpty);
         if (allEmpty) {
             System.out.println("🎉 All test conditions finished! Saving all results...");

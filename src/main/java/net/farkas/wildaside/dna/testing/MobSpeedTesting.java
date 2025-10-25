@@ -109,9 +109,6 @@ public class MobSpeedTesting {
                         else if (x == 0) {
                                 level.setBlock(pos, wallBlock.defaultBlockState(), 3);
                             }
-                            else {
-//                                level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
-                            }
                 }
             }
         }
@@ -119,14 +116,5 @@ public class MobSpeedTesting {
 
     public static void runBatchTest(ServerLevel level, BlockPos groundStart) {
         spawnAllMobs(level, groundStart);
-
-        // Wait TEST_LENGTH ticks or schedule the next environment test
-        // You can use a server tick handler to trigger water test after ground mobs finish
-        // Example pseudo-code:
-        /*
-        server.schedule(() -> {
-            spawnAllMobs(level, waterStart, true);
-        }, TEST_LENGTH);
-        */
     }
 }
