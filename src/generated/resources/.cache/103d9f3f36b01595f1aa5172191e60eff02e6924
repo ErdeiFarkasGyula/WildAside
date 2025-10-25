@@ -1,4 +1,6 @@
-// 1.20.1	2025-10-18T07:50:20.2553311	Registries
+// 1.20.1	2025-10-25T17:04:32.8259152	Registries
+14e1619102adf6f77386aad49c46f7c1642c58ea data/wildaside/dimension/test_level.json
+38bbd3936f134d481e421827515ebe1043da2404 data/wildaside/dimension_type/test_dimension.json
 05932425ca6a359557428956fa0fca9085ef4f59 data/wildaside/worldgen/biome/glowing_hickory_forest.json
 7a0d557931867582484919e6a5c12f11a9a6fbd8 data/wildaside/worldgen/biome/hickory_forest.json
 a7a16ed6870d0f7bf7a9998827668d743be81f76 data/wildaside/worldgen/biome/vibrion_hive.json
