@@ -6,11 +6,14 @@ import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.capability.contamination.ContaminationAttacher;
 import net.farkas.wildaside.capability.contamination.ContaminationCapability;
 import net.farkas.wildaside.command.ModCommands;
+import net.farkas.wildaside.dna.testing.MobSpeedTestTracker;
+import net.farkas.wildaside.dna.testing.MobSpeedTesting;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.network.WindSavedData;
 import net.farkas.wildaside.util.AdvancementHandler;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.farkas.wildaside.util.WindManager;
+import net.farkas.wildaside.worldgen.dimension.ModDimensions;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -23,6 +26,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -32,6 +36,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
 import net.minecraftforge.event.entity.living.LivingBreatheEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
@@ -39,6 +44,7 @@ import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.level.LevelEvent;
+import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -62,6 +68,47 @@ public class ModEvents {
             AdvancementHandler.givePlayerAdvancement(player, "wild_wilder_wildest");
         }
     }
+
+    @SubscribeEvent
+    public static void onServerStarting(ServerStartingEvent event) {
+        loadTestLevelArea(event);
+    }
+
+    public static void loadTestLevelArea(ServerStartingEvent event) {
+        MinecraftServer server = event.getServer();
+        ServerLevel level = server.getLevel(ModDimensions.TEST_LEVEL);
+
+        if (level != null) {
+            ensureTestAreaLoaded(level, new BlockPos(0, 16, 0), 150, MobSpeedTesting.getMobsToTest(level).size() * 4 + 2);
+        }
+    }
+
+    public static void ensureTestAreaLoaded(ServerLevel level, BlockPos origin, int length, int width) {
+        int chunkXStart = origin.getX() >> 4;
+        int chunkZStart = origin.getZ() >> 4;
+        int chunkXEnd = (origin.getX() + length) >> 4;
+        int chunkZEnd = (origin.getZ() + width) >> 4;
+
+        for (int cx = chunkXStart; cx <= chunkXEnd; cx++) {
+            for (int cz = chunkZStart; cz <= chunkZEnd; cz++) {
+                level.setChunkForced(cx, cz, true);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onEntityLeftLevel(EntityLeaveLevelEvent event) {
+        checkTestDimensionEntityRemoves(event);
+    }
+
+    public static void checkTestDimensionEntityRemoves(EntityLeaveLevelEvent event) {
+        if (event.getEntity().level().dimension() == ModDimensions.TEST_LEVEL) {
+            if (event.getEntity() instanceof Mob mob && (mob.isSensitiveToWater() || mob.getSpeed() == 0.0)) {
+                MobSpeedTestTracker.onMobFinished(mob, "water");
+            }
+        }
+    }
+
 
     @SubscribeEvent
     public static void onWorldLoad(LevelEvent.Load event) {

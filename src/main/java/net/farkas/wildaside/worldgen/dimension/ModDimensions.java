@@ -2,6 +2,7 @@ package net.farkas.wildaside.worldgen.dimension;
 
 import com.ibm.icu.impl.Pair;
 import net.farkas.wildaside.WildAside;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
@@ -16,13 +17,12 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
-import net.minecraft.world.level.levelgen.FlatLevelSource;
-import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
-import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
+import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.flat.FlatLayerInfo;
 import net.minecraft.world.level.levelgen.flat.FlatLevelGeneratorPresets;
 import net.minecraft.world.level.levelgen.flat.FlatLevelGeneratorSettings;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalLong;
@@ -59,15 +59,40 @@ public class ModDimensions {
         HolderGetter<Biome> biomes = context.lookup(Registries.BIOME);
         HolderGetter<DimensionType> dimTypes = context.lookup(Registries.DIMENSION_TYPE);
 
-        FlatLevelGeneratorSettings generatorSettings = new FlatLevelGeneratorSettings(
-                Optional.empty(),
-                biomes.getOrThrow(Biomes.PLAINS),
-                List.of()
+        NoiseSettings noiseSettings = new NoiseSettings(
+                0, 16, 1, 2
         );
 
-        generatorSettings.getLayersInfo().add(new FlatLayerInfo(1, Blocks.DIRT));
+        NoiseRouter router = new NoiseRouter(
+                DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(),
+                DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(),
+                DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(),
+                DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(),
+                DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero()
+        );
 
-        var generator = new FlatLevelSource(generatorSettings);
+        NoiseGeneratorSettings generatorSettings = new NoiseGeneratorSettings(
+                noiseSettings,
+                Blocks.AIR.defaultBlockState(), // base block
+                Blocks.AIR.defaultBlockState(), // fluid
+                router,
+                SurfaceRules.sequence(
+                        SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(),
+                                SurfaceRules.state(Blocks.AIR.defaultBlockState()))
+                ),
+                Collections.emptyList(),
+                1, // seaLevel
+                true, // disableMobGeneration
+                false, // aquifersEnabled
+                false, // oreVeinsEnabled
+                false  // useLegacyRandomSource
+        );
+
+        // Wrap in a Noise-based chunk generator
+        NoiseBasedChunkGenerator generator = new NoiseBasedChunkGenerator(
+                new FixedBiomeSource(biomes.getOrThrow(Biomes.THE_VOID)),
+                Holder.direct(generatorSettings)
+        );
 
         LevelStem stem = new LevelStem(dimTypes.getOrThrow(TEST_DIMENSION_TYPE), generator);
 
