@@ -1,12 +1,11 @@
 package net.farkas.wildaside.dna;
 
 import net.farkas.wildaside.WildAside;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.effect.MobEffectInstance;
+import net.farkas.wildaside.dna.genes.CoreGene;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -63,6 +62,24 @@ public class DnaUtils {
 //            keysToRemove.forEach(tag::remove);
         }
 
+    }
+
+    public static List<CoreGene> generateBaseCoreGenes(LivingEntity entity) {
+        List<CoreGene> genes = new ArrayList<>();
+        for (var trait : Traits.Core.values()) {
+            float traitValue = entity.getAttribute(trait.attribute) == null ? 0 : (float) entity.getAttribute(trait.attribute).getBaseValue();
+            genes.add(new CoreGene(trait, traitValue, trait.baseInstability));
+        }
+        return genes;
+    }
+
+    public static List<CoreGene> mutateCoreGenes(List<CoreGene> baseGenes, LivingEntity entity) {
+        RandomSource random = RandomSource.create(entity.getUUID().getLeastSignificantBits());
+        return baseGenes.stream().map(gene -> mutateCoreGene(gene, random)).toList();
+    }
+
+    private static CoreGene mutateCoreGene(CoreGene gene, RandomSource random) {
+        return new CoreGene(gene.trait(), gene.value() * (0.9f + random.nextFloat() * 0.2f), gene.stabilityCost());
     }
 
     public static UUID getUuid(String name) {
