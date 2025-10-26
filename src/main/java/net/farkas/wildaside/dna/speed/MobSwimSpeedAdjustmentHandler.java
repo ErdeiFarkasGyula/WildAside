@@ -60,7 +60,7 @@ public class MobSwimSpeedAdjustmentHandler {
             double groundVal = groundSpeed / 43.17;
             double waterVal = waterSpeed / 43.17;
 
-            double adjustment = (waterVal / groundVal) - 1.0;
+            double adjustment = (waterVal / groundVal);
 
             attr.addPermanentModifier(new AttributeModifier(
                     WATER_ADJUST_UUID,

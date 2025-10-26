@@ -25,7 +25,8 @@ public class MobSpeedTesting {
             EntityType.MAGMA_CUBE,
             EntityType.GIANT,
             EntityType.WANDERING_TRADER,
-            EntityType.WARDEN
+            EntityType.WARDEN,
+            EntityType.SHULKER
     );
 
     public static void spawnAllMobs(ServerLevel level, BlockPos start) {
@@ -48,16 +49,16 @@ public class MobSpeedTesting {
 
             MobSpeedTestTracker.registerMob(mob, testName);
 
-            buildTestBox(level, start.offset(0, 0, offsetZ), 120, 5, 5, inWater);
-            BlockPos spawnPos = start.offset(0, 0, offsetZ);
+            BlockPos pos = start.offset(0, 0, offsetZ);
+            buildTestBox(level, pos, 120, 5, 5, inWater);
 
-            mob.moveTo(spawnPos.getX() + 0.5 + 3, spawnPos.getY() + 1, spawnPos.getZ() + 0.5 + 2, 0, 0);
+            mob.moveTo(pos.getX() + 0.5 + 3, pos.getY() + 1, pos.getZ() + 0.5 + 2, 0, 0);
             level.addFreshEntity(mob);
 
             mob.goalSelector.getAvailableGoals().clear();
             mob.targetSelector.getAvailableGoals().clear();
 
-            mob.goalSelector.addGoal(0, new StraightLineGoal(mob, Direction.EAST, 5, testName));
+            mob.goalSelector.addGoal(0, new MobSpeedTestGoal(mob, Direction.EAST, 5, testName));
 
             offsetZ += 4;
         }

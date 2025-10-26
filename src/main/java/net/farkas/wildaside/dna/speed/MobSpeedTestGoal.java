@@ -5,7 +5,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.Vec3;
 
-public class StraightLineGoal extends Goal {
+public class MobSpeedTestGoal extends Goal {
     private final Mob mob;
     private final Direction dir;
     private final int length;
@@ -18,7 +18,7 @@ public class StraightLineGoal extends Goal {
     private double distanceTraveled;
     private int ticks;
 
-    public StraightLineGoal(Mob mob, Direction dir, int length, String testName) {
+    public MobSpeedTestGoal(Mob mob, Direction dir, int length, String testName) {
         this.mob = mob;
         this.dir = dir;
         this.length = length;

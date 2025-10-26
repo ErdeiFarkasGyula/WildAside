@@ -21,10 +21,10 @@ public class DnaExtractor extends Item {
         if (pUsedHand == InteractionHand.OFF_HAND || pPlayer.level().isClientSide()) return InteractionResult.PASS;
 
         var base = DnaUtils.generateBaseCoreGenes(pInteractionTarget);
-//        var core = DnaUtils.mutateCoreGenes(base, pInteractionTarget);
+        var core = DnaUtils.mutateCoreGenes(base, pInteractionTarget);
 
         Dna dna = new Dna(pInteractionTarget,
-                base,
+                core,
                 List.of(),
                 List.of(), 75);
 
@@ -39,14 +39,14 @@ public class DnaExtractor extends Item {
                                 "]"
                 ));
 
-//        core.stream().forEach(coreGene ->
-//                System.out.println(
-//                        "Modified[" +
-//                                "stat=" + coreGene.trait() +
-//                                ", value=" + coreGene.value() +
-//                                ", stabilityCost=" + coreGene.stabilityCost() +
-//                                "]"
-//                ));
+        core.stream().forEach(coreGene ->
+                System.out.println(
+                        "Modified[" +
+                                "stat=" + coreGene.trait() +
+                                ", value=" + coreGene.value() +
+                                ", stabilityCost=" + coreGene.stabilityCost() +
+                                "]"
+                ));
 
 
 //        MinecraftServer server = pPlayer.getServer();
