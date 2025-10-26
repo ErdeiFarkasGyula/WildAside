@@ -70,33 +70,6 @@ public class ModEvents {
     }
 
     @SubscribeEvent
-    public static void onServerStarting(ServerStartingEvent event) {
-        loadTestLevelArea(event);
-    }
-
-    public static void loadTestLevelArea(ServerStartingEvent event) {
-        MinecraftServer server = event.getServer();
-        ServerLevel level = server.getLevel(ModDimensions.TEST_LEVEL);
-
-        if (level != null) {
-            ensureTestAreaLoaded(level, new BlockPos(0, 16, 0), 150, MobSpeedTesting.getMobsToTest(level).size() * 4 + 2);
-        }
-    }
-
-    public static void ensureTestAreaLoaded(ServerLevel level, BlockPos origin, int length, int width) {
-        int chunkXStart = origin.getX() >> 4;
-        int chunkZStart = origin.getZ() >> 4;
-        int chunkXEnd = (origin.getX() + length) >> 4;
-        int chunkZEnd = (origin.getZ() + width) >> 4;
-
-        for (int cx = chunkXStart; cx <= chunkXEnd; cx++) {
-            for (int cz = chunkZStart; cz <= chunkZEnd; cz++) {
-                level.setChunkForced(cx, cz, true);
-            }
-        }
-    }
-
-    @SubscribeEvent
     public static void onEntityLeftLevel(EntityLeaveLevelEvent event) {
         checkTestDimensionEntityRemoves(event);
     }

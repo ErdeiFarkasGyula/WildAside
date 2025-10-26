@@ -84,9 +84,22 @@ public class DnaUtils {
     }
 
     private static CoreGene mutateCoreGene(CoreGene gene, RandomSource random) {
-        return new CoreGene(gene.trait(), gene.value() * (0.9f + random.nextFloat() * 0.2f), gene.stabilityCost());
-    }
+        float averageMutation = -0.1f;
+        float baseVariance = 0.15f;
+        float strongMutationChance = 0.05f;
+        float strongMultiplier = 0.5f;
 
+        float mutation = (float) random.nextGaussian() * baseVariance + averageMutation;
+
+        if (random.nextFloat() < strongMutationChance) {
+            float direction = random.nextBoolean() ? 1.0f : -1.0f;
+            mutation += direction * (random.nextFloat() * strongMultiplier);
+        }
+
+        float newValue = gene.value() * (1.0f + mutation);
+
+        return new CoreGene(gene.trait(), newValue, gene.stabilityCost());
+    }
     public static UUID getUuid(String name) {
         return UUID.nameUUIDFromBytes(name.getBytes(StandardCharsets.UTF_8));
     }

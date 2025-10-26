@@ -1,5 +1,7 @@
 package net.farkas.wildaside.dna.speed;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Mob;
 
 import java.util.Map;
@@ -29,6 +31,10 @@ public class MobSpeedTestTracker {
             System.out.println("🎉 All test conditions finished! Saving all results...");
             MobSpeedResultStorage.save();
             MobSpeedResultStorage.load();
+            if (mob.level() instanceof ServerLevel serverLevel) {
+                MobSpeedTestManager.unloadTestLevelArea(serverLevel, new BlockPos(0, 16, 0), 150, MobSpeedTesting.getMobsToTest(serverLevel).size() * 4 + 2);
+                System.out.println(serverLevel.isLoaded(new BlockPos(0, 5, 0)));
+            }
         }
     }
 }
