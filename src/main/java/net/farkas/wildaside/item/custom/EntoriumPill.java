@@ -1,10 +1,5 @@
 package net.farkas.wildaside.item.custom;
 
-import net.farkas.wildaside.dna.Dna;
-import net.farkas.wildaside.dna.Gene;
-import net.farkas.wildaside.dna.Traits;
-import net.farkas.wildaside.dna.genes.AbilityGene;
-import net.farkas.wildaside.dna.genes.CoreGene;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.util.AdvancementHandler;
 import net.minecraft.network.chat.Component;

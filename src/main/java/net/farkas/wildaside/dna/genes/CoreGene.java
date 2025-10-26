@@ -22,15 +22,14 @@ public record CoreGene(Traits.Core trait, float value, float stabilityCost) impl
                     instance.removeModifier(id);
                     instance.removePermanentModifier(id);
                 }
+
+                AttributeInstance attributeInstance = livingEntity.getAttribute(trait.attribute);
+                double base = attributeInstance.getValue();
+                double modifierValue = (value / base) - 1.0;
+
+                livingEntity.getAttribute(trait.attribute).addPermanentModifier(
+                        new AttributeModifier(DnaUtils.getUuid(fullName()), fullName(), modifierValue, AttributeModifier.Operation.MULTIPLY_BASE));
             }
-
-            AttributeInstance attributeInstance = livingEntity.getAttribute(trait.attribute);
-            double base = attributeInstance.getValue();
-            double modifierValue = (value / base) - 1.0;
-
-            livingEntity.getAttribute(trait.attribute).addPermanentModifier(
-                    new AttributeModifier(DnaUtils.getUuid(fullName()), fullName(), modifierValue, AttributeModifier.Operation.MULTIPLY_BASE));
-
         }
     }
 

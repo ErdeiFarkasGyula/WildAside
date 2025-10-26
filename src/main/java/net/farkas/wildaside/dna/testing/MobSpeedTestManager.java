@@ -55,6 +55,8 @@ public class MobSpeedTestManager {
                 data.lastHash = currentHash;
                 data.setDirty();
             }
+
+            MobSpeedResultStorage.load();
         }
     }
 

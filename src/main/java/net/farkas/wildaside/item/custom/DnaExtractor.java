@@ -30,25 +30,25 @@ public class DnaExtractor extends Item {
     public InteractionResult interactLivingEntity(ItemStack pStack, Player pPlayer, LivingEntity pInteractionTarget, InteractionHand pUsedHand) {
         if (pUsedHand == InteractionHand.OFF_HAND || pPlayer.level().isClientSide()) return InteractionResult.PASS;
 
-//        var base = DnaUtils.generateBaseCoreGenes(pInteractionTarget);
+        var base = DnaUtils.generateBaseCoreGenes(pInteractionTarget);
 //        var core = DnaUtils.mutateCoreGenes(base, pInteractionTarget);
-//
-//        Dna dna = new Dna(pInteractionTarget,
-//                core,
-//                List.of(),
-//                List.of(), 75);
-//
-//        dna.applyTo(pPlayer);
-//
-//        base.stream().forEach(baseGene ->
-//                System.out.println(
-//                        "BaseGene[" +
-//                                "stat=" + baseGene.trait() +
-//                                ", value=" + baseGene.value() +
-//                                ", stabilityCost=" + baseGene.stabilityCost() +
-//                                "]"
-//                ));
-//
+
+        Dna dna = new Dna(pInteractionTarget,
+                base,
+                List.of(),
+                List.of(), 75);
+
+        dna.applyTo(pPlayer);
+
+        base.stream().forEach(baseGene ->
+                System.out.println(
+                        "BaseGene[" +
+                                "stat=" + baseGene.trait() +
+                                ", value=" + baseGene.value() +
+                                ", stabilityCost=" + baseGene.stabilityCost() +
+                                "]"
+                ));
+
 //        core.stream().forEach(coreGene ->
 //                System.out.println(
 //                        "Modified[" +
@@ -59,9 +59,9 @@ public class DnaExtractor extends Item {
 //                ));
 
 
-        MinecraftServer server = pPlayer.getServer();
-        ServerLevel level = server.getLevel(ModDimensions.TEST_LEVEL);
-        MobSpeedTesting.runBatchTest(level, new BlockPos(0, 5, 0));
+//        MinecraftServer server = pPlayer.getServer();
+//        ServerLevel level = server.getLevel(ModDimensions.TEST_LEVEL);
+//        MobSpeedTesting.runBatchTest(level, new BlockPos(0, 5, 0));
 
         return super.interactLivingEntity(pStack, pPlayer, pInteractionTarget, pUsedHand);
     }

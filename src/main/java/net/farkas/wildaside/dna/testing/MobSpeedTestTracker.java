@@ -28,6 +28,7 @@ public class MobSpeedTestTracker {
         if (allEmpty) {
             System.out.println("🎉 All test conditions finished! Saving all results...");
             MobSpeedResultStorage.save();
+            MobSpeedResultStorage.load();
         }
     }
 }

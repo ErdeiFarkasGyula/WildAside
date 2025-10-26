@@ -2,6 +2,7 @@ package net.farkas.wildaside.dna;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.dna.genes.CoreGene;
+import net.farkas.wildaside.dna.testing.MobSpeedResultStorage;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -68,6 +69,10 @@ public class DnaUtils {
         List<CoreGene> genes = new ArrayList<>();
         for (var trait : Traits.Core.values()) {
             float traitValue = entity.getAttribute(trait.attribute) == null ? 0 : (float) entity.getAttribute(trait.attribute).getBaseValue();
+            if (trait == Traits.Core.MOVEMENT_SPEED) {
+                traitValue = (float) (MobSpeedResultStorage.getSpeed(entity.getType(), "ground") / 43.17);
+                System.out.println("TRAIT VALUE: " + traitValue);
+            }
             genes.add(new CoreGene(trait, traitValue, trait.baseInstability));
         }
         return genes;
