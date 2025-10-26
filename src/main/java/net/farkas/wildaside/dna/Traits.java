@@ -5,21 +5,23 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 
-public class Traits {
-    public enum Core {
-        MAX_HEALTH(Attributes.MAX_HEALTH, 0.8f),
-        MOVEMENT_SPEED(Attributes.MOVEMENT_SPEED, 1.2f),
-        ATTACK_DAMAGE(Attributes.ATTACK_DAMAGE, 1.3f),
-        ATTACK_SPEED(Attributes.ATTACK_SPEED, 1.0f),
-        ATTACK_KNOCKBACK(Attributes.ATTACK_KNOCKBACK, 0.9f),
-        ARMOR(Attributes.ARMOR, 0.7f),
-        ARMOR_TOUGHNESS(Attributes.ARMOR_TOUGHNESS, 0.8f),
-        KNOCKBACK_RESISTANCE(Attributes.KNOCKBACK_RESISTANCE, 0.6f);
+public interface Traits {
+    float baseInstability();
+
+    enum Core implements Traits {
+        MAX_HEALTH(1.2f, Attributes.MAX_HEALTH),
+        MOVEMENT_SPEED(1.0f, Attributes.MOVEMENT_SPEED),
+        ATTACK_DAMAGE(0.9f, Attributes.ATTACK_DAMAGE),
+        ATTACK_SPEED(0.7f, Attributes.ATTACK_SPEED),
+        ATTACK_KNOCKBACK(0.6f, Attributes.ATTACK_KNOCKBACK),
+        ARMOR(0.5f, Attributes.ARMOR),
+        ARMOR_TOUGHNESS(0.4f, Attributes.ARMOR_TOUGHNESS),
+        KNOCKBACK_RESISTANCE(0.3f, Attributes.KNOCKBACK_RESISTANCE);
 
         public final Attribute attribute;
         public final float baseInstability;
 
-        Core(Attribute attribute, float baseInstability) {
+        Core(float baseInstability, Attribute attribute) {
             this.attribute = attribute;
             this.baseInstability = baseInstability;
         }
@@ -27,22 +29,49 @@ public class Traits {
         public static Core getRandom(RandomSource randomSource) {
             return Traits.Core.values()[randomSource.nextInt(Core.values().length)];
         }
+
+        @Override
+        public float baseInstability() {
+            return this.baseInstability;
+        }
     }
 
-    public enum Resistance {
-        FIRE,
-        POISON,
-        EXPLOSION,
-        FALL,
-        TOXIN,
-        TEMPERATURE;
+    enum Resistance implements Traits {
+        FIRE(0),
+        POISON(0),
+        EXPLOSION(0),
+        FALL(0),
+        TOXIN(0),
+        TEMPERATURE(0);
+
+        public final float baseInstability;
+
+        Resistance(float baseInstability) {
+            this.baseInstability = baseInstability;
+        }
+
+        @Override
+        public float baseInstability() {
+            return 0;
+        }
     }
 
-    public enum Ability {
-        REGENERATION,
-        LIFESTEAL,
-        SPORE_ATTACK,
-        PROJECTILE_ATTACK,
-        AOE_EFFECT;
+    enum Ability implements Traits {
+        REGENERATION(0),
+        LIFESTEAL(0),
+        SPORE_ATTACK(0),
+        PROJECTILE_ATTACK(0),
+        AOE_EFFECT(0);
+
+        public final float baseInstability;
+
+        Ability(float baseInstability) {
+            this.baseInstability = baseInstability;
+        }
+
+        @Override
+        public float baseInstability() {
+            return this.baseInstability;
+        }
     }
 }

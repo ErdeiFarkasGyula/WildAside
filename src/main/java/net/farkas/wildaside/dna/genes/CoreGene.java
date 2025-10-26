@@ -24,7 +24,7 @@ public record CoreGene(Traits.Core trait, float value, float stabilityCost) impl
                 }
 
                 AttributeInstance attributeInstance = livingEntity.getAttribute(trait.attribute);
-                double base = attributeInstance.getValue();
+                double base = attributeInstance.getBaseValue();
                 double modifierValue = (value / base) - 1.0;
 
                 livingEntity.getAttribute(trait.attribute).addPermanentModifier(
