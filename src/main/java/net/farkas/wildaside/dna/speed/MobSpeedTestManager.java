@@ -1,4 +1,4 @@
-package net.farkas.wildaside.dna.testing;
+package net.farkas.wildaside.dna.speed;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.worldgen.dimension.ModDimensions;
@@ -7,7 +7,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
-import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
@@ -15,7 +14,6 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(modid = WildAside.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class MobSpeedTestManager {

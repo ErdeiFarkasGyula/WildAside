@@ -1,4 +1,4 @@
-package net.farkas.wildaside.dna.testing;
+package net.farkas.wildaside.dna.speed;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;

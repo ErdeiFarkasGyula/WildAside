@@ -4,6 +4,7 @@ import net.farkas.wildaside.dna.genes.CoreGene;
 import net.farkas.wildaside.dna.genes.ResistanceGene;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +31,13 @@ public class Dna {
     }
 
     public void applyTo(Entity entity) {
-        DnaUtils.clearDnaEffects(entity);
-        for (Gene gene : genes) {
-            gene.apply(entity);
+        if (entity instanceof LivingEntity livingEntity) {
+            livingEntity.getPersistentData().putString("dna_source_entity", origin.getType().getDescriptionId());
+            System.out.println("DESC: " + origin.getType().getDescriptionId());
+            DnaUtils.clearDnaEffects(livingEntity);
+            for (Gene gene : genes) {
+                gene.apply(livingEntity);
+            }
         }
     }
 

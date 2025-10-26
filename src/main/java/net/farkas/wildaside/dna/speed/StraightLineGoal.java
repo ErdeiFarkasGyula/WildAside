@@ -1,4 +1,4 @@
-package net.farkas.wildaside.dna.testing;
+package net.farkas.wildaside.dna.speed;
 
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Mob;

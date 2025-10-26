@@ -2,7 +2,7 @@ package net.farkas.wildaside.dna;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.dna.genes.CoreGene;
-import net.farkas.wildaside.dna.testing.MobSpeedResultStorage;
+import net.farkas.wildaside.dna.speed.MobSpeedResultStorage;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
