@@ -17,7 +17,7 @@ public class ModMobEffects {
     public static final DeferredRegister<MobEffect> MOB_EFFECTS = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, WildAside.MOD_ID);
 
     public static final RegistryObject<MobEffect> CONTAMINATION = MOB_EFFECTS.register("contamination",
-            () -> new Contamination(MobEffectCategory.HARMFUL, -6184663)
+            () -> new Contamination(MobEffectCategory.HARMFUL, 0xefca73)
                     .addAttributeModifier(Attributes.ARMOR, "FA233E1C-6969-4200-B01B-BCCE9785ACA4", -0.10 , AttributeModifier.Operation.MULTIPLY_TOTAL)
                     .addAttributeModifier(Attributes.ATTACK_DAMAGE, "FA233E1C-6969-4200-B01B-BCCE9785ACA4", -0.10 , AttributeModifier.Operation.MULTIPLY_TOTAL)
                     .addAttributeModifier(Attributes.SPAWN_REINFORCEMENTS_CHANCE, "FB233E1C-6969-4200-B01B-BCCE9785ACA4", 0.01, AttributeModifier.Operation.ADDITION)
