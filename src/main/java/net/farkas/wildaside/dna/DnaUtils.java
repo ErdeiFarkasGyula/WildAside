@@ -139,17 +139,18 @@ public class DnaUtils {
             }
         }
 
+        RandomSource random = RandomSource.create(entity.getUUID().getLeastSignificantBits());
         if (entity.fireImmune()) {
             Trait trait = Traits.FIRE_RESISTANCE;
-            genes.put(trait, new Gene(trait, entity.getRandom().nextFloat(), trait.baseInstability()));
+            genes.put(trait, new Gene(trait, random.nextFloat(), trait.baseInstability()));
         }
         if (entity.getType().is(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES)) {
             Trait trait = Traits.FREEZE_RESISTANCE;
-            genes.put(trait, new Gene(trait, entity.getRandom().nextFloat(), trait.baseInstability()));
+            genes.put(trait, new Gene(trait, random.nextFloat(), trait.baseInstability()));
         }
         if (entity.getType().is(EntityTypeTags.FALL_DAMAGE_IMMUNE)) {
             Trait trait = Traits.FALL_RESISTANCE;
-            genes.put(trait, new Gene(trait, entity.getRandom().nextFloat(), trait.baseInstability()));
+            genes.put(trait, new Gene(trait, random.nextFloat(), trait.baseInstability()));
         }
 
         return genes;
