@@ -31,7 +31,7 @@ public class DnaExtractor extends Item {
         });
 
         AtomicReference<Float> stability = new AtomicReference<>(0f);
-        pPlayer.getCapability(DnaCapability.INSTANCE).ifPresent(iDna -> stability.set(iDna.stability()));
+        pPlayer.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> stability.set(dna.stability()));
 
         mutatedGenes.forEach((trait, gene) -> {
             System.out.println(
@@ -43,10 +43,6 @@ public class DnaExtractor extends Item {
                             "]"
             );
         });
-
-//        MinecraftServer server = pPlayer.getServer();
-//        ServerLevel level = server.getLevel(ModDimensions.TEST_LEVEL);
-//        MobSpeedTesting.runBatchTest(level, new BlockPos(0, 5, 0));
 
         return super.interactLivingEntity(pStack, pPlayer, pInteractionTarget, pUsedHand);
     }

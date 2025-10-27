@@ -51,16 +51,7 @@ public class Traits {
         return gene != null ? gene.value() : 0.0f;
     }
 }
-//
-//    class Resistance extends Traits {
-//        FIRE(0),
-//        POISON(0),
-//        EXPLOSION(0),
-//        FALL(0),
-//        TOXIN(0),
-//        TEMPERATURE(0);
-//    }
-//
+
 //    class Ability extends Traits {
 //        REGENERATION(0),
 //        LIFESTEAL(0),
@@ -68,4 +59,3 @@ public class Traits {
 //        PROJECTILE_ATTACK(0),
 //        AOE_EFFECT(0);
 //    }
-//}
