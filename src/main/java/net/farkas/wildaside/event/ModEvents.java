@@ -11,6 +11,7 @@ import net.farkas.wildaside.command.ModCommands;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.speed.MobSpeedTestTracker;
+import net.farkas.wildaside.dna.traits.Trait;
 import net.farkas.wildaside.dna.traits.Traits;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.network.WindSavedData;
@@ -27,6 +28,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -54,6 +56,8 @@ import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import java.util.List;
 
 @Mod.EventBusSubscriber(modid = WildAside.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModEvents {
@@ -228,6 +232,7 @@ public class ModEvents {
     public static void livingEntityHurt(LivingHurtEvent event) {
         if (event.getEntity().level().isClientSide()) return;
         reduceDnaStabilityFromHurting(event);
+        reduceDamageBasedOnDnaResistances(event);
     }
 
     public static void reduceDnaStabilityFromHurting(LivingHurtEvent event) {
@@ -237,6 +242,30 @@ public class ModEvents {
             dna.setStability(dna.stability() - stabilityReduction);
             dna.apply(event.getEntity());
             System.out.println(dna.stability() + " " + entity);
+        });
+    }
+
+    public static void reduceDamageBasedOnDnaResistances(LivingHurtEvent event) {
+        LivingEntity entity = event.getEntity();
+        DamageSource source = event.getSource();
+
+        entity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
+        Trait trait = null;
+            if (source.is(DamageTypes.IN_FIRE) || source.is(DamageTypes.ON_FIRE) || source.is(DamageTypes.LAVA) || source.is(DamageTypes.HOT_FLOOR)) {
+                trait = Traits.FIRE_RESISTANCE;
+            }
+            else if (source.is(DamageTypes.EXPLOSION) || source.is(DamageTypes.PLAYER_EXPLOSION)) {
+                trait = Traits.EXPLOSION_RESISTANCE;
+            }
+            else if (source.is(DamageTypes.FALL)) {
+                trait = Traits.FALL_RESISTANCE;
+            }
+            else if (source.is(DamageTypes.FREEZE)) {
+                trait = Traits.FREEZE_RESISTANCE;
+            }
+            float value = Traits.getTraitValue(dna.genes(), trait);
+            dna.setStability(dna.stability() - (event.getAmount() * 0.25f));
+            event.setAmount(event.getAmount() * (1.0f - value));
         });
     }
 

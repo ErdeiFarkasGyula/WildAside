@@ -3,13 +3,12 @@ package net.farkas.wildaside.dna;
 import com.google.common.collect.Multimap;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.dna.speed.MobSpeedResultStorage;
+import net.farkas.wildaside.dna.speed.MobSpeedTesting;
+import net.farkas.wildaside.dna.traits.Trait;
 import net.farkas.wildaside.dna.traits.TraitTypes;
 import net.farkas.wildaside.dna.traits.Traits;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -19,10 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
+import java.util.*;
 
 public class DnaUtils {
     public static final String DNA_PREFIX = WildAside.MOD_ID + "_dna_";
@@ -115,36 +111,45 @@ public class DnaUtils {
         return false;
     }
 
-    public static List<Gene> generateDefaultCoreGenes(LivingEntity entity) {
-        List<Gene> genes = new ArrayList<>();
+    public static Map<Trait, Gene> generateDefaultCoreGenes(LivingEntity entity) {
+        Map<Trait, Gene> genes = new HashMap<>();
         for (var trait : Traits.getByType(TraitTypes.CORE)) {
             Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(getAttribute(trait.name()));
             float traitValue = getStableAttributeValue(entity, attribute);
-            genes.add(new Gene(trait, traitValue, trait.baseInstability()));
+            genes.put(trait, new Gene(trait, traitValue, trait.baseInstability()));
         }
         return genes;
     }
 
-    public static List<Gene> generateBaseCoreGenes(LivingEntity entity) {
-        List<Gene> genes = new ArrayList<>();
+    public static Map<Trait, Gene> generateBaseCoreGenes(LivingEntity entity) {
+        Map<Trait, Gene> genes = new HashMap<>();
         for (var trait : Traits.getByType(TraitTypes.CORE)) {
             Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(getAttribute(trait.name()));
-            float traitValue = getStableAttributeValue(entity, attribute);
-            if (trait == Traits.MOVEMENT_SPEED) {
-                traitValue = (float) (MobSpeedResultStorage.getSpeed(entity.getType(), "ground") / 43.17);
-                System.out.println("TRAIT VALUE: " + traitValue);
+            if (attribute != null) {
+                float traitValue = getStableAttributeValue(entity, attribute);
+                if (trait == Traits.MOVEMENT_SPEED) {
+                    traitValue = (float) (MobSpeedResultStorage.getSpeed(entity.getType(), "ground") / 43.17f);
+                    if (MobSpeedTesting.EXCLUDED_MOBS.contains(entity.getType())) {
+                        traitValue = (float) entity.getAttributeBaseValue(attribute);
+                    }
+                    System.out.println("TRAIT VALUE: " + traitValue);
+                }
+                genes.put(trait, new Gene(trait, traitValue, trait.baseInstability()));
             }
-            genes.add(new Gene(trait, traitValue, trait.baseInstability()));
         }
         return genes;
     }
 
-    public static List<Gene> mutateCoreGenes(List<Gene> baseGenes, LivingEntity entity) {
+    public static Map<Trait, Gene> mutateGenes(Map<Trait, Gene> baseGenes, LivingEntity entity) {
         RandomSource random = RandomSource.create(entity.getUUID().getLeastSignificantBits());
-        return baseGenes.stream().map(gene -> mutateCoreGene(gene, random)).toList();
+        Map<Trait, Gene> mutated = new HashMap<>();
+        for (var entry : baseGenes.entrySet()) {
+            mutated.put(entry.getKey(), mutateGene(entry.getValue(), random));
+        }
+        return mutated;
     }
 
-    private static Gene mutateCoreGene(Gene gene, RandomSource random) {
+    private static Gene mutateGene(Gene gene, RandomSource random) {
         float averageMutation = -0.2f;
         float baseVariance = 0.2f;
         float strongMutationChance = 0.05f;

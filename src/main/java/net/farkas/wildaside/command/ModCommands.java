@@ -6,7 +6,11 @@ import com.mojang.brigadier.arguments.*;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.config.Config;
+import net.farkas.wildaside.dna.Gene;
+import net.farkas.wildaside.dna.traits.Trait;
+import net.farkas.wildaside.dna.traits.Traits;
 import net.farkas.wildaside.network.WindSavedData;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.farkas.wildaside.network.WindData;
@@ -115,6 +119,21 @@ public class ModCommands {
                         )
         );
 
+        root.then(
+                Commands.literal("dna")
+                        .requires(src -> src.hasPermission(2))
+                        .then(Commands.argument("target", EntityArgument.player())
+                        .then(Commands.argument("trait", StringArgumentType.word())
+                                .suggests((ctx, builder) -> {
+                                    for (Trait trait : Traits.TRAITS) {
+                                        builder.suggest(trait.name());
+                                    }
+                                    return builder.buildFuture();
+                                })
+                                .then(Commands.argument("value", FloatArgumentType.floatArg())
+                                        .executes(ctx -> applyGene(ctx, EntityArgument.getPlayer(ctx, "target"))))))
+        );
+
         dispatcher.register(root);
     }
 
@@ -165,5 +184,30 @@ public class ModCommands {
             source.sendFailure(Component.literal("No valid living entities found."));
         }
         return affected;
+    }
+
+    private static int applyGene(CommandContext<CommandSourceStack> ctx, LivingEntity target) {
+        String traitName = StringArgumentType.getString(ctx, "trait");
+        float value = FloatArgumentType.getFloat(ctx, "value");
+
+        Trait trait = Traits.TRAITS.stream()
+                .filter(t -> t.name().equalsIgnoreCase(traitName))
+                .findFirst()
+                .orElse(null);
+
+        if (trait == null) {
+            ctx.getSource().sendFailure(Component.literal("Unknown trait: " + traitName));
+            return 0;
+        }
+
+        target.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
+            dna.genes().put(trait, new Gene(trait, value, 0f));
+            dna.apply(target);
+        });
+
+        ctx.getSource().sendSuccess(() ->
+                        Component.literal("Applied " + traitName + " (" + value + ") to " + target.getName().getString()),
+                true);
+        return 1;
     }
 }

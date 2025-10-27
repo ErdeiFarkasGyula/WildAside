@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 public class MobSpeedTesting {
-    private static final Set<EntityType<?>> EXCLUDED_MOBS = Set.of(
+    public static final Set<EntityType<?>> EXCLUDED_MOBS = Set.of(
             EntityType.ENDER_DRAGON,
             EntityType.WITHER,
             EntityType.BAT,

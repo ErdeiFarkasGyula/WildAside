@@ -55,7 +55,10 @@ public class MobSwimSpeedAdjustmentHandler {
             double groundSpeed = MobSpeedResultStorage.getSpeed(entityType, "ground");
             double waterSpeed = MobSpeedResultStorage.getSpeed(entityType, "water");
 
-            if (groundSpeed <= 0) return;
+            if (groundSpeed == 0) return;
+
+            if (groundSpeed == -1) groundSpeed = player.getAttributeBaseValue(attr.getAttribute());
+            if (waterSpeed == -1) waterSpeed = player.getAttributeBaseValue(attr.getAttribute()) / 5;
 
             double groundVal = groundSpeed / 43.17;
             double waterVal = waterSpeed / 43.17;

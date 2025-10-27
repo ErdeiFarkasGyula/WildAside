@@ -73,7 +73,7 @@ public class MobSpeedResultStorage {
         if (id == null) return 0.0;
 
         Map<String, Double> map = results.get(id);
-        if (map == null) return 0.0;
+        if (map == null) return -1;
 
         return map.getOrDefault(environment, 0.0);
     }

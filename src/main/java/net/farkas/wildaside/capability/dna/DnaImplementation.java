@@ -16,29 +16,31 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DnaImplementation implements IDna {
     private @Nullable EntityType<?> source;
     private float stability = 100;
-    private List<Gene> genes = new ArrayList<>();
+    private Map<Trait, Gene> genes = new HashMap<>();
 
     @Override
     public void apply(LivingEntity entity) {
-        for (Gene gene : genes) {
+        for (Gene gene : genes.values()) {
             gene.apply(entity);
         }
     }
 
     @Override
     public void remove(LivingEntity entity) {
-        for (Gene gene : genes) {
+        for (Gene gene : genes.values()) {
             gene.remove(entity);
         }
     }
 
     @Override
-    public void setGenes(List<Gene> genes) {
+    public void setGenes(Map<Trait, Gene> genes) {
         this.genes = genes;
     }
 
@@ -52,7 +54,6 @@ public class DnaImplementation implements IDna {
         return stability;
     }
 
-
     @Override
     public void setSource(@Nullable EntityType<?> source) {
         this.source = source;
@@ -61,25 +62,34 @@ public class DnaImplementation implements IDna {
     @Nullable
     @Override
     public EntityType<?> source() {
-        if (source == null) { return null; }
-        return ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(source.toString()));
+        return source;
     }
 
     @Override
-    public List<Gene> genes() {
+    public Map<Trait, Gene> genes() {
         return genes;
     }
 
-    public float calculateInstabilityChange(List<Gene> newGenes) {
-        List<Gene> currentGenes = this.genes;
+    public void setGene(LivingEntity entity, Trait trait, float value, float stabilityCost) {
+        Gene existing = genes.get(trait);
+        if (existing != null) {
+            existing.remove(entity);
+        }
+
+        Gene newGene = new Gene(trait, value, stabilityCost);
+        genes.put(trait, newGene);
+        newGene.apply(entity);
+    }
+
+    @Override
+    public float calculateInstabilityChange(Map<Trait, Gene> newGenes) {
         float totalCost = 0.0f;
 
-        for (Gene newGene : newGenes) {
-            Gene currentGene = currentGenes.stream()
-                    .filter(g -> g.trait.equals(newGene.trait))
-                    .findFirst()
-                    .orElse(null);
+        for (Map.Entry<Trait, Gene> entry : newGenes.entrySet()) {
+            Trait trait = entry.getKey();
+            Gene newGene = entry.getValue();
 
+            Gene currentGene = genes.get(trait);
             if (currentGene == null) {
                 totalCost += newGene.trait.baseInstability();
                 continue;
@@ -111,22 +121,18 @@ public class DnaImplementation implements IDna {
     @Override
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
-        String sourceString = "";
-        if (source != null) {
-            sourceString = source.toString();
-        }
+        String sourceString = source != null ? source.toString() : "";
         tag.putString("source", sourceString);
         tag.putFloat("stability", stability);
 
         ListTag list = new ListTag();
-        if (genes != null) {
-            for (Gene gene : genes) {
-                CompoundTag geneTag = new CompoundTag();
-                geneTag.putString("trait", gene.trait().name());
-                geneTag.putFloat("value", gene.value());
-                geneTag.putFloat("stabilityCost", gene.stabilityCost());
-                list.add(geneTag);
-            }
+        for (var entry : genes.entrySet()) {
+            Gene gene = entry.getValue();
+            CompoundTag geneTag = new CompoundTag();
+            geneTag.putString("trait", gene.trait().name());
+            geneTag.putFloat("value", gene.value());
+            geneTag.putFloat("stabilityCost", gene.stabilityCost());
+            list.add(geneTag);
         }
         tag.put("genes", list);
         return tag;
@@ -134,26 +140,22 @@ public class DnaImplementation implements IDna {
 
     @Override
     public void deserializeNBT(CompoundTag tag) {
-        String sourceString = tag.getString("source");
-        source = ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(sourceString));
+        source = ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(tag.getString("source")));
         stability = tag.getFloat("stability");
+        genes.clear();
 
-        if (genes != null) {
-            genes.clear();
-        }
         ListTag list = tag.getList("genes", Tag.TAG_COMPOUND);
         for (Tag t : list) {
             CompoundTag geneTag = (CompoundTag) t;
-            String trait = geneTag.getString("trait");
-            Trait traitValue = Traits.getByName(trait);
-            if (traitValue == null) {
-                traitValue = Traits.ARMOR_TOUGHNESS;
-                WildAside.LOGGER.warn("Missing Trait: {}", trait);
+            String traitName = geneTag.getString("trait");
+            Trait trait = Traits.getByName(traitName);
+            if (trait == null) {
+                WildAside.LOGGER.warn("Missing Trait: {}", traitName);
+                continue;
             }
             float value = geneTag.getFloat("value");
             float cost = geneTag.getFloat("stabilityCost");
-            Gene gene = new Gene(traitValue, value, cost);
-            genes.add(gene);
+            genes.put(trait, new Gene(trait, value, cost));
         }
     }
 }
