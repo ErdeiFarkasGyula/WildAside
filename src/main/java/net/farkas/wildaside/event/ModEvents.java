@@ -5,6 +5,7 @@ import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.capability.contamination.ContaminationAttacher;
 import net.farkas.wildaside.capability.contamination.ContaminationCapability;
+import net.farkas.wildaside.capability.contamination.ContaminationProvider;
 import net.farkas.wildaside.command.ModCommands;
 import net.farkas.wildaside.dna.speed.MobSpeedTestTracker;
 import net.farkas.wildaside.dna.speed.MobSpeedTesting;
@@ -44,7 +45,6 @@ import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.level.LevelEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -52,8 +52,7 @@ import net.minecraftforge.fml.common.Mod;
 public class ModEvents {
     @SubscribeEvent
     public static void attach(AttachCapabilitiesEvent<Entity> event) {
-        final ContaminationAttacher.ContaminationProvider provider = new ContaminationAttacher.ContaminationProvider();
-        event.addCapability(ContaminationAttacher.ContaminationProvider.IDENTIFIER, provider);
+        event.addCapability(ContaminationProvider.IDENTIFIER, new ContaminationProvider());
     }
 
     @SubscribeEvent
