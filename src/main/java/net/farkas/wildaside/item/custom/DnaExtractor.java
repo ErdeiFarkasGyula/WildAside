@@ -1,6 +1,6 @@
 package net.farkas.wildaside.item.custom;
 
-import net.farkas.wildaside.dna.Dna;
+import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -9,7 +9,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class DnaExtractor extends Item {
     public DnaExtractor(Properties pProperties) {
@@ -21,30 +21,26 @@ public class DnaExtractor extends Item {
         if (pUsedHand == InteractionHand.OFF_HAND || pPlayer.level().isClientSide()) return InteractionResult.PASS;
 
         var base = DnaUtils.generateBaseCoreGenes(pInteractionTarget);
-        var core = DnaUtils.mutateCoreGenes(base, pInteractionTarget);
+        var mutateCoreGenes = DnaUtils.mutateCoreGenes(base, pInteractionTarget);
 
-        Dna dna = new Dna(pInteractionTarget,
-                core,
-                List.of(),
-                List.of(), 75);
+        pPlayer.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
+            dna.setSource(pInteractionTarget.getType());
+            dna.setStability(dna.stability() - dna.calculateInstabilityChange(mutateCoreGenes));
+            dna.setGenes(mutateCoreGenes);
+            dna.apply(pPlayer);
+        });
 
-        dna.applyTo(pPlayer);
+        AtomicReference<Float> stability = new AtomicReference<>((float) 0);
 
-        base.stream().forEach(baseGene ->
-                System.out.println(
-                        "BaseGene[" +
-                                "stat=" + baseGene.trait() +
-                                ", value=" + baseGene.value() +
-                                ", stabilityCost=" + baseGene.stabilityCost() +
-                                "]"
-                ));
+        pPlayer.getCapability(DnaCapability.INSTANCE).ifPresent(iDna -> stability.set(iDna.stability()));
 
-        core.stream().forEach(coreGene ->
+        mutateCoreGenes.stream().forEach(coreGene ->
                 System.out.println(
                         "Modified[" +
                                 "stat=" + coreGene.trait() +
                                 ", value=" + coreGene.value() +
                                 ", stabilityCost=" + coreGene.stabilityCost() +
+                                ", currentStability:" + stability +
                                 "]"
                 ));
 

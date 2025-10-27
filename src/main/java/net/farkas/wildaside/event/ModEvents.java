@@ -5,8 +5,13 @@ import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.capability.contamination.ContaminationCapability;
 import net.farkas.wildaside.capability.contamination.ContaminationProvider;
+import net.farkas.wildaside.capability.dna.DnaCapability;
+import net.farkas.wildaside.capability.dna.DnaProvider;
 import net.farkas.wildaside.command.ModCommands;
+import net.farkas.wildaside.dna.DnaUtils;
+import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.speed.MobSpeedTestTracker;
+import net.farkas.wildaside.dna.traits.Traits;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.network.WindSavedData;
 import net.farkas.wildaside.util.AdvancementHandler;
@@ -35,6 +40,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
 import net.minecraftforge.event.entity.living.LivingBreatheEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
@@ -46,11 +52,16 @@ import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.List;
+
 @Mod.EventBusSubscriber(modid = WildAside.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModEvents {
     @SubscribeEvent
     public static void attach(AttachCapabilitiesEvent<Entity> event) {
-        event.addCapability(ContaminationProvider.IDENTIFIER, new ContaminationProvider());
+        if (event.getObject() instanceof LivingEntity livingEntity) {
+            event.addCapability(ContaminationProvider.IDENTIFIER, new ContaminationProvider());
+            event.addCapability(DnaProvider.IDENTIFIER, new DnaProvider());
+        }
     }
 
     @SubscribeEvent
@@ -71,6 +82,22 @@ public class ModEvents {
         checkTestDimensionEntityRemoves(event);
     }
 
+    @SubscribeEvent
+    public static void onEntityJoinLevel(EntityJoinLevelEvent event) {
+        applyDnaOnJoinLevel(event);
+    }
+
+    public static void applyDnaOnJoinLevel(EntityJoinLevelEvent event) {
+        if (event.getEntity() instanceof LivingEntity livingEntity) {
+            livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
+                dna.setSource(null);
+                dna.setGenes(DnaUtils.generateDefaultCoreGenes(livingEntity));
+                dna.setStability(dna.stability());
+                dna.apply(livingEntity);
+            });
+        }
+    }
+
     public static void checkTestDimensionEntityRemoves(EntityLeaveLevelEvent event) {
         if (event.getEntity().level().dimension() == ModDimensions.TEST_LEVEL) {
             if (event.getEntity() instanceof Mob mob && (mob.isSensitiveToWater() || mob.getSpeed() == 0.0)) {
@@ -78,7 +105,6 @@ public class ModEvents {
             }
         }
     }
-
 
     @SubscribeEvent
     public static void onWorldLoad(LevelEvent.Load event) {
