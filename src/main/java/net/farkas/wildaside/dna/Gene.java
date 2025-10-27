@@ -8,6 +8,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.UUID;
@@ -33,23 +34,31 @@ public class Gene {
 
     public void apply(Entity entity) {
         if (this.trait.traitType() != TraitTypes.CORE) return;
-        if (entity instanceof LivingEntity livingEntity) {
-            Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(DnaUtils.getAttribute(trait.name()));
-            if (attribute != null) {
-                var instance = livingEntity.getAttribute(attribute);
-                if (instance != null) {
-                    remove(livingEntity, attribute);
-                }
+        if (!(entity instanceof LivingEntity livingEntity)) return;
 
-                AttributeInstance attributeInstance = livingEntity.getAttribute(attribute);
-                if (attributeInstance == null) return;
-                double base = attributeInstance.getBaseValue();
-                double modifierValue = (value / base) - 1.0;
+        Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(DnaUtils.getAttribute(trait.name()));
+        if (attribute == null) return;
 
-                livingEntity.getAttribute(attribute).addPermanentModifier(
-                        new AttributeModifier(DnaUtils.getUuid(fullName), fullName, modifierValue, AttributeModifier.Operation.MULTIPLY_BASE));
-            }
+        AttributeInstance instance = livingEntity.getAttribute(attribute);
+        if (instance == null) return;
+
+        remove(livingEntity, attribute);
+
+        double base = instance.getBaseValue();
+        if (Double.isNaN(base) || base == 0.0) base = 1.0;
+
+        double modifierValue;
+        AttributeModifier.Operation op;
+
+        if (attribute == Attributes.ARMOR || attribute == Attributes.ARMOR_TOUGHNESS || attribute == Attributes.ATTACK_KNOCKBACK) {
+            modifierValue = value - base;
+            op = AttributeModifier.Operation.ADDITION;
+        } else {
+            modifierValue = (value / base) - 1.0;
+            op = AttributeModifier.Operation.MULTIPLY_BASE;
         }
+
+        instance.addPermanentModifier(new AttributeModifier(DnaUtils.getUuid(fullName), fullName, modifierValue, op));
     }
 
     public void remove(Entity entity) {

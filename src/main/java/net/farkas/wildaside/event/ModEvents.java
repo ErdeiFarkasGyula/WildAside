@@ -27,6 +27,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.damagesource.DamageSources;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -44,6 +46,7 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
 import net.minecraftforge.event.entity.living.LivingBreatheEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -51,8 +54,6 @@ import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import java.util.List;
 
 @Mod.EventBusSubscriber(modid = WildAside.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModEvents {
@@ -221,6 +222,22 @@ public class ModEvents {
         if (mobEffectInstance != null && mobEffectInstance.getEffect() == ModMobEffects.CONTAMINATION.get()) {
             entity.addEffect(new MobEffectInstance(ModMobEffects.IMMUNITY.get(), (mobEffectInstance.getAmplifier() + 1 ) * 5 * 20, mobEffectInstance.getAmplifier()));
         }
+    }
+
+    @SubscribeEvent
+    public static void livingEntityHurt(LivingHurtEvent event) {
+        if (event.getEntity().level().isClientSide()) return;
+        reduceDnaStabilityFromHurting(event);
+    }
+
+    public static void reduceDnaStabilityFromHurting(LivingHurtEvent event) {
+        LivingEntity entity = event.getEntity();
+        float stabilityReduction = event.getAmount() * 0.25f;
+        event.getEntity().getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
+            dna.setStability(dna.stability() - stabilityReduction);
+            dna.apply(event.getEntity());
+            System.out.println(dna.stability() + " " + entity);
+        });
     }
 
     @SubscribeEvent

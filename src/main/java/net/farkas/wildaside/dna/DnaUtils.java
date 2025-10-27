@@ -1,5 +1,6 @@
 package net.farkas.wildaside.dna;
 
+import com.google.common.collect.Multimap;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.dna.speed.MobSpeedResultStorage;
 import net.farkas.wildaside.dna.traits.TraitTypes;
@@ -9,15 +10,18 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 public class DnaUtils {
@@ -73,12 +77,49 @@ public class DnaUtils {
 //
 //    }
 
+    public static float getStableAttributeValue(LivingEntity entity, Attribute attribute) {
+        AttributeInstance instance = entity.getAttribute(attribute);
+        if (instance == null) return 0.0f;
+
+        double base = instance.getBaseValue();
+        double add = 0.0;
+        double multBase = 1.0;
+        double multTotal = 1.0;
+
+        for (AttributeModifier mod : instance.getModifiers()) {
+            String name = mod.getName().toLowerCase(Locale.ROOT);
+
+            if (name.contains("potion") || name.contains("effect") || name.contains("temporary")) continue;
+            if (isEquipmentModifier(entity, mod)) continue;
+
+            switch (mod.getOperation()) {
+                case ADDITION -> add += mod.getAmount();
+                case MULTIPLY_BASE -> multBase += mod.getAmount();
+                case MULTIPLY_TOTAL -> multTotal += mod.getAmount();
+            }
+        }
+
+        return (float) ((base * multBase + add) * multTotal);
+    }
+
+    private static boolean isEquipmentModifier(LivingEntity entity, AttributeModifier modifier) {
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            ItemStack stack = entity.getItemBySlot(slot);
+            if (!stack.isEmpty()) {
+                Multimap<Attribute, AttributeModifier> itemModifiers = stack.getAttributeModifiers(slot);
+                if (itemModifiers.containsValue(modifier)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public static List<Gene> generateDefaultCoreGenes(LivingEntity entity) {
         List<Gene> genes = new ArrayList<>();
         for (var trait : Traits.getByType(TraitTypes.CORE)) {
             Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(getAttribute(trait.name()));
-
-            float traitValue = entity.getAttribute(attribute) == null ? 0 : (float) entity.getAttribute(attribute).getBaseValue();
+            float traitValue = getStableAttributeValue(entity, attribute);
             genes.add(new Gene(trait, traitValue, trait.baseInstability()));
         }
         return genes;
@@ -88,8 +129,7 @@ public class DnaUtils {
         List<Gene> genes = new ArrayList<>();
         for (var trait : Traits.getByType(TraitTypes.CORE)) {
             Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(getAttribute(trait.name()));
-
-            float traitValue = entity.getAttribute(attribute) == null ? 0 : (float) entity.getAttribute(attribute).getBaseValue();
+            float traitValue = getStableAttributeValue(entity, attribute);
             if (trait == Traits.MOVEMENT_SPEED) {
                 traitValue = (float) (MobSpeedResultStorage.getSpeed(entity.getType(), "ground") / 43.17);
                 System.out.println("TRAIT VALUE: " + traitValue);

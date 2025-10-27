@@ -80,19 +80,29 @@ public class DnaImplementation implements IDna {
                     .findFirst()
                     .orElse(null);
 
-            boolean isDifferent = false;
-
             if (currentGene == null) {
-                isDifferent = true;
-            } else {
-                if (Math.abs(currentGene.value() - newGene.value()) > 0.0001f) {
-                    isDifferent = true;
-                }
+                totalCost += newGene.trait.baseInstability();
+                continue;
             }
 
-            if (isDifferent) {
-                totalCost += newGene.stabilityCost();
-            }
+            float oldValue = currentGene.value();
+            float newValue = newGene.value();
+
+            if (Math.abs(oldValue - newValue) <= 0.001f)
+                continue;
+
+            float base = oldValue == 0.0f ? 1.0f : Math.abs(oldValue);
+            float relativeChange = Math.abs(newValue - oldValue) / base;
+
+            relativeChange = Math.min(relativeChange, 2.0f);
+
+            float baseInstability = newGene.trait.baseInstability();
+            float instabilityCost = baseInstability * (1.0f + relativeChange * 2.0f);
+
+            if (newValue > oldValue)
+                instabilityCost *= 1.25f;
+
+            totalCost += instabilityCost;
         }
 
         return totalCost;
