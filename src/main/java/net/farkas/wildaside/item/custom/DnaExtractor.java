@@ -20,7 +20,7 @@ public class DnaExtractor extends Item {
     public InteractionResult interactLivingEntity(ItemStack pStack, Player pPlayer, LivingEntity pInteractionTarget, InteractionHand pUsedHand) {
         if (pUsedHand == InteractionHand.OFF_HAND || pPlayer.level().isClientSide()) return InteractionResult.PASS;
 
-        var baseGenes = DnaUtils.generateBaseCoreGenes(pInteractionTarget);
+        var baseGenes = DnaUtils.generateBaseGenes(pInteractionTarget);
         var mutatedGenes = DnaUtils.mutateGenes(baseGenes, pInteractionTarget);
 
         pPlayer.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {

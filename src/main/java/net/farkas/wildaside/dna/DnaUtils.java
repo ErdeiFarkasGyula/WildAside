@@ -8,6 +8,7 @@ import net.farkas.wildaside.dna.traits.Trait;
 import net.farkas.wildaside.dna.traits.TraitTypes;
 import net.farkas.wildaside.dna.traits.Traits;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -113,7 +114,7 @@ public class DnaUtils {
 
     public static Map<Trait, Gene> generateDefaultCoreGenes(LivingEntity entity) {
         Map<Trait, Gene> genes = new HashMap<>();
-        for (var trait : Traits.getByType(TraitTypes.CORE)) {
+        for (Trait trait : Traits.getByType(TraitTypes.CORE)) {
             Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(getAttribute(trait.name()));
             float traitValue = getStableAttributeValue(entity, attribute);
             genes.put(trait, new Gene(trait, traitValue, trait.baseInstability()));
@@ -121,9 +122,9 @@ public class DnaUtils {
         return genes;
     }
 
-    public static Map<Trait, Gene> generateBaseCoreGenes(LivingEntity entity) {
+    public static Map<Trait, Gene> generateBaseGenes(LivingEntity entity) {
         Map<Trait, Gene> genes = new HashMap<>();
-        for (var trait : Traits.getByType(TraitTypes.CORE)) {
+        for (Trait trait : Traits.getByType(TraitTypes.CORE)) {
             Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(getAttribute(trait.name()));
             if (attribute != null) {
                 float traitValue = getStableAttributeValue(entity, attribute);
@@ -137,6 +138,20 @@ public class DnaUtils {
                 genes.put(trait, new Gene(trait, traitValue, trait.baseInstability()));
             }
         }
+
+        if (entity.fireImmune()) {
+            Trait trait = Traits.FIRE_RESISTANCE;
+            genes.put(trait, new Gene(trait, entity.getRandom().nextFloat(), trait.baseInstability()));
+        }
+        if (entity.getType().is(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES)) {
+            Trait trait = Traits.FREEZE_RESISTANCE;
+            genes.put(trait, new Gene(trait, entity.getRandom().nextFloat(), trait.baseInstability()));
+        }
+        if (entity.getType().is(EntityTypeTags.FALL_DAMAGE_IMMUNE)) {
+            Trait trait = Traits.FALL_RESISTANCE;
+            genes.put(trait, new Gene(trait, entity.getRandom().nextFloat(), trait.baseInstability()));
+        }
+
         return genes;
     }
 
