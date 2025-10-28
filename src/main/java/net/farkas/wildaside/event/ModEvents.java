@@ -94,6 +94,7 @@ public class ModEvents {
     }
 
     public static void applyDnaOnJoinLevel(EntityJoinLevelEvent event) {
+        if (event.getLevel().dimension() == ModDimensions.TEST_LEVEL) return;
         if (event.getEntity() instanceof LivingEntity livingEntity) {
             livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
                 if (dna.genes().isEmpty()) {

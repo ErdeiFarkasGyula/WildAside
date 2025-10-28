@@ -21,10 +21,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -37,6 +34,23 @@ public class DnaExtractor extends Item {
     public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
         if (hand == InteractionHand.OFF_HAND || player.level().isClientSide()) return InteractionResult.PASS;
 
+        if (stack.getCount() > 1) {
+            ItemStack single = stack.split(1);
+            ItemStack result = applyDna(target, single);
+
+            if (!player.getInventory().add(result)) {
+                player.drop(result, false);
+            }
+            return InteractionResult.sidedSuccess(player.level().isClientSide());
+        } else {
+            ItemStack result = applyDna(target, stack);
+            player.setItemInHand(hand, result);
+        }
+
+        return InteractionResult.sidedSuccess(player.level().isClientSide());
+    }
+
+    private ItemStack applyDna(LivingEntity target, ItemStack stack) {
         var baseGenes = DnaUtils.generateBaseGenes(target);
         var mutatedGenes = DnaUtils.mutateGenes(baseGenes, target);
 
@@ -45,7 +59,7 @@ public class DnaExtractor extends Item {
         extractedDna.setGenes(mutatedGenes);
 
         target.getCapability(DnaCapability.INSTANCE).ifPresent(dna ->
-            extractedDna.setStability(dna.stability())
+                extractedDna.setStability(dna.stability())
         );
 
         CompoundTag tag = stack.getOrCreateTag();
@@ -56,13 +70,7 @@ public class DnaExtractor extends Item {
         tag.putBoolean("reveal_traits", false);
 
         stack.setTag(tag);
-        player.setItemInHand(hand, stack);
-
-        mutatedGenes.forEach((trait, gene) -> {
-            WildAside.LOGGER.info("Extracted Gene: {} = {} (stabilityCost: {})", trait.name(), gene.value(), gene.stabilityCost());
-        });
-
-        return InteractionResult.sidedSuccess(player.level().isClientSide());
+        return stack;
     }
 
     @Override
