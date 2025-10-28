@@ -99,9 +99,11 @@ public class ModEvents {
     public static void applyDnaOnJoinLevel(EntityJoinLevelEvent event) {
         if (event.getEntity() instanceof LivingEntity livingEntity) {
             livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-                dna.setSource(null);
-                dna.setGenes(DnaUtils.generateDefaultCoreGenes(livingEntity));
-                dna.setStability(dna.stability());
+                if (dna.genes().isEmpty()) {
+                    dna.setSource(null);
+                    dna.setGenes(DnaUtils.generateDefaultCoreGenes(livingEntity));
+                    dna.setStability(1.0f);
+                }
                 dna.apply(livingEntity);
             });
             livingEntity.getPersistentData().putFloat(IAbility.DATA_NAME, 0);
@@ -110,7 +112,7 @@ public class ModEvents {
 
     public static void checkTestDimensionEntityRemoves(EntityLeaveLevelEvent event) {
         if (event.getEntity().level().dimension() == ModDimensions.TEST_LEVEL) {
-            if (event.getEntity() instanceof Mob mob && (mob.isSensitiveToWater() || mob.getSpeed() == 0.0)) {
+            if (event.getEntity() instanceof Mob mob && (mob.isSensitiveToWater() || mob.getSpeed() == 0.0 || mob.getDeltaMovement() == Vec3.ZERO)) {
                 MobSpeedTestTracker.onMobFinished(mob, "water");
             }
         }
@@ -242,7 +244,7 @@ public class ModEvents {
 
     public static void reduceDnaStabilityFromHurting(LivingHurtEvent event) {
         LivingEntity entity = event.getEntity();
-        float stabilityReduction = event.getAmount() * 0.1f;
+        float stabilityReduction = event.getAmount() * 0.05f;
 
         entity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
             boolean modified = dna.genes().entrySet().stream().anyMatch(entry -> {

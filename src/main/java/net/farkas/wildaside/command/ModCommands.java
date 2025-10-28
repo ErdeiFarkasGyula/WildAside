@@ -127,6 +127,7 @@ public class ModCommands {
                                 .then(Commands.argument("trait", StringArgumentType.word())
                                         .suggests((ctx, builder) -> {
                                             for (Trait trait : Traits.TRAITS) {
+                                                builder.suggest("stability");
                                                 builder.suggest(trait.name());
                                             }
                                             return builder.buildFuture();
@@ -135,28 +136,14 @@ public class ModCommands {
                                         .then(Commands.literal("get")
                                                 .executes(ctx -> {
                                                     var target = EntityArgument.getEntity(ctx, "target");
-                                                    String traitName = StringArgumentType.getString(ctx, "trait");
-                                                    Trait trait = Traits.getByName(traitName);
-                                                    if (trait == null) {
-                                                        ctx.getSource().sendFailure(Component.literal("Unknown trait: " + traitName));
-                                                        return 0;
-                                                    }
-
-                                                    target.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-                                                        float value = Traits.getTraitValue(dna.genes(), trait);
-                                                        ctx.getSource().sendSuccess(
-                                                                () -> Component.literal(target.getName().getString() + " has " + trait.name() + " = " + value),
-                                                                false
-                                                        );
-                                                    });
-                                                    return 1;
+                                                    return getGene(ctx, target);
                                                 }))
 
                                         .then(Commands.literal("set")
                                                 .then(Commands.argument("value", FloatArgumentType.floatArg())
                                                         .executes(ctx -> {
-                                                            var entity = EntityArgument.getEntity(ctx, "target");
-                                                            return applyGene(ctx, entity);
+                                                            var target = EntityArgument.getEntity(ctx, "target");
+                                                            return applyGene(ctx, target);
                                                         })
                                                 )
                                         )
@@ -216,29 +203,68 @@ public class ModCommands {
         return affected;
     }
 
+    public static int getGene(CommandContext<CommandSourceStack> ctx, Entity target) {
+        if (target instanceof LivingEntity livingEntity) {
+            String traitName = StringArgumentType.getString(ctx, "trait");
+            if (traitName.equals("stability")) {
+                livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
+                    float value = dna.stability();
+                    ctx.getSource().sendSuccess(
+                            () -> Component.literal(livingEntity.getName().getString() + " has " + traitName + " = " + value), false);
+                });
+            }
+            else {
+                Trait trait = Traits.getByName(traitName);
+                if (trait == null) {
+                    ctx.getSource().sendFailure(Component.literal("Unknown trait: " + traitName));
+                    return 0;
+                }
+                livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
+                    float value = Traits.getTraitValue(dna.genes(), trait);
+                    ctx.getSource().sendSuccess(
+                            () -> Component.literal(livingEntity.getName().getString() + " has " + trait.name() + " = " + value), false);
+                });
+            }
+            return 1;
+        }
+        return 0;
+    }
+
     private static int applyGene(CommandContext<CommandSourceStack> ctx, Entity target) {
         if (target instanceof LivingEntity livingEntity) {
             String traitName = StringArgumentType.getString(ctx, "trait");
             float value = FloatArgumentType.getFloat(ctx, "value");
 
-            Trait trait = Traits.TRAITS.stream()
-                    .filter(t -> t.name().equalsIgnoreCase(traitName))
-                    .findFirst()
-                    .orElse(null);
+            if (traitName.equals("stability")) {
+                livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
+                    dna.setStability(value);
+                });
 
-            if (trait == null) {
-                ctx.getSource().sendFailure(Component.literal("Unknown trait: " + traitName));
-                return 0;
+                ctx.getSource().sendSuccess(() ->
+                                Component.literal("Applied " + traitName + " (" + value + ") to " + livingEntity.getName().getString()),
+                        true);
+            }
+            else {
+                Trait trait = Traits.TRAITS.stream()
+                        .filter(t -> t.name().equalsIgnoreCase(traitName))
+                        .findFirst()
+                        .orElse(null);
+
+                if (trait == null) {
+                    ctx.getSource().sendFailure(Component.literal("Unknown trait: " + traitName));
+                    return 0;
+                }
+
+                livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
+                    dna.genes().put(trait, new Gene(trait, value, 0f));
+                    dna.apply(livingEntity);
+                });
+
+                ctx.getSource().sendSuccess(() ->
+                                Component.literal("Applied " + traitName + " (" + value + ") to " + livingEntity.getName().getString()),
+                        true);
             }
 
-            livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-                dna.genes().put(trait, new Gene(trait, value, 0f));
-                dna.apply(livingEntity);
-            });
-
-            ctx.getSource().sendSuccess(() ->
-                            Component.literal("Applied " + traitName + " (" + value + ") to " + livingEntity.getName().getString()),
-                    true);
             return 1;
         }
         return 0;
