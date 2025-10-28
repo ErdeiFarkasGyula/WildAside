@@ -121,13 +121,16 @@ public class DnaImplementation implements IDna {
     @Override
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
-        String sourceString = source != null ? source.toString() : "";
-        tag.putString("source", sourceString);
+        if (source != null) {
+            ResourceLocation id = ForgeRegistries.ENTITY_TYPES.getKey(source);
+            tag.putString("source", id.toString());
+        } else {
+            tag.putString("source", "");
+        }
         tag.putFloat("stability", stability);
 
         ListTag list = new ListTag();
-        for (var entry : genes.entrySet()) {
-            Gene gene = entry.getValue();
+        for (Gene gene : genes.values()) {
             CompoundTag geneTag = new CompoundTag();
             geneTag.putString("trait", gene.trait().name());
             geneTag.putFloat("value", gene.value());
@@ -140,19 +143,21 @@ public class DnaImplementation implements IDna {
 
     @Override
     public void deserializeNBT(CompoundTag tag) {
-        source = ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(tag.getString("source")));
+        String sourceString = tag.getString("source");
+        if (!sourceString.isEmpty()) {
+            source = ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(sourceString));
+        } else {
+            source = null;
+        }
+
         stability = tag.getFloat("stability");
         genes.clear();
-
         ListTag list = tag.getList("genes", Tag.TAG_COMPOUND);
         for (Tag t : list) {
             CompoundTag geneTag = (CompoundTag) t;
             String traitName = geneTag.getString("trait");
             Trait trait = Traits.getByName(traitName);
-            if (trait == null) {
-                WildAside.LOGGER.warn("Missing Trait: {}", traitName);
-                continue;
-            }
+            if (trait == null) continue;
             float value = geneTag.getFloat("value");
             float cost = geneTag.getFloat("stabilityCost");
             genes.put(trait, new Gene(trait, value, cost));

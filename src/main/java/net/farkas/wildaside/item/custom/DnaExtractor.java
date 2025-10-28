@@ -1,15 +1,33 @@
 package net.farkas.wildaside.item.custom;
 
+import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.capability.dna.DnaCapability;
+import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.DnaUtils;
+import net.farkas.wildaside.dna.Gene;
+import net.farkas.wildaside.dna.traits.Trait;
+import net.farkas.wildaside.dna.traits.TraitTypes;
+import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 public class DnaExtractor extends Item {
     public DnaExtractor(Properties pProperties) {
@@ -17,33 +35,108 @@ public class DnaExtractor extends Item {
     }
 
     @Override
-    public InteractionResult interactLivingEntity(ItemStack pStack, Player pPlayer, LivingEntity pInteractionTarget, InteractionHand pUsedHand) {
-        if (pUsedHand == InteractionHand.OFF_HAND || pPlayer.level().isClientSide()) return InteractionResult.PASS;
+    public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
+        if (hand == InteractionHand.OFF_HAND || player.level().isClientSide()) return InteractionResult.PASS;
 
-        var baseGenes = DnaUtils.generateBaseGenes(pInteractionTarget);
-        var mutatedGenes = DnaUtils.mutateGenes(baseGenes, pInteractionTarget);
+        var baseGenes = DnaUtils.generateBaseGenes(target);
+        var mutatedGenes = DnaUtils.mutateGenes(baseGenes, target);
 
-        pPlayer.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-            dna.setSource(pInteractionTarget.getType());
-            dna.setStability(dna.stability() - dna.calculateInstabilityChange(mutatedGenes));
-            dna.setGenes(mutatedGenes);
-            dna.apply(pPlayer);
-        });
+        DnaImplementation extractedDna = new DnaImplementation();
+        extractedDna.setSource(target.getType());
+        extractedDna.setGenes(mutatedGenes);
 
-        AtomicReference<Float> stability = new AtomicReference<>(0f);
-        pPlayer.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> stability.set(dna.stability()));
+        target.getCapability(DnaCapability.INSTANCE).ifPresent(dna ->
+            extractedDna.setStability(dna.stability())
+        );
+
+        CompoundTag tag = stack.getOrCreateTag();
+        tag.put("dna_data", extractedDna.serializeNBT());
+
+        tag.putBoolean("reveal_source", false);
+        tag.putBoolean("reveal_stability", false);
+        tag.putBoolean("reveal_traits", false);
+
+        stack.setTag(tag);
+        player.setItemInHand(hand, stack);
 
         mutatedGenes.forEach((trait, gene) -> {
-            System.out.println(
-                    "Modified[" +
-                            "stat=" + trait.name() +
-                            ", value=" + gene.value() +
-                            ", stabilityCost=" + gene.stabilityCost() +
-                            ", currentStability=" + stability.get() +
-                            "]"
-            );
+            WildAside.LOGGER.info("Extracted Gene: {} = {} (stabilityCost: {})", trait.name(), gene.value(), gene.stabilityCost());
         });
 
-        return super.interactLivingEntity(pStack, pPlayer, pInteractionTarget, pUsedHand);
+        return InteractionResult.sidedSuccess(player.level().isClientSide());
+    }
+
+    @Override
+    public boolean onDroppedByPlayer(ItemStack item, Player player) {
+        CompoundTag tag = item.getOrCreateTag();
+        tag.putBoolean("reveal_source", true);
+        tag.putBoolean("reveal_stability", true);
+        tag.putBoolean("reveal_traits", true);
+        item.setTag(tag);
+        return super.onDroppedByPlayer(item, player);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag isAdvanced) {
+        super.appendHoverText(stack, level, tooltip, isAdvanced);
+
+        if (!stack.hasTag() || !stack.getTag().contains("dna_data")) {
+            tooltip.add(Component.literal("No DNA stored").withStyle(ChatFormatting.GRAY));
+            return;
+        }
+
+        CompoundTag tag = stack.getTag();
+        DnaImplementation dna = new DnaImplementation();
+        dna.deserializeNBT(tag.getCompound("dna_data"));
+
+        boolean revealSource = tag.getBoolean("reveal_source");
+        boolean revealStability = tag.getBoolean("reveal_stability");
+        boolean revealTraits = tag.getBoolean("reveal_traits");
+
+        if (!(revealSource || revealStability || revealTraits)) {
+            tooltip.add(Component.literal("DNA data hidden").withStyle(ChatFormatting.STRIKETHROUGH));
+        } else {
+            if (revealSource) {
+                String sourceName = dna.source() != null
+                        ? ForgeRegistries.ENTITY_TYPES.getKey(dna.source()).getPath()
+                        : "Unknown";
+                tooltip.add(Component.literal("Source: " + sourceName).withStyle(ChatFormatting.AQUA));
+            }
+
+            if (revealStability) {
+                tooltip.add(Component.literal("Stability: " + String.format("%.2f", dna.stability())).withStyle(ChatFormatting.GREEN));
+            }
+
+            if (revealTraits) {
+                BiConsumer<String, TraitTypes> displayGenes = (title, type) -> {
+                    Map<Trait, Gene> filtered = dna.genes().entrySet().stream()
+                            .filter(e -> e.getKey().traitType() == type)
+                            .sorted(Map.Entry.comparingByKey(Comparator.comparing(Trait::name)))
+                            .collect(Collectors.toMap(
+                                    Map.Entry::getKey,
+                                    Map.Entry::getValue,
+                                    (a, b) -> a,
+                                    LinkedHashMap::new
+                            ));
+                    if (!filtered.isEmpty()) {
+                        ChatFormatting headerColor = switch (type) {
+                            case CORE -> ChatFormatting.YELLOW;
+                            case RESISTANCE -> ChatFormatting.BLUE;
+                            case ABILITY -> ChatFormatting.RED;
+                        };
+                        tooltip.add(Component.literal(title).withStyle(headerColor));
+                        filtered.values().forEach(gene -> {
+                            String valueStr = String.format("%.2f", gene.value());
+                            ChatFormatting valueColor = (type == TraitTypes.ABILITY) ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.WHITE;
+                            tooltip.add(Component.literal("- " + gene.trait().name() + ": " + valueStr).withStyle(valueColor));
+                        });
+                    }
+                };
+
+                displayGenes.accept("Core Stats:", TraitTypes.CORE);
+                displayGenes.accept("Resistances:", TraitTypes.RESISTANCE);
+                displayGenes.accept("Abilities:", TraitTypes.ABILITY);
+            }
+        }
     }
 }

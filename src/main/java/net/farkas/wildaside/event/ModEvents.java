@@ -60,9 +60,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.List;
-import java.util.Map;
-
 @Mod.EventBusSubscriber(modid = WildAside.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModEvents {
     @SubscribeEvent
@@ -102,7 +99,7 @@ public class ModEvents {
                 if (dna.genes().isEmpty()) {
                     dna.setSource(null);
                     dna.setGenes(DnaUtils.generateDefaultCoreGenes(livingEntity));
-                    dna.setStability(1.0f);
+                    dna.setStability(100);
                 }
                 dna.apply(livingEntity);
             });
