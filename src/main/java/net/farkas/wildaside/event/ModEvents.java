@@ -12,6 +12,7 @@ import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.speed.MobSpeedTestTracker;
 import net.farkas.wildaside.dna.traits.Trait;
+import net.farkas.wildaside.dna.traits.TraitTypes;
 import net.farkas.wildaside.dna.traits.Traits;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.network.WindSavedData;
@@ -35,6 +36,8 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -56,8 +59,10 @@ import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
+import java.util.Map;
 
 @Mod.EventBusSubscriber(modid = WildAside.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModEvents {
@@ -237,11 +242,36 @@ public class ModEvents {
 
     public static void reduceDnaStabilityFromHurting(LivingHurtEvent event) {
         LivingEntity entity = event.getEntity();
-        float stabilityReduction = event.getAmount() * 0.25f;
-        event.getEntity().getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-            dna.setStability(dna.stability() - stabilityReduction);
-            dna.apply(event.getEntity());
-            System.out.println(dna.stability() + " " + entity);
+        float stabilityReduction = event.getAmount() * 0.1f;
+
+        entity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
+            boolean modified = dna.genes().entrySet().stream().anyMatch(entry -> {
+                Trait trait = entry.getKey();
+
+                if (trait.traitType() == TraitTypes.CORE) {
+                    Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(DnaUtils.getAttribute(trait.name()));
+                    if (attribute == null) return false;
+
+                    AttributeInstance instance = entity.getAttribute(attribute);
+                    if (instance == null) return false;
+
+                    double base = instance.getBaseValue();
+                    double current = DnaUtils.getStableAttributeValue(entity, attribute);
+                    return Math.abs(current - base) > 0.001;
+                }
+                else if (trait.traitType() == TraitTypes.RESISTANCE) {
+                    return entry.getValue().value != 0.0f;
+                }
+                else {
+                    return entry.getValue().value != -1f;
+                }
+            });
+
+            if (modified) {
+                dna.setStability(dna.stability() - stabilityReduction);
+                dna.apply(entity);
+                System.out.println("Reduced DNA stability to " + dna.stability() + " for " + entity);
+            }
         });
     }
 

@@ -1,19 +1,27 @@
 package net.farkas.wildaside.dna.speed;
 
+import net.farkas.wildaside.WildAside;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 public class MobSpeedTesting {
+    public static List<EntityType<? extends PathfinderMob>> mobs = new ArrayList<>();
+    public static int entityCount = 0;
+
     public static final Set<EntityType<?>> EXCLUDED_MOBS = Set.of(
             EntityType.ENDER_DRAGON,
             EntityType.WITHER,
@@ -41,48 +49,74 @@ public class MobSpeedTesting {
         int yOffset = inWater ? 5 : 0;
         start = start.offset(0, yOffset, 0);
 
-        for (EntityType<? extends Mob> type : getMobsToTest(level)) {
-            Mob mob = type.create(level);
-            if (mob == null) continue;
+        System.out.println("WILDASS:RUNTEST" + inWater);
 
-            System.out.println("MEOW UUID: " + mob.getUUID() + "MOB: " + mob);
+        for (EntityType<? extends PathfinderMob> type : mobs) {
+            try {
+                PathfinderMob mob = type.create(level);
+                if (mob == null) continue;
 
-            MobSpeedTestTracker.registerMob(mob, testName);
+                System.out.println("MEOW UUID: " + mob.getUUID() + "MOB: " + mob);
 
-            BlockPos pos = start.offset(0, 0, offsetZ);
-            buildTestBox(level, pos, 120, 5, 5, inWater);
+                MobSpeedTestTracker.registerMob(mob, testName);
 
-            mob.moveTo(pos.getX() + 0.5 + 3, pos.getY() + 1, pos.getZ() + 0.5 + 2, 0, 0);
-            level.addFreshEntity(mob);
+                BlockPos pos = start.offset(0, 0, offsetZ);
+                buildTestBox(level, pos, 120, 5, 5, inWater);
 
-            mob.goalSelector.getAvailableGoals().clear();
-            mob.targetSelector.getAvailableGoals().clear();
+                mob.goalSelector.getAvailableGoals().clear();
+                mob.targetSelector.getAvailableGoals().clear();
 
-            mob.goalSelector.addGoal(0, new MobSpeedTestGoal(mob, Direction.EAST, 5, testName));
+                mob.moveTo(pos.getX() + 0.5 + 3, pos.getY() + 1, pos.getZ() + 0.5 + 2, 0, 0);
+                level.addFreshEntity(mob);
 
-            offsetZ += 4;
+                mob.goalSelector.addGoal(0, new MobSpeedTestGoal(mob, Direction.EAST, 5, testName));
+
+                offsetZ += 4;
+            } catch (Exception e) {
+                WildAside.LOGGER.warn("Skipping entity " + type + " due to exception: " + e);
+            }
         }
     }
 
-    public static List<EntityType<? extends Mob>> getMobsToTest(ServerLevel level) {
+    public static List<EntityType<? extends PathfinderMob>> getMobsToTest(ServerLevel level) {
         var registry = level.registryAccess().registryOrThrow(Registries.ENTITY_TYPE);
-
-        List<EntityType<? extends Mob>> mobsToTest = new ArrayList<>();
+        List<EntityType<? extends PathfinderMob>> mobsToTest = new ArrayList<>();
 
         for (EntityType<?> type : registry) {
-            if (!type.canSummon()) continue;
-            if (!(type.create(level) instanceof Mob)) continue;
-            if (EXCLUDED_MOBS.contains(type)) continue;
+            try {
+                if (!type.canSummon()) continue;
 
-            mobsToTest.add((EntityType<? extends Mob>) type);
-            System.out.println("TYPE: " + type);
+                ResourceLocation id = ForgeRegistries.ENTITY_TYPES.getKey(type);
+                if (id == null) continue;
+
+                String namespace = id.getNamespace();
+                String path = id.getPath();
+
+//                if (namespace.equals("fdlib") || path.contains("camera") || path.contains("dummy") || path.contains("test")) {
+//                    continue;
+//                }
+
+                Entity entity = type.create(level);
+                if (entity instanceof PathfinderMob mob) {
+                    if (!EXCLUDED_MOBS.contains(type)) {
+                        mobsToTest.add((EntityType<? extends PathfinderMob>) type);
+                        System.out.println("TYPE: " + id);
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Skipped entity: " + ForgeRegistries.ENTITY_TYPES.getKey(type) + " due to exception: " + e.getClass().getSimpleName());
+            }
         }
 
+        System.out.println("WILDASS:MOBSCOUNT: " + mobsToTest.size());
+
+        entityCount = mobsToTest.size();
+        mobs = mobsToTest;
         return mobsToTest;
     }
 
     public static void buildTestBox(ServerLevel level, BlockPos start, int length, int width, int height, boolean water) {
-        Block floorBlock = Blocks.STONE;
+        Block floorBlock = Blocks.BEDROCK;
         Block wallBlock = Blocks.BARRIER;
         Block waterBlock = Blocks.WATER;
 

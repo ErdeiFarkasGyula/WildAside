@@ -166,8 +166,8 @@ public class DnaUtils {
     }
 
     private static Gene mutateGene(Gene gene, RandomSource random) {
-        float averageMutation = -0.2f;
-        float baseVariance = 0.2f;
+        float averageMutation = -0.1f;
+        float baseVariance = 0.25f;
         float strongMutationChance = 0.05f;
         float strongMultiplier = 0.5f;
 

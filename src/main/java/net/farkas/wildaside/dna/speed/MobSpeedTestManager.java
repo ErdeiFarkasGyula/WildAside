@@ -51,6 +51,7 @@ public class MobSpeedTestManager {
             String currentHash = computeModListHash();
 
             if (!Objects.equals(data.lastHash, currentHash)) {
+                System.out.println("WILDASS:CHANGEDLIST");
                 onModListChanged(server, data.lastHash, currentHash);
 
                 data.lastHash = currentHash;

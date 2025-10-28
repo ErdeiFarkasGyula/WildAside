@@ -11,7 +11,7 @@ public class MobSpeedTestGoal extends Goal {
     private final int length;
     private final String testName;
 
-    private static final float TEST_LENGTH = 60;
+    private static final float TEST_LENGTH = 200;
 
     private Vec3 startPosition;
     private Vec3 endPosition;
@@ -68,5 +68,10 @@ public class MobSpeedTestGoal extends Goal {
                 mob.getZ() + dz,
                 1.0
         );
+    }
+
+    @Override
+    public boolean requiresUpdateEveryTick() {
+        return true;
     }
 }
