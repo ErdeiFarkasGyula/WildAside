@@ -2,7 +2,6 @@ package net.farkas.wildaside.dna;
 
 import net.farkas.wildaside.dna.traits.Trait;
 import net.farkas.wildaside.dna.traits.TraitTypes;
-import net.farkas.wildaside.dna.traits.Traits;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;

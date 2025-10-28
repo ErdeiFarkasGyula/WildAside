@@ -8,7 +8,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.common.util.INBTSerializable;
 
 import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Map;
 
 public interface IDna extends INBTSerializable<CompoundTag> {

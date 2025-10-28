@@ -1,6 +1,5 @@
 package net.farkas.wildaside.worldgen.dimension;
 
-import com.ibm.icu.impl.Pair;
 import net.farkas.wildaside.WildAside;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
@@ -13,18 +12,12 @@ import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.*;
-import net.minecraft.world.level.levelgen.flat.FlatLayerInfo;
-import net.minecraft.world.level.levelgen.flat.FlatLevelGeneratorPresets;
-import net.minecraft.world.level.levelgen.flat.FlatLevelGeneratorSettings;
 
 import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 import java.util.OptionalLong;
 
 public class ModDimensions {

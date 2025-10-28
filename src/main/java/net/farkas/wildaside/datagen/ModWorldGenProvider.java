@@ -1,7 +1,6 @@
 package net.farkas.wildaside.datagen;
 
 import net.farkas.wildaside.WildAside;
-import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.worldgen.biome.ModBiomeModifiers;
 import net.farkas.wildaside.worldgen.ModConfiguredFeatures;
 import net.farkas.wildaside.worldgen.ModPlacedFeatures;

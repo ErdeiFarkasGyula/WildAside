@@ -53,11 +53,3 @@ public class Traits {
         return gene != null ? gene.value() : 0.0f;
     }
 }
-
-//    class Ability extends Traits {
-//        REGENERATION(0),
-//        LIFESTEAL(0),
-//        SPORE_ATTACK(0),
-//        PROJECTILE_ATTACK(0),
-//        AOE_EFFECT(0);
-//    }

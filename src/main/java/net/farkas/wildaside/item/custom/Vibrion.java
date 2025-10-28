@@ -22,7 +22,6 @@ import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 public class Vibrion extends Item {
     public static final int GRASS_SPREAD_WIDTH = 8;

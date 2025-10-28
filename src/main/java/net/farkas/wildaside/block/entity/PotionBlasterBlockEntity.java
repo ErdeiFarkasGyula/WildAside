@@ -113,9 +113,7 @@ public class PotionBlasterBlockEntity extends BlasterBlockEntity implements Menu
 
         this.potionColour = PotionUtils.getColor(activePotion);
         setChanged();
-        level.sendBlockUpdated( // push an update to clients
-                worldPosition, getBlockState(), getBlockState(), 3
-        );
+        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
         float r = ((potionColour >> 16) & 0xFF) / 255.0f;
         float g = ((potionColour >> 8) & 0xFF) / 255.0f;
         float b = (potionColour & 0xFF) / 255.0f;
