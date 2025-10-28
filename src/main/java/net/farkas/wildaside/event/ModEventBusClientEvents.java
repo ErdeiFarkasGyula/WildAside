@@ -1,14 +1,20 @@
 package net.farkas.wildaside.event;
 
+import cpw.mods.util.Lazy;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.ModBlockEntities;
+import net.farkas.wildaside.client.ModKeyMappings;
+import net.farkas.wildaside.network.UseAbilityPacket;
 import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.entity.client.ModModelLayers;
 import net.farkas.wildaside.entity.client.hickory.HickoryTreantRenderer;
 import net.farkas.wildaside.entity.client.vibrion.MucellithModel;
+import net.farkas.wildaside.network.NetworkHandler;
 import net.farkas.wildaside.particle.*;
 import net.farkas.wildaside.particle.custom.*;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.BoatModel;
 import net.minecraft.client.model.ChestBoatModel;
 import net.minecraft.client.renderer.BiomeColors;
@@ -21,12 +27,20 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.lwjgl.glfw.GLFW;
 
 @Mod.EventBusSubscriber(modid = WildAside.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ModEventBusClientEvents {
+    @SubscribeEvent
+    public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
+        event.register(ModKeyMappings.USE_ABILITY);
+    }
+
     @SubscribeEvent
     public static void registerLayer(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(ModModelLayers.SUBSTILIUM_BOAT_LAYER, BoatModel::createBodyModel);

@@ -10,12 +10,14 @@ import net.farkas.wildaside.dna.traits.Traits;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.nio.charset.StandardCharsets;
@@ -124,6 +126,7 @@ public class DnaUtils {
 
     public static Map<Trait, Gene> generateBaseGenes(LivingEntity entity) {
         Map<Trait, Gene> genes = new HashMap<>();
+
         for (Trait trait : Traits.getByType(TraitTypes.CORE)) {
             Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(getAttribute(trait.name()));
             if (attribute != null) {
@@ -151,6 +154,11 @@ public class DnaUtils {
         if (entity.getType().is(EntityTypeTags.FALL_DAMAGE_IMMUNE)) {
             Trait trait = Traits.FALL_RESISTANCE;
             genes.put(trait, new Gene(trait, random.nextFloat(), trait.baseInstability()));
+        }
+
+        if (entity.getType() == EntityType.BLAZE) {
+            Trait trait = Traits.FIRE_ABILITY;
+            genes.put(trait, new Gene(trait, random.nextInt(40, 80), trait.baseInstability()));
         }
 
         return genes;

@@ -33,6 +33,13 @@ public class NetworkHandler {
                 WindSyncPacket::decode,
                 WindSyncPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
+        CHANNEL.registerMessage(id(),
+                UseAbilityPacket.class,
+                UseAbilityPacket::encode,
+                UseAbilityPacket::decode,
+                UseAbilityPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
     }
 
     public static void sendWindUpdateToAll(Vec3 dir, float strength) {
@@ -41,5 +48,13 @@ public class NetworkHandler {
             return;
         }
         CHANNEL.send(PacketDistributor.ALL.noArg(), new WindSyncPacket(dir, strength));
+    }
+
+    public static void sendAbilityKeyUpdate() {
+        if (CHANNEL == null) {
+            WildAside.LOGGER.warn("Tried to send ability key update before network init. Ignoring.");
+            return;
+        }
+        CHANNEL.send(PacketDistributor.SERVER.noArg(), new UseAbilityPacket());
     }
 }

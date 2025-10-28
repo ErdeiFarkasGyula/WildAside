@@ -9,7 +9,7 @@ import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.capability.dna.DnaProvider;
 import net.farkas.wildaside.command.ModCommands;
 import net.farkas.wildaside.dna.DnaUtils;
-import net.farkas.wildaside.dna.Gene;
+import net.farkas.wildaside.dna.ability.IAbility;
 import net.farkas.wildaside.dna.speed.MobSpeedTestTracker;
 import net.farkas.wildaside.dna.traits.Trait;
 import net.farkas.wildaside.dna.traits.TraitTypes;
@@ -30,7 +30,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -105,6 +104,7 @@ public class ModEvents {
                 dna.setStability(dna.stability());
                 dna.apply(livingEntity);
             });
+            livingEntity.getPersistentData().putFloat(IAbility.DATA_NAME, 0);
         }
     }
 
