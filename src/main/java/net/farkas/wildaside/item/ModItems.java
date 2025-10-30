@@ -41,8 +41,8 @@ public class ModItems {
     public static final RegistryObject<Item> FERTILISER_BOMB = ITEMS.register("fertiliser_bomb",
             () ->  new FertiliserBomb(new Item.Properties().stacksTo(16)));
 
-    public static final RegistryObject<Item> DNA_EXTRACTOR = ITEMS.register("dna_extractor",
-            () ->  new DnaExtractor(new Item.Properties().stacksTo(16)));
+    public static final RegistryObject<Item> DNA_HOLDER = ITEMS.register("dna_holder",
+            () ->  new DnaHolder(new Item.Properties().stacksTo(64)));
 
     public static final RegistryObject<Item> SUBSTILIUM_SIGN = ITEMS.register("substilium_sign",
             () ->  new SignItem(new Item.Properties().stacksTo(16), ModBlocks.SUBSTILIUM_SIGN.get(), ModBlocks.SUBSTILIUM_WALL_SIGN.get()));

@@ -104,7 +104,7 @@ public class ModEventBusClientEvents {
                 case 1 -> egg.getColor(1);
                 default -> 0xFFFFFF;
             };
-        }, ModItems.DNA_EXTRACTOR.get());
+        }, ModItems.DNA_HOLDER.get());
     }
 }
 

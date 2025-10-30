@@ -23,13 +23,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class DnaExtractor extends Item {
+public class DnaHolder extends Item {
     private static final String TAG_SAMPLE_PROGRESS = "sample_progress";
     private static final String TAG_MAX_SAMPLES = "max_samples";
 
     public static final int DEFAULT_MAX_SAMPLES = 3;
 
-    public DnaExtractor(Properties pProperties) {
+    public DnaHolder(Properties pProperties) {
         super(pProperties);
     }
 

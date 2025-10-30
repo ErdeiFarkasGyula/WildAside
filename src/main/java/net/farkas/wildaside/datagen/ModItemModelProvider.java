@@ -3,7 +3,7 @@ package net.farkas.wildaside.datagen;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.item.ModItems;
-import net.farkas.wildaside.item.custom.DnaExtractor;
+import net.farkas.wildaside.item.custom.DnaHolder;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -138,7 +138,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.HICKORY_CHEST_BOAT);
 
         //CUSTOM
-        dnaExtractor(ModItems.DNA_EXTRACTOR.get());
+        dnaExtractor(ModItems.DNA_HOLDER.get());
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item) {
@@ -203,7 +203,7 @@ public class ModItemModelProvider extends ItemModelProvider {
     private void dnaExtractor(Item item) {
         String baseName = ForgeRegistries.ITEMS.getKey(item).getPath();
 
-        for (int i = 0; i <= DnaExtractor.DEFAULT_MAX_SAMPLES; i++) {
+        for (int i = 0; i <= DnaHolder.DEFAULT_MAX_SAMPLES; i++) {
             getBuilder(baseName + "_stage" + i)
                     .parent(getExistingFile(mcLoc("item/generated")))
                     .texture("layer0", WildAside.MOD_ID + ":item/" + baseName + "_fill1_" + i)
@@ -215,8 +215,8 @@ public class ModItemModelProvider extends ItemModelProvider {
                 .parent(getExistingFile(mcLoc("item/generated")))
                 .texture("layer0", WildAside.MOD_ID + ":item/" + baseName + "_base");
 
-        for (int i = 0; i <= DnaExtractor.DEFAULT_MAX_SAMPLES; i++) {
-            float progress = i / (float) DnaExtractor.DEFAULT_MAX_SAMPLES;
+        for (int i = 0; i <= DnaHolder.DEFAULT_MAX_SAMPLES; i++) {
+            float progress = i / (float) DnaHolder.DEFAULT_MAX_SAMPLES;
             builder.override()
                     .predicate(new ResourceLocation(WildAside.MOD_ID, "progress"), progress)
                     .model(getExistingFile(modLoc("item/" + baseName + "_stage" + i)))

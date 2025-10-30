@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "wildaside:item/dna_holder_fill1_2",
+    "layer1": "wildaside:item/dna_holder_fill2_2",
+    "layer2": "wildaside:item/dna_holder_base"
+  }
+}

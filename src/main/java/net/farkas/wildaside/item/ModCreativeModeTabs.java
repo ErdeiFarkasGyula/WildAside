@@ -68,7 +68,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.FERTILISER_BOMB.get());
                         pOutput.accept(ModItems.SPORE_BOMB.get());
                         pOutput.accept(ModItems.SPORE_ARROW.get());
-                        pOutput.accept(ModItems.DNA_EXTRACTOR.get());
+                        pOutput.accept(ModItems.DNA_HOLDER.get());
 
                         pOutput.accept(ModBlocks.NATURAL_SPORE_BLASTER.get());
                         pOutput.accept(ModBlocks.SPORE_BLASTER.get());

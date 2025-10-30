@@ -2,31 +2,31 @@
   "parent": "minecraft:item/generated",
   "overrides": [
     {
-      "model": "wildaside:item/dna_extractor_stage0",
+      "model": "wildaside:item/dna_holder_stage0",
       "predicate": {
         "wildaside:progress": 0.0
       }
     },
     {
-      "model": "wildaside:item/dna_extractor_stage1",
+      "model": "wildaside:item/dna_holder_stage1",
       "predicate": {
         "wildaside:progress": 0.33333334
       }
     },
     {
-      "model": "wildaside:item/dna_extractor_stage2",
+      "model": "wildaside:item/dna_holder_stage2",
       "predicate": {
         "wildaside:progress": 0.6666667
       }
     },
     {
-      "model": "wildaside:item/dna_extractor_stage3",
+      "model": "wildaside:item/dna_holder_stage3",
       "predicate": {
         "wildaside:progress": 1.0
       }
     }
   ],
   "textures": {
-    "layer0": "wildaside:item/dna_extractor_base"
+    "layer0": "wildaside:item/dna_holder_base"
   }
 }

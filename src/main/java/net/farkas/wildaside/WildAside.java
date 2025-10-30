@@ -134,7 +134,7 @@ public class WildAside
             });
 
             ItemProperties.register(
-                    ModItems.DNA_EXTRACTOR.get(),
+                    ModItems.DNA_HOLDER.get(),
                     new ResourceLocation(MOD_ID, "progress"),
                     (stack, level, entity, seed) -> {
                         if (!stack.hasTag()) return 0f;
