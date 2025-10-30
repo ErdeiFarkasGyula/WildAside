@@ -50,7 +50,6 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.YELLOW_GLOWING_HICKORY_LEAF);
         simpleItem(ModItems.GREEN_GLOWING_HICKORY_LEAF);
 
-
         //SIMPLE BLOCK ITEM
         simpleBlockItem(ModBlocks.VIBRION_GLASS_PANE, ModBlocks.VIBRION_GLASS);
         simpleBlockItem(ModBlocks.LIT_VIBRION_GLASS_PANE, ModBlocks.VIBRION_GLASS);
