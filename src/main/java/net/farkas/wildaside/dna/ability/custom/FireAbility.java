@@ -20,13 +20,13 @@ public class FireAbility implements IAbility {
 
     @Override
     public void onUse(LivingEntity entity, float cooldown) {
-        if (entity.getPersistentData().getFloat(DATA_NAME) > 0) return;
+        if (entity.getPersistentData().getFloat(COOLDOWN) > 0) return;
 
         if (entity.level() instanceof ServerLevel level) {
             SmallFireball fireball = new SmallFireball(level, entity, entity.getLookAngle().x, entity.getLookAngle().y, entity.getLookAngle().z);
             fireball.setPos(entity.getEyePosition());
             level.addFreshEntity(fireball);
-            entity.getPersistentData().putFloat(DATA_NAME, cooldown);
+            entity.getPersistentData().putFloat(COOLDOWN, cooldown);
         }
     }
 }

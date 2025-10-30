@@ -35,21 +35,21 @@ public class DnaExtractor extends Item {
 
         if (stack.getCount() > 1) {
             ItemStack single = stack.split(1);
-            ItemStack result = applyDna(target, single);
+            ItemStack result = applyDna(player, target, single);
 
             if (!player.getInventory().add(result)) {
                 player.drop(result, false);
             }
             return InteractionResult.sidedSuccess(player.level().isClientSide());
         } else {
-            ItemStack result = applyDna(target, stack);
+            ItemStack result = applyDna(player, target, stack);
             player.setItemInHand(hand, result);
         }
 
         return InteractionResult.sidedSuccess(player.level().isClientSide());
     }
 
-    private ItemStack applyDna(LivingEntity target, ItemStack stack) {
+    private ItemStack applyDna(Player player, LivingEntity target, ItemStack stack) {
         var baseGenes = DnaUtils.generateBaseGenes(target);
         var mutatedGenes = DnaUtils.mutateGenes(baseGenes, target);
 
@@ -57,9 +57,18 @@ public class DnaExtractor extends Item {
         extractedDna.setSource(target.getType());
         extractedDna.setGenes(mutatedGenes);
 
-        target.getCapability(DnaCapability.INSTANCE).ifPresent(dna ->
-                extractedDna.setStability(dna.stability())
-        );
+        target.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
+            extractedDna.setStability(dna.stability());
+        });
+
+        player.getCapability(DnaCapability.INSTANCE).ifPresent(playerDna -> {
+            playerDna.setSource(extractedDna.source());
+            float stability = playerDna.stability() - playerDna.calculateInstabilityChange(extractedDna.genes());
+            playerDna.setStability(stability);
+            System.out.println(stability);
+            playerDna.setGenes(extractedDna.genes());
+            playerDna.apply(player);
+        });
 
         CompoundTag tag = stack.getOrCreateTag();
         tag.put("dna_data", extractedDna.serializeNBT());

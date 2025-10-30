@@ -1,6 +1,7 @@
 package net.farkas.wildaside.dna.speed;
 
 import net.farkas.wildaside.WildAside;
+import net.farkas.wildaside.config.Config;
 import net.farkas.wildaside.worldgen.dimension.ModDimensions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -18,7 +19,7 @@ import java.util.Objects;
 
 @Mod.EventBusSubscriber(modid = WildAside.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class MobSpeedTestManager {
-    private static final String DATA_NAME = "mod_version_tracker";
+    private static final String DATA_NAME = "wildaside_mod_version_tracker";
 
     public static class ModTrackerData extends SavedData {
         private String lastHash = "";
@@ -38,6 +39,8 @@ public class MobSpeedTestManager {
 
     @SubscribeEvent
     public static void onWorldLoad(ServerStartedEvent event) {
+        if (!Config.ACCURATE_DNA_MOVEMENT_SPEEDS.get()) return;
+
         if (event.getServer() != null) {
             System.out.println("SERVERRR");
             MinecraftServer server = event.getServer();
@@ -66,6 +69,8 @@ public class MobSpeedTestManager {
     }
 
     public static void loadTestLevelArea(ServerStartingEvent event) {
+        if (!Config.ACCURATE_DNA_MOVEMENT_SPEEDS.get()) return;
+
         MinecraftServer server = event.getServer();
         ServerLevel level = server.getLevel(ModDimensions.TEST_LEVEL);
 

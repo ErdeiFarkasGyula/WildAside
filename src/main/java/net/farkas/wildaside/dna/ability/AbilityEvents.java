@@ -18,9 +18,9 @@ public class AbilityEvents {
         LivingEntity entity = event.getEntity();
 
         entity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-            float cooldown = entity.getPersistentData().getFloat(IAbility.DATA_NAME);
+            float cooldown = entity.getPersistentData().getFloat(IAbility.COOLDOWN);
             if (cooldown > 0) {
-                entity.getPersistentData().putFloat(IAbility.DATA_NAME, cooldown - 1);
+                entity.getPersistentData().putFloat(IAbility.COOLDOWN, cooldown - 1);
                 System.out.println(cooldown);
             }
             for (Gene gene : dna.genes().values()) {

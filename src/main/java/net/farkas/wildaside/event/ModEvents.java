@@ -8,6 +8,7 @@ import net.farkas.wildaside.capability.contamination.ContaminationProvider;
 import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.capability.dna.DnaProvider;
 import net.farkas.wildaside.command.ModCommands;
+import net.farkas.wildaside.config.Config;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.ability.IAbility;
 import net.farkas.wildaside.dna.speed.MobSpeedTestTracker;
@@ -94,21 +95,24 @@ public class ModEvents {
     }
 
     public static void applyDnaOnJoinLevel(EntityJoinLevelEvent event) {
-        if (event.getLevel().dimension() == ModDimensions.TEST_LEVEL) return;
+        if (event.getLevel().dimension() == ModDimensions.TEST_LEVEL || !Config.ACCURATE_DNA_MOVEMENT_SPEEDS.get()) return;
+
         if (event.getEntity() instanceof LivingEntity livingEntity) {
             livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
                 if (dna.genes().isEmpty()) {
-                    dna.setSource(null);
+                    dna.setSource(livingEntity.getType());
                     dna.setGenes(DnaUtils.generateDefaultCoreGenes(livingEntity));
                     dna.setStability(100);
                 }
                 dna.apply(livingEntity);
             });
-            livingEntity.getPersistentData().putFloat(IAbility.DATA_NAME, 0);
+            livingEntity.getPersistentData().putFloat(IAbility.COOLDOWN, 0);
         }
     }
 
     public static void checkTestDimensionEntityRemoves(EntityLeaveLevelEvent event) {
+        if (!Config.ACCURATE_DNA_WATER_MOVEMENT_SPEEDS.get()) return;
+
         if (event.getEntity().level().dimension() == ModDimensions.TEST_LEVEL) {
             if (event.getEntity() instanceof Mob mob && (mob.isSensitiveToWater() || mob.getSpeed() == 0.0 || mob.getDeltaMovement() == Vec3.ZERO)) {
                 MobSpeedTestTracker.onMobFinished(mob, "water");

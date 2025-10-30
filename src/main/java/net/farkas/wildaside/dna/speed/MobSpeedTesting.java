@@ -1,6 +1,7 @@
 package net.farkas.wildaside.dna.speed;
 
 import net.farkas.wildaside.WildAside;
+import net.farkas.wildaside.config.Config;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
@@ -38,7 +39,9 @@ public class MobSpeedTesting {
 
     public static void spawnAllMobs(ServerLevel level, BlockPos start) {
         runTest(level, start, false);
-        runTest(level, start, true);
+        if (Config.ACCURATE_DNA_WATER_MOVEMENT_SPEEDS.get()) {
+            runTest(level, start, true);
+        }
     }
 
     public static void runTest(ServerLevel level, BlockPos start, boolean inWater) {
@@ -90,10 +93,6 @@ public class MobSpeedTesting {
 
                 String namespace = id.getNamespace();
                 String path = id.getPath();
-
-//                if (namespace.equals("fdlib") || path.contains("camera") || path.contains("dummy") || path.contains("test")) {
-//                    continue;
-//                }
 
                 Entity entity = type.create(level);
                 if (entity instanceof PathfinderMob mob) {

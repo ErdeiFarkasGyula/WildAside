@@ -1,15 +1,19 @@
 package net.farkas.wildaside.dna.speed;
 
 import net.farkas.wildaside.WildAside;
+import net.farkas.wildaside.capability.dna.DnaCapability;
+import net.farkas.wildaside.config.Config;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -21,59 +25,57 @@ public class MobSwimSpeedAdjustmentHandler {
     private static final String LAST_STATE_KEY = "dna_last_env_state";
 
     @SubscribeEvent
-    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return;
-        Player player = event.player;
-        if (player.level().isClientSide()) return;
+    public static void onLivingTick(LivingEvent.LivingTickEvent event) {
+        if (!Config.ACCURATE_DNA_WATER_MOVEMENT_SPEEDS.get()) return;
 
-        CompoundTag data = player.getPersistentData();
-        boolean inWater = player.isInWater();
+        LivingEntity entity = event.getEntity();
+        if (entity.level().isClientSide()) return;
+
+        CompoundTag data = entity.getPersistentData();
+        boolean inWater = entity.isInWater();
 
         boolean wasInWater = data.getBoolean(LAST_STATE_KEY);
         if (inWater == wasInWater) return;
         data.putBoolean(LAST_STATE_KEY, inWater);
 
-        applyWaterAdjustment(player, inWater);
+        applyWaterAdjustment(entity, inWater);
     }
 
-    private static void applyWaterAdjustment(Player player, boolean inWater) {
-        AttributeInstance attr = player.getAttribute(Attributes.MOVEMENT_SPEED);
+    private static void applyWaterAdjustment(LivingEntity livingEntity, boolean inWater) {
+        AttributeInstance attr = livingEntity.getAttribute(Attributes.MOVEMENT_SPEED);
         if (attr == null) return;
 
         attr.removeModifier(WATER_ADJUST_UUID);
         attr.removePermanentModifier(WATER_ADJUST_UUID);
 
         if (inWater) {
-            CompoundTag data = player.getPersistentData();
-            if (!data.contains("dna_source_entity")) return;
+            livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
+                double groundSpeed = MobSpeedResultStorage.getSpeed(dna.source(), "ground");
+                double waterSpeed = MobSpeedResultStorage.getSpeed(dna.source(), "water");
 
-            String sourceType = data.getString("dna_source_entity");
-            var entityType = player.level().registryAccess().registryOrThrow(Registries.ENTITY_TYPE).get(new ResourceLocation(sourceType));
+                if (groundSpeed == 0) return;
 
-            double groundSpeed = MobSpeedResultStorage.getSpeed(entityType, "ground");
-            double waterSpeed = MobSpeedResultStorage.getSpeed(entityType, "water");
+                if (groundSpeed == -1) groundSpeed = livingEntity.getAttributeBaseValue(attr.getAttribute());
+                if (waterSpeed == -1) waterSpeed = livingEntity.getAttributeBaseValue(attr.getAttribute()) / 5;
 
-            if (groundSpeed == 0) return;
+                double groundVal = groundSpeed / 43.17;
+                double waterVal = waterSpeed / 43.17;
 
-            if (groundSpeed == -1) groundSpeed = player.getAttributeBaseValue(attr.getAttribute());
-            if (waterSpeed == -1) waterSpeed = player.getAttributeBaseValue(attr.getAttribute()) / 5;
+                double adjustment = (waterVal / groundVal);
 
-            double groundVal = groundSpeed / 43.17;
-            double waterVal = waterSpeed / 43.17;
+                attr.addPermanentModifier(new AttributeModifier(
+                        WATER_ADJUST_UUID,
+                        "dna_water_adjust",
+                        adjustment,
+                        AttributeModifier.Operation.MULTIPLY_TOTAL
+                ));
 
-            double adjustment = (waterVal / groundVal);
+                System.out.printf("[%s] Entered water → Adjust %.4f (ground %.4f → water %.4f)%n",
+                        livingEntity.getName().getString(), adjustment, groundVal, waterVal);
+            });
 
-            attr.addPermanentModifier(new AttributeModifier(
-                    WATER_ADJUST_UUID,
-                    "dna_water_adjust",
-                    adjustment,
-                    AttributeModifier.Operation.MULTIPLY_TOTAL
-            ));
-
-            System.out.printf("[%s] Entered water → Adjust %.4f (ground %.4f → water %.4f)%n",
-                    player.getName().getString(), adjustment, groundVal, waterVal);
         } else {
-            System.out.printf("[%s] Left water → Removed adjust%n", player.getName().getString());
+            System.out.printf("[%s] Left water → Removed adjust%n", livingEntity.getName().getString());
         }
     }
 }
