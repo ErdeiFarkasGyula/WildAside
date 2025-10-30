@@ -4,7 +4,6 @@ import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.ModBlockEntities;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
-import net.farkas.wildaside.capability.dna.IDna;
 import net.farkas.wildaside.client.ModKeyMappings;
 import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.entity.client.ModModelLayers;

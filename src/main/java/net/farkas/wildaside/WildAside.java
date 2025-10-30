@@ -32,7 +32,6 @@ import net.farkas.wildaside.worldgen.feature.ModFeatures;
 import net.farkas.wildaside.worldgen.feature.ModFoliagePlacers;
 import net.farkas.wildaside.worldgen.feature.decorator.ModTreeDecorators;
 import net.farkas.wildaside.worldgen.modifier.ModPlacementModifiers;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;

@@ -139,7 +139,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.HICKORY_CHEST_BOAT);
 
         //CUSTOM
-        dnaExtractor(ModItems.DNA_EXTRACTOR.get(), DnaExtractor.DEFAULT_MAX_SAMPLES);
+        dnaExtractor(ModItems.DNA_EXTRACTOR.get());
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item) {
@@ -201,23 +201,23 @@ public class ModItemModelProvider extends ItemModelProvider {
                 modLoc("block/" + ForgeRegistries.BLOCKS.getKey(block.get()).getPath() + "_bottom"));
     }
 
-    private void dnaExtractor(Item item, int maxStages) {
+    private void dnaExtractor(Item item) {
         String baseName = ForgeRegistries.ITEMS.getKey(item).getPath();
 
-        for (int i = 0; i <= maxStages; i++) {
+        for (int i = 0; i <= DnaExtractor.DEFAULT_MAX_SAMPLES; i++) {
             getBuilder(baseName + "_stage" + i)
                     .parent(getExistingFile(mcLoc("item/generated")))
-                    .texture("layer0", "wildaside:item/" + baseName + "_fill1_" + i)
-                    .texture("layer1", "wildaside:item/" + baseName + "_fill2_" + i)
-                    .texture("layer2", "wildaside:item/" + baseName + "_base");
+                    .texture("layer0", WildAside.MOD_ID + ":item/" + baseName + "_fill1_" + i)
+                    .texture("layer1", WildAside.MOD_ID + ":item/" + baseName + "_fill2_" + i)
+                    .texture("layer2", WildAside.MOD_ID + ":item/" + baseName + "_base");
         }
 
         var builder = getBuilder(baseName)
                 .parent(getExistingFile(mcLoc("item/generated")))
-                .texture("layer0", "wildaside:item/" + baseName + "_base");
+                .texture("layer0", WildAside.MOD_ID + ":item/" + baseName + "_base");
 
-        for (int i = 0; i <= maxStages; i++) {
-            float progress = i / (float) maxStages;
+        for (int i = 0; i <= DnaExtractor.DEFAULT_MAX_SAMPLES; i++) {
+            float progress = i / (float) DnaExtractor.DEFAULT_MAX_SAMPLES;
             builder.override()
                     .predicate(new ResourceLocation(WildAside.MOD_ID, "progress"), progress)
                     .model(getExistingFile(modLoc("item/" + baseName + "_stage" + i)))
