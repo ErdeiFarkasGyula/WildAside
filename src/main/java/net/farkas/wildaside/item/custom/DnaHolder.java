@@ -6,9 +6,12 @@ import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.traits.Trait;
 import net.farkas.wildaside.dna.traits.TraitTypes;
+import net.farkas.wildaside.sound.ModSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
@@ -24,6 +27,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class DnaHolder extends Item {
+    private static final int MAX_COOLDOWN = 60;
+
     private static final String TAG_SAMPLE_PROGRESS = "sample_progress";
     private static final String TAG_MAX_SAMPLES = "max_samples";
 
@@ -59,27 +64,27 @@ public class DnaHolder extends Item {
 
         if (stack.getCount() > 1) {
             ItemStack single = stack.split(1);
-            applyDna(target, single);
+            applyDna(player, target, single);
 
             if (!player.getInventory().add(single)) {
                 player.drop(single, false);
             }
         } else {
-            applyDna(target, stack);
+            applyDna(player, target, stack);
             player.setItemInHand(hand, stack);
         }
 
         return InteractionResult.sidedSuccess(player.level().isClientSide());
     }
 
-    private ItemStack applyDna(LivingEntity target, ItemStack stack) {
+    private ItemStack applyDna(Player player, LivingEntity target, ItemStack stack) {
         CompoundTag tag = stack.getOrCreateTag();
         int maxProgress = DEFAULT_MAX_SAMPLES;
         int progress = tag.getInt("sample_progress");
 
         if (progress >= maxProgress) return stack;
 
-        DnaImplementation existingDna = null;
+        DnaImplementation existingDna;
         if (tag.contains("dna_data")) {
             existingDna = new DnaImplementation();
             existingDna.deserializeNBT(tag.getCompound("dna_data"));
@@ -87,6 +92,8 @@ public class DnaHolder extends Item {
             if (!Objects.equals(existingDna.source(), target.getType())) {
                 return stack;
             }
+        } else {
+            existingDna = null;
         }
 
         progress = Math.min(progress + 1, maxProgress);
@@ -94,6 +101,7 @@ public class DnaHolder extends Item {
 
         var baseGenes = DnaUtils.generateBaseGenes(target);
         var mutatedGenes = DnaUtils.mutateGenes(baseGenes, target);
+
         DnaImplementation newDna = new DnaImplementation();
         newDna.setSource(target.getType());
         newDna.setGenes(mutatedGenes);
@@ -111,9 +119,23 @@ public class DnaHolder extends Item {
             newDna.setGenes(averaged);
         }
 
-        int finalProgress = progress;
         target.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-            newDna.setStability(dna.stability() / ((float) maxProgress / finalProgress));
+            float currentStability;
+            if (existingDna != null) {
+                currentStability = existingDna.stability();
+            } else {
+                currentStability = 0;
+            }
+
+            float targetStability = dna.stability();
+            float progressMultiplier = 1f / maxProgress;
+            float remainingPercent = player.getCooldowns().getCooldownPercent(stack.getItem(), 0f);
+            float cooldownMultiplier = 1.0f - remainingPercent;
+            float finalStability = currentStability + (targetStability * progressMultiplier) * (cooldownMultiplier);
+
+            newDna.setStability(Math.max(0f, Math.min(100f, finalStability)));
+
+            player.level().playSound(null, player.blockPosition(), ModSounds.MUCELLITH_DEATH.get(), SoundSource.PLAYERS, remainingPercent, 0.2f);
         });
 
         tag.put("dna_data", newDna.serializeNBT());
@@ -123,6 +145,10 @@ public class DnaHolder extends Item {
         tag.putBoolean("reveal_traits", false);
 
         stack.setTag(tag);
+
+        player.getCooldowns().addCooldown(this, MAX_COOLDOWN);
+        player.level().playSound(null, target.blockPosition(), SoundEvents.BOTTLE_FILL, SoundSource.PLAYERS, 1, 1);
+
         return stack;
     }
 

@@ -318,7 +318,6 @@ public class ModBlocks {
     public static final RegistryObject<Block> BIOENGINEERING_WORKSTATION = registerBlock("bioengineering_workstation",
             () ->  new BioengineeringWorkstation(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
 
-
     //HICKORY
     public static final RegistryObject<Block> HICKORY_LOG = registerBlock("hickory_log",
             () ->  new ModFlammableRotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG)
