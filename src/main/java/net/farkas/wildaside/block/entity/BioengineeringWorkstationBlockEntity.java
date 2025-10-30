@@ -2,6 +2,7 @@ package net.farkas.wildaside.block.entity;
 
 import net.farkas.wildaside.recipe.BioengineeringWorkstationRecipe;
 import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationMenu;
+import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationTab;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -43,6 +44,8 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
     protected final ContainerData data;
     private int progress = 0;
     private int maxProgress = 200;
+
+    private BioengineeringWorkstationTab currentTab = BioengineeringWorkstationTab.ASSEMBLER;
 
     public BioengineeringWorkstationBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super (ModBlockEntities.BIOENGINEERING_WORKSTATION.get(), pPos, pBlockState);
@@ -93,6 +96,15 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
         lazyItemHandler.invalidate();
     }
 
+    public void setTab(BioengineeringWorkstationTab tab) {
+        this.currentTab = tab;
+        setChanged();
+    }
+
+    public BioengineeringWorkstationTab getTab() {
+        return currentTab;
+    }
+
     public void drops() {
         SimpleContainer inventory = new SimpleContainer(itemHandler.getSlots());
         for (int i = 0; i < itemHandler.getSlots(); i++) {
@@ -116,6 +128,7 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
     protected void saveAdditional(CompoundTag pTag) {
         pTag.put("inventory", itemHandler.serializeNBT());
         pTag.putInt("bioengineering_workstation.progress", progress);
+        pTag.putInt("bioengineering_workstation.tab", currentTab.ordinal());
 
         super.saveAdditional(pTag);
     }
@@ -125,6 +138,7 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
         super.load(pTag);
         itemHandler.deserializeNBT(pTag.getCompound("inventory"));
         progress = pTag.getInt("bioengineering_workstation.progress");
+        currentTab = BioengineeringWorkstationTab.values()[pTag.getInt("bioengineering_workstation.tab")];
     }
 
     public void tick(Level pLevel, BlockPos pPos, BlockState pState) {
