@@ -1,13 +1,13 @@
-// 1.20.1	2025-10-30T11:43:29.1124192	Item Models: wildaside
+// 1.20.1	2025-10-30T12:59:27.0787317	Item Models: wildaside
 97ec986340aeed12ebc0d678c97ba34a7afb7b7c assets/wildaside/models/item/brown_glowing_hickory_leaf.json
 657a44b343b52d1185c119350b9599bc495c3976 assets/wildaside/models/item/brown_glowing_hickory_sapling.json
 9a615629962edb4ec1311e1782a12ec189c42bf4 assets/wildaside/models/item/brown_hickory_nut_trail_mix.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/wildaside/models/item/contaminated_creeper_spawn_egg.json
 d358e7b2c88dd9292f6804876eaa6bb04fe36529 assets/wildaside/models/item/dna_extractor.json
-8c4515b914d7ff4a823e73eef7d4dbfa58be0493 assets/wildaside/models/item/dna_extractor_stage0.json
-f28355115dd86e44307d736af755fa73fe8f2b2e assets/wildaside/models/item/dna_extractor_stage1.json
-312ee50dee024a41bb883d76a2b36c3779d83b9d assets/wildaside/models/item/dna_extractor_stage2.json
-dcc32c84d26bd85b8be4b8bae55351c140a591ae assets/wildaside/models/item/dna_extractor_stage3.json
+e3ffcf3d04683291f21e0a4967e7f0fce6d17347 assets/wildaside/models/item/dna_extractor_stage0.json
+f3d4306e835713a90d52608c635a2f67bce282eb assets/wildaside/models/item/dna_extractor_stage1.json
+45ea9518cc797fab9dd5c6630197aeabdb418dc4 assets/wildaside/models/item/dna_extractor_stage2.json
+cce19e1fb6ef245144c9061ba5640b1f9dcdd1d1 assets/wildaside/models/item/dna_extractor_stage3.json
 7c314b9855fa14cfb6f45f4b35479303da8c369e assets/wildaside/models/item/entorium.json
 b9e8179243c134d4c8ef147d30f464ca785a6b5b assets/wildaside/models/item/entorium_pill.json
 e5f1479fbf76bd4d9780abf55c782b4291be7387 assets/wildaside/models/item/fertiliser_bomb.json

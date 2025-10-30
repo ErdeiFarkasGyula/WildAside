@@ -6,12 +6,9 @@ import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.traits.Trait;
 import net.farkas.wildaside.dna.traits.TraitTypes;
-import net.farkas.wildaside.util.EntityColourUtil;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
@@ -124,10 +121,6 @@ public class DnaExtractor extends Item {
         tag.putBoolean("reveal_source", false);
         tag.putBoolean("reveal_stability", false);
         tag.putBoolean("reveal_traits", false);
-
-        int[] colors = EntityColourUtil.getSpawnEggColors(target.getType());
-        tag.putInt("primary_color", colors[0]);
-        tag.putInt("secondary_color", colors[1]);
 
         stack.setTag(tag);
         return stack;

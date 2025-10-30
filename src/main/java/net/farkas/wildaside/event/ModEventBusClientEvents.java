@@ -29,6 +29,7 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -86,20 +87,24 @@ public class ModEventBusClientEvents {
             BlockState state = ((BlockItem)pStack.getItem()).getBlock().defaultBlockState();
             return event.getBlockColors().getColor(state, null, null, pTintIndex);
         }, ModBlocks.HICKORY_LEAVES.get());
-        event.getItemColors().register((stack, tintIndex) -> {
-            if (tintIndex == 0 && stack.hasTag() && stack.getTag().contains("dna_data")) {
-                CompoundTag dnaTag = stack.getTag().getCompound("dna_data");
-                DnaImplementation dna = new DnaImplementation();
-                dna.deserializeNBT(dnaTag);
 
-                if (dna.source() != null) {
-                    SpawnEggItem egg = SpawnEggItem.byId(dna.source());
-                    if (egg != null) {
-                        return egg.getColor(1);
-                    }
-                }
-            }
-            return 0xFFFFFF;
+        event.getItemColors().register((stack, tintIndex) -> {
+            if (!stack.hasTag() || !stack.getTag().contains("dna_data")) return 0xFFFFFF;
+
+            CompoundTag dnaTag = stack.getTag().getCompound("dna_data");
+            DnaImplementation dna = new DnaImplementation();
+            dna.deserializeNBT(dnaTag);
+
+            if (dna.source() == null) return 0xFFFFFF;
+
+            SpawnEggItem egg = ForgeSpawnEggItem.fromEntityType(dna.source());
+            if (egg == null) return 0xFFFFFF;
+
+            return switch (tintIndex) {
+                case 0 -> egg.getColor(0);
+                case 1 -> egg.getColor(1);
+                default -> 0xFFFFFF;
+            };
         }, ModItems.DNA_EXTRACTOR.get());
     }
 }

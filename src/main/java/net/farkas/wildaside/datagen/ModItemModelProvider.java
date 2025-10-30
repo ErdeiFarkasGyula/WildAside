@@ -207,8 +207,9 @@ public class ModItemModelProvider extends ItemModelProvider {
         for (int i = 0; i <= maxStages; i++) {
             getBuilder(baseName + "_stage" + i)
                     .parent(getExistingFile(mcLoc("item/generated")))
-                    .texture("layer0", "wildaside:item/" + baseName + "_fill_" + i)
-                    .texture("layer1", "wildaside:item/" + baseName + "_base");
+                    .texture("layer0", "wildaside:item/" + baseName + "_fill1_" + i)
+                    .texture("layer1", "wildaside:item/" + baseName + "_fill2_" + i)
+                    .texture("layer2", "wildaside:item/" + baseName + "_base");
         }
 
         var builder = getBuilder(baseName)
