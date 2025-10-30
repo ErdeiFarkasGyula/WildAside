@@ -3,11 +3,14 @@ package net.farkas.wildaside.event;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.ModBlockEntities;
+import net.farkas.wildaside.capability.dna.DnaImplementation;
+import net.farkas.wildaside.capability.dna.IDna;
 import net.farkas.wildaside.client.ModKeyMappings;
 import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.entity.client.ModModelLayers;
 import net.farkas.wildaside.entity.client.hickory.HickoryTreantRenderer;
 import net.farkas.wildaside.entity.client.vibrion.MucellithModel;
+import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.particle.*;
 import net.farkas.wildaside.particle.custom.*;
 import net.minecraft.client.model.BoatModel;
@@ -16,7 +19,9 @@ import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
@@ -81,6 +86,21 @@ public class ModEventBusClientEvents {
             BlockState state = ((BlockItem)pStack.getItem()).getBlock().defaultBlockState();
             return event.getBlockColors().getColor(state, null, null, pTintIndex);
         }, ModBlocks.HICKORY_LEAVES.get());
+        event.getItemColors().register((stack, tintIndex) -> {
+            if (tintIndex == 0 && stack.hasTag() && stack.getTag().contains("dna_data")) {
+                CompoundTag dnaTag = stack.getTag().getCompound("dna_data");
+                DnaImplementation dna = new DnaImplementation();
+                dna.deserializeNBT(dnaTag);
+
+                if (dna.source() != null) {
+                    SpawnEggItem egg = SpawnEggItem.byId(dna.source());
+                    if (egg != null) {
+                        return egg.getColor(1);
+                    }
+                }
+            }
+            return 0xFFFFFF;
+        }, ModItems.DNA_EXTRACTOR.get());
     }
 }
 

@@ -3,6 +3,7 @@ package net.farkas.wildaside.datagen;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.item.ModItems;
+import net.farkas.wildaside.item.custom.DnaExtractor;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -35,8 +36,6 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.SPORE_ARROW);
         simpleItem(ModItems.SPORE_BOMB);
         simpleItem(ModItems.FERTILISER_BOMB);
-
-        simpleItem(ModItems.DNA_EXTRACTOR);
 
         simpleItem(ModItems.HICKORY_NUT);
         simpleItem(ModItems.HICKORY_NUT_TRAIL_MIX);
@@ -138,6 +137,9 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.SUBSTILIUM_CHEST_BOAT);
         simpleItem(ModItems.HICKORY_BOAT);
         simpleItem(ModItems.HICKORY_CHEST_BOAT);
+
+        //CUSTOM
+        dnaExtractor(ModItems.DNA_EXTRACTOR.get(), DnaExtractor.DEFAULT_MAX_SAMPLES);
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item) {
@@ -197,5 +199,28 @@ public class ModItemModelProvider extends ItemModelProvider {
     public void trapdoorItem(RegistryObject<Block> block) {
         this.withExistingParent(ForgeRegistries.BLOCKS.getKey(block.get()).getPath(),
                 modLoc("block/" + ForgeRegistries.BLOCKS.getKey(block.get()).getPath() + "_bottom"));
+    }
+
+    private void dnaExtractor(Item item, int maxStages) {
+        String baseName = ForgeRegistries.ITEMS.getKey(item).getPath();
+
+        for (int i = 0; i <= maxStages; i++) {
+            getBuilder(baseName + "_stage" + i)
+                    .parent(getExistingFile(mcLoc("item/generated")))
+                    .texture("layer0", "wildaside:item/" + baseName + "_fill_" + i)
+                    .texture("layer1", "wildaside:item/" + baseName + "_base");
+        }
+
+        var builder = getBuilder(baseName)
+                .parent(getExistingFile(mcLoc("item/generated")))
+                .texture("layer0", "wildaside:item/" + baseName + "_base");
+
+        for (int i = 0; i <= maxStages; i++) {
+            float progress = i / (float) maxStages;
+            builder.override()
+                    .predicate(new ResourceLocation(WildAside.MOD_ID, "progress"), progress)
+                    .model(getExistingFile(modLoc("item/" + baseName + "_stage" + i)))
+                    .end();
+        }
     }
 }

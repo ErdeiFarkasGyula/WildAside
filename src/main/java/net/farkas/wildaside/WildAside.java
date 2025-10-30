@@ -32,6 +32,7 @@ import net.farkas.wildaside.worldgen.feature.ModFeatures;
 import net.farkas.wildaside.worldgen.feature.ModFoliagePlacers;
 import net.farkas.wildaside.worldgen.feature.decorator.ModTreeDecorators;
 import net.farkas.wildaside.worldgen.modifier.ModPlacementModifiers;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -39,9 +40,12 @@ import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.entity.ArrowRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -129,6 +133,20 @@ public class WildAside
                     return new SporeArrowEntity(pLevel, pPosition.x(), pPosition.y(), pPosition.z());
                 }
             });
+
+            ItemProperties.register(
+                    ModItems.DNA_EXTRACTOR.get(),
+                    new ResourceLocation(MOD_ID, "progress"),
+                    (stack, level, entity, seed) -> {
+                        if (!stack.hasTag()) return 0f;
+                        CompoundTag tag = stack.getTag();
+                        if (tag.contains("sample_progress")) {
+                            int progress = tag.getInt("sample_progress");
+                            return Mth.clamp(progress / 3f, 0f, 1f);
+                        }
+                        return 0f;
+                    }
+            );
         });
 
         SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MOD_ID, ModSurfaceRules.makeRules());

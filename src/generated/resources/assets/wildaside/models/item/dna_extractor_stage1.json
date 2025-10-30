@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "wildaside:item/dna_extractor_fill_1",
+    "layer1": "wildaside:item/dna_extractor_base"
+  }
+}
