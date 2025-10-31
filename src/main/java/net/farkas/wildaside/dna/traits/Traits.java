@@ -19,8 +19,8 @@ public class Traits {
     public static final Trait ARMOR_TOUGHNESS = register("armor_toughness", TraitTypes.CORE,0.8f);
     public static final Trait KNOCKBACK_RESISTANCE = register("knockback_resistance", TraitTypes.CORE, 0.8f);
 
-    public static final Trait FIRE_RESISTANCE = register("fire_resistance", TraitTypes.RESISTANCE, 1.9f);
-    public static final Trait FALL_RESISTANCE = register("fall_resistance", TraitTypes.RESISTANCE, 2.3f);
+    public static final Trait FIRE_RESISTANCE = register("fire_resistance", TraitTypes.RESISTANCE, 2.3f);
+    public static final Trait FALL_RESISTANCE = register("fall_resistance", TraitTypes.RESISTANCE, 2.1f);
     public static final Trait EXPLOSION_RESISTANCE = register("explosion_resistance", TraitTypes.RESISTANCE, 1.7f);
     public static final Trait FREEZE_RESISTANCE = register("freeze_resistance", TraitTypes.RESISTANCE, 1.1f);
 
