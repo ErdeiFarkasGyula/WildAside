@@ -237,7 +237,17 @@ public class DnaHolder extends Item {
 
         tooltip.add(Component.literal(title).withStyle(headerColor));
         filtered.values().forEach(gene -> {
-            String valueStr = String.format("%.2f", gene.value());
+            float value = gene.value();
+            String valueStr = String.format("%.2f", value);
+
+            if (type == TraitTypes.ABILITY) {
+                value /= 20;
+                valueStr = String.format("%.2f", value) + " s";
+            } else if (type == TraitTypes.RESISTANCE) {
+                value *= 100;
+                valueStr = String.format("%.2f", value) + " %";
+            }
+
             ChatFormatting color = (type == TraitTypes.ABILITY) ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.WHITE;
             tooltip.add(Component.literal("- " + gene.trait().name() + ": " + valueStr).withStyle(color));
         });

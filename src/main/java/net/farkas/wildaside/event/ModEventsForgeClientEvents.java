@@ -15,7 +15,6 @@ public class ModEventsForgeClientEvents {
         if (event.phase == TickEvent.Phase.END) {
             while (ModKeyMappings.USE_ABILITY.consumeClick()) {
                 NetworkHandler.sendAbilityKeyUpdate();
-                System.out.println("PRESSING G");
             }
         }
     }

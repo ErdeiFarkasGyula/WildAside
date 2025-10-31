@@ -21,7 +21,6 @@ public class AbilityEvents {
             float cooldown = entity.getPersistentData().getFloat(IAbility.COOLDOWN);
             if (cooldown > 0) {
                 entity.getPersistentData().putFloat(IAbility.COOLDOWN, cooldown - 1);
-                System.out.println(cooldown);
             }
             for (Gene gene : dna.genes().values()) {
                 if (gene.trait().traitType() == TraitTypes.ABILITY) {
