@@ -10,15 +10,12 @@ import net.farkas.wildaside.dna.traits.TraitTypes;
 import net.farkas.wildaside.dna.traits.Traits;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.EntityTypeTags;
-import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -99,26 +96,31 @@ public class DnaUtils {
             }
         }
 
-        RandomSource random = RandomSource.create(entity.getUUID().getLeastSignificantBits());
+        long seed = entity.getUUID().getLeastSignificantBits();
+
         if (entity.fireImmune()) {
-            Trait trait = Traits.FIRE_RESISTANCE;
-            genes.put(trait, new Gene(trait, random.nextFloat(), trait.baseInstability()));
+            putResistanceWithGaussian(genes, Traits.FIRE_RESISTANCE, seed);
         }
         if (entity.getType().is(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES)) {
-            Trait trait = Traits.FREEZE_RESISTANCE;
-            genes.put(trait, new Gene(trait, random.nextFloat(), trait.baseInstability()));
+            putResistanceWithGaussian(genes, Traits.FREEZE_RESISTANCE, seed);
         }
         if (entity.getType().is(EntityTypeTags.FALL_DAMAGE_IMMUNE)) {
-            Trait trait = Traits.FALL_RESISTANCE;
-            genes.put(trait, new Gene(trait, random.nextFloat(), trait.baseInstability()));
+            putResistanceWithGaussian(genes, Traits.FALL_RESISTANCE, seed);
         }
 
         if (entity.getType() == EntityType.BLAZE) {
-            Trait trait = Traits.FIRE_ABILITY;
-            genes.put(trait, new Gene(trait, random.nextInt(40, 80), trait.baseInstability()));
+            putAbilityWithGaussian(genes, Traits.FIRE_ABILITY, seed);
         }
 
         return genes;
+    }
+
+    private static void putResistanceWithGaussian(Map<Trait, Gene> genes, Trait trait, long seed) {
+        genes.put(trait, new Gene(trait, deterministicGaussian(seed, trait.name()) / 2 + 0.5f, trait.baseInstability()));
+    }
+
+    private static void putAbilityWithGaussian(Map<Trait, Gene> genes, Trait trait, long seed) {
+        genes.put(trait, new Gene(trait, (deterministicGaussian(seed, trait.name()) / 2 + trait.baseInstability()) * 100, trait.baseInstability()));
     }
 
     public static Map<Trait, Gene> mutateGenes(Map<Trait, Gene> baseGenes, LivingEntity entity) {
