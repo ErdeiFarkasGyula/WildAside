@@ -28,7 +28,7 @@ public class UseAbilityPacket {
                         IAbility ability = Abilities.get(gene.trait());
                         if (ability != null) {
                             ability.onUse(player, gene.value);
-                            dna.setStability(dna.stability() - gene.trait().baseInstability() * 0.1f);
+                            dna.setStability(dna.stability() - gene.trait().baseInstability() * 0.5f);
                         }
                     }
                 }
