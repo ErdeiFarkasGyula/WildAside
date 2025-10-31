@@ -2,7 +2,7 @@
   "parent": "minecraft:block/template_glass_pane_side",
   "render_type": "minecraft:translucent",
   "textures": {
-    "edge": "wildaside:block/vibrion_glass",
+    "edge": "wildaside:block/vibrion_glass_pane_top",
     "pane": "wildaside:block/vibrion_glass"
   }
 }
