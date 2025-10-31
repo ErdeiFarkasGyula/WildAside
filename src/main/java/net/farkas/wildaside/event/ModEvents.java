@@ -252,27 +252,7 @@ public class ModEvents {
         float stabilityReduction = event.getAmount() * 0.05f;
 
         entity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-            boolean modified = dna.genes().entrySet().stream().anyMatch(entry -> {
-                Trait trait = entry.getKey();
-
-                if (trait.traitType() == TraitTypes.CORE) {
-                    Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(DnaUtils.getAttribute(trait.name()));
-                    if (attribute == null) return false;
-
-                    AttributeInstance instance = entity.getAttribute(attribute);
-                    if (instance == null) return false;
-
-                    double base = instance.getBaseValue();
-                    double current = DnaUtils.getAttributeValue(entity, attribute);
-                    return Math.abs(current - base) > 0.001;
-                }
-                else if (trait.traitType() == TraitTypes.RESISTANCE) {
-                    return entry.getValue().value != 0.0f;
-                }
-                else {
-                    return entry.getValue().value != -1f;
-                }
-            });
+            boolean modified = DnaUtils.generateBaseGenes(entity, true) != dna.genes();
 
             if (modified) {
                 dna.setStability(dna.stability() - stabilityReduction);
@@ -299,9 +279,12 @@ public class ModEvents {
             else if (source.is(DamageTypes.FREEZE)) {
                 trait = Traits.FREEZE_RESISTANCE;
             }
-            float value = Traits.getTraitValue(dna.genes(), trait);
-            dna.setStability(dna.stability() - (event.getAmount() * 0.25f));
-            event.setAmount(event.getAmount() * (1.0f - value));
+
+            if (trait != null) {
+                float value = Traits.getTraitValue(dna.genes(), trait);
+                dna.setStability(dna.stability() - (event.getAmount() * 0.25f));
+                event.setAmount(event.getAmount() * (1.0f - value));
+            }
         });
     }
 
