@@ -1,5 +1,6 @@
 package net.farkas.wildaside.screen.bioengineering_workstation;
 
+import net.farkas.wildaside.screen.ModVisibleSlot;
 import net.farkas.wildaside.util.AdvancementHandler;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -8,7 +9,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
-public class BioengineeringWorkstationResultSlot extends SlotItemHandler {
+public class BioengineeringWorkstationResultSlot extends ModVisibleSlot {
     private final Player player;
 
     public BioengineeringWorkstationResultSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition, Player player) {

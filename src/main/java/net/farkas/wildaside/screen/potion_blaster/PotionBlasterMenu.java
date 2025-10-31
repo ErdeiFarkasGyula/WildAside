@@ -25,7 +25,7 @@ public class PotionBlasterMenu extends AbstractContainerMenu {
     }
 
     private static PotionBlasterBlockEntity getBlockEntityFromBuffer(Inventory inv, FriendlyByteBuf extraData) {
-        BlockPos pos = extraData.readBlockPos();  // Read once!
+        BlockPos pos = extraData.readBlockPos();
         BlockEntity entity = inv.player.level().getBlockEntity(pos);
         return (PotionBlasterBlockEntity) entity;
     }
@@ -89,7 +89,7 @@ public class PotionBlasterMenu extends AbstractContainerMenu {
     @Override
     public ItemStack quickMoveStack(Player playerIn, int pIndex) {
         Slot sourceSlot = slots.get(pIndex);
-        if (sourceSlot == null || !sourceSlot.hasItem()) return ItemStack.EMPTY;  //EMPTY_ITEM
+        if (sourceSlot == null || !sourceSlot.hasItem()) return ItemStack.EMPTY;
         ItemStack sourceStack = sourceSlot.getItem();
         ItemStack copyOfSourceStack = sourceStack.copy();
 

@@ -1,6 +1,9 @@
 package net.farkas.wildaside.network;
 
 import net.farkas.wildaside.WildAside;
+import net.farkas.wildaside.network.packets.BioengineeringWorkstationTabPacket;
+import net.farkas.wildaside.network.packets.UseAbilityPacket;
+import net.farkas.wildaside.network.packets.WindSyncPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -40,6 +43,13 @@ public class NetworkHandler {
                 UseAbilityPacket::decode,
                 UseAbilityPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
+
+        CHANNEL.registerMessage(id(),
+                BioengineeringWorkstationTabPacket.class,
+                BioengineeringWorkstationTabPacket::toBytes,
+                BioengineeringWorkstationTabPacket::new,
+                BioengineeringWorkstationTabPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
     }
 
     public static void sendWindUpdateToAll(Vec3 dir, float strength) {
@@ -56,5 +66,13 @@ public class NetworkHandler {
             return;
         }
         CHANNEL.send(PacketDistributor.SERVER.noArg(), new UseAbilityPacket());
+    }
+
+    public static void sendBioengineeringWorkstationTabPacket(int index) {
+        if (CHANNEL == null) {
+            WildAside.LOGGER.warn("Tried to send bioengineering workstation tab update before network init. Ignoring.");
+            return;
+        }
+        CHANNEL.send(PacketDistributor.SERVER.noArg(), new BioengineeringWorkstationTabPacket(index));
     }
 }
