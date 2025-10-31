@@ -122,23 +122,51 @@ public class DnaUtils {
     }
 
     public static Map<Trait, Gene> mutateGenes(Map<Trait, Gene> baseGenes, LivingEntity entity) {
-        RandomSource random = RandomSource.create(entity.getUUID().getLeastSignificantBits());
         Map<Trait, Gene> mutated = new HashMap<>();
         for (var entry : baseGenes.entrySet()) {
-            mutated.put(entry.getKey(), mutateGene(entry.getValue(), random));
+            mutated.put(entry.getKey(), mutateGene(entry.getValue(), entity));
         }
         return mutated;
     }
 
-    public static Gene mutateGene(Gene gene, RandomSource random) {
+    public static Gene mutateGene(Gene gene, LivingEntity entity) {
+        long seed = entity.getUUID().getLeastSignificantBits();
+        String salt = gene.trait().name();
+
+        float gaussian = deterministicGaussian(seed, salt);
+
         float averageMutation = -0.1f;
         float baseVariance = 0.5f;
-        float mutation = (float) random.nextGaussian() * baseVariance + averageMutation;
 
-        System.out.println("Trait:" + gene.trait() + "Value:" + gene.value() + " Mutation: " + (1.0f + mutation) + " = " + gene.value() * (1.0f + mutation));
+        float mutation = gaussian * baseVariance + averageMutation;
         float newValue = gene.value() * (1.0f + mutation);
 
+        System.out.printf("Trait:%s  Value:%.3f  Mutation:%.3f  →  %.3f%n", gene.trait(), gene.value(), mutation, newValue);
+
         return new Gene(gene.trait(), newValue, gene.stabilityCost());
+    }
+
+    private static float hashToFloat(long seed, String salt, int index) {
+        long hash = seed ^ (index * 0x9E3779B97F4A7C15L);
+        for (char c : salt.toCharArray()) {
+            hash = hash * 31 + c;
+        }
+
+        hash ^= (hash >>> 33);
+        hash *= 0xff51afd7ed558ccdL;
+        hash ^= (hash >>> 33);
+        hash *= 0xc4ceb9fe1a85ec53L;
+        hash ^= (hash >>> 33);
+
+        return (float) ((hash & 0xFFFFFFFFL) / (double) 0xFFFFFFFFL);
+    }
+
+    private static float deterministicGaussian(long seed, String salt) {
+        float sum = 0f;
+        for (int i = 0; i < 6; i++) {
+            sum += hashToFloat(seed, salt, i);
+        }
+        return (sum / 6f - 0.5f) * 2f;
     }
 
     public static ResourceLocation getAttribute(String name) {

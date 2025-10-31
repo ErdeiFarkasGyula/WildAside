@@ -114,7 +114,7 @@ public class DnaHolder extends Item {
                 if (Config.ACCURATE_DNA_MOVEMENT_SPEEDS.get()) {
                     RandomSource random = RandomSource.create(target.getUUID().getLeastSignificantBits());
                     Trait trait = Traits.MOVEMENT_SPEED;
-                    Gene gene = DnaUtils.mutateGene(new Gene(trait, (float) MobSpeedResultStorage.getSpeed(target.getType(), "ground"), trait.baseInstability()), random);
+                    Gene gene = DnaUtils.mutateGene(new Gene(trait, (float) MobSpeedResultStorage.getSpeed(target.getType(), "ground"), trait.baseInstability()), target);
                     baseGenes.get().replace(trait, gene);
                 }
             } else {

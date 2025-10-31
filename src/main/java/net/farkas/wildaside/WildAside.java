@@ -132,20 +132,6 @@ public class WildAside
                     return new SporeArrowEntity(pLevel, pPosition.x(), pPosition.y(), pPosition.z());
                 }
             });
-
-            ItemProperties.register(
-                    ModItems.DNA_HOLDER.get(),
-                    new ResourceLocation(MOD_ID, "progress"),
-                    (stack, level, entity, seed) -> {
-                        if (!stack.hasTag()) return 0f;
-                        CompoundTag tag = stack.getTag();
-                        if (tag.contains("sample_progress")) {
-                            int progress = tag.getInt("sample_progress");
-                            return Mth.clamp(progress / 3f, 0f, 1f);
-                        }
-                        return 0f;
-                    }
-            );
         });
 
         SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MOD_ID, ModSurfaceRules.makeRules());
@@ -221,6 +207,20 @@ public class WildAside
 
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.FALLEN_HICKORY_LEAVES.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.HICKORY_ROOT_BUSH.get(), RenderType.cutout());
+
+            ItemProperties.register(
+                    ModItems.DNA_HOLDER.get(),
+                    new ResourceLocation(MOD_ID, "progress"),
+                    (stack, level, entity, seed) -> {
+                        if (!stack.hasTag()) return 0f;
+                        CompoundTag tag = stack.getTag();
+                        if (tag.contains("sample_progress")) {
+                            int progress = tag.getInt("sample_progress");
+                            return Mth.clamp(progress / 3f, 0f, 1f);
+                        }
+                        return 0f;
+                    }
+            );
         }
     }
 
