@@ -75,7 +75,7 @@ public class MobSpeedResultStorage {
         Map<String, Double> map = results.get(id);
         if (map == null) return -1;
 
-        return map.getOrDefault(environment, 0.0);
+        return map.getOrDefault(environment, 0.0) / 43.17f;
     }
 
     public static Set<ResourceLocation> getAllEntities() {

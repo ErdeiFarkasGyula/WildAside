@@ -54,10 +54,7 @@ public class MobSwimSpeedAdjustmentHandler {
                 if (groundSpeed == -1) groundSpeed = livingEntity.getAttributeBaseValue(attr.getAttribute());
                 if (waterSpeed == -1) waterSpeed = livingEntity.getAttributeBaseValue(attr.getAttribute()) / 5;
 
-                double groundVal = groundSpeed / 43.17;
-                double waterVal = waterSpeed / 43.17;
-
-                double adjustment = (waterVal / groundVal);
+                double adjustment = (waterSpeed / groundSpeed);
 
                 attr.addPermanentModifier(new AttributeModifier(
                         WATER_ADJUST_UUID,
@@ -67,7 +64,7 @@ public class MobSwimSpeedAdjustmentHandler {
                 ));
 
                 System.out.printf("[%s] Entered water → Adjust %.4f (ground %.4f → water %.4f)%n",
-                        livingEntity.getName().getString(), adjustment, groundVal, waterVal);
+                        livingEntity.getName().getString(), adjustment, groundSpeed, waterSpeed);
             });
 
         } else {

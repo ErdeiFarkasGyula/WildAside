@@ -10,6 +10,7 @@ import net.farkas.wildaside.dna.traits.TraitTypes;
 import net.farkas.wildaside.dna.traits.Traits;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.EntityTypeTags;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -17,6 +18,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -52,7 +54,16 @@ public class DnaUtils {
             }
         }
 
-        return (float) ((base * multBase + add) * multTotal);
+        float result = (float) ((base * multBase + add) * multTotal);
+        if (result == -1) return 0;
+        return result;
+    }
+
+    public static float getAttributeValue(LivingEntity entity, Attribute attribute) {
+        AttributeInstance instance = entity.getAttribute(attribute);
+        if (instance == null) return 0.0f;
+
+        return (float) instance.getBaseValue();
     }
 
     private static boolean isEquipmentModifier(LivingEntity entity, AttributeModifier modifier) {
@@ -68,31 +79,21 @@ public class DnaUtils {
         return false;
     }
 
-    public static Map<Trait, Gene> generateDefaultCoreGenes(LivingEntity entity) {
-        Map<Trait, Gene> genes = new HashMap<>();
-        for (Trait trait : Traits.getByType(TraitTypes.CORE)) {
-            Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(getAttribute(trait.name()));
-            float traitValue = getStableAttributeValue(entity, attribute);
-            genes.put(trait, new Gene(trait, traitValue, trait.baseInstability()));
-        }
-        return genes;
-    }
-
-    public static Map<Trait, Gene> generateBaseGenes(LivingEntity entity) {
+    public static Map<Trait, Gene> generateBaseGenes(LivingEntity entity, boolean preGen) {
         Map<Trait, Gene> genes = new HashMap<>();
 
         for (Trait trait : Traits.getByType(TraitTypes.CORE)) {
             Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(getAttribute(trait.name()));
             if (attribute != null) {
-                float traitValue = getStableAttributeValue(entity, attribute);
+                float traitValue = getAttributeValue(entity, attribute);
                 if (trait == Traits.MOVEMENT_SPEED) {
-                    if (Config.ACCURATE_DNA_MOVEMENT_SPEEDS.get()) {
-                        traitValue = (float) (MobSpeedResultStorage.getSpeed(entity.getType(), "ground") / 43.17f);
+                    if (Config.ACCURATE_DNA_MOVEMENT_SPEEDS.get() && !preGen) {
+                        traitValue = (float) (MobSpeedResultStorage.getSpeed(entity.getType(), "ground"));
+                        System.out.println("MOVESPEEEDA: " + traitValue);
                         if (MobSpeedTesting.EXCLUDED_MOBS.contains(entity.getType())) {
                             traitValue = (float) entity.getAttributeBaseValue(attribute);
                         }
                     }
-                    System.out.println("TRAIT VALUE: " + traitValue);
                 }
                 genes.put(trait, new Gene(trait, traitValue, trait.baseInstability()));
             }
@@ -129,19 +130,12 @@ public class DnaUtils {
         return mutated;
     }
 
-    private static Gene mutateGene(Gene gene, RandomSource random) {
-        float averageMutation = -0.05f;
-        float baseVariance = 0.25f;
-        float strongMutationChance = 0.05f;
-        float strongMultiplier = 0.5f;
-
+    public static Gene mutateGene(Gene gene, RandomSource random) {
+        float averageMutation = -0.1f;
+        float baseVariance = 0.5f;
         float mutation = (float) random.nextGaussian() * baseVariance + averageMutation;
 
-        if (random.nextFloat() < strongMutationChance) {
-            float direction = random.nextBoolean() ? 1.0f : -1.0f;
-            mutation += direction * (random.nextFloat() * strongMultiplier);
-        }
-
+        System.out.println("Trait:" + gene.trait() + "Value:" + gene.value() + " Mutation: " + (1.0f + mutation) + " = " + gene.value() * (1.0f + mutation));
         float newValue = gene.value() * (1.0f + mutation);
 
         return new Gene(gene.trait(), newValue, gene.stabilityCost());

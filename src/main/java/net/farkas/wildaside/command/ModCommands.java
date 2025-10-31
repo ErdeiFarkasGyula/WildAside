@@ -256,7 +256,7 @@ public class ModCommands {
 
                 livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
                     dna.genes().put(trait, new Gene(trait, value, 0f));
-                    dna.apply(livingEntity);
+                    dna.applyGenes(livingEntity);
                 });
 
                 ctx.getSource().sendSuccess(() ->

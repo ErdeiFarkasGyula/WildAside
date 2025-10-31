@@ -35,6 +35,7 @@ public class Config {
             .comment("Enable/disable the glowing tick of glowing blocks in the Glowing Hickory Forest, making them not change their light levels anymore.  (def: true)")
             .define("glowing_hickory_tick", true);
 
+
     public static final ForgeConfigSpec.BooleanValue ACCURATE_DNA_MOVEMENT_SPEEDS = COMMON_BUILDER
             .comment("Enable/disable the accurate movement speed calculations of mobs for DNAs. " +
                     "If false, both ground and water movement speeds be inaccurate with DNAs, " +
@@ -47,7 +48,6 @@ public class Config {
                     "but performance after loading a world might be better for the first few seconds " +
                     "when loading it up for the first time, or with a different mod list. (def: false)")
             .define("accurate_dna_water_movement_speeds", false);
-
 
 //    public static final ForgeConfigSpec.ConfigValue<Integer> MUCELLITH_SPAWN_WEIGHT = BUILDER
 //            .pop()

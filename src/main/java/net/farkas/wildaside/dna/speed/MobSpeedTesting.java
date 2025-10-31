@@ -23,6 +23,7 @@ public class MobSpeedTesting {
     public static int entityCount = 0;
 
     public static final Set<EntityType<?>> EXCLUDED_MOBS = Set.of(
+            EntityType.PLAYER,
             EntityType.ENDER_DRAGON,
             EntityType.WITHER,
             EntityType.BAT,

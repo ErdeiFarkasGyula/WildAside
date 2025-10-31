@@ -19,9 +19,10 @@ public class DnaImplementation implements IDna {
     private @Nullable EntityType<?> source;
     private float stability = 100;
     private Map<Trait, Gene> genes = new HashMap<>();
+    private boolean initial = true;
 
     @Override
-    public void apply(LivingEntity entity) {
+    public void applyGenes(LivingEntity entity) {
         for (Gene gene : genes.values()) {
             gene.apply(entity);
         }

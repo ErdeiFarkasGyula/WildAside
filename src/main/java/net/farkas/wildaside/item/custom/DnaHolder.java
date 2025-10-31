@@ -2,16 +2,20 @@ package net.farkas.wildaside.item.custom;
 
 import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
+import net.farkas.wildaside.config.Config;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
+import net.farkas.wildaside.dna.speed.MobSpeedResultStorage;
 import net.farkas.wildaside.dna.traits.Trait;
 import net.farkas.wildaside.dna.traits.TraitTypes;
+import net.farkas.wildaside.dna.traits.Traits;
 import net.farkas.wildaside.sound.ModSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
@@ -24,6 +28,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class DnaHolder extends Item {
@@ -99,27 +104,29 @@ public class DnaHolder extends Item {
         progress = Math.min(progress + 1, maxProgress);
         tag.putInt("sample_progress", progress);
 
-        var baseGenes = DnaUtils.generateBaseGenes(target);
-        var mutatedGenes = DnaUtils.mutateGenes(baseGenes, target);
-
+        AtomicReference<Map<Trait, Gene>> baseGenes = new AtomicReference<>(DnaUtils.generateBaseGenes(target, false));
         DnaImplementation newDna = new DnaImplementation();
-        newDna.setSource(target.getType());
-        newDna.setGenes(mutatedGenes);
-
-        if (existingDna != null) {
-            Map<Trait, Gene> averaged = new HashMap<>();
-            for (Trait trait : mutatedGenes.keySet()) {
-                Gene oldGene = existingDna.genes().get(trait);
-                Gene newGene = mutatedGenes.get(trait);
-                float oldValue = oldGene != null ? oldGene.value() : 0f;
-                float newValue = newGene.value();
-                float avg = ((oldValue * (progress - 1)) + newValue) / progress;
-                averaged.put(trait, new Gene(trait, avg, newGene.stabilityCost()));
-            }
-            newDna.setGenes(averaged);
-        }
 
         target.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
+            boolean hasMutated = target.getPersistentData().getBoolean("dna_mutated");
+            if (!hasMutated) {
+                baseGenes.set(DnaUtils.mutateGenes(dna.genes(), target));
+                if (Config.ACCURATE_DNA_MOVEMENT_SPEEDS.get()) {
+                    RandomSource random = RandomSource.create(target.getUUID().getLeastSignificantBits());
+                    Trait trait = Traits.MOVEMENT_SPEED;
+                    Gene gene = DnaUtils.mutateGene(new Gene(trait, (float) MobSpeedResultStorage.getSpeed(target.getType(), "ground"), trait.baseInstability()), random);
+                    baseGenes.get().replace(trait, gene);
+                }
+            } else {
+                baseGenes.set(dna.genes());
+                if (Config.ACCURATE_DNA_MOVEMENT_SPEEDS.get()) {
+                    Trait trait = Traits.MOVEMENT_SPEED;
+                    Gene gene = new Gene(trait, (float) MobSpeedResultStorage.getSpeed(target.getType(), "ground"), trait.baseInstability());
+                    baseGenes.get().replace(trait, gene);
+                }
+            }
+
+
             float currentStability;
             if (existingDna != null) {
                 currentStability = existingDna.stability();
@@ -137,6 +144,23 @@ public class DnaHolder extends Item {
 
             player.level().playSound(null, player.blockPosition(), ModSounds.MUCELLITH_DEATH.get(), SoundSource.PLAYERS, remainingPercent, 0.2f);
         });
+
+        newDna.setSource(target.getType());
+        newDna.setGenes(baseGenes.get());
+
+        if (existingDna != null) {
+            Map<Trait, Gene> averaged = new HashMap<>();
+            for (Trait trait : baseGenes.get().keySet()) {
+                Gene oldGene = existingDna.genes().get(trait);
+                Gene newGene = baseGenes.get().get(trait);
+                float oldValue = oldGene != null ? oldGene.value() : 0f;
+                float newValue = newGene.value();
+                float avg = ((oldValue * (progress - 1)) + newValue) / progress;
+                averaged.put(trait, new Gene(trait, avg, newGene.stabilityCost()));
+            }
+            newDna.setGenes(averaged);
+        }
+
 
         tag.put("dna_data", newDna.serializeNBT());
 

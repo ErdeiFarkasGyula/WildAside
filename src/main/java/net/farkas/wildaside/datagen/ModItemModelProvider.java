@@ -138,7 +138,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.HICKORY_CHEST_BOAT);
 
         //CUSTOM
-        dnaExtractor(ModItems.DNA_HOLDER.get());
+        dnaHolder(ModItems.DNA_HOLDER.get());
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item) {
@@ -200,7 +200,7 @@ public class ModItemModelProvider extends ItemModelProvider {
                 modLoc("block/" + ForgeRegistries.BLOCKS.getKey(block.get()).getPath() + "_bottom"));
     }
 
-    private void dnaExtractor(Item item) {
+    private void dnaHolder(Item item) {
         String baseName = ForgeRegistries.ITEMS.getKey(item).getPath();
 
         for (int i = 0; i <= DnaHolder.DEFAULT_MAX_SAMPLES; i++) {
