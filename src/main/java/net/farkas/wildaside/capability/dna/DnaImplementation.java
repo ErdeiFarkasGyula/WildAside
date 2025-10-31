@@ -29,7 +29,7 @@ public class DnaImplementation implements IDna {
     }
 
     @Override
-    public void remove(LivingEntity entity) {
+    public void removeGenes(LivingEntity entity) {
         for (Gene gene : genes.values()) {
             gene.remove(entity);
         }

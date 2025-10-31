@@ -119,11 +119,6 @@ public class DnaHolder extends Item {
                 }
             } else {
                 baseGenes.set(dna.genes());
-                if (Config.ACCURATE_DNA_MOVEMENT_SPEEDS.get()) {
-                    Trait trait = Traits.MOVEMENT_SPEED;
-                    Gene gene = new Gene(trait, (float) MobSpeedResultStorage.getSpeed(target.getType(), "ground"), trait.baseInstability());
-                    baseGenes.get().replace(trait, gene);
-                }
             }
 
 
