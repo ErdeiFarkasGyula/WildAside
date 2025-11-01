@@ -37,6 +37,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.SPORE_BOMB);
         simpleItem(ModItems.FERTILISER_BOMB);
 
+        simpleItem(ModItems.DNA_SEQUENCE);
+
         simpleItem(ModItems.HICKORY_NUT);
         simpleItem(ModItems.HICKORY_NUT_TRAIL_MIX);
         simpleItem(ModItems.RED_HICKORY_NUT_TRAIL_MIX);

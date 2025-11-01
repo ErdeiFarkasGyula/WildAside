@@ -1,4 +1,4 @@
-// 1.20.1	2025-10-30T13:37:11.0362338	Item Models: wildaside
+// 1.20.1	2025-11-01T11:47:02.2128848	Item Models: wildaside
 97ec986340aeed12ebc0d678c97ba34a7afb7b7c assets/wildaside/models/item/brown_glowing_hickory_leaf.json
 657a44b343b52d1185c119350b9599bc495c3976 assets/wildaside/models/item/brown_glowing_hickory_sapling.json
 9a615629962edb4ec1311e1782a12ec189c42bf4 assets/wildaside/models/item/brown_hickory_nut_trail_mix.json
@@ -8,6 +8,7 @@ ed8d823764c5627b3ab614a410e7df7f507bf818 assets/wildaside/models/item/dna_holder
 0915715fce96c2688340835b8cd27f524de9133a assets/wildaside/models/item/dna_holder_stage1.json
 1450c4fd7936c9efa88e036fd4478d729dcd2893 assets/wildaside/models/item/dna_holder_stage2.json
 054ff6e32f7f0f9ac7aafec2306766e4824f576c assets/wildaside/models/item/dna_holder_stage3.json
+43d5bcf72a5ba3032aad730fc0ef6b76ab5fe7e9 assets/wildaside/models/item/dna_sequence.json
 7c314b9855fa14cfb6f45f4b35479303da8c369e assets/wildaside/models/item/entorium.json
 b9e8179243c134d4c8ef147d30f464ca785a6b5b assets/wildaside/models/item/entorium_pill.json
 e5f1479fbf76bd4d9780abf55c782b4291be7387 assets/wildaside/models/item/fertiliser_bomb.json
