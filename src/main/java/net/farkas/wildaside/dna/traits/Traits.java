@@ -16,7 +16,7 @@ public class Traits {
     public static final Trait ATTACK_SPEED = register("attack_speed", TraitTypes.CORE, 1.1f);
     public static final Trait ATTACK_KNOCKBACK = register("attack_knockback", TraitTypes.CORE, 1f);
     public static final Trait ARMOR = register("armor", TraitTypes.CORE, 1.5f);
-    public static final Trait ARMOR_TOUGHNESS = register("armor_toughness", TraitTypes.CORE,0.8f);
+    public static final Trait ARMOR_TOUGHNESS = register("armor_toughness", TraitTypes.CORE, 0.8f);
     public static final Trait KNOCKBACK_RESISTANCE = register("knockback_resistance", TraitTypes.CORE, 0.8f);
 
     public static final Trait FIRE_RESISTANCE = register("fire_resistance", TraitTypes.RESISTANCE, 2.3f);
