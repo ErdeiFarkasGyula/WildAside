@@ -18,6 +18,8 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
     private final Level level;
     private final ContainerData data;
 
+    private BioengineeringWorkstationTab tab;
+
     public BioengineeringWorkstationMenu(int pContainerId, Inventory inv, FriendlyByteBuf extraData) {
         this(pContainerId, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(6));
     }
@@ -55,6 +57,18 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
         int progressArrowSize = 26;
 
         return maxProgress != 0 && progress != 0 ? progress * progressArrowSize / maxProgress : 0;
+    }
+
+    public void setTab(BioengineeringWorkstationTab tab) {
+        this.tab = tab;
+    }
+
+    public void setTab(int index) {
+        this.tab = BioengineeringWorkstationTab.values()[index];
+    }
+
+    public BioengineeringWorkstationTab getTab() {
+        return tab;
     }
 
     // CREDIT GOES TO: diesieben07 | https://github.com/diesieben07/SevenCommons

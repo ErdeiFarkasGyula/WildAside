@@ -45,7 +45,7 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
     private int progress = 0;
     private int maxProgress = 200;
 
-    private BioengineeringWorkstationTab currentTab = BioengineeringWorkstationTab.ASSEMBLER;
+    private BioengineeringWorkstationTab tab = BioengineeringWorkstationTab.ASSEMBLER;
 
     public BioengineeringWorkstationBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super (ModBlockEntities.BIOENGINEERING_WORKSTATION.get(), pPos, pBlockState);
@@ -97,12 +97,12 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
     }
 
     public void setTab(BioengineeringWorkstationTab tab) {
-        this.currentTab = tab;
+        this.tab = tab;
         setChanged();
     }
 
     public BioengineeringWorkstationTab getTab() {
-        return currentTab;
+        return tab;
     }
 
     public void drops() {
@@ -128,7 +128,7 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
     protected void saveAdditional(CompoundTag pTag) {
         pTag.put("inventory", itemHandler.serializeNBT());
         pTag.putInt("bioengineering_workstation.progress", progress);
-        pTag.putInt("bioengineering_workstation.tab", currentTab.ordinal());
+        pTag.putInt("bioengineering_workstation.tab", tab.ordinal());
 
         super.saveAdditional(pTag);
     }
@@ -138,7 +138,7 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
         super.load(pTag);
         itemHandler.deserializeNBT(pTag.getCompound("inventory"));
         progress = pTag.getInt("bioengineering_workstation.progress");
-        currentTab = BioengineeringWorkstationTab.values()[pTag.getInt("bioengineering_workstation.tab")];
+        tab = BioengineeringWorkstationTab.values()[pTag.getInt("bioengineering_workstation.tab")];
     }
 
     public void tick(Level pLevel, BlockPos pPos, BlockState pState) {
