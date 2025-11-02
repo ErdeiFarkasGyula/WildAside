@@ -61,7 +61,7 @@ public class FallingHickoryLeafParticle extends TextureSheetParticle {
 
         Vec3 wind = ClientWindData.getWind();
 
-        double windInfluence = 0.025;
+        double windInfluence = 0.035;
         this.xd += wind.x * windInfluence;
         this.yd += wind.y * windInfluence;
         this.zd += wind.z * windInfluence;

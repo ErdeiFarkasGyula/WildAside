@@ -9,7 +9,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class WindManager {
     private static final float RAIN_MULTIPLIER = 2.5f;
-    private static final float THUNDER_MULTIPLIER = 5f;
+    private static final float THUNDER_MULTIPLIER = 4f;
 
     private static Vec3 direction = new Vec3(0.01, 0, 0.01);
     private static float strength = 0.1f;
