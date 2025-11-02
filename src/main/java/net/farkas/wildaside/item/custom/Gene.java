@@ -1,7 +1,6 @@
 package net.farkas.wildaside.item.custom;
 
 import net.farkas.wildaside.capability.dna.DnaImplementation;
-import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.traits.Trait;
 import net.farkas.wildaside.dna.traits.TraitTypes;
 import net.minecraft.ChatFormatting;
@@ -11,7 +10,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
@@ -20,8 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class DnaSequence extends Item {
-    public DnaSequence(Properties pProperties) {
+public class Gene extends Item {
+    public Gene(Properties pProperties) {
         super(pProperties);
     }
 
@@ -34,7 +32,7 @@ public class DnaSequence extends Item {
     }
 
     private void displayGenesSection(List<Component> tooltip, DnaImplementation dna, TraitTypes type, String title, ChatFormatting headerColor) {
-        Map<Trait, Gene> filtered = dna.genes().entrySet().stream()
+        Map<Trait, net.farkas.wildaside.dna.Gene> filtered = dna.genes().entrySet().stream()
                 .filter(e -> e.getKey().traitType() == type)
                 .sorted(Map.Entry.comparingByKey(Comparator.comparing(Trait::name)))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));
