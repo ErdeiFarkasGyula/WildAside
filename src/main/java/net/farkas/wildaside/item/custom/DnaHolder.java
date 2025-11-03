@@ -221,13 +221,13 @@ public class DnaHolder extends Item {
         }
 
         if (revealTraits) {
-            displayGenesSection(tooltip, dna, TraitTypes.CORE, "Core Stats:", ChatFormatting.YELLOW);
-            displayGenesSection(tooltip, dna, TraitTypes.RESISTANCE, "Resistances:", ChatFormatting.BLUE);
-            displayGenesSection(tooltip, dna, TraitTypes.ABILITY, "Abilities:", ChatFormatting.RED);
+            displayGenesSection(tooltip, dna, TraitTypes.CORE, "Core Stats:");
+            displayGenesSection(tooltip, dna, TraitTypes.RESISTANCE, "Resistances:");
+            displayGenesSection(tooltip, dna, TraitTypes.ABILITY, "Abilities:");
         }
     }
 
-    private void displayGenesSection(List<Component> tooltip, DnaImplementation dna, TraitTypes type, String title, ChatFormatting headerColor) {
+    private void displayGenesSection(List<Component> tooltip, DnaImplementation dna, TraitTypes type, String title) {
         Map<Trait, Gene> filtered = dna.genes().entrySet().stream()
                 .filter(e -> e.getKey().traitType() == type)
                 .sorted(Map.Entry.comparingByKey(Comparator.comparing(Trait::name)))
@@ -235,7 +235,7 @@ public class DnaHolder extends Item {
 
         if (filtered.isEmpty()) return;
 
-        tooltip.add(Component.literal(title).withStyle(headerColor));
+        tooltip.add(Component.literal(title).withStyle(type.headerColour));
         filtered.values().forEach(gene -> {
             float value = gene.value();
             String valueStr = String.format("%.2f", value);
@@ -248,8 +248,7 @@ public class DnaHolder extends Item {
                 valueStr = String.format("%.2f", value) + " %";
             }
 
-            ChatFormatting color = (type == TraitTypes.ABILITY) ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.WHITE;
-            tooltip.add(Component.literal("- " + gene.trait().name() + ": " + valueStr).withStyle(color));
+            tooltip.add(Component.literal("- " + gene.trait().name() + ": " + valueStr).withStyle(type.entryColour));
         });
     }
 

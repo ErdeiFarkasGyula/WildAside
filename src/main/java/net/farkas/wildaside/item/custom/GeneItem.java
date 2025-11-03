@@ -4,6 +4,7 @@ import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.traits.Trait;
 import net.farkas.wildaside.dna.traits.TraitTypes;
+import net.farkas.wildaside.dna.traits.Traits;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -29,32 +30,14 @@ public class GeneItem extends Item {
         super.appendHoverText(stack, level, tooltip, isAdvanced);
 
         CompoundTag tag = stack.getOrCreateTag();
+        tag.putString("gene_trait", "attack_damage");
+        tag.putFloat("gene_value", 0.2f);
+        String traitName = tag.getString("gene_trait");
+        float value = tag.getFloat("gene_value");
 
-    }
-
-    private void displayGenesSection(List<Component> tooltip, DnaImplementation dna, TraitTypes type, String title, ChatFormatting headerColor) {
-        Map<Trait, Gene> filtered = dna.genes().entrySet().stream()
-                .filter(e -> e.getKey().traitType() == type)
-                .sorted(Map.Entry.comparingByKey(Comparator.comparing(Trait::name)))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));
-
-        if (filtered.isEmpty()) return;
-
-        tooltip.add(Component.literal(title).withStyle(headerColor));
-        filtered.values().forEach(gene -> {
-            float value = gene.value();
-            String valueStr = String.format("%.2f", value);
-
-            if (type == TraitTypes.ABILITY) {
-                value /= 20;
-                valueStr = String.format("%.2f", value) + " s";
-            } else if (type == TraitTypes.RESISTANCE) {
-                value *= 100;
-                valueStr = String.format("%.2f", value) + " %";
-            }
-
-            ChatFormatting color = (type == TraitTypes.ABILITY) ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.WHITE;
-            tooltip.add(Component.literal("- " + gene.trait().name() + ": " + valueStr).withStyle(color));
-        });
+        Trait trait = Traits.getByName(traitName);
+        if (trait != null) {
+            tooltip.add(Component.literal(traitName + ": " + value).withStyle(trait.traitType().headerColour));
+        }
     }
 }
