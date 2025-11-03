@@ -42,7 +42,7 @@ public class ModItems {
             () ->  new FertiliserBomb(new Item.Properties().stacksTo(16)));
 
     public static final RegistryObject<Item> GENE = ITEMS.register("gene",
-            () ->  new Gene(new Item.Properties().stacksTo(1)));
+            () ->  new GeneItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> DNA_HOLDER = ITEMS.register("dna_holder",
             () ->  new DnaHolder(new Item.Properties().stacksTo(64)));
 
