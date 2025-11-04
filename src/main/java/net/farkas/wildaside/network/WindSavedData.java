@@ -9,10 +9,10 @@ public class WindSavedData extends SavedData {
     private boolean lastRaining = false;
     private boolean lastThundering = false;
 
-    private double windX = 0.1;
+    private double windX = 0;
     private double windY = 0;
-    private double windZ = 0.1;
-    private float windStrength = 0.05f;
+    private double windZ = 0;
+    private float windStrength = 0f;
 
     public WindSavedData(CompoundTag tag) {
         this.lastRaining = tag.getBoolean("lastRaining");
