@@ -295,7 +295,7 @@ public class ModBlocks {
                     SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
 
     public static final RegistryObject<Block> SUBSTILIUM_DOOR = registerBlock("substilium_door",
-            () ->  new DoorBlock(BlockBehaviour.Properties.copy(ModBlocks.SUBSTILIUM_PLANKS.get()), BlockSetType.OAK));
+            () ->  new DoorBlock(BlockBehaviour.Properties.copy(ModBlocks.SUBSTILIUM_PLANKS.get()).noOcclusion(), BlockSetType.OAK));
 
     public static final RegistryObject<Block> SUBSTILIUM_TRAPDOOR = registerBlock("substilium_trapdoor",
             () ->  new TrapDoorBlock(BlockBehaviour.Properties.copy(ModBlocks.SUBSTILIUM_PLANKS.get()).noOcclusion(), BlockSetType.OAK));
@@ -360,7 +360,7 @@ public class ModBlocks {
                     SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
 
     public static final RegistryObject<Block> HICKORY_DOOR = registerBlock("hickory_door",
-            () ->  new DoorBlock(BlockBehaviour.Properties.copy(ModBlocks.HICKORY_PLANKS.get()), BlockSetType.OAK));
+            () ->  new DoorBlock(BlockBehaviour.Properties.copy(ModBlocks.HICKORY_PLANKS.get()).noOcclusion(), BlockSetType.OAK));
 
     public static final RegistryObject<Block> HICKORY_TRAPDOOR = registerBlock("hickory_trapdoor",
             () ->  new TrapDoorBlock(BlockBehaviour.Properties.copy(ModBlocks.HICKORY_PLANKS.get()).noOcclusion(), BlockSetType.OAK));
