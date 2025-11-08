@@ -60,7 +60,7 @@ public class MucellithEntity extends PathfinderMob implements RangedAttackMob {
 
     public static AttributeSupplier.Builder createAttributes() {
         return PathfinderMob.createLivingAttributes()
-                .add(Attributes.MAX_HEALTH, 40)
+                .add(Attributes.MAX_HEALTH, 30)
                 .add(Attributes.FOLLOW_RANGE, 32)
                 .add(Attributes.MOVEMENT_SPEED, 0)
                 .add(Attributes.JUMP_STRENGTH, 0)

@@ -108,7 +108,7 @@ public class ModEvents {
 
         if (server.getTickCount() % regularTime == 0) {
             WindManager.calculateAndSetWind(overworld, true);
-            irregularTime = overworld.random.nextInt(40, 140);
+            irregularTime = overworld.random.nextInt(40, 300);
         }
         else if (tickCount % irregularTime == 0) {
             WindManager.calculateAndSetWind(overworld, true);
