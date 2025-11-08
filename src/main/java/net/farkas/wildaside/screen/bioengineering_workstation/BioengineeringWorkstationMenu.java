@@ -18,6 +18,8 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
     private final Level level;
     private final ContainerData data;
 
+    public static final int yOffset = 0;
+
     private BioengineeringWorkstationTab tab;
 
     public BioengineeringWorkstationMenu(int pContainerId, Inventory inv, FriendlyByteBuf extraData) {
@@ -36,12 +38,12 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
         addPlayerHotbar(inv);
 
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
-            this.addSlot(new SlotItemHandler(iItemHandler, 0, 44, 34));
-            this.addSlot(new SlotItemHandler(iItemHandler, 1, 44, 16));
-            this.addSlot(new SlotItemHandler(iItemHandler, 2, 62, 34));
-            this.addSlot(new SlotItemHandler(iItemHandler, 3, 44, 52));
-            this.addSlot(new SlotItemHandler(iItemHandler, 4, 26, 34));
-            this.addSlot(new BioengineeringWorkstationResultSlot(iItemHandler, 5, 130, 34, inv.player));
+            this.addSlot(new SlotItemHandler(iItemHandler, 0, 84, 34 + yOffset));
+            this.addSlot(new SlotItemHandler(iItemHandler, 1, 84, 16 + yOffset));
+            this.addSlot(new SlotItemHandler(iItemHandler, 2, 102, 34 + yOffset));
+            this.addSlot(new SlotItemHandler(iItemHandler, 3, 84, 52 + yOffset));
+            this.addSlot(new SlotItemHandler(iItemHandler, 4, 66, 34 + yOffset));
+            this.addSlot(new BioengineeringWorkstationResultSlot(iItemHandler, 5, 170, 34 + yOffset, inv.player));
         });
 
         addDataSlots(data);
@@ -54,7 +56,7 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
     public int getScaledProgress() {
         int progress = this.data.get(0);
         int maxProgress = this.data.get(1);
-        int progressArrowSize = 26;
+        int progressArrowSize = 27;
 
         return maxProgress != 0 && progress != 0 ? progress * progressArrowSize / maxProgress : 0;
     }
@@ -133,14 +135,14 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
     private void addPlayerInventory(Inventory playerInventory) {
         for (int i = 0; i < 3; ++i) {
             for (int l = 0; l < 9; ++l) {
-                this.addSlot(new Slot(playerInventory, l + i * 9 + 9, 8 + l * 18, 84 + i * 18));
+                this.addSlot(new Slot(playerInventory, l + i * 9 + 9, 8 + l * 18 + 40, 84 + i * 18 + yOffset));
             }
         }
     }
 
     private void addPlayerHotbar(Inventory playerInventory) {
         for (int i = 0; i < 9; ++i) {
-            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
+            this.addSlot(new Slot(playerInventory, i, 8 + i * 18 + 40, 142 + yOffset));
         }
     }
 }

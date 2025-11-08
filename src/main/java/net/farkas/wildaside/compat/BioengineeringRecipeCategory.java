@@ -27,7 +27,7 @@ public class BioengineeringRecipeCategory implements IRecipeCategory<Bioengineer
     private final IDrawable icon;
 
     public BioengineeringRecipeCategory(IGuiHelper helper) {
-        this.background = helper.createDrawable(TEXTURE, 17, 10, 140, 65);
+        this.background = helper.createDrawable(TEXTURE, 57, 10, 140, 65);
         this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModBlocks.BIOENGINEERING_WORKSTATION.get()));
     }
 

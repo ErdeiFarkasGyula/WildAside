@@ -36,6 +36,6 @@ public class JEIWildAsidePlugin implements IModPlugin {
 
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
-        registration.addRecipeClickArea(BioengineeringWorkstationScreen.class, 88, 35, 29, 14, BioengineeringRecipeCategory.BIOENGINEERING_TYPE);
+        registration.addRecipeClickArea(BioengineeringWorkstationScreen.class, 122, 35, 29, 14, BioengineeringRecipeCategory.BIOENGINEERING_TYPE);
     }
 }
