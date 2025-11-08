@@ -23,12 +23,12 @@ public class MobSpeedTestTracker {
 
         active.remove(mob.getUUID());
         if (active.isEmpty()) {
-            System.out.println("✅ Test batch finished: " + testName);
+            System.out.println("Test batch finished: " + testName);
         }
 
         boolean allEmpty = activeTests.values().stream().allMatch(Set::isEmpty);
         if (allEmpty) {
-            System.out.println("🎉 All test conditions finished! Saving all results...");
+            System.out.println("Saving results.");
             MobSpeedResultStorage.save();
             MobSpeedResultStorage.load();
             if (mob.level() instanceof ServerLevel serverLevel) {
