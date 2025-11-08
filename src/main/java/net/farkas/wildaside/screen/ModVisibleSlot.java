@@ -22,4 +22,13 @@ public class ModVisibleSlot extends SlotItemHandler {
     public boolean mayPickup(Player playerIn) {
         return active && super.mayPickup(playerIn);
     }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    @Override
+    public boolean isActive() {
+        return active;
+    }
 }
