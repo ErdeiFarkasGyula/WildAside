@@ -30,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 public class  BioengineeringWorkstationBlockEntity extends BlockEntity implements MenuProvider {
-    private final ItemStackHandler itemHandler = new ItemStackHandler(6);
+    private final ItemStackHandler itemHandler = new ItemStackHandler(12);
 
     private static final int INPUT_1 = 0;
     private static final int INPUT_2 = 1;
@@ -98,6 +98,11 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
 
     public void setTab(BioengineeringWorkstationTab tab) {
         this.tab = tab;
+        setChanged();
+    }
+
+    public void setTab(int i) {
+        this.tab = BioengineeringWorkstationTab.values()[i];
         setChanged();
     }
 
@@ -183,9 +188,9 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
     }
 
     private Optional<BioengineeringWorkstationRecipe> getCurrentRecipe() {
-        SimpleContainer inventory = new SimpleContainer(this.itemHandler.getSlots());
+        SimpleContainer inventory = new SimpleContainer(6);
 
-        for (int i = 0; i < itemHandler.getSlots(); i++) {
+        for (int i = 0; i < 6; i++) {
             inventory.setItem(i, this.itemHandler.getStackInSlot(i));
         }
 

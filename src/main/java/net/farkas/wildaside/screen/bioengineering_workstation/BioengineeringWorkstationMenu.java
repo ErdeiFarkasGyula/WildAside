@@ -2,6 +2,8 @@ package net.farkas.wildaside.screen.bioengineering_workstation;
 
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.BioengineeringWorkstationBlockEntity;
+import net.farkas.wildaside.item.ModItems;
+import net.farkas.wildaside.item.custom.DnaHolder;
 import net.farkas.wildaside.screen.ModMenuTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -15,6 +17,8 @@ import net.minecraftforge.items.SlotItemHandler;
 
 public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
     public final BioengineeringWorkstationBlockEntity blockEntity;
+    public final Inventory inventory;
+    public final Player player;
     private final Level level;
     private final ContainerData data;
 
@@ -27,28 +31,63 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
     public BioengineeringWorkstationMenu(int pContainerId, Inventory inv, BlockEntity entity, ContainerData data) {
         super(ModMenuTypes.BIOENGINEERING_WORKSTATION_MENU.get(), pContainerId);
 
-        checkContainerSize(inv, 6);
-        blockEntity = ((BioengineeringWorkstationBlockEntity)entity);
-        this.level = inv.player.level();
+        this.blockEntity = (BioengineeringWorkstationBlockEntity) entity;
+        this.inventory = inv;
+        this.player = inv.player;
+        this.level = player.level();
         this.data = data;
+        this.tab = blockEntity.getTab();
 
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
-
-        this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
-            this.addSlot(new SlotItemHandler(iItemHandler, 0, 84, 34));
-            this.addSlot(new SlotItemHandler(iItemHandler, 1, 84, 16));
-            this.addSlot(new SlotItemHandler(iItemHandler, 2, 102, 34));
-            this.addSlot(new SlotItemHandler(iItemHandler, 3, 84, 52));
-            this.addSlot(new SlotItemHandler(iItemHandler, 4, 66, 34));
-            this.addSlot(new BioengineeringWorkstationResultSlot(iItemHandler, 5, 170, 34, inv.player));
-        });
+        addMenuSlots(tab);
 
         addDataSlots(data);
     }
 
+    private void addMenuSlots(BioengineeringWorkstationTab tab) {
+        this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
+            switch (tab) {
+                case ASSEMBLER -> {
+                    addSlot(new SlotItemHandler(iItemHandler, 0, 84, 34));
+                    addSlot(new SlotItemHandler(iItemHandler, 1, 84, 16));
+                    addSlot(new SlotItemHandler(iItemHandler, 2, 102, 34));
+                    addSlot(new SlotItemHandler(iItemHandler, 3, 84, 52));
+                    addSlot(new SlotItemHandler(iItemHandler, 4, 66, 34));
+                    addSlot(new BioengineeringWorkstationResultSlot(iItemHandler, 5, 170, 34, player));
+                }
+                case DNA_ANALYZER -> {
+                    addSlot(new SlotItemHandler(iItemHandler, 5, 80, 30));
+                    addSlot(new SlotItemHandler(iItemHandler, 6, 100, 30));
+                }
+                case DNA_SEQUENCER -> {
+                    addSlot(new SlotItemHandler(iItemHandler, 7, 12, 8));
+                    addSlot(new SlotItemHandler(iItemHandler, 8, 12, 30));
+                    addSlot(new BioengineeringWorkstationResultSlot(iItemHandler, 9, 194, 57, player));
+                    addSlot(new BioengineeringWorkstationResultSlot(iItemHandler, 10, 224, 57, player));
+                }
+            }
+        });
+    }
+
+    public void rebuildSlots(Inventory inv) {
+        slots.clear();
+        addPlayerInventory(inv);
+        addPlayerHotbar(inv);
+        addMenuSlots(tab);
+    }
+
     public boolean isCrafting() {
         return data.get(0) > 0;
+    }
+
+    public boolean isDnaSampleInPlace(int i) {
+        ItemStack stack = slots.get(7 + i).getItem();
+        if (stack.getItem() instanceof DnaHolder dnaHolder) {
+            System.out.println("DNA: " + dnaHolder.hasDna(stack));
+            return dnaHolder.hasDna(stack);
+        }
+        return false;
     }
 
     public int getScaledProgress() {
@@ -61,10 +100,12 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
 
     public void setTab(BioengineeringWorkstationTab tab) {
         this.tab = tab;
+        rebuildSlots(inventory);
     }
 
     public void setTab(int index) {
         this.tab = BioengineeringWorkstationTab.values()[index];
+        rebuildSlots(inventory);
     }
 
     public BioengineeringWorkstationTab getTab() {
@@ -126,8 +167,7 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player pPlayer) {
-        return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()),
-                pPlayer, ModBlocks.BIOENGINEERING_WORKSTATION.get());
+        return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), pPlayer, ModBlocks.BIOENGINEERING_WORKSTATION.get());
     }
 
     private void addPlayerInventory(Inventory playerInventory) {

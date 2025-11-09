@@ -2,6 +2,7 @@ package net.farkas.wildaside.screen.bioengineering_workstation;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.farkas.wildaside.WildAside;
+import net.farkas.wildaside.network.NetworkHandler;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
@@ -12,13 +13,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 public class BioengineeringWorkstationScreen extends AbstractContainerScreen<BioengineeringWorkstationMenu> {
-    private static final ResourceLocation BACKGROUND = new ResourceLocation(WildAside.MOD_ID, "textures/gui/bioengineering_workstation.png");
-    private static final ResourceLocation SEQUENCER = new ResourceLocation(WildAside.MOD_ID, "textures/gui/bioengineering_workstation_sequencer_full.png");
-
-    private int tab = 0;
+    private static BioengineeringWorkstationMenu menu;
+    private static BioengineeringWorkstationTab tab;
+    private static ResourceLocation BACKGROUND;
 
     public BioengineeringWorkstationScreen(BioengineeringWorkstationMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
+        menu = pMenu;
     }
 
     @Override
@@ -27,6 +28,9 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         super.init();
         this.inventoryLabelY = 9999;
         this.titleLabelY = 9999;
+
+        tab = menu.getTab();
+        BACKGROUND = tab.getTexture();
 
         addTabButtons();
     }
@@ -39,19 +43,23 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
-        ResourceLocation background = tab == 0 ? BACKGROUND : SEQUENCER;
+        ResourceLocation background = menu.getTab().getTexture();
         guiGraphics.blit(background, x, y, 0, 0, imageWidth, imageHeight);
 
         renderProgressArrow(guiGraphics, x, y);
-    }
-
-    private void switchTab(int i) {
-        tab = i;
+        renderDnaConnector(guiGraphics, x, y);
     }
 
     private void renderProgressArrow(GuiGraphics guiGraphics, int x, int y) {
-        if (menu.isCrafting()) {
+        if (menu.isCrafting() && tab == BioengineeringWorkstationTab.ASSEMBLER) {
             guiGraphics.blit(BACKGROUND, x + 129, y + 37, 0, 248, menu.getScaledProgress(), 8);
+        }
+    }
+
+    private void renderDnaConnector(GuiGraphics guiGraphics, int x, int y) {
+        if (menu.isDnaSampleInPlace(0) && tab == BioengineeringWorkstationTab.DNA_ANALYZER) {
+            System.out.println("DRAWING CONNECTORS");
+            guiGraphics.blit(BACKGROUND, x + 12, y + 8, 0, 240, 240, 16);
         }
     }
 
@@ -74,18 +82,28 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         }
     }
 
+
+    private void switchTab(BioengineeringWorkstationTab newTab) {
+        if (tab == newTab) return;
+        tab = newTab;
+
+        NetworkHandler.sendBioengineeringWorkstationTabPacket(newTab);
+
+        menu.setTab(newTab);
+    }
+
     private void addTabButtons() {
         this.clearWidgets();
-        this.addWidget(Button.builder(Component.literal("A"), b -> switchTab(0))
+        this.addWidget(Button.builder(Component.literal("A"), b -> switchTab(BioengineeringWorkstationTab.ASSEMBLER))
                 .pos(this.leftPos + 15, this.topPos + 87)
                 .size(26, 25)
-                .tooltip(Tooltip.create(Component.literal("A")))
+                .tooltip(Tooltip.create(Component.literal("ASSEMBLER")))
                 .build());
 
-        this.addWidget(Button.builder(Component.literal("B"), b -> switchTab(1))
+        this.addWidget(Button.builder(Component.literal("B"), b -> switchTab(BioengineeringWorkstationTab.DNA_SEQUENCER))
                 .pos(this.leftPos + 15, this.topPos + 114)
                 .size(26, 25)
-                .tooltip(Tooltip.create(Component.literal("B")))
+                .tooltip(Tooltip.create(Component.literal("DNA_SEQUENCER")))
                 .build());
     }
 }

@@ -43,6 +43,10 @@ public class DnaHolder extends Item {
         super(pProperties);
     }
 
+    public boolean hasDna(ItemStack stack) {
+        return stack.getOrCreateTag().getInt("sample_progress") > 0;
+    }
+
     @Override
     public int getMaxStackSize(ItemStack stack) {
         if (stack.hasTag() && stack.getTag().getInt("sample_progress") > 0) {

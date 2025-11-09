@@ -29,6 +29,7 @@ public class BioengineeringWorkstationTabPacket {
             if (player == null) return;
 
             if (player.containerMenu instanceof BioengineeringWorkstationMenu menu) {
+//                menu.blockEntity.setTab(tabIndex);
                 menu.setTab(tabIndex);
             }
         });
