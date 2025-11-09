@@ -66,8 +66,8 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
                     addSlot(new SlotItemHandler(iItemHandler, 6, 100, 30));
                 }
                 case DNA_SEQUENCER -> {
-                    addSlot(new SlotItemHandler(iItemHandler, 7, 12, 8));
-                    addSlot(new SlotItemHandler(iItemHandler, 8, 12, 30));
+                    addSlot(new DnaInputSlot(iItemHandler, 7, 12, 8));
+                    addSlot(new DnaInputSlot(iItemHandler, 8, 12, 30));
                     addSlot(new BioengineeringWorkstationResultSlot(iItemHandler, 9, 194, 57, player));
                     addSlot(new BioengineeringWorkstationResultSlot(iItemHandler, 10, 224, 57, player));
                 }
