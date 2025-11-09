@@ -1,10 +1,9 @@
 package net.farkas.wildaside.network;
 
 import net.farkas.wildaside.WildAside;
-import net.farkas.wildaside.network.packets.BioengineeringWorkstationTabPacket;
-import net.farkas.wildaside.network.packets.UseAbilityPacket;
-import net.farkas.wildaside.network.packets.WindSyncPacket;
+import net.farkas.wildaside.network.packets.*;
 import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationTab;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -51,6 +50,20 @@ public class NetworkHandler {
                 BioengineeringWorkstationTabPacket::new,
                 BioengineeringWorkstationTabPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
+
+        CHANNEL.registerMessage(id(),
+                GeneSwapPacket.class,
+                GeneSwapPacket::toBytes,
+                GeneSwapPacket::new,
+                GeneSwapPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
+
+        CHANNEL.registerMessage(id(),
+                RecompileDnaPacket.class,
+                RecompileDnaPacket::toBytes,
+                RecompileDnaPacket::new,
+                RecompileDnaPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
     }
 
     public static void sendWindUpdateToAll(Vec3 dir, float strength) {
@@ -75,5 +88,21 @@ public class NetworkHandler {
             return;
         }
         CHANNEL.send(PacketDistributor.SERVER.noArg(), new BioengineeringWorkstationTabPacket(tab.ordinal()));
+    }
+
+    public static void sendBioengineeringWorkstationGeneSwappingPacket(BlockPos pos, int a, int b) {
+        if (CHANNEL == null) {
+            WildAside.LOGGER.warn("Tried to send bioengineering workstation gene swapping update before network init. Ignoring.");
+            return;
+        }
+        CHANNEL.send(PacketDistributor.SERVER.noArg(), new GeneSwapPacket(pos, a, b));
+    }
+
+    public static void sendBioengineeringWorkstationRecompileGenesPacket(BlockPos pos) {
+        if (CHANNEL == null) {
+            WildAside.LOGGER.warn("Tried to send bioengineering workstation gene recompiling update before network init. Ignoring.");
+            return;
+        }
+        CHANNEL.send(PacketDistributor.SERVER.noArg(), new RecompileDnaPacket(pos));
     }
 }
