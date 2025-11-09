@@ -8,6 +8,7 @@ import net.farkas.wildaside.dna.traits.Traits;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -39,5 +40,10 @@ public class GeneItem extends Item {
         if (trait != null) {
             tooltip.add(Component.literal(traitName + ": " + value).withStyle(trait.traitType().headerColour));
         }
+    }
+
+    @Override
+    public void onInventoryTick(ItemStack stack, Level level, Player player, int slotIndex, int selectedIndex) {
+        player.getInventory().removeItem(stack);
     }
 }

@@ -10,6 +10,7 @@ import net.farkas.wildaside.network.packets.RecompileDnaPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
@@ -41,10 +42,6 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         BACKGROUND = tab.getTexture();
 
         addTabButtons();
-
-        this.addRenderableWidget(Button.builder(Component.literal("Recompile DNA"), btn -> {
-            NetworkHandler.sendBioengineeringWorkstationRecompileGenesPacket(menu.blockEntity.getBlockPos());
-        }).pos(leftPos + 160, topPos + 120).size(80, 20).build());
     }
 
     @Override
@@ -59,19 +56,11 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         guiGraphics.blit(background, x, y, 0, 0, imageWidth, imageHeight);
 
         renderProgressArrow(guiGraphics, x, y);
-        renderDnaConnector(guiGraphics, x, y);
     }
 
     private void renderProgressArrow(GuiGraphics guiGraphics, int x, int y) {
         if (menu.isCrafting() && tab == BioengineeringWorkstationTab.ASSEMBLER) {
             guiGraphics.blit(BACKGROUND, x + 129, y + 37, 0, 248, menu.getScaledProgress(), 8);
-        }
-    }
-
-    private void renderDnaConnector(GuiGraphics guiGraphics, int x, int y) {
-        if (menu.isDnaSampleInPlace(0) && tab == BioengineeringWorkstationTab.DNA_ANALYZER) {
-            System.out.println("DRAWING CONNECTORS");
-            guiGraphics.blit(BACKGROUND, x + 12, y + 8, 0, 240, 240, 16);
         }
     }
 
@@ -94,7 +83,6 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         }
     }
 
-
     private void switchTab(BioengineeringWorkstationTab newTab) {
         if (tab == newTab) return;
         tab = newTab;
@@ -102,6 +90,15 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         NetworkHandler.sendBioengineeringWorkstationTabPacket(newTab);
 
         menu.setTab(newTab);
+
+        if (tab == BioengineeringWorkstationTab.DNA_SEQUENCER) {
+            this.addRenderableWidget(Button.builder(Component.literal("Recompile DNA"), btn -> {
+                NetworkHandler.sendBioengineeringWorkstationRecompileGenesPacket(menu.blockEntity.getBlockPos());
+            }).pos(leftPos + 11, topPos + 55).size(80, 20).build());
+        } else {
+            this.clearWidgets();
+            addTabButtons();
+        }
     }
 
     private void addTabButtons() {

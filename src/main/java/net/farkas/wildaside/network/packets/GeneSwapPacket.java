@@ -1,7 +1,6 @@
 package net.farkas.wildaside.network.packets;
 
 import net.farkas.wildaside.block.entity.BioengineeringWorkstationBlockEntity;
-import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -38,7 +37,7 @@ public class GeneSwapPacket {
             if (player == null) return;
 
             if (player.level().getBlockEntity(msg.pos) instanceof BioengineeringWorkstationBlockEntity be) {
-                be.swapGenes(msg.indexA, msg.indexB);
+//                be.swapGenes(msg.indexA, msg.indexB);
             }
         });
         ctx.get().setPacketHandled(true);

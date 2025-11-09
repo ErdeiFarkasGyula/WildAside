@@ -93,7 +93,7 @@ public class ModEvents {
     }
 
     public static void checkTestDimensionEntityRemoves(EntityLeaveLevelEvent event) {
-        if (!Config.ACCURATE_DNA_WATER_MOVEMENT_SPEEDS.get()) return;
+        if (!Config.ACCURATE_DNA_WATER_MOVEMENT_SPEEDS.get() || event.getEntity().level().isClientSide()) return;
 
         if (event.getEntity().level().dimension() == ModDimensions.TEST_LEVEL) {
             if (event.getEntity() instanceof Mob mob && (mob.isSensitiveToWater() || mob.getSpeed() == 0.0 || mob.getDeltaMovement() == Vec3.ZERO)) {
@@ -108,7 +108,7 @@ public class ModEvents {
     }
 
     public static void applyDnaOnJoinLevel(EntityJoinLevelEvent event) {
-        if (event.getLevel().dimension() == ModDimensions.TEST_LEVEL || !Config.ACCURATE_DNA_MOVEMENT_SPEEDS.get()) return;
+        if (event.getLevel().dimension() == ModDimensions.TEST_LEVEL || !Config.ACCURATE_DNA_MOVEMENT_SPEEDS.get() || !(event.getLevel() instanceof ServerLevel)) return;
 
         if (event.getEntity() instanceof LivingEntity livingEntity) {
             livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {

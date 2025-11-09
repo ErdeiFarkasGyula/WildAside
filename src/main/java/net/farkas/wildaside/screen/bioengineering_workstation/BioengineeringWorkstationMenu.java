@@ -28,7 +28,7 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
     private int teSlotCount;
 
     public BioengineeringWorkstationMenu(int pContainerId, Inventory inv, FriendlyByteBuf extraData) {
-        this(pContainerId, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(6));
+        this(pContainerId, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(40));
     }
 
     public BioengineeringWorkstationMenu(int pContainerId, Inventory inv, BlockEntity entity, ContainerData data) {
@@ -70,6 +70,11 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
                     addSlot(new DnaInputSlot(iItemHandler, 8, 12, 30));
                     addSlot(new BioengineeringWorkstationResultSlot(iItemHandler, 9, 194, 57, player));
                     addSlot(new BioengineeringWorkstationResultSlot(iItemHandler, 10, 224, 57, player));
+                    for (int i = 1; i <= 2; i++) {
+                        for (int j = 0; j <= 12; j++) {
+                            addSlot(new GeneSlot(iItemHandler, 11 + i * j, 30 + j * 16, 8 + (i - 1) * 22));
+                        }
+                    }
                 }
             }
 
@@ -87,15 +92,6 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
 
     public boolean isCrafting() {
         return data.get(0) > 0;
-    }
-
-    public boolean isDnaSampleInPlace(int i) {
-        ItemStack stack = slots.get(7 + i).getItem();
-        if (stack.getItem() instanceof DnaHolder dnaHolder) {
-            System.out.println("DNA: " + dnaHolder.hasDna(stack));
-            return dnaHolder.hasDna(stack);
-        }
-        return false;
     }
 
     public int getScaledProgress() {

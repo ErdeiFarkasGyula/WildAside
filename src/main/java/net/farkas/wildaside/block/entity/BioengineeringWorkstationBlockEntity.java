@@ -1,5 +1,9 @@
 package net.farkas.wildaside.block.entity;
 
+import net.farkas.wildaside.capability.dna.DnaImplementation;
+import net.farkas.wildaside.dna.Gene;
+import net.farkas.wildaside.dna.traits.Trait;
+import net.farkas.wildaside.item.custom.DnaHolder;
 import net.farkas.wildaside.recipe.BioengineeringWorkstationRecipe;
 import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationMenu;
 import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationTab;
@@ -27,10 +31,14 @@ import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class  BioengineeringWorkstationBlockEntity extends BlockEntity implements MenuProvider {
-    private final ItemStackHandler itemHandler = new ItemStackHandler(12);
+    private final ItemStackHandler itemHandler = new ItemStackHandler(40);
 
     private static final int INPUT_1 = 0;
     private static final int INPUT_2 = 1;
@@ -157,6 +165,102 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
             }
         } else {
             resetProgress();
+        }
+    }
+
+    public void swapGenesBetweenInputs(int inputSlotIndexA, int traitIndexA, int inputSlotIndexB, int traitIndexB) {
+        ItemStack a = itemHandler.getStackInSlot(inputSlotIndexA);
+        ItemStack b = itemHandler.getStackInSlot(inputSlotIndexB);
+        if (a.isEmpty() || b.isEmpty()) return;
+        if (!(a.getItem() instanceof DnaHolder) || !(b.getItem() instanceof DnaHolder)) return;
+
+        CompoundTag tagA = a.getOrCreateTagElement("dna_data");
+        CompoundTag tagB = b.getOrCreateTagElement("dna_data");
+
+        DnaImplementation dnaA = new DnaImplementation();
+        DnaImplementation dnaB = new DnaImplementation();
+        if (!tagA.isEmpty()) dnaA.deserializeNBT(tagA);
+        if (!tagB.isEmpty()) dnaB.deserializeNBT(tagB);
+
+        List<Map.Entry<Trait, Gene>> entriesA = orderedTraitEntries(dnaA);
+        List<Map.Entry<Trait, Gene>> entriesB = orderedTraitEntries(dnaB);
+
+        if (traitIndexA < 0 || traitIndexA >= entriesA.size()) return;
+        if (traitIndexB < 0 || traitIndexB >= entriesB.size()) return;
+
+        Trait traitA = entriesA.get(traitIndexA).getKey();
+        Trait traitB = entriesB.get(traitIndexB).getKey();
+
+        Gene geneA = dnaA.genes().get(traitA);
+        Gene geneB = dnaB.genes().get(traitB);
+
+        if (geneB != null) {
+            dnaA.genes().put(traitA, new Gene(traitA, geneB.value(), geneB.stabilityCost()));
+        } else {
+            dnaA.genes().remove(traitA);
+        }
+
+        if (geneA != null) {
+            dnaB.genes().put(traitB, new Gene(traitB, geneA.value(), geneA.stabilityCost()));
+        } else {
+            dnaB.genes().remove(traitB);
+        }
+
+        a.getOrCreateTag().put("dna_data", dnaA.serializeNBT());
+        b.getOrCreateTag().put("dna_data", dnaB.serializeNBT());
+
+        itemHandler.setStackInSlot(inputSlotIndexA, a);
+        itemHandler.setStackInSlot(inputSlotIndexB, b);
+
+        setChanged();
+        if (level != null) {
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+        }
+    }
+
+    public static List<Trait> orderedTraits(DnaImplementation dna) {
+        return dna.genes().entrySet().stream()
+                .sorted(Map.Entry.<Trait, Gene>comparingByKey(Comparator.comparing(Trait::name)))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+    }
+
+    public static List<Map.Entry<Trait, Gene>> orderedTraitEntries(DnaImplementation dna) {
+        return dna.genes().entrySet().stream()
+                .sorted(Map.Entry.<Trait, Gene>comparingByKey(Comparator.comparing(Trait::name)))
+                .collect(Collectors.toList());
+    }
+
+    public void recompileDnas() {
+        ItemStack inA = itemHandler.getStackInSlot(7);
+        ItemStack inB = itemHandler.getStackInSlot(8);
+        if (inA.isEmpty() && inB.isEmpty()) return;
+
+        if (!inA.isEmpty() && inA.getItem() instanceof DnaHolder) {
+            ItemStack outA = inA.copy();
+            CompoundTag dnaTag = outA.getOrCreateTagElement("dna_data");
+            DnaImplementation dna = new DnaImplementation();
+            if (!dnaTag.isEmpty()) {
+                dna.deserializeNBT(dnaTag);
+                outA.getOrCreateTag().put("dna_data", dna.serializeNBT());
+            }
+            itemHandler.setStackInSlot(9, outA);
+        }
+
+        if (!inB.isEmpty() && inB.getItem() instanceof DnaHolder) {
+            ItemStack outB = inB.copy();
+            CompoundTag dnaTag = outB.getOrCreateTagElement("dna_data");
+            DnaImplementation dna = new DnaImplementation();
+            if (!dnaTag.isEmpty()) {
+                dna.deserializeNBT(dnaTag);
+                outB.getOrCreateTag().put("dna_data", dna.serializeNBT());
+            }
+            itemHandler.setStackInSlot(10, outB);
+        }
+
+        setChanged();
+        if (level != null) {
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
         }
     }
 
