@@ -42,6 +42,9 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
     public List<Slot> topGeneSlots = new ArrayList<>();
     public List<Slot> botGeneSlots = new ArrayList<>();
 
+    public static final int TOP_GENE_INDEX_START = 11;
+    public static final int BOT_GENE_INDEX_START = TOP_GENE_INDEX_START + 13;
+
     public BioengineeringWorkstationMenu(int pContainerId, Inventory inv, FriendlyByteBuf extraData) {
         this(pContainerId, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(70));
     }
@@ -87,10 +90,10 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
                     addSlot(new BioengineeringWorkstationResultSlot(iItemHandler, 10, 224, 57, player));
 
                     for (int i = 0; i <= 12; i++) {
-                        topGeneSlots.add(addSlot(new GeneSlot(iItemHandler, 11 + i, 30 + i * 16, 8)));
+                        topGeneSlots.add(addSlot(new GeneSlot(iItemHandler, TOP_GENE_INDEX_START + i, 30 + i * 16, 8)));
                     }
                     for (int i = 0; i <= 12; i++) {
-                        botGeneSlots.add(addSlot(new GeneSlot(iItemHandler, 11 + i + 13, 30 + i * 16, 8 + 22)));
+                        botGeneSlots.add(addSlot(new GeneSlot(iItemHandler, BOT_GENE_INDEX_START + i, 30 + i * 16, 8 + 22)));
                     }
                 }
             }
@@ -136,9 +139,6 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
 
                     tag.putString("trait", traitName);
                     tag.putFloat("value", gene.value);
-
-                    System.out.println("Trait Name: " + traitName);
-                    System.out.println("Trait Value: " + gene.value);
 
                     geneStack.setTag(tag);
 

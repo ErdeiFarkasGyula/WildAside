@@ -19,7 +19,6 @@ public class DnaImplementation implements IDna {
     private @Nullable EntityType<?> source;
     private float stability = 100;
     private Map<Trait, Gene> genes = new HashMap<>();
-    private boolean initial = true;
 
     @Override
     public void applyGenes(LivingEntity entity) {
@@ -142,8 +141,6 @@ public class DnaImplementation implements IDna {
         String sourceString = tag.getString("source");
         if (!sourceString.isEmpty()) {
             source = ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(sourceString));
-        } else {
-            source = null;
         }
 
         stability = tag.getFloat("stability");

@@ -30,6 +30,7 @@ public class RecompileDnaPacket {
             if (player == null) return;
 
             if (player.level().getBlockEntity(msg.pos) instanceof BioengineeringWorkstationBlockEntity be) {
+                System.out.println("RECOMP");
                 be.recompileDnas();
             }
         });

@@ -16,8 +16,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
 
 public class BioengineeringWorkstationScreen extends AbstractContainerScreen<BioengineeringWorkstationMenu> {
-    private static BioengineeringWorkstationMenu menu;
-    private static BioengineeringWorkstationTab tab;
+    private final BioengineeringWorkstationMenu menu;
+    private BioengineeringWorkstationTab tab;
     private static ResourceLocation BACKGROUND;
 
     public BioengineeringWorkstationScreen(BioengineeringWorkstationMenu pMenu, Inventory pPlayerInventory, Component pTitle) {

@@ -34,9 +34,6 @@ public class GeneItem extends Item {
         String traitName = tag.getString("trait");
         float value = tag.getFloat("value");
 
-        System.out.println("Trait: " + traitName);
-        System.out.println("Value: " + value);
-
         Trait trait = Traits.getByName(traitName);
         if (trait != null) {
             tooltip.add(Component.literal(traitName + ": " + value).withStyle(trait.traitType().headerColour));
