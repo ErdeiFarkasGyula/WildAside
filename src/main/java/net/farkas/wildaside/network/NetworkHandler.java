@@ -52,13 +52,6 @@ public class NetworkHandler {
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
 
         CHANNEL.registerMessage(id(),
-                GeneSwapPacket.class,
-                GeneSwapPacket::toBytes,
-                GeneSwapPacket::new,
-                GeneSwapPacket::handle,
-                Optional.of(NetworkDirection.PLAY_TO_SERVER));
-
-        CHANNEL.registerMessage(id(),
                 RecompileDnaPacket.class,
                 RecompileDnaPacket::toBytes,
                 RecompileDnaPacket::new,
@@ -88,14 +81,6 @@ public class NetworkHandler {
             return;
         }
         CHANNEL.send(PacketDistributor.SERVER.noArg(), new BioengineeringWorkstationTabPacket(tab.ordinal()));
-    }
-
-    public static void sendBioengineeringWorkstationGeneSwappingPacket(BlockPos pos, int a, int b) {
-        if (CHANNEL == null) {
-            WildAside.LOGGER.warn("Tried to send bioengineering workstation gene swapping update before network init. Ignoring.");
-            return;
-        }
-        CHANNEL.send(PacketDistributor.SERVER.noArg(), new GeneSwapPacket(pos, a, b));
     }
 
     public static void sendBioengineeringWorkstationRecompileGenesPacket(BlockPos pos) {
