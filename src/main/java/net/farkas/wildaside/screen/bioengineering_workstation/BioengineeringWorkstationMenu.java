@@ -5,6 +5,7 @@ import net.farkas.wildaside.block.entity.BioengineeringWorkstationBlockEntity;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.traits.Trait;
+import net.farkas.wildaside.dna.traits.Traits;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.item.custom.DnaHolder;
 import net.farkas.wildaside.screen.ModMenuTypes;
@@ -38,8 +39,8 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
     private int teFirstSlotIndex;
     private int teSlotCount;
 
-    private List<Slot> topGeneSlots = new ArrayList<>();
-    private List<Slot> botGeneSlots = new ArrayList<>();
+    public List<Slot> topGeneSlots = new ArrayList<>();
+    public List<Slot> botGeneSlots = new ArrayList<>();
 
     public BioengineeringWorkstationMenu(int pContainerId, Inventory inv, FriendlyByteBuf extraData) {
         this(pContainerId, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(70));
@@ -106,9 +107,14 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
         addMenuSlots(tab);
     }
 
+    public void clearGenes() {
+        topGeneSlots.forEach(slot -> slot.set(ItemStack.EMPTY));
+        botGeneSlots.forEach(slot -> slot.set(ItemStack.EMPTY));
+    }
+
     public void loadGenes(int i) {
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
-            ItemStack stack =  iItemHandler.getStackInSlot(i);
+            ItemStack stack = iItemHandler.getStackInSlot(i);
             System.out.println("STACK: " + stack);
 
             if (stack.getItem() instanceof DnaHolder dnaHolder) {
@@ -117,19 +123,12 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
                 dna.deserializeNBT(dnaDataTag);
                 Map<Trait, Gene> genes = BioengineeringWorkstationBlockEntity.orderGenes(dna);
 
-                if (i == 7) {
-                    topGeneSlots.forEach(topGeneSlot->{
-                        topGeneSlot.set(ItemStack.EMPTY);
-                    });
-                }
-                else if (i == 8) {
-                    botGeneSlots.forEach(botGeneSlot->{
-                        botGeneSlot.set(ItemStack.EMPTY);
-                    });
-                }
-
-                for (int x = 0; x < genes.size(); x++) {
-                    Gene gene = (Gene) genes.values().toArray()[x];
+                for (int x = 0; x < Traits.TRAITS.size(); x++) {
+                    Trait trait = Traits.TRAITS.get(x);
+                    Gene gene = genes.get(trait);
+                    if (gene == null) {
+                        gene = new Gene(trait, 0, trait.baseInstability());
+                    }
                     String traitName = gene.trait.name();
 
                     ItemStack geneStack = new ItemStack(ModItems.GENE.get());

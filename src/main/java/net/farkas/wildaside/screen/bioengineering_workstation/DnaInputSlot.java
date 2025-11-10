@@ -29,7 +29,10 @@ public class DnaInputSlot extends SlotItemHandler {
     @Override
     public void setChanged() {
         if (menu == null) return;
+        menu.clearGenes();
+        int otherIndex = index == 7 ? 8 : 7;
         menu.loadGenes(index);
+        menu.loadGenes(otherIndex);
         super.setChanged();
     }
 }

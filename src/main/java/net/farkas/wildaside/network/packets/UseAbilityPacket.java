@@ -26,7 +26,7 @@ public class UseAbilityPacket {
                 for (Gene gene : dna.genes().values()) {
                     if (gene.trait().traitType() == TraitTypes.ABILITY) {
                         IAbility ability = Abilities.get(gene.trait());
-                        if (ability != null) {
+                        if (ability != null && gene.value != 0) {
                             ability.onUse(player, gene.value);
                             dna.setStability(dna.stability() - gene.trait().baseInstability() * 0.5f);
                         }
