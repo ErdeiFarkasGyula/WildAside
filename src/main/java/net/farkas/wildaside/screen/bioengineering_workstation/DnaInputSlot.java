@@ -28,7 +28,6 @@ public class DnaInputSlot extends SlotItemHandler {
 
     @Override
     public void setChanged() {
-        System.out.println(menu);
         if (menu == null) return;
         menu.loadGenes(index);
         super.setChanged();

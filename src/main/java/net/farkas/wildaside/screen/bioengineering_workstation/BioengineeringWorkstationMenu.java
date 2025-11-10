@@ -8,6 +8,7 @@ import net.farkas.wildaside.dna.traits.Trait;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.item.custom.DnaHolder;
 import net.farkas.wildaside.screen.ModMenuTypes;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
     public final BioengineeringWorkstationBlockEntity blockEntity;
@@ -40,7 +42,7 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
     private List<Slot> botGeneSlots = new ArrayList<>();
 
     public BioengineeringWorkstationMenu(int pContainerId, Inventory inv, FriendlyByteBuf extraData) {
-        this(pContainerId, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(40));
+        this(pContainerId, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(70));
     }
 
     public BioengineeringWorkstationMenu(int pContainerId, Inventory inv, BlockEntity entity, ContainerData data) {
@@ -87,7 +89,7 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
                         topGeneSlots.add(addSlot(new GeneSlot(iItemHandler, 11 + i, 30 + i * 16, 8)));
                     }
                     for (int i = 0; i <= 12; i++) {
-                        botGeneSlots.add(addSlot(new GeneSlot(iItemHandler, 11 + i + 12, 30 + i * 16, 8 + 22)));
+                        botGeneSlots.add(addSlot(new GeneSlot(iItemHandler, 11 + i + 13, 30 + i * 16, 8 + 22)));
                     }
                 }
             }
@@ -105,34 +107,51 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
     }
 
     public void loadGenes(int i) {
-        ItemStack stack = slots.get(i).getItem();
-        if (stack.getItem() instanceof DnaHolder dnaHolder) {
-            CompoundTag tag = stack.getOrCreateTagElement("dna_data");
-            DnaImplementation dna = new DnaImplementation();
-            dna.deserializeNBT(tag);
-            Map<Trait, Gene> genes = dna.genes();
+        this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
+            ItemStack stack =  iItemHandler.getStackInSlot(i);
+            System.out.println("STACK: " + stack);
 
-            if (i == 7) {
-                topGeneSlots.clear();
-                for (int x = 0; x <= genes.size(); x++) {
-                    Gene gene = (Gene) genes.values().toArray()[0];
+            if (stack.getItem() instanceof DnaHolder dnaHolder) {
+                CompoundTag dnaDataTag = stack.getOrCreateTagElement("dna_data");
+                DnaImplementation dna = new DnaImplementation();
+                dna.deserializeNBT(dnaDataTag);
+                Map<Trait, Gene> genes = BioengineeringWorkstationBlockEntity.orderGenes(dna);
+
+                if (i == 7) {
+                    topGeneSlots.forEach(topGeneSlot->{
+                        topGeneSlot.set(ItemStack.EMPTY);
+                    });
+                }
+                else if (i == 8) {
+                    botGeneSlots.forEach(botGeneSlot->{
+                        botGeneSlot.set(ItemStack.EMPTY);
+                    });
+                }
+
+                for (int x = 0; x < genes.size(); x++) {
+                    Gene gene = (Gene) genes.values().toArray()[x];
                     String traitName = gene.trait.name();
 
                     ItemStack geneStack = new ItemStack(ModItems.GENE.get());
-                    CompoundTag geneTag = stack.getOrCreateTagElement("gene_data");
+                    CompoundTag tag = geneStack.getOrCreateTag();
 
-                    geneTag.putString("trait", traitName);
-                    geneTag.putFloat("value", gene.value);
+                    tag.putString("trait", traitName);
+                    tag.putFloat("value", gene.value);
 
-                    geneStack.setTag(geneTag);
+                    System.out.println("Trait Name: " + traitName);
+                    System.out.println("Trait Value: " + gene.value);
 
-                    topGeneSlots.get(x).set(geneStack);
+                    geneStack.setTag(tag);
 
-                    System.out.println("Trait: " + traitName);
-                    System.out.println("Gene: " + gene.trait.name());
+                    if (i == 7) {
+                        topGeneSlots.get(x).set(geneStack);
+                    }
+                    else if (i == 8) {
+                        botGeneSlots.get(x).set(geneStack);
+                    }
                 }
             }
-        }
+        });
     }
 
     public boolean isCrafting() {

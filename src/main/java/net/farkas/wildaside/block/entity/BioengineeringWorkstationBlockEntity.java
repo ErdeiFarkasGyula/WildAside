@@ -35,7 +35,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class  BioengineeringWorkstationBlockEntity extends BlockEntity implements MenuProvider {
-    private final ItemStackHandler itemHandler = new ItemStackHandler(40);
+    private final ItemStackHandler itemHandler = new ItemStackHandler(70);
 
     private static final int INPUT_1 = 0;
     private static final int INPUT_2 = 1;
@@ -226,6 +226,13 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
         return dna.genes().entrySet().stream()
                 .sorted(Map.Entry.<Trait, Gene>comparingByKey(Comparator.comparing(Trait::name)))
                 .collect(Collectors.toList());
+    }
+
+    public static Map<Trait, Gene> orderGenes(DnaImplementation dna) {
+        return dna.genes().entrySet().stream()
+                .sorted(Map.Entry.comparingByKey(Comparator.comparing(Trait::name)))
+                .sorted(Map.Entry.comparingByKey(Comparator.comparing(Trait::traitType)))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));
     }
 
     public void recompileDnas() {
