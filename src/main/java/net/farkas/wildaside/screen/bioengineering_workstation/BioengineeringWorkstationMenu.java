@@ -84,16 +84,16 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
                     addSlot(new SlotItemHandler(iItemHandler, 6, 100, 30));
                 }
                 case DNA_SEQUENCER -> {
-                    addSlot(new DnaInputSlot(this, iItemHandler, 7, 12, 8));
-                    addSlot(new DnaInputSlot(this, iItemHandler, 8, 12, 30));
-                    addSlot(new BioengineeringWorkstationResultSlot(iItemHandler, 9, 194, 57, player));
-                    addSlot(new BioengineeringWorkstationResultSlot(iItemHandler, 10, 224, 57, player));
+                    addSlot(new DnaInputSlot(this, iItemHandler, 7, 15, 8));
+                    addSlot(new DnaInputSlot(this, iItemHandler, 8, 15, 30));
+                    addSlot(new BioengineeringWorkstationResultSlot(iItemHandler, 9, 191, 57, player));
+                    addSlot(new BioengineeringWorkstationResultSlot(iItemHandler, 10, 221, 57, player));
 
                     for (int i = 0; i <= 12; i++) {
-                        topGeneSlots.add(addSlot(new GeneSlot(iItemHandler, TOP_GENE_INDEX_START + i, 30 + i * 16, 8)));
+                        topGeneSlots.add(addSlot(new GeneSlot(iItemHandler, TOP_GENE_INDEX_START + i, 33 + i * 16, 8)));
                     }
                     for (int i = 0; i <= 12; i++) {
-                        botGeneSlots.add(addSlot(new GeneSlot(iItemHandler, BOT_GENE_INDEX_START + i, 30 + i * 16, 8 + 22)));
+                        botGeneSlots.add(addSlot(new GeneSlot(iItemHandler, BOT_GENE_INDEX_START + i, 33 + i * 16, 8 + 22)));
                     }
                 }
             }

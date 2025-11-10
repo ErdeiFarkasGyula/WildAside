@@ -98,21 +98,24 @@ public class DnaUtils {
 
         long seed = entity.getUUID().getLeastSignificantBits();
 
-        if (entity.fireImmune()) {
-            putResistanceWithGaussian(genes, Traits.FIRE_RESISTANCE, seed);
-        }
-        if (entity.getType().is(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES)) {
-            putResistanceWithGaussian(genes, Traits.FREEZE_RESISTANCE, seed);
-        }
-        if (entity.getType().is(EntityTypeTags.FALL_DAMAGE_IMMUNE)) {
-            putResistanceWithGaussian(genes, Traits.FALL_RESISTANCE, seed);
-        }
+        putGaussianOrZero(genes, Traits.FIRE_RESISTANCE, seed, entity.fireImmune());
+        putGaussianOrZero(genes, Traits.FREEZE_RESISTANCE, seed, entity.getType().is(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES));
+        putGaussianOrZero(genes, Traits.FALL_RESISTANCE, seed, entity.getType().is(EntityTypeTags.FALL_DAMAGE_IMMUNE));
+        putGaussianOrZero(genes, Traits.FIRE_ABILITY, seed, entity.getType().is(EntityTypeTags.FALL_DAMAGE_IMMUNE));
 
         if (entity.getType() == EntityType.BLAZE) {
             putAbilityWithGaussian(genes, Traits.FIRE_ABILITY, seed);
         }
 
         return genes;
+    }
+
+    private static void putGaussianOrZero(Map<Trait, Gene> genes, Trait trait, long seed, boolean condition) {
+        if (condition) {
+            putResistanceWithGaussian(genes, trait, seed);
+        } else {
+            genes.put(trait, new Gene(trait, 0.0f, trait.baseInstability()));
+        }
     }
 
     private static void putResistanceWithGaussian(Map<Trait, Gene> genes, Trait trait, long seed) {

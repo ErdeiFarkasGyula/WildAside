@@ -116,7 +116,6 @@ public class DnaHolder extends Item {
             if (!hasMutated) {
                 baseGenes.set(DnaUtils.mutateGenes(dna.genes(), target));
                 if (Config.ACCURATE_DNA_MOVEMENT_SPEEDS.get()) {
-                    RandomSource random = RandomSource.create(target.getUUID().getLeastSignificantBits());
                     Trait trait = Traits.MOVEMENT_SPEED;
                     Gene gene = DnaUtils.mutateGene(new Gene(trait, (float) MobSpeedResultStorage.getSpeed(target.getType(), "ground"), trait.baseInstability()), target);
                     baseGenes.get().replace(trait, gene);
@@ -124,7 +123,6 @@ public class DnaHolder extends Item {
             } else {
                 baseGenes.set(dna.genes());
             }
-
 
             float currentStability;
             if (existingDna != null) {
@@ -149,13 +147,15 @@ public class DnaHolder extends Item {
 
         if (existingDna != null) {
             Map<Trait, Gene> averaged = new HashMap<>();
-            for (Trait trait : baseGenes.get().keySet()) {
+            for (Trait trait : Traits.TRAITS) {
                 Gene oldGene = existingDna.genes().get(trait);
                 Gene newGene = baseGenes.get().get(trait);
                 float oldValue = oldGene != null ? oldGene.value() : 0f;
-                float newValue = newGene.value();
+                float newValue = newGene != null ? newGene.value : 0f;
                 float avg = ((oldValue * (progress - 1)) + newValue) / progress;
-                averaged.put(trait, new Gene(trait, avg, newGene.stabilityCost()));
+                float stabilityCost = newGene != null ? newGene.stabilityCost() : trait.baseInstability();
+
+                averaged.put(trait, new Gene(trait, avg, stabilityCost));
             }
             newDna.setGenes(averaged);
         }
