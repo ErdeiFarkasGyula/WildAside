@@ -44,6 +44,11 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
     private static final int INPUT_5 = 4;
     private static final int OUTPUT_1 = 5;
 
+    private static final int DNA_INPUT_1 = 7;
+    private static final int DNA_INPUT_2 = 8;
+    private static final int DNA_OUTPUT_1 = 9;
+    private static final int DNA_OUTPUT_2 = 10;
+
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
     protected final ContainerData data;
@@ -165,69 +170,6 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
         }
     }
 
-    public void swapGenesBetweenInputs(int inputSlotIndexA, int traitIndexA, int inputSlotIndexB, int traitIndexB) {
-        ItemStack a = itemHandler.getStackInSlot(inputSlotIndexA);
-        ItemStack b = itemHandler.getStackInSlot(inputSlotIndexB);
-        if (a.isEmpty() || b.isEmpty()) return;
-        if (!(a.getItem() instanceof DnaHolder) || !(b.getItem() instanceof DnaHolder)) return;
-
-        CompoundTag tagA = a.getOrCreateTagElement("dna_data");
-        CompoundTag tagB = b.getOrCreateTagElement("dna_data");
-
-        DnaImplementation dnaA = new DnaImplementation();
-        DnaImplementation dnaB = new DnaImplementation();
-        if (!tagA.isEmpty()) dnaA.deserializeNBT(tagA);
-        if (!tagB.isEmpty()) dnaB.deserializeNBT(tagB);
-
-        List<Map.Entry<Trait, Gene>> entriesA = orderedTraitEntries(dnaA);
-        List<Map.Entry<Trait, Gene>> entriesB = orderedTraitEntries(dnaB);
-
-        if (traitIndexA < 0 || traitIndexA >= entriesA.size()) return;
-        if (traitIndexB < 0 || traitIndexB >= entriesB.size()) return;
-
-        Trait traitA = entriesA.get(traitIndexA).getKey();
-        Trait traitB = entriesB.get(traitIndexB).getKey();
-
-        Gene geneA = dnaA.genes().get(traitA);
-        Gene geneB = dnaB.genes().get(traitB);
-
-        if (geneB != null) {
-            dnaA.genes().put(traitA, new Gene(traitA, geneB.value(), geneB.stabilityCost()));
-        } else {
-            dnaA.genes().remove(traitA);
-        }
-
-        if (geneA != null) {
-            dnaB.genes().put(traitB, new Gene(traitB, geneA.value(), geneA.stabilityCost()));
-        } else {
-            dnaB.genes().remove(traitB);
-        }
-
-        a.getOrCreateTag().put("dna_data", dnaA.serializeNBT());
-        b.getOrCreateTag().put("dna_data", dnaB.serializeNBT());
-
-        itemHandler.setStackInSlot(inputSlotIndexA, a);
-        itemHandler.setStackInSlot(inputSlotIndexB, b);
-
-        setChanged();
-        if (level != null) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
-        }
-    }
-
-    public static List<Trait> orderedTraits(DnaImplementation dna) {
-        return dna.genes().entrySet().stream()
-                .sorted(Map.Entry.<Trait, Gene>comparingByKey(Comparator.comparing(Trait::name)))
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
-    }
-
-    public static List<Map.Entry<Trait, Gene>> orderedTraitEntries(DnaImplementation dna) {
-        return dna.genes().entrySet().stream()
-                .sorted(Map.Entry.<Trait, Gene>comparingByKey(Comparator.comparing(Trait::name)))
-                .collect(Collectors.toList());
-    }
-
     public static Map<Trait, Gene> orderGenes(DnaImplementation dna) {
         return dna.genes().entrySet().stream()
                 .sorted(Map.Entry.comparingByKey(Comparator.comparing(Trait::name)))
@@ -236,8 +178,8 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
     }
 
     public void recompileDnas() {
-        ItemStack inA = itemHandler.getStackInSlot(7);
-        ItemStack inB = itemHandler.getStackInSlot(8);
+        ItemStack inA = itemHandler.getStackInSlot(DNA_OUTPUT_1);
+        ItemStack inB = itemHandler.getStackInSlot(DNA_INPUT_2);
         if (inA.isEmpty() && inB.isEmpty()) return;
 
         if (!inA.isEmpty() && inA.getItem() instanceof DnaHolder) {
