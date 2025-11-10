@@ -30,11 +30,9 @@ public class GeneItem extends Item {
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag isAdvanced) {
         super.appendHoverText(stack, level, tooltip, isAdvanced);
 
-        CompoundTag tag = stack.getOrCreateTag();
-        tag.putString("gene_trait", "attack_damage");
-        tag.putFloat("gene_value", 0.2f);
-        String traitName = tag.getString("gene_trait");
-        float value = tag.getFloat("gene_value");
+        CompoundTag tag = stack.getOrCreateTagElement("gene_data");
+        String traitName = tag.getString("trait");
+        float value = tag.getFloat("value");
 
         Trait trait = Traits.getByName(traitName);
         if (trait != null) {
