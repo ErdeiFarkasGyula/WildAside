@@ -10,6 +10,20 @@
   "item.wildaside.fertiliser_bomb": "Trágya bomba",
   "item.wildaside.hickory_nut": "Hikori dió",
 
+  "item.wildaside.dna_holder": "DNS Tartó",
+  "item.wildaside.gene": "Gén",
+
+  "dna.wildaside.dna_mismatch": "DNS párosítási hiba",
+  "dna.wildaside.sample_progress": "Mintavételi haladás",
+  "dna.wildaside.no_dna_data": "Nincs DNS adat",
+  "dna.wildaside.dna_data_hidden": "DNS adat rejtve",
+  "dna.wildaside.unknown": "Ismeretlen",
+  "dna.wildaside.source": "Forrás",
+  "dna.wildaside.stability": "Stabilitás",
+  "dna.wildaside.core_traits": "Alap tulajdonságok",
+  "dna.wildaside.resistances": "Ellenállások",
+  "dna.wildaside.abilities": "Képességek",
+
   "item.wildaside.hickory_nut_trail_mix": "Hikori dió diákcsemege",
   "item.wildaside.red_hickory_nut_trail_mix": "Vörös hikori dió diákcsemege",
   "item.wildaside.brown_hickory_nut_trail_mix": "Barna hikori dió diákcsemege",
@@ -213,5 +227,19 @@
   "sounds.wildaside.music.vibrion_hive": "Vibrion Hive - Erdei Farkas Gyula",
   "sounds.wildaside.entity.mucellith.ambient": "Mucellith morog",
   "sounds.wildaside.entity.mucellith.hurt": "Mucellith sérül",
-  "sounds.wildaside.entity.mucellith.death": "Mucellith meghal"
+  "sounds.wildaside.entity.mucellith.death": "Mucellith meghal",
+
+  "trait.wildaside.max_health": "Max életerő",
+  "trait.wildaside.movement_speed": "Mozgási sebesség",
+  "trait.wildaside.attack_damage": "Támadási erő",
+  "trait.wildaside.attack_speed": "Támadási sebesség",
+  "trait.wildaside.attack_knockback": "Támadási hátralökés",
+  "trait.wildaside.armor": "Páncélzat",
+  "trait.wildaside.armor_toughness": "Páncélzati erősség",
+  "trait.wildaside.knockback_resistance": "Hátralökési ellenállás",
+  "trait.wildaside.fire_resistance": "Tűz ellenállás",
+  "trait.wildaside.fall_resistance": "Esés ellenállás",
+  "trait.wildaside.explosion_resistance": "Robbanás ellenállás",
+  "trait.wildaside.freeze_resistance": "Fagyás ellenállás",
+  "trait.wildaside.fire_ability": "Tűz képesség"
 }

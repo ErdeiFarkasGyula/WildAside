@@ -10,6 +10,20 @@
   "item.wildaside.fertiliser_bomb": "Fertilizer Bomb",
   "item.wildaside.hickory_nut": "Hickory Nut",
 
+  "item.wildaside.dna_holder": "DNA Holder",
+  "item.wildaside.gene": "Gene",
+
+  "dna.wildaside.dna_mismatch": "DNA Mismatch",
+  "dna.wildaside.sample_progress": "Sample Progress",
+  "dna.wildaside.no_dna_data": "No DNA Data",
+  "dna.wildaside.dna_data_hidden": "DNA Data Hidden",
+  "dna.wildaside.unknown": "Unknown",
+  "dna.wildaside.source": "Source",
+  "dna.wildaside.stability": "Stability",
+  "dna.wildaside.core_traits": "Core Traits",
+  "dna.wildaside.resistances": "Resistances",
+  "dna.wildaside.abilities": "Abilities",
+
   "item.wildaside.hickory_nut_trail_mix": "Hickory Nut Trail Mix",
   "item.wildaside.red_hickory_nut_trail_mix": "Red Hickory Nut Trail Mix",
   "item.wildaside.brown_hickory_nut_trail_mix": "Brown Hickory Nut Trail Mix",
@@ -213,5 +227,19 @@
   "sounds.wildaside.music.vibrion_hive": "Vibrion Hive - Erdei Farkas Gyula",
   "sounds.wildaside.entity.mucellith.ambient": "Mucellith growls",
   "sounds.wildaside.entity.mucellith.hurt": "Mucellith hurts",
-  "sounds.wildaside.entity.mucellith.death": "Mucellith dies"
+  "sounds.wildaside.entity.mucellith.death": "Mucellith dies",
+
+  "trait.wildaside.max_health": "Max Health",
+  "trait.wildaside.movement_speed": "Movement Speed",
+  "trait.wildaside.attack_damage": "Attack Damage",
+  "trait.wildaside.attack_speed": "Attack Speed",
+  "trait.wildaside.attack_knockback": "Attack Knockback",
+  "trait.wildaside.armor": "Armor",
+  "trait.wildaside.armor_toughness": "Armor Toughness",
+  "trait.wildaside.knockback_resistance": "Knockback Resistance",
+  "trait.wildaside.fire_resistance": "Fire Resistance",
+  "trait.wildaside.fall_resistance": "Fall Resistance",
+  "trait.wildaside.explosion_resistance": "Explosion Resistance",
+  "trait.wildaside.freeze_resistance": "Freeze Resistance",
+  "trait.wildaside.fire_ability": "Fire Ability"
 }

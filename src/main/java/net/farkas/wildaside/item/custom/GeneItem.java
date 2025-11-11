@@ -1,11 +1,7 @@
 package net.farkas.wildaside.item.custom;
 
-import net.farkas.wildaside.capability.dna.DnaImplementation;
-import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.traits.Trait;
-import net.farkas.wildaside.dna.traits.TraitTypes;
 import net.farkas.wildaside.dna.traits.Traits;
-import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
@@ -15,11 +11,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class GeneItem extends Item {
     public GeneItem(Properties pProperties) {
@@ -36,7 +28,9 @@ public class GeneItem extends Item {
 
         Trait trait = Traits.getByName(traitName);
         if (trait != null) {
-            tooltip.add(Component.literal(traitName + ": " + value).withStyle(trait.traitType().headerColour));
+            tooltip.add(Component.translatable("trait.wildaside." + traitName)
+                    .append(Component.literal(": " + String.format("%.2f", value)))
+                    .withStyle(trait.traitType().headerColour));
         }
     }
 

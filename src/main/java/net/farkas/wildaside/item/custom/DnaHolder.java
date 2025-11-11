@@ -15,7 +15,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
@@ -66,7 +65,7 @@ public class DnaHolder extends Item {
             dna.deserializeNBT(dnaTag);
 
             if (dna.source() != null && dna.source() != target.getType()) {
-                player.displayClientMessage(Component.literal("DNA mismatch!").withStyle(ChatFormatting.RED), true);
+                player.displayClientMessage(Component.translatable("dna.wildaside.dna_mismatch").withStyle(ChatFormatting.RED), true);
                 return InteractionResult.sidedSuccess(player.level().isClientSide());
             }
         }
@@ -193,11 +192,14 @@ public class DnaHolder extends Item {
         int progress = getSampleProgress(stack);
         int maxSamples = getMaxSamples(stack);
 
-        tooltip.add(Component.literal("Sample Progress: " + progress + "/" + maxSamples)
-                .withStyle(progress >= maxSamples ? ChatFormatting.GREEN : ChatFormatting.GRAY));
+        Component sampleComponent = Component.translatable("dna.wildaside.sample_progress")
+                .append(Component.literal(": " + progress + "/" + maxSamples))
+                .withStyle(progress >= maxSamples ? ChatFormatting.GREEN : ChatFormatting.GRAY);
+        tooltip.add(sampleComponent);
 
         if (!tag.contains("dna_data")) {
-            tooltip.add(Component.literal("No DNA stored").withStyle(ChatFormatting.DARK_GRAY));
+            tooltip.add(Component.translatable("dna.wildaside.no_dna_data")
+                    .withStyle(ChatFormatting.DARK_GRAY));
             return;
         }
 
@@ -209,25 +211,30 @@ public class DnaHolder extends Item {
         boolean revealTraits = tag.getBoolean("reveal_traits");
 
         if (!(revealSource || revealStability || revealTraits)) {
-            tooltip.add(Component.literal("DNA data hidden").withStyle(ChatFormatting.STRIKETHROUGH, ChatFormatting.DARK_GRAY));
+            tooltip.add(Component.translatable("dna.wildaside.dna_data_hidden")
+                    .withStyle(ChatFormatting.STRIKETHROUGH, ChatFormatting.DARK_GRAY));
             return;
         }
 
         if (revealSource) {
-            String sourceName = dna.source() != null
-                    ? ForgeRegistries.ENTITY_TYPES.getKey(dna.source()).getPath()
-                    : "Unknown";
-            tooltip.add(Component.literal("Source: " + sourceName).withStyle(ChatFormatting.AQUA));
+            Component sourceName = dna.source() != null
+                    ? dna.source().getDescription()
+                    : Component.translatable("dna.wildaside.unknown");
+            tooltip.add(Component.translatable("dna.wildaside.source")
+                    .append(": " + sourceName.getString())
+                    .withStyle(ChatFormatting.AQUA));
         }
 
         if (revealStability) {
-            tooltip.add(Component.literal("Stability: " + String.format("%.2f", dna.stability())).withStyle(ChatFormatting.GREEN));
+            tooltip.add(Component.translatable("dna.wildaside.stability")
+                    .append(": " + String.format("%.2f", dna.stability()))
+                    .withStyle(ChatFormatting.GREEN));
         }
 
         if (revealTraits) {
-            displayGenesSection(tooltip, dna, TraitTypes.CORE, "Core Stats:");
-            displayGenesSection(tooltip, dna, TraitTypes.RESISTANCE, "Resistances:");
-            displayGenesSection(tooltip, dna, TraitTypes.ABILITY, "Abilities:");
+            displayGenesSection(tooltip, dna, TraitTypes.CORE, "dna.wildaside.core_traits");
+            displayGenesSection(tooltip, dna, TraitTypes.RESISTANCE, "dna.wildaside.resistances");
+            displayGenesSection(tooltip, dna, TraitTypes.ABILITY, "dna.wildaside.abilities");
         }
     }
 
@@ -239,20 +246,24 @@ public class DnaHolder extends Item {
 
         if (filtered.isEmpty()) return;
 
-        tooltip.add(Component.literal(title).withStyle(type.headerColour));
+        tooltip.add(Component.translatable(title).withStyle(type.headerColour));
+
         filtered.values().forEach(gene -> {
             float value = gene.value();
             String valueStr = String.format("%.2f", value);
 
             if (type == TraitTypes.ABILITY) {
                 value /= 20;
-                valueStr = String.format("%.2f", value) + " s";
+                valueStr = String.format("%.2f", value) + "s";
             } else if (type == TraitTypes.RESISTANCE) {
                 value *= 100;
-                valueStr = String.format("%.2f", value) + " %";
+                valueStr = String.format("%.2f", value) + "%";
             }
 
-            tooltip.add(Component.literal("- " + gene.trait().name() + ": " + valueStr).withStyle(type.entryColour));
+            tooltip.add(Component.literal("- ")
+                    .append(Component.translatable("trait.wildaside." + gene.trait().name()))
+                    .append(": " + valueStr)
+                    .withStyle(type.entryColour));
         });
     }
 
