@@ -88,7 +88,7 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         if (tab == BioengineeringWorkstationTab.DNA_SEQUENCER) {
             this.addRenderableWidget(Button.builder(Component.translatable("gui.wildaside.bioengineering_workstation.recompile_dna"), btn -> {
                 NetworkHandler.sendBioengineeringWorkstationRecompileGenesPacket(menu.blockEntity.getBlockPos());
-            }).pos(leftPos + 14, topPos + 55).size(80, 20).build());
+            }).pos(leftPos + 14, topPos + 55).size(100, 20).build());
         } else {
             this.clearWidgets();
             addTabButtons();

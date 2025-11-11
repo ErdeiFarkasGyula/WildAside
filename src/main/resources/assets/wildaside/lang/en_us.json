@@ -1,5 +1,6 @@
 {
   "mod.wildaside": "Wild Aside",
+  "resourcepack.wildaside.wildaside_legacy": "Wild Aside Legacy",
 
   "creativetab.wildaside_tab": "Wild Aside",
 
@@ -249,11 +250,32 @@
   "gui.wildaside.bioengineering_workstation.dna_sequencer":  "DNA Sequencer",
   "gui.wildaside.bioengineering_workstation.recompile_dna":  "Recompile DNA",
 
-  "command.wildaside.dna.trait_applied": "Applied %s (%s) to %s",
+  "command.wildaside.contamination.apply_contamination": "Applied %1$s to %2$s to %3$s",
+  "command.wildaside.contamination.add_contamination": "Added %1$s of %2$s %3$s",
+  "command.wildaside.contamination.get_contamination": "%1$s has %2$s %3$s",
+  "command.wildaside.contamination.set_contamination": "Set %1$s of %2$s to %3$f",
+  "command.wildaside.contamination.clear_contamination": "Cleared %1$s of %2$s",
+  "command.wildaside.contamination.no_valid_entities": "No valid entities",
+  "command.wildaside.contamination.invalid_action": "Invalid action: %s",
+  "command.wildaside.contamination.action.add": "Add",
+  "command.wildaside.contamination.action.get": "Get",
+  "command.wildaside.contamination.action.set": "Set",
+  "command.wildaside.contamination.action.clear": "Clear",
+  "command.wildaside.contamination.entity": "Entity",
+  "command.wildaside.contamination.entities": "Entities",
+  "command.wildaside.dna.set_trait": "Set %1$s of %2$s to %3$s",
+  "command.wildaside.dna.get_trait": "%1$s has %2$s of %3$s",
+  "command.wildaside.dna.unknown_trait": "Unknown Trait: %s",
+  "command.wildaside.update_notification": "[%1$s] Update notifications: %2$s",
+  "command.wildaside.wind.set": "Set wind to (%2$s, %2$s, %3$s), strength = %4$s",
+  "command.wildaside.wind.random": "Set random wind to (%1$s, %2$s, %3$s), strength = %4$s",
+  "command.wildaside.wind.get": "Current wind: (%1$s, %2$s, %3$s), strength = %4$s",
 
   "update_checker.wildaside.curseforge_page": "CurseForge Page",
   "update_checker.wildaside.modrinth_page": "Modrinth Page",
   "update_checker.wildaside.dont_show_again": "Don't show again",
-  "update_checker.wildaside.update_available": "[Wild Aside] A new version %s is available! (You have %s)"
+  "update_checker.wildaside.update_available": "[%1$s] A new version, %s is available! (You have %2$s)",
 
+  "general.wildaside.enabled": "Enabled",
+  "general.wildaside.disabled": "Disabled"
 }

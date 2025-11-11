@@ -1,4 +1,7 @@
 {
+  "mod.wildaside": "Wild Aside",
+  "resourcepack.wildaside.wildaside_legacy": "Wild Aside Legacy",
+
   "creativetab.wildaside_tab": "Wild Aside",
 
   "item.wildaside.vibrion": "Vibrion",
@@ -241,5 +244,38 @@
   "trait.wildaside.fall_resistance": "Esés ellenállás",
   "trait.wildaside.explosion_resistance": "Robbanás ellenállás",
   "trait.wildaside.freeze_resistance": "Fagyás ellenállás",
-  "trait.wildaside.fire_ability": "Tűz képesség"
+  "trait.wildaside.fire_ability": "Tűz képesség",
+
+  "gui.wildaside.bioengineering_workstation.bio_assembler":  "Bio összeszerelő",
+  "gui.wildaside.bioengineering_workstation.dna_sequencer":  "DNS szekvenszer",
+  "gui.wildaside.bioengineering_workstation.recompile_dna":  "DNS újraalkotása",
+
+  "command.wildaside.contamination.apply_contamination": "%1$s elvégezve %2$s %3$s",
+  "command.wildaside.contamination.add_contamination": "%3$s: %1$s %2$s hozzáadva",
+  "command.wildaside.contamination.get_contamination": "%1$s: %2$s %3$s",
+  "command.wildaside.contamination.set_contamination": "%2$s: %1$s beállítva: %3$f",
+  "command.wildaside.contamination.clear_contamination": "%2$s: %1$s lenullázva",
+  "command.wildaside.contamination.no_valid_entities": "Nincs érvényes entitás",
+  "command.wildaside.contamination.invalid_action": "Érvénytelen akció: %s",
+  "command.wildaside.contamination.action.add": "Hozzáad",
+  "command.wildaside.contamination.action.get": "Lekér",
+  "command.wildaside.contamination.action.set": "Beállít",
+  "command.wildaside.contamination.action.clear": "Lenulláz",
+  "command.wildaside.contamination.entity": "Entitásra",
+  "command.wildaside.contamination.entities": "Entitásra",
+  "command.wildaside.dna.set_trait": "%2$s: %1$s beállítva: %3$s",
+  "command.wildaside.dna.get_trait": "%1$s: %2$s %3$s",
+  "command.wildaside.dna.unknown_trait": "Ismeretlen tulajdonság: %s",
+  "command.wildaside.update_notification": "[%1$s] Frissítési értesítés: %2$s",
+  "command.wildaside.wind.set": "Szél beállítva: (%2$s, %2$s, %3$s), erősség = %4$s",
+  "command.wildaside.wind.random": "Véletlenszerű szél beállítva: (%1$s, %2$s, %3$s), erősség = %4$s",
+  "command.wildaside.wind.get": "Jelenlegi szél: (%1$s, %2$s, %3$s), erősség = %4$s",
+
+  "update_checker.wildaside.curseforge_page": "CurseForge oldal",
+  "update_checker.wildaside.modrinth_page": "Modrinth oldal",
+  "update_checker.wildaside.dont_show_again": "Többet ne mutassd",
+  "update_checker.wildaside.update_available": "[%1$s] Egy új verzió, a %s már elérhető! (Jelenleg használt: %2$s)",
+
+  "general.wildaside.enabled": "Bekapcsolva",
+  "general.wildaside.disabled": "Kikapcsolva"
 }

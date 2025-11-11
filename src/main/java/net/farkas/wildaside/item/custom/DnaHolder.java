@@ -159,7 +159,6 @@ public class DnaHolder extends Item {
             newDna.setGenes(averaged);
         }
 
-
         tag.put("dna_data", newDna.serializeNBT());
 
         tag.putBoolean("reveal_source", false);

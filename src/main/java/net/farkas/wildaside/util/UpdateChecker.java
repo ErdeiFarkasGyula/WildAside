@@ -50,6 +50,7 @@ public class UpdateChecker {
                         var player = Minecraft.getInstance().player;
 
                         player.sendSystemMessage(Component.translatable("update_checker.wildaside.update_available",
+                                        Component.translatable("mod.wildaside"),
                                         Component.literal(latest).withStyle(ChatFormatting.YELLOW),
                                         Component.literal(currentVersion).withStyle(ChatFormatting.GRAY))
                                 .withStyle(ChatFormatting.GOLD)

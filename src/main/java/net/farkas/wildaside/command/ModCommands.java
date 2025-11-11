@@ -15,7 +15,6 @@ import net.farkas.wildaside.network.WindSavedData;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.farkas.wildaside.network.WindData;
 import net.farkas.wildaside.util.WindManager;
-import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -68,8 +67,7 @@ public class ModCommands {
                                                                     windSavedData.setWind(vec, s);
 
                                                                     ctx.getSource().sendSuccess(
-                                                                            () -> Component.literal("Set wind to (" + x + ", " + y + ", " + z + ") strength=" + s),
-                                                                            true
+                                                                            () -> Component.translatable("command.wildaside.wind.set", x, y, z, s), true
                                                                     );
                                                                     return Command.SINGLE_SUCCESS;
                                                                 })
@@ -86,8 +84,7 @@ public class ModCommands {
                                     Vec3 dir = windData.direction();
 
                                     ctx.getSource().sendSuccess(
-                                            () -> Component.literal("Set random wind to (" + dir.x + ", " + dir.y + ", " + dir.z + ") strength=" + windData.strength()),
-                                            true
+                                            () -> Component.translatable("command.wildaside.wind.random", dir.x, dir.y, dir.z, windData.strength()), true
                                     );
                                     return Command.SINGLE_SUCCESS;
                                 })
@@ -98,8 +95,7 @@ public class ModCommands {
                                     float strength = WindManager.getStrength();
                                     Vec3 dir = WindManager.getDirection();
                                     ctx.getSource().sendSuccess(
-                                            () -> Component.literal("Current wind: (" + dir.x + ", " + dir.y + ", " + dir.z + ") strength=" + strength),
-                                            false
+                                            () -> Component.translatable("command.wildaside.wind.get", dir.x, dir.y, dir.z, strength), false
                                     );
                                     return Command.SINGLE_SUCCESS;
                                 })
@@ -114,7 +110,9 @@ public class ModCommands {
                                         boolean value = BoolArgumentType.getBool(context, "enabled");
                                         Config.setShowUpdates(value);
                                         context.getSource().sendSuccess(() ->
-                                                Component.literal("§7[Wild Aside] Update notifications " + (value ? "enabled" : "disabled") + "."), false);
+                                                Component.translatable("command.wildaside.update_notification",
+                                                Component.translatable("mod.wildaside"),
+                                                Component.translatable(value ? "general.wildaside.enabled" : "general.wildaside.disabled")), false);
                                         return Command.SINGLE_SUCCESS;
                                 })
                         )
@@ -168,37 +166,41 @@ public class ModCommands {
             switch (action.toLowerCase()) {
                 case "add" -> {
                     ContaminationHandler.addDose(living, amount);
-                    source.sendSuccess(() -> Component.literal("Added " + amount + " of contamination to " + living.getName().getString()), false);
+                    source.sendSuccess(() -> Component.translatable("command.wildaside.contamination.add_contamination",
+                            amount, Component.translatable("effect.wildaside.contamination"), living.getName()), false);
                     affected++;
                 }
                 case "get" -> {
                     int current = ContaminationHandler.getDose(living);
-                    source.sendSuccess(() -> Component.literal(living.getName().getString() + " has " + current + " contamination"), false);
+                    source.sendSuccess(() -> Component.translatable("command.wildaside.contamination.get_contamination",
+                            living.getName(), current, Component.translatable("effect.wildaside.contamination")), false);
                     affected++;
                 }
                 case "set" -> {
                     ContaminationHandler.setDose(living, amount);
-                    source.sendSuccess(() -> Component.literal("Set contamination of " + living.getName().getString() + " to " + amount), false);
+                    source.sendSuccess(() -> Component.translatable("command.wildaside.contamination.set_contamination",
+                            Component.translatable("effect.wildaside.contamination"), living.getName(), amount), false);
                     affected++;
                 }
                 case "clear" -> {
                     ContaminationHandler.setDose(living, 0);
-                    source.sendSuccess(() -> Component.literal("Cleared contamination of " + living.getName().getString()), false);
+                    source.sendSuccess(() -> Component.translatable("command.wildaside.contamination.clear_contamination",
+                            Component.translatable("effect.wildaside.contamination"), living.getName()), false);
                     affected++;
                 }
                 default -> {
-                    source.sendFailure(Component.literal("Invalid action: " + action));
+                    source.sendFailure(Component.translatable("command.wildaside.contamination.invalid_action", action));
                     return 0;
                 }
             }
         }
 
         if (affected > 0) {
-            String entityString = affected > 1 ? "entities" : "entity";
-            int finalAffected = affected;
-            source.sendSuccess(() -> Component.literal("Applied '" + action + "' to " + finalAffected + " " + entityString), true);
+            String entityString = affected > 1 ? "command.wildaside.contamination.entities" : "command.wildaside.contamination.entity";
+            String actionString = "command.wildaside.contamination.action." + action;
+            applyContamination(ctx, actionString, affected, entityString);
         } else {
-            source.sendFailure(Component.literal("No valid living entities found."));
+            source.sendFailure(Component.translatable("command.wildaside.contamination.no_valid_entities"));
         }
         return affected;
     }
@@ -209,23 +211,23 @@ public class ModCommands {
             if (traitName.equals("stability")) {
                 livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
                     float value = dna.stability();
-                    ctx.getSource().sendSuccess(
-                            () -> Component.literal(livingEntity.getName().getString() + " has " + traitName + " = " + value), false);
+                    ctx.getSource().sendSuccess(() ->
+                            Component.translatable("command.wildaside.dna.get_trait", livingEntity.getName(), value,
+                            Component.translatable("dna.wildaside.stability")), false);
                 });
             }
             else {
                 Trait trait = Traits.getByName(traitName);
                 if (trait == null) {
-                    ctx.getSource().sendFailure(Component.literal("Unknown trait: " + traitName));
+                    unknownTrait(ctx, traitName);
                     return 0;
                 }
                 livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
                     float value = Traits.getTraitValue(dna.genes(), trait);
-                    ctx.getSource().sendSuccess(
-                            () -> Component.literal(livingEntity.getName().getString() + " has " + trait.name() + " = " + value), false);
+                    getTrait(ctx, livingEntity, trait, value);
                 });
             }
-            return 1;
+            return Command.SINGLE_SUCCESS;
         }
         return 0;
     }
@@ -239,38 +241,49 @@ public class ModCommands {
                 livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
                     dna.setStability(value);
                 });
-
-                ctx.getSource().sendSuccess(() ->
-                                Component.literal("Applied " + traitName + " (" + value + ") to " + livingEntity.getName().getString()),
-                        true);
+                ctx.getSource().sendSuccess(() -> Component.translatable("command.wildaside.dna.set_trait",
+                            Component.translatable("dna.wildaside.stability"), livingEntity.getName(), value), false);
             }
             else {
-                Trait trait = Traits.TRAITS.stream()
-                        .filter(t -> t.name().equalsIgnoreCase(traitName))
-                        .findFirst()
-                        .orElse(null);
-
-                if (trait == null) {
-                    ctx.getSource().sendFailure(Component.literal("Unknown trait: " + traitName));
+                Trait trait = Traits.getByName(traitName);
+                if (trait == null)  {
+                    unknownTrait(ctx, traitName);
                     return 0;
                 }
 
                 livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-                    dna.genes().put(trait, new Gene(trait, value, 0f));
+                    dna.genes().put(trait, new Gene(trait, value, trait.baseInstability()));
                     dna.applyGenes(livingEntity);
                 });
 
-                Component message = Component.translatable("command.wildaside.dna.trait_applied",
+                Component message = Component.translatable("command.wildaside.dna.set_trait",
                         Traits.translatableTrait(trait),
-                        Component.literal(String.valueOf(value)),
-                        livingEntity.getName()
+                        livingEntity.getName(),
+                        String.valueOf(value)
                 );
 
                 ctx.getSource().sendSuccess(() -> message, true);
             }
 
-            return 1;
+            return Command.SINGLE_SUCCESS;
         }
         return 0;
+    }
+
+    private static void unknownTrait(CommandContext<CommandSourceStack> context, String traitName) {
+        context.getSource().sendFailure(
+                Component.translatable("command.wildaside.dna.unknown_trait", traitName));
+    }
+
+    public static void getTrait(CommandContext<CommandSourceStack> context, LivingEntity livingEntity, Trait trait, float value) {
+        context.getSource().sendSuccess(() ->
+                Component.translatable("command.wildaside.dna.get_trait", livingEntity.getName(), value, Traits.translatableTrait(trait)), false);
+    }
+
+    public static void applyContamination(CommandContext<CommandSourceStack> context, String action, int finalAffected, String entityString) {
+        context.getSource().sendSuccess(() ->
+                Component.translatable("command.wildaside.contamination.apply_contamination",
+                        Component.translatable(action).getString().toLowerCase(), finalAffected,
+                        Component.translatable(entityString).getString().toLowerCase()), true);
     }
 }
