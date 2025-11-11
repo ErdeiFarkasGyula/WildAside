@@ -86,7 +86,7 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         menu.setTab(newTab);
 
         if (tab == BioengineeringWorkstationTab.DNA_SEQUENCER) {
-            this.addRenderableWidget(Button.builder(Component.literal("Recompile DNA"), btn -> {
+            this.addRenderableWidget(Button.builder(Component.translatable("gui.wildaside.bioengineering_workstation.recompile_dna"), btn -> {
                 NetworkHandler.sendBioengineeringWorkstationRecompileGenesPacket(menu.blockEntity.getBlockPos());
             }).pos(leftPos + 14, topPos + 55).size(80, 20).build());
         } else {
@@ -97,16 +97,16 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
 
     private void addTabButtons() {
         this.clearWidgets();
-        this.addWidget(Button.builder(Component.literal("A"), b -> switchTab(BioengineeringWorkstationTab.ASSEMBLER))
+        this.addWidget(Button.builder(Component.empty(), b -> switchTab(BioengineeringWorkstationTab.ASSEMBLER))
                 .pos(this.leftPos + 15, this.topPos + 87)
                 .size(26, 25)
-                .tooltip(Tooltip.create(Component.literal("ASSEMBLER")))
+                .tooltip(Tooltip.create(Component.translatable("gui.wildaside.bioengineering_workstation.bio_assembler")))
                 .build());
 
-        this.addWidget(Button.builder(Component.literal("B"), b -> switchTab(BioengineeringWorkstationTab.DNA_SEQUENCER))
+        this.addWidget(Button.builder(Component.empty(), b -> switchTab(BioengineeringWorkstationTab.DNA_SEQUENCER))
                 .pos(this.leftPos + 15, this.topPos + 114)
                 .size(26, 25)
-                .tooltip(Tooltip.create(Component.literal("DNA_SEQUENCER")))
+                .tooltip(Tooltip.create(Component.translatable("gui.wildaside.bioengineering_workstation.dna_sequencer")))
                 .build());
     }
 }

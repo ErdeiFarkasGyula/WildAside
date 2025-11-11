@@ -15,6 +15,7 @@ import net.farkas.wildaside.network.WindSavedData;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.farkas.wildaside.network.WindData;
 import net.farkas.wildaside.util.WindManager;
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -259,9 +260,13 @@ public class ModCommands {
                     dna.applyGenes(livingEntity);
                 });
 
-                ctx.getSource().sendSuccess(() ->
-                                Component.literal("Applied " + traitName + " (" + value + ") to " + livingEntity.getName().getString()),
-                        true);
+                Component message = Component.translatable("command.wildaside.dna.trait_applied",
+                        Traits.translatableTrait(trait),
+                        Component.literal(String.valueOf(value)),
+                        livingEntity.getName()
+                );
+
+                ctx.getSource().sendSuccess(() -> message, true);
             }
 
             return 1;

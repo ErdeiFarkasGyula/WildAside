@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.config.Config;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
@@ -48,25 +49,38 @@ public class UpdateChecker {
                     if (Minecraft.getInstance().player != null) {
                         var player = Minecraft.getInstance().player;
 
-                        player.sendSystemMessage(Component.literal("§6[Wild Aside] A new version §e" + latest + "§6 is available! (You have " + currentVersion + ")"));
+                        player.sendSystemMessage(Component.translatable("update_checker.wildaside.update_available",
+                                        Component.literal(latest).withStyle(ChatFormatting.YELLOW),
+                                        Component.literal(currentVersion).withStyle(ChatFormatting.GRAY))
+                                .withStyle(ChatFormatting.GOLD)
+                        );
 
                         player.sendSystemMessage(
-                                Component.literal("§d[CurseForge Page]")
+                                Component.literal("[")
+                                        .append(Component.translatable("update_checker.wildaside.curseforge_page"))
+                                        .append(Component.literal("]"))
                                         .withStyle(style -> style
+                                                .withColor(ChatFormatting.LIGHT_PURPLE)
                                                 .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, curseforge))
                                                 .withUnderlined(true))
                         );
 
                         player.sendSystemMessage(
-                                Component.literal("§b[Modrinth Page]")
+                                Component.literal("[")
+                                        .append(Component.translatable("update_checker.wildaside.modrinth_page"))
+                                        .append(Component.literal("]"))
                                         .withStyle(style -> style
+                                                .withColor(ChatFormatting.AQUA)
                                                 .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, modrinth))
                                                 .withUnderlined(true))
                         );
 
                         player.sendSystemMessage(
-                                Component.literal("[Don’t show again]")
+                                Component.literal("[")
+                                        .append(Component.translatable("update_checker.wildaside.dont_show_again"))
+                                        .append(Component.literal("]"))
                                         .withStyle(style -> style
+                                                .withColor(ChatFormatting.GRAY)
                                                 .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/wildaside update_notification false"))
                                                 .withUnderlined(false))
                         );

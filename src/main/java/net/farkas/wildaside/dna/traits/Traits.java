@@ -1,6 +1,7 @@
 package net.farkas.wildaside.dna.traits;
 
 import net.farkas.wildaside.dna.Gene;
+import net.minecraft.network.chat.Component;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -51,5 +52,9 @@ public class Traits {
         if (trait == null || genes == null) return 0.0f;
         Gene gene = genes.get(trait);
         return gene != null ? gene.value() : 0.0f;
+    }
+
+    public static Component translatableTrait(Trait trait) {
+        return Component.translatable("trait.wildaside." + trait.name());
     }
 }

@@ -1,4 +1,6 @@
 {
+  "mod.wildaside": "Wild Aside",
+
   "creativetab.wildaside_tab": "Wild Aside",
 
   "item.wildaside.vibrion": "Vibrion",
@@ -12,17 +14,6 @@
 
   "item.wildaside.dna_holder": "DNA Holder",
   "item.wildaside.gene": "Gene",
-
-  "dna.wildaside.dna_mismatch": "DNA Mismatch",
-  "dna.wildaside.sample_progress": "Sample Progress",
-  "dna.wildaside.no_dna_data": "No DNA Data",
-  "dna.wildaside.dna_data_hidden": "DNA Data Hidden",
-  "dna.wildaside.unknown": "Unknown",
-  "dna.wildaside.source": "Source",
-  "dna.wildaside.stability": "Stability",
-  "dna.wildaside.core_traits": "Core Traits",
-  "dna.wildaside.resistances": "Resistances",
-  "dna.wildaside.abilities": "Abilities",
 
   "item.wildaside.hickory_nut_trail_mix": "Hickory Nut Trail Mix",
   "item.wildaside.red_hickory_nut_trail_mix": "Red Hickory Nut Trail Mix",
@@ -229,6 +220,17 @@
   "sounds.wildaside.entity.mucellith.hurt": "Mucellith hurts",
   "sounds.wildaside.entity.mucellith.death": "Mucellith dies",
 
+  "dna.wildaside.dna_mismatch": "DNA Mismatch",
+  "dna.wildaside.sample_progress": "Sample Progress",
+  "dna.wildaside.no_dna_data": "No DNA Data",
+  "dna.wildaside.dna_data_hidden": "DNA Data Hidden",
+  "dna.wildaside.unknown": "Unknown",
+  "dna.wildaside.source": "Source",
+  "dna.wildaside.stability": "Stability",
+  "dna.wildaside.core_traits": "Core Traits",
+  "dna.wildaside.resistances": "Resistances",
+  "dna.wildaside.abilities": "Abilities",
+
   "trait.wildaside.max_health": "Max Health",
   "trait.wildaside.movement_speed": "Movement Speed",
   "trait.wildaside.attack_damage": "Attack Damage",
@@ -241,5 +243,17 @@
   "trait.wildaside.fall_resistance": "Fall Resistance",
   "trait.wildaside.explosion_resistance": "Explosion Resistance",
   "trait.wildaside.freeze_resistance": "Freeze Resistance",
-  "trait.wildaside.fire_ability": "Fire Ability"
+  "trait.wildaside.fire_ability": "Fire Ability",
+
+  "gui.wildaside.bioengineering_workstation.bio_assembler":  "Bio Assembler",
+  "gui.wildaside.bioengineering_workstation.dna_sequencer":  "DNA Sequencer",
+  "gui.wildaside.bioengineering_workstation.recompile_dna":  "Recompile DNA",
+
+  "command.wildaside.dna.trait_applied": "Applied %s (%s) to %s",
+
+  "update_checker.wildaside.curseforge_page": "CurseForge Page",
+  "update_checker.wildaside.modrinth_page": "Modrinth Page",
+  "update_checker.wildaside.dont_show_again": "Don't show again",
+  "update_checker.wildaside.update_available": "[Wild Aside] A new version %s is available! (You have %s)"
+
 }
