@@ -36,6 +36,7 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         BACKGROUND = tab.getTexture();
 
         addTabButtons();
+        addRecompileButton();
     }
 
     @Override
@@ -73,7 +74,9 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         if (this.leftPos != correctLeft || this.topPos != correctTop) {
             this.leftPos = correctLeft;
             this.topPos = correctTop;
+            clearWidgets();
             addTabButtons();
+            addRecompileButton();
         }
     }
 
@@ -85,18 +88,13 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
 
         menu.setTab(newTab);
 
-        if (tab == BioengineeringWorkstationTab.DNA_SEQUENCER) {
-            this.addRenderableWidget(Button.builder(Component.translatable("gui.wildaside.bioengineering_workstation.recompile_dna"), btn -> {
-                NetworkHandler.sendBioengineeringWorkstationRecompileGenesPacket(menu.blockEntity.getBlockPos());
-            }).pos(leftPos + 14, topPos + 55).size(100, 20).build());
-        } else {
-            this.clearWidgets();
-            addTabButtons();
-        }
+        clearWidgets();
+        addRecompileButton();
+        addTabButtons();
+
     }
 
     private void addTabButtons() {
-        this.clearWidgets();
         this.addWidget(Button.builder(Component.empty(), b -> switchTab(BioengineeringWorkstationTab.ASSEMBLER))
                 .pos(this.leftPos + 15, this.topPos + 87)
                 .size(26, 25)
@@ -108,5 +106,14 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
                 .size(26, 25)
                 .tooltip(Tooltip.create(Component.translatable("gui.wildaside.bioengineering_workstation.dna_sequencer")))
                 .build());
+    }
+
+    public void addRecompileButton() {
+        if (tab ==  BioengineeringWorkstationTab.DNA_SEQUENCER) {
+            this.addRenderableWidget(Button.builder(Component.literal("⟳"), btn -> {
+                        NetworkHandler.sendBioengineeringWorkstationRecompileGenesPacket(menu.blockEntity.getBlockPos());
+                    }).pos(leftPos + 14, topPos + 55).size(20, 20)
+                    .tooltip(Tooltip.create(Component.translatable("gui.wildaside.bioengineering_workstation.recompile_dna"))).build());
+        }
     }
 }
