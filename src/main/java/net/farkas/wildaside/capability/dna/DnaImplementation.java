@@ -2,6 +2,7 @@ package net.farkas.wildaside.capability.dna;
 
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.traits.Trait;
+import net.farkas.wildaside.dna.traits.TraitTypes;
 import net.farkas.wildaside.dna.traits.Traits;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -12,6 +13,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +38,7 @@ public class DnaImplementation implements IDna {
 
     @Override
     public void setGenes(Map<Trait, Gene> genes) {
-        this.genes = genes;
+        this.genes = enforceAbilityLimit(genes);
     }
 
     @Override
@@ -111,6 +113,25 @@ public class DnaImplementation implements IDna {
         }
 
         return totalCost;
+    }
+
+    private static Map<Trait, Gene> enforceAbilityLimit(Map<Trait, Gene> input) {
+        Trait chosenAbility = null;
+        float lowestValue = Float.POSITIVE_INFINITY;
+
+        for (Trait trait : new ArrayList<>(input.keySet())) {
+            if (trait.traitType() == TraitTypes.ABILITY) {
+                Gene gene = input.get(trait);
+                if (chosenAbility == null || gene.value() < lowestValue) {
+                    chosenAbility = trait;
+                    lowestValue = gene.value();
+                } else {
+                    input.remove(trait);
+                }
+            }
+        }
+
+        return input;
     }
 
     @Override

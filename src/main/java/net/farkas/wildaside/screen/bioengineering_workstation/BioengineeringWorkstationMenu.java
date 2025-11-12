@@ -5,6 +5,7 @@ import net.farkas.wildaside.block.entity.BioengineeringWorkstationBlockEntity;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.traits.Trait;
+import net.farkas.wildaside.dna.traits.TraitTypes;
 import net.farkas.wildaside.dna.traits.Traits;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.item.custom.DnaHolder;
@@ -125,26 +126,21 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
                 dna.deserializeNBT(dnaDataTag);
                 Map<Trait, Gene> genes = BioengineeringWorkstationBlockEntity.orderGenes(dna);
 
-                for (int x = 0; x < Traits.TRAITS.size(); x++) {
+                for (int x = 0; x < Math.min(Traits.TRAITS.size(), topGeneSlots.size()); x++) {
                     Trait trait = Traits.TRAITS.get(x);
-                    Gene gene = genes.get(trait);
-                    if (gene == null) {
-                        gene = new Gene(trait, 0, trait.baseInstability());
+                    Gene gene = genes.getOrDefault(trait, new Gene(trait, 0, trait.baseInstability()));
+                    if (trait == Traits.FIRE_ABILITY && gene.value == 0.0) {
+                        continue;
                     }
-                    String traitName = gene.trait.name();
-
                     ItemStack geneStack = new ItemStack(ModItems.GENE.get());
                     CompoundTag tag = geneStack.getOrCreateTag();
-
-                    tag.putString("trait", traitName);
+                    tag.putString("trait", gene.trait.name());
                     tag.putFloat("value", gene.value);
-
                     geneStack.setTag(tag);
 
                     if (i == 7) {
                         topGeneSlots.get(x).set(geneStack);
-                    }
-                    else if (i == 8) {
+                    } else if (i == 8) {
                         botGeneSlots.get(x).set(geneStack);
                     }
                 }

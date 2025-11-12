@@ -26,6 +26,7 @@ public class Traits {
     public static final Trait FREEZE_RESISTANCE = register("freeze_resistance", TraitTypes.RESISTANCE, 1.1f);
 
     public static final Trait FIRE_ABILITY = register("fire_ability", TraitTypes.ABILITY, 3f);
+    public static final Trait TELEPORT_ABILITY = register("teleport_ability", TraitTypes.ABILITY, 3f);
 
     private static Trait register(String name, TraitTypes traitType, float baseInstability) {
         Trait trait = new Trait(name, traitType, baseInstability);

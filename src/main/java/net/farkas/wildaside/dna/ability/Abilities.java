@@ -1,6 +1,7 @@
 package net.farkas.wildaside.dna.ability;
 
 import net.farkas.wildaside.dna.ability.custom.FireAbility;
+import net.farkas.wildaside.dna.ability.custom.TeleportAbility;
 import net.farkas.wildaside.dna.traits.Trait;
 import net.farkas.wildaside.dna.traits.Traits;
 
@@ -11,6 +12,7 @@ public class Abilities {
     private static final Map<Trait, IAbility> ABILITIES = new HashMap<>();
 
     private static final IAbility FIRE_ABILITY = register(Traits.FIRE_ABILITY, new FireAbility());
+    private static final IAbility TELEPORT_ABILITY = register(Traits.TELEPORT_ABILITY, new TeleportAbility());
 
     public static IAbility register(Trait trait, IAbility behavior) {
         ABILITIES.put(trait, behavior);

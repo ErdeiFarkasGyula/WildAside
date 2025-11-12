@@ -147,12 +147,13 @@ public class DnaHolder extends Item {
         if (existingDna != null) {
             Map<Trait, Gene> averaged = new HashMap<>();
             for (Trait trait : Traits.TRAITS) {
-                Gene oldGene = existingDna.genes().get(trait);
                 Gene newGene = baseGenes.get().get(trait);
+                if (newGene == null) continue;
+
+                Gene oldGene = existingDna.genes().get(trait);
                 float oldValue = oldGene != null ? oldGene.value() : 0f;
-                float newValue = newGene != null ? newGene.value : 0f;
-                float avg = ((oldValue * (progress - 1)) + newValue) / progress;
-                float stabilityCost = newGene != null ? newGene.stabilityCost() : trait.baseInstability();
+                float avg = ((oldValue * (progress - 1)) + newGene.value()) / progress;
+                float stabilityCost = newGene.stabilityCost();
 
                 averaged.put(trait, new Gene(trait, avg, stabilityCost));
             }

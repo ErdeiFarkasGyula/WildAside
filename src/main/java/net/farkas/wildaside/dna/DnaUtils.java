@@ -100,11 +100,14 @@ public class DnaUtils {
         putGaussianOrZero(genes, Traits.FIRE_RESISTANCE, seed, entity.fireImmune());
         putGaussianOrZero(genes, Traits.FREEZE_RESISTANCE, seed, entity.getType().is(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES));
         putGaussianOrZero(genes, Traits.FALL_RESISTANCE, seed, entity.getType().is(EntityTypeTags.FALL_DAMAGE_IMMUNE));
-        putGaussianOrZero(genes, Traits.FIRE_ABILITY, seed, entity.getType().is(EntityTypeTags.FALL_DAMAGE_IMMUNE));
 
         if (entity.getType() == EntityType.BLAZE) {
             putAbilityWithGaussian(genes, Traits.FIRE_ABILITY, seed);
         }
+        else if (entity.getType() == EntityType.ENDERMAN) {
+            putAbilityWithGaussian(genes, Traits.TELEPORT_ABILITY, seed);
+        }
+
 
         return genes;
     }
