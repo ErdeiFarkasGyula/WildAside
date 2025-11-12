@@ -18,6 +18,6 @@ public class TeleportAbility implements IAbility {
 
     @Override
     public void onUse(LivingEntity entity, float cooldown) {
-        System.out.println("TPPPPPP");
+
     }
 }

@@ -38,7 +38,7 @@ public class DnaImplementation implements IDna {
 
     @Override
     public void setGenes(Map<Trait, Gene> genes) {
-        this.genes = enforceAbilityLimit(genes);
+        this.genes = genes;
     }
 
     @Override
@@ -113,25 +113,6 @@ public class DnaImplementation implements IDna {
         }
 
         return totalCost;
-    }
-
-    private static Map<Trait, Gene> enforceAbilityLimit(Map<Trait, Gene> input) {
-        Trait chosenAbility = null;
-        float lowestValue = Float.POSITIVE_INFINITY;
-
-        for (Trait trait : new ArrayList<>(input.keySet())) {
-            if (trait.traitType() == TraitTypes.ABILITY) {
-                Gene gene = input.get(trait);
-                if (chosenAbility == null || gene.value() < lowestValue) {
-                    chosenAbility = trait;
-                    lowestValue = gene.value();
-                } else {
-                    input.remove(trait);
-                }
-            }
-        }
-
-        return input;
     }
 
     @Override

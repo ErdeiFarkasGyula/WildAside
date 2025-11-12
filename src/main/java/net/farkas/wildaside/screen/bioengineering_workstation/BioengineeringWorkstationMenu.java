@@ -126,10 +126,13 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
                 dna.deserializeNBT(dnaDataTag);
                 Map<Trait, Gene> genes = BioengineeringWorkstationBlockEntity.orderGenes(dna);
 
-                for (int x = 0; x < Math.min(Traits.TRAITS.size(), topGeneSlots.size()); x++) {
+                int slotCorrection = 0;
+                for (int x = 0; x < Traits.TRAITS.size(); x++) {
                     Trait trait = Traits.TRAITS.get(x);
                     Gene gene = genes.getOrDefault(trait, new Gene(trait, 0, trait.baseInstability()));
-                    if (trait == Traits.FIRE_ABILITY && gene.value == 0.0) {
+                    System.out.println("Trait" + trait.name() + " Gene: " + gene.value);
+                    if (trait.traitType() == TraitTypes.ABILITY && gene.value == 0.0) {
+                        slotCorrection++;
                         continue;
                     }
                     ItemStack geneStack = new ItemStack(ModItems.GENE.get());
@@ -138,10 +141,15 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
                     tag.putFloat("value", gene.value);
                     geneStack.setTag(tag);
 
+                    int correctedSlot = x - slotCorrection;
                     if (i == 7) {
-                        topGeneSlots.get(x).set(geneStack);
+                        if (topGeneSlots.size() > correctedSlot) {
+                            topGeneSlots.get(correctedSlot).set(geneStack);
+                        }
                     } else if (i == 8) {
-                        botGeneSlots.get(x).set(geneStack);
+                        if (botGeneSlots.size() > correctedSlot) {
+                            botGeneSlots.get(correctedSlot).set(geneStack);
+                        }
                     }
                 }
             }

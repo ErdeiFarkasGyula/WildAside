@@ -1,7 +1,6 @@
 package net.farkas.wildaside.dna.ability;
 
-import net.farkas.wildaside.dna.ability.custom.FireAbility;
-import net.farkas.wildaside.dna.ability.custom.TeleportAbility;
+import net.farkas.wildaside.dna.ability.custom.*;
 import net.farkas.wildaside.dna.traits.Trait;
 import net.farkas.wildaside.dna.traits.Traits;
 

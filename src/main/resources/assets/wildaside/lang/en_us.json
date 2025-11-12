@@ -245,6 +245,7 @@
   "trait.wildaside.explosion_resistance": "Explosion Resistance",
   "trait.wildaside.freeze_resistance": "Freeze Resistance",
   "trait.wildaside.fire_ability": "Fire Ability",
+  "trait.wildaside.teleport_ability": "Teleport Ability",
 
   "gui.wildaside.bioengineering_workstation.bio_assembler":  "Bio Assembler",
   "gui.wildaside.bioengineering_workstation.dna_sequencer":  "DNA Sequencer",
