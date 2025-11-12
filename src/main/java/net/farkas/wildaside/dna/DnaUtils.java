@@ -86,7 +86,6 @@ public class DnaUtils {
                 if (trait == Traits.MOVEMENT_SPEED) {
                     if (Config.ACCURATE_DNA_MOVEMENT_SPEEDS.get() && !preGen) {
                         traitValue = (float) (MobSpeedResultStorage.getSpeed(entity.getType(), "ground"));
-                        System.out.println("MOVESPEEEDA: " + traitValue);
                         if (MobSpeedTesting.EXCLUDED_MOBS.contains(entity.getType())) {
                             traitValue = (float) entity.getAttributeBaseValue(attribute);
                         }

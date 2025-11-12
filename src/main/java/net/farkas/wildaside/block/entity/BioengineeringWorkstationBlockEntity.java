@@ -183,9 +183,6 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
         ItemStack inA = itemHandler.getStackInSlot(DNA_INPUT_1);
         ItemStack inB = itemHandler.getStackInSlot(DNA_INPUT_2);
 
-        System.out.println(inA);
-        System.out.println(inB);
-
         if (inA.isEmpty() && inB.isEmpty()) return;
 
         if (!inA.isEmpty() && inA.getItem() instanceof DnaHolder) {
@@ -202,8 +199,6 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
                     CompoundTag geneTag = geneStack.getOrCreateTag();
                     Trait trait = Traits.getByName(geneTag.getString("trait"));
                     float value = geneTag.getFloat("value");
-                    System.out.println("TRAIT: " + trait);
-                    System.out.println("VALUE: " + value);
 
                     if (trait == null) {
                         trait = Traits.FIRE_RESISTANCE;

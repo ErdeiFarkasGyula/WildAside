@@ -14,7 +14,7 @@ public class AdvancementHandler {
             Advancement advancement = player.server.getAdvancements().getAdvancement(advancementID);
 
             if (advancement == null) {
-                System.out.println("Advancement " + advName + " can't be found!");
+                WildAside.LOGGER.warn("Advancement {} can't be found!", advName);
                 return;
             }
 

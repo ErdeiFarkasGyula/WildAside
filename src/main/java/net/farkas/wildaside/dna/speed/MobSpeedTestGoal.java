@@ -39,7 +39,6 @@ public class MobSpeedTestGoal extends Goal {
         String env = mob.isInWater() ? "water" : "ground";
         distanceTraveled = startPosition.distanceTo(endPosition);
         double blocksPerSecond = distanceTraveled / TEST_LENGTH * 20.0;
-        System.out.println("Mob:" + mob + "UUID:" + mob.getUUID() + " Traveled:" + distanceTraveled + " Speed:" + blocksPerSecond);
         MobSpeedResultStorage.record(mob.getType(), env, blocksPerSecond);
         MobSpeedTestTracker.onMobFinished(mob, testName);
         mob.discard();

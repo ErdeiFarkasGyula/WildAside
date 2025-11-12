@@ -42,7 +42,6 @@ public class MobSpeedTestManager {
         if (!Config.ACCURATE_DNA_MOVEMENT_SPEEDS.get()) return;
 
         if (event.getServer() != null) {
-            System.out.println("SERVERRR");
             MinecraftServer server = event.getServer();
 
             ModTrackerData data = server.overworld()
@@ -52,7 +51,6 @@ public class MobSpeedTestManager {
             String currentHash = computeModListHash();
 
             if (!Objects.equals(data.lastHash, currentHash)) {
-                System.out.println("WILDASS:CHANGEDLIST");
                 onModListChanged(server, data.lastHash, currentHash);
 
                 data.lastHash = currentHash;

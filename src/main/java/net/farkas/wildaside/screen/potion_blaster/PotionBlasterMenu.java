@@ -1,5 +1,6 @@
 package net.farkas.wildaside.screen.potion_blaster;
 
+import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.PotionBlasterBlockEntity;
 import net.farkas.wildaside.screen.ModMenuTypes;
@@ -107,7 +108,7 @@ public class PotionBlasterMenu extends AbstractContainerMenu {
             }
         }
         else {
-            System.out.println("Invalid slotIndex:" + pIndex);
+            WildAside.LOGGER.warn("Invalid slotIndex: {}", pIndex);
             return ItemStack.EMPTY;
         }
         // If stack size == 0 (the entire stack was moved) set slot contents to null

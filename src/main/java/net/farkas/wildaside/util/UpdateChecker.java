@@ -104,7 +104,7 @@ public class UpdateChecker {
                 conn.disconnect();
                 return json;
             } catch (Exception e) {
-                System.out.println("[WildAside] Failed to fetch version info from " + url + ": " + e.getMessage());
+                WildAside.LOGGER.warn("[Wild Aside] Failed to fetch version info from {}: {}", url, e.getMessage());
             }
         }
         return null;
@@ -118,7 +118,7 @@ public class UpdateChecker {
             Version vCurrent = Version.parse(current);
             return vLatest.compareTo(vCurrent) > 0;
         } catch (Exception e) {
-            System.out.println("[WildAside] Version compare failed: " + e.getMessage());
+            WildAside.LOGGER.warn("[Wild Aside] Version compare failed: {}", e.getMessage());
             return false;
         }
     }

@@ -52,14 +52,10 @@ public class MobSpeedTesting {
         int yOffset = inWater ? 5 : 0;
         start = start.offset(0, yOffset, 0);
 
-        System.out.println("WILDASS:RUNTEST" + inWater);
-
         for (EntityType<? extends PathfinderMob> type : mobs) {
             try {
                 PathfinderMob mob = type.create(level);
                 if (mob == null) continue;
-
-                System.out.println("MEOW UUID: " + mob.getUUID() + "MOB: " + mob);
 
                 MobSpeedTestTracker.registerMob(mob, testName);
 
@@ -99,15 +95,12 @@ public class MobSpeedTesting {
                 if (entity instanceof PathfinderMob mob) {
                     if (!EXCLUDED_MOBS.contains(type)) {
                         mobsToTest.add((EntityType<? extends PathfinderMob>) type);
-                        System.out.println("TYPE: " + id);
                     }
                 }
             } catch (Exception e) {
-                System.out.println("Skipped entity: " + ForgeRegistries.ENTITY_TYPES.getKey(type) + " due to exception: " + e.getClass().getSimpleName());
+                WildAside.LOGGER.warn("Skipped entity: {} due to exception: {}", ForgeRegistries.ENTITY_TYPES.getKey(type), e.getClass().getSimpleName());
             }
         }
-
-        System.out.println("WILDASS:MOBSCOUNT: " + mobsToTest.size());
 
         entityCount = mobsToTest.size();
         mobs = mobsToTest;

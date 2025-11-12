@@ -118,7 +118,6 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
     public void loadGenes(int i) {
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
             ItemStack stack = iItemHandler.getStackInSlot(i);
-            System.out.println("STACK: " + stack);
 
             if (stack.getItem() instanceof DnaHolder dnaHolder) {
                 CompoundTag dnaDataTag = stack.getOrCreateTagElement("dna_data");

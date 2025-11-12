@@ -256,7 +256,6 @@ public class ModEvents {
 
             if (modified) {
                 dna.setStability(dna.stability() - stabilityReduction);
-                System.out.println("Reduced DNA stability to " + dna.stability() + " for " + entity);
             }
         });
     }
