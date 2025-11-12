@@ -185,72 +185,51 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
 
         if (inA.isEmpty() && inB.isEmpty()) return;
 
-        if (!inA.isEmpty() && inA.getItem() instanceof DnaHolder) {
-            ItemStack outA = inA.copy();
-            CompoundTag tag = outA.getOrCreateTag();
-            CompoundTag dnaTag = tag.getCompound("dna_data");
-            DnaImplementation dna = new DnaImplementation();
-
-            if (!dnaTag.isEmpty()) {
-                Map<Trait, Gene> genes = new HashMap<>();
-                dna.deserializeNBT(dnaTag);
-                for (int i = 0; i < 12; i++) {
-                    ItemStack geneStack = itemHandler.getStackInSlot(i + BioengineeringWorkstationMenu.TOP_GENE_INDEX_START);
-                    CompoundTag geneTag = geneStack.getOrCreateTag();
-                    Trait trait = Traits.getByName(geneTag.getString("trait"));
-                    float value = geneTag.getFloat("value");
-
-                    if (trait == null) {
-                        trait = Traits.FIRE_RESISTANCE;
-                    }
-
-                    genes.put(trait, new Gene(trait, value, trait.baseInstability()));
-                }
-                dna.setGenes(genes);
-                tag.remove("dna_data");
-                tag.put("dna_data", dna.serializeNBT());
-            }
-
-            outA.setTag(tag);
-            itemHandler.setStackInSlot(DNA_OUTPUT_1, outA);
-            itemHandler.setStackInSlot(DNA_INPUT_1, ItemStack.EMPTY);
-        }
-
-        if (!inB.isEmpty() && inB.getItem() instanceof DnaHolder) {
-            ItemStack ouB = inB.copy();
-            CompoundTag tag = ouB.getOrCreateTag();
-            CompoundTag dnaTag = tag.getCompound("dna_data");
-            DnaImplementation dna = new DnaImplementation();
-
-            if (!dnaTag.isEmpty()) {
-                Map<Trait, Gene> genes = new HashMap<>();
-                dna.deserializeNBT(dnaTag);
-                for (int i = 0; i <= 12; i++) {
-                    ItemStack geneStack = itemHandler.getStackInSlot(i + BioengineeringWorkstationMenu.BOT_GENE_INDEX_START);
-                    CompoundTag geneTag = geneStack.getOrCreateTag();
-                    Trait trait = Traits.getByName(geneTag.getString("trait"));
-                    float value = geneTag.getFloat("value");
-
-                    if (trait == null) {
-                        trait = Traits.FIRE_RESISTANCE;
-                    }
-
-                    genes.put(trait, new Gene(trait, value, trait.baseInstability()));
-                }
-                dna.setGenes(genes);
-                tag.remove("dna_data");
-                tag.put("dna_data", dna.serializeNBT());
-            }
-
-            ouB.setTag(tag);
-            itemHandler.setStackInSlot(DNA_OUTPUT_2, ouB);
-            itemHandler.setStackInSlot(DNA_INPUT_2, ItemStack.EMPTY);
-        }
+        processDnaSlot(inA, DNA_INPUT_1, DNA_OUTPUT_1, BioengineeringWorkstationMenu.TOP_GENE_INDEX_START);
+        processDnaSlot(inB, DNA_INPUT_2, DNA_OUTPUT_2, BioengineeringWorkstationMenu.BOT_GENE_INDEX_START);
 
         setChanged();
         if (level != null) {
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
         }
+    }
+
+    private void processDnaSlot(ItemStack input, int inputSlot, int outputSlot, int geneStartIndex) {
+        if (input.isEmpty() || !(input.getItem() instanceof DnaHolder)) {
+            return;
+        }
+
+        ItemStack output = input.copy();
+        CompoundTag tag = output.getOrCreateTag();
+        CompoundTag dnaTag = tag.getCompound("dna_data");
+        DnaImplementation dna = new DnaImplementation();
+
+        if (!dnaTag.isEmpty()) {
+            Map<Trait, Gene> genes = new HashMap<>();
+            dna.deserializeNBT(dnaTag);
+
+            for (int i = 0; i <= 12; i++) {
+                ItemStack geneStack = itemHandler.getStackInSlot(i + geneStartIndex);
+                CompoundTag geneTag = geneStack.getOrCreateTag();
+
+                Trait trait = Traits.getByName(geneTag.getString("trait"));
+                float value = geneTag.getFloat("value");
+
+                if (trait == null) {
+                    trait = Traits.FIRE_RESISTANCE;
+                }
+
+                genes.put(trait, new Gene(trait, value, trait.baseInstability()));
+            }
+
+            dna.setGenes(genes);
+            tag.remove("dna_data");
+            tag.put("dna_data", dna.serializeNBT());
+        }
+
+        output.setTag(tag);
+        itemHandler.setStackInSlot(outputSlot, output);
+        itemHandler.setStackInSlot(inputSlot, ItemStack.EMPTY);
     }
 
     private void resetProgress() {
