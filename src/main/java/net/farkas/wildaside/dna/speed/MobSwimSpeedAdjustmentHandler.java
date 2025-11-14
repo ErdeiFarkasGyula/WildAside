@@ -62,13 +62,8 @@ public class MobSwimSpeedAdjustmentHandler {
                         adjustment,
                         AttributeModifier.Operation.MULTIPLY_TOTAL
                 ));
-
-                System.out.printf("[%s] Entered water → Adjust %.4f (ground %.4f → water %.4f)%n",
-                        livingEntity.getName().getString(), adjustment, groundSpeed, waterSpeed);
             });
 
-        } else {
-            System.out.printf("[%s] Left water → Removed adjust%n", livingEntity.getName().getString());
         }
     }
 }

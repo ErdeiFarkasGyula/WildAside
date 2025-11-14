@@ -148,8 +148,6 @@ public class DnaUtils {
         float mutation = gaussian * baseVariance + averageMutation;
         float newValue = gene.value() * (1.0f + mutation);
 
-        System.out.printf("Trait:%s  Value:%.3f  Mutation:%.3f  →  %.3f%n", gene.trait(), gene.value(), mutation, newValue);
-
         return new Gene(gene.trait(), newValue, gene.stabilityCost());
     }
 
