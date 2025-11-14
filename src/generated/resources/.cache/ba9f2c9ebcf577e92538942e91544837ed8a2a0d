@@ -1,4 +1,4 @@
-// 1.20.1	2025-11-01T13:44:14.2170741	Item Models: wildaside
+// 1.20.1	2025-11-14T12:25:14.9930069	Item Models: wildaside
 97ec986340aeed12ebc0d678c97ba34a7afb7b7c assets/wildaside/models/item/brown_glowing_hickory_leaf.json
 657a44b343b52d1185c119350b9599bc495c3976 assets/wildaside/models/item/brown_glowing_hickory_sapling.json
 9a615629962edb4ec1311e1782a12ec189c42bf4 assets/wildaside/models/item/brown_hickory_nut_trail_mix.json
@@ -76,6 +76,11 @@ a9f83d4c6be050d3985ce9c5465a7ed36831d562 assets/wildaside/models/item/substilium
 0a37d0e2842db5e595c0c902579d6cc94742bf0b assets/wildaside/models/item/substilium_tile_walls.json
 66f3426f4cccf32b8c8350f96a108ec7d371c807 assets/wildaside/models/item/substilium_trapdoor.json
 e64cd79400c73a174556db69ac31d1be127aa727 assets/wildaside/models/item/substilium_wood.json
+502f6b3b26372bb08d81a05dffb2faf33647aad1 assets/wildaside/models/item/syringe.json
+343b67b066dc4b37793105c772e92a1b9fa90cb7 assets/wildaside/models/item/syringe_stage0.json
+2cf1b080d558ce0bbf9c2201c8305f06d9a3c1c4 assets/wildaside/models/item/syringe_stage1.json
+145f43e94be1173e930eb677effe25b50491aec6 assets/wildaside/models/item/syringe_stage2.json
+050bcc28aa0015a97c8222218cac9b39e4fbc39e assets/wildaside/models/item/syringe_stage3.json
 ba9b6c59e041ca210f319502611fc9d1be5045be assets/wildaside/models/item/vibrion.json
 28b841c1b7ab30aa3f867a711da8e464c43ecf6b assets/wildaside/models/item/vibrion_glass_pane.json
 78d1091c6bfee6f5eb6f3d286f67bc150b54208f assets/wildaside/models/item/vibrion_growth.json

@@ -133,6 +133,7 @@ public class VanillaCreativeTabs {
             event.accept(ModItems.SPORE_BOMB);
             event.accept(ModItems.SPORE_ARROW);
             event.accept(ModItems.DNA_HOLDER);
+            event.accept(ModItems.SYRINGE);
         }
         if (tab == CreativeModeTabs.SPAWN_EGGS) {
             event.accept(ModItems.MUCELLITH_SPAWN_EGG);

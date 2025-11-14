@@ -45,6 +45,8 @@ public class ModItems {
             () ->  new GeneItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> DNA_HOLDER = ITEMS.register("dna_holder",
             () ->  new DnaHolder(new Item.Properties().stacksTo(64)));
+    public static final RegistryObject<Item> SYRINGE = ITEMS.register("syringe",
+            () ->  new Syringe(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> SUBSTILIUM_SIGN = ITEMS.register("substilium_sign",
             () ->  new SignItem(new Item.Properties().stacksTo(16), ModBlocks.SUBSTILIUM_SIGN.get(), ModBlocks.SUBSTILIUM_WALL_SIGN.get()));

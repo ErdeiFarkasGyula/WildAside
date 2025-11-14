@@ -16,6 +16,8 @@ import net.farkas.wildaside.entity.custom.vibrion.SporeBombEntity;
 import net.farkas.wildaside.item.ModCreativeModeTabs;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.item.VanillaCreativeTabs;
+import net.farkas.wildaside.item.custom.DnaHolder;
+import net.farkas.wildaside.item.custom.Syringe;
 import net.farkas.wildaside.network.NetworkHandler;
 import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.potion.BetterBrewingRecipe;
@@ -216,7 +218,21 @@ public class WildAside
                         CompoundTag tag = stack.getTag();
                         if (tag.contains("sample_progress")) {
                             int progress = tag.getInt("sample_progress");
-                            return Mth.clamp(progress / 3f, 0f, 1f);
+                            return Mth.clamp((float) progress / DnaHolder.DEFAULT_MAX_SAMPLES, 0f, 1f);
+                        }
+                        return 0f;
+                    }
+            );
+
+            ItemProperties.register(
+                    ModItems.SYRINGE.get(),
+                    new ResourceLocation(MOD_ID, "unload_progress"),
+                    (stack, level, entity, seed) -> {
+                        if (!stack.hasTag()) return 0f;
+                        CompoundTag tag = stack.getTag();
+                        if (tag.contains("unload_progress")) {
+                            int progress = tag.getInt("unload_progress");
+                            return Mth.clamp((float) progress / Syringe.DEFAULT_MAX_LOAD, 0f, 1f);
                         }
                         return 0f;
                     }
