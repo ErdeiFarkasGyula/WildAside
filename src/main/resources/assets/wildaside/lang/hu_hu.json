@@ -249,7 +249,7 @@
 
   "gui.wildaside.bioengineering_workstation.bio_assembler":  "Bio összeszerelő",
   "gui.wildaside.bioengineering_workstation.dna_sequencer":  "DNS szekvenszer",
-  "gui.wildaside.bioengineering_workstation.recompile_dna":  "DNS újraalkotása",
+  "gui.wildaside.bioengineering_workstation.recompile_dna":  "DNSek újraalkotása",
 
   "command.wildaside.contamination.apply_contamination": "%1$s elvégezve %2$s %3$s",
   "command.wildaside.contamination.add_contamination": "%3$s: %1$s %2$s hozzáadva",

@@ -249,7 +249,7 @@
 
   "gui.wildaside.bioengineering_workstation.bio_assembler":  "Bio Assembler",
   "gui.wildaside.bioengineering_workstation.dna_sequencer":  "DNA Sequencer",
-  "gui.wildaside.bioengineering_workstation.recompile_dna":  "Recompile DNA",
+  "gui.wildaside.bioengineering_workstation.recompile_dna":  "Recompile DNAs",
 
   "command.wildaside.contamination.apply_contamination": "Applied %1$s to %2$s to %3$s",
   "command.wildaside.contamination.add_contamination": "Added %1$s of %2$s %3$s",
