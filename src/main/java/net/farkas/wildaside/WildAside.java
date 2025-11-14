@@ -226,12 +226,12 @@ public class WildAside
 
             ItemProperties.register(
                     ModItems.SYRINGE.get(),
-                    new ResourceLocation(MOD_ID, "unload_progress"),
+                    new ResourceLocation(MOD_ID, "syringe_progress"),
                     (stack, level, entity, seed) -> {
                         if (!stack.hasTag()) return 0f;
                         CompoundTag tag = stack.getTag();
-                        if (tag.contains("unload_progress")) {
-                            int progress = tag.getInt("unload_progress");
+                        if (tag.contains("syringe_progress")) {
+                            int progress = tag.getInt("syringe_progress");
                             return Mth.clamp((float) progress / Syringe.DEFAULT_MAX_LOAD, 0f, 1f);
                         }
                         return 0f;

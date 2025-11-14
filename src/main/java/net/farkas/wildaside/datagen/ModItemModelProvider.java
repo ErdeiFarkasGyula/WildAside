@@ -39,7 +39,6 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.FERTILISER_BOMB);
 
         simpleItem(ModItems.GENE);
-        simpleItem(ModItems.SYRINGE);
 
         simpleItem(ModItems.HICKORY_NUT);
         simpleItem(ModItems.HICKORY_NUT_TRAIL_MIX);
@@ -246,7 +245,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         for (int i = 0; i < Syringe.DEFAULT_MAX_LOAD; i++) {
             float progress = i / (float) Syringe.DEFAULT_MAX_LOAD;
             builder.override()
-                    .predicate(new ResourceLocation(WildAside.MOD_ID, "unload_progress"), progress)
+                    .predicate(new ResourceLocation(WildAside.MOD_ID, "syringe_progress"), progress)
                     .model(getExistingFile(modLoc("item/" + baseName + "_stage" + i)))
                     .end();
         }

@@ -4,25 +4,19 @@
     {
       "model": "wildaside:item/syringe_stage0",
       "predicate": {
-        "wildaside:unload_progress": 0.0
+        "wildaside:syringe_progress": 0.0
       }
     },
     {
       "model": "wildaside:item/syringe_stage1",
       "predicate": {
-        "wildaside:unload_progress": 0.25
+        "wildaside:syringe_progress": 0.33333334
       }
     },
     {
       "model": "wildaside:item/syringe_stage2",
       "predicate": {
-        "wildaside:unload_progress": 0.5
-      }
-    },
-    {
-      "model": "wildaside:item/syringe_stage3",
-      "predicate": {
-        "wildaside:unload_progress": 0.75
+        "wildaside:syringe_progress": 0.6666667
       }
     }
   ],
