@@ -4,25 +4,25 @@
     {
       "model": "wildaside:item/dna_holder_stage0",
       "predicate": {
-        "wildaside:progress": 0.0
+        "wildaside:sample_progress": 0.0
       }
     },
     {
       "model": "wildaside:item/dna_holder_stage1",
       "predicate": {
-        "wildaside:progress": 0.33333334
+        "wildaside:sample_progress": 0.33333334
       }
     },
     {
       "model": "wildaside:item/dna_holder_stage2",
       "predicate": {
-        "wildaside:progress": 0.6666667
+        "wildaside:sample_progress": 0.6666667
       }
     },
     {
       "model": "wildaside:item/dna_holder_stage3",
       "predicate": {
-        "wildaside:progress": 1.0
+        "wildaside:sample_progress": 1.0
       }
     }
   ],

@@ -222,7 +222,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         for (int i = 0; i <= DnaHolder.DEFAULT_MAX_SAMPLES; i++) {
             float progress = i / (float) DnaHolder.DEFAULT_MAX_SAMPLES;
             builder.override()
-                    .predicate(new ResourceLocation(WildAside.MOD_ID, "progress"), progress)
+                    .predicate(new ResourceLocation(WildAside.MOD_ID, DnaHolder.SAMPLE_PROGRESS), progress)
                     .model(getExistingFile(modLoc("item/" + baseName + "_stage" + i)))
                     .end();
         }
@@ -245,7 +245,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         for (int i = 0; i < Syringe.DEFAULT_MAX_LOAD; i++) {
             float progress = i / (float) Syringe.DEFAULT_MAX_LOAD;
             builder.override()
-                    .predicate(new ResourceLocation(WildAside.MOD_ID, "syringe_progress"), progress)
+                    .predicate(new ResourceLocation(WildAside.MOD_ID, Syringe.SYRINGE_PROGRESS), progress)
                     .model(getExistingFile(modLoc("item/" + baseName + "_stage" + i)))
                     .end();
         }

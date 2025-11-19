@@ -46,15 +46,15 @@ public class NetworkHandler {
 
         CHANNEL.registerMessage(id(),
                 BioengineeringWorkstationTabPacket.class,
-                BioengineeringWorkstationTabPacket::toBytes,
-                BioengineeringWorkstationTabPacket::new,
+                BioengineeringWorkstationTabPacket::encode,
+                BioengineeringWorkstationTabPacket::decode,
                 BioengineeringWorkstationTabPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
 
         CHANNEL.registerMessage(id(),
                 RecompileDnaPacket.class,
-                RecompileDnaPacket::toBytes,
-                RecompileDnaPacket::new,
+                RecompileDnaPacket::encode,
+                RecompileDnaPacket::decode,
                 RecompileDnaPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
     }

@@ -1,7 +1,6 @@
 package net.farkas.wildaside.network.packets;
 
 import net.farkas.wildaside.block.entity.BioengineeringWorkstationBlockEntity;
-import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,9 +19,10 @@ public class RecompileDnaPacket {
         this.pos = buf.readBlockPos();
     }
 
-    public void toBytes(FriendlyByteBuf buf) {
+    public void encode(FriendlyByteBuf buf) {
         buf.writeBlockPos(pos);
     }
+    public static RecompileDnaPacket decode(FriendlyByteBuf buf) { return new RecompileDnaPacket(buf.readBlockPos()); }
 
     public static void handle(RecompileDnaPacket msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {

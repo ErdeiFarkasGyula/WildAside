@@ -16,6 +16,8 @@ import net.minecraft.world.level.Level;
 public class Syringe extends Item {
     public static int DEFAULT_MAX_LOAD = 3;
 
+    public static final String SYRINGE_PROGRESS = "syringe_progress";
+
     public Syringe(Properties pProperties) {
         super(pProperties);
     }

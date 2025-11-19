@@ -10,6 +10,7 @@ import net.farkas.wildaside.entity.client.ModModelLayers;
 import net.farkas.wildaside.entity.client.hickory.HickoryTreantRenderer;
 import net.farkas.wildaside.entity.client.vibrion.MucellithModel;
 import net.farkas.wildaside.item.ModItems;
+import net.farkas.wildaside.item.custom.DnaHolder;
 import net.farkas.wildaside.particle.*;
 import net.farkas.wildaside.particle.custom.*;
 import net.minecraft.client.model.BoatModel;
@@ -31,6 +32,8 @@ import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import static net.farkas.wildaside.item.custom.DnaHolder.DNA_DATA;
 
 @Mod.EventBusSubscriber(modid = WildAside.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ModEventBusClientEvents {
@@ -88,9 +91,9 @@ public class ModEventBusClientEvents {
         }, ModBlocks.HICKORY_LEAVES.get());
 
         event.getItemColors().register((stack, tintIndex) -> {
-            if (!stack.hasTag() || !stack.getTag().contains("dna_data")) return 0xFFFFFF;
+            if (!stack.hasTag() || !stack.getTag().contains(DNA_DATA)) return 0xFFFFFF;
 
-            CompoundTag dnaTag = stack.getTag().getCompound("dna_data");
+            CompoundTag dnaTag = stack.getTag().getCompound(DNA_DATA);
             DnaImplementation dna = new DnaImplementation();
             dna.deserializeNBT(dnaTag);
 

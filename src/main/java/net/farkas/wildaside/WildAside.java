@@ -70,6 +70,9 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 import terrablender.api.SurfaceRuleManager;
 
+import static net.farkas.wildaside.item.custom.DnaHolder.SAMPLE_PROGRESS;
+import static net.farkas.wildaside.item.custom.Syringe.SYRINGE_PROGRESS;
+
 @Mod(WildAside.MOD_ID)
 public class WildAside
 {
@@ -212,12 +215,12 @@ public class WildAside
 
             ItemProperties.register(
                     ModItems.DNA_HOLDER.get(),
-                    new ResourceLocation(MOD_ID, "progress"),
+                    new ResourceLocation(MOD_ID, SAMPLE_PROGRESS),
                     (stack, level, entity, seed) -> {
                         if (!stack.hasTag()) return 0f;
                         CompoundTag tag = stack.getTag();
-                        if (tag.contains("sample_progress")) {
-                            int progress = tag.getInt("sample_progress");
+                        if (tag.contains(SAMPLE_PROGRESS)) {
+                            int progress = tag.getInt(SAMPLE_PROGRESS);
                             return Mth.clamp((float) progress / DnaHolder.DEFAULT_MAX_SAMPLES, 0f, 1f);
                         }
                         return 0f;
@@ -226,12 +229,12 @@ public class WildAside
 
             ItemProperties.register(
                     ModItems.SYRINGE.get(),
-                    new ResourceLocation(MOD_ID, "syringe_progress"),
+                    new ResourceLocation(MOD_ID, SYRINGE_PROGRESS),
                     (stack, level, entity, seed) -> {
                         if (!stack.hasTag()) return 0f;
                         CompoundTag tag = stack.getTag();
-                        if (tag.contains("syringe_progress")) {
-                            int progress = tag.getInt("syringe_progress");
+                        if (tag.contains(SYRINGE_PROGRESS)) {
+                            int progress = tag.getInt(SYRINGE_PROGRESS);
                             return Mth.clamp((float) progress / Syringe.DEFAULT_MAX_LOAD, 0f, 1f);
                         }
                         return 0f;
