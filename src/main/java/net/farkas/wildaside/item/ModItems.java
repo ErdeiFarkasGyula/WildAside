@@ -5,6 +5,7 @@ import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.entity.custom.ModBoatEntity;
 import net.farkas.wildaside.item.custom.*;
+import net.farkas.wildaside.item.custom.syringe.SyringeItem;
 import net.farkas.wildaside.util.HickoryColour;
 import net.minecraft.world.item.HangingSignItem;
 import net.minecraft.world.item.Item;
@@ -46,7 +47,7 @@ public class ModItems {
     public static final RegistryObject<Item> DNA_HOLDER = ITEMS.register("dna_holder",
             () ->  new DnaHolder(new Item.Properties().stacksTo(64)));
     public static final RegistryObject<Item> SYRINGE = ITEMS.register("syringe",
-            () ->  new Syringe(new Item.Properties().stacksTo(1)));
+            () ->  new SyringeItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> SUBSTILIUM_SIGN = ITEMS.register("substilium_sign",
             () ->  new SignItem(new Item.Properties().stacksTo(16), ModBlocks.SUBSTILIUM_SIGN.get(), ModBlocks.SUBSTILIUM_WALL_SIGN.get()));

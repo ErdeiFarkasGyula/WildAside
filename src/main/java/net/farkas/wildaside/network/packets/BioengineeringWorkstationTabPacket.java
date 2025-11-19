@@ -18,9 +18,10 @@ public class BioengineeringWorkstationTabPacket {
         this.tabIndex = buf.readInt();
     }
 
-    public void toBytes(FriendlyByteBuf buf) {
+    public void encode(FriendlyByteBuf buf) {
         buf.writeInt(tabIndex);
     }
+    public static BioengineeringWorkstationTabPacket decode(FriendlyByteBuf buf) { return new BioengineeringWorkstationTabPacket(buf.readInt()); }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         NetworkEvent.Context context = ctx.get();

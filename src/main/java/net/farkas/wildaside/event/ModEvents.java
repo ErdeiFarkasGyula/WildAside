@@ -7,6 +7,7 @@ import net.farkas.wildaside.capability.contamination.ContaminationCapability;
 import net.farkas.wildaside.capability.contamination.ContaminationProvider;
 import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.capability.dna.DnaProvider;
+import net.farkas.wildaside.capability.syringe.SyringeAnimProvider;
 import net.farkas.wildaside.command.ModCommands;
 import net.farkas.wildaside.config.Config;
 import net.farkas.wildaside.dna.DnaUtils;
@@ -14,7 +15,6 @@ import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.ability.IAbility;
 import net.farkas.wildaside.dna.speed.MobSpeedTestTracker;
 import net.farkas.wildaside.dna.traits.Trait;
-import net.farkas.wildaside.dna.traits.TraitTypes;
 import net.farkas.wildaside.dna.traits.Traits;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.network.WindSavedData;
@@ -37,8 +37,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -60,7 +58,6 @@ import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Map;
 
@@ -71,6 +68,9 @@ public class ModEvents {
         if (event.getObject() instanceof LivingEntity livingEntity) {
             event.addCapability(ContaminationProvider.IDENTIFIER, new ContaminationProvider());
             event.addCapability(DnaProvider.IDENTIFIER, new DnaProvider());
+        }
+        if (event.getObject() instanceof Player player) {
+            event.addCapability(SyringeAnimProvider.IDENTIFIER, new SyringeAnimProvider());
         }
     }
 

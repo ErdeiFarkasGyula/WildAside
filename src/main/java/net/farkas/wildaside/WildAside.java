@@ -17,7 +17,7 @@ import net.farkas.wildaside.item.ModCreativeModeTabs;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.item.VanillaCreativeTabs;
 import net.farkas.wildaside.item.custom.DnaHolder;
-import net.farkas.wildaside.item.custom.Syringe;
+import net.farkas.wildaside.item.custom.syringe.SyringeItem;
 import net.farkas.wildaside.network.NetworkHandler;
 import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.potion.BetterBrewingRecipe;
@@ -212,12 +212,12 @@ public class WildAside
 
             ItemProperties.register(
                     ModItems.DNA_HOLDER.get(),
-                    new ResourceLocation(MOD_ID, "progress"),
+                    new ResourceLocation(MOD_ID, DnaHolder.SAMPLE_PROGRESS),
                     (stack, level, entity, seed) -> {
                         if (!stack.hasTag()) return 0f;
                         CompoundTag tag = stack.getTag();
-                        if (tag.contains("sample_progress")) {
-                            int progress = tag.getInt("sample_progress");
+                        if (tag.contains(DnaHolder.SAMPLE_PROGRESS)) {
+                            int progress = tag.getInt(DnaHolder.SAMPLE_PROGRESS);
                             return Mth.clamp((float) progress / DnaHolder.DEFAULT_MAX_SAMPLES, 0f, 1f);
                         }
                         return 0f;
@@ -226,13 +226,13 @@ public class WildAside
 
             ItemProperties.register(
                     ModItems.SYRINGE.get(),
-                    new ResourceLocation(MOD_ID, "syringe_progress"),
+                    new ResourceLocation(MOD_ID, SyringeItem.NEEDLE_PROGRESS),
                     (stack, level, entity, seed) -> {
                         if (!stack.hasTag()) return 0f;
                         CompoundTag tag = stack.getTag();
-                        if (tag.contains("syringe_progress")) {
-                            int progress = tag.getInt("syringe_progress");
-                            return Mth.clamp((float) progress / Syringe.DEFAULT_MAX_LOAD, 0f, 1f);
+                        if (tag.contains(SyringeItem.NEEDLE_PROGRESS)) {
+                            int progress = tag.getInt(SyringeItem.NEEDLE_PROGRESS);
+                            return Mth.clamp((float) progress / SyringeItem.MAX_PROGRESS, 0f, 1f);
                         }
                         return 0f;
                     }
