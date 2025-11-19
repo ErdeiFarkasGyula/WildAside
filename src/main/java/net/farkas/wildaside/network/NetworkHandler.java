@@ -46,23 +46,16 @@ public class NetworkHandler {
 
         CHANNEL.registerMessage(id(),
                 BioengineeringWorkstationTabPacket.class,
-                BioengineeringWorkstationTabPacket::encode,
-                BioengineeringWorkstationTabPacket::decode,
+                BioengineeringWorkstationTabPacket::toBytes,
+                BioengineeringWorkstationTabPacket::new,
                 BioengineeringWorkstationTabPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
 
         CHANNEL.registerMessage(id(),
                 RecompileDnaPacket.class,
-                RecompileDnaPacket::encode,
-                RecompileDnaPacket::decode,
+                RecompileDnaPacket::toBytes,
+                RecompileDnaPacket::new,
                 RecompileDnaPacket::handle,
-                Optional.of(NetworkDirection.PLAY_TO_SERVER));
-
-        CHANNEL.registerMessage(id(),
-                SyringeAnimPacket.class,
-                SyringeAnimPacket::encode,
-                SyringeAnimPacket::decode,
-                SyringeAnimPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
     }
 
@@ -96,13 +89,5 @@ public class NetworkHandler {
             return;
         }
         CHANNEL.send(PacketDistributor.SERVER.noArg(), new RecompileDnaPacket(pos));
-    }
-
-    public static void sendSyringeAnimPacket(boolean inwards, int slot) {
-        if (CHANNEL == null) {
-            WildAside.LOGGER.warn("Tried to send syringe animation update before network init. Ignoring.");
-            return;
-        }
-        CHANNEL.send(PacketDistributor.SERVER.noArg(), new SyringeAnimPacket(inwards, slot));
     }
 }

@@ -27,7 +27,7 @@ public class ContaminationImplementation implements IContamination {
 
     @Override
     public CompoundTag serializeNBT() {
-        CompoundTag tag = new CompoundTag();
+        final CompoundTag tag = new CompoundTag();
         tag.putInt("contamination_dose", this.dose);
         return tag;
     }

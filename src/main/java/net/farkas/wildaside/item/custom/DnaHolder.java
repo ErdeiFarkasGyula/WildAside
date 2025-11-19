@@ -13,7 +13,6 @@ import net.farkas.wildaside.sound.ModSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -24,6 +23,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -31,28 +31,10 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class DnaHolder extends Item {
-    public static final int MAX_COOLDOWN = 60;
+    private static final int MAX_COOLDOWN = 60;
 
-    public static final String DNA_DATA = "dna_data";
-    public static final String NO_DNA_DATA = "no_dna_data";
-    public static final String DNA_DATA_HIDDEN = "dna_data_hidden";
-    public static final String DNA_MUTATED = "dna_mutated";
-    public static final String DNA_MISMATCH = "dna_mismatch";
-
-    public static final String SAMPLE_PROGRESS = "sample_progress";
-    public static final String MAX_SAMPLES = "max_samples";
-
-    public static final String REVEAL_SOURCE = "reveal_source";
-    public static final String REVEAL_STABILITY = "reveal_stability";
-    public static final String REVEAL_TRAITS = "reveal_traits";
-
-    public static final String STABILITY = "stability";
-    public static final String SOURCE = "source";
-    public static final String UNKNOWN = "unknown";
-
-    public static final String CORE_TRAITS = "core_traits";
-    public static final String RESISTANCES = "resistances";
-    public static final String ABILITIES = "abilities";
+    private static final String TAG_SAMPLE_PROGRESS = "sample_progress";
+    private static final String TAG_MAX_SAMPLES = "max_samples";
 
     public static final int DEFAULT_MAX_SAMPLES = 3;
 
@@ -61,29 +43,29 @@ public class DnaHolder extends Item {
     }
 
     public boolean hasDna(ItemStack stack) {
-        return stack.getOrCreateTag().getInt(SAMPLE_PROGRESS) > 0;
+        return stack.getOrCreateTag().getInt("sample_progress") > 0;
     }
 
     @Override
     public int getMaxStackSize(ItemStack stack) {
-        if (stack.hasTag() && stack.getTag().getInt(SAMPLE_PROGRESS) > 0) {
+        if (stack.hasTag() && stack.getTag().getInt("sample_progress") > 0) {
             return 1;
         }
         return super.getMaxStackSize(stack);
     }
+
     @Override
     public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
         if (hand == InteractionHand.OFF_HAND || player.level().isClientSide()) return InteractionResult.PASS;
 
         CompoundTag tag = stack.getOrCreateTag();
-        CompoundTag dnaTag = tag.getCompound(DNA_DATA);
+        CompoundTag dnaTag = tag.getCompound("dna_data");
         DnaImplementation dna = new DnaImplementation();
-
         if (dnaTag != null && !dnaTag.isEmpty()) {
             dna.deserializeNBT(dnaTag);
 
             if (dna.source() != null && dna.source() != target.getType()) {
-                player.displayClientMessage(getTranslatable(DNA_MISMATCH).withStyle(ChatFormatting.RED), true);
+                player.displayClientMessage(Component.translatable("dna.wildaside.dna_mismatch").withStyle(ChatFormatting.RED), true);
                 return InteractionResult.sidedSuccess(player.level().isClientSide());
             }
         }
@@ -106,14 +88,14 @@ public class DnaHolder extends Item {
     private ItemStack applyDna(Player player, LivingEntity target, ItemStack stack) {
         CompoundTag tag = stack.getOrCreateTag();
         int maxProgress = DEFAULT_MAX_SAMPLES;
-        int progress = tag.getInt(SAMPLE_PROGRESS);
+        int progress = tag.getInt("sample_progress");
 
         if (progress >= maxProgress) return stack;
 
         DnaImplementation existingDna;
-        if (tag.contains(DNA_DATA)) {
+        if (tag.contains("dna_data")) {
             existingDna = new DnaImplementation();
-            existingDna.deserializeNBT(tag.getCompound(DNA_DATA));
+            existingDna.deserializeNBT(tag.getCompound("dna_data"));
 
             if (!Objects.equals(existingDna.source(), target.getType())) {
                 return stack;
@@ -123,13 +105,13 @@ public class DnaHolder extends Item {
         }
 
         progress = Math.min(progress + 1, maxProgress);
-        tag.putInt(SAMPLE_PROGRESS, progress);
+        tag.putInt("sample_progress", progress);
 
         AtomicReference<Map<Trait, Gene>> baseGenes = new AtomicReference<>(DnaUtils.generateBaseGenes(target, false));
         DnaImplementation newDna = new DnaImplementation();
 
         target.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-            boolean hasMutated = target.getPersistentData().getBoolean(DNA_MUTATED);
+            boolean hasMutated = target.getPersistentData().getBoolean("dna_mutated");
             if (!hasMutated) {
                 baseGenes.set(DnaUtils.mutateGenes(dna.genes(), target));
                 if (Config.ACCURATE_DNA_MOVEMENT_SPEEDS.get()) {
@@ -178,11 +160,11 @@ public class DnaHolder extends Item {
             newDna.setGenes(averaged);
         }
 
-        tag.put(DNA_DATA, newDna.serializeNBT());
+        tag.put("dna_data", newDna.serializeNBT());
 
-        tag.putBoolean(REVEAL_SOURCE, false);
-        tag.putBoolean(REVEAL_STABILITY, false);
-        tag.putBoolean(REVEAL_TRAITS, false);
+        tag.putBoolean("reveal_source", false);
+        tag.putBoolean("reveal_stability", false);
+        tag.putBoolean("reveal_traits", false);
 
         stack.setTag(tag);
 
@@ -195,9 +177,9 @@ public class DnaHolder extends Item {
     @Override
     public boolean onDroppedByPlayer(ItemStack item, Player player) {
         CompoundTag tag = item.getOrCreateTag();
-        tag.putBoolean(REVEAL_SOURCE, true);
-        tag.putBoolean(REVEAL_STABILITY, true);
-        tag.putBoolean(REVEAL_TRAITS, true);
+        tag.putBoolean("reveal_source", true);
+        tag.putBoolean("reveal_stability", true);
+        tag.putBoolean("reveal_traits", true);
         item.setTag(tag);
         return super.onDroppedByPlayer(item, player);
     }
@@ -210,51 +192,53 @@ public class DnaHolder extends Item {
         int progress = getSampleProgress(stack);
         int maxSamples = getMaxSamples(stack);
 
-        Component sampleComponent = getTranslatable(SAMPLE_PROGRESS)
+        Component sampleComponent = Component.translatable("dna.wildaside.sample_progress")
                 .append(Component.literal(": " + progress + "/" + maxSamples))
                 .withStyle(progress >= maxSamples ? ChatFormatting.GREEN : ChatFormatting.GRAY);
         tooltip.add(sampleComponent);
 
-        if (!tag.contains(DNA_DATA)) {
-            tooltip.add(getTranslatable(NO_DNA_DATA).withStyle(ChatFormatting.DARK_GRAY));
+        if (!tag.contains("dna_data")) {
+            tooltip.add(Component.translatable("dna.wildaside.no_dna_data")
+                    .withStyle(ChatFormatting.DARK_GRAY));
             return;
         }
 
         DnaImplementation dna = new DnaImplementation();
-        dna.deserializeNBT(tag.getCompound(DNA_DATA));
+        dna.deserializeNBT(tag.getCompound("dna_data"));
 
-        boolean revealSource = tag.getBoolean(REVEAL_SOURCE);
-        boolean revealStability = tag.getBoolean(REVEAL_STABILITY);
-        boolean revealTraits = tag.getBoolean(REVEAL_TRAITS);
+        boolean revealSource = tag.getBoolean("reveal_source");
+        boolean revealStability = tag.getBoolean("reveal_stability");
+        boolean revealTraits = tag.getBoolean("reveal_traits");
 
         if (!(revealSource || revealStability || revealTraits)) {
-            tooltip.add(getTranslatable(DNA_DATA_HIDDEN).withStyle(ChatFormatting.STRIKETHROUGH, ChatFormatting.DARK_GRAY));
+            tooltip.add(Component.translatable("dna.wildaside.dna_data_hidden")
+                    .withStyle(ChatFormatting.STRIKETHROUGH, ChatFormatting.DARK_GRAY));
             return;
         }
 
         if (revealSource) {
             Component sourceName = dna.source() != null
                     ? dna.source().getDescription()
-                    : getTranslatable(UNKNOWN);
-            tooltip.add(getTranslatable(SOURCE)
+                    : Component.translatable("dna.wildaside.unknown");
+            tooltip.add(Component.translatable("dna.wildaside.source")
                     .append(": " + sourceName.getString())
                     .withStyle(ChatFormatting.AQUA));
         }
 
         if (revealStability) {
-            tooltip.add(getTranslatable(STABILITY)
+            tooltip.add(Component.translatable("dna.wildaside.stability")
                     .append(": " + String.format("%.2f", dna.stability()))
                     .withStyle(ChatFormatting.GREEN));
         }
 
         if (revealTraits) {
-            displayGenesSection(tooltip, dna, TraitTypes.CORE, getTranslatable(CORE_TRAITS));
-            displayGenesSection(tooltip, dna, TraitTypes.RESISTANCE, getTranslatable(RESISTANCES));
-            displayGenesSection(tooltip, dna, TraitTypes.ABILITY, getTranslatable(ABILITIES));
+            displayGenesSection(tooltip, dna, TraitTypes.CORE, "dna.wildaside.core_traits");
+            displayGenesSection(tooltip, dna, TraitTypes.RESISTANCE, "dna.wildaside.resistances");
+            displayGenesSection(tooltip, dna, TraitTypes.ABILITY, "dna.wildaside.abilities");
         }
     }
 
-    private void displayGenesSection(List<Component> tooltip, DnaImplementation dna, TraitTypes type, MutableComponent title) {
+    private void displayGenesSection(List<Component> tooltip, DnaImplementation dna, TraitTypes type, String title) {
         Map<Trait, Gene> filtered = dna.genes().entrySet().stream()
                 .filter(e -> e.getKey().traitType() == type)
                 .sorted(Map.Entry.comparingByKey(Comparator.comparing(Trait::name)))
@@ -262,7 +246,7 @@ public class DnaHolder extends Item {
 
         if (filtered.isEmpty()) return;
 
-        tooltip.add(title.withStyle(type.headerColour));
+        tooltip.add(Component.translatable(title).withStyle(type.headerColour));
 
         filtered.values().forEach(gene -> {
             float value = gene.value();
@@ -284,21 +268,17 @@ public class DnaHolder extends Item {
     }
 
     private int getSampleProgress(ItemStack stack) {
-        return stack.getOrCreateTag().getInt(SAMPLE_PROGRESS);
+        return stack.getOrCreateTag().getInt(TAG_SAMPLE_PROGRESS);
     }
 
     private void setSampleProgress(ItemStack stack, int progress) {
-        stack.getOrCreateTag().putInt(SAMPLE_PROGRESS, progress);
+        stack.getOrCreateTag().putInt(TAG_SAMPLE_PROGRESS, progress);
     }
 
     private int getMaxSamples(ItemStack stack) {
         CompoundTag tag = stack.getOrCreateTag();
-        if (!tag.contains(MAX_SAMPLES))
-            tag.putInt(MAX_SAMPLES, DEFAULT_MAX_SAMPLES);
-        return tag.getInt(MAX_SAMPLES);
-    }
-
-    public static MutableComponent getTranslatable(String string) {
-        return Component.translatable("dna.wildaside." + string);
+        if (!tag.contains(TAG_MAX_SAMPLES))
+            tag.putInt(TAG_MAX_SAMPLES, DEFAULT_MAX_SAMPLES);
+        return tag.getInt(TAG_MAX_SAMPLES);
     }
 }

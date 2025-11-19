@@ -24,6 +24,10 @@ public class DnaProvider implements ICapabilityProvider, INBTSerializable<Compou
         return DnaCapability.INSTANCE.orEmpty(cap, this.optionalData);
     }
 
+    void invalidate() {
+        this.optionalData.invalidate();
+    }
+
     @Override
     public CompoundTag serializeNBT() {
         return this.backend.serializeNBT();

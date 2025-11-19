@@ -24,6 +24,10 @@ public class ContaminationProvider implements ICapabilityProvider, INBTSerializa
         return ContaminationCapability.INSTANCE.orEmpty(cap, this.optionalData);
     }
 
+    void invalidate() {
+        this.optionalData.invalidate();
+    }
+
     @Override
     public CompoundTag serializeNBT() {
         return this.backend.serializeNBT();
