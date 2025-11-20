@@ -5,6 +5,7 @@ import net.farkas.wildaside.network.packets.*;
 import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationTab;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.network.NetworkDirection;
@@ -57,6 +58,13 @@ public class NetworkHandler {
                 RecompileDnaPacket::decode,
                 RecompileDnaPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
+
+        CHANNEL.registerMessage(id(),
+                SyringeDataPacket.class,
+                SyringeDataPacket::encode,
+                SyringeDataPacket::decode,
+                SyringeDataPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
     public static void sendWindUpdateToAll(Vec3 dir, float strength) {
@@ -89,5 +97,12 @@ public class NetworkHandler {
             return;
         }
         CHANNEL.send(PacketDistributor.SERVER.noArg(), new RecompileDnaPacket(pos));
+    }
+
+    public static void sendSyringeDataClientSyncPacket(ServerPlayer player, int slot, float progress, boolean animating, boolean inwards) {
+        if (CHANNEL == null) return;
+
+        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player),
+                new SyringeDataPacket(slot, progress, animating, inwards));
     }
 }

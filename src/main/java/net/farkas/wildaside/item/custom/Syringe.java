@@ -1,7 +1,12 @@
 package net.farkas.wildaside.item.custom;
 
+import net.farkas.wildaside.capability.syringe.SyringeDataCapability;
+import net.farkas.wildaside.capability.syringe.SyringeDataProvider;
 import net.farkas.wildaside.item.ModItems;
+import net.farkas.wildaside.network.NetworkHandler;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -12,86 +17,84 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import org.jetbrains.annotations.Nullable;
 
 public class Syringe extends Item {
-    public static int DEFAULT_MAX_LOAD = 3;
+    public static final int DEFAULT_MAX_LOAD = 3;
+    private static final int SYNC_INTERVAL = 4;
+    public static final int MAX_BLOOD_LEVEL = 3;
+    public static final int BLOOD_DECAY_INTERVAL = 20 * 2;
 
     public static final String SYRINGE_PROGRESS = "syringe_progress";
+    public static final String BLOOD_LEVEL = "blood_level";
+    public static final String BLOOD_DECAY_TICKS = "blood_decay_ticks";
 
     public Syringe(Properties pProperties) {
         super(pProperties);
     }
 
     @Override
-    public InteractionResult interactLivingEntity(ItemStack pStack, Player pPlayer, LivingEntity pInteractionTarget, InteractionHand pUsedHand) {
-        if (pUsedHand == InteractionHand.OFF_HAND || pPlayer.level().isClientSide()) return InteractionResult.PASS;
-        
-        return InteractionResult.sidedSuccess(pPlayer.level().isClientSide());
-    }
-
-    @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
-        if (pPlayer.level().isClientSide()) return InteractionResultHolder.pass(pPlayer.getItemInHand(pUsedHand));
-
-        if (pUsedHand == InteractionHand.MAIN_HAND) {
-            ItemStack stack = pPlayer.getItemInHand(pUsedHand);
-            if (startSyringeAnimation(pPlayer, pUsedHand, stack)) return InteractionResultHolder.pass(stack);
-
-            if (pPlayer.getItemInHand(InteractionHand.OFF_HAND).is(ModItems.DNA_HOLDER.get())) {
-                System.out.println("MEOW");
-
-            }
-        }
+        if (pLevel.isClientSide() || pUsedHand != InteractionHand.MAIN_HAND) return InteractionResultHolder.pass(pPlayer.getItemInHand(pUsedHand));
+        startSyringeAnimation((ServerPlayer) pPlayer, pUsedHand, pPlayer.getMainHandItem());
         return super.use(pLevel, pPlayer, pUsedHand);
     }
 
-    private boolean startSyringeAnimation(Player pPlayer, InteractionHand pUsedHand, ItemStack stack) {
-        CompoundTag tag = stack.getOrCreateTag();
-        boolean inProgress = tag.getBoolean("in_progress");
-        if (inProgress) return true;
-
-        tag.putBoolean("in_progress", true);
-        tag.putInt("slot", pPlayer.getInventory().selected);
-
-        boolean inwards = tag.getBoolean("inwards");
-        tag.putBoolean("inwards", !inwards);
-
-        stack.setTag(tag);
-        pPlayer.setItemInHand(pUsedHand, stack);
-        return false;
-    }
-
     @Override
-    public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
-        CompoundTag tag = pStack.getOrCreateTag();
-        boolean inProgress = tag.getBoolean("in_progress");
-        if (!inProgress) return;
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
+        super.inventoryTick(stack, level, entity, slot, selected);
 
-        if (pEntity instanceof Player player) {
-            int slot = tag.getInt("slot");
-            if (slot != player.getInventory().selected) {
-                tag.putBoolean("in_progress", false);
+        if (!(entity instanceof ServerPlayer serverPlayer)) {
+            return;
+        }
+
+        stack.getCapability(SyringeDataCapability.INSTANCE).ifPresent(cap -> {
+            if (!cap.isAnimating()) return;
+
+            if (cap.getSlot() != serverPlayer.getInventory().selected) {
+                cap.setAnimating(false);
+                NetworkHandler.sendSyringeDataClientSyncPacket(serverPlayer, cap.getSlot(), cap.getProgress(), false, cap.isInwards());
                 return;
             }
 
-            boolean inwards = tag.getBoolean("inwards");
+            float delta = 0.1f;
+            float old = cap.getProgress();
+            float next = old + (cap.isInwards() ? delta : -delta);
+            cap.setProgress(next);
 
-            float prog = tag.getFloat("syringe_progress");
-
-            if (inwards) {
-                prog += 0.1f;
-            } else {
-                prog -= 0.1f;
+            boolean finished = next >= DEFAULT_MAX_LOAD || next <= 0f;
+            if (finished) {
+                cap.setAnimating(false);
+                cap.setProgress(Mth.clamp(next, 0f, DEFAULT_MAX_LOAD));
             }
 
-            System.out.println(" prog: " + prog);
-
-            if (prog >= Syringe.DEFAULT_MAX_LOAD || prog < 0.0f) {
-                tag.putBoolean("in_progress", false);
+            if (Math.abs(next - old) > 1e-4f || serverPlayer.tickCount % SYNC_INTERVAL == 0 || finished) {
+                NetworkHandler.sendSyringeDataClientSyncPacket(serverPlayer, cap.getSlot(), cap.getProgress(), cap.isAnimating(), cap.isInwards());
             }
 
-            tag.putFloat("syringe_progress", prog);
-            pStack.setTag(tag);
-        }
+            if (finished) {
+
+            }
+        });
+    }
+
+    public static boolean startSyringeAnimation(ServerPlayer player, InteractionHand hand, ItemStack stack) {
+        if (player == null) return false;
+        stack.getCapability(SyringeDataCapability.INSTANCE).ifPresent(cap -> {
+            if (cap.isAnimating()) return;
+            cap.setAnimating(true);
+            cap.setSlot(player.getInventory().selected);
+            cap.setInwards(!cap.isInwards());
+            cap.setProgress(cap.getProgress());
+
+            NetworkHandler.sendSyringeDataClientSyncPacket(player, cap.getSlot(), cap.getProgress(), cap.isAnimating(), cap.isInwards());
+        });
+        return true;
+    }
+
+    @Override
+    public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
+        return new SyringeDataProvider();
     }
 }

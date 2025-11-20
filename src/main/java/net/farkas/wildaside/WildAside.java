@@ -3,6 +3,8 @@ package net.farkas.wildaside;
 import com.mojang.logging.LogUtils;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.ModBlockEntities;
+import net.farkas.wildaside.capability.syringe.ISyringeData;
+import net.farkas.wildaside.capability.syringe.SyringeDataCapability;
 import net.farkas.wildaside.config.Config;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.enchantment.ModEnchantments;
@@ -229,16 +231,12 @@ public class WildAside
 
             ItemProperties.register(
                     ModItems.SYRINGE.get(),
-                    new ResourceLocation(MOD_ID, SYRINGE_PROGRESS),
-                    (stack, level, entity, seed) -> {
-                        if (!stack.hasTag()) return 0f;
-                        CompoundTag tag = stack.getTag();
-                        if (tag.contains(SYRINGE_PROGRESS)) {
-                            int progress = tag.getInt(SYRINGE_PROGRESS);
-                            return Mth.clamp((float) progress / Syringe.DEFAULT_MAX_LOAD, 0f, 1f);
-                        }
-                        return 0f;
-                    }
+                    new ResourceLocation(WildAside.MOD_ID, Syringe.SYRINGE_PROGRESS),
+                    (stack, level, entity, seed) ->
+                            stack.getCapability(SyringeDataCapability.INSTANCE)
+                            .map(ISyringeData::getProgress)
+                            .map(progress -> Mth.clamp(progress / Syringe.DEFAULT_MAX_LOAD, 0f, 1f))
+                            .orElse(0f)
             );
         }
     }
