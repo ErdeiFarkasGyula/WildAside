@@ -2,7 +2,7 @@ package net.farkas.wildaside.dna.speed;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.capability.dna.DnaCapability;
-import net.farkas.wildaside.config.Config;
+import net.farkas.wildaside.config.ModConfig;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,7 +22,7 @@ public class MobSwimSpeedAdjustmentHandler {
 
     @SubscribeEvent
     public static void onLivingTick(LivingEvent.LivingTickEvent event) {
-        if (!Config.ACCURATE_DNA_WATER_MOVEMENT_SPEEDS.get()) return;
+        if (!ModConfig.ACCURATE_DNA_WATER_MOVEMENT_SPEEDS.get()) return;
 
         LivingEntity entity = event.getEntity();
         if (entity.level().isClientSide()) return;

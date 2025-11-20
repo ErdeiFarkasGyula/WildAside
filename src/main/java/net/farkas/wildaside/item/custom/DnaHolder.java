@@ -2,7 +2,7 @@ package net.farkas.wildaside.item.custom;
 
 import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
-import net.farkas.wildaside.config.Config;
+import net.farkas.wildaside.config.ModConfig;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.speed.MobSpeedResultStorage;
@@ -24,7 +24,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -133,7 +132,7 @@ public class DnaHolder extends Item {
             boolean hasMutated = target.getPersistentData().getBoolean(DNA_MUTATED);
             if (!hasMutated) {
                 baseGenes.set(DnaUtils.mutateGenes(dna.genes(), target));
-                if (Config.ACCURATE_DNA_MOVEMENT_SPEEDS.get()) {
+                if (ModConfig.ACCURATE_DNA_MOVEMENT_SPEEDS.get()) {
                     Trait trait = Traits.MOVEMENT_SPEED;
                     Gene gene = DnaUtils.mutateGene(new Gene(trait, (float) MobSpeedResultStorage.getSpeed(target.getType(), "ground"), trait.baseInstability()), target);
                     baseGenes.get().replace(trait, gene);

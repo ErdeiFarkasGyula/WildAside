@@ -7,7 +7,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.farkas.wildaside.capability.dna.DnaCapability;
-import net.farkas.wildaside.config.Config;
+import net.farkas.wildaside.config.ModConfig;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.traits.Trait;
 import net.farkas.wildaside.dna.traits.Traits;
@@ -108,7 +108,7 @@ public class ModCommands {
                         .then(Commands.argument("enabled", BoolArgumentType.bool())
                                 .executes(context -> {
                                         boolean value = BoolArgumentType.getBool(context, "enabled");
-                                        Config.setShowUpdates(value);
+                                        ModConfig.setShowUpdates(value);
                                         context.getSource().sendSuccess(() ->
                                                 Component.translatable("command.wildaside.update_notification",
                                                 Component.translatable("mod.wildaside"),

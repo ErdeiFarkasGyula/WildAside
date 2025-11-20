@@ -5,7 +5,7 @@ import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.ModBlockEntities;
 import net.farkas.wildaside.capability.syringe.ISyringeData;
 import net.farkas.wildaside.capability.syringe.SyringeDataCapability;
-import net.farkas.wildaside.config.Config;
+import net.farkas.wildaside.config.ModConfig;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.enchantment.ModEnchantments;
 import net.farkas.wildaside.entity.ModEntities;
@@ -65,7 +65,6 @@ import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -73,7 +72,6 @@ import org.slf4j.Logger;
 import terrablender.api.SurfaceRuleManager;
 
 import static net.farkas.wildaside.item.custom.DnaHolder.SAMPLE_PROGRESS;
-import static net.farkas.wildaside.item.custom.Syringe.SYRINGE_PROGRESS;
 
 @Mod(WildAside.MOD_ID)
 public class WildAside
@@ -83,8 +81,8 @@ public class WildAside
 
     public WildAside(FMLJavaModLoadingContext context)
     {
-        context.registerConfig(ModConfig.Type.COMMON, Config.COMMON_SPEC);
-        context.registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_SPEC);
+        context.registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, ModConfig.COMMON_SPEC);
+        context.registerConfig(net.minecraftforge.fml.config.ModConfig.Type.CLIENT, ModConfig.CLIENT_SPEC);
 
         IEventBus modEventBus = context.getModEventBus();
 

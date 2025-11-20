@@ -8,13 +8,12 @@ import net.farkas.wildaside.capability.contamination.ContaminationProvider;
 import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.capability.dna.DnaProvider;
 import net.farkas.wildaside.command.ModCommands;
-import net.farkas.wildaside.config.Config;
+import net.farkas.wildaside.config.ModConfig;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.ability.IAbility;
 import net.farkas.wildaside.dna.speed.MobSpeedTestTracker;
 import net.farkas.wildaside.dna.traits.Trait;
-import net.farkas.wildaside.dna.traits.TraitTypes;
 import net.farkas.wildaside.dna.traits.Traits;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.network.WindSavedData;
@@ -37,8 +36,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -60,7 +57,6 @@ import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Map;
 
@@ -93,7 +89,7 @@ public class ModEvents {
     }
 
     public static void checkTestDimensionEntityRemoves(EntityLeaveLevelEvent event) {
-        if (!Config.ACCURATE_DNA_WATER_MOVEMENT_SPEEDS.get() || event.getEntity().level().isClientSide()) return;
+        if (!ModConfig.ACCURATE_DNA_WATER_MOVEMENT_SPEEDS.get() || event.getEntity().level().isClientSide()) return;
 
         if (event.getEntity().level().dimension() == ModDimensions.TEST_LEVEL) {
             if (event.getEntity() instanceof Mob mob && (mob.isSensitiveToWater() || mob.getSpeed() == 0.0 || mob.getDeltaMovement() == Vec3.ZERO)) {
@@ -108,7 +104,7 @@ public class ModEvents {
     }
 
     public static void applyDnaOnJoinLevel(EntityJoinLevelEvent event) {
-        if (event.getLevel().dimension() == ModDimensions.TEST_LEVEL || !Config.ACCURATE_DNA_MOVEMENT_SPEEDS.get() || !(event.getLevel() instanceof ServerLevel)) return;
+        if (event.getLevel().dimension() == ModDimensions.TEST_LEVEL || !ModConfig.ACCURATE_DNA_MOVEMENT_SPEEDS.get() || !(event.getLevel() instanceof ServerLevel)) return;
 
         if (event.getEntity() instanceof LivingEntity livingEntity) {
             livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {

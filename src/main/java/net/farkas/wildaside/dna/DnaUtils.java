@@ -2,7 +2,7 @@ package net.farkas.wildaside.dna;
 
 import com.google.common.collect.Multimap;
 import net.farkas.wildaside.WildAside;
-import net.farkas.wildaside.config.Config;
+import net.farkas.wildaside.config.ModConfig;
 import net.farkas.wildaside.dna.speed.MobSpeedResultStorage;
 import net.farkas.wildaside.dna.speed.MobSpeedTesting;
 import net.farkas.wildaside.dna.traits.Trait;
@@ -84,7 +84,7 @@ public class DnaUtils {
             if (attribute != null) {
                 float traitValue = getAttributeValue(entity, attribute);
                 if (trait == Traits.MOVEMENT_SPEED) {
-                    if (Config.ACCURATE_DNA_MOVEMENT_SPEEDS.get() && !preGen) {
+                    if (ModConfig.ACCURATE_DNA_MOVEMENT_SPEEDS.get() && !preGen) {
                         traitValue = (float) (MobSpeedResultStorage.getSpeed(entity.getType(), "ground"));
                         if (MobSpeedTesting.EXCLUDED_MOBS.contains(entity.getType())) {
                             traitValue = (float) entity.getAttributeBaseValue(attribute);

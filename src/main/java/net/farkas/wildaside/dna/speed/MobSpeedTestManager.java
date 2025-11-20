@@ -1,7 +1,7 @@
 package net.farkas.wildaside.dna.speed;
 
 import net.farkas.wildaside.WildAside;
-import net.farkas.wildaside.config.Config;
+import net.farkas.wildaside.config.ModConfig;
 import net.farkas.wildaside.worldgen.dimension.ModDimensions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -39,7 +39,7 @@ public class MobSpeedTestManager {
 
     @SubscribeEvent
     public static void onWorldLoad(ServerStartedEvent event) {
-        if (!Config.ACCURATE_DNA_MOVEMENT_SPEEDS.get()) return;
+        if (!ModConfig.ACCURATE_DNA_MOVEMENT_SPEEDS.get()) return;
 
         if (event.getServer() != null) {
             MinecraftServer server = event.getServer();
@@ -67,7 +67,7 @@ public class MobSpeedTestManager {
     }
 
     public static void loadTestLevelArea(ServerStartingEvent event) {
-        if (!Config.ACCURATE_DNA_MOVEMENT_SPEEDS.get()) return;
+        if (!ModConfig.ACCURATE_DNA_MOVEMENT_SPEEDS.get()) return;
 
         MinecraftServer server = event.getServer();
         ServerLevel level = server.getLevel(ModDimensions.TEST_LEVEL);

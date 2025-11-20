@@ -1,7 +1,7 @@
 package net.farkas.wildaside.dna.speed;
 
 import net.farkas.wildaside.WildAside;
-import net.farkas.wildaside.config.Config;
+import net.farkas.wildaside.config.ModConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
@@ -40,7 +40,7 @@ public class MobSpeedTesting {
 
     public static void spawnAllMobs(ServerLevel level, BlockPos start) {
         runTest(level, start, false);
-        if (Config.ACCURATE_DNA_WATER_MOVEMENT_SPEEDS.get()) {
+        if (ModConfig.ACCURATE_DNA_WATER_MOVEMENT_SPEEDS.get()) {
             runTest(level, start, true);
         }
     }

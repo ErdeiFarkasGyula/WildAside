@@ -3,7 +3,7 @@ package net.farkas.wildaside.util;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.farkas.wildaside.WildAside;
-import net.farkas.wildaside.config.Config;
+import net.farkas.wildaside.config.ModConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.ClickEvent;
@@ -28,7 +28,7 @@ public class UpdateChecker {
 
     @SubscribeEvent
     public static void onClientJoin(ClientPlayerNetworkEvent.LoggingIn event) {
-        if (checked || !Config.SHOW_UPDATE_NOTIFICATION.get()) return;
+        if (checked || !ModConfig.SHOW_UPDATE_NOTIFICATION.get()) return;
         checked = true;
 
         new Thread(() -> {
