@@ -100,8 +100,13 @@ public class NetworkHandler {
     }
 
     public static void sendSyringeDataClientSyncPacket(ServerPlayer player, int slot, float progress, boolean animating, boolean inwards) {
-        if (CHANNEL == null) return;
+        if (CHANNEL == null) {
+            WildAside.LOGGER.warn("Tried to send send syringe fata client sync packet before network init. Ignoring.");
+            return;
+        }
 
-        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new SyringeDataPacket(slot, progress, animating, inwards));
+        NetworkHandler.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player),
+                new SyringeDataPacket(player.getUUID(), slot, progress, animating, inwards)
+        );
     }
 }

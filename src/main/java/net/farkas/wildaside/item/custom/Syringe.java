@@ -1,9 +1,8 @@
 package net.farkas.wildaside.item.custom;
 
-import net.farkas.wildaside.capability.syringe.SyringeDataCapability;
-import net.farkas.wildaside.capability.syringe.SyringeDataProvider;
-import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.network.NetworkHandler;
+import net.farkas.wildaside.network.packets.SyringeDataPacket;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -16,85 +15,125 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.jetbrains.annotations.Nullable;
 
 public class Syringe extends Item {
     public static final int DEFAULT_MAX_LOAD = 3;
-    private static final int SYNC_INTERVAL = 4;
-    public static final int MAX_BLOOD_LEVEL = 3;
-    public static final int BLOOD_DECAY_INTERVAL = 20 * 2;
 
     public static final String SYRINGE_PROGRESS = "syringe_progress";
-    public static final String BLOOD_LEVEL = "blood_level";
-    public static final String BLOOD_DECAY_TICKS = "blood_decay_ticks";
+    public static final String ANIMATING = "animating";
+    public static final String INWARDS = "inwards";
 
-    public Syringe(Properties pProperties) {
-        super(pProperties);
+    public Syringe(Properties properties) {
+        super(properties);
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
-        if (pLevel.isClientSide() || pUsedHand != InteractionHand.MAIN_HAND) return InteractionResultHolder.pass(pPlayer.getItemInHand(pUsedHand));
-        startSyringeAnimation((ServerPlayer) pPlayer, pUsedHand, pPlayer.getMainHandItem());
-        return super.use(pLevel, pPlayer, pUsedHand);
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        if (!level.isClientSide() && hand == InteractionHand.MAIN_HAND) {
+            player.startUsingItem(hand);
+        }
+        return InteractionResultHolder.success(stack);
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-        super.inventoryTick(stack, level, entity, slot, selected);
+    public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int useRemaining) {
+        if (!(entity instanceof ServerPlayer player)) return;
 
-        if (!(entity instanceof ServerPlayer serverPlayer)) {
-            return;
+        CompoundTag tag = stack.getOrCreateTag();
+        if (!tag.contains(INWARDS)) {
+            tag.putBoolean(INWARDS, true);
         }
 
-        stack.getCapability(SyringeDataCapability.INSTANCE).ifPresent(cap -> {
-            if (!cap.isAnimating()) return;
+        boolean inwards = tag.getBoolean(INWARDS);
+        float delta = 0.1f;
+        float progress = tag.getFloat(SYRINGE_PROGRESS);
 
-            if (cap.getSlot() != serverPlayer.getInventory().selected) {
-                cap.setAnimating(false);
-                NetworkHandler.sendSyringeDataClientSyncPacket(serverPlayer, cap.getSlot(), cap.getProgress(), false, cap.isInwards());
-                return;
-            }
+        progress += inwards ? delta : -delta;
+        progress = Mth.clamp(progress, 0f, DEFAULT_MAX_LOAD);
+        tag.putFloat(SYRINGE_PROGRESS, progress);
 
-            float delta = 0.1f;
-            float old = cap.getProgress();
-            float next = old + (cap.isInwards() ? delta : -delta);
-            cap.setProgress(next);
+        if (progress >= DEFAULT_MAX_LOAD) {
+            tag.putBoolean(INWARDS, false);
+        } else if (progress <= 0f) {
+            tag.putBoolean(INWARDS, true);
+        }
 
-            boolean finished = next >= DEFAULT_MAX_LOAD || next <= 0f;
-            if (finished) {
-                cap.setAnimating(false);
-                cap.setProgress(Mth.clamp(next, 0f, DEFAULT_MAX_LOAD));
-            }
+        NetworkHandler.sendSyringeDataClientSyncPacket(player, player.getInventory().selected, progress, true, inwards);
 
-            if (Math.abs(next - old) > 1e-4f || serverPlayer.tickCount % SYNC_INTERVAL == 0 || finished) {
-                NetworkHandler.sendSyringeDataClientSyncPacket(serverPlayer, cap.getSlot(), cap.getProgress(), cap.isAnimating(), cap.isInwards());
-            }
+        if (progress >= DEFAULT_MAX_LOAD || progress <= 0f) {
+            player.stopUsingItem();
+            tag.putBoolean(ANIMATING, false);
+        }
+    }
 
-            if (finished) {
+    @Override
+    public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
+        if (!(entity instanceof ServerPlayer player)) return;
 
-            }
-        });
+        CompoundTag tag = stack.getOrCreateTag();
+        tag.putBoolean(ANIMATING, false);
+        NetworkHandler.sendSyringeDataClientSyncPacket(player, player.getInventory().selected, tag.getFloat(SYRINGE_PROGRESS), false, tag.getBoolean(INWARDS));
+    }
+
+    @Override
+    public InteractionResult interactLivingEntity(ItemStack pStack, Player pPlayer, LivingEntity pInteractionTarget, InteractionHand pUsedHand) {
+        if (!pPlayer.level().isClientSide() && pUsedHand == InteractionHand.MAIN_HAND) {
+            pPlayer.startUsingItem(pUsedHand);
+            Syringe.startSyringeAnimation((ServerPlayer) pPlayer, pUsedHand, pStack);
+        }
+        return super.interactLivingEntity(pStack, pPlayer, pInteractionTarget, pUsedHand);
     }
 
     public static boolean startSyringeAnimation(ServerPlayer player, InteractionHand hand, ItemStack stack) {
-        if (player == null) return false;
-        stack.getCapability(SyringeDataCapability.INSTANCE).ifPresent(cap -> {
-            if (cap.isAnimating()) return;
-            cap.setAnimating(true);
-            cap.setSlot(player.getInventory().selected);
-            cap.setInwards(!cap.isInwards());
-            cap.setProgress(cap.getProgress());
+        if (stack.isEmpty() || !(stack.getItem() instanceof Syringe)) return false;
 
-            NetworkHandler.sendSyringeDataClientSyncPacket(player, cap.getSlot(), cap.getProgress(), cap.isAnimating(), cap.isInwards());
-        });
+        CompoundTag tag = stack.getOrCreateTag();
+        if (tag.getBoolean(ANIMATING)) return false;
+
+        boolean inwards = !tag.getBoolean(INWARDS);
+        int slot = player.getInventory().selected;
+
+        tag.putBoolean(ANIMATING, true);
+        tag.putBoolean(INWARDS, inwards);
+        tag.putFloat(SYRINGE_PROGRESS, tag.getFloat(SYRINGE_PROGRESS));
+
+        NetworkHandler.sendSyringeDataClientSyncPacket(player, slot, tag.getFloat(SYRINGE_PROGRESS), true, inwards);
         return true;
     }
 
+    public static void handleSyringeProgress(SyringeDataPacket pkt) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.level == null) return;
+
+        Player target = mc.level.getPlayerByUUID(pkt.getPlayerId());
+        if (target == null) return;
+
+        int slot = pkt.getSlot();
+        if (slot < 0 || slot >= target.getInventory().items.size()) return;
+
+        ItemStack stack = target.getInventory().getItem(slot);
+        if (!(stack.getItem() instanceof Syringe)) return;
+
+        CompoundTag tag = stack.getOrCreateTag();
+        tag.putFloat(SYRINGE_PROGRESS, pkt.getProgress());
+        tag.putBoolean(ANIMATING, pkt.isAnimating());
+        tag.putBoolean(INWARDS, pkt.isInwards());
+    }
+
     @Override
-    public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return new SyringeDataProvider();
+    public UseAnim getUseAnimation(ItemStack pStack) {
+        return UseAnim.NONE;
+    }
+
+    @Override
+    public int getUseDuration(ItemStack pStack) {
+        return 72000;
     }
 }
+
