@@ -102,7 +102,6 @@ public class NetworkHandler {
     public static void sendSyringeDataClientSyncPacket(ServerPlayer player, int slot, float progress, boolean animating, boolean inwards) {
         if (CHANNEL == null) return;
 
-        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player),
-                new SyringeDataPacket(slot, progress, animating, inwards));
+        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new SyringeDataPacket(slot, progress, animating, inwards));
     }
 }
