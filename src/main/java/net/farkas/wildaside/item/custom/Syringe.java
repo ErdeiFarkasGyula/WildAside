@@ -75,7 +75,6 @@ public class Syringe extends Item {
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
         if (!(entity instanceof ServerPlayer player)) return;
-
         CompoundTag tag = stack.getOrCreateTag();
         tag.putBoolean(ANIMATING, false);
         NetworkHandler.sendSyringeDataClientSyncPacket(player, player.getInventory().selected, tag.getFloat(SYRINGE_PROGRESS), false, tag.getBoolean(INWARDS));
@@ -84,27 +83,9 @@ public class Syringe extends Item {
     @Override
     public InteractionResult interactLivingEntity(ItemStack pStack, Player pPlayer, LivingEntity pInteractionTarget, InteractionHand pUsedHand) {
         if (!pPlayer.level().isClientSide() && pUsedHand == InteractionHand.MAIN_HAND) {
-            pPlayer.startUsingItem(pUsedHand);
-            Syringe.startSyringeAnimation((ServerPlayer) pPlayer, pUsedHand, pStack);
+            System.out.println("MOB");
         }
         return super.interactLivingEntity(pStack, pPlayer, pInteractionTarget, pUsedHand);
-    }
-
-    public static boolean startSyringeAnimation(ServerPlayer player, InteractionHand hand, ItemStack stack) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof Syringe)) return false;
-
-        CompoundTag tag = stack.getOrCreateTag();
-        if (tag.getBoolean(ANIMATING)) return false;
-
-        boolean inwards = !tag.getBoolean(INWARDS);
-        int slot = player.getInventory().selected;
-
-        tag.putBoolean(ANIMATING, true);
-        tag.putBoolean(INWARDS, inwards);
-        tag.putFloat(SYRINGE_PROGRESS, tag.getFloat(SYRINGE_PROGRESS));
-
-        NetworkHandler.sendSyringeDataClientSyncPacket(player, slot, tag.getFloat(SYRINGE_PROGRESS), true, inwards);
-        return true;
     }
 
     public static void handleSyringeProgress(SyringeDataPacket pkt) {
