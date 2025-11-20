@@ -7,7 +7,7 @@ import net.minecraft.world.level.Level;
 public class SyringeDataImplementation implements ISyringeData {
     private float progress = 0f;
     private boolean animating = false;
-    private boolean inwards = true;
+    private boolean inwards = false;
     private int slot = 0;
 
     @Override
