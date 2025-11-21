@@ -11,6 +11,7 @@ import net.farkas.wildaside.entity.client.hickory.HickoryTreantRenderer;
 import net.farkas.wildaside.entity.client.vibrion.MucellithModel;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.item.custom.DnaHolder;
+import net.farkas.wildaside.item.custom.Syringe;
 import net.farkas.wildaside.particle.*;
 import net.farkas.wildaside.particle.custom.*;
 import net.minecraft.client.model.BoatModel;
@@ -20,6 +21,7 @@ import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.FoliageColor;
@@ -108,6 +110,23 @@ public class ModEventBusClientEvents {
                 default -> 0xFFFFFF;
             };
         }, ModItems.DNA_HOLDER.get());
+
+        event.getItemColors().register((stack, tintIndex) -> {
+            if (tintIndex != 0) return 0xFFFFFF;
+
+            if (!stack.hasTag()) return 0xFFFFFF;
+            CompoundTag tag = stack.getTag();
+
+            float level = tag.contains(Syringe.BLOOD_LEVEL) ? tag.getFloat(Syringe.BLOOD_LEVEL) : 0f;
+
+            if (level <= 0.01f) return 0xFFFFFF;
+
+            int baseColor = Syringe.DEFAULT_BLOOD_COLOR;
+
+            int alpha = (int)(255 * Mth.clamp(level, 0f, 1f));
+            return (alpha << 24) | (baseColor & 0xFFFFFF);
+
+        }, ModItems.SYRINGE.get());
     }
 }
 

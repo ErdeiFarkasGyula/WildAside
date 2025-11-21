@@ -27,12 +27,15 @@ import java.util.List;
 import java.util.Optional;
 
 public class Syringe extends Item {
+    public static final int DEFAULT_BLOOD_COLOR = 0xAA5500;
 
     public static final int DEFAULT_MAX_LOAD = 3;
 
     public static final String SYRINGE_PROGRESS = "syringe_progress";
     public static final String INWARDS = "inwards";
+
     public static final String BLOOD_LEVEL = "blood_level";
+    public static final String BLOOD_COLOUR = "blood_colour";
 
     private static final float NEEDLE_DELTA = 0.1f;
     private static final int RAYCAST_RANGE = 3;
