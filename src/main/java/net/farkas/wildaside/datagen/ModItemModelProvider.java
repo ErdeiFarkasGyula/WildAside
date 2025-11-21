@@ -231,23 +231,35 @@ public class ModItemModelProvider extends ItemModelProvider {
     private void syringe(Item item) {
         String baseName = ForgeRegistries.ITEMS.getKey(item).getPath();
 
-        for (int i = 0; i < Syringe.DEFAULT_MAX_LOAD; i++) {
-            getBuilder(baseName + "_stage" + i)
-                    .parent(getExistingFile(mcLoc("item/generated")))
-                    .texture("layer0", WildAside.MOD_ID + ":item/" + baseName + "_needle_" + i)
-                    .texture("layer1", WildAside.MOD_ID + ":item/" + baseName + "_base");
+        int max = Syringe.DEFAULT_MAX_LOAD;
+
+        for (int needle = 0; needle < max; needle++) {
+            for (int blood = 0; blood < max; blood++) {
+
+                getBuilder(baseName + "_needle" + needle + "_blood" + blood)
+                        .parent(getExistingFile(mcLoc("item/generated")))
+                        .texture("layer0", WildAside.MOD_ID + ":item/" + baseName + "_fill_" + blood)
+                        .texture("layer1", WildAside.MOD_ID + ":item/" + baseName + "_needle_" + needle)
+                        .texture("layer2", WildAside.MOD_ID + ":item/" + baseName + "_base");
+            }
         }
 
         var builder = getBuilder(baseName)
                 .parent(getExistingFile(mcLoc("item/generated")))
                 .texture("layer0", WildAside.MOD_ID + ":item/" + baseName + "_base");
 
-        for (int i = 0; i < Syringe.DEFAULT_MAX_LOAD; i++) {
-            float progress = i / (float) Syringe.DEFAULT_MAX_LOAD;
-            builder.override()
-                    .predicate(new ResourceLocation(WildAside.MOD_ID, Syringe.SYRINGE_PROGRESS), progress)
-                    .model(getExistingFile(modLoc("item/" + baseName + "_stage" + i)))
-                    .end();
+        for (int needle = 0; needle < max; needle++) {
+            float needleVal = needle / (float) max;
+
+            for (int blood = 0; blood < max; blood++) {
+                float bloodVal = blood / (float) max;
+
+                builder.override()
+                       .predicate(new ResourceLocation(WildAside.MOD_ID, Syringe.SYRINGE_PROGRESS), needleVal)
+                       .predicate(new ResourceLocation(WildAside.MOD_ID, Syringe.BLOOD_LEVEL), bloodVal)
+                       .model(getExistingFile(modLoc("item/" + baseName + "_needle" + needle + "_blood" + blood)))
+                       .end();
+            }
         }
     }
 }

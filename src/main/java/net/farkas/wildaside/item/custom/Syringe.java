@@ -18,15 +18,24 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+import java.util.Optional;
+
 public class Syringe extends Item {
+
     public static final int DEFAULT_MAX_LOAD = 3;
 
     public static final String SYRINGE_PROGRESS = "syringe_progress";
-    public static final String ANIMATING = "animating";
     public static final String INWARDS = "inwards";
+    public static final String BLOOD_LEVEL = "blood_level";
+
+    private static final float NEEDLE_DELTA = 0.1f;
+    private static final int RAYCAST_RANGE = 3;
 
     public Syringe(Properties properties) {
         super(properties);
@@ -35,9 +44,11 @@ public class Syringe extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
+
         if (!level.isClientSide() && hand == InteractionHand.MAIN_HAND) {
             player.startUsingItem(hand);
         }
+
         return InteractionResultHolder.success(stack);
     }
 
@@ -46,65 +57,69 @@ public class Syringe extends Item {
         if (!(entity instanceof ServerPlayer player)) return;
 
         CompoundTag tag = stack.getOrCreateTag();
-        if (!tag.contains(INWARDS)) {
-            tag.putBoolean(INWARDS, true);
-        }
+
+        if (!tag.contains(INWARDS)) tag.putBoolean(INWARDS, true);
+        if (!tag.contains(BLOOD_LEVEL)) tag.putFloat(BLOOD_LEVEL, 0);
 
         boolean inwards = tag.getBoolean(INWARDS);
-        float delta = 0.1f;
         float progress = tag.getFloat(SYRINGE_PROGRESS);
+        float blood = tag.getFloat(BLOOD_LEVEL);
 
-        progress += inwards ? delta : -delta;
+        float oldProgress = progress;
+        progress += inwards ? NEEDLE_DELTA : -NEEDLE_DELTA;
         progress = Mth.clamp(progress, 0f, DEFAULT_MAX_LOAD);
+
         tag.putFloat(SYRINGE_PROGRESS, progress);
 
-        if (progress >= DEFAULT_MAX_LOAD) {
-            tag.putBoolean(INWARDS, false);
-        } else if (progress <= 0f) {
-            tag.putBoolean(INWARDS, true);
+        if (progress >= DEFAULT_MAX_LOAD) tag.putBoolean(INWARDS, false);
+        if (progress <= 0f) tag.putBoolean(INWARDS, true);
+
+        if (!inwards) {
+            LivingEntity target = raytraceLiving(level, player, RAYCAST_RANGE);
+            if (target != null) {
+                blood += NEEDLE_DELTA;
+
+            }
+        } else {
+            blood -= NEEDLE_DELTA;
         }
 
-        NetworkHandler.sendSyringeDataClientSyncPacket(player, player.getInventory().selected, progress, true, inwards);
+        blood = Mth.clamp(blood, 0, DEFAULT_MAX_LOAD);
+        tag.putFloat(BLOOD_LEVEL, blood);
+
+        NetworkHandler.sendSyringeDataClientSyncPacket(player, player.getInventory().selected, progress, blood, true, tag.getBoolean(INWARDS));
 
         if (progress >= DEFAULT_MAX_LOAD || progress <= 0f) {
             player.stopUsingItem();
-            tag.putBoolean(ANIMATING, false);
         }
     }
 
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
         if (!(entity instanceof ServerPlayer player)) return;
+
         CompoundTag tag = stack.getOrCreateTag();
-        tag.putBoolean(ANIMATING, false);
-        NetworkHandler.sendSyringeDataClientSyncPacket(player, player.getInventory().selected, tag.getFloat(SYRINGE_PROGRESS), false, tag.getBoolean(INWARDS));
+
+        NetworkHandler.sendSyringeDataClientSyncPacket(player, player.getInventory().selected, tag.getFloat(SYRINGE_PROGRESS), tag.getFloat(BLOOD_LEVEL), false, tag.getBoolean(INWARDS));
     }
 
-    @Override
-    public InteractionResult interactLivingEntity(ItemStack pStack, Player pPlayer, LivingEntity pInteractionTarget, InteractionHand pUsedHand) {
-        if (!pPlayer.level().isClientSide() && pUsedHand == InteractionHand.MAIN_HAND) {
-            System.out.println("MOB");
-        }
-        return super.interactLivingEntity(pStack, pPlayer, pInteractionTarget, pUsedHand);
-    }
-
-    public static void handleSyringeProgress(SyringeDataPacket pkt) {
+    public static void handleSyringeProgress(SyringeDataPacket packet) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.level == null) return;
 
-        Player target = mc.level.getPlayerByUUID(pkt.getPlayerId());
+        Player target = mc.level.getPlayerByUUID(packet.getPlayerId());
         if (target == null) return;
 
-        int slot = pkt.getSlot();
+        int slot = packet.getSlot();
         if (slot < 0 || slot >= target.getInventory().items.size()) return;
 
         ItemStack stack = target.getInventory().getItem(slot);
         if (!(stack.getItem() instanceof Syringe)) return;
 
         CompoundTag tag = stack.getOrCreateTag();
-        tag.putFloat(SYRINGE_PROGRESS, pkt.getProgress());
-        tag.putBoolean(ANIMATING, pkt.isAnimating());
-        tag.putBoolean(INWARDS, pkt.isInwards());
+        tag.putFloat(SYRINGE_PROGRESS, packet.getProgress());
+        tag.putBoolean(INWARDS, packet.isInwards());
+        tag.putFloat(BLOOD_LEVEL, packet.getBlood());
     }
 
     @Override
@@ -116,5 +131,31 @@ public class Syringe extends Item {
     public int getUseDuration(ItemStack pStack) {
         return 72000;
     }
-}
 
+    private LivingEntity raytraceLiving(Level level, Player player, double range) {
+        Vec3 start = player.getEyePosition();
+        Vec3 look = player.getLookAngle().scale(range);
+        Vec3 end = start.add(look);
+
+        AABB box = player.getBoundingBox().expandTowards(look).inflate(1.0);
+        List<Entity> list = level.getEntities(player, box, e -> e instanceof LivingEntity && e.isPickable());
+
+        double closest = Double.MAX_VALUE;
+        LivingEntity found = null;
+
+        for (Entity e : list) {
+            AABB bb = e.getBoundingBox().inflate(0.3);
+            Optional<Vec3> hit = bb.clip(start, end);
+
+            if (hit.isPresent()) {
+                double dist = hit.get().distanceTo(start);
+                if (dist < closest) {
+                    closest = dist;
+                    found = (LivingEntity) e;
+                }
+            }
+        }
+
+        return found;
+    }
+}

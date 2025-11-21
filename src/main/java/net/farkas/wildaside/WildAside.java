@@ -231,7 +231,16 @@ public class WildAside
                     (stack, level, entity, seed) -> {
                         if (!stack.hasTag()) return 0f;
                         float p = stack.getTag().getFloat(Syringe.SYRINGE_PROGRESS);
-                        System.out.println("Syringe progress " + p);
+                        return Mth.clamp(p / Syringe.DEFAULT_MAX_LOAD, 0f, 1f);
+                    }
+            );
+
+            ItemProperties.register(
+                    ModItems.SYRINGE.get(),
+                    new ResourceLocation(WildAside.MOD_ID, Syringe.BLOOD_LEVEL),
+                    (stack, level, entity, seed) -> {
+                        if (!stack.hasTag()) return 0f;
+                        float p = stack.getTag().getFloat(Syringe.BLOOD_LEVEL);
                         return Mth.clamp(p / Syringe.DEFAULT_MAX_LOAD, 0f, 1f);
                     }
             );

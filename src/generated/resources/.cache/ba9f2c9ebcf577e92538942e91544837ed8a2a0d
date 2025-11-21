@@ -1,4 +1,4 @@
-// 1.20.1	2025-11-19T21:43:34.8707312	Item Models: wildaside
+// 1.20.1	2025-11-21T18:18:42.7058374	Item Models: wildaside
 97ec986340aeed12ebc0d678c97ba34a7afb7b7c assets/wildaside/models/item/brown_glowing_hickory_leaf.json
 657a44b343b52d1185c119350b9599bc495c3976 assets/wildaside/models/item/brown_glowing_hickory_sapling.json
 9a615629962edb4ec1311e1782a12ec189c42bf4 assets/wildaside/models/item/brown_hickory_nut_trail_mix.json
@@ -76,10 +76,16 @@ a9f83d4c6be050d3985ce9c5465a7ed36831d562 assets/wildaside/models/item/substilium
 0a37d0e2842db5e595c0c902579d6cc94742bf0b assets/wildaside/models/item/substilium_tile_walls.json
 66f3426f4cccf32b8c8350f96a108ec7d371c807 assets/wildaside/models/item/substilium_trapdoor.json
 e64cd79400c73a174556db69ac31d1be127aa727 assets/wildaside/models/item/substilium_wood.json
-e8b08433146306d57c3339aa05533c3b517c5171 assets/wildaside/models/item/syringe.json
-343b67b066dc4b37793105c772e92a1b9fa90cb7 assets/wildaside/models/item/syringe_stage0.json
-2cf1b080d558ce0bbf9c2201c8305f06d9a3c1c4 assets/wildaside/models/item/syringe_stage1.json
-145f43e94be1173e930eb677effe25b50491aec6 assets/wildaside/models/item/syringe_stage2.json
+438ca649c7df7195e2e4e53fc4f61bf7672703ec assets/wildaside/models/item/syringe.json
+ec230acf5c9e4c469508fc4692a3c8ab62c3e422 assets/wildaside/models/item/syringe_needle0_blood0.json
+2c7bd08b1d5ac606ba3e47ee00bc1f9a3f5496c1 assets/wildaside/models/item/syringe_needle0_blood1.json
+315c5d6f5959e1beb662149ba9031ea15b834b82 assets/wildaside/models/item/syringe_needle0_blood2.json
+3c1a4dd6ba19b0856e5f2205086eaa962dc55f2b assets/wildaside/models/item/syringe_needle1_blood0.json
+3ff51a3c7935872bf6cceffe1e6f1fecf3194619 assets/wildaside/models/item/syringe_needle1_blood1.json
+61ee54833185d3bfaf72340bf4d5270a6287f680 assets/wildaside/models/item/syringe_needle1_blood2.json
+a1fda99e5173388e8eda0c3f2e604d051f777fe1 assets/wildaside/models/item/syringe_needle2_blood0.json
+01630d259d74c1451b199b7fa60ce1946e8b10ac assets/wildaside/models/item/syringe_needle2_blood1.json
+345dfffae3299e9a578fd4064306c90b9552c531 assets/wildaside/models/item/syringe_needle2_blood2.json
 ba9b6c59e041ca210f319502611fc9d1be5045be assets/wildaside/models/item/vibrion.json
 28b841c1b7ab30aa3f867a711da8e464c43ecf6b assets/wildaside/models/item/vibrion_glass_pane.json
 78d1091c6bfee6f5eb6f3d286f67bc150b54208f assets/wildaside/models/item/vibrion_growth.json

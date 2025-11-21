@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "wildaside:item/syringe_needle_0",
-    "layer1": "wildaside:item/syringe_base"
-  }
-}

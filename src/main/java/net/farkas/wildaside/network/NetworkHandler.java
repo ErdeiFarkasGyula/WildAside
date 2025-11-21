@@ -99,14 +99,14 @@ public class NetworkHandler {
         CHANNEL.send(PacketDistributor.SERVER.noArg(), new RecompileDnaPacket(pos));
     }
 
-    public static void sendSyringeDataClientSyncPacket(ServerPlayer player, int slot, float progress, boolean animating, boolean inwards) {
+    public static void sendSyringeDataClientSyncPacket(ServerPlayer player, int slot, float progress, float blood, boolean animating, boolean inwards) {
         if (CHANNEL == null) {
             WildAside.LOGGER.warn("Tried to send send syringe fata client sync packet before network init. Ignoring.");
             return;
         }
 
         NetworkHandler.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player),
-                new SyringeDataPacket(player.getUUID(), slot, progress, animating, inwards)
+                new SyringeDataPacket(player.getUUID(), slot, progress, blood, animating, inwards)
         );
     }
 }
