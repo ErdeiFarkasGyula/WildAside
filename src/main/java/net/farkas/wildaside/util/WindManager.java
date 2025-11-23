@@ -45,7 +45,7 @@ public class WindManager {
         }
 
         double angle = randomSource.nextDouble() * 2 * Math.PI;
-        Vec3 newDir = new Vec3(Math.cos(angle), (randomSource.nextFloat() - 0.5f) * 0.02f, Math.sin(angle)).scale(correction);
+        Vec3 newDir = new Vec3(Math.cos(angle), (randomSource.nextFloat() - 0.5f) * 0.1f, Math.sin(angle)).scale(correction);
         float strength = (0.03f + randomSource.nextFloat() * 0.1f) * correction;
 
         WindManager.setWind(newDir, strength);
