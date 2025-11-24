@@ -10,7 +10,6 @@ import net.farkas.wildaside.dna.traits.Traits;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.item.custom.DnaHolder;
 import net.farkas.wildaside.screen.ModMenuTypes;
-import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -23,10 +22,8 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.SlotItemHandler;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 
 public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
     public final BioengineeringWorkstationBlockEntity blockEntity;

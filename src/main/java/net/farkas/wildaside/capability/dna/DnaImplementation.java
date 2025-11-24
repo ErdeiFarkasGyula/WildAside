@@ -2,7 +2,6 @@ package net.farkas.wildaside.capability.dna;
 
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.traits.Trait;
-import net.farkas.wildaside.dna.traits.TraitTypes;
 import net.farkas.wildaside.dna.traits.Traits;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -13,7 +12,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 

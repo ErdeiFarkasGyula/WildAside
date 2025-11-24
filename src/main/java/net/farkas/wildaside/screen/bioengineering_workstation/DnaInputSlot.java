@@ -1,12 +1,7 @@
 package net.farkas.wildaside.screen.bioengineering_workstation;
 
-import net.farkas.wildaside.block.entity.BioengineeringWorkstationBlockEntity;
 import net.farkas.wildaside.item.ModItems;
-import net.farkas.wildaside.network.NetworkHandler;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;

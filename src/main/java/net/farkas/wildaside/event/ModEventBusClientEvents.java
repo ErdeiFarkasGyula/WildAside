@@ -10,7 +10,6 @@ import net.farkas.wildaside.entity.client.ModModelLayers;
 import net.farkas.wildaside.entity.client.hickory.HickoryTreantRenderer;
 import net.farkas.wildaside.entity.client.vibrion.MucellithModel;
 import net.farkas.wildaside.item.ModItems;
-import net.farkas.wildaside.item.custom.DnaHolder;
 import net.farkas.wildaside.item.custom.Syringe;
 import net.farkas.wildaside.particle.*;
 import net.farkas.wildaside.particle.custom.*;
