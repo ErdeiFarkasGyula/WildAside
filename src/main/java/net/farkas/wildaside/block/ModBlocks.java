@@ -319,7 +319,7 @@ public class ModBlocks {
                     .lightLevel(l -> 0)));
 
     public static final RegistryObject<Block> BIOENGINEERING_WORKSTATION = registerBlock("bioengineering_workstation",
-            () -> new BioengineeringWorkstationBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+            () -> new BioengineeringWorkstationBlock(BlockBehaviour.Properties.copy(Blocks.QUARTZ_BLOCK)
                     .lightLevel(s -> 5)));
 
     public static final RegistryObject<Block> BIOFREEZER = registerBlock("biofreezer",
