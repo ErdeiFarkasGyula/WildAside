@@ -1,2 +1,6 @@
 - Added blocks to blocktags to work properly (like pickaxe efficient)
 - Bioengineering Workstation's animation now aligns with other Vibrion based blocks'
+- Made the light levels of Lit Vibrion Glass blocks higher
+- Changed the gravity of Falling Hickory Leaf particles
+- Fixed the textures of Vibrion Block, Vibrion Glass and Chiseled Substilium Soil
+- Lowered max health of Mucelliths to 30 from 40
