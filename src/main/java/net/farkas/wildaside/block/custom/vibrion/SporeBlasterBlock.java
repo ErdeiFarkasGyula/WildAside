@@ -1,6 +1,6 @@
 package net.farkas.wildaside.block.custom.vibrion;
 
-import net.farkas.wildaside.block.entity.NaturalSporeBlasterBlockEntity;
+import net.farkas.wildaside.block.entity.SporeBlasterBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -11,11 +11,18 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import org.jetbrains.annotations.Nullable;
 
-public class NaturalSporeBlaster extends RotatedPillarBlock implements EntityBlock {
-    public NaturalSporeBlaster(Properties props) {
-        super(props);
+public class SporeBlasterBlock extends DirectionalBlock implements EntityBlock {
+    public SporeBlasterBlock(Properties properties) {
+        super(properties);
+        this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH));
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
+        pBuilder.add(FACING);
     }
 
     @Override
@@ -24,8 +31,8 @@ public class NaturalSporeBlaster extends RotatedPillarBlock implements EntityBlo
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        return this.defaultBlockState().setValue(NaturalSporeBlaster.AXIS, pContext.getNearestLookingDirection().getOpposite().getAxis());
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext pContext) {
+        return this.defaultBlockState().setValue(SporeBlasterBlock.FACING, pContext.getNearestLookingDirection().getOpposite());
     }
 
     @Override
@@ -43,7 +50,7 @@ public class NaturalSporeBlaster extends RotatedPillarBlock implements EntityBlo
     @Override
     public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource rand) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof NaturalSporeBlasterBlockEntity sbe) {
+        if (blockEntity instanceof SporeBlasterBlockEntity sbe) {
             sbe.tickServer();
         }
     }
@@ -51,6 +58,6 @@ public class NaturalSporeBlaster extends RotatedPillarBlock implements EntityBlo
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new NaturalSporeBlasterBlockEntity(pos, state);
+        return new SporeBlasterBlockEntity(pos, state);
     }
 }

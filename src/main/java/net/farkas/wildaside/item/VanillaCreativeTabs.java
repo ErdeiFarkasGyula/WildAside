@@ -71,6 +71,7 @@ public class VanillaCreativeTabs {
         }
         if (tab == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
             event.accept(ModBlocks.BIOENGINEERING_WORKSTATION);
+            event.accept(ModBlocks.BIOFREEZER);
             event.accept(ModBlocks.SUBSTILIUM_SIGN);
             event.accept(ModBlocks.SUBSTILIUM_HANGING_SIGN);
             event.accept(ModBlocks.HICKORY_SIGN);

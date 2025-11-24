@@ -16,11 +16,11 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import org.jetbrains.annotations.Nullable;
 
-public class SporeAir extends AirBlock {
+public class SporeAirBlock extends AirBlock {
     private int AGE = 0;
     public static final DirectionProperty FACING = DirectionalBlock.FACING;
 
-    public SporeAir(Properties pProperties) {
+    public SporeAirBlock(Properties pProperties) {
         super(pProperties);
     }
 

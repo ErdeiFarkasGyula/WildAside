@@ -42,6 +42,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
         blockWithItem(ModBlocks.OVERGROWN_ENTORIUM_ORE);
         blockWithItem(ModBlocks.ENTORIUM_SHROOM);
 
+        blockWithItem(ModBlocks.BIOFREEZER);
+
         blockWithItem(ModBlocks.SUBSTILIUM_COAL_ORE);
         blockWithItem(ModBlocks.SUBSTILIUM_COPPER_ORE);
         blockWithItem(ModBlocks.SUBSTILIUM_LAPIS_ORE);

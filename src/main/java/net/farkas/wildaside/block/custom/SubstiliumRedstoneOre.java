@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class SubstiliumRedstoneOre extends SubstiliumSoil {
+public class SubstiliumRedstoneOre extends SubstiliumSoilBlock {
     public static final BooleanProperty LIT = RedstoneTorchBlock.LIT;
 
     public SubstiliumRedstoneOre(Properties pProperties, IntProvider pXpRange) {

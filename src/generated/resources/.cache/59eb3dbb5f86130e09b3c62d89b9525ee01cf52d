@@ -1,5 +1,6 @@
-// 1.20.1	2025-10-18T15:26:38.8592044	Loot Tables
+// 1.20.1	2025-11-24T10:03:26.802408	Loot Tables
 cb111f4aa2094610caccd6c93bb58846842f1adf data/wildaside/loot_tables/blocks/bioengineering_workstation.json
+8a8b5782b149204d6e179cc12b0579fca1c215a3 data/wildaside/loot_tables/blocks/biofreezer.json
 9af05efdb1326dfab1d8ce52f3587c6b2314e19e data/wildaside/loot_tables/blocks/brown_glowing_hickory_leaves.json
 806c305e5b6bdf1e690e0d5df8ae5f63031a6a21 data/wildaside/loot_tables/blocks/brown_glowing_hickory_sapling.json
 af75d09f745b7c2e54ece2d661f97d18d3e28af4 data/wildaside/loot_tables/blocks/chiseled_substilium_soil.json

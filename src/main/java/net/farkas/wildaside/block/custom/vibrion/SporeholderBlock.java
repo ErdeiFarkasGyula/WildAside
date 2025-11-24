@@ -20,8 +20,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.List;
 
-public class Sporeholder extends SaplingBlock {
-    public Sporeholder(AbstractTreeGrower pTreeGrower, Properties pProperties) {
+public class SporeholderBlock extends SaplingBlock {
+    public SporeholderBlock(AbstractTreeGrower pTreeGrower, Properties pProperties) {
         super(pTreeGrower, pProperties);
     }
 

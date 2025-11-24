@@ -17,8 +17,8 @@ import net.minecraftforge.common.IPlantable;
 
 import java.util.List;
 
-public class SubstiliumSoil extends DropExperienceBlock implements BonemealableBlock {
-    public SubstiliumSoil(Properties pProperties, IntProvider pXpRange) {
+public class SubstiliumSoilBlock extends DropExperienceBlock implements BonemealableBlock {
+    public SubstiliumSoilBlock(Properties pProperties, IntProvider pXpRange) {
         super(pProperties, pXpRange);
     }
 

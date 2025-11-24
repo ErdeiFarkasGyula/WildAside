@@ -131,7 +131,7 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable("block.wildaside.bioengineering_workstation");
+        return  Component.translatable("block.wildaside.bioengineering_workstation");
     }
 
     @Nullable

@@ -1,6 +1,6 @@
 package net.farkas.wildaside.block.entity;
 
-import net.farkas.wildaside.block.custom.vibrion.WindBlaster;
+import net.farkas.wildaside.block.custom.vibrion.WindBlasterBlock;
 import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.util.BlasterUtils;
 import net.minecraft.core.BlockPos;
@@ -49,7 +49,7 @@ public class WindBlasterBlockEntity extends BlasterBlockEntity {
     public void tickServer(Level level, BlockPos origin, BlockState oldState) {
         if (!(level instanceof ServerLevel world)) return;
 
-        Direction facing = getBlockState().getValue(WindBlaster.FACING);
+        Direction facing = getBlockState().getValue(WindBlasterBlock.FACING);
         Direction back = facing.getOpposite();
 
         int rangeSignal = world.getSignal(worldPosition.relative(back), back);

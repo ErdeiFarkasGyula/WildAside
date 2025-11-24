@@ -10,8 +10,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.IPlantable;
 
-public class EntoriumOre extends Block {
-    public EntoriumOre(Properties pProperties) {
+public class EntoriumOreBlock extends Block {
+    public EntoriumOreBlock(Properties pProperties) {
         super(pProperties);
     }
 

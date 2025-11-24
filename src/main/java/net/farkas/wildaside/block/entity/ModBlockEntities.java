@@ -29,6 +29,10 @@ public class ModBlockEntities {
             BLOCK_ENTITIES.register("bioengineering_workstation", () -> BlockEntityType.Builder.of(BioengineeringWorkstationBlockEntity::new,
                     ModBlocks.BIOENGINEERING_WORKSTATION.get()).build(null));
 
+    public static final RegistryObject<BlockEntityType<BiofreezerBlockEntity>> BIOFREEZER =
+            BLOCK_ENTITIES.register("biofreezer", () -> BlockEntityType.Builder.of(BiofreezerBlockEntity::new,
+                    ModBlocks.BIOFREEZER.get()).build(null));
+
     public static final RegistryObject<BlockEntityType<NaturalSporeBlasterBlockEntity>> NATURAL_SPORE_BLASTER =
             BLOCK_ENTITIES.register("natural_spore_blaster",
                     () -> BlockEntityType.Builder.of(NaturalSporeBlasterBlockEntity::new, ModBlocks.NATURAL_SPORE_BLASTER.get()).build(null));

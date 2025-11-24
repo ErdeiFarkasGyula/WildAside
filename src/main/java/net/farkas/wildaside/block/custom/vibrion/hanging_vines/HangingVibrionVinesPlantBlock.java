@@ -15,8 +15,8 @@ import net.minecraft.world.level.block.WeepingVinesPlantBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
 
-public class HangingVibrionVinesPlant extends WeepingVinesPlantBlock {
-    public HangingVibrionVinesPlant(Properties p_154975_) {
+public class HangingVibrionVinesPlantBlock extends WeepingVinesPlantBlock {
+    public HangingVibrionVinesPlantBlock(Properties p_154975_) {
         super(p_154975_);
     }
 

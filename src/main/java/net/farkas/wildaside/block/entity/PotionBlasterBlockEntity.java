@@ -1,6 +1,6 @@
 package net.farkas.wildaside.block.entity;
 
-import net.farkas.wildaside.block.custom.vibrion.PotionBlaster;
+import net.farkas.wildaside.block.custom.vibrion.PotionBlasterBlock;
 import net.farkas.wildaside.screen.potion_blaster.PotionBlasterMenu;
 import net.farkas.wildaside.util.AdvancementHandler;
 import net.farkas.wildaside.util.BlasterUtils;
@@ -299,7 +299,7 @@ public class PotionBlasterBlockEntity extends BlasterBlockEntity implements Menu
                 }
 
                 if (!activePotion.isEmpty()) {
-                    shootPotionBeam(state.getValue(PotionBlaster.FACING), (ServerLevel)level, pos);
+                    shootPotionBeam(state.getValue(PotionBlasterBlock.FACING), (ServerLevel)level, pos);
                     potionTicksLeft--;
 
                     if (potionTicksLeft <= 0) {

@@ -7,8 +7,8 @@ import net.farkas.wildaside.block.custom.sign.ModStandingSignBlock;
 import net.farkas.wildaside.block.custom.sign.ModWallHangingSignBlock;
 import net.farkas.wildaside.block.custom.sign.ModWallSignBlock;
 import net.farkas.wildaside.block.custom.vibrion.*;
-import net.farkas.wildaside.block.custom.vibrion.hanging_vines.HangingVibrionVines;
-import net.farkas.wildaside.block.custom.vibrion.hanging_vines.HangingVibrionVinesPlant;
+import net.farkas.wildaside.block.custom.vibrion.hanging_vines.HangingVibrionVinesBlock;
+import net.farkas.wildaside.block.custom.vibrion.hanging_vines.HangingVibrionVinesPlantBlock;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.util.HickoryColour;
 import net.farkas.wildaside.util.ModWoodTypes;
@@ -54,7 +54,7 @@ public class ModBlocks {
                     .lightLevel(s -> 15), UniformInt.of(0, 0)));
 
     public static final RegistryObject<Block> VIBRION_GEL = registerBlock("vibrion_gel",
-            () -> new VibrionGel(BlockBehaviour.Properties.of()
+            () -> new VibrionGelBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_YELLOW)
                     .sound(SoundType.HONEY_BLOCK)
                     .strength(0.1F, 0F)
@@ -64,10 +64,10 @@ public class ModBlocks {
                     .noOcclusion()));
 
     public static final RegistryObject<Block> LIT_VIBRION_GEL = registerBlock("lit_vibrion_gel",
-            () -> new VibrionGel(BlockBehaviour.Properties.copy(ModBlocks.VIBRION_GEL.get()).lightLevel(s -> 9)));
+            () -> new VibrionGelBlock(BlockBehaviour.Properties.copy(ModBlocks.VIBRION_GEL.get()).lightLevel(s -> 9)));
 
     public static final RegistryObject<Block> VIBRION_GLASS = registerBlock("vibrion_glass",
-            () -> new VibrionGlass(BlockBehaviour.Properties.of()
+            () -> new VibrionGlassBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_YELLOW)
                     .sound(SoundType.GLASS)
                     .strength(0.4F, 0.3F)
@@ -77,7 +77,7 @@ public class ModBlocks {
                     .instrument(NoteBlockInstrument.HAT)));
 
     public static final RegistryObject<Block> LIT_VIBRION_GLASS = registerBlock("lit_vibrion_glass",
-            () -> new VibrionGlass(BlockBehaviour.Properties.copy(ModBlocks.VIBRION_GLASS.get()).lightLevel(s -> 9)));
+            () -> new VibrionGlassBlock(BlockBehaviour.Properties.copy(ModBlocks.VIBRION_GLASS.get()).lightLevel(s -> 9)));
 
     public static final RegistryObject<Block> VIBRION_GLASS_PANE = registerBlock("vibrion_glass_pane",
             () -> new IronBarsBlock(BlockBehaviour.Properties.copy(ModBlocks.VIBRION_GLASS.get())));
@@ -103,7 +103,7 @@ public class ModBlocks {
                     .pushReaction(PushReaction.DESTROY)));
 
     public static final RegistryObject<Block> VIBRION_SPOREHOLDER = registerBlock("vibrion_sporeholder",
-            () -> new Sporeholder(new SubstiliumMushroomGrower(), BlockBehaviour.Properties.of()
+            () -> new SporeholderBlock(new SubstiliumMushroomGrower(), BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_YELLOW)
                     .sound(SoundType.FUNGUS)
                     .lightLevel(l -> 5)
@@ -114,7 +114,7 @@ public class ModBlocks {
                     .pushReaction(PushReaction.DESTROY)));
 
     public static final RegistryObject<Block> HANGING_VIBRION_VINES = registerBlock("hanging_vibrion_vines",
-            () -> new HangingVibrionVines(BlockBehaviour.Properties.of()
+            () -> new HangingVibrionVinesBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_YELLOW)
                     .sound(SoundType.WEEPING_VINES)
                     .lightLevel(l -> 5)
@@ -126,10 +126,10 @@ public class ModBlocks {
                     .pushReaction(PushReaction.DESTROY)));
 
     public static final RegistryObject<Block> HANGING_VIBRION_VINES_PLANT = registerBlock("hanging_vibrion_vines_plant",
-            () -> new HangingVibrionVinesPlant(BlockBehaviour.Properties.copy(ModBlocks.HANGING_VIBRION_VINES.get())));
+            () -> new HangingVibrionVinesPlantBlock(BlockBehaviour.Properties.copy(ModBlocks.HANGING_VIBRION_VINES.get())));
 
     public static final RegistryObject<Block> SPORE_AIR = registerBlock("spore_air",
-            () -> new SporeAir(BlockBehaviour.Properties.copy(Blocks.AIR).mapColor(MapColor.COLOR_YELLOW).noLootTable()));
+            () -> new SporeAirBlock(BlockBehaviour.Properties.copy(Blocks.AIR).mapColor(MapColor.COLOR_YELLOW).noLootTable()));
 
     //ENTORIUM
     public static final RegistryObject<Block> ENTORIUM_SHROOM = registerBlock("entorium_shroom",
@@ -146,31 +146,31 @@ public class ModBlocks {
                     .strength(3.5f, 12)));
 
     public static final RegistryObject<Block> ENTORIUM_ORE = registerBlock("entorium_ore",
-            () -> new EntoriumOre(BlockBehaviour.Properties.of()
+            () -> new EntoriumOreBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_PURPLE)
                     .sound(SoundType.NETHER_ORE)
                     .strength(3, 12)));
 
     public static final RegistryObject<Block> SUBSTILIUM_COAL_ORE = registerBlock("substilium_coal_ore",
-            () -> new SubstiliumSoil(BlockBehaviour.Properties.copy(Blocks.COAL_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(0, 3)));
+            () -> new SubstiliumSoilBlock(BlockBehaviour.Properties.copy(Blocks.COAL_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(0, 3)));
     public static final RegistryObject<Block> SUBSTILIUM_COPPER_ORE = registerBlock("substilium_copper_ore",
-            () -> new SubstiliumSoil(BlockBehaviour.Properties.copy(Blocks.COPPER_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(0, 1)));
+            () -> new SubstiliumSoilBlock(BlockBehaviour.Properties.copy(Blocks.COPPER_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(0, 1)));
     public static final RegistryObject<Block> SUBSTILIUM_LAPIS_ORE = registerBlock("substilium_lapis_ore",
-            () -> new SubstiliumSoil(BlockBehaviour.Properties.copy(Blocks.LAPIS_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(2, 6)));
+            () -> new SubstiliumSoilBlock(BlockBehaviour.Properties.copy(Blocks.LAPIS_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(2, 6)));
     public static final RegistryObject<Block> SUBSTILIUM_IRON_ORE = registerBlock("substilium_iron_ore",
-            () -> new SubstiliumSoil(BlockBehaviour.Properties.copy(Blocks.IRON_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(0, 1)));
+            () -> new SubstiliumSoilBlock(BlockBehaviour.Properties.copy(Blocks.IRON_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(0, 1)));
     public static final RegistryObject<Block> SUBSTILIUM_GOLD_ORE = registerBlock("substilium_gold_ore",
-            () -> new SubstiliumSoil(BlockBehaviour.Properties.copy(Blocks.GOLD_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(0, 1)));
+            () -> new SubstiliumSoilBlock(BlockBehaviour.Properties.copy(Blocks.GOLD_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(0, 1)));
     public static final RegistryObject<Block> SUBSTILIUM_REDSTONE_ORE = registerBlock("substilium_redstone_ore",
             () -> new SubstiliumRedstoneOre(BlockBehaviour.Properties.copy(Blocks.REDSTONE_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(0, 1)));
     public static final RegistryObject<Block> SUBSTILIUM_DIAMOND_ORE = registerBlock("substilium_diamond_ore",
-            () -> new SubstiliumSoil(BlockBehaviour.Properties.copy(Blocks.DIAMOND_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(3, 8)));
+            () -> new SubstiliumSoilBlock(BlockBehaviour.Properties.copy(Blocks.DIAMOND_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(3, 8)));
     public static final RegistryObject<Block> SUBSTILIUM_EMERALD_ORE = registerBlock("substilium_emerald_ore",
-            () -> new SubstiliumSoil(BlockBehaviour.Properties.copy(Blocks.EMERALD_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(3, 8)));
+            () -> new SubstiliumSoilBlock(BlockBehaviour.Properties.copy(Blocks.EMERALD_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(3, 8)));
 
     //SUBSTILIUM
     public static final RegistryObject<Block> SUBSTILIUM_SOIL = registerBlock("substilium_soil",
-            () -> new SubstiliumSoil(BlockBehaviour.Properties.of()
+            () -> new SubstiliumSoilBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_CYAN)
                     .sound(SoundType.ROOTED_DIRT)
                     .strength(1, 2), UniformInt.of(0, 0)));
@@ -188,20 +188,20 @@ public class ModBlocks {
             });
 
     public static final RegistryObject<Block> NATURAL_SPORE_BLASTER = registerBlock("natural_spore_blaster",
-            () -> new NaturalSporeBlaster(BlockBehaviour.Properties.copy(ModBlocks.SUBSTILIUM_SOIL.get())
+            () -> new NaturalSporeBlasterBlock(BlockBehaviour.Properties.copy(ModBlocks.SUBSTILIUM_SOIL.get())
                     .noOcclusion().strength(6f, 12f)
                     .lightLevel(s -> 0).requiresCorrectToolForDrops()));
 
     public static final RegistryObject<Block> SPORE_BLASTER = registerBlock("spore_blaster",
-            () -> new SporeBlaster(BlockBehaviour.Properties.copy(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get())
+            () -> new SporeBlasterBlock(BlockBehaviour.Properties.copy(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get())
                     .noOcclusion().strength(6f, 12f)
                     .lightLevel(s -> 5).requiresCorrectToolForDrops()));
 
     public static final RegistryObject<Block> POTION_BLASTER = registerBlock("potion_blaster",
-            () -> new PotionBlaster(BlockBehaviour.Properties.copy(ModBlocks.SPORE_BLASTER.get())));
+            () -> new PotionBlasterBlock(BlockBehaviour.Properties.copy(ModBlocks.SPORE_BLASTER.get())));
 
     public static final RegistryObject<Block> WIND_BLASTER = registerBlock("wind_blaster",
-            () -> new WindBlaster(BlockBehaviour.Properties.copy(ModBlocks.SPORE_BLASTER.get())));
+            () -> new WindBlasterBlock(BlockBehaviour.Properties.copy(ModBlocks.SPORE_BLASTER.get())));
 
     public static final RegistryObject<Block> SMOOTH_SUBSTILIUM_SOIL = registerBlock("smooth_substilium_soil",
             () -> new Block(BlockBehaviour.Properties.copy(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get())));
@@ -319,8 +319,11 @@ public class ModBlocks {
                     .lightLevel(l -> 0)));
 
     public static final RegistryObject<Block> BIOENGINEERING_WORKSTATION = registerBlock("bioengineering_workstation",
-            () -> new BioengineeringWorkstation(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+            () -> new BioengineeringWorkstationBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
                     .lightLevel(s -> 5)));
+
+    public static final RegistryObject<Block> BIOFREEZER = registerBlock("biofreezer",
+            () -> new BiofreezerBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
 
     //HICKORY
     public static final RegistryObject<Block> HICKORY_LOG = registerBlock("hickory_log",

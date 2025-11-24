@@ -1,6 +1,6 @@
 package net.farkas.wildaside.block.entity;
 
-import net.farkas.wildaside.block.custom.vibrion.SporeBlaster;
+import net.farkas.wildaside.block.custom.vibrion.SporeBlasterBlock;
 import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.util.BlasterUtils;
 import net.farkas.wildaside.util.ContaminationHandler;
@@ -28,7 +28,7 @@ public class SporeBlasterBlockEntity extends BlasterBlockEntity {
         Level level = getLevel();
         int power = level.getBestNeighborSignal(worldPosition);
         if (power > 0) {
-            infectAlongLine((ServerLevel) level, worldPosition, getBlockState().getValue(SporeBlaster.FACING), power, level.random);
+            infectAlongLine((ServerLevel) level, worldPosition, getBlockState().getValue(SporeBlasterBlock.FACING), power, level.random);
         }
         level.scheduleTick(worldPosition, getBlockState().getBlock(), 2);
     }

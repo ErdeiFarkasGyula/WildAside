@@ -5,8 +5,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.GlassBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class VibrionGlass extends GlassBlock {
-    public VibrionGlass(Properties p_53640_) {
+public class VibrionGlassBlock extends GlassBlock {
+    public VibrionGlassBlock(Properties p_53640_) {
         super(p_53640_);
     }
 

@@ -1,7 +1,6 @@
 package net.farkas.wildaside.block.custom;
 
-import net.farkas.wildaside.block.entity.BioengineeringWorkstationBlockEntity;
-import net.farkas.wildaside.block.entity.ModBlockEntities;
+import net.farkas.wildaside.block.entity.BiofreezerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -13,8 +12,6 @@ import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -22,16 +19,16 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
-public class BioengineeringWorkstation extends BaseEntityBlock {
+public class BiofreezerBlock extends BaseEntityBlock {
     public static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 16, 16);
 
-    public BioengineeringWorkstation(Properties pProperties) {
+    public BiofreezerBlock(Properties pProperties) {
         super(pProperties);
     }
 
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return new BioengineeringWorkstationBlockEntity(pPos, pState);
+        return new BiofreezerBlockEntity(pPos, pState);
     }
 
     @Override
@@ -45,39 +42,28 @@ public class BioengineeringWorkstation extends BaseEntityBlock {
     }
 
     @Override
-    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
         if (pState.getBlock() != pNewState.getBlock()) {
             BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-            if (blockEntity instanceof BioengineeringWorkstationBlockEntity) {
-                ((BioengineeringWorkstationBlockEntity)blockEntity).drops();
+            if (blockEntity instanceof BiofreezerBlockEntity bioFreezer) {
+                bioFreezer.drops();
             }
         }
 
-        super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
+        super.onRemove(pState, pLevel, pPos, pState, pMovedByPiston);
     }
 
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         if (!pLevel.isClientSide()) {
-            BlockEntity entity = pLevel.getBlockEntity(pPos);
-            if (entity instanceof BioengineeringWorkstationBlockEntity) {
-                NetworkHooks.openScreen(((ServerPlayer)pPlayer), (BioengineeringWorkstationBlockEntity)entity, pPos);
+            BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
+            if (blockEntity instanceof BiofreezerBlockEntity bioFreezer) {
+                NetworkHooks.openScreen(((ServerPlayer)pPlayer), bioFreezer, pPos);
             } else {
-                throw new IllegalStateException("Our Container provider is missing!");
+                throw new IllegalStateException("Bio Freezer container provider is missing!");
             }
         }
 
         return InteractionResult.sidedSuccess(pLevel.isClientSide());
-    }
-
-
-    @Nullable
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-        if (pLevel.isClientSide()) {
-            return null;
-        }
-        return createTickerHelper(pBlockEntityType, ModBlockEntities.BIOENGINEERING_WORKSTATION.get(),
-                (pLevel1, pPos, pState1, pBlockEntity) -> pBlockEntity.tick(pLevel1, pPos, pState1));
     }
 }
