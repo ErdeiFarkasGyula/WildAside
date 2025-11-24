@@ -35,7 +35,6 @@ public class ModConfig {
             .comment("Enable/disable the glowing tick of glowing blocks in the Glowing Hickory Forest, making them not change their light levels anymore.  (def: true)")
             .define("glowing_hickory_tick", true);
 
-
     public static final ForgeConfigSpec.BooleanValue ACCURATE_DNA_MOVEMENT_SPEEDS = COMMON_BUILDER
             .comment("Enable/disable the accurate movement speed calculations of mobs for DNAs. " +
                     "If false, both ground and water movement speeds be inaccurate with DNAs, " +
