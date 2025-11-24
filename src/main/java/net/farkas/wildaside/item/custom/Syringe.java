@@ -145,15 +145,15 @@ public class Syringe extends Item {
         double closest = Double.MAX_VALUE;
         LivingEntity found = null;
 
-        for (Entity e : list) {
-            AABB bb = e.getBoundingBox().inflate(0.3);
+        for (Entity entity : list) {
+            AABB bb = entity.getBoundingBox().inflate(0.3);
             Optional<Vec3> hit = bb.clip(start, end);
 
             if (hit.isPresent()) {
                 double dist = hit.get().distanceTo(start);
                 if (dist < closest) {
                     closest = dist;
-                    found = (LivingEntity) e;
+                    found = (LivingEntity) entity;
                 }
             }
         }
