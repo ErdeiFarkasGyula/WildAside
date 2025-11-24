@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class Syringe extends Item {
-    public static final int DEFAULT_BLOOD_COLOR = 0xAA5500;
+    public static final int DEFAULT_BLOOD_COLOR = 0xba260f;
 
     public static final int DEFAULT_MAX_LOAD = 3;
 
@@ -68,7 +68,6 @@ public class Syringe extends Item {
         float progress = tag.getFloat(SYRINGE_PROGRESS);
         float blood = tag.getFloat(BLOOD_LEVEL);
 
-        float oldProgress = progress;
         progress += inwards ? NEEDLE_DELTA : -NEEDLE_DELTA;
         progress = Mth.clamp(progress, 0f, DEFAULT_MAX_LOAD);
 
