@@ -1,5 +1,6 @@
 package net.farkas.wildaside.block.entity;
 
+import net.farkas.wildaside.screen.biofreezer.BiofreezerMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -23,11 +24,30 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class BiofreezerBlockEntity extends BlockEntity implements MenuProvider {
-    private final ItemStackHandler itemHandler = new ItemStackHandler(27);
+    private final ItemStackHandler itemHandler = new ItemStackHandler(90);
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
+
+    public final ContainerData data;
 
     public BiofreezerBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(ModBlockEntities.BIOFREEZER.get(), pPos, pBlockState);
+
+        this.data = new ContainerData() {
+            @Override
+            public int get(int pIndex) {
+                return 0;
+            }
+
+            @Override
+            public void set(int pIndex, int pValue) {
+
+            }
+
+            @Override
+            public int getCount() {
+                return 0;
+            }
+        };
     }
 
     @Override
@@ -61,12 +81,12 @@ public class BiofreezerBlockEntity extends BlockEntity implements MenuProvider {
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable("block.minecraft.biofreezer");
+        return Component.translatable("block.wildaside.biofreezer");
     }
 
     @Override
     public @Nullable AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
-        return null;
+        return new BiofreezerMenu(pContainerId, pPlayerInventory, this, data);
     }
 
     @Override

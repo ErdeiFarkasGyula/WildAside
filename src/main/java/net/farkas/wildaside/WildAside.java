@@ -25,6 +25,7 @@ import net.farkas.wildaside.potion.ModPotions;
 import net.farkas.wildaside.recipe.ModRecipes;
 import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationScreen;
 import net.farkas.wildaside.screen.ModMenuTypes;
+import net.farkas.wildaside.screen.biofreezer.BiofreezerScreen;
 import net.farkas.wildaside.screen.potion_blaster.PotionBlasterScreen;
 import net.farkas.wildaside.sound.ModSounds;
 import net.farkas.wildaside.util.ModWoodTypes;
@@ -203,6 +204,7 @@ public class WildAside
             EntityRenderers.register(ModEntities.CONTAMINATED_CREEPER.get(), ContaminatedCreeperRenderer::new);
 
             MenuScreens.register(ModMenuTypes.BIOENGINEERING_WORKSTATION_MENU.get(), BioengineeringWorkstationScreen::new);
+            MenuScreens.register(ModMenuTypes.BIOFREEZER_MENU.get(), BiofreezerScreen::new);
             MenuScreens.register(ModMenuTypes.POTION_BLASTER_MENU.get(), PotionBlasterScreen::new);
 
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.VIBRION_GLASS_PANE.get(), RenderType.translucent());

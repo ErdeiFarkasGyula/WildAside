@@ -1,10 +1,9 @@
-package net.farkas.wildaside.screen.potion_blaster;
+package net.farkas.wildaside.screen.biofreezer;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
-import net.farkas.wildaside.block.entity.PotionBlasterBlockEntity;
+import net.farkas.wildaside.block.entity.BiofreezerBlockEntity;
 import net.farkas.wildaside.screen.ModMenuTypes;
-import net.farkas.wildaside.screen.ModOutputSlot;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -16,29 +15,29 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class PotionBlasterMenu extends AbstractContainerMenu {
-    public final PotionBlasterBlockEntity blockEntity;
+public class BiofreezerMenu extends AbstractContainerMenu {
+    public final BiofreezerBlockEntity blockEntity;
     public final Level level;
     public final ContainerData data;
 
-    public PotionBlasterMenu(int pContainerId, Inventory inv, FriendlyByteBuf extraData) {
+    public BiofreezerMenu(int pContainerId, Inventory inv, FriendlyByteBuf extraData) {
         this(pContainerId, inv, getBlockEntityFromBuffer(inv, extraData));
     }
 
-    private static PotionBlasterBlockEntity getBlockEntityFromBuffer(Inventory inv, FriendlyByteBuf extraData) {
+    private static BiofreezerBlockEntity getBlockEntityFromBuffer(Inventory inv, FriendlyByteBuf extraData) {
         BlockPos pos = extraData.readBlockPos();
         BlockEntity entity = inv.player.level().getBlockEntity(pos);
-        return (PotionBlasterBlockEntity) entity;
+        return (BiofreezerBlockEntity) entity;
     }
 
-    public PotionBlasterMenu(int pContainerId, Inventory inv, PotionBlasterBlockEntity blockEntity) {
+    public BiofreezerMenu(int pContainerId, Inventory inv, BiofreezerBlockEntity blockEntity) {
         this(pContainerId, inv, blockEntity, blockEntity.data);
     }
 
-    public PotionBlasterMenu(int pContainerId, Inventory inv, BlockEntity entity, ContainerData data) {
-        super(ModMenuTypes.POTION_BLASTER_MENU.get(), pContainerId);
+    public BiofreezerMenu(int pContainerId, Inventory inv, BlockEntity entity, ContainerData data) {
+        super(ModMenuTypes.BIOFREEZER_MENU.get(), pContainerId);
 
-        this.blockEntity = ((PotionBlasterBlockEntity)entity);
+        this.blockEntity = ((BiofreezerBlockEntity)entity);
         this.level = inv.player.level();
         this.data = data;
 
@@ -46,26 +45,16 @@ public class PotionBlasterMenu extends AbstractContainerMenu {
         addPlayerHotbar(inv);
 
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
-            this.addSlot(new SlotItemHandler(iItemHandler, 0, 26, 15));
-            this.addSlot(new SlotItemHandler(iItemHandler, 1, 44, 15));
-            this.addSlot(new SlotItemHandler(iItemHandler, 2, 62, 15));
-            this.addSlot(new SlotItemHandler(iItemHandler, 3, 26, 33));
-            this.addSlot(new SlotItemHandler(iItemHandler, 4, 44, 33));
-            this.addSlot(new SlotItemHandler(iItemHandler, 5, 62, 33));
-            this.addSlot(new SlotItemHandler(iItemHandler, 6, 26, 51));
-            this.addSlot(new SlotItemHandler(iItemHandler, 7, 44, 51));
-            this.addSlot(new SlotItemHandler(iItemHandler, 8, 62, 51));
-            this.addSlot(new ModOutputSlot(iItemHandler, 9, 102, 35));
+            int index = 0;
+            for (int i = 0; i < 6; ++i) {
+                for (int l = 0; l < 9; ++l) {
+                    index++;
+                    this.addSlot(new SlotItemHandler(iItemHandler, index, 8 + l * 18, 18 + i * 18));
+                }
+            }
         });
 
         addDataSlots(data);
-    }
-
-    public int getScaledProgress() {
-        int progress = this.data.get(0);
-        int maxProgress = this.data.get(1);
-
-        return progress * 52 / maxProgress;
     }
 
     // CREDIT GOES TO: diesieben07 | https://github.com/diesieben07/SevenCommons
@@ -85,7 +74,7 @@ public class PotionBlasterMenu extends AbstractContainerMenu {
     private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
 
     // THIS YOU HAVE TO DEFINE!
-    private static final int TE_INVENTORY_SLOT_COUNT = 10;  // must be the number of slots you have!
+    private static final int TE_INVENTORY_SLOT_COUNT = 72;  // must be the number of slots you have!
     @Override
     public ItemStack quickMoveStack(Player playerIn, int pIndex) {
         Slot sourceSlot = slots.get(pIndex);
@@ -124,20 +113,20 @@ public class PotionBlasterMenu extends AbstractContainerMenu {
     @Override
     public boolean stillValid(Player pPlayer) {
         return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()),
-                pPlayer, ModBlocks.POTION_BLASTER.get());
+                pPlayer, ModBlocks.BIOFREEZER.get());
     }
 
     private void addPlayerInventory(Inventory playerInventory) {
         for (int i = 0; i < 3; ++i) {
             for (int l = 0; l < 9; ++l) {
-                this.addSlot(new Slot(playerInventory, l + i * 9 + 9, 8 + l * 18, 84 + i * 18));
+                this.addSlot(new Slot(playerInventory, l + i * 9 + 9, 8 + l * 18, 140 + i * 18));
             }
         }
     }
 
     private void addPlayerHotbar(Inventory playerInventory) {
         for (int i = 0; i < 9; ++i) {
-            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
+            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 198));
         }
     }
 }

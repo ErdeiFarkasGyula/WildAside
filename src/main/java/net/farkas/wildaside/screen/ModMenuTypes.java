@@ -2,6 +2,7 @@ package net.farkas.wildaside.screen;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationMenu;
+import net.farkas.wildaside.screen.biofreezer.BiofreezerMenu;
 import net.farkas.wildaside.screen.potion_blaster.PotionBlasterMenu;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
@@ -18,6 +19,8 @@ public class ModMenuTypes {
 
     public static final RegistryObject<MenuType<BioengineeringWorkstationMenu>> BIOENGINEERING_WORKSTATION_MENU =
             registerMenuType("bioengineering_workstation_menu", BioengineeringWorkstationMenu::new);
+    public static final RegistryObject<MenuType<BiofreezerMenu>> BIOFREEZER_MENU =
+            registerMenuType("biofreezer_menu", BiofreezerMenu::new);
     public static final RegistryObject<MenuType<PotionBlasterMenu>> POTION_BLASTER_MENU =
             registerMenuType("potion_blaster_menu", PotionBlasterMenu::new);
 

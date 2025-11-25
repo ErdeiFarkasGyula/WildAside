@@ -15,6 +15,7 @@
 
   "item.wildaside.dna_holder": "DNA Holder",
   "item.wildaside.gene": "Gene",
+  "item.wildaside.syringe": "Syringe",
 
   "item.wildaside.hickory_nut_trail_mix": "Hickory Nut Trail Mix",
   "item.wildaside.red_hickory_nut_trail_mix": "Red Hickory Nut Trail Mix",
@@ -118,6 +119,7 @@
   "block.wildaside.substilium_hanging_wall_sign": "Substilium Hanging Wall Sign",
   "block.wildaside.substilium_sprouts": "Substilium Sprouts",
   "block.wildaside.bioengineering_workstation": "Bioengineering Workstation",
+  "block.wildaside.biofreezer": "Biofreezer",
   "block.wildaside.hickory_log": "Hickory Log",
   "block.wildaside.hickory_wood": "Hickory Wood",
   "block.wildaside.stripped_hickory_log": "Stripped Hickory Log",
