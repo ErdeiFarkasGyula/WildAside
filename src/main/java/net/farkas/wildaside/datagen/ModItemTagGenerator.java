@@ -3,6 +3,7 @@ package net.farkas.wildaside.datagen;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.item.ModItems;
+import net.farkas.wildaside.util.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
@@ -21,6 +22,12 @@ public class ModItemTagGenerator extends ItemTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider pProvider) {
+        this.tag(ModTags.Items.BIOFREEZER_ITEMS)
+                .add(ModItems.SYRINGE.get().asItem())
+                .add(ModItems.DNA_HOLDER.get().asItem());
+
+        //
+
         this.tag(ItemTags.LOGS_THAT_BURN)
                 .add(ModBlocks.SUBSTILIUM_STEM.get().asItem())
                 .add(ModBlocks.STRIPPED_SUBSTILIUM_STEM.get().asItem())

@@ -19,8 +19,6 @@ public class PotionBlasterScreen extends AbstractContainerScreen<PotionBlasterMe
     @Override
     protected void init() {
         super.init();
-        this.inventoryLabelY = 9999;
-        this.titleLabelY = 9999;
     }
 
     @Override
