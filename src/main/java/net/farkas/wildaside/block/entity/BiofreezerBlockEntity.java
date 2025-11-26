@@ -77,16 +77,13 @@ public class BiofreezerBlockEntity extends BlockEntity implements MenuProvider {
         lazyItemHandler.invalidate();
     }
 
-    public void tick(Level pLevel, BlockPos pPos, BlockState pState) {
+    public void tick() {
         for (int i = 0; i < itemHandler.getSlots(); i++) {
             ItemStack stack = itemHandler.getStackInSlot(i);
             if (stack.is(ModTags.Items.BIOFREEZER_ITEMS)) {
                 CompoundTag tag = stack.getOrCreateTag();
-
-                if (tag.contains(BIOFREEZER_TICKS)) {
-                    int biofreezerTicks = tag.getInt(BIOFREEZER_TICKS);
-                    tag.putInt(BIOFREEZER_TICKS, biofreezerTicks++);
-                }
+                int biofreezerTicks = tag.getInt(BIOFREEZER_TICKS);
+                tag.putInt(BIOFREEZER_TICKS, ++biofreezerTicks);
             }
         }
     }
