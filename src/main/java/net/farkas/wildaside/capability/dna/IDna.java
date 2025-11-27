@@ -1,7 +1,7 @@
 package net.farkas.wildaside.capability.dna;
 
 import net.farkas.wildaside.dna.Gene;
-import net.farkas.wildaside.dna.traits.Trait;
+import net.farkas.wildaside.dna.trait.Trait;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;

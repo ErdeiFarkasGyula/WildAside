@@ -2,8 +2,8 @@ package net.farkas.wildaside.block.entity;
 
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.Gene;
-import net.farkas.wildaside.dna.traits.Trait;
-import net.farkas.wildaside.dna.traits.Traits;
+import net.farkas.wildaside.dna.trait.Trait;
+import net.farkas.wildaside.dna.trait.Traits;
 import net.farkas.wildaside.item.custom.DnaHolder;
 import net.farkas.wildaside.recipe.BioengineeringWorkstationRecipe;
 import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationMenu;

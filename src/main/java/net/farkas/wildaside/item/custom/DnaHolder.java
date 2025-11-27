@@ -2,13 +2,11 @@ package net.farkas.wildaside.item.custom;
 
 import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
-import net.farkas.wildaside.config.ModConfig;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
-import net.farkas.wildaside.dna.speed.MobSpeedResultStorage;
-import net.farkas.wildaside.dna.traits.Trait;
-import net.farkas.wildaside.dna.traits.TraitTypes;
-import net.farkas.wildaside.dna.traits.Traits;
+import net.farkas.wildaside.dna.trait.Trait;
+import net.farkas.wildaside.dna.trait.TraitTypes;
+import net.farkas.wildaside.dna.trait.Traits;
 import net.farkas.wildaside.sound.ModSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;

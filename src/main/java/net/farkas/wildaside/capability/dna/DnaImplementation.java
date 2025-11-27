@@ -1,8 +1,8 @@
 package net.farkas.wildaside.capability.dna;
 
 import net.farkas.wildaside.dna.Gene;
-import net.farkas.wildaside.dna.traits.Trait;
-import net.farkas.wildaside.dna.traits.Traits;
+import net.farkas.wildaside.dna.trait.Trait;
+import net.farkas.wildaside.dna.trait.Traits;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;

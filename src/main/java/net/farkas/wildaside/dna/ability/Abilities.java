@@ -1,8 +1,8 @@
 package net.farkas.wildaside.dna.ability;
 
 import net.farkas.wildaside.dna.ability.custom.*;
-import net.farkas.wildaside.dna.traits.Trait;
-import net.farkas.wildaside.dna.traits.Traits;
+import net.farkas.wildaside.dna.trait.Trait;
+import net.farkas.wildaside.dna.trait.Traits;
 
 import java.util.HashMap;
 import java.util.Map;

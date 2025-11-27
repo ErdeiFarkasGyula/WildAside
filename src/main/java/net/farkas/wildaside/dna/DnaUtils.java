@@ -5,9 +5,9 @@ import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.config.ModConfig;
 import net.farkas.wildaside.dna.speed.MobSpeedResultStorage;
 import net.farkas.wildaside.dna.speed.MobSpeedTesting;
-import net.farkas.wildaside.dna.traits.Trait;
-import net.farkas.wildaside.dna.traits.TraitTypes;
-import net.farkas.wildaside.dna.traits.Traits;
+import net.farkas.wildaside.dna.trait.Trait;
+import net.farkas.wildaside.dna.trait.TraitTypes;
+import net.farkas.wildaside.dna.trait.Traits;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.EntityType;
@@ -27,6 +27,14 @@ public class DnaUtils {
 
     public static String fullName(String id) {
         return DNA_PREFIX + id;
+    }
+
+    public static ResourceLocation getAttributeRes(String name) {
+        return new ResourceLocation("minecraft", "generic." + name);
+    }
+
+    public static UUID getUuid(String name) {
+        return UUID.nameUUIDFromBytes(name.getBytes(StandardCharsets.UTF_8));
     }
 
     public static float getStableAttributeValue(LivingEntity entity, Attribute attribute) {
@@ -80,7 +88,7 @@ public class DnaUtils {
         Map<Trait, Gene> genes = new HashMap<>();
 
         for (Trait trait : Traits.getByType(TraitTypes.CORE)) {
-            Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(getAttribute(trait.name()));
+            Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(getAttributeRes(trait.name()));
             if (attribute != null) {
                 float traitValue = getAttributeValue(entity, attribute);
                 if (trait == Traits.MOVEMENT_SPEED) {
@@ -174,13 +182,5 @@ public class DnaUtils {
             sum += hashToFloat(seed, salt, i);
         }
         return (sum / 6f - 0.5f) * 2f;
-    }
-
-    public static ResourceLocation getAttribute(String name) {
-        return new ResourceLocation("minecraft", "generic." + name);
-    }
-
-    public static UUID getUuid(String name) {
-        return UUID.nameUUIDFromBytes(name.getBytes(StandardCharsets.UTF_8));
     }
 }

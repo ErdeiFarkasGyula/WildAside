@@ -1,4 +1,4 @@
-package net.farkas.wildaside.dna.traits;
+package net.farkas.wildaside.dna.trait;
 
 import net.minecraft.ChatFormatting;
 

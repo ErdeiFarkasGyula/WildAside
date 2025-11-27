@@ -3,7 +3,7 @@ package net.farkas.wildaside.dna.ability;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.dna.Gene;
-import net.farkas.wildaside.dna.traits.TraitTypes;
+import net.farkas.wildaside.dna.trait.TraitTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

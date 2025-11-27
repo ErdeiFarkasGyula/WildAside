@@ -4,7 +4,7 @@ import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.ability.Abilities;
 import net.farkas.wildaside.dna.ability.IAbility;
-import net.farkas.wildaside.dna.traits.TraitTypes;
+import net.farkas.wildaside.dna.trait.TraitTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
