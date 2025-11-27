@@ -132,11 +132,6 @@ public class DnaHolder extends Item {
             boolean hasMutated = target.getPersistentData().getBoolean(DNA_MUTATED);
             if (!hasMutated) {
                 baseGenes.set(DnaUtils.mutateGenes(dna.genes(), target));
-                if (ModConfig.ACCURATE_DNA_MOVEMENT_SPEEDS.get()) {
-                    Trait trait = Traits.MOVEMENT_SPEED;
-                    Gene gene = DnaUtils.mutateGene(new Gene(trait, (float) MobSpeedResultStorage.getSpeed(target.getType(), "ground"), trait.baseInstability()), target);
-                    baseGenes.get().replace(trait, gene);
-                }
             } else {
                 baseGenes.set(dna.genes());
             }

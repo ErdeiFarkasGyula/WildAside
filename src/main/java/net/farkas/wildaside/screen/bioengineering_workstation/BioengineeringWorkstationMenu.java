@@ -127,7 +127,6 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
                 for (int x = 0; x < Traits.TRAITS.size(); x++) {
                     Trait trait = Traits.TRAITS.get(x);
                     Gene gene = genes.getOrDefault(trait, new Gene(trait, 0, trait.baseInstability()));
-                    System.out.println("Trait" + trait.name() + " Gene: " + gene.value);
                     if (trait.traitType() == TraitTypes.ABILITY && gene.value == 0.0) {
                         slotCorrection++;
                         continue;

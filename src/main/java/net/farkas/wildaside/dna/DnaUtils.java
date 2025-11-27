@@ -87,7 +87,9 @@ public class DnaUtils {
                     if (ModConfig.ACCURATE_DNA_MOVEMENT_SPEEDS.get() && !preGen) {
                         traitValue = (float) (MobSpeedResultStorage.getSpeed(entity.getType(), "ground"));
                         if (MobSpeedTesting.EXCLUDED_MOBS.contains(entity.getType())) {
+                            System.out.println("Doesn't contain: " + entity.getType());
                             traitValue = (float) entity.getAttributeBaseValue(attribute);
+                            System.out.println(traitValue);
                         }
                     }
                 }
