@@ -65,17 +65,6 @@ public class DnaImplementation implements IDna {
         return genes;
     }
 
-    public void setGene(LivingEntity entity, Trait trait, float value, float stabilityCost) {
-        Gene existing = genes.get(trait);
-        if (existing != null) {
-            existing.remove(entity);
-        }
-
-        Gene newGene = new Gene(trait, value, stabilityCost);
-        genes.put(trait, newGene);
-        newGene.apply(entity);
-    }
-
     @Override
     public float calculateInstabilityChange(Map<Trait, Gene> newGenes) {
         float totalCost = 0.0f;
