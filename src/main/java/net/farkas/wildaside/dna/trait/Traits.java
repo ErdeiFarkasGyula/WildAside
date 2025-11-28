@@ -4,6 +4,7 @@ import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.trait.TraitTypes;
 import net.farkas.wildaside.dna.traits.AttributeTrait;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
 import javax.annotation.Nullable;
@@ -37,16 +38,24 @@ public class Traits {
         return trait;
     }
 
-
     public static List<Trait> getByType(TraitTypes type) {
         List<Trait> out = new ArrayList<>();
-        for (Trait t : TRAITS) if (t.traitType() == type) out.add(t);
+        for (Trait t : TRAITS) if (t.getTraitType() == type) out.add(t);
         return out;
     }
 
-
     public static Trait getByName(String name) {
-        for (Trait t : TRAITS) if (t.name().equalsIgnoreCase(name)) return t;
+        for (Trait t : TRAITS) if (t.getName().equalsIgnoreCase(name)) return t;
         return MAX_HEALTH;
+    }
+
+    public static float getTraitValue(Map<Trait, Gene> genes, @Nullable Trait trait) {
+        if (trait == null || genes == null) return 0.0f;
+        Gene gene = genes.get(trait);
+        return gene.getExpressedValue();
+    }
+
+    public static Component translatableTrait(Trait trait) {
+        return Component.translatable("trait.wildaside." + trait.getName());
     }
 }
