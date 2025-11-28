@@ -1,6 +1,9 @@
 package net.farkas.wildaside.dna.allele;
 
+import net.farkas.wildaside.dna.DnaConstants;
 import net.minecraft.nbt.CompoundTag;
+
+import static net.farkas.wildaside.dna.DnaConstants.*;
 
 public class Allele {
     private float value;
@@ -49,25 +52,25 @@ public class Allele {
 
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
-        tag.putFloat("value", value);
-        tag.putFloat("mutationRate", mutationRate);
-        tag.putFloat("stability", stability);
-        tag.putString("dominance", dominance.name());
+        tag.putFloat(VALUE, value);
+        tag.putFloat(MUTATION_RATE, mutationRate);
+        tag.putFloat(STABILITY, stability);
+        tag.putString(DOMINANCE, dominance.name());
         return tag;
     }
 
     public void deserializeNBT(CompoundTag tag) {
-        value = tag.getFloat("value");
-        mutationRate = tag.getFloat("mutationRate");
-        stability = tag.getFloat("stability");
-        dominance = Dominance.valueOf(tag.getString("dominance"));
+        value = tag.getFloat(VALUE);
+        mutationRate = tag.getFloat(MUTATION_RATE);
+        stability = tag.getFloat(STABILITY);
+        dominance = Dominance.valueOf(tag.getString(DOMINANCE));
     }
 
     public static Allele createFromTag(CompoundTag tag) {
-        float value = tag.getFloat("value");
-        float mutationRate = tag.getFloat("mutationRate");
-        float stability = tag.getFloat("stability");
-        String dominance = tag.getString("dominance");
+        float value = tag.getFloat(VALUE);
+        float mutationRate = tag.getFloat(MUTATION_RATE);
+        float stability = tag.getFloat(STABILITY);
+        String dominance = tag.getString(DOMINANCE);
         return new Allele(value, mutationRate, stability, Dominance.valueOf(dominance));
     }
 
