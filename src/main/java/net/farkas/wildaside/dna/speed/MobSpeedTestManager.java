@@ -7,7 +7,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -74,6 +77,17 @@ public class MobSpeedTestManager {
 
         if (level != null) {
             ensureTestAreaLoaded(level, new BlockPos(0, 16, 0), 150, MobSpeedTesting.getMobsToTest(level).size() * 4 + 2);
+        }
+    }
+    
+    @SubscribeEvent
+    public static void onEntityLeftLevel(EntityLeaveLevelEvent event) {
+        if (!ModConfig.ACCURATE_DNA_WATER_MOVEMENT_SPEEDS.get() || event.getEntity().level().isClientSide()) return;
+
+        if (event.getEntity().level().dimension() == ModDimensions.TEST_LEVEL) {
+            if (event.getEntity() instanceof Mob mob && (mob.isSensitiveToWater() || mob.getSpeed() == 0.0 || mob.getDeltaMovement() == Vec3.ZERO)) {
+                MobSpeedTestTracker.onMobFinished(mob, "water");
+            }
         }
     }
 

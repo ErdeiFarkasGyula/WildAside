@@ -5,6 +5,7 @@ import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.ModBlockEntities;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.client.ModKeyMappings;
+import net.farkas.wildaside.dna.DnaConstants;
 import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.entity.client.ModModelLayers;
 import net.farkas.wildaside.entity.client.hickory.HickoryTreantRenderer;
@@ -34,7 +35,7 @@ import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import static net.farkas.wildaside.item.custom.DnaHolder.DNA_DATA;
+import static net.farkas.wildaside.dna.DnaConstants.*;
 
 @Mod.EventBusSubscriber(modid = WildAside.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ModEventBusClientEvents {
