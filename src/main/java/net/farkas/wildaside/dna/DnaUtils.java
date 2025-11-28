@@ -190,27 +190,31 @@ public class DnaUtils {
         return new Allele(newValue, newMutationRate, newStability, newDom);
     }
 
+    private static long mix64(long x) {
+        x ^= (x >>> 30);
+        x *= 0xBF58476D1CE4E5B9L;
+        x ^= (x >>> 27);
+        x *= 0x94D049BB133111EBL;
+        x ^= (x >>> 31);
+        return x;
+    }
+
     private static float hashToFloat(long seed, String salt, int index) {
-        long hash = seed ^ (index * 0x9E3779B97F4A7C15L);
-        for (char c : salt.toCharArray()) {
-            hash = hash * 31 + c;
-        }
+        long h = seed;
+        h ^= 0x9E3779B97F4A7C15L * index;
+        h ^= mix64(salt.hashCode());
+        h = mix64(h);
 
-        hash ^= (hash >>> 33);
-        hash *= 0xff51afd7ed558ccdL;
-        hash ^= (hash >>> 33);
-        hash *= 0xc4ceb9fe1a85ec53L;
-        hash ^= (hash >>> 33);
-
-        return (float) ((hash & 0xFFFFFFFFL) / (double) 0xFFFFFFFFL);
+        return (h >>> 40) / (float)(1L << 24);
     }
 
     private static float deterministicGaussian(long seed, String salt) {
-        float sum = 0f;
-        for (int i = 0; i < 6; i++) {
-            sum += hashToFloat(seed, salt, i);
-        }
-        return (sum / 6f - 0.5f) * 2f;
+        float u1 = hashToFloat(seed, salt, 0);
+        float u2 = hashToFloat(seed, salt, 1);
+
+        u1 = Math.max(u1, 1e-12f);
+
+        return (float)(Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2 * Math.PI * u2));
     }
 
     private static Dominance generateNewDominance(Allele allele, float mutationRate, long seed, String salt) {
