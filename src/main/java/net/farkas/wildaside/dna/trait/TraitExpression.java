@@ -1,9 +1,9 @@
 package net.farkas.wildaside.dna.trait;
 
 import net.farkas.wildaside.dna.allele.Allele;
-import net.farkas.wildaside.dna.allele.Dominance;
+import net.farkas.wildaside.dna.dominance.Dominance;
 
-import static net.farkas.wildaside.dna.allele.Dominance.*;
+import static net.farkas.wildaside.dna.dominance.Dominance.*;
 
 public class TraitExpression {
     public static float evaluate(Allele a, Allele b) {

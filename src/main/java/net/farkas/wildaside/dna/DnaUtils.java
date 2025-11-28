@@ -4,7 +4,7 @@ import com.google.common.collect.Multimap;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.config.ModConfig;
 import net.farkas.wildaside.dna.allele.Allele;
-import net.farkas.wildaside.dna.allele.Dominance;
+import net.farkas.wildaside.dna.dominance.Dominance;
 import net.farkas.wildaside.dna.speed.MobSpeedResultStorage;
 import net.farkas.wildaside.dna.speed.MobSpeedTesting;
 import net.farkas.wildaside.dna.trait.Trait;

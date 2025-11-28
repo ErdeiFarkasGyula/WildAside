@@ -1,6 +1,6 @@
 package net.farkas.wildaside.dna.allele;
 
-import net.farkas.wildaside.dna.DnaConstants;
+import net.farkas.wildaside.dna.dominance.Dominance;
 import net.minecraft.nbt.CompoundTag;
 
 import static net.farkas.wildaside.dna.DnaConstants.*;

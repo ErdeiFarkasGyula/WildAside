@@ -238,7 +238,7 @@ public class DnaHolder extends Item {
 
         if (filtered.isEmpty()) return;
 
-        tooltip.add(title.withStyle(type.headerColour));
+        tooltip.add(title.withStyle(type.getHeaderColour()));
 
         filtered.values().forEach(gene -> {
             float value = gene.value();
@@ -255,7 +255,7 @@ public class DnaHolder extends Item {
             tooltip.add(Component.literal("- ")
                     .append(Component.translatable("trait.wildaside." + gene.trait().name()))
                     .append(": " + valueStr)
-                    .withStyle(type.entryColour));
+                    .withStyle(type.getEntryColour()));
         });
     }
 

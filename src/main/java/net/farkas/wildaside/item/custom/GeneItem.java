@@ -30,7 +30,7 @@ public class GeneItem extends Item {
         if (trait != null) {
             tooltip.add(Component.translatable("trait.wildaside." + traitName)
                     .append(Component.literal(": " + String.format("%.2f", value)))
-                    .withStyle(trait.traitType().headerColour));
+                    .withStyle(trait.getTraitType().getHeaderColour()));
         }
     }
 

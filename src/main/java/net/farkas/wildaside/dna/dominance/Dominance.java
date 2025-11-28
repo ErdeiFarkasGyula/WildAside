@@ -1,4 +1,4 @@
-package net.farkas.wildaside.dna.allele;
+package net.farkas.wildaside.dna.dominance;
 
 public enum Dominance {
     DOMINANT,
