@@ -212,9 +212,10 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
 
             for (int i = 0; i <= 12; i++) {
                 ItemStack geneStack = itemHandler.getStackInSlot(i + geneStartIndex);
+                if (geneStack.isEmpty()) continue;
                 CompoundTag geneTag = geneStack.getOrCreateTag();
 
-                Gene gene = Gene.deserializeNBT(tag);
+                Gene gene = Gene.deserializeNBT(geneTag);
                 Trait trait = gene.getTrait();
 
                 genes.put(trait, new Gene(trait, gene.getAlleleA(), gene.getAlleleB()));
