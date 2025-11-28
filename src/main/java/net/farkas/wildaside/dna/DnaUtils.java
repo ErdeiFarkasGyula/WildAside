@@ -89,55 +89,76 @@ public class DnaUtils {
 
     public static Map<Trait, Gene> generateBaseGenes(LivingEntity entity, boolean preGen) {
         Map<Trait, Gene> genes = new HashMap<>();
+        long seed = entity.getUUID().getLeastSignificantBits();
 
-        for (Trait trait : Traits.getByType(TraitType.CORE)) {
-            Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(getAttributeRes(trait.getName()));
-            if (attribute != null) {
-                float traitValue = getAttributeValue(entity, attribute);
-                if (trait == Traits.MOVEMENT_SPEED) {
-                    if (ModConfig.ACCURATE_DNA_MOVEMENT_SPEEDS.get() && !preGen) {
-                        traitValue = (float) (MobSpeedResultStorage.getSpeed(entity.getType(), "ground"));
+        for (Trait trait : Traits.TRAITS) {
+            if (trait.getTraitType() == TraitType.CORE) {
+                Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(DnaUtils.getAttributeRes(trait.getName()));
+                if (attribute != null) {
+                    float baseValue = DnaUtils.getAttributeValue(entity, attribute);
+
+                    if (trait == Traits.MOVEMENT_SPEED && ModConfig.ACCURATE_DNA_MOVEMENT_SPEEDS.get() && !preGen) {
+                        baseValue = (float) MobSpeedResultStorage.getSpeed(entity.getType(), "ground");
                         if (MobSpeedTesting.EXCLUDED_MOBS.contains(entity.getType())) {
-                            traitValue = (float) entity.getAttributeBaseValue(attribute);
-                            System.out.println(traitValue);
+                            baseValue = (float) entity.getAttributeBaseValue(attribute);
                         }
                     }
+
+                    Allele alleleA = createAllele(trait, baseValue, seed, 0);
+                    Allele alleleB = createAllele(trait, baseValue, seed, 1);
+
+                    genes.put(trait, new Gene(trait, alleleA, alleleB));
                 }
-                genes.put(trait, new Gene(trait, traitValue, trait.baseInstability()));
             }
         }
 
-        long seed = entity.getUUID().getLeastSignificantBits();
-
-        putGaussianOrZero(genes, Traits.FIRE_RESISTANCE, seed, entity.fireImmune());
-        putGaussianOrZero(genes, Traits.FREEZE_RESISTANCE, seed, entity.getType().is(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES));
-        putGaussianOrZero(genes, Traits.FALL_RESISTANCE, seed, entity.getType().is(EntityTypeTags.FALL_DAMAGE_IMMUNE));
+        generateResistanceGene(genes, Traits.FIRE_RESISTANCE, seed, entity.fireImmune());
+        generateResistanceGene(genes, Traits.FREEZE_RESISTANCE, seed, entity.getType().is(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES));
+        generateResistanceGene(genes, Traits.FALL_RESISTANCE, seed, entity.getType().is(EntityTypeTags.FALL_DAMAGE_IMMUNE));
 
         if (entity.getType() == EntityType.BLAZE) {
-            putAbilityWithGaussian(genes, Traits.FIRE_ABILITY, seed);
+            generateAbilityGene(genes, Traits.FIRE_ABILITY, seed);
+        } else if (entity.getType() == EntityType.ENDERMAN) {
+            generateAbilityGene(genes, Traits.TELEPORT_ABILITY, seed);
         }
-        else if (entity.getType() == EntityType.ENDERMAN) {
-            putAbilityWithGaussian(genes, Traits.TELEPORT_ABILITY, seed);
-        }
-
 
         return genes;
     }
 
-    private static void putGaussianOrZero(Map<Trait, Gene> genes, Trait trait, long seed, boolean condition) {
+    private static Allele createAllele(Trait trait, float baseValue, long seed, int index) {
+        float gaussian = DnaUtils.deterministicGaussian(seed, trait.getName() + index);
+
+        Dominance dominance = trait.getTraitType().getDominanceExpression().chooseDominance(trait, seed, index);
+
+        float mutationRate = 0.05f * (trait.getTraitType() == TraitType.ABILITY ? 2f : 1f);
+
+        float stability = trait.getInstabilityModifier() * (0.5f + gaussian / 2f);
+
+        float value = baseValue * (1 + 0.2f * gaussian);
+
+        return new Allele(value, mutationRate, stability, dominance);
+    }
+
+    private static void generateResistanceGene(Map<Trait, Gene> genes, Trait trait, long seed, boolean condition) {
+        Allele alleleA, alleleB;
         if (condition) {
-            putResistanceWithGaussian(genes, trait, seed);
+            alleleA = createAllele(trait, 1f, seed, 0);
+            alleleB = createAllele(trait, 1f, seed, 1);
         } else {
-            genes.put(trait, new Gene(trait, 0.0f, trait.getInstabilityModifier()));
+            alleleA = new Allele(0f, 0f, trait.getInstabilityModifier(), Dominance.RECESSIVE);
+            alleleB = new Allele(0f, 0f, trait.getInstabilityModifier(), Dominance.RECESSIVE);
         }
+        genes.put(trait, new Gene(trait, alleleA, alleleB));
     }
 
-    private static void putResistanceWithGaussian(Map<Trait, Gene> genes, Trait trait, long seed) {
-        genes.put(trait, new Gene(trait, deterministicGaussian(seed, trait.getName()) / 2 + 0.5f, trait.getInstabilityModifier()));
+    private static void generateAbilityGene(Map<Trait, Gene> genes, Trait trait, long seed) {
+        Allele alleleA = createAllele(trait, trait.getInstabilityModifier() * 100f, seed, 0);
+        Allele alleleB = createAllele(trait, trait.getInstabilityModifier() * 100f, seed, 1);
+        genes.put(trait, new Gene(trait, alleleA, alleleB));
     }
 
-    private static void putAbilityWithGaussian(Map<Trait, Gene> genes, Trait trait, long seed) {
-        genes.put(trait, new Gene(trait, (deterministicGaussian(seed, trait.getName()) / 2 + trait.getInstabilityModifier()) * 100, trait.getInstabilityModifier()));
+    private static float randomFactor(long seed, String salt, int index) {
+        return 0.9f + DnaUtils.hashToFloat(seed, salt, index) * 0.2f;
     }
 
     public static Map<Trait, Gene> mutateGenes(Map<Trait, Gene> baseGenes, LivingEntity entity) {
@@ -190,7 +211,7 @@ public class DnaUtils {
         return x;
     }
 
-    private static float hashToFloat(long seed, String salt, int index) {
+    public static float hashToFloat(long seed, String salt, int index) {
         long h = seed;
         h ^= 0x9E3779B97F4A7C15L * index;
         h ^= mix64(salt.hashCode());
@@ -229,5 +250,9 @@ public class DnaUtils {
         if (p < 0.50f) return Dominance.RECESSIVE;
         if (p < 0.75f) return Dominance.INCOMPLETE;
         return Dominance.CO_DOMINANT;
+    }
+
+    public static String getFormattedString(float value) {
+        return String.format("%.2f", value);
     }
 }

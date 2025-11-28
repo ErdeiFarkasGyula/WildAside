@@ -233,6 +233,9 @@
   "dna.wildaside.core_traits": "Core Traits",
   "dna.wildaside.resistances": "Resistances",
   "dna.wildaside.abilities": "Abilities",
+  "dna.wildaside.allele": "Allele",
+  "dna.wildaside.alleleA": "Allele A",
+  "dna.wildaside.alleleB": "Allele B",
 
   "trait.wildaside.max_health": "Max Health",
   "trait.wildaside.movement_speed": "Movement Speed",

@@ -9,11 +9,11 @@ public class AbilityTrait extends Trait {
 
     @Override
     public void apply(LivingEntity entity, float value) {
-        entity.getPersistentData().putFloat("trait_ability_" + name(), value);
+        entity.getPersistentData().putFloat("trait_ability_" + getName(), value);
     }
 
     @Override
     public void remove(LivingEntity entity) {
-        entity.getPersistentData().remove("trait_ability_" + name());
+        entity.getPersistentData().remove("trait_ability_" + getName());
     }
 }

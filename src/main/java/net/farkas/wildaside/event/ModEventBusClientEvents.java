@@ -117,7 +117,7 @@ public class ModEventBusClientEvents {
             if (!stack.hasTag()) return 0xFFFFFF;
             CompoundTag tag = stack.getTag();
 
-            float level = tag.contains(Syringe.BLOOD_LEVEL) ? tag.getFloat(Syringe.BLOOD_LEVEL) : 0f;
+            float level = tag.contains(BLOOD_LEVEL) ? tag.getFloat(BLOOD_LEVEL) : 0f;
 
             if (level <= 0.01f) return 0xFFFFFF;
 

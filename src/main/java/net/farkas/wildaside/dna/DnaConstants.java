@@ -5,6 +5,7 @@ public class DnaConstants {
 
     public static final String ALLELE = "allele";
     public static final String VALUE = "value";
+    public static final String EXPRESSED_VALUE = "expressed_value";
     public static final String MUTATION_RATE = "mutationRate";
     public static final String STABILITY = "stability";
     public static final String DOMINANCE = "dominance";
@@ -40,4 +41,10 @@ public class DnaConstants {
     public static final String CORE_TRAITS = "core_traits";
     public static final String RESISTANCES = "resistances";
     public static final String ABILITIES = "abilities";
+
+    public static final String SYRINGE_PROGRESS = "syringe_progress";
+    public static final String INWARDS = "inwards";
+
+    public static final String BLOOD_LEVEL = "blood_level";
+    public static final String BLOOD_COLOUR = "blood_colour";
 }

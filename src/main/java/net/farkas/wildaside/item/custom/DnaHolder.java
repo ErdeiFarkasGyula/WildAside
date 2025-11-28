@@ -4,6 +4,7 @@ import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
+import net.farkas.wildaside.dna.allele.Allele;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitType;
 import net.farkas.wildaside.dna.trait.Traits;
@@ -143,11 +144,17 @@ public class DnaHolder extends Item {
                 if (newGene == null) continue;
 
                 Gene oldGene = existingDna.getGenes().get(trait);
-                float oldValue = oldGene != null ? oldGene.value() : 0f;
-                float avg = ((oldValue * (progress - 1)) + newGene.value()) / progress;
-                float stabilityCost = newGene.stabilityCost();
 
-                averaged.put(trait, new Gene(trait, avg, stabilityCost));
+                Allele alleleA = oldGene.getAlleleA();
+                Allele alleleB = newGene.getAlleleB();
+
+                float avgA = ((alleleA.getValue() * (progress - 1)) + newGene.getExpressedValue()) / progress;
+                float avgB = ((alleleB.getValue() * (progress - 1)) + newGene.getExpressedValue()) / progress;
+
+                alleleA.setValue(avgA);
+                alleleB.setValue(avgB);
+
+                averaged.put(trait, new Gene(trait, alleleA, alleleB));
             }
             newDna.setGenes(averaged);
         }
@@ -232,8 +239,8 @@ public class DnaHolder extends Item {
 
     private void displayGenesSection(List<Component> tooltip, DnaImplementation dna, TraitType type, MutableComponent title) {
         Map<Trait, Gene> filtered = dna.getGenes().entrySet().stream()
-                .filter(e -> e.getKey().traitType() == type)
-                .sorted(Map.Entry.comparingByKey(Comparator.comparing(Trait::name)))
+                .filter(e -> e.getKey().getTraitType() == type)
+                .sorted(Map.Entry.comparingByKey(Comparator.comparing(Trait::getName)))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));
 
         if (filtered.isEmpty()) return;
@@ -241,7 +248,7 @@ public class DnaHolder extends Item {
         tooltip.add(title.withStyle(type.getHeaderColour()));
 
         filtered.values().forEach(gene -> {
-            float value = gene.value();
+            float value = gene.getExpressedValue();
             String valueStr = String.format("%.2f", value);
 
             if (type == TraitType.ABILITY) {
@@ -253,7 +260,7 @@ public class DnaHolder extends Item {
             }
 
             tooltip.add(Component.literal("- ")
-                    .append(Component.translatable("trait.wildaside." + gene.trait().name()))
+                    .append(Component.translatable("trait.wildaside." + gene.getTrait().getName()))
                     .append(": " + valueStr)
                     .withStyle(type.getEntryColour()));
         });

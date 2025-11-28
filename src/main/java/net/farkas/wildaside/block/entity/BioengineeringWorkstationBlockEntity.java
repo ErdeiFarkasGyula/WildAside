@@ -1,6 +1,7 @@
 package net.farkas.wildaside.block.entity;
 
 import net.farkas.wildaside.capability.dna.DnaImplementation;
+import net.farkas.wildaside.dna.DnaConstants;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.Traits;
@@ -34,6 +35,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static net.farkas.wildaside.dna.DnaConstants.*;
 
 public class  BioengineeringWorkstationBlockEntity extends BlockEntity implements MenuProvider {
     private final ItemStackHandler itemHandler = new ItemStackHandler(70);
@@ -200,7 +203,7 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
 
         ItemStack output = input.copy();
         CompoundTag tag = output.getOrCreateTag();
-        CompoundTag dnaTag = tag.getCompound("dna_data");
+        CompoundTag dnaTag = tag.getCompound(DNA_DATA);
         DnaImplementation dna = new DnaImplementation();
 
         if (!dnaTag.isEmpty()) {
@@ -211,19 +214,15 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
                 ItemStack geneStack = itemHandler.getStackInSlot(i + geneStartIndex);
                 CompoundTag geneTag = geneStack.getOrCreateTag();
 
-                Trait trait = Traits.getByName(geneTag.getString("trait"));
-                float value = geneTag.getFloat("value");
+                Gene gene = Gene.deserializeNBT(tag);
+                Trait trait = gene.getTrait();
 
-                if (trait == null) {
-                    trait = Traits.FIRE_RESISTANCE;
-                }
-
-                genes.put(trait, new Gene(trait, value, trait.baseInstability()));
+                genes.put(trait, new Gene(trait, gene.getAlleleA(), gene.getAlleleB()));
             }
 
             dna.setGenes(genes);
-            tag.remove("dna_data");
-            tag.put("dna_data", dna.serializeNBT());
+            tag.remove(DNA_DATA);
+            tag.put(DNA_DATA, dna.serializeNBT());
         }
 
         output.setTag(tag);

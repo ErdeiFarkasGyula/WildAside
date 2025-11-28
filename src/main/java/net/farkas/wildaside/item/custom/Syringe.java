@@ -1,5 +1,6 @@
 package net.farkas.wildaside.item.custom;
 
+import net.farkas.wildaside.dna.DnaConstants;
 import net.farkas.wildaside.network.NetworkHandler;
 import net.farkas.wildaside.network.packets.SyringeDataPacket;
 import net.minecraft.client.Minecraft;
@@ -21,16 +22,12 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 import java.util.Optional;
 
+import static net.farkas.wildaside.dna.DnaConstants.*;
+
 public class Syringe extends Item {
     public static final int DEFAULT_BLOOD_COLOR = 0xba260f;
 
     public static final int DEFAULT_MAX_LOAD = 3;
-
-    public static final String SYRINGE_PROGRESS = "syringe_progress";
-    public static final String INWARDS = "inwards";
-
-    public static final String BLOOD_LEVEL = "blood_level";
-    public static final String BLOOD_COLOUR = "blood_colour";
 
     private static final float NEEDLE_DELTA = 0.1f;
     private static final int RAYCAST_RANGE = 3;

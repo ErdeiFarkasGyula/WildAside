@@ -10,6 +10,8 @@ import net.minecraft.world.entity.LivingEntity;
 
 import java.util.UUID;
 
+import static net.farkas.wildaside.dna.DnaConstants.*;
+
 public class Gene {
     private final UUID uuid;
     private final Trait trait;
@@ -72,18 +74,18 @@ public class Gene {
 
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
-        tag.putUUID("uuid", uuid);
-        tag.putString("trait", trait.getName());
-        tag.put("alleleA", alleleA.serializeNBT());
-        tag.put("alleleB", alleleB.serializeNBT());
+        tag.putUUID(UUID, uuid);
+        tag.putString(TRAIT, trait.getName());
+        tag.put(ALLELE_A, alleleA.serializeNBT());
+        tag.put(ALLELE_B, alleleB.serializeNBT());
         return tag;
     }
 
     public static Gene deserializeNBT(CompoundTag tag) {
-        UUID uuid = tag.getUUID("uuid");
-        String traitName = tag.getString("trait");
-        Allele alleleA = Allele.createFromTag(tag.getCompound("alleleA"));
-        Allele alleleB = Allele.createFromTag(tag.getCompound("alleleB"));
-        return new Gene(uuid, Traits.getByName(traitName), alleleA, alleleB);
+        UUID uuid = tag.getUUID(UUID);
+        Trait trait = Traits.getByName(tag.getString(TRAIT));
+        Allele alleleA = Allele.createFromTag(tag.getCompound(ALLELE_A));
+        Allele alleleB = Allele.createFromTag(tag.getCompound(ALLELE_B));
+        return new Gene(uuid, trait, alleleA, alleleB);
     }
 }

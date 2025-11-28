@@ -48,7 +48,7 @@ public class Traits {
         return MAX_HEALTH;
     }
 
-    public static float getTraitValue(Map<Trait, Gene> genes, @Nullable Trait trait) {
+    public static float getTraitValue(Map<Trait, Gene> genes, Trait trait) {
         if (trait == null || genes == null) return 0.0f;
         Gene gene = genes.get(trait);
         return gene.getExpressedValue();

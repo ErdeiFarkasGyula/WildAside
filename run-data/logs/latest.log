@@ -1,38 +1,38 @@
-[26nov.2025 12:10:28.517] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgedatauserdev, --assetIndex, 5, --assetsDir, C:\Users\12d\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.3.27, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412, --mod, wildaside, --all, --output, C:\Users\12d\Documents\GitHub\WildAside\src\generated\resources, --existing, C:\Users\12d\Documents\GitHub\WildAside\src\main\resources, --mixin.config, mixins.wildaside.json]
-[26nov.2025 12:10:28.530] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.16 by Eclipse Adoptium; OS Windows 11 arch amd64 version 10.0
-[26nov.2025 12:10:28.676] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgedatauserdev
-[26nov.2025 12:10:28.742] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/C:/Users/12d/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23132!/ Service=ModLauncher Env=CLIENT
-[26nov.2025 12:10:29.083] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\12d\.gradle\caches\modules-2\files-2.1\net.minecraftforge\javafmllanguage\1.20.1-47.3.27\8001575a8be1ded39093805ca80ef976b5149b3f\javafmllanguage-1.20.1-47.3.27.jar is missing mods.toml file
-[26nov.2025 12:10:29.087] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\12d\.gradle\caches\modules-2\files-2.1\net.minecraftforge\lowcodelanguage\1.20.1-47.3.27\17ff592420fbc1f933420f0a473783943ac176ce\lowcodelanguage-1.20.1-47.3.27.jar is missing mods.toml file
-[26nov.2025 12:10:29.091] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\12d\.gradle\caches\modules-2\files-2.1\net.minecraftforge\mclanguage\1.20.1-47.3.27\48269e2cdbd3c44641fb99a6b05f205b63efa37b\mclanguage-1.20.1-47.3.27.jar is missing mods.toml file
-[26nov.2025 12:10:29.094] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\12d\.gradle\caches\modules-2\files-2.1\net.minecraftforge\fmlcore\1.20.1-47.3.27\8e7f3f29ab42d8116b9ee3f9f06fc8e8fa0fd12f\fmlcore-1.20.1-47.3.27.jar is missing mods.toml file
-[26nov.2025 12:10:29.218] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: No dependencies to load found. Skipping!
-[26nov.2025 12:10:31.316] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
-[26nov.2025 12:10:31.329] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgedatauserdev' with arguments [--gameDir, ., --assetsDir, C:\Users\12d\.gradle\caches\forge_gradle\assets, --assetIndex, 5, --mod, wildaside, --all, --output, C:\Users\12d\Documents\GitHub\WildAside\src\generated\resources, --existing, C:\Users\12d\Documents\GitHub\WildAside\src\main\resources]
-[26nov.2025 12:10:31.450] [main/WARN] [mixin/]: Reference map 'wildaside.refmap.json' for mixins.wildaside.json could not be read. If this is a development environment you can ignore this message
-[26nov.2025 12:10:31.763] [main/INFO] [mixin/]: Remapping refMap terrablender.refmap.json using C:\Users\12d\Documents\GitHub\WildAside\build\createSrgToMcp\output.srg
-[26nov.2025 12:10:31.766] [main/INFO] [mixin/]: Remapping refMap terrablender.refmap.json using C:\Users\12d\Documents\GitHub\WildAside\build\createSrgToMcp\output.srg
-[26nov.2025 12:10:31.768] [main/INFO] [mixin/]: Remapping refMap patchouli.refmap.json using C:\Users\12d\Documents\GitHub\WildAside\build\createSrgToMcp\output.srg
-[26nov.2025 12:10:32.311] [main/INFO] [net.minecraftforge.data.loading.DatagenModLoader/]: Initializing Data Gatherer for mods [wildaside]
-[26nov.2025 12:10:37.326] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.3.27, for MC 1.20.1 with MCP 20230612.114412
-[26nov.2025 12:10:37.327] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.3.27 Initialized
-[26nov.2025 12:10:37.690] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager...
-[26nov.2025 12:10:37.697] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager took 4.500 ms
-[26nov.2025 12:10:38.271] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/12d/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.3.27_mapped_parchment_2023.09.03-1.20.1/forge-1.20.1-47.3.27_mapped_parchment_2023.09.03-1.20.1-recomp.jar%23191!/assets/.mcassetsroot' uses unexpected schema
-[26nov.2025 12:10:38.273] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/12d/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.3.27_mapped_parchment_2023.09.03-1.20.1/forge-1.20.1-47.3.27_mapped_parchment_2023.09.03-1.20.1-recomp.jar%23191!/data/.mcassetsroot' uses unexpected schema
-[26nov.2025 12:10:38.628] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Recipes
-[26nov.2025 12:10:38.691] [main/INFO] [net.minecraft.data.DataGenerator/]: Recipes finished after 63 ms
-[26nov.2025 12:10:38.693] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Loot Tables
-[26nov.2025 12:10:38.756] [main/INFO] [net.minecraft.data.DataGenerator/]: Loot Tables finished after 64 ms
-[26nov.2025 12:10:38.756] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Block States: wildaside
-[26nov.2025 12:10:39.008] [main/INFO] [net.minecraft.data.DataGenerator/]: Block States: wildaside finished after 251 ms
-[26nov.2025 12:10:39.008] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Item Models: wildaside
-[26nov.2025 12:10:39.037] [main/INFO] [net.minecraft.data.DataGenerator/]: Item Models: wildaside finished after 28 ms
-[26nov.2025 12:10:39.037] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:block mod id wildaside
-[26nov.2025 12:10:39.056] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:block mod id wildaside finished after 17 ms
-[26nov.2025 12:10:39.056] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:item mod id wildaside
-[26nov.2025 12:10:39.060] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:item mod id wildaside finished after 3 ms
-[26nov.2025 12:10:39.060] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Registries
-[26nov.2025 12:10:39.099] [main/INFO] [net.minecraft.data.DataGenerator/]: Registries finished after 45 ms
-[26nov.2025 12:10:39.099] [main/INFO] [net.minecraft.data.DataGenerator/]: All providers took: 478 ms
-[26nov.2025 12:10:39.150] [main/INFO] [net.minecraft.data.HashCache/]: Caching: total files: 852, old count: 851, new count: 853, removed stale: 0, written: 1
+[28nov.2025 19:42:35.043] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgedatauserdev, --assetIndex, 5, --assetsDir, C:\Users\Gyula\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.3.27, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412, --mod, wildaside, --all, --output, D:\Wild Aside\remake\forge-1.20.1\src\generated\resources, --existing, D:\Wild Aside\remake\forge-1.20.1\src\main\resources, --mixin.config, mixins.wildaside.json]
+[28nov.2025 19:42:35.043] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.14 by Eclipse Adoptium; OS Windows 11 arch amd64 version 10.0
+[28nov.2025 19:42:35.167] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgedatauserdev
+[28nov.2025 19:42:35.208] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/C:/Users/Gyula/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23132!/ Service=ModLauncher Env=CLIENT
+[28nov.2025 19:42:35.442] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Gyula\.gradle\caches\modules-2\files-2.1\net.minecraftforge\javafmllanguage\1.20.1-47.3.27\8001575a8be1ded39093805ca80ef976b5149b3f\javafmllanguage-1.20.1-47.3.27.jar is missing mods.toml file
+[28nov.2025 19:42:35.442] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Gyula\.gradle\caches\modules-2\files-2.1\net.minecraftforge\lowcodelanguage\1.20.1-47.3.27\17ff592420fbc1f933420f0a473783943ac176ce\lowcodelanguage-1.20.1-47.3.27.jar is missing mods.toml file
+[28nov.2025 19:42:35.453] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Gyula\.gradle\caches\modules-2\files-2.1\net.minecraftforge\mclanguage\1.20.1-47.3.27\48269e2cdbd3c44641fb99a6b05f205b63efa37b\mclanguage-1.20.1-47.3.27.jar is missing mods.toml file
+[28nov.2025 19:42:35.456] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Gyula\.gradle\caches\modules-2\files-2.1\net.minecraftforge\fmlcore\1.20.1-47.3.27\8e7f3f29ab42d8116b9ee3f9f06fc8e8fa0fd12f\fmlcore-1.20.1-47.3.27.jar is missing mods.toml file
+[28nov.2025 19:42:35.532] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: No dependencies to load found. Skipping!
+[28nov.2025 19:42:36.832] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
+[28nov.2025 19:42:36.839] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgedatauserdev' with arguments [--gameDir, ., --assetsDir, C:\Users\Gyula\.gradle\caches\forge_gradle\assets, --assetIndex, 5, --mod, wildaside, --all, --output, D:\Wild Aside\remake\forge-1.20.1\src\generated\resources, --existing, D:\Wild Aside\remake\forge-1.20.1\src\main\resources]
+[28nov.2025 19:42:36.902] [main/WARN] [mixin/]: Reference map 'wildaside.refmap.json' for mixins.wildaside.json could not be read. If this is a development environment you can ignore this message
+[28nov.2025 19:42:37.068] [main/INFO] [mixin/]: Remapping refMap terrablender.refmap.json using D:\Wild Aside\remake\forge-1.20.1\build\createSrgToMcp\output.srg
+[28nov.2025 19:42:37.069] [main/INFO] [mixin/]: Remapping refMap terrablender.refmap.json using D:\Wild Aside\remake\forge-1.20.1\build\createSrgToMcp\output.srg
+[28nov.2025 19:42:37.070] [main/INFO] [mixin/]: Remapping refMap patchouli.refmap.json using D:\Wild Aside\remake\forge-1.20.1\build\createSrgToMcp\output.srg
+[28nov.2025 19:42:37.385] [main/INFO] [net.minecraftforge.data.loading.DatagenModLoader/]: Initializing Data Gatherer for mods [wildaside]
+[28nov.2025 19:42:40.406] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.3.27, for MC 1.20.1 with MCP 20230612.114412
+[28nov.2025 19:42:40.406] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.3.27 Initialized
+[28nov.2025 19:42:40.633] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager...
+[28nov.2025 19:42:40.649] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager took 1.747 ms
+[28nov.2025 19:42:40.909] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/Gyula/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.3.27_mapped_parchment_2023.09.03-1.20.1/forge-1.20.1-47.3.27_mapped_parchment_2023.09.03-1.20.1-recomp.jar%23191!/assets/.mcassetsroot' uses unexpected schema
+[28nov.2025 19:42:40.909] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/Gyula/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.3.27_mapped_parchment_2023.09.03-1.20.1/forge-1.20.1-47.3.27_mapped_parchment_2023.09.03-1.20.1-recomp.jar%23191!/data/.mcassetsroot' uses unexpected schema
+[28nov.2025 19:42:41.043] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Recipes
+[28nov.2025 19:42:41.083] [main/INFO] [net.minecraft.data.DataGenerator/]: Recipes finished after 39 ms
+[28nov.2025 19:42:41.083] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Loot Tables
+[28nov.2025 19:42:41.137] [main/INFO] [net.minecraft.data.DataGenerator/]: Loot Tables finished after 55 ms
+[28nov.2025 19:42:41.137] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Block States: wildaside
+[28nov.2025 19:42:41.286] [main/INFO] [net.minecraft.data.DataGenerator/]: Block States: wildaside finished after 151 ms
+[28nov.2025 19:42:41.286] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Item Models: wildaside
+[28nov.2025 19:42:41.293] [main/INFO] [net.minecraft.data.DataGenerator/]: Item Models: wildaside finished after 7 ms
+[28nov.2025 19:42:41.293] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:block mod id wildaside
+[28nov.2025 19:42:41.293] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:block mod id wildaside finished after 9 ms
+[28nov.2025 19:42:41.293] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:item mod id wildaside
+[28nov.2025 19:42:41.309] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:item mod id wildaside finished after 1 ms
+[28nov.2025 19:42:41.309] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Registries
+[28nov.2025 19:42:41.332] [main/INFO] [net.minecraft.data.DataGenerator/]: Registries finished after 22 ms
+[28nov.2025 19:42:41.332] [main/INFO] [net.minecraft.data.DataGenerator/]: All providers took: 289 ms
+[28nov.2025 19:42:41.343] [main/INFO] [net.minecraft.data.HashCache/]: Caching: total files: 852, old count: 852, new count: 853, removed stale: 0, written: 0

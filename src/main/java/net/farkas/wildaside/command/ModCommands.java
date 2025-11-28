@@ -9,6 +9,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.config.ModConfig;
 import net.farkas.wildaside.dna.Gene;
+import net.farkas.wildaside.dna.allele.Allele;
+import net.farkas.wildaside.dna.dominance.Dominance;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.Traits;
 import net.farkas.wildaside.network.WindSavedData;
@@ -126,7 +128,7 @@ public class ModCommands {
                                         .suggests((ctx, builder) -> {
                                             for (Trait trait : Traits.TRAITS) {
                                                 builder.suggest("stability");
-                                                builder.suggest(trait.name());
+                                                builder.suggest(trait.getName());
                                             }
                                             return builder.buildFuture();
                                         })
@@ -233,41 +235,46 @@ public class ModCommands {
     }
 
     private static int applyGene(CommandContext<CommandSourceStack> ctx, Entity target) {
-        if (target instanceof LivingEntity livingEntity) {
-            String traitName = StringArgumentType.getString(ctx, "trait");
-            float value = FloatArgumentType.getFloat(ctx, "value");
+        if (!(target instanceof LivingEntity livingEntity)) return 0;
 
-            if (traitName.equals("stability")) {
-                livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-                    dna.setStability(value);
-                });
-                ctx.getSource().sendSuccess(() -> Component.translatable("command.wildaside.dna.set_trait",
+        String traitName = StringArgumentType.getString(ctx, "trait");
+        float value = FloatArgumentType.getFloat(ctx, "value");
+
+        if (traitName.equalsIgnoreCase("stability")) {
+            livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
+                dna.setStability(value);
+            });
+
+            ctx.getSource().sendSuccess(() ->
+                    Component.translatable("command.wildaside.dna.set_trait",
                             Component.translatable("dna.wildaside.stability"), livingEntity.getName(), value), false);
-            }
-            else {
-                Trait trait = Traits.getByName(traitName);
-                if (trait == null)  {
-                    unknownTrait(ctx, traitName);
-                    return 0;
-                }
-
-                livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-                    dna.getGenes().put(trait, new Gene(trait, value, trait.baseInstability()));
-                    dna.applyGenes(livingEntity);
-                });
-
-                Component message = Component.translatable("command.wildaside.dna.set_trait",
-                        Traits.translatableTrait(trait),
-                        livingEntity.getName(),
-                        String.valueOf(value)
-                );
-
-                ctx.getSource().sendSuccess(() -> message, true);
-            }
 
             return Command.SINGLE_SUCCESS;
         }
-        return 0;
+
+        Trait trait = Traits.getByName(traitName);
+        if (trait == null) {
+            unknownTrait(ctx, traitName);
+            return 0;
+        }
+
+        Allele alleleA = new Allele(value, 0.05f, trait.getInstabilityModifier(), Dominance.DOMINANT);
+        Allele alleleB = new Allele(value, 0.05f, trait.getInstabilityModifier(), Dominance.RECESSIVE);
+
+        livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
+            dna.getGenes().put(trait, new Gene(trait, alleleA, alleleB));
+            dna.applyGenes(livingEntity);
+        });
+
+        Component message = Component.translatable(
+                "command.wildaside.dna.set_trait",
+                Traits.translatableTrait(trait),
+                livingEntity.getName(),
+                String.valueOf(value)
+        );
+
+        ctx.getSource().sendSuccess(() -> message, true);
+        return Command.SINGLE_SUCCESS;
     }
 
     private static void unknownTrait(CommandContext<CommandSourceStack> context, String traitName) {

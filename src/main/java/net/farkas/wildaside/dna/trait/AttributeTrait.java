@@ -61,7 +61,7 @@ public class AttributeTrait extends Trait {
             modifierValue = value - base;
         }
 
-        AttributeModifier modifier = new AttributeModifier(modifierUuid, DnaUtils.fullName(name()), modifierValue, operation);
+        AttributeModifier modifier = new AttributeModifier(modifierUuid, DnaUtils.fullName(getName()), modifierValue, operation);
         instance.addPermanentModifier(modifier);
     }
 

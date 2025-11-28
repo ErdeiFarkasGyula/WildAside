@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.ModBlockEntities;
 import net.farkas.wildaside.config.ModConfig;
+import net.farkas.wildaside.dna.DnaConstants;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.enchantment.ModEnchantments;
 import net.farkas.wildaside.entity.ModEntities;
@@ -70,7 +71,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 import terrablender.api.SurfaceRuleManager;
 
-import static net.farkas.wildaside.item.custom.DnaHolder.SAMPLE_PROGRESS;
+import static net.farkas.wildaside.dna.DnaConstants.*;
 
 @Mod(WildAside.MOD_ID)
 public class WildAside
@@ -229,20 +230,20 @@ public class WildAside
 
             ItemProperties.register(
                     ModItems.SYRINGE.get(),
-                    new ResourceLocation(WildAside.MOD_ID, Syringe.SYRINGE_PROGRESS),
+                    new ResourceLocation(WildAside.MOD_ID, SYRINGE_PROGRESS),
                     (stack, level, entity, seed) -> {
                         if (!stack.hasTag()) return 0f;
-                        float p = stack.getTag().getFloat(Syringe.SYRINGE_PROGRESS);
+                        float p = stack.getTag().getFloat(SYRINGE_PROGRESS);
                         return Mth.clamp(p / Syringe.DEFAULT_MAX_LOAD, 0f, 1f);
                     }
             );
 
             ItemProperties.register(
                     ModItems.SYRINGE.get(),
-                    new ResourceLocation(WildAside.MOD_ID, Syringe.BLOOD_LEVEL),
+                    new ResourceLocation(WildAside.MOD_ID, BLOOD_LEVEL),
                     (stack, level, entity, seed) -> {
                         if (!stack.hasTag()) return 0f;
-                        float p = stack.getTag().getFloat(Syringe.BLOOD_LEVEL);
+                        float p = stack.getTag().getFloat(BLOOD_LEVEL);
                         return Mth.clamp(p / Syringe.DEFAULT_MAX_LOAD, 0f, 1f);
                     }
             );

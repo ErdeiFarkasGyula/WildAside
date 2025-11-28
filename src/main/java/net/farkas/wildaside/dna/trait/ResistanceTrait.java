@@ -9,11 +9,11 @@ public class ResistanceTrait extends Trait {
 
     @Override
     public void apply(LivingEntity entity, float value) {
-        entity.getPersistentData().putFloat("trait_resistance_" + name(), value);
+        entity.getPersistentData().putFloat("trait_resistance_" + getName(), value);
     }
 
     @Override
     public void remove(LivingEntity entity) {
-        entity.getPersistentData().remove("trait_resistance_" + name());
+        entity.getPersistentData().remove("trait_resistance_" + getName());
     }
 }

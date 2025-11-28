@@ -3,12 +3,14 @@ package net.farkas.wildaside.screen.bioengineering_workstation;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.BioengineeringWorkstationBlockEntity;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
+import net.farkas.wildaside.dna.DnaConstants;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitType;
 import net.farkas.wildaside.dna.trait.Traits;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.item.custom.DnaHolder;
+import net.farkas.wildaside.item.custom.GeneItem;
 import net.farkas.wildaside.screen.ModMenuTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -24,6 +26,8 @@ import net.minecraftforge.items.SlotItemHandler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static net.farkas.wildaside.dna.DnaConstants.*;
 
 public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
     public final BioengineeringWorkstationBlockEntity blockEntity;
@@ -118,26 +122,22 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
             ItemStack stack = iItemHandler.getStackInSlot(i);
 
             if (stack.getItem() instanceof DnaHolder dnaHolder) {
-                CompoundTag dnaDataTag = stack.getOrCreateTagElement("dna_data");
+                CompoundTag dnaDataTag = stack.getOrCreateTagElement(DNA_DATA);
                 DnaImplementation dna = new DnaImplementation();
                 dna.deserializeNBT(dnaDataTag);
                 Map<Trait, Gene> genes = BioengineeringWorkstationBlockEntity.orderGenes(dna);
 
                 int slotCorrection = 0;
-                for (int x = 0; x < Traits.TRAITS.size(); x++) {
-                    Trait trait = Traits.TRAITS.get(x);
-                    Gene gene = genes.getOrDefault(trait, new Gene(trait, 0, trait.baseInstability()));
-                    if (trait.traitType() == TraitType.ABILITY && gene.value == 0.0) {
+
+                for (int j = 0; j < genes.size(); j++) {
+                    Gene gene = genes.get(Traits.TRAITS.get(j));
+                    if (gene.getExpressedValue() == 0.0f) {
                         slotCorrection++;
                         continue;
                     }
-                    ItemStack geneStack = new ItemStack(ModItems.GENE.get());
-                    CompoundTag tag = geneStack.getOrCreateTag();
-                    tag.putString("trait", gene.trait.name());
-                    tag.putFloat("value", gene.value);
-                    geneStack.setTag(tag);
 
-                    int correctedSlot = x - slotCorrection;
+                    ItemStack geneStack = GeneItem.createFromTag(gene);
+                    int correctedSlot = i - slotCorrection;
                     if (i == 7) {
                         if (topGeneSlots.size() > correctedSlot) {
                             topGeneSlots.get(correctedSlot).set(geneStack);
