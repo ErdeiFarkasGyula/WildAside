@@ -3,7 +3,7 @@ package net.farkas.wildaside.dna.trait;
 import net.minecraft.world.entity.LivingEntity;
 
 public class AbilityTrait extends Trait {
-    public AbilityTrait(String name, TraitTypes type, float baseInstability) {
+    public AbilityTrait(String name, TraitType type, float baseInstability) {
         super(name, type, baseInstability);
     }
 

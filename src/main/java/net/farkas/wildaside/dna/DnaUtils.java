@@ -8,7 +8,7 @@ import net.farkas.wildaside.dna.allele.Dominance;
 import net.farkas.wildaside.dna.speed.MobSpeedResultStorage;
 import net.farkas.wildaside.dna.speed.MobSpeedTesting;
 import net.farkas.wildaside.dna.trait.Trait;
-import net.farkas.wildaside.dna.trait.TraitTypes;
+import net.farkas.wildaside.dna.trait.TraitType;
 import net.farkas.wildaside.dna.trait.Traits;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.EntityTypeTags;
@@ -21,7 +21,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.commons.lang3.RandomUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -91,7 +90,7 @@ public class DnaUtils {
     public static Map<Trait, Gene> generateBaseGenes(LivingEntity entity, boolean preGen) {
         Map<Trait, Gene> genes = new HashMap<>();
 
-        for (Trait trait : Traits.getByType(TraitTypes.CORE)) {
+        for (Trait trait : Traits.getByType(TraitType.CORE)) {
             Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(getAttributeRes(trait.getName()));
             if (attribute != null) {
                 float traitValue = getAttributeValue(entity, attribute);
@@ -129,7 +128,7 @@ public class DnaUtils {
         if (condition) {
             putResistanceWithGaussian(genes, trait, seed);
         } else {
-            genes.put(trait, new Gene(trait, 0.0f, trait.baseInstability()));
+            genes.put(trait, new Gene(trait, 0.0f, trait.getInstabilityModifier()));
         }
     }
 

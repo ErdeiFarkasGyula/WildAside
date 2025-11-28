@@ -5,7 +5,7 @@ import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.trait.Trait;
-import net.farkas.wildaside.dna.trait.TraitTypes;
+import net.farkas.wildaside.dna.trait.TraitType;
 import net.farkas.wildaside.dna.trait.Traits;
 import net.farkas.wildaside.sound.ModSounds;
 import net.minecraft.ChatFormatting;
@@ -224,13 +224,13 @@ public class DnaHolder extends Item {
         }
 
         if (revealTraits) {
-            displayGenesSection(tooltip, dna, TraitTypes.CORE, getTranslatable(CORE_TRAITS));
-            displayGenesSection(tooltip, dna, TraitTypes.RESISTANCE, getTranslatable(RESISTANCES));
-            displayGenesSection(tooltip, dna, TraitTypes.ABILITY, getTranslatable(ABILITIES));
+            displayGenesSection(tooltip, dna, TraitType.CORE, getTranslatable(CORE_TRAITS));
+            displayGenesSection(tooltip, dna, TraitType.RESISTANCE, getTranslatable(RESISTANCES));
+            displayGenesSection(tooltip, dna, TraitType.ABILITY, getTranslatable(ABILITIES));
         }
     }
 
-    private void displayGenesSection(List<Component> tooltip, DnaImplementation dna, TraitTypes type, MutableComponent title) {
+    private void displayGenesSection(List<Component> tooltip, DnaImplementation dna, TraitType type, MutableComponent title) {
         Map<Trait, Gene> filtered = dna.getGenes().entrySet().stream()
                 .filter(e -> e.getKey().traitType() == type)
                 .sorted(Map.Entry.comparingByKey(Comparator.comparing(Trait::name)))
@@ -244,10 +244,10 @@ public class DnaHolder extends Item {
             float value = gene.value();
             String valueStr = String.format("%.2f", value);
 
-            if (type == TraitTypes.ABILITY) {
+            if (type == TraitType.ABILITY) {
                 value /= 20;
                 valueStr = String.format("%.2f", value) + "s";
-            } else if (type == TraitTypes.RESISTANCE) {
+            } else if (type == TraitType.RESISTANCE) {
                 value *= 100;
                 valueStr = String.format("%.2f", value) + "%";
             }

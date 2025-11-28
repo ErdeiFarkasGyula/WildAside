@@ -4,7 +4,7 @@ import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.ability.Abilities;
 import net.farkas.wildaside.dna.ability.IAbility;
-import net.farkas.wildaside.dna.trait.TraitTypes;
+import net.farkas.wildaside.dna.trait.TraitType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
@@ -24,7 +24,7 @@ public class UseAbilityPacket {
 
             player.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
                 for (Gene gene : dna.getGenes().values()) {
-                    if (gene.getTrait().getTraitType() == TraitTypes.ABILITY) {
+                    if (gene.getTrait().getTraitType() == TraitType.ABILITY) {
                         IAbility ability = Abilities.get(gene.getTrait());
                         if (ability != null && gene.getExpressedValue() != 0) {
                             ability.onUse(player, gene.getExpressedValue());

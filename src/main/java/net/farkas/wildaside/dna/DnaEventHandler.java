@@ -5,19 +5,15 @@ import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.config.ModConfig;
 import net.farkas.wildaside.dna.ability.Abilities;
 import net.farkas.wildaside.dna.ability.IAbility;
-import net.farkas.wildaside.dna.speed.MobSpeedTestTracker;
 import net.farkas.wildaside.dna.trait.Trait;
-import net.farkas.wildaside.dna.trait.TraitTypes;
+import net.farkas.wildaside.dna.trait.TraitType;
 import net.farkas.wildaside.dna.trait.Traits;
 import net.farkas.wildaside.worldgen.dimension.ModDimensions;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -111,7 +107,7 @@ public class DnaEventHandler {
                 entity.getPersistentData().putFloat(IAbility.COOLDOWN, cooldown - 1);
             }
             for (Gene gene : dna.getGenes().values()) {
-                if (gene.getTrait().getTraitType() == TraitTypes.ABILITY) {
+                if (gene.getTrait().getTraitType() == TraitType.ABILITY) {
                     IAbility behavior = Abilities.get(gene.getTrait());
                     if (behavior != null) behavior.onTick(entity, gene);
                 }

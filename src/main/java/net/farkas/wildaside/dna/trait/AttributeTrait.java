@@ -2,7 +2,7 @@ package net.farkas.wildaside.dna.traits;
 
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.trait.Trait;
-import net.farkas.wildaside.dna.trait.TraitTypes;
+import net.farkas.wildaside.dna.trait.TraitType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -16,14 +16,14 @@ public class AttributeTrait extends Trait {
     private final UUID modifierUuid;
     private final AttributeModifier.Operation operation;
 
-    public AttributeTrait(String name, TraitTypes type, float baseInstability, ResourceLocation attributeRes, AttributeModifier.Operation operation) {
+    public AttributeTrait(String name, TraitType type, float baseInstability, ResourceLocation attributeRes, AttributeModifier.Operation operation) {
         super(name, type, baseInstability);
         this.attributeRes = attributeRes;
         this.modifierUuid = DnaUtils.generateUuid(DnaUtils.fullName(name));
         this.operation = operation;
     }
 
-    public AttributeTrait(String name, TraitTypes type, float baseInstability, ResourceLocation attributeRes) {
+    public AttributeTrait(String name, TraitType type, float baseInstability, ResourceLocation attributeRes) {
         super(name, type, baseInstability);
         this.attributeRes = attributeRes;
         this.modifierUuid = DnaUtils.generateUuid(DnaUtils.fullName(name));

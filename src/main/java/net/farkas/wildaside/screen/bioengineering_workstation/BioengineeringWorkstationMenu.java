@@ -5,7 +5,7 @@ import net.farkas.wildaside.block.entity.BioengineeringWorkstationBlockEntity;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.trait.Trait;
-import net.farkas.wildaside.dna.trait.TraitTypes;
+import net.farkas.wildaside.dna.trait.TraitType;
 import net.farkas.wildaside.dna.trait.Traits;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.item.custom.DnaHolder;
@@ -127,7 +127,7 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
                 for (int x = 0; x < Traits.TRAITS.size(); x++) {
                     Trait trait = Traits.TRAITS.get(x);
                     Gene gene = genes.getOrDefault(trait, new Gene(trait, 0, trait.baseInstability()));
-                    if (trait.traitType() == TraitTypes.ABILITY && gene.value == 0.0) {
+                    if (trait.traitType() == TraitType.ABILITY && gene.value == 0.0) {
                         slotCorrection++;
                         continue;
                     }

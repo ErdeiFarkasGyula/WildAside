@@ -5,17 +5,17 @@ import net.minecraft.world.entity.LivingEntity;
 
 public abstract class Trait {
     private final String name;
-    private final TraitTypes traitType;
+    private final TraitType traitType;
     private final float instabilityModifier;
 
-    public Trait(String name, TraitTypes traitType, float baseInstability) {
+    public Trait(String name, TraitType traitType, float baseInstability) {
         this.name = name;
         this.traitType = traitType;
         this.instabilityModifier = baseInstability;
     }
 
     public String getName() { return name; }
-    public TraitTypes getTraitType() { return traitType; }
+    public TraitType getTraitType() { return traitType; }
     public float getInstabilityModifier() { return instabilityModifier; }
 
     public abstract void apply(LivingEntity entity, float value);
