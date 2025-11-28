@@ -22,7 +22,7 @@ public class AbilityEvents {
             if (cooldown > 0) {
                 entity.getPersistentData().putFloat(IAbility.COOLDOWN, cooldown - 1);
             }
-            for (Gene gene : dna.genes().values()) {
+            for (Gene gene : dna.getGenes().values()) {
                 if (gene.trait().traitType() == TraitTypes.ABILITY) {
                     IAbility behavior = Abilities.get(gene.trait());
                     if (behavior != null) behavior.onTick(entity, gene);

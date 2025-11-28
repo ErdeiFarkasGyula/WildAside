@@ -11,12 +11,14 @@ import javax.annotation.Nullable;
 import java.util.Map;
 
 public interface IDna extends INBTSerializable<CompoundTag> {
-    @Nullable EntityType<?> source();
-    Map<Trait, Gene> genes();
-    float stability();
+    @Nullable EntityType<?> getSource();
+    Map<Trait, Gene> getGenes();
+    float getStability();
+    boolean getModified();
     void setSource(EntityType<?> source);
     void setGenes(Map<Trait, Gene> genes);
     void setStability(float stability);
+    void setModified(boolean modified);
     void applyGenes(LivingEntity entity);
     void removeGenes(LivingEntity entity);
     float calculateInstabilityChange(Map<Trait, Gene> genes);

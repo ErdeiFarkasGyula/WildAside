@@ -17,8 +17,9 @@ import java.util.Map;
 
 public class DnaImplementation implements IDna {
     private @Nullable EntityType<?> source;
-    private float stability = 100;
     private Map<Trait, Gene> genes = new HashMap<>();
+    private float stability = 100;
+    private boolean modified = false;
 
     @Override
     public void applyGenes(LivingEntity entity) {
@@ -45,9 +46,15 @@ public class DnaImplementation implements IDna {
     }
 
     @Override
-    public float stability() {
+    public void setModified(boolean modified) { this.modified = modified; }
+
+    @Override
+    public float getStability() {
         return stability;
     }
+
+    @Override
+    public boolean getModified() { return modified; }
 
     @Override
     public void setSource(@Nullable EntityType<?> source) {
@@ -56,12 +63,12 @@ public class DnaImplementation implements IDna {
 
     @Nullable
     @Override
-    public EntityType<?> source() {
+    public EntityType<?> getSource() {
         return source;
     }
 
     @Override
-    public Map<Trait, Gene> genes() {
+    public Map<Trait, Gene> getGenes() {
         return genes;
     }
 

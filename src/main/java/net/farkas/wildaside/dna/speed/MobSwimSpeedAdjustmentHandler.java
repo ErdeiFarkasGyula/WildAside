@@ -46,8 +46,8 @@ public class MobSwimSpeedAdjustmentHandler {
 
         if (inWater) {
             livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-                double groundSpeed = MobSpeedResultStorage.getSpeed(dna.source(), "ground");
-                double waterSpeed = MobSpeedResultStorage.getSpeed(dna.source(), "water");
+                double groundSpeed = MobSpeedResultStorage.getSpeed(dna.getSource(), "ground");
+                double waterSpeed = MobSpeedResultStorage.getSpeed(dna.getSource(), "water");
 
                 if (groundSpeed == 0) return;
 

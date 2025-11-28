@@ -210,7 +210,7 @@ public class ModCommands {
             String traitName = StringArgumentType.getString(ctx, "trait");
             if (traitName.equals("stability")) {
                 livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-                    float value = dna.stability();
+                    float value = dna.getStability();
                     ctx.getSource().sendSuccess(() ->
                             Component.translatable("command.wildaside.dna.get_trait", livingEntity.getName(), value,
                             Component.translatable("dna.wildaside.stability")), false);
@@ -223,7 +223,7 @@ public class ModCommands {
                     return 0;
                 }
                 livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-                    float value = Traits.getTraitValue(dna.genes(), trait);
+                    float value = Traits.getTraitValue(dna.getGenes(), trait);
                     getTrait(ctx, livingEntity, trait, value);
                 });
             }
@@ -252,7 +252,7 @@ public class ModCommands {
                 }
 
                 livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-                    dna.genes().put(trait, new Gene(trait, value, trait.baseInstability()));
+                    dna.getGenes().put(trait, new Gene(trait, value, trait.baseInstability()));
                     dna.applyGenes(livingEntity);
                 });
 

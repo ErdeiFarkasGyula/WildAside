@@ -2,7 +2,6 @@ package net.farkas.wildaside.item.custom;
 
 import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
-import net.farkas.wildaside.dna.DnaConstants;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.trait.Trait;
@@ -62,7 +61,7 @@ public class DnaHolder extends Item {
         if (dnaTag != null && !dnaTag.isEmpty()) {
             dna.deserializeNBT(dnaTag);
 
-            if (dna.source() != null && dna.source() != target.getType()) {
+            if (dna.getSource() != null && dna.getSource() != target.getType()) {
                 player.displayClientMessage(getTranslatable(DNA_MISMATCH).withStyle(ChatFormatting.RED), true);
                 return InteractionResult.sidedSuccess(player.level().isClientSide());
             }
@@ -95,7 +94,7 @@ public class DnaHolder extends Item {
             existingDna = new DnaImplementation();
             existingDna.deserializeNBT(tag.getCompound(DNA_DATA));
 
-            if (!Objects.equals(existingDna.source(), target.getType())) {
+            if (!Objects.equals(existingDna.getSource(), target.getType())) {
                 return stack;
             }
         } else {
@@ -111,19 +110,19 @@ public class DnaHolder extends Item {
         target.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
             boolean hasMutated = target.getPersistentData().getBoolean(DNA_MUTATED);
             if (!hasMutated) {
-                baseGenes.set(DnaUtils.mutateGenes(dna.genes(), target));
+                baseGenes.set(DnaUtils.mutateGenes(dna.getGenes(), target));
             } else {
-                baseGenes.set(dna.genes());
+                baseGenes.set(dna.getGenes());
             }
 
             float currentStability;
             if (existingDna != null) {
-                currentStability = existingDna.stability();
+                currentStability = existingDna.getStability();
             } else {
                 currentStability = 0;
             }
 
-            float targetStability = dna.stability();
+            float targetStability = dna.getStability();
             float progressMultiplier = 1f / maxProgress;
             float remainingPercent = player.getCooldowns().getCooldownPercent(stack.getItem(), 0f);
             float cooldownMultiplier = 1.0f - remainingPercent;
@@ -143,7 +142,7 @@ public class DnaHolder extends Item {
                 Gene newGene = baseGenes.get().get(trait);
                 if (newGene == null) continue;
 
-                Gene oldGene = existingDna.genes().get(trait);
+                Gene oldGene = existingDna.getGenes().get(trait);
                 float oldValue = oldGene != null ? oldGene.value() : 0f;
                 float avg = ((oldValue * (progress - 1)) + newGene.value()) / progress;
                 float stabilityCost = newGene.stabilityCost();
@@ -210,8 +209,8 @@ public class DnaHolder extends Item {
         }
 
         if (revealSource) {
-            Component sourceName = dna.source() != null
-                    ? dna.source().getDescription()
+            Component sourceName = dna.getSource() != null
+                    ? dna.getSource().getDescription()
                     : Component.translatable("dna.wildaside.unknown");
             tooltip.add(Component.translatable("dna.wildaside.source")
                     .append(": " + sourceName.getString())
@@ -220,7 +219,7 @@ public class DnaHolder extends Item {
 
         if (revealStability) {
             tooltip.add(Component.translatable("dna.wildaside.stability")
-                    .append(": " + String.format("%.2f", dna.stability()))
+                    .append(": " + String.format("%.2f", dna.getStability()))
                     .withStyle(ChatFormatting.GREEN));
         }
 
@@ -232,7 +231,7 @@ public class DnaHolder extends Item {
     }
 
     private void displayGenesSection(List<Component> tooltip, DnaImplementation dna, TraitTypes type, MutableComponent title) {
-        Map<Trait, Gene> filtered = dna.genes().entrySet().stream()
+        Map<Trait, Gene> filtered = dna.getGenes().entrySet().stream()
                 .filter(e -> e.getKey().traitType() == type)
                 .sorted(Map.Entry.comparingByKey(Comparator.comparing(Trait::name)))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));

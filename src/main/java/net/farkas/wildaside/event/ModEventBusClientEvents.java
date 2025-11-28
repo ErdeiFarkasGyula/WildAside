@@ -98,9 +98,9 @@ public class ModEventBusClientEvents {
             DnaImplementation dna = new DnaImplementation();
             dna.deserializeNBT(dnaTag);
 
-            if (dna.source() == null) return 0xFFFFFF;
+            if (dna.getSource() == null) return 0xFFFFFF;
 
-            SpawnEggItem egg = ForgeSpawnEggItem.fromEntityType(dna.source());
+            SpawnEggItem egg = ForgeSpawnEggItem.fromEntityType(dna.getSource());
             if (egg == null) return 0xFFFFFF;
 
             return switch (tintIndex) {

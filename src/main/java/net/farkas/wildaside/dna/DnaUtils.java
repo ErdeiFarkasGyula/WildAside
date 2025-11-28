@@ -92,7 +92,7 @@ public class DnaUtils {
         Map<Trait, Gene> genes = new HashMap<>();
 
         for (Trait trait : Traits.getByType(TraitTypes.CORE)) {
-            Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(getAttributeRes(trait.name()));
+            Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(getAttributeRes(trait.getName()));
             if (attribute != null) {
                 float traitValue = getAttributeValue(entity, attribute);
                 if (trait == Traits.MOVEMENT_SPEED) {
@@ -134,11 +134,11 @@ public class DnaUtils {
     }
 
     private static void putResistanceWithGaussian(Map<Trait, Gene> genes, Trait trait, long seed) {
-        genes.put(trait, new Gene(trait, deterministicGaussian(seed, trait.name()) / 2 + 0.5f, trait.baseInstability()));
+        genes.put(trait, new Gene(trait, deterministicGaussian(seed, trait.getName()) / 2 + 0.5f, trait.getInstabilityModifier()));
     }
 
     private static void putAbilityWithGaussian(Map<Trait, Gene> genes, Trait trait, long seed) {
-        genes.put(trait, new Gene(trait, (deterministicGaussian(seed, trait.name()) / 2 + trait.baseInstability()) * 100, trait.baseInstability()));
+        genes.put(trait, new Gene(trait, (deterministicGaussian(seed, trait.getName()) / 2 + trait.getInstabilityModifier()) * 100, trait.getInstabilityModifier()));
     }
 
     public static Map<Trait, Gene> mutateGenes(Map<Trait, Gene> baseGenes, LivingEntity entity) {
@@ -150,18 +150,10 @@ public class DnaUtils {
     }
 
     public static Gene mutateGene(Gene gene, LivingEntity entity) {
-        long seed = entity.getUUID().getLeastSignificantBits();
-        String salt = gene.getTrait().getName());
+        Allele alleleA = mutateAllele(gene.getAlleleA(), entity);
+        Allele alleleB = mutateAllele(gene.getAlleleB(), entity);
 
-        float gaussian = deterministicGaussian(seed, salt);
-
-        float averageMutation = -0.1f;
-        float baseVariance = 0.5f;
-
-        float mutation = gaussian * baseVariance + averageMutation;
-        float newValue = gene.getExpressedValue() * (1.0f + mutation);
-
-        return new Gene(gene.getTrait(), newValue, gene.getTrait().getInstabilityModifier());
+        return new Gene(gene.getTrait(), alleleA, alleleB);
     }
 
     public static Allele mutateAllele(Allele allele, LivingEntity entity) {
