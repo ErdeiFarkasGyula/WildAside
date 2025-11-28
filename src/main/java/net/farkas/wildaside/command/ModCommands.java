@@ -264,6 +264,7 @@ public class ModCommands {
         livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
             dna.getGenes().put(trait, new Gene(trait, alleleA, alleleB));
             dna.applyGenes(livingEntity);
+            dna.setModified(true);
         });
 
         Component message = Component.translatable(
