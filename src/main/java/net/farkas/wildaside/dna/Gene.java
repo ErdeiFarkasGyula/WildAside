@@ -2,6 +2,7 @@ package net.farkas.wildaside.dna;
 
 import net.farkas.wildaside.dna.allele.Allele;
 import net.farkas.wildaside.dna.trait.Trait;
+import net.farkas.wildaside.dna.trait.TraitExpression;
 import net.farkas.wildaside.dna.trait.TraitTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -51,14 +52,14 @@ public class Gene {
     }
 
     public float getExpressedValue() {
-        return Trait
+        return TraitExpression.evaluate(alleleA, alleleB);
     }
 
     public void apply(Entity entity) {
         if (this.trait.traitType() == TraitTypes.CORE && entity instanceof LivingEntity living) {
-            trait.apply(living, value);
+            trait.apply(living, getExpressedValue());
         } else if (entity instanceof LivingEntity living) {
-            trait.apply(living, value);
+            trait.apply(living, getExpressedValue());
         }
     }
 
