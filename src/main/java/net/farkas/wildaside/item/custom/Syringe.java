@@ -1,5 +1,6 @@
 package net.farkas.wildaside.item.custom;
 
+import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.dna.DnaConstants;
 import net.farkas.wildaside.network.NetworkHandler;
 import net.farkas.wildaside.network.packets.SyringeDataPacket;
@@ -21,12 +22,12 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static net.farkas.wildaside.dna.DnaConstants.*;
 
 public class Syringe extends Item {
     public static final int DEFAULT_BLOOD_COLOR = 0xba260f;
-
     public static final int DEFAULT_MAX_LOAD = 3;
 
     private static final float NEEDLE_DELTA = 0.1f;
@@ -71,8 +72,21 @@ public class Syringe extends Item {
         if (!inwards) {
             LivingEntity target = raytraceLiving(level, player, RAYCAST_RANGE);
             if (target != null) {
-                blood += NEEDLE_DELTA;
+                UUID previousTargetUuid = target.getUUID();
+                if (tag.hasUUID(PREVIOUS_TARGET)) {
+                    previousTargetUuid = tag.getUUID(PREVIOUS_TARGET);
+                }
 
+                if (target.getUUID() != previousTargetUuid) {
+                    tag.putBoolean(UNUSABLE, true);
+                } else {
+                    target.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
+                        tag.put(DNA_DATA, dna.serializeNBT());
+                    });
+                }
+
+                tag.putUUID(PREVIOUS_TARGET, target.getUUID());
+                blood += NEEDLE_DELTA;
             }
         } else {
             blood -= NEEDLE_DELTA;
