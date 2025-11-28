@@ -1,5 +1,6 @@
 package net.farkas.wildaside.dna;
 
+import net.farkas.wildaside.dna.allele.Allele;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitTypes;
 import net.minecraft.world.entity.Entity;
@@ -13,22 +14,44 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.UUID;
 
 public class Gene {
-    public Trait trait;
-    public float value;
-    public float stabilityCost;
-    private final String fullName;
     private final UUID uuid;
+    private final Trait trait;
+    private Allele alleleA;
+    private Allele alleleB;
 
-    public Trait trait() { return trait; }
-    public float value() { return value; }
-    public float stabilityCost() { return stabilityCost; }
-
-    public Gene(Trait trait, float value, float stabilityCost) {
+    public Gene(Trait trait, Allele alleleA, Allele alleleB) {
         this.trait = trait;
-        this.value = value;
-        this.stabilityCost = stabilityCost;
-        this.fullName = DnaUtils.fullName(trait.name());
-        this.uuid = DnaUtils.getUuid(fullName);
+        this.alleleA = alleleA;
+        this.alleleB = alleleB;
+        this.uuid = DnaUtils.getUuid(trait.name());
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public Trait getTrait() {
+        return trait;
+    }
+
+    public Allele getAlleleA() {
+        return alleleA;
+    }
+
+    public void setAlleleA(Allele alleleA) {
+        this.alleleA = alleleA;
+    }
+
+    public Allele getAlleleB() {
+        return alleleB;
+    }
+
+    public void setAlleleB(Allele alleleB) {
+        this.alleleB = alleleB;
+    }
+
+    public float getExpressedValue() {
+        return Trait
     }
 
     public void apply(Entity entity) {
