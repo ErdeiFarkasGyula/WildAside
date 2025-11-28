@@ -224,6 +224,9 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
             dna.setGenes(genes);
             tag.remove(DNA_DATA);
             tag.put(DNA_DATA, dna.serializeNBT());
+            tag.putBoolean(REVEAL_SOURCE, false);
+            tag.putBoolean(REVEAL_STABILITY, false);
+            tag.putBoolean(REVEAL_TRAITS, false);
         }
 
         output.setTag(tag);
