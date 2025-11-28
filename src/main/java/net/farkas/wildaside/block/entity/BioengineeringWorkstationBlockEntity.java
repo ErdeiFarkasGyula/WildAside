@@ -173,8 +173,8 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
 
     public static Map<Trait, Gene> orderGenes(DnaImplementation dna) {
         return dna.genes().entrySet().stream()
-                .sorted(Map.Entry.comparingByKey(Comparator.comparing(Trait::name)))
-                .sorted(Map.Entry.comparingByKey(Comparator.comparing(Trait::traitType)))
+                .sorted(Map.Entry.comparingByKey(Comparator.comparing(Trait::getName)))
+                .sorted(Map.Entry.comparingByKey(Comparator.comparing(Trait::getTraitType)))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));
     }
 

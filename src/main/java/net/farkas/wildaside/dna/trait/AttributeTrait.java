@@ -7,7 +7,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.UUID;
@@ -20,14 +19,14 @@ public class AttributeTrait extends Trait {
     public AttributeTrait(String name, TraitTypes type, float baseInstability, ResourceLocation attributeRes, AttributeModifier.Operation operation) {
         super(name, type, baseInstability);
         this.attributeRes = attributeRes;
-        this.modifierUuid = DnaUtils.getUuid(DnaUtils.fullName(name));
+        this.modifierUuid = DnaUtils.generateUuid(DnaUtils.fullName(name));
         this.operation = operation;
     }
 
     public AttributeTrait(String name, TraitTypes type, float baseInstability, ResourceLocation attributeRes) {
         super(name, type, baseInstability);
         this.attributeRes = attributeRes;
-        this.modifierUuid = DnaUtils.getUuid(DnaUtils.fullName(name));
+        this.modifierUuid = DnaUtils.generateUuid(DnaUtils.fullName(name));
         this.operation = AttributeModifier.Operation.ADDITION;
     }
 

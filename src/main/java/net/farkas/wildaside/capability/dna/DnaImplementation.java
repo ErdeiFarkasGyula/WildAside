@@ -67,39 +67,40 @@ public class DnaImplementation implements IDna {
 
     @Override
     public float calculateInstabilityChange(Map<Trait, Gene> newGenes) {
-        float totalCost = 0.0f;
-
-        for (Map.Entry<Trait, Gene> entry : newGenes.entrySet()) {
-            Trait trait = entry.getKey();
-            Gene newGene = entry.getValue();
-
-            Gene currentGene = genes.get(trait);
-            if (currentGene == null) {
-                totalCost += newGene.getTrait().baseInstability();
-                continue;
-            }
-
-            float oldValue = currentGene.getExpressedValue();
-            float newValue = newGene.getExpressedValue();
-
-            if (Math.abs(oldValue - newValue) <= 0.001f)
-                continue;
-
-            float base = oldValue == 0.0f ? 1.0f : Math.abs(oldValue);
-            float relativeChange = Math.abs(newValue - oldValue) / base;
-
-            relativeChange = Math.min(relativeChange, 2.0f);
-
-            float baseInstability = newGene.getTrait().baseInstability();
-            float instabilityCost = baseInstability * (1.0f + relativeChange * 2.0f);
-
-            if (newValue > oldValue)
-                instabilityCost *= 1.25f;
-
-            totalCost += instabilityCost;
-        }
-
-        return totalCost;
+//        float totalCost = 0.0f;
+//
+//        for (Map.Entry<Trait, Gene> entry : newGenes.entrySet()) {
+//            Trait trait = entry.getKey();
+//            Gene newGene = entry.getValue();
+//
+//            Gene currentGene = genes.get(trait);
+//            if (currentGene == null) {
+//                totalCost += newGene.getTrait().baseInstability();
+//                continue;
+//            }
+//
+//            float oldValue = currentGene.getExpressedValue();
+//            float newValue = newGene.getExpressedValue();
+//
+//            if (Math.abs(oldValue - newValue) <= 0.001f)
+//                continue;
+//
+//            float base = oldValue == 0.0f ? 1.0f : Math.abs(oldValue);
+//            float relativeChange = Math.abs(newValue - oldValue) / base;
+//
+//            relativeChange = Math.min(relativeChange, 2.0f);
+//
+//            float baseInstability = newGene.getTrait().baseInstability();
+//            float instabilityCost = baseInstability * (1.0f + relativeChange * 2.0f);
+//
+//            if (newValue > oldValue)
+//                instabilityCost *= 1.25f;
+//
+//            totalCost += instabilityCost;
+//        }
+//
+//        return totalCost;
+        return 0.0f;
     }
 
     @Override
@@ -115,10 +116,7 @@ public class DnaImplementation implements IDna {
 
         ListTag list = new ListTag();
         for (Gene gene : genes.values()) {
-            CompoundTag geneTag = new CompoundTag();
-            geneTag.putString("trait", gene.getTrait().name());
-            geneTag.putFloat("value", gene.g);
-            geneTag.putFloat("stabilityCost", gene.stabilityCost());
+            CompoundTag geneTag = gene.serializeNBT();
             list.add(geneTag);
         }
         tag.put("genes", list);
@@ -137,12 +135,8 @@ public class DnaImplementation implements IDna {
         ListTag list = tag.getList("genes", Tag.TAG_COMPOUND);
         for (Tag t : list) {
             CompoundTag geneTag = (CompoundTag) t;
-            String traitName = geneTag.getString("trait");
-            Trait trait = Traits.getByName(traitName);
-            if (trait == null) continue;
-            float value = geneTag.getFloat("value");
-            float cost = geneTag.getFloat("stabilityCost");
-            genes.put(trait, new Gene(trait, value, cost));
+            Gene gene = Gene.deserializeNBT(geneTag);
+            genes.put(gene.getTrait(), gene);
         }
     }
 }

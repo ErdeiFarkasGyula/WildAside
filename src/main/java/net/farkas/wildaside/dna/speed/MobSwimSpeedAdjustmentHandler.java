@@ -17,7 +17,7 @@ import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = WildAside.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class MobSwimSpeedAdjustmentHandler {
-    private static final UUID WATER_ADJUST_UUID = DnaUtils.getUuid("dna_dynamic_water_adjust");
+    private static final UUID WATER_ADJUST_UUID = DnaUtils.generateUuid("dna_dynamic_water_adjust");
     private static final String LAST_STATE_KEY = "dna_last_env_state";
 
     @SubscribeEvent

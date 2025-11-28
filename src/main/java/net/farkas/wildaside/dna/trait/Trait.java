@@ -1,6 +1,5 @@
 package net.farkas.wildaside.dna.trait;
 
-import net.farkas.wildaside.dna.trait.TraitTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 

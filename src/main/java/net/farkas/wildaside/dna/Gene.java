@@ -3,16 +3,10 @@ package net.farkas.wildaside.dna;
 import net.farkas.wildaside.dna.allele.Allele;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitExpression;
-import net.farkas.wildaside.dna.trait.TraitTypes;
 import net.farkas.wildaside.dna.trait.Traits;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.UUID;
 
@@ -26,7 +20,7 @@ public class Gene {
         this.trait = trait;
         this.alleleA = alleleA;
         this.alleleB = alleleB;
-        this.uuid = DnaUtils.getUuid(trait.name());
+        this.uuid = DnaUtils.generateUuid(trait.getName());
     }
 
     public Gene(UUID uuid, Trait trait, Allele alleleA, Allele alleleB) {
@@ -65,23 +59,21 @@ public class Gene {
     }
 
     public void apply(Entity entity) {
-        if (this.trait.traitType() == TraitTypes.CORE && entity instanceof LivingEntity living) {
-            trait.apply(living, getExpressedValue());
-        } else if (entity instanceof LivingEntity living) {
-            trait.apply(living, getExpressedValue());
+        if (entity instanceof LivingEntity livingEntity) {
+            trait.apply(livingEntity, getExpressedValue());
         }
     }
 
     public void remove(Entity entity) {
-        if (entity instanceof LivingEntity living) {
-            trait.remove(living);
+        if (entity instanceof LivingEntity livingEntity) {
+            trait.remove(livingEntity);
         }
     }
 
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
         tag.putUUID("uuid", uuid);
-        tag.putString("trait", trait.name());
+        tag.putString("trait", trait.getName());
         tag.put("alleleA", alleleA.serializeNBT());
         tag.put("alleleB", alleleB.serializeNBT());
         return tag;

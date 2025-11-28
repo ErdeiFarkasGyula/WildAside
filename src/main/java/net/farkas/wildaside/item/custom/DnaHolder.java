@@ -2,6 +2,7 @@ package net.farkas.wildaside.item.custom;
 
 import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
+import net.farkas.wildaside.dna.DnaConstants;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.trait.Trait;
@@ -28,29 +29,10 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+import static net.farkas.wildaside.dna.DnaConstants.*;
+
 public class DnaHolder extends Item {
     public static final int MAX_COOLDOWN = 60;
-
-    public static final String DNA_DATA = "dna_data";
-    public static final String NO_DNA_DATA = "no_dna_data";
-    public static final String DNA_DATA_HIDDEN = "dna_data_hidden";
-    public static final String DNA_MUTATED = "dna_mutated";
-    public static final String DNA_MISMATCH = "dna_mismatch";
-
-    public static final String SAMPLE_PROGRESS = "sample_progress";
-    public static final String MAX_SAMPLES = "max_samples";
-
-    public static final String REVEAL_SOURCE = "reveal_source";
-    public static final String REVEAL_STABILITY = "reveal_stability";
-    public static final String REVEAL_TRAITS = "reveal_traits";
-
-    public static final String STABILITY = "stability";
-    public static final String SOURCE = "source";
-    public static final String UNKNOWN = "unknown";
-
-    public static final String CORE_TRAITS = "core_traits";
-    public static final String RESISTANCES = "resistances";
-    public static final String ABILITIES = "abilities";
 
     public static final int DEFAULT_MAX_SAMPLES = 3;
 

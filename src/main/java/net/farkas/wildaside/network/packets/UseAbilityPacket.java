@@ -24,11 +24,11 @@ public class UseAbilityPacket {
 
             player.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
                 for (Gene gene : dna.genes().values()) {
-                    if (gene.trait().traitType() == TraitTypes.ABILITY) {
-                        IAbility ability = Abilities.get(gene.trait());
-                        if (ability != null && gene.value != 0) {
-                            ability.onUse(player, gene.value);
-                            dna.setStability(dna.stability() - gene.trait().baseInstability() * 0.5f);
+                    if (gene.getTrait().getTraitType() == TraitTypes.ABILITY) {
+                        IAbility ability = Abilities.get(gene.getTrait());
+                        if (ability != null && gene.getExpressedValue() != 0) {
+                            ability.onUse(player, gene.getExpressedValue());
+                            dna.setStability(dna.stability() - gene.getTrait().getInstabilityModifier() * 0.5f);
                         }
                     }
                 }
