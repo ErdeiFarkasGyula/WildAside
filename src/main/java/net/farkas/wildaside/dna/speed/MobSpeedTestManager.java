@@ -79,7 +79,7 @@ public class MobSpeedTestManager {
             ensureTestAreaLoaded(level, new BlockPos(0, 16, 0), 150, MobSpeedTesting.getMobsToTest(level).size() * 4 + 2);
         }
     }
-    
+
     @SubscribeEvent
     public static void onEntityLeftLevel(EntityLeaveLevelEvent event) {
         if (!ModConfig.ACCURATE_DNA_WATER_MOVEMENT_SPEEDS.get() || event.getEntity().level().isClientSide()) return;
