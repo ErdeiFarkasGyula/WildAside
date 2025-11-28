@@ -130,14 +130,14 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
                 int slotCorrection = 0;
 
                 for (int j = 0; j < genes.size(); j++) {
-                    Gene gene = genes.get(Traits.TRAITS.get(j));
-                    if (gene.getExpressedValue() == 0.0f) {
+                    Gene gene = genes.values().stream().toList().get(j);
+                    if (gene.getTrait().getTraitType() == TraitType.ABILITY && gene.getExpressedValue() == 0.0f) {
                         slotCorrection++;
                         continue;
                     }
 
                     ItemStack geneStack = GeneItem.createFromTag(gene);
-                    int correctedSlot = i - slotCorrection;
+                    int correctedSlot = j - slotCorrection;
                     if (i == 7) {
                         if (topGeneSlots.size() > correctedSlot) {
                             topGeneSlots.get(correctedSlot).set(geneStack);

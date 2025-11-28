@@ -2,9 +2,13 @@ package net.farkas.wildaside.item.custom;
 
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
+import net.farkas.wildaside.dna.allele.Allele;
+import net.farkas.wildaside.dna.dominance.Dominance;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.Traits;
 import net.farkas.wildaside.item.ModItems;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
@@ -32,18 +36,30 @@ public class GeneItem extends Item {
         Trait trait = gene.getTrait();
 
         if (trait != null) {
+            Allele alleleA = gene.getAlleleA();
+            Allele alleleB = gene.getAlleleB();
+
             tooltip.add(Component.translatable("trait.wildaside." + trait.getName())
-                    .append(Component.literal(": " + DnaUtils.getFormattedString(gene.getExpressedValue())))
-                    .withStyle(trait.getTraitType().getHeaderColour())
-                    .append(Component.translatable("dna.wildaside.allele"))
-                    .append(Component.translatable("dna.wildaside.alleleA"))
-                    .withStyle(trait.getTraitType().getHeaderColour())
-                    .append(DnaUtils.getFormattedString(gene.getAlleleA().getValue()))
-                    .append(Component.translatable("dna.wildaside.alleleB"))
-                    .withStyle(trait.getTraitType().getHeaderColour())
-                    .append(DnaUtils.getFormattedString(gene.getAlleleB().getValue())));
+                    .withStyle(trait.getTraitType().getHeaderColour()));
+
+            tooltip.add(Component.literal("- " + DnaUtils.getFormattedString(gene.getExpressedValue())));
+
+            tooltip.add(Component.translatable("dna.wildaside.alleleA").withStyle(ChatFormatting.AQUA));
+            tooltip.add(Component.literal("- ")
+                    .append(Component.translatable("dna.wildaside.dominance"))
+                    .append(Component.literal(": "))
+                    .append(alleleA.getDominance().getComponent()));
+            tooltip.add(Component.literal("- "+ DnaUtils.getFormattedString(alleleA.getValue())));
+
+            tooltip.add(Component.translatable("dna.wildaside.alleleB").withStyle(ChatFormatting.AQUA));
+            tooltip.add(Component.literal("- ")
+                    .append(Component.translatable("dna.wildaside.dominance"))
+                    .append(Component.literal(": "))
+                    .append(alleleB.getDominance().getComponent()));
+            tooltip.add(Component.literal("- "+ DnaUtils.getFormattedString(alleleB.getValue())));
         }
     }
+
 
     @Override
     public void onInventoryTick(ItemStack stack, Level level, Player player, int slotIndex, int selectedIndex) {
