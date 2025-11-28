@@ -28,7 +28,6 @@ public class Traits {
     public static final Trait EXPLOSION_RESISTANCE = register(new ResistanceTrait("explosion_resistance", TraitTypes.RESISTANCE, 1.7f));
     public static final Trait FREEZE_RESISTANCE = register(new ResistanceTrait("freeze_resistance", TraitTypes.RESISTANCE, 1.1f));
 
-
     public static final Trait FIRE_ABILITY = register(new AbilityTrait("fire_ability", TraitTypes.ABILITY, 3f));
     public static final Trait TELEPORT_ABILITY = register(new AbilityTrait("teleport_ability", TraitTypes.ABILITY, 3f));
 
@@ -48,6 +47,6 @@ public class Traits {
 
     public static Trait getByName(String name) {
         for (Trait t : TRAITS) if (t.name().equalsIgnoreCase(name)) return t;
-        return null;
+        return MAX_HEALTH;
     }
 }

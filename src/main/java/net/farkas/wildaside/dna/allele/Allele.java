@@ -63,6 +63,14 @@ public class Allele {
         dominance = Dominance.valueOf(tag.getString("dominance"));
     }
 
+    public static Allele createFromTag(CompoundTag tag) {
+        float value = tag.getFloat("value");
+        float mutationRate = tag.getFloat("mutationRate");
+        float stability = tag.getFloat("stability");
+        String dominance = tag.getString("dominance");
+        return new Allele(value, mutationRate, stability, Dominance.valueOf(dominance));
+    }
+
     @Override
     public String toString() {
         return "Allele[" + "value=" + value + ", mutationRate=" + mutationRate + ", stability=" + stability + ", dominance=" + dominance + ']';

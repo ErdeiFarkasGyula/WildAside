@@ -75,12 +75,12 @@ public class DnaImplementation implements IDna {
 
             Gene currentGene = genes.get(trait);
             if (currentGene == null) {
-                totalCost += newGene.trait.baseInstability();
+                totalCost += newGene.getTrait().baseInstability();
                 continue;
             }
 
-            float oldValue = currentGene.value();
-            float newValue = newGene.value();
+            float oldValue = currentGene.getExpressedValue();
+            float newValue = newGene.getExpressedValue();
 
             if (Math.abs(oldValue - newValue) <= 0.001f)
                 continue;
@@ -90,7 +90,7 @@ public class DnaImplementation implements IDna {
 
             relativeChange = Math.min(relativeChange, 2.0f);
 
-            float baseInstability = newGene.trait.baseInstability();
+            float baseInstability = newGene.getTrait().baseInstability();
             float instabilityCost = baseInstability * (1.0f + relativeChange * 2.0f);
 
             if (newValue > oldValue)
@@ -116,8 +116,8 @@ public class DnaImplementation implements IDna {
         ListTag list = new ListTag();
         for (Gene gene : genes.values()) {
             CompoundTag geneTag = new CompoundTag();
-            geneTag.putString("trait", gene.trait().name());
-            geneTag.putFloat("value", gene.value());
+            geneTag.putString("trait", gene.getTrait().name());
+            geneTag.putFloat("value", gene.g);
             geneTag.putFloat("stabilityCost", gene.stabilityCost());
             list.add(geneTag);
         }
