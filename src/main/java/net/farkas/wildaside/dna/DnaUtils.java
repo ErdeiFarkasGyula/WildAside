@@ -3,6 +3,8 @@ package net.farkas.wildaside.dna;
 import com.google.common.collect.Multimap;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.config.ModConfig;
+import net.farkas.wildaside.dna.allele.Allele;
+import net.farkas.wildaside.dna.allele.Dominance;
 import net.farkas.wildaside.dna.speed.MobSpeedResultStorage;
 import net.farkas.wildaside.dna.speed.MobSpeedTesting;
 import net.farkas.wildaside.dna.trait.Trait;
@@ -10,6 +12,7 @@ import net.farkas.wildaside.dna.trait.TraitTypes;
 import net.farkas.wildaside.dna.trait.Traits;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.EntityTypeTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,6 +21,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.commons.lang3.RandomUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -147,7 +151,7 @@ public class DnaUtils {
 
     public static Gene mutateGene(Gene gene, LivingEntity entity) {
         long seed = entity.getUUID().getLeastSignificantBits();
-        String salt = gene.trait().name();
+        String salt = gene.getTrait().getName());
 
         float gaussian = deterministicGaussian(seed, salt);
 
@@ -155,9 +159,35 @@ public class DnaUtils {
         float baseVariance = 0.5f;
 
         float mutation = gaussian * baseVariance + averageMutation;
-        float newValue = gene.value() * (1.0f + mutation);
+        float newValue = gene.getExpressedValue() * (1.0f + mutation);
 
-        return new Gene(gene.trait(), newValue, gene.stabilityCost());
+        return new Gene(gene.getTrait(), newValue, gene.getTrait().getInstabilityModifier());
+    }
+
+    public static Allele mutateAllele(Allele allele, LivingEntity entity) {
+        long seed = entity.getUUID().getLeastSignificantBits();
+        String salt = allele.toString();
+
+        float gaussian = deterministicGaussian(seed, salt);
+
+        float averageMutation = -0.1f;
+
+        float baseMutation = allele.getMutationRate();
+        float mutation = gaussian * baseMutation + averageMutation;
+
+        float newValue = allele.getValue() * (1.0f + mutation);
+
+        float traitBaseMutation = 0.03f;
+
+        float newMutationRate = traitBaseMutation * (1f + Math.abs(newValue) * 0.1f);
+
+        float baseStability = allele.getStability();
+        float newStability = baseStability - (Math.abs(newValue) * 0.1f) + (gaussian * 0.05f);
+
+        newStability = Mth.clamp(newStability, 0, 100);
+        Dominance newDom = generateNewDominance(allele, newMutationRate, seed, salt);
+
+        return new Allele(newValue, newMutationRate, newStability, newDom);
     }
 
     private static float hashToFloat(long seed, String salt, int index) {
@@ -181,5 +211,28 @@ public class DnaUtils {
             sum += hashToFloat(seed, salt, i);
         }
         return (sum / 6f - 0.5f) * 2f;
+    }
+
+    private static Dominance generateNewDominance(Allele allele, float mutationRate, long seed, String salt) {
+        Dominance newDom = allele.getDominance();
+        float dominanceFlipChance = mutationRate * 0.02f;
+        float domNoise = deterministicGaussian(seed, salt + "_DOMINANCE");
+        float domProb = (domNoise + 1f) * 0.5f;
+
+        if (domProb < dominanceFlipChance) {
+            newDom = deterministicDominancePick(seed, salt);
+        }
+
+        return newDom;
+    }
+
+    private static Dominance deterministicDominancePick(long seed, String salt) {
+        float g = deterministicGaussian(seed, salt + "_DOMINANCE_PICK");
+        float p = (g + 1f) * 0.5f;
+
+        if (p < 0.25f) return Dominance.DOMINANT;
+        if (p < 0.50f) return Dominance.RECESSIVE;
+        if (p < 0.75f) return Dominance.INCOMPLETE;
+        return Dominance.CO_DOMINANT;
     }
 }
