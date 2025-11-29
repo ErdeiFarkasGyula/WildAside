@@ -97,9 +97,12 @@ public class DnaUtils {
         long seed = entity.getUUID().getLeastSignificantBits();
 
         for (Trait trait : Traits.TRAITS) {
-            if (trait.getTraitType() == TraitType.CORE) {
+            if (trait.getTraitType() == TraitType.CORE || trait == Traits.KNOCKBACK_RESISTANCE) {
                 Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(DnaUtils.getAttributeRes(trait.getName()));
                 if (attribute != null) {
+                    if (trait == Traits.KNOCKBACK_RESISTANCE) {
+                        System.out.println("Real");
+                    }
                     float baseValue = DnaUtils.getAttributeValue(entity, attribute);
 
                     if (trait == Traits.MOVEMENT_SPEED && ModConfig.ACCURATE_DNA_MOVEMENT_SPEEDS.get() && !preGen) {
@@ -160,25 +163,6 @@ public class DnaUtils {
         Allele alleleA = createAllele(trait, trait.getInstabilityModifier() * 100f, seed, 0);
         Allele alleleB = createAllele(trait, trait.getInstabilityModifier() * 100f, seed, 1);
         genes.put(trait, new Gene(trait, alleleA, alleleB));
-    }
-
-    private static float randomFactor(long seed, String salt, int index) {
-        return 0.9f + DnaUtils.hashToFloat(seed, salt, index) * 0.2f;
-    }
-
-    public static Map<Trait, Gene> mutateGenes(Map<Trait, Gene> baseGenes, LivingEntity entity) {
-        Map<Trait, Gene> mutated = new HashMap<>();
-        for (var entry : baseGenes.entrySet()) {
-            mutated.put(entry.getKey(), mutateGene(entry.getValue(), entity));
-        }
-        return mutated;
-    }
-
-    public static Gene mutateGene(Gene gene, LivingEntity entity) {
-        Allele alleleA = mutateAllele(gene.getAlleleA(), entity);
-        Allele alleleB = mutateAllele(gene.getAlleleB(), entity);
-
-        return new Gene(gene.getTrait(), alleleA, alleleB);
     }
 
     public static Allele mutateAllele(Allele allele, LivingEntity entity) {

@@ -21,7 +21,7 @@ public class Traits {
     public static final Trait ARMOR = register(new AttributeTrait("armor", TraitType.CORE, 1.5f, DnaUtils.getAttributeRes("armor"), AttributeModifier.Operation.ADDITION));
     public static final Trait ARMOR_TOUGHNESS = register(new AttributeTrait("armor_toughness", TraitType.CORE, 0.8f, DnaUtils.getAttributeRes("armor_toughness"), AttributeModifier.Operation.ADDITION));
 
-    public static final Trait KNOCKBACK_RESISTANCE = register(new AttributeTrait("knockback_resistance", TraitType.RESISTANCE, 0.8f, DnaUtils.getAttributeRes("knockback_resistance")));
+    public static final Trait KNOCKBACK_RESISTANCE = register(new AttributeTrait("knockback_resistance", TraitType.RESISTANCE, 1.6f, DnaUtils.getAttributeRes("knockback_resistance")));
     public static final Trait FIRE_RESISTANCE = register(new ResistanceTrait("fire_resistance", TraitType.RESISTANCE, 2.3f));
     public static final Trait FALL_RESISTANCE = register(new ResistanceTrait("fall_resistance", TraitType.RESISTANCE, 2.1f));
     public static final Trait EXPLOSION_RESISTANCE = register(new ResistanceTrait("explosion_resistance", TraitType.RESISTANCE, 1.7f));

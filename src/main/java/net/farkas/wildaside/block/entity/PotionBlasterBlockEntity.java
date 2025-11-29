@@ -41,8 +41,14 @@ import java.util.List;
 import java.util.stream.StreamSupport;
 
 public class PotionBlasterBlockEntity extends BlasterBlockEntity implements MenuProvider {
-    private final ItemStackHandler itemHandler = new ItemStackHandler(10);
-    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
+    private final ItemStackHandler itemHandler = new ItemStackHandler(10) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            setChanged();
+        }
+    };
+
+    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.of(() -> itemHandler);
 
     public static final int OUTPUT_1 = 9;
 
@@ -252,13 +258,16 @@ public class PotionBlasterBlockEntity extends BlasterBlockEntity implements Menu
 
     @Override
     protected void saveAdditional(CompoundTag pTag) {
-        pTag.put("inventory", itemHandler.serializeNBT());
+        super.saveAdditional(pTag);
+
+        if (pTag.contains("inventory")) {
+            pTag.put("inventory", itemHandler.serializeNBT());
+        }
         pTag.putInt("ticks_left", potionTicksLeft);
         pTag.putInt("max_ticks", maxPotionTicks);
         pTag.putInt("colour", potionColour);
         pTag.put("potion", activePotion.save(new CompoundTag()));
 
-        super.saveAdditional(pTag);
     }
 
     @Override

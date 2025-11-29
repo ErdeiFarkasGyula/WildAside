@@ -48,8 +48,8 @@ public class BiofreezerMenu extends AbstractContainerMenu {
             int index = 0;
             for (int i = 0; i < 6; ++i) {
                 for (int l = 0; l < 9; ++l) {
-                    index++;
                     this.addSlot(new SlotItemHandler(iItemHandler, index, 8 + l * 18, 18 + i * 18));
+                    index++;
                 }
             }
         });
@@ -74,7 +74,7 @@ public class BiofreezerMenu extends AbstractContainerMenu {
     private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
 
     // THIS YOU HAVE TO DEFINE!
-    private static final int TE_INVENTORY_SLOT_COUNT = 72;  // must be the number of slots you have!
+    private static final int TE_INVENTORY_SLOT_COUNT = 54;  // must be the number of slots you have!
     @Override
     public ItemStack quickMoveStack(Player playerIn, int pIndex) {
         Slot sourceSlot = slots.get(pIndex);

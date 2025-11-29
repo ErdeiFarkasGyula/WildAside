@@ -38,8 +38,15 @@ import java.util.stream.Collectors;
 
 import static net.farkas.wildaside.dna.DnaConstants.*;
 
-public class  BioengineeringWorkstationBlockEntity extends BlockEntity implements MenuProvider {
-    private final ItemStackHandler itemHandler = new ItemStackHandler(80);
+public class BioengineeringWorkstationBlockEntity extends BlockEntity implements MenuProvider {
+    private final ItemStackHandler itemHandler = new ItemStackHandler(37) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            setChanged();
+        }
+    };
+
+    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.of(() -> itemHandler);
 
     private static final int INPUT_1 = 0;
     private static final int INPUT_2 = 1;
@@ -52,8 +59,6 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
     private static final int DNA_INPUT_2 = 8;
     private static final int DNA_OUTPUT_1 = 9;
     private static final int DNA_OUTPUT_2 = 10;
-
-    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
     protected final ContainerData data;
     private int progress = 0;
@@ -145,17 +150,20 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
 
     @Override
     protected void saveAdditional(CompoundTag pTag) {
+        super.saveAdditional(pTag);
+
         pTag.put("inventory", itemHandler.serializeNBT());
         pTag.putInt("bioengineering_workstation.progress", progress);
         pTag.putInt("bioengineering_workstation.tab", tab.ordinal());
-
-        super.saveAdditional(pTag);
     }
 
     @Override
     public void load(CompoundTag pTag) {
         super.load(pTag);
-        itemHandler.deserializeNBT(pTag.getCompound("inventory"));
+
+        if (pTag.contains("inventory")) {
+            itemHandler.deserializeNBT(pTag.getCompound("inventory"));
+        }
         progress = pTag.getInt("bioengineering_workstation.progress");
         tab = BioengineeringWorkstationTab.values()[pTag.getInt("bioengineering_workstation.tab")];
     }
@@ -200,6 +208,8 @@ public class  BioengineeringWorkstationBlockEntity extends BlockEntity implement
         if (input.isEmpty() || !(input.getItem() instanceof DnaHolder)) {
             return;
         }
+
+        if (!itemHandler.getStackInSlot(outputSlot).isEmpty()) return;
 
         ItemStack output = input.copy();
         CompoundTag tag = output.getOrCreateTag();
