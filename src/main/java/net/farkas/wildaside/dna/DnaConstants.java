@@ -63,5 +63,5 @@ public class DnaConstants {
 
     public static final String TARGET = "target";
     public static final String PREVIOUS_TARGET = "previous_target";
-    public static final String UNUSABLE = "unusable";
+    public static final String MULTIPLE_SOURCES = "multiple_sources";
 }

@@ -294,6 +294,8 @@ public class DnaUtils {
     }
 
     public static long getFrozenItemEffectiveAge(CompoundTag tag, Level level) {
+        if (level == null || tag == null) return 0;
+
         long currentTime = level.getGameTime();
         long creationTime = getBloodSamplingTick(tag);
         long freezerTicks = getBloodFreezerTicks(tag);
@@ -301,8 +303,6 @@ public class DnaUtils {
         if (creationTime == 0) {
             return 0;
         }
-
-        System.out.println("Current time: " + currentTime + " Creation time: " + creationTime + " Frozen ticks: " + freezerTicks + " Effetive age: " + (currentTime - creationTime - freezerTicks));
 
         return currentTime - creationTime - freezerTicks;
     }

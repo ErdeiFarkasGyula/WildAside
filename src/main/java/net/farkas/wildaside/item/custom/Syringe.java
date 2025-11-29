@@ -4,9 +4,12 @@ import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.network.NetworkHandler;
 import net.farkas.wildaside.network.packets.SyringeDataPacket;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.FluidTags;
@@ -17,6 +20,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -26,6 +30,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -92,6 +97,8 @@ public class Syringe extends Item {
                 tag.putString(FLUID_TYPE, NONE);
                 DnaUtils.resetBloodSamplingTick(tag);
                 DnaUtils.resetBloodFreezerTicks(tag);
+                tag.putBoolean(MULTIPLE_SOURCES, false);
+                tag.remove(PREVIOUS_TARGET);
             }
         }
 
@@ -108,7 +115,8 @@ public class Syringe extends Item {
                 tag.getInt(FLUID_COLOUR),
                 tag.getInt(DIRTINESS),
                 tag.getInt(BLOOD_CREATION_TICK),
-                tag.getInt(BLOOD_FREEZER_TICKS)
+                tag.getInt(BLOOD_FREEZER_TICKS),
+                tag.getBoolean(MULTIPLE_SOURCES)
         );
 
         if (progress <= 0f || progress >= DEFAULT_MAX_LOAD) {
@@ -132,7 +140,8 @@ public class Syringe extends Item {
                 tag.getInt(FLUID_COLOUR),
                 tag.getInt(DIRTINESS),
                 tag.getInt(BLOOD_CREATION_TICK),
-                tag.getInt(BLOOD_FREEZER_TICKS)
+                tag.getInt(BLOOD_FREEZER_TICKS),
+                tag.getBoolean(MULTIPLE_SOURCES)
         );
     }
 
@@ -143,6 +152,13 @@ public class Syringe extends Item {
         if (!(offHandStack.getItem() instanceof DnaHolder dnaHolder)) return fluid;
 
         if (progress >= DEFAULT_MAX_LOAD - 0.01f) {
+            boolean multipleSources = syringeTag.getBoolean(MULTIPLE_SOURCES);
+            boolean clotted = DnaUtils.getFrozenItemEffectiveAge(syringeTag, serverLevel) > BLOOD_CLOTTING_TIME_DEFAULT;
+
+            if (multipleSources || clotted) {
+                return fluid;
+            }
+
             DnaImplementation dna = new DnaImplementation();
             dna.deserializeNBT(syringeTag.getCompound(DNA_DATA));
 
@@ -188,6 +204,7 @@ public class Syringe extends Item {
         tag.putInt(DIRTINESS, packet.getDirtiness());
         tag.putLong(BLOOD_CREATION_TICK, packet.getCreationTick());
         tag.putLong(BLOOD_FREEZER_TICKS, packet.getFreezerTicks());
+        tag.putBoolean(MULTIPLE_SOURCES, packet.isMultipleSources());
     }
 
     @Override
@@ -199,7 +216,6 @@ public class Syringe extends Item {
     public int getUseDuration(ItemStack stack) {
         return 72000;
     }
-
 
     private void initTagDefaults(CompoundTag tag) {
         if (!tag.contains(INWARDS)) tag.putBoolean(INWARDS, true);
@@ -229,7 +245,7 @@ public class Syringe extends Item {
 
         UUID previous = tag.contains(PREVIOUS_TARGET) ? tag.getUUID(PREVIOUS_TARGET) : null;
         if (previous != null && !target.getUUID().equals(previous)) {
-            tag.putBoolean(UNUSABLE, true);
+            tag.putBoolean(MULTIPLE_SOURCES, true);
         }
 
         fluid = Mth.clamp(fluid + NEEDLE_DELTA, 0f, DEFAULT_MAX_LOAD);
@@ -301,5 +317,32 @@ public class Syringe extends Item {
         }
 
         return level.getBiome(pos).value().getWaterColor();
+    }
+
+    @Override
+    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+        CompoundTag tag = pStack.getOrCreateTag();
+        boolean multipleSources = tag.getBoolean(MULTIPLE_SOURCES);
+        boolean clotted = DnaUtils.getFrozenItemEffectiveAge(tag, pLevel) > BLOOD_CLOTTING_TIME_DEFAULT;
+
+        if (multipleSources || clotted) {
+            pTooltipComponents.add(
+                    Component.translatable("dna.wildaside.sample_unusable")
+                            .append(Component.literal(": "))
+                            .withStyle(ChatFormatting.RED)
+            );
+
+            if (multipleSources) {
+                pTooltipComponents.add(Component.literal("- ")
+                        .append(Component.translatable("dna.wildaside.multiple_sources"))
+                );
+            }
+
+            if (clotted) {
+                pTooltipComponents.add(Component.literal("- ")
+                        .append(Component.translatable("dna.wildaside.blood_clotted"))
+                );
+            }
+        }
     }
 }

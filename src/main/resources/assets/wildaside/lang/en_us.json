@@ -237,6 +237,10 @@
   "dna.wildaside.alleleA": "Allele A",
   "dna.wildaside.alleleB": "Allele B",
   "dna.wildaside.dominance": "Dominance",
+  "dna.wildaside.sample_unusable": "Sample unusable",
+  "dna.wildaside.blood_clotted": "Blood clotted",
+  "dna.wildaside.blood_dirty": "Blood dirty",
+  "dna.wildaside.multiple_sources": "Multiple sources",
 
   "trait.wildaside.max_health": "Max Health",
   "trait.wildaside.movement_speed": "Movement Speed",

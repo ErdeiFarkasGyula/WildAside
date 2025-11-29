@@ -23,8 +23,10 @@ public class SyringeDataPacket {
     private final long creationTick;
     private final long freezerTicks;
 
+    private final boolean multipleSources;
+
     public SyringeDataPacket(UUID playerId, int slot, float progress, float blood, boolean animating, boolean inwards,
-                             String fluidType, int fluidColor, int dirtiness, long creationTick, long freezerTicks) {
+                             String fluidType, int fluidColor, int dirtiness, long creationTick, long freezerTicks, boolean multipleSources) {
         this.playerId = playerId;
         this.slot = slot;
         this.progress = progress;
@@ -36,6 +38,7 @@ public class SyringeDataPacket {
         this.dirtiness = dirtiness;
         this.creationTick = creationTick;
         this.freezerTicks = freezerTicks;
+        this.multipleSources = multipleSources;
     }
 
     public static SyringeDataPacket decode(FriendlyByteBuf buf) {
@@ -53,7 +56,9 @@ public class SyringeDataPacket {
         long creationTick = buf.readLong();
         long freezerTicks = buf.readLong();
 
-        return new SyringeDataPacket(playerId, slot, progress, blood, animating, inwards, fluidType, fluidColor, dirtiness, creationTick, freezerTicks);
+        boolean multipleSources = buf.readBoolean();
+
+        return new SyringeDataPacket(playerId, slot, progress, blood, animating, inwards, fluidType, fluidColor, dirtiness, creationTick, freezerTicks, multipleSources);
     }
 
     public void encode(FriendlyByteBuf buf) {
@@ -70,6 +75,8 @@ public class SyringeDataPacket {
 
         buf.writeLong(creationTick);
         buf.writeLong(freezerTicks);
+
+        buf.writeBoolean(multipleSources);
     }
 
     public boolean handle(Supplier<NetworkEvent.Context> ctx) {
@@ -93,4 +100,6 @@ public class SyringeDataPacket {
 
     public long getCreationTick() { return creationTick; }
     public long getFreezerTicks() { return freezerTicks; }
+
+    public boolean isMultipleSources() { return multipleSources; }
 }
