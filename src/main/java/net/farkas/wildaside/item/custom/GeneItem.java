@@ -45,17 +45,11 @@ public class GeneItem extends Item {
             tooltip.add(Component.literal("- " + DnaUtils.getFormattedString(gene.getExpressedValue())));
 
             tooltip.add(Component.translatable("dna.wildaside.alleleA").withStyle(ChatFormatting.AQUA));
-            tooltip.add(Component.literal("- ")
-                    .append(Component.translatable("dna.wildaside.dominance"))
-                    .append(Component.literal(": "))
-                    .append(alleleA.getDominance().getComponent()));
+            tooltip.add(Component.literal("- ").append(alleleA.getDominance().getComponent()));
             tooltip.add(Component.literal("- "+ DnaUtils.getFormattedString(alleleA.getValue())));
 
             tooltip.add(Component.translatable("dna.wildaside.alleleB").withStyle(ChatFormatting.AQUA));
-            tooltip.add(Component.literal("- ")
-                    .append(Component.translatable("dna.wildaside.dominance"))
-                    .append(Component.literal(": "))
-                    .append(alleleB.getDominance().getComponent()));
+            tooltip.add(Component.literal("- ").append(alleleB.getDominance().getComponent()));
             tooltip.add(Component.literal("- "+ DnaUtils.getFormattedString(alleleB.getValue())));
         }
     }

@@ -9,7 +9,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.FluidTags;
@@ -154,8 +153,9 @@ public class Syringe extends Item {
         if (progress >= DEFAULT_MAX_LOAD - 0.01f) {
             boolean multipleSources = syringeTag.getBoolean(MULTIPLE_SOURCES);
             boolean clotted = DnaUtils.getFrozenItemEffectiveAge(syringeTag, serverLevel) > BLOOD_CLOTTING_TIME_DEFAULT;
+            boolean dirty = syringeTag.getInt(DIRTINESS) >= 3;
 
-            if (multipleSources || clotted) {
+            if (multipleSources || clotted || dirty) {
                 return fluid;
             }
 
@@ -324,8 +324,9 @@ public class Syringe extends Item {
         CompoundTag tag = pStack.getOrCreateTag();
         boolean multipleSources = tag.getBoolean(MULTIPLE_SOURCES);
         boolean clotted = DnaUtils.getFrozenItemEffectiveAge(tag, pLevel) > BLOOD_CLOTTING_TIME_DEFAULT;
+        boolean dirty = tag.getInt(DIRTINESS) >= 3;
 
-        if (multipleSources || clotted) {
+        if (multipleSources || clotted || dirty) {
             pTooltipComponents.add(
                     Component.translatable("dna.wildaside.sample_unusable")
                             .append(Component.literal(": "))
@@ -341,6 +342,12 @@ public class Syringe extends Item {
             if (clotted) {
                 pTooltipComponents.add(Component.literal("- ")
                         .append(Component.translatable("dna.wildaside.blood_clotted"))
+                );
+            }
+
+            if (dirty) {
+                pTooltipComponents.add(Component.literal("- ")
+                        .append(Component.translatable("dna.wildaside.blood_contaminated"))
                 );
             }
         }
