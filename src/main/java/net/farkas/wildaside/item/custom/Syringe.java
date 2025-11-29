@@ -1,8 +1,6 @@
 package net.farkas.wildaside.item.custom;
-
 import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
-import net.farkas.wildaside.dna.DnaConstants;
 import net.farkas.wildaside.network.NetworkHandler;
 import net.farkas.wildaside.network.packets.SyringeDataPacket;
 import net.minecraft.client.Minecraft;
@@ -10,7 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.Mth;
+import net.minecraft.util.datafix.fixes.CauldronRenameFix;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -22,8 +20,15 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.CauldronBlock;
+import net.minecraft.world.level.block.LayeredCauldronBlock;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.util.Mth;
 
 import java.util.List;
 import java.util.Optional;
@@ -62,26 +67,46 @@ public class Syringe extends Item {
 
         boolean inwards = tag.getBoolean(INWARDS);
         float progress = tag.getFloat(SYRINGE_PROGRESS);
-        float blood = tag.getFloat(BLOOD_LEVEL);
+        float fluid = tag.getFloat(FLUID_LEVEL);
+        String fluidType = tag.getString(FLUID_TYPE);
 
         progress = updateProgress(tag, progress, inwards);
 
         if (inwards) {
-            blood = handleSamplingPhase(player, tag, blood, progress);
+            if (BLOOD.equals(fluidType) || NONE.equals(fluidType)) {
+                fluid = sampleEntity(level, player, tag, fluid);
+            }
+            if (NONE.equals(fluidType) || WATER.equals(fluidType)) {
+                int waterColor = raytraceForWater(level, player, RAYCAST_RANGE);
+                if (waterColor != -1) {
+                    fluid = Mth.clamp(fluid + NEEDLE_DELTA, 0f, DEFAULT_MAX_LOAD);
+                    tag.putString(FLUID_TYPE, WATER);
+                    tag.putInt(FLUID_COLOUR, waterColor);
+                    if (fluid >= 2.5) tag.putInt(DIRTINESS, 0);
+                }
+            }
         } else {
-            blood = handleInjectionPhase(level, player, tag, blood);
+            fluid = Mth.clamp(fluid - NEEDLE_DELTA, 0f, DEFAULT_MAX_LOAD);
+            if (fluid <= 0.01f) {
+                tag.putString(FLUID_TYPE, NONE);
+            }
+            if (BLOOD.equals(fluidType)) {
+                handleDnaHolder(player, tag, fluid, progress);
+            }
         }
 
-        blood = Mth.clamp(blood, 0, DEFAULT_MAX_LOAD);
-        tag.putFloat(BLOOD_LEVEL, blood);
+        tag.putFloat(FLUID_LEVEL, fluid);
 
         NetworkHandler.sendSyringeDataClientSyncPacket(
                 player,
                 player.getInventory().selected,
                 progress,
-                blood,
+                fluid,
                 true,
-                tag.getBoolean(INWARDS)
+                inwards,
+                tag.getString(FLUID_TYPE),
+                tag.getInt(FLUID_COLOUR),
+                tag.getInt(DIRTINESS)
         );
 
         if (progress <= 0f || progress >= DEFAULT_MAX_LOAD) {
@@ -98,10 +123,37 @@ public class Syringe extends Item {
                 player,
                 player.getInventory().selected,
                 tag.getFloat(SYRINGE_PROGRESS),
-                tag.getFloat(BLOOD_LEVEL),
+                tag.getFloat(FLUID_LEVEL),
                 false,
-                tag.getBoolean(INWARDS)
+                tag.getBoolean(INWARDS),
+                tag.getString(FLUID_TYPE),
+                tag.getInt(FLUID_COLOUR),
+                tag.getInt(DIRTINESS)
         );
+    }
+
+    private float handleDnaHolder(ServerPlayer player, CompoundTag syringeTag, float fluid, float progress) {
+        ItemStack offHand = player.getItemInHand(InteractionHand.OFF_HAND);
+        if (!(offHand.getItem() instanceof DnaHolder dnaHolder)) return fluid;
+
+        if (progress == DEFAULT_MAX_LOAD) {
+            DnaImplementation dna = new DnaImplementation();
+            dna.deserializeNBT(syringeTag.getCompound(DNA_DATA));
+
+            if (dna.getSource() == null) return fluid;
+
+            CompoundTag holderTag = offHand.getOrCreateTag();
+            holderTag.put(DNA_DATA, dna.serializeNBT());
+
+            syringeTag.remove(DNA_DATA);
+
+            int newProgress = Mth.clamp(holderTag.getInt(SAMPLE_PROGRESS) + 1, 0, DnaHolder.DEFAULT_MAX_SAMPLES);
+
+            holderTag.putInt(SAMPLE_PROGRESS, newProgress);
+            offHand.setTag(holderTag);
+        }
+
+        return fluid;
     }
 
     public static void handleSyringeProgress(SyringeDataPacket packet) {
@@ -120,7 +172,10 @@ public class Syringe extends Item {
         CompoundTag tag = stack.getOrCreateTag();
         tag.putFloat(SYRINGE_PROGRESS, packet.getProgress());
         tag.putBoolean(INWARDS, packet.isInwards());
-        tag.putFloat(BLOOD_LEVEL, packet.getBlood());
+        tag.putFloat(FLUID_LEVEL, packet.getBlood());
+        tag.putString(FLUID_TYPE, packet.getFluidType());
+        tag.putInt(FLUID_COLOUR, packet.getFluidColor());
+        tag.putInt(DIRTINESS, packet.getDirtiness());
     }
 
     @Override
@@ -135,64 +190,52 @@ public class Syringe extends Item {
 
 
     private void initTagDefaults(CompoundTag tag) {
-        tag.putBoolean(INWARDS, tag.getBoolean(INWARDS));
-        tag.putFloat(BLOOD_LEVEL, tag.getFloat(BLOOD_LEVEL));
+        if (!tag.contains(INWARDS)) tag.putBoolean(INWARDS, true);
+        if (!tag.contains(SYRINGE_PROGRESS)) tag.putFloat(SYRINGE_PROGRESS, 0f);
+        if (!tag.contains(FLUID_LEVEL)) tag.putFloat(FLUID_LEVEL, 0f);
+        if (!tag.contains(FLUID_TYPE)) tag.putString(FLUID_TYPE, NONE);
+        if (!tag.contains(FLUID_COLOUR)) tag.putInt(FLUID_COLOUR, 0);
+        if (!tag.contains(DIRTINESS)) tag.putInt(DIRTINESS, 0);
     }
 
     private float updateProgress(CompoundTag tag, float progress, boolean inwards) {
-        progress += inwards ? NEEDLE_DELTA : -NEEDLE_DELTA;
+        progress += inwards ? -NEEDLE_DELTA : NEEDLE_DELTA;
         progress = Mth.clamp(progress, 0f, DEFAULT_MAX_LOAD);
         tag.putFloat(SYRINGE_PROGRESS, progress);
 
-        if (progress >= DEFAULT_MAX_LOAD) tag.putBoolean(INWARDS, false);
-        if (progress <= 0f) tag.putBoolean(INWARDS, true);
+        if (progress >= DEFAULT_MAX_LOAD) tag.putBoolean(INWARDS, true);
+        if (progress <= 0f) tag.putBoolean(INWARDS, false);
 
         return progress;
     }
 
-    private float handleSamplingPhase(ServerPlayer player, CompoundTag syringeTag, float blood, float progress) {
-        blood -= NEEDLE_DELTA;
-
-        ItemStack offHand = player.getItemInHand(InteractionHand.OFF_HAND);
-        if (!(offHand.getItem() instanceof DnaHolder dnaHolder)) return blood;
-
-        if (progress == DEFAULT_MAX_LOAD) {
-            DnaImplementation dna = new DnaImplementation();
-            dna.deserializeNBT(syringeTag.getCompound(DNA_DATA));
-
-            if (dna.getSource() == null) return blood;
-
-            CompoundTag holderTag = offHand.getOrCreateTag();
-            holderTag.put(DNA_DATA, dna.serializeNBT());
-
-            syringeTag.remove(DNA_DATA);
-
-            int newProgress = Mth.clamp(holderTag.getInt(SAMPLE_PROGRESS) + 1, 0, DnaHolder.DEFAULT_MAX_SAMPLES);
-
-            holderTag.putInt(SAMPLE_PROGRESS, newProgress);
-            offHand.setTag(holderTag);
-        }
-
-        return blood;
-    }
-
-    private float handleInjectionPhase(Level level, ServerPlayer player, CompoundTag tag, float blood) {
+    private float sampleEntity(Level level, ServerPlayer player, CompoundTag tag, float fluid) {
         LivingEntity target = raytraceLiving(level, player, RAYCAST_RANGE);
-        if (target == null) return blood;
+        if (target == null) return fluid;
 
         UUID previous = tag.contains(PREVIOUS_TARGET) ? tag.getUUID(PREVIOUS_TARGET) : null;
         if (previous != null && !target.getUUID().equals(previous)) {
             tag.putBoolean(UNUSABLE, true);
         }
 
-        if (blood > 2.5f) {
+        fluid = Mth.clamp(fluid + NEEDLE_DELTA, 0f, DEFAULT_MAX_LOAD);
+        tag.putString(FLUID_TYPE, BLOOD);
+        tag.putInt(FLUID_COLOUR, DEFAULT_BLOOD_COLOR);
+
+        if (fluid >= DEFAULT_MAX_LOAD) {
+            int dirt = tag.getInt(DIRTINESS);
+            dirt = Mth.clamp(dirt + 1, 0, 3);
+            tag.putInt(DIRTINESS, dirt);
+        }
+
+        if (fluid > 2.5f) {
             target.getCapability(DnaCapability.INSTANCE).ifPresent(dna ->
                     tag.put(DNA_DATA, dna.serializeNBT())
             );
         }
 
         tag.putUUID(PREVIOUS_TARGET, target.getUUID());
-        return blood + NEEDLE_DELTA;
+        return fluid;
     }
 
     private LivingEntity raytraceLiving(Level level, Player player, double range) {
@@ -208,7 +251,6 @@ public class Syringe extends Item {
         for (Entity e : entities) {
             AABB bb = e.getBoundingBox().inflate(0.3);
             Optional<Vec3> hit = bb.clip(start, end);
-
             if (hit.isPresent()) {
                 double dist = hit.get().distanceTo(start);
                 if (dist < closest) {
@@ -226,13 +268,25 @@ public class Syringe extends Item {
                 player.getEyePosition(),
                 player.getEyePosition().add(player.getViewVector(1f).scale(range)),
                 ClipContext.Block.OUTLINE,
-                ClipContext.Fluid.WATER,
+                ClipContext.Fluid.ANY,
                 player
         );
 
-        BlockPos pos = level.clip(ctx).getBlockPos();
-        return level.getFluidState(pos).is(FluidTags.WATER) || level.getBlockState(pos).is(Blocks.WATER)
-                ? level.getBiome(pos).get().getWaterColor()
-                : 0;
+        BlockHitResult res = level.clip(ctx);
+        if (res == null) return -1;
+
+        BlockPos pos = res.getBlockPos();
+        FluidState fs = level.getFluidState(pos);
+        boolean isFluidWater = fs.is(FluidTags.WATER);
+
+        boolean isCauldron = level.getBlockState(pos).getBlock() instanceof LayeredCauldronBlock;
+        if (!isFluidWater && !isCauldron) return -1;
+
+        if (isCauldron) {
+            int levelValue = level.getBlockState(pos).getValue(LayeredCauldronBlock.LEVEL);
+            if (levelValue <= 0) return -1;
+        }
+
+        return level.getBiome(pos).value().getWaterColor();
     }
 }

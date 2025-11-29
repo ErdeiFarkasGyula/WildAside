@@ -5,7 +5,6 @@ import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.ModBlockEntities;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.client.ModKeyMappings;
-import net.farkas.wildaside.dna.DnaConstants;
 import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.entity.client.ModModelLayers;
 import net.farkas.wildaside.entity.client.hickory.HickoryTreantRenderer;
@@ -112,19 +111,37 @@ public class ModEventBusClientEvents {
         }, ModItems.DNA_HOLDER.get());
 
         event.getItemColors().register((stack, tintIndex) -> {
-            if (tintIndex != 0) return 0xFFFFFF;
-
-            if (!stack.hasTag()) return 0xFFFFFF;
+            if (!stack.hasTag()) {
+                if (tintIndex == 2) return 0xFFFFFF;
+                return 0xFFFFFF;
+            }
             CompoundTag tag = stack.getTag();
 
-            float level = tag.contains(BLOOD_LEVEL) ? tag.getFloat(BLOOD_LEVEL) : 0f;
+            if (tintIndex == 0) {
+                float level = tag.contains(FLUID_LEVEL) ? tag.getFloat(FLUID_LEVEL) : 0f;
+                if (level <= 0.01f) return 0xFFFFFF;
 
-            if (level <= 0.01f) return 0xFFFFFF;
+                String fluidType = tag.contains(FLUID_TYPE) ? tag.getString(FLUID_TYPE) : NONE;
+                int baseColor = Syringe.DEFAULT_BLOOD_COLOR;
+                if (WATER.equals(fluidType)) {
+                    baseColor = tag.contains(FLUID_COLOUR) ? tag.getInt(FLUID_COLOUR) : 0x3F76E4;
+                }
 
-            int baseColor = Syringe.DEFAULT_BLOOD_COLOR;
+                int alpha = (int)(255 * Mth.clamp(level / (float) Syringe.DEFAULT_MAX_LOAD, 0f, 1f));
+                return (alpha << 24) | (baseColor & 0xFFFFFF);
+            }
 
-            int alpha = (int)(255 * Mth.clamp(level, 0f, 1f));
-            return (alpha << 24) | (baseColor & 0xFFFFFF);
+            if (tintIndex == 2) {
+                int dirt = tag.contains(DIRTINESS) ? tag.getInt(DIRTINESS) : 0;
+                if (dirt < 3) return 0xFFFFFF;
+
+                int dirtColor = 0x7A5228;
+                float factor = Mth.clamp(dirt / 3.0f, 0f, 1f);
+                int alpha = (int) (255 * factor);
+                return (alpha << 24) | (dirtColor & 0xFFFFFF);
+            }
+
+            return 0xFFFFFF;
 
         }, ModItems.SYRINGE.get());
     }

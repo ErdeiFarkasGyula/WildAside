@@ -45,10 +45,14 @@ public class DnaConstants {
     public static final String SYRINGE_PROGRESS = "syringe_progress";
     public static final String INWARDS = "inwards";
 
-    public static final String BLOOD_LEVEL = "blood_level";
-    public static final String WATER_LEVEL = "blood_level";
-    public static final String BLOOD_COLOUR = "blood_colour";
-    public static final String WATER_COLOUR = "blood_colour";
+    public static final String FLUID_LEVEL = "fluid_level";
+    public static final String DIRTINESS = "dirtiness";
+    public static final String FLUID_COLOUR = "fluid_colour";
+    public static final String FLUID_TYPE = "fluid_type";
+
+    public static final String NONE = "none";
+    public static final String WATER = "water";
+    public static final String BLOOD = "blood";
 
     public static final String TARGET = "target";
     public static final String PREVIOUS_TARGET = "previous_target";

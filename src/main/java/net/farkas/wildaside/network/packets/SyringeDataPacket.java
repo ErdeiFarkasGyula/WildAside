@@ -1,5 +1,6 @@
 package net.farkas.wildaside.network.packets;
 
+import net.farkas.wildaside.dna.DnaConstants;
 import net.farkas.wildaside.item.custom.Syringe;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
@@ -15,13 +16,20 @@ public class SyringeDataPacket {
     private final boolean animating;
     private final boolean inwards;
 
-    public SyringeDataPacket(UUID playerId, int slot, float progress, float blood, boolean animating, boolean inwards) {
+    private final String fluidType;
+    private final int fluidColor;
+    private final int dirtiness;
+
+    public SyringeDataPacket(UUID playerId, int slot, float progress, float blood, boolean animating, boolean inwards, String fluidType, int fluidColor, int dirtiness) {
         this.playerId = playerId;
         this.slot = slot;
         this.progress = progress;
         this.blood = blood;
         this.animating = animating;
         this.inwards = inwards;
+        this.fluidType = fluidType;
+        this.fluidColor = fluidColor;
+        this.dirtiness = dirtiness;
     }
 
     public static SyringeDataPacket decode(FriendlyByteBuf buf) {
@@ -32,7 +40,11 @@ public class SyringeDataPacket {
         boolean animating = buf.readBoolean();
         boolean inwards = buf.readBoolean();
 
-        return new SyringeDataPacket(playerId, slot, progress, blood, animating, inwards);
+        String fluidType = buf.readUtf(32767);
+        int fluidColor = buf.readInt();
+        int dirtiness = buf.readInt();
+
+        return new SyringeDataPacket(playerId, slot, progress, blood, animating, inwards, fluidType, fluidColor, dirtiness);
     }
 
     public void encode(FriendlyByteBuf buf) {
@@ -42,6 +54,10 @@ public class SyringeDataPacket {
         buf.writeFloat(blood);
         buf.writeBoolean(animating);
         buf.writeBoolean(inwards);
+
+        buf.writeUtf(fluidType == null ? DnaConstants.NONE : fluidType);
+        buf.writeInt(fluidColor);
+        buf.writeInt(dirtiness);
     }
 
     public boolean handle(Supplier<NetworkEvent.Context> ctx) {
@@ -58,4 +74,8 @@ public class SyringeDataPacket {
     public float getBlood() { return blood; }
     public boolean isAnimating() { return animating; }
     public boolean isInwards() { return inwards; }
+
+    public String getFluidType() { return fluidType; }
+    public int getFluidColor() { return fluidColor; }
+    public int getDirtiness() { return dirtiness; }
 }

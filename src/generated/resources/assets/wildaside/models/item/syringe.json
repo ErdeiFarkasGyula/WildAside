@@ -2,65 +2,65 @@
   "parent": "minecraft:item/generated",
   "overrides": [
     {
-      "model": "wildaside:item/syringe_needle0_blood0",
+      "model": "wildaside:item/syringe_needle0_fluid0",
       "predicate": {
-        "wildaside:blood_level": 0.0,
+        "wildaside:fluid_level": 0.0,
         "wildaside:syringe_progress": 0.0
       }
     },
     {
-      "model": "wildaside:item/syringe_needle0_blood1",
+      "model": "wildaside:item/syringe_needle0_fluid1",
       "predicate": {
-        "wildaside:blood_level": 0.33333334,
+        "wildaside:fluid_level": 0.33333334,
         "wildaside:syringe_progress": 0.0
       }
     },
     {
-      "model": "wildaside:item/syringe_needle0_blood2",
+      "model": "wildaside:item/syringe_needle0_fluid2",
       "predicate": {
-        "wildaside:blood_level": 0.6666667,
+        "wildaside:fluid_level": 0.6666667,
         "wildaside:syringe_progress": 0.0
       }
     },
     {
-      "model": "wildaside:item/syringe_needle1_blood0",
+      "model": "wildaside:item/syringe_needle1_fluid0",
       "predicate": {
-        "wildaside:blood_level": 0.0,
+        "wildaside:fluid_level": 0.0,
         "wildaside:syringe_progress": 0.33333334
       }
     },
     {
-      "model": "wildaside:item/syringe_needle1_blood1",
+      "model": "wildaside:item/syringe_needle1_fluid1",
       "predicate": {
-        "wildaside:blood_level": 0.33333334,
+        "wildaside:fluid_level": 0.33333334,
         "wildaside:syringe_progress": 0.33333334
       }
     },
     {
-      "model": "wildaside:item/syringe_needle1_blood2",
+      "model": "wildaside:item/syringe_needle1_fluid2",
       "predicate": {
-        "wildaside:blood_level": 0.6666667,
+        "wildaside:fluid_level": 0.6666667,
         "wildaside:syringe_progress": 0.33333334
       }
     },
     {
-      "model": "wildaside:item/syringe_needle2_blood0",
+      "model": "wildaside:item/syringe_needle2_fluid0",
       "predicate": {
-        "wildaside:blood_level": 0.0,
+        "wildaside:fluid_level": 0.0,
         "wildaside:syringe_progress": 0.6666667
       }
     },
     {
-      "model": "wildaside:item/syringe_needle2_blood1",
+      "model": "wildaside:item/syringe_needle2_fluid1",
       "predicate": {
-        "wildaside:blood_level": 0.33333334,
+        "wildaside:fluid_level": 0.33333334,
         "wildaside:syringe_progress": 0.6666667
       }
     },
     {
-      "model": "wildaside:item/syringe_needle2_blood2",
+      "model": "wildaside:item/syringe_needle2_fluid2",
       "predicate": {
-        "wildaside:blood_level": 0.6666667,
+        "wildaside:fluid_level": 0.6666667,
         "wildaside:syringe_progress": 0.6666667
       }
     }

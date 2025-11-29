@@ -4,7 +4,6 @@ import com.mojang.logging.LogUtils;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.ModBlockEntities;
 import net.farkas.wildaside.config.ModConfig;
-import net.farkas.wildaside.dna.DnaConstants;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.enchantment.ModEnchantments;
 import net.farkas.wildaside.entity.ModEntities;
@@ -240,10 +239,10 @@ public class WildAside
 
             ItemProperties.register(
                     ModItems.SYRINGE.get(),
-                    new ResourceLocation(WildAside.MOD_ID, BLOOD_LEVEL),
+                    new ResourceLocation(WildAside.MOD_ID, FLUID_LEVEL),
                     (stack, level, entity, seed) -> {
                         if (!stack.hasTag()) return 0f;
-                        float p = stack.getTag().getFloat(BLOOD_LEVEL);
+                        float p = stack.getTag().getFloat(FLUID_LEVEL);
                         return Mth.clamp(p / Syringe.DEFAULT_MAX_LOAD, 0f, 1f);
                     }
             );

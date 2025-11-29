@@ -3,6 +3,7 @@
   "textures": {
     "layer0": "wildaside:item/syringe_fill_1",
     "layer1": "wildaside:item/syringe_needle_0",
-    "layer2": "wildaside:item/syringe_base"
+    "layer2": "wildaside:item/syringe_tip",
+    "layer3": "wildaside:item/syringe_base"
   }
 }

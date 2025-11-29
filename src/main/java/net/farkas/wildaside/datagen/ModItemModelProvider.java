@@ -237,13 +237,14 @@ public class ModItemModelProvider extends ItemModelProvider {
         int max = Syringe.DEFAULT_MAX_LOAD;
 
         for (int needle = 0; needle < max; needle++) {
-            for (int blood = 0; blood < max; blood++) {
+            for (int fluid = 0; fluid < max; fluid++) {
 
-                getBuilder(baseName + "_needle" + needle + "_blood" + blood)
+                getBuilder(baseName + "_needle" + needle + "_fluid" + fluid)
                         .parent(getExistingFile(mcLoc("item/generated")))
-                        .texture("layer0", WildAside.MOD_ID + ":item/" + baseName + "_fill_" + blood)
+                        .texture("layer0", WildAside.MOD_ID + ":item/" + baseName + "_fill_" + fluid)
                         .texture("layer1", WildAside.MOD_ID + ":item/" + baseName + "_needle_" + needle)
-                        .texture("layer2", WildAside.MOD_ID + ":item/" + baseName + "_base");
+                        .texture("layer2", WildAside.MOD_ID + ":item/" + baseName + "_tip")
+                        .texture("layer3", WildAside.MOD_ID + ":item/" + baseName + "_base");
             }
         }
 
@@ -254,13 +255,13 @@ public class ModItemModelProvider extends ItemModelProvider {
         for (int needle = 0; needle < max; needle++) {
             float needleVal = needle / (float) max;
 
-            for (int blood = 0; blood < max; blood++) {
-                float bloodVal = blood / (float) max;
+            for (int fluid = 0; fluid < max; fluid++) {
+                float fluidVal = fluid / (float) max;
 
                 builder.override()
                        .predicate(new ResourceLocation(WildAside.MOD_ID, SYRINGE_PROGRESS), needleVal)
-                       .predicate(new ResourceLocation(WildAside.MOD_ID, BLOOD_LEVEL), bloodVal)
-                       .model(getExistingFile(modLoc("item/" + baseName + "_needle" + needle + "_blood" + blood)))
+                       .predicate(new ResourceLocation(WildAside.MOD_ID, FLUID_LEVEL), fluidVal)
+                       .model(getExistingFile(modLoc("item/" + baseName + "_needle" + needle + "_fluid" + fluid)))
                        .end();
             }
         }
