@@ -1,6 +1,9 @@
 package net.farkas.wildaside.dna;
 
 public class DnaConstants {
+    public static final long BLOOD_CLOTTING_TIME_DEFAULT = 60 * 20;
+    public static final long BLOOD_CLOTTING_TIME_WITH_AGENT = 600 * 20;
+
     public static final String ID = "id";
 
     public static final String ALLELE = "allele";
@@ -53,6 +56,9 @@ public class DnaConstants {
     public static final String NONE = "none";
     public static final String WATER = "water";
     public static final String BLOOD = "blood";
+
+    public static final String BLOOD_CREATION_TICK = "blood_creation_tick";
+    public static final String BLOOD_BIOFREEZER_TICK = "blood_freezer_tick";
 
     public static final String TARGET = "target";
     public static final String PREVIOUS_TARGET = "previous_target";

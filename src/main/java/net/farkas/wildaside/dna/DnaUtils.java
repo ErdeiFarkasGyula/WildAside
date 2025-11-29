@@ -10,6 +10,7 @@ import net.farkas.wildaside.dna.speed.MobSpeedTesting;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitType;
 import net.farkas.wildaside.dna.trait.Traits;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.Mth;
@@ -20,10 +21,13 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+
+import static net.farkas.wildaside.dna.DnaConstants.*;
 
 public class DnaUtils {
     public static final String DNA_PREFIX = WildAside.MOD_ID + "_dna_";
@@ -37,7 +41,7 @@ public class DnaUtils {
     }
 
     public static UUID generateUuid(String name) {
-        return UUID.nameUUIDFromBytes(name.getBytes(StandardCharsets.UTF_8));
+        return java.util.UUID.nameUUIDFromBytes(name.getBytes(StandardCharsets.UTF_8));
     }
 
     public static float getStableAttributeValue(LivingEntity entity, Attribute attribute) {
@@ -254,5 +258,49 @@ public class DnaUtils {
 
     public static String getFormattedString(float value) {
         return String.format("%.2f", value);
+    }
+
+    public static long getBloodSamplingTime(CompoundTag tag) {
+        return tag.getLong(BLOOD_CREATION_TICK);
+    }
+
+    public static void setBloodSamplingTime(CompoundTag tag, long value) {
+        tag.putLong(BLOOD_CREATION_TICK, value);
+    }
+
+    public static void resetBloodSamplingTime(CompoundTag tag) {
+        setBloodSamplingTime(tag, 0);
+    }
+
+    public static void saveBloodSamplingTime(CompoundTag tag, Level level) {
+        setBloodSamplingTime(tag, level.getGameTime());
+    }
+
+    public static long getBloodFreezerTicks(CompoundTag tag) {
+        return tag.getLong(BLOOD_BIOFREEZER_TICK);
+    }
+
+    public static void setBloodFreezerTicks(CompoundTag tag, long value) {
+        tag.putLong(BLOOD_BIOFREEZER_TICK, value);
+    }
+
+    public static void increaseBloodFreezerTicks(CompoundTag tag, long value) {
+        setBloodFreezerTicks(tag, getBloodFreezerTicks(tag) + value);
+    }
+
+    public static void resetBloodFreezerTicks(CompoundTag tag) {
+        setBloodFreezerTicks(tag, 0);
+    }
+
+    public static long getFrozenItemAge(CompoundTag tag, Level level) {
+        long currentTime = level.getGameTime();
+        long creationTime = getBloodSamplingTime(tag);
+        long freezerTicks = getBloodFreezerTicks(tag);
+
+        if (creationTime == 0) {
+            return 0;
+        }
+
+        return currentTime - creationTime - freezerTicks;
     }
 }

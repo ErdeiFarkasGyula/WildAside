@@ -1,6 +1,7 @@
 package net.farkas.wildaside.item.custom;
 import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
+import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.network.NetworkHandler;
 import net.farkas.wildaside.network.packets.SyringeDataPacket;
 import net.minecraft.client.Minecraft;
@@ -92,6 +93,8 @@ public class Syringe extends Item {
             }
             if (fluid <= 0.01f) {
                 tag.putString(FLUID_TYPE, NONE);
+                DnaUtils.resetBloodSamplingTime(tag);
+                DnaUtils.resetBloodFreezerTicks(tag);
             }
         }
 
@@ -222,13 +225,12 @@ public class Syringe extends Item {
         tag.putString(FLUID_TYPE, BLOOD);
         tag.putInt(FLUID_COLOUR, DEFAULT_BLOOD_COLOR);
 
-        if (fluid >= DEFAULT_MAX_LOAD) {
+        if (fluid > DEFAULT_MAX_LOAD - 0.1f) {
+            DnaUtils.saveBloodSamplingTime(tag, level);
+
             int dirt = tag.getInt(DIRTINESS);
             dirt = Mth.clamp(dirt + 1, 0, 3);
             tag.putInt(DIRTINESS, dirt);
-        }
-
-        if (fluid > 2.5f) {
             target.getCapability(DnaCapability.INSTANCE).ifPresent(dna ->
                     tag.put(DNA_DATA, dna.serializeNBT())
             );

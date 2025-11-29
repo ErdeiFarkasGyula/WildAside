@@ -1,13 +1,12 @@
 package net.farkas.wildaside.block.entity;
 
-import net.farkas.wildaside.item.ModItems;
+import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.screen.biofreezer.BiofreezerMenu;
 import net.farkas.wildaside.util.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Mth;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
@@ -16,7 +15,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -28,8 +26,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class BiofreezerBlockEntity extends BlockEntity implements MenuProvider {
-    public static final String BIOFREEZER_TICKS = "biofreezer_ticks";
-
     private final ItemStackHandler itemHandler = new ItemStackHandler(90);
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
@@ -78,12 +74,20 @@ public class BiofreezerBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     public void tick() {
-        for (int i = 0; i < itemHandler.getSlots(); i++) {
-            ItemStack stack = itemHandler.getStackInSlot(i);
-            if (stack.is(ModTags.Items.BIOFREEZER_ITEMS)) {
-                CompoundTag tag = stack.getOrCreateTag();
-                int biofreezerTicks = tag.getInt(BIOFREEZER_TICKS);
-                tag.putInt(BIOFREEZER_TICKS, ++biofreezerTicks);
+        if (level == null) return;
+
+        if (level.getGameTime() % 20 == 0) {
+            for (int i = 0; i < itemHandler.getSlots(); i++) {
+                ItemStack stack = itemHandler.getStackInSlot(i);
+                if (stack.is(ModTags.Items.BIOFREEZER_ITEMS)) {
+                    CompoundTag tag = stack.getOrCreateTag();
+
+                    if (DnaUtils.getBloodSamplingTime(tag) > 0) {
+                        DnaUtils.increaseBloodFreezerTicks(tag, 20);
+                    }
+
+                    stack.setTag(tag);
+                }
             }
         }
     }
