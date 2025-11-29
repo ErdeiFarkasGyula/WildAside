@@ -6,8 +6,10 @@ import net.farkas.wildaside.dna.DnaConstants;
 import net.farkas.wildaside.network.NetworkHandler;
 import net.farkas.wildaside.network.packets.SyringeDataPacket;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -17,7 +19,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -185,5 +189,24 @@ public class Syringe extends Item {
         }
 
         return found;
+    }
+
+    private int raytraceForWater(Level level, Player player, double range) {
+        ClipContext clipContext = new ClipContext(player.getEyePosition(1f),
+                player.getEyePosition(1f).add(player.getViewVector(1f).scale(range)),
+                ClipContext.Block.OUTLINE,
+                ClipContext.Fluid.WATER,
+                player);
+
+        BlockPos blockPos = level.clip(clipContext).getBlockPos();
+        System.out.println(level.getBlockState(blockPos).getBlock());
+        System.out.println(level.getFluidState(blockPos).is(FluidTags.WATER));
+        System.out.println(level.getBlockState(blockPos).is(Blocks.WATER));
+        System.out.println(level.getBiome(blockPos).get().getWaterColor());
+
+        System.out.println(level.getFluidState(blockPos).is(FluidTags.WATER) || level.getBlockState(blockPos).is(Blocks.WATER)
+                ? level.getBiome(blockPos).get().getWaterColor() : 0);
+        return level.getFluidState(blockPos).is(FluidTags.WATER) || level.getBlockState(blockPos).is(Blocks.WATER)
+                ? level.getBiome(blockPos).get().getWaterColor() : 0;
     }
 }

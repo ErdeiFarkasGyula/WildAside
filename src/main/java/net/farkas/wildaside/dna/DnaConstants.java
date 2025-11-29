@@ -46,7 +46,9 @@ public class DnaConstants {
     public static final String INWARDS = "inwards";
 
     public static final String BLOOD_LEVEL = "blood_level";
+    public static final String WATER_LEVEL = "blood_level";
     public static final String BLOOD_COLOUR = "blood_colour";
+    public static final String WATER_COLOUR = "blood_colour";
 
     public static final String TARGET = "target";
     public static final String PREVIOUS_TARGET = "previous_target";
