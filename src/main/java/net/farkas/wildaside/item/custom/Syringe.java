@@ -9,7 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.datafix.fixes.CauldronRenameFix;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -20,13 +19,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.block.CauldronBlock;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.util.Mth;
@@ -89,7 +84,7 @@ public class Syringe extends Item {
         } else {
             fluid = Mth.clamp(fluid - NEEDLE_DELTA, 0f, DEFAULT_MAX_LOAD);
             if (BLOOD.equals(fluidType)) {
-                handleDnaHolder(player, tag, fluid, progress);
+                handleDnaHolderInteraction(player, tag, fluid, progress);
             }
             if (fluid <= 0.01f) {
                 tag.putString(FLUID_TYPE, NONE);
@@ -135,9 +130,9 @@ public class Syringe extends Item {
         );
     }
 
-    private float handleDnaHolder(ServerPlayer player, CompoundTag syringeTag, float fluid, float progress) {
-        ItemStack offHand = player.getItemInHand(InteractionHand.OFF_HAND);
-        if (!(offHand.getItem() instanceof DnaHolder dnaHolder)) return fluid;
+    private float handleDnaHolderInteraction(ServerPlayer player, CompoundTag syringeTag, float fluid, float progress) {
+        ItemStack offHandStack = player.getItemInHand(InteractionHand.OFF_HAND);
+        if (!(offHandStack.getItem() instanceof DnaHolder dnaHolder)) return fluid;
 
         if (progress >= DEFAULT_MAX_LOAD - 0.01f) {
             DnaImplementation dna = new DnaImplementation();
@@ -145,7 +140,7 @@ public class Syringe extends Item {
 
             if (dna.getSource() == null) return fluid;
 
-            CompoundTag holderTag = offHand.getOrCreateTag();
+            CompoundTag holderTag = offHandStack.getOrCreateTag();
             holderTag.put(DNA_DATA, dna.serializeNBT());
 
             syringeTag.remove(DNA_DATA);
@@ -153,7 +148,11 @@ public class Syringe extends Item {
             int newProgress = Mth.clamp(holderTag.getInt(SAMPLE_PROGRESS) + 1, 0, DnaHolder.DEFAULT_MAX_SAMPLES);
 
             holderTag.putInt(SAMPLE_PROGRESS, newProgress);
-            offHand.setTag(holderTag);
+
+            DnaUtils.resetBloodFreezerTicks(holderTag);
+            DnaUtils.saveBloodSamplingTime(holderTag, player.level());
+
+            offHandStack.setTag(holderTag);
         }
 
         return fluid;
