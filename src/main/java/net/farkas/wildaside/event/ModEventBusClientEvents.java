@@ -135,7 +135,7 @@ public class ModEventBusClientEvents {
                 int dirt = tag.contains(DIRTINESS) ? tag.getInt(DIRTINESS) : 0;
                 if (dirt < 3) return 0xFFFFFF;
 
-                int dirtColor = 0x7A5228;
+                int dirtColor = 0x8a4e34;
                 float factor = Mth.clamp(dirt / 3.0f, 0f, 1f);
                 int alpha = (int) (255 * factor);
                 return (alpha << 24) | (dirtColor & 0xFFFFFF);
