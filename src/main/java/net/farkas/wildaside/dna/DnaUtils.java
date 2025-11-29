@@ -100,9 +100,6 @@ public class DnaUtils {
             if (trait.getTraitType() == TraitType.CORE || trait == Traits.KNOCKBACK_RESISTANCE) {
                 Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(DnaUtils.getAttributeRes(trait.getName()));
                 if (attribute != null) {
-                    if (trait == Traits.KNOCKBACK_RESISTANCE) {
-                        System.out.println("Real");
-                    }
                     float baseValue = DnaUtils.getAttributeValue(entity, attribute);
 
                     if (trait == Traits.MOVEMENT_SPEED && ModConfig.ACCURATE_DNA_MOVEMENT_SPEEDS.get() && !preGen) {
