@@ -70,7 +70,26 @@ public class Syringe extends Item {
         if (progress >= DEFAULT_MAX_LOAD) tag.putBoolean(INWARDS, false);
         if (progress <= 0f) tag.putBoolean(INWARDS, true);
 
-        if (!inwards) {
+        if (inwards) {
+            blood -= NEEDLE_DELTA;
+            ItemStack offHandStack = player.getItemInHand(InteractionHand.OFF_HAND);
+            if (offHandStack.getItem() instanceof DnaHolder dnaHolder) {
+                if (progress == 3.0f) {
+                    DnaImplementation dnaImplementation = new DnaImplementation();
+                    dnaImplementation.deserializeNBT(tag.getCompound(DNA_DATA));
+                    if (dnaImplementation.getSource() == null) return;
+
+                    CompoundTag holderTag = offHandStack.getOrCreateTag();
+                    holderTag.put(DNA_DATA, dnaImplementation.serializeNBT());
+
+                    tag.remove(DNA_DATA);
+
+                    int newSampleProgress = Mth.clamp(holderTag.getInt(SAMPLE_PROGRESS) + 1, 0, DnaHolder.DEFAULT_MAX_SAMPLES);
+                    holderTag.putInt(SAMPLE_PROGRESS, newSampleProgress);
+                    offHandStack.setTag(holderTag);
+                }
+            }
+        } else {
             LivingEntity target = raytraceLiving(level, player, RAYCAST_RANGE);
             if (target != null) {
                 UUID previousTargetUuid = target.getUUID();
@@ -82,30 +101,14 @@ public class Syringe extends Item {
                     tag.putBoolean(UNUSABLE, true);
                 }
 
-                target.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-                    tag.put(DNA_DATA, dna.serializeNBT());
-                });
+                if (blood > 2.5f) {
+                    target.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
+                        tag.put(DNA_DATA, dna.serializeNBT());
+                    });
+                }
 
                 tag.putUUID(PREVIOUS_TARGET, target.getUUID());
                 blood += NEEDLE_DELTA;
-            }
-        } else {
-            blood -= NEEDLE_DELTA;
-            ItemStack offHandStack = player.getItemInHand(InteractionHand.OFF_HAND);
-            if (offHandStack.getItem() instanceof DnaHolder dnaHolder) {
-                if (progress == 3.0f) {
-                    DnaImplementation dnaImplementation = new DnaImplementation();
-                    dnaImplementation.deserializeNBT(tag.getCompound(DNA_DATA));
-                    if (dnaImplementation.getSource() == null) {
-                        return;
-                    }
-
-                    CompoundTag holderTag = offHandStack.getOrCreateTag();
-                    holderTag.put(DNA_DATA, dnaImplementation.serializeNBT());
-                    int newSampleProgress = Mth.clamp(holderTag.getInt(SAMPLE_PROGRESS) + 1, 0, DnaHolder.DEFAULT_MAX_SAMPLES);
-                    holderTag.putInt(SAMPLE_PROGRESS, newSampleProgress);
-                    offHandStack.setTag(holderTag);
-                }
             }
         }
 
