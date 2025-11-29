@@ -12,6 +12,7 @@ import net.farkas.wildaside.dna.trait.TraitType;
 import net.farkas.wildaside.dna.trait.Traits;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
@@ -272,7 +273,7 @@ public class DnaUtils {
         setBloodSamplingTime(tag, 0);
     }
 
-    public static void saveBloodSamplingTime(CompoundTag tag, Level level) {
+    public static void saveBloodSamplingTime(CompoundTag tag, ServerLevel level) {
         setBloodSamplingTime(tag, level.getGameTime());
     }
 
@@ -292,7 +293,7 @@ public class DnaUtils {
         setBloodFreezerTicks(tag, 0);
     }
 
-    public static long getFrozenItemAge(CompoundTag tag, Level level) {
+    public static long getFrozenItemEffectiveAge(CompoundTag tag, ServerLevel level) {
         long currentTime = level.getGameTime();
         long creationTime = getBloodSamplingTime(tag);
         long freezerTicks = getBloodFreezerTicks(tag);

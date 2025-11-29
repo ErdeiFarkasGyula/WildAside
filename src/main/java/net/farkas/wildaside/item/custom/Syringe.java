@@ -7,6 +7,7 @@ import net.farkas.wildaside.network.packets.SyringeDataPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
@@ -57,6 +58,7 @@ public class Syringe extends Item {
     @Override
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int useRemaining) {
         if (!(entity instanceof ServerPlayer player)) return;
+        ServerLevel serverLevel = player.serverLevel();
 
         CompoundTag tag = stack.getOrCreateTag();
         initTagDefaults(tag);
@@ -70,10 +72,10 @@ public class Syringe extends Item {
 
         if (inwards) {
             if (BLOOD.equals(fluidType) || NONE.equals(fluidType)) {
-                fluid = sampleEntity(level, player, tag, fluid);
+                fluid = sampleEntity(serverLevel, player, tag, fluid);
             }
             if (NONE.equals(fluidType) || WATER.equals(fluidType)) {
-                int waterColor = raytraceForWater(level, player, RAYCAST_RANGE);
+                int waterColor = raytraceForWater(serverLevel, player, RAYCAST_RANGE);
                 if (waterColor != -1) {
                     fluid = Mth.clamp(fluid + NEEDLE_DELTA, 0f, DEFAULT_MAX_LOAD);
                     tag.putString(FLUID_TYPE, WATER);
@@ -131,6 +133,8 @@ public class Syringe extends Item {
     }
 
     private float handleDnaHolderInteraction(ServerPlayer player, CompoundTag syringeTag, float fluid, float progress) {
+        ServerLevel serverLevel = player.serverLevel();
+
         ItemStack offHandStack = player.getItemInHand(InteractionHand.OFF_HAND);
         if (!(offHandStack.getItem() instanceof DnaHolder dnaHolder)) return fluid;
 
@@ -150,7 +154,7 @@ public class Syringe extends Item {
             holderTag.putInt(SAMPLE_PROGRESS, newProgress);
 
             DnaUtils.resetBloodFreezerTicks(holderTag);
-            DnaUtils.saveBloodSamplingTime(holderTag, player.level());
+            DnaUtils.saveBloodSamplingTime(holderTag, serverLevel);
 
             offHandStack.setTag(holderTag);
         }
@@ -211,8 +215,8 @@ public class Syringe extends Item {
         return progress;
     }
 
-    private float sampleEntity(Level level, ServerPlayer player, CompoundTag tag, float fluid) {
-        LivingEntity target = raytraceLiving(level, player, RAYCAST_RANGE);
+    private float sampleEntity(ServerLevel serverLevel, ServerPlayer player, CompoundTag tag, float fluid) {
+        LivingEntity target = raytraceLiving(serverLevel, player, RAYCAST_RANGE);
         if (target == null) return fluid;
 
         UUID previous = tag.contains(PREVIOUS_TARGET) ? tag.getUUID(PREVIOUS_TARGET) : null;
@@ -225,7 +229,7 @@ public class Syringe extends Item {
         tag.putInt(FLUID_COLOUR, DEFAULT_BLOOD_COLOR);
 
         if (fluid > DEFAULT_MAX_LOAD - 0.1f) {
-            DnaUtils.saveBloodSamplingTime(tag, level);
+            DnaUtils.saveBloodSamplingTime(tag, serverLevel);
 
             int dirt = tag.getInt(DIRTINESS);
             dirt = Mth.clamp(dirt + 1, 0, 3);
@@ -239,7 +243,7 @@ public class Syringe extends Item {
         return fluid;
     }
 
-    private LivingEntity raytraceLiving(Level level, Player player, double range) {
+    private LivingEntity raytraceLiving(ServerLevel level, ServerPlayer player, double range) {
         Vec3 start = player.getEyePosition();
         Vec3 end = start.add(player.getLookAngle().scale(range));
 
@@ -264,7 +268,7 @@ public class Syringe extends Item {
         return hitResult;
     }
 
-    private int raytraceForWater(Level level, Player player, double range) {
+    private int raytraceForWater(ServerLevel level, ServerPlayer player, double range) {
         ClipContext ctx = new ClipContext(
                 player.getEyePosition(),
                 player.getEyePosition().add(player.getViewVector(1f).scale(range)),
