@@ -8,6 +8,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.config.ModConfig;
+import net.farkas.wildaside.dna.DnaConstants;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.allele.Allele;
 import net.farkas.wildaside.dna.dominance.Dominance;
@@ -28,6 +29,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Collection;
+
+import static net.farkas.wildaside.dna.DnaConstants.*;
 
 public class ModCommands {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -121,13 +124,13 @@ public class ModCommands {
         );
 
         root.then(
-                Commands.literal("dna")
+                Commands.literal(DNA)
                         .requires(src -> src.hasPermission(2))
-                        .then(Commands.argument("target", EntityArgument.entity())
-                                .then(Commands.argument("trait", StringArgumentType.word())
+                        .then(Commands.argument(TARGET, EntityArgument.entity())
+                                .then(Commands.argument(TRAIT, StringArgumentType.word())
                                         .suggests((ctx, builder) -> {
                                             for (Trait trait : Traits.TRAITS) {
-                                                builder.suggest("stability");
+                                                builder.suggest(STABILITY);
                                                 builder.suggest(trait.getName());
                                             }
                                             return builder.buildFuture();
@@ -135,14 +138,14 @@ public class ModCommands {
 
                                         .then(Commands.literal("get")
                                                 .executes(ctx -> {
-                                                    var target = EntityArgument.getEntity(ctx, "target");
+                                                    var target = EntityArgument.getEntity(ctx, TARGET);
                                                     return getGene(ctx, target);
                                                 }))
 
                                         .then(Commands.literal("set")
-                                                .then(Commands.argument("value", FloatArgumentType.floatArg())
+                                                .then(Commands.argument(VALUE, FloatArgumentType.floatArg())
                                                         .executes(ctx -> {
-                                                            var target = EntityArgument.getEntity(ctx, "target");
+                                                            var target = EntityArgument.getEntity(ctx, TARGET);
                                                             return applyGene(ctx, target);
                                                         })
                                                 )
@@ -209,8 +212,8 @@ public class ModCommands {
 
     public static int getGene(CommandContext<CommandSourceStack> ctx, Entity target) {
         if (target instanceof LivingEntity livingEntity) {
-            String traitName = StringArgumentType.getString(ctx, "trait");
-            if (traitName.equals("stability")) {
+            String traitName = StringArgumentType.getString(ctx, TRAIT);
+            if (traitName.equals(STABILITY)) {
                 livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
                     float value = dna.getStability();
                     ctx.getSource().sendSuccess(() ->
@@ -237,10 +240,10 @@ public class ModCommands {
     private static int applyGene(CommandContext<CommandSourceStack> ctx, Entity target) {
         if (!(target instanceof LivingEntity livingEntity)) return 0;
 
-        String traitName = StringArgumentType.getString(ctx, "trait");
-        float value = FloatArgumentType.getFloat(ctx, "value");
+        String traitName = StringArgumentType.getString(ctx, TRAIT);
+        float value = FloatArgumentType.getFloat(ctx, VALUE);
 
-        if (traitName.equalsIgnoreCase("stability")) {
+        if (traitName.equalsIgnoreCase(STABILITY)) {
             livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
                 dna.setStability(value);
             });

@@ -50,6 +50,7 @@ public class Traits {
     public static float getTraitValue(Map<Trait, Gene> genes, Trait trait) {
         if (trait == null || genes == null) return 0.0f;
         Gene gene = genes.get(trait);
+        if (gene == null) return 0.0f;
         return gene.getExpressedValue();
     }
 
