@@ -1,4 +1,4 @@
-package net.farkas.wildaside.dna.traits;
+package net.farkas.wildaside.dna.trait;
 
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.trait.Trait;

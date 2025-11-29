@@ -20,7 +20,11 @@ public class SyringeDataPacket {
     private final int fluidColor;
     private final int dirtiness;
 
-    public SyringeDataPacket(UUID playerId, int slot, float progress, float blood, boolean animating, boolean inwards, String fluidType, int fluidColor, int dirtiness) {
+    private final long creationTick;
+    private final long freezerTicks;
+
+    public SyringeDataPacket(UUID playerId, int slot, float progress, float blood, boolean animating, boolean inwards,
+                             String fluidType, int fluidColor, int dirtiness, long creationTick, long freezerTicks) {
         this.playerId = playerId;
         this.slot = slot;
         this.progress = progress;
@@ -30,6 +34,8 @@ public class SyringeDataPacket {
         this.fluidType = fluidType;
         this.fluidColor = fluidColor;
         this.dirtiness = dirtiness;
+        this.creationTick = creationTick;
+        this.freezerTicks = freezerTicks;
     }
 
     public static SyringeDataPacket decode(FriendlyByteBuf buf) {
@@ -44,7 +50,10 @@ public class SyringeDataPacket {
         int fluidColor = buf.readInt();
         int dirtiness = buf.readInt();
 
-        return new SyringeDataPacket(playerId, slot, progress, blood, animating, inwards, fluidType, fluidColor, dirtiness);
+        long creationTick = buf.readLong();
+        long freezerTicks = buf.readLong();
+
+        return new SyringeDataPacket(playerId, slot, progress, blood, animating, inwards, fluidType, fluidColor, dirtiness, creationTick, freezerTicks);
     }
 
     public void encode(FriendlyByteBuf buf) {
@@ -58,6 +67,9 @@ public class SyringeDataPacket {
         buf.writeUtf(fluidType == null ? DnaConstants.NONE : fluidType);
         buf.writeInt(fluidColor);
         buf.writeInt(dirtiness);
+
+        buf.writeLong(creationTick);
+        buf.writeLong(freezerTicks);
     }
 
     public boolean handle(Supplier<NetworkEvent.Context> ctx) {
@@ -78,4 +90,7 @@ public class SyringeDataPacket {
     public String getFluidType() { return fluidType; }
     public int getFluidColor() { return fluidColor; }
     public int getDirtiness() { return dirtiness; }
+
+    public long getCreationTick() { return creationTick; }
+    public long getFreezerTicks() { return freezerTicks; }
 }

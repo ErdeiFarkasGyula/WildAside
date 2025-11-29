@@ -5,6 +5,8 @@ import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.ModBlockEntities;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.client.ModKeyMappings;
+import net.farkas.wildaside.dna.DnaConstants;
+import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.entity.client.ModModelLayers;
 import net.farkas.wildaside.entity.client.hickory.HickoryTreantRenderer;
@@ -13,6 +15,7 @@ import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.item.custom.Syringe;
 import net.farkas.wildaside.particle.*;
 import net.farkas.wildaside.particle.custom.*;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.BoatModel;
 import net.minecraft.client.model.ChestBoatModel;
 import net.minecraft.client.renderer.BiomeColors;
@@ -20,10 +23,12 @@ import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.FoliageColor;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -110,39 +115,49 @@ public class ModEventBusClientEvents {
             };
         }, ModItems.DNA_HOLDER.get());
 
+
         event.getItemColors().register((stack, tintIndex) -> {
-            if (!stack.hasTag()) {
-                if (tintIndex == 2) return 0xFFFFFF;
-                return 0xFFFFFF;
-            }
+            if (!stack.hasTag()) return 0xFFFFFFFF;
+
             CompoundTag tag = stack.getTag();
 
-            if (tintIndex == 0) {
-                float level = tag.contains(FLUID_LEVEL) ? tag.getFloat(FLUID_LEVEL) : 0f;
-                if (level <= 0.01f) return 0xFFFFFF;
+            switch (tintIndex) {
+                case 0:
+                    float level = tag.contains(FLUID_LEVEL) ? tag.getFloat(FLUID_LEVEL) : 0f;
+                    if (level <= 0.01f) return 0xFFFFFFFF;
 
-                String fluidType = tag.contains(FLUID_TYPE) ? tag.getString(FLUID_TYPE) : NONE;
-                int baseColor = Syringe.DEFAULT_BLOOD_COLOR;
-                if (WATER.equals(fluidType)) {
-                    baseColor = tag.contains(FLUID_COLOUR) ? tag.getInt(FLUID_COLOUR) : 0x3F76E4;
-                }
+                    String fluidType = tag.contains(FLUID_TYPE) ? tag.getString(FLUID_TYPE) : NONE;
+                    int baseColor = Syringe.DEFAULT_BLOOD_COLOR;
 
-                int alpha = (int)(255 * Mth.clamp(level / (float) Syringe.DEFAULT_MAX_LOAD, 0f, 1f));
-                return (alpha << 24) | (baseColor & 0xFFFFFF);
+                    if (WATER.equals(fluidType)) {
+                        baseColor = tag.contains(FLUID_COLOUR) ? tag.getInt(FLUID_COLOUR) : 0x3F76E4;
+                    } else if (BLOOD.equals(fluidType)) {
+                        Level levelWorld = Minecraft.getInstance().level;
+                        if (levelWorld != null) {
+                            long age = DnaUtils.getFrozenItemEffectiveAge(tag, levelWorld);
+                            float clotFactor = Mth.clamp(age / (float) DnaConstants.BLOOD_CLOTTING_TIME_DEFAULT, 0f, 1f);
+
+                            int r = (int) Mth.lerp(clotFactor, (baseColor >> 16) & 0xFF, 0x4C);
+                            int g = (int) Mth.lerp(clotFactor, (baseColor >> 8) & 0xFF, 0x00);
+                            int b = (int) Mth.lerp(clotFactor, baseColor & 0xFF, 0x00);
+                            baseColor = (r << 16) | (g << 8) | b;
+                        }
+                    }
+
+                    int alpha = (int)(255 * Mth.clamp(level / (float) Syringe.DEFAULT_MAX_LOAD, 0f, 1f));
+                    return (alpha << 24) | (baseColor & 0xFFFFFF);
+
+                case 2:
+                    int dirt = tag.contains(DIRTINESS) ? tag.getInt(DIRTINESS) : 0;
+                    if (dirt <= 0) return 0xFFFFFFFF;
+
+                    int dirtColor = 0x8a4e34;
+                    int alphaDirt = (int) (255 * Mth.clamp(dirt / 3f, 0f, 1f));
+                    return (alphaDirt << 24) | (dirtColor & 0xFFFFFF);
+
+                default:
+                    return 0xFFFFFFFF;
             }
-
-            if (tintIndex == 2) {
-                int dirt = tag.contains(DIRTINESS) ? tag.getInt(DIRTINESS) : 0;
-                if (dirt < 3) return 0xFFFFFF;
-
-                int dirtColor = 0x8a4e34;
-                float factor = Mth.clamp(dirt / 3.0f, 0f, 1f);
-                int alpha = (int) (255 * factor);
-                return (alpha << 24) | (dirtColor & 0xFFFFFF);
-            }
-
-            return 0xFFFFFF;
-
         }, ModItems.SYRINGE.get());
     }
 }

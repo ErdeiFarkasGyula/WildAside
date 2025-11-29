@@ -2,7 +2,6 @@ package net.farkas.wildaside.dna.trait;
 
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
-import net.farkas.wildaside.dna.traits.AttributeTrait;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 

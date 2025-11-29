@@ -261,28 +261,28 @@ public class DnaUtils {
         return String.format("%.2f", value);
     }
 
-    public static long getBloodSamplingTime(CompoundTag tag) {
+    public static long getBloodSamplingTick(CompoundTag tag) {
         return tag.getLong(BLOOD_CREATION_TICK);
     }
 
-    public static void setBloodSamplingTime(CompoundTag tag, long value) {
+    public static void setBloodSamplingTick(CompoundTag tag, long value) {
         tag.putLong(BLOOD_CREATION_TICK, value);
     }
 
-    public static void resetBloodSamplingTime(CompoundTag tag) {
-        setBloodSamplingTime(tag, 0);
+    public static void resetBloodSamplingTick(CompoundTag tag) {
+        setBloodSamplingTick(tag, 0);
     }
 
-    public static void saveBloodSamplingTime(CompoundTag tag, ServerLevel level) {
-        setBloodSamplingTime(tag, level.getGameTime());
+    public static void saveBloodSamplingTick(CompoundTag tag, ServerLevel level) {
+        setBloodSamplingTick(tag, level.getGameTime());
     }
 
     public static long getBloodFreezerTicks(CompoundTag tag) {
-        return tag.getLong(BLOOD_BIOFREEZER_TICK);
+        return tag.getLong(BLOOD_FREEZER_TICKS);
     }
 
     public static void setBloodFreezerTicks(CompoundTag tag, long value) {
-        tag.putLong(BLOOD_BIOFREEZER_TICK, value);
+        tag.putLong(BLOOD_FREEZER_TICKS, value);
     }
 
     public static void increaseBloodFreezerTicks(CompoundTag tag, long value) {
@@ -293,14 +293,16 @@ public class DnaUtils {
         setBloodFreezerTicks(tag, 0);
     }
 
-    public static long getFrozenItemEffectiveAge(CompoundTag tag, ServerLevel level) {
+    public static long getFrozenItemEffectiveAge(CompoundTag tag, Level level) {
         long currentTime = level.getGameTime();
-        long creationTime = getBloodSamplingTime(tag);
+        long creationTime = getBloodSamplingTick(tag);
         long freezerTicks = getBloodFreezerTicks(tag);
 
         if (creationTime == 0) {
             return 0;
         }
+
+        System.out.println("Current time: " + currentTime + " Creation time: " + creationTime + " Frozen ticks: " + freezerTicks + " Effetive age: " + (currentTime - creationTime - freezerTicks));
 
         return currentTime - creationTime - freezerTicks;
     }

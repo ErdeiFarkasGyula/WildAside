@@ -90,7 +90,7 @@ public class Syringe extends Item {
             }
             if (fluid <= 0.01f) {
                 tag.putString(FLUID_TYPE, NONE);
-                DnaUtils.resetBloodSamplingTime(tag);
+                DnaUtils.resetBloodSamplingTick(tag);
                 DnaUtils.resetBloodFreezerTicks(tag);
             }
         }
@@ -106,7 +106,9 @@ public class Syringe extends Item {
                 inwards,
                 tag.getString(FLUID_TYPE),
                 tag.getInt(FLUID_COLOUR),
-                tag.getInt(DIRTINESS)
+                tag.getInt(DIRTINESS),
+                tag.getInt(BLOOD_CREATION_TICK),
+                tag.getInt(BLOOD_FREEZER_TICKS)
         );
 
         if (progress <= 0f || progress >= DEFAULT_MAX_LOAD) {
@@ -128,7 +130,9 @@ public class Syringe extends Item {
                 tag.getBoolean(INWARDS),
                 tag.getString(FLUID_TYPE),
                 tag.getInt(FLUID_COLOUR),
-                tag.getInt(DIRTINESS)
+                tag.getInt(DIRTINESS),
+                tag.getInt(BLOOD_CREATION_TICK),
+                tag.getInt(BLOOD_FREEZER_TICKS)
         );
     }
 
@@ -154,7 +158,7 @@ public class Syringe extends Item {
             holderTag.putInt(SAMPLE_PROGRESS, newProgress);
 
             DnaUtils.resetBloodFreezerTicks(holderTag);
-            DnaUtils.saveBloodSamplingTime(holderTag, serverLevel);
+            DnaUtils.saveBloodSamplingTick(holderTag, serverLevel);
 
             offHandStack.setTag(holderTag);
         }
@@ -182,6 +186,8 @@ public class Syringe extends Item {
         tag.putString(FLUID_TYPE, packet.getFluidType());
         tag.putInt(FLUID_COLOUR, packet.getFluidColor());
         tag.putInt(DIRTINESS, packet.getDirtiness());
+        tag.putLong(BLOOD_CREATION_TICK, packet.getCreationTick());
+        tag.putLong(BLOOD_FREEZER_TICKS, packet.getFreezerTicks());
     }
 
     @Override
@@ -202,6 +208,8 @@ public class Syringe extends Item {
         if (!tag.contains(FLUID_TYPE)) tag.putString(FLUID_TYPE, NONE);
         if (!tag.contains(FLUID_COLOUR)) tag.putInt(FLUID_COLOUR, 0);
         if (!tag.contains(DIRTINESS)) tag.putInt(DIRTINESS, 0);
+        if (!tag.contains(BLOOD_CREATION_TICK)) tag.putLong(BLOOD_CREATION_TICK, 0);
+        if (!tag.contains(BLOOD_FREEZER_TICKS)) tag.putLong(BLOOD_FREEZER_TICKS, 0);
     }
 
     private float updateProgress(CompoundTag tag, float progress, boolean inwards) {
@@ -229,7 +237,7 @@ public class Syringe extends Item {
         tag.putInt(FLUID_COLOUR, DEFAULT_BLOOD_COLOR);
 
         if (fluid > DEFAULT_MAX_LOAD - 0.1f) {
-            DnaUtils.saveBloodSamplingTime(tag, serverLevel);
+            DnaUtils.saveBloodSamplingTick(tag, serverLevel);
 
             int dirt = tag.getInt(DIRTINESS);
             dirt = Mth.clamp(dirt + 1, 0, 3);

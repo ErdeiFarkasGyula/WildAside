@@ -58,7 +58,8 @@ public class DnaConstants {
     public static final String BLOOD = "blood";
 
     public static final String BLOOD_CREATION_TICK = "blood_creation_tick";
-    public static final String BLOOD_BIOFREEZER_TICK = "blood_freezer_tick";
+    public static final String BLOOD_FREEZER_TICKS = "blood_freezer_ticks";
+    public static final String BLOOD_EFFECTIVE_AGE = "blood_effective_age";
 
     public static final String TARGET = "target";
     public static final String PREVIOUS_TARGET = "previous_target";

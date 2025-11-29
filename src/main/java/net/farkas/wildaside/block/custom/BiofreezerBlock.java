@@ -73,7 +73,6 @@ public class BiofreezerBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-        if (pLevel.isClientSide()) return null;
         return createTickerHelper(pBlockEntityType, ModBlockEntities.BIOFREEZER.get(),
                 (pLevel1, pPos, pState1, pBlockEntity) -> pBlockEntity.tick());
     }

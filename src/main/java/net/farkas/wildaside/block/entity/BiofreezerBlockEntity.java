@@ -82,11 +82,12 @@ public class BiofreezerBlockEntity extends BlockEntity implements MenuProvider {
                 if (stack.is(ModTags.Items.BIOFREEZER_ITEMS)) {
                     CompoundTag tag = stack.getOrCreateTag();
 
-                    if (DnaUtils.getBloodSamplingTime(tag) > 0) {
+                    if (DnaUtils.getBloodSamplingTick(tag) > 0) {
                         DnaUtils.increaseBloodFreezerTicks(tag, 20);
                     }
 
                     stack.setTag(tag);
+                    itemHandler.setStackInSlot(i, stack);
                 }
             }
         }
