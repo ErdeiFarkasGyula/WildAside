@@ -82,16 +82,16 @@ public class Syringe extends Item {
                     fluid = Mth.clamp(fluid + NEEDLE_DELTA, 0f, DEFAULT_MAX_LOAD);
                     tag.putString(FLUID_TYPE, WATER);
                     tag.putInt(FLUID_COLOUR, waterColor);
-                    if (fluid >= 2.5) tag.putInt(DIRTINESS, 0);
+                    if (fluid >= DEFAULT_MAX_LOAD - 0.01f) tag.putInt(DIRTINESS, 0);
                 }
             }
         } else {
             fluid = Mth.clamp(fluid - NEEDLE_DELTA, 0f, DEFAULT_MAX_LOAD);
-            if (fluid <= 0.01f) {
-                tag.putString(FLUID_TYPE, NONE);
-            }
             if (BLOOD.equals(fluidType)) {
                 handleDnaHolder(player, tag, fluid, progress);
+            }
+            if (fluid <= 0.01f) {
+                tag.putString(FLUID_TYPE, NONE);
             }
         }
 
@@ -136,7 +136,7 @@ public class Syringe extends Item {
         ItemStack offHand = player.getItemInHand(InteractionHand.OFF_HAND);
         if (!(offHand.getItem() instanceof DnaHolder dnaHolder)) return fluid;
 
-        if (progress == DEFAULT_MAX_LOAD) {
+        if (progress >= DEFAULT_MAX_LOAD - 0.01f) {
             DnaImplementation dna = new DnaImplementation();
             dna.deserializeNBT(syringeTag.getCompound(DNA_DATA));
 

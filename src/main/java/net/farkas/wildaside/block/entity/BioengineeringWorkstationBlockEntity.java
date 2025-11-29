@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 import static net.farkas.wildaside.dna.DnaConstants.*;
 
 public class  BioengineeringWorkstationBlockEntity extends BlockEntity implements MenuProvider {
-    private final ItemStackHandler itemHandler = new ItemStackHandler(70);
+    private final ItemStackHandler itemHandler = new ItemStackHandler(80);
 
     private static final int INPUT_1 = 0;
     private static final int INPUT_2 = 1;
