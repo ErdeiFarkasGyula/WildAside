@@ -199,13 +199,6 @@ public class Syringe extends Item {
                 player);
 
         BlockPos blockPos = level.clip(clipContext).getBlockPos();
-        System.out.println(level.getBlockState(blockPos).getBlock());
-        System.out.println(level.getFluidState(blockPos).is(FluidTags.WATER));
-        System.out.println(level.getBlockState(blockPos).is(Blocks.WATER));
-        System.out.println(level.getBiome(blockPos).get().getWaterColor());
-
-        System.out.println(level.getFluidState(blockPos).is(FluidTags.WATER) || level.getBlockState(blockPos).is(Blocks.WATER)
-                ? level.getBiome(blockPos).get().getWaterColor() : 0);
         return level.getFluidState(blockPos).is(FluidTags.WATER) || level.getBlockState(blockPos).is(Blocks.WATER)
                 ? level.getBiome(blockPos).get().getWaterColor() : 0;
     }
