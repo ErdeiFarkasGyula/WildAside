@@ -3,6 +3,8 @@ package net.farkas.wildaside.event;
 import com.mojang.brigadier.CommandDispatcher;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
+import net.farkas.wildaside.capability.bioengineering.BioengineeringSkillsCapability;
+import net.farkas.wildaside.capability.bioengineering.BioengineeringSkillsProvider;
 import net.farkas.wildaside.capability.contamination.ContaminationCapability;
 import net.farkas.wildaside.capability.contamination.ContaminationProvider;
 import net.farkas.wildaside.capability.dna.DnaCapability;
@@ -67,6 +69,9 @@ public class ModEvents {
         if (event.getObject() instanceof LivingEntity livingEntity) {
             event.addCapability(ContaminationProvider.IDENTIFIER, new ContaminationProvider());
             event.addCapability(DnaProvider.IDENTIFIER, new DnaProvider());
+        }
+        if (event.getObject() instanceof Player player) {
+            event.addCapability(BioengineeringSkillsProvider.IDENTIFIER, new BioengineeringSkillsProvider());
         }
     }
 

@@ -68,4 +68,7 @@ public class DnaConstants {
     public static final String SAMPLE_DIRTY = "sample_dirty";
 
     public static final String SAMPLE_UNUSABLE = "sample_unusable";
+
+    public static final String BIOENGINEERING_SKILL = "bioengineering_skill";
+    public static final String BIOENGINEERING_SKILLS = "bioengineering_skills";
 }
