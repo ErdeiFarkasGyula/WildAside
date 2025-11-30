@@ -3,15 +3,13 @@ package net.farkas.wildaside.screen.bioengineering_workstation;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.BioengineeringWorkstationBlockEntity;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
-import net.farkas.wildaside.dna.DnaConstants;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitType;
-import net.farkas.wildaside.dna.trait.Traits;
-import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.item.custom.DnaHolder;
 import net.farkas.wildaside.item.custom.GeneItem;
 import net.farkas.wildaside.screen.ModMenuTypes;
+import net.farkas.wildaside.screen.ModVisibleSlot;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -21,7 +19,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.SlotItemHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,11 +38,25 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
     private int teFirstSlotIndex;
     private int teSlotCount;
 
-    public List<Slot> topGeneSlots = new ArrayList<>();
-    public List<Slot> botGeneSlots = new ArrayList<>();
+    public List<GeneSlot> topGeneSlots = new ArrayList<>();
+    public List<GeneSlot> botGeneSlots = new ArrayList<>();
 
     public static final int TOP_GENE_INDEX_START = 11;
     public static final int BOT_GENE_INDEX_START = TOP_GENE_INDEX_START + 13;
+
+    private ModVisibleSlot assemblerSlot0;
+    private ModVisibleSlot assemblerSlot1;
+    private ModVisibleSlot assemblerSlot2;
+    private ModVisibleSlot assemblerSlot3;
+    private ModVisibleSlot assemblerSlot4;
+    private BioengineeringWorkstationResultSlot assemblerResult;
+
+    private ModVisibleSlot analyzerSlotA;
+    private ModVisibleSlot analyzerSlotB;
+    private DnaInputSlot seqInputA;
+    private DnaInputSlot seqInputB;
+    private BioengineeringWorkstationResultSlot seqOutA;
+    private BioengineeringWorkstationResultSlot seqOutB;
 
     public BioengineeringWorkstationMenu(int pContainerId, Inventory inv, FriendlyByteBuf extraData) {
         this(pContainerId, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2));
@@ -72,32 +83,44 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
             int before = slots.size();
 
-            switch (tab) {
-                case ASSEMBLER -> {
-                    addSlot(new SlotItemHandler(iItemHandler, 0, 84, 34));
-                    addSlot(new SlotItemHandler(iItemHandler, 1, 84, 16));
-                    addSlot(new SlotItemHandler(iItemHandler, 2, 102, 34));
-                    addSlot(new SlotItemHandler(iItemHandler, 3, 84, 52));
-                    addSlot(new SlotItemHandler(iItemHandler, 4, 66, 34));
-                    addSlot(new BioengineeringWorkstationResultSlot(iItemHandler, 5, 170, 34, player));
-                }
-                case DNA_ANALYZER -> {
-                    addSlot(new SlotItemHandler(iItemHandler, 5, 80, 30));
-                    addSlot(new SlotItemHandler(iItemHandler, 6, 100, 30));
-                }
-                case DNA_SEQUENCER -> {
-                    addSlot(new DnaInputSlot(this, iItemHandler, 7, 15, 8));
-                    addSlot(new DnaInputSlot(this, iItemHandler, 8, 15, 30));
-                    addSlot(new BioengineeringWorkstationResultSlot(iItemHandler, 9, 191, 57, player));
-                    addSlot(new BioengineeringWorkstationResultSlot(iItemHandler, 10, 221, 57, player));
+            assemblerSlot0 = new ModVisibleSlot(iItemHandler, 0, 84, 34);
+            assemblerSlot1 = new ModVisibleSlot(iItemHandler, 1, 84, 16);
+            assemblerSlot2 = new ModVisibleSlot(iItemHandler, 2, 102, 34);
+            assemblerSlot3 = new ModVisibleSlot(iItemHandler, 3, 84, 52);
+            assemblerSlot4 = new ModVisibleSlot(iItemHandler, 4, 66, 34);
+            assemblerResult = new BioengineeringWorkstationResultSlot(iItemHandler, 5, 170, 34, player);
 
-                    for (int i = 0; i <= 12; i++) {
-                        topGeneSlots.add(addSlot(new GeneSlot(iItemHandler, TOP_GENE_INDEX_START + i, 33 + i * 16, 8)));
-                    }
-                    for (int i = 0; i <= 12; i++) {
-                        botGeneSlots.add(addSlot(new GeneSlot(iItemHandler, BOT_GENE_INDEX_START + i, 33 + i * 16, 8 + 22)));
-                    }
-                }
+            addSlot(assemblerSlot0);
+            addSlot(assemblerSlot1);
+            addSlot(assemblerSlot2);
+            addSlot(assemblerSlot3);
+            addSlot(assemblerSlot4);
+            addSlot(assemblerResult);
+
+            analyzerSlotA = new ModVisibleSlot(iItemHandler, 5, 80, 30);
+            analyzerSlotB = new ModVisibleSlot(iItemHandler, 6, 100, 30);
+            addSlot(analyzerSlotA);
+            addSlot(analyzerSlotB);
+
+            seqInputA = new DnaInputSlot(this, iItemHandler, 7, 15, 8);
+            seqInputB = new DnaInputSlot(this, iItemHandler, 8, 15, 30);
+            seqOutA = new BioengineeringWorkstationResultSlot(iItemHandler, 9, 191, 57, player);
+            seqOutB = new BioengineeringWorkstationResultSlot(iItemHandler, 10, 221, 57, player);
+
+            addSlot(seqInputA);
+            addSlot(seqInputB);
+            addSlot(seqOutA);
+            addSlot(seqOutB);
+
+            for (int i = 0; i <= 12; i++) {
+                GeneSlot currentSlot = new GeneSlot(iItemHandler, TOP_GENE_INDEX_START + i, 33 + i * 16, 8);
+                addSlot(currentSlot);
+                topGeneSlots.add(currentSlot);
+            }
+            for (int i = 0; i <= 12; i++) {
+                GeneSlot currentSlot = new GeneSlot(iItemHandler, BOT_GENE_INDEX_START + i, 33 + i * 16, 30);
+                addSlot(currentSlot);
+                botGeneSlots.add(currentSlot);
             }
 
             this.teFirstSlotIndex = before;
@@ -105,12 +128,48 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
         });
     }
 
-    public void rebuildSlots(Inventory inv) {
-        slots.clear();
-        addPlayerInventory(inv);
-        addPlayerHotbar(inv);
-        addMenuSlots(tab);
-        broadcastChanges();
+    private void applyTabVisibility() {
+        switch (tab) {
+            case ASSEMBLER -> {
+                setVisibleAsm(true);
+                setVisibleAnalyzer(false);
+                setVisibleSequencer(false);
+            }
+            case DNA_ANALYZER -> {
+                setVisibleAsm(false);
+                setVisibleAnalyzer(true);
+                setVisibleSequencer(false);
+            }
+            case DNA_SEQUENCER -> {
+                setVisibleAsm(false);
+                setVisibleAnalyzer(false);
+                setVisibleSequencer(true);
+            }
+        }
+    }
+
+    private void setVisibleAsm(boolean v) {
+        assemblerSlot0.setVisible(v);
+        assemblerSlot1.setVisible(v);
+        assemblerSlot2.setVisible(v);
+        assemblerSlot3.setVisible(v);
+        assemblerSlot4.setVisible(v);
+        assemblerResult.setVisible(v);
+    }
+
+    private void setVisibleAnalyzer(boolean v) {
+        analyzerSlotA.setVisible(v);
+        analyzerSlotB.setVisible(v);
+    }
+
+    private void setVisibleSequencer(boolean v) {
+        seqInputA.setVisible(v);
+        seqInputB.setVisible(v);
+        seqOutA.setVisible(v);
+        seqOutB.setVisible(v);
+
+        topGeneSlots.forEach(s -> s.setVisible(v));
+        botGeneSlots.forEach(s -> s.setVisible(v));
     }
 
     public void clearGenes() {
@@ -168,12 +227,12 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
 
     public void setTab(BioengineeringWorkstationTab tab) {
         this.tab = tab;
-        rebuildSlots(inventory);
+        applyTabVisibility();
     }
 
     public void setTab(int index) {
         this.tab = BioengineeringWorkstationTab.values()[index];
-        rebuildSlots(inventory);
+        applyTabVisibility();
     }
 
     public BioengineeringWorkstationTab getTab() {
