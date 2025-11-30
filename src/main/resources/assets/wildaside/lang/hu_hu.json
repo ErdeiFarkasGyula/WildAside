@@ -15,17 +15,7 @@
 
   "item.wildaside.dna_holder": "DNS Tartó",
   "item.wildaside.gene": "Gén",
-
-  "dna.wildaside.dna_mismatch": "DNS párosítási hiba",
-  "dna.wildaside.sample_progress": "Mintavételi haladás",
-  "dna.wildaside.no_dna_data": "Nincs DNS adat",
-  "dna.wildaside.dna_data_hidden": "DNS adat rejtve",
-  "dna.wildaside.unknown": "Ismeretlen",
-  "dna.wildaside.source": "Forrás",
-  "dna.wildaside.stability": "Stabilitás",
-  "dna.wildaside.core_traits": "Alap tulajdonságok",
-  "dna.wildaside.resistances": "Ellenállások",
-  "dna.wildaside.abilities": "Képességek",
+  "item.wildaside.syringe": "Fecskendő",
 
   "item.wildaside.hickory_nut_trail_mix": "Hikori dió diákcsemege",
   "item.wildaside.red_hickory_nut_trail_mix": "Vörös hikori dió diákcsemege",
@@ -232,6 +222,24 @@
   "sounds.wildaside.entity.mucellith.hurt": "Mucellith sérül",
   "sounds.wildaside.entity.mucellith.death": "Mucellith meghal",
 
+  "dna.wildaside.dna_mismatch": "DNS párosítási hiba",
+  "dna.wildaside.sample_progress": "Mintavételi haladás",
+  "dna.wildaside.no_dna_data": "Nincs DNS adat",
+  "dna.wildaside.dna_data_hidden": "DNS adat rejtve",
+  "dna.wildaside.unknown": "Ismeretlen",
+  "dna.wildaside.source": "Forrás",
+  "dna.wildaside.stability": "Stabilitás",
+  "dna.wildaside.core_traits": "Alap tulajdonságok",
+  "dna.wildaside.resistances": "Ellenállások",
+  "dna.wildaside.abilities": "Képességek",
+  "dna.wildaside.alleleA": "Allél A",
+  "dna.wildaside.alleleB": "Allél B",
+  "dna.wildaside.dominance": "Dominancia",
+  "dna.wildaside.sample_unusable": "Minta használhatatlan",
+  "dna.wildaside.blood_clotted": "Vér megalvadt",
+  "dna.wildaside.blood_contaminated": "Vér megfertőzve",
+  "dna.wildaside.multiple_sources": "Több forrás",
+
   "trait.wildaside.max_health": "Max életerő",
   "trait.wildaside.movement_speed": "Mozgási sebesség",
   "trait.wildaside.attack_damage": "Támadási erő",
@@ -246,6 +254,11 @@
   "trait.wildaside.freeze_resistance": "Fagyás ellenállás",
   "trait.wildaside.fire_ability": "Tűz képesség",
   "trait.wildaside.teleport_ability": "Teleportálás képesség",
+
+  "dominance.wildaside.dominant": "Domináns",
+  "dominance.wildaside.recessive": "Recesszív",
+  "dominance.wildaside.co_dominant": "Co-domináns",
+  "dominance.wildaside.incomplete": "Hiányos",
 
   "gui.wildaside.bioengineering_workstation.bio_assembler":  "Bio összeszerelő",
   "gui.wildaside.bioengineering_workstation.dna_sequencer":  "DNS szekvenszer",
@@ -278,5 +291,7 @@
   "update_checker.wildaside.update_available": "[%1$s] Egy új verzió, a %s már elérhető! (Jelenleg használt: %2$s)",
 
   "general.wildaside.enabled": "Bekapcsolva",
-  "general.wildaside.disabled": "Kikapcsolva"
+  "general.wildaside.disabled": "Kikapcsolva",
+  "block.wildaside.biofreezer": "Biofreezer",
+  "dna.wildaside.allele": "Allele"
 }
