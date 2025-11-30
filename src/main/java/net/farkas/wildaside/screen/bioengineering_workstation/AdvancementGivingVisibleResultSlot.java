@@ -8,12 +8,20 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 
-public class BioengineeringWorkstationResultSlot extends ModVisibleSlot {
+public class AdvancementGivingVisibleResultSlot extends ModVisibleSlot {
     private final Player player;
+    private final String advancement;
 
-    public BioengineeringWorkstationResultSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition, Player player) {
+    public AdvancementGivingVisibleResultSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition, Player player, String advancement) {
         super(itemHandler, index, xPosition, yPosition);
         this.player = player;
+        this.advancement = advancement;
+    }
+
+    public AdvancementGivingVisibleResultSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition, Player player) {
+        super(itemHandler, index, xPosition, yPosition);
+        this.player = player;
+        this.advancement = null;
     }
 
     @Override
@@ -25,8 +33,8 @@ public class BioengineeringWorkstationResultSlot extends ModVisibleSlot {
     public void onTake(Player pPlayer, ItemStack pStack) {
         super.onTake(pPlayer, pStack);
 
-        if (player instanceof ServerPlayer serverPlayer) {
-            AdvancementHandler.givePlayerAdvancement(serverPlayer, "we_need_to_cook");
+        if (advancement != null && player instanceof ServerPlayer serverPlayer) {
+            AdvancementHandler.givePlayerAdvancement(serverPlayer, advancement);
         }
     }
 }

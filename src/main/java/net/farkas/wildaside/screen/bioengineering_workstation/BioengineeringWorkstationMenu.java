@@ -49,14 +49,14 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
     private ModVisibleSlot assemblerSlot2;
     private ModVisibleSlot assemblerSlot3;
     private ModVisibleSlot assemblerSlot4;
-    private BioengineeringWorkstationResultSlot assemblerResult;
+    private AdvancementGivingVisibleResultSlot assemblerResult;
 
     private ModVisibleSlot analyzerSlotA;
     private ModVisibleSlot analyzerSlotB;
     private DnaInputSlot seqInputA;
     private DnaInputSlot seqInputB;
-    private BioengineeringWorkstationResultSlot seqOutA;
-    private BioengineeringWorkstationResultSlot seqOutB;
+    private AdvancementGivingVisibleResultSlot seqOutA;
+    private AdvancementGivingVisibleResultSlot seqOutB;
 
     public BioengineeringWorkstationMenu(int pContainerId, Inventory inv, FriendlyByteBuf extraData) {
         this(pContainerId, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2));
@@ -76,6 +76,8 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
         addPlayerHotbar(inv);
         addMenuSlots(tab);
 
+        applyTabVisibility();
+
         addDataSlots(data);
     }
 
@@ -88,7 +90,7 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
             assemblerSlot2 = new ModVisibleSlot(iItemHandler, 2, 102, 34);
             assemblerSlot3 = new ModVisibleSlot(iItemHandler, 3, 84, 52);
             assemblerSlot4 = new ModVisibleSlot(iItemHandler, 4, 66, 34);
-            assemblerResult = new BioengineeringWorkstationResultSlot(iItemHandler, 5, 170, 34, player);
+            assemblerResult = new AdvancementGivingVisibleResultSlot(iItemHandler, 5, 170, 34, player, "we_need_to_cook");
 
             addSlot(assemblerSlot0);
             addSlot(assemblerSlot1);
@@ -104,8 +106,8 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
 
             seqInputA = new DnaInputSlot(this, iItemHandler, 7, 15, 8);
             seqInputB = new DnaInputSlot(this, iItemHandler, 8, 15, 30);
-            seqOutA = new BioengineeringWorkstationResultSlot(iItemHandler, 9, 191, 57, player);
-            seqOutB = new BioengineeringWorkstationResultSlot(iItemHandler, 10, 221, 57, player);
+            seqOutA = new AdvancementGivingVisibleResultSlot(iItemHandler, 9, 191, 57, player);
+            seqOutB = new AdvancementGivingVisibleResultSlot(iItemHandler, 10, 221, 57, player);
 
             addSlot(seqInputA);
             addSlot(seqInputB);
