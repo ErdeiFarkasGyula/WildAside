@@ -119,6 +119,7 @@
   "block.wildaside.substilium_hanging_wall_sign": "Szubsztílium függő falitábla",
   "block.wildaside.substilium_sprouts": "Szubsztílium csírák",
   "block.wildaside.bioengineering_workstation": "Biomérnöki munkaállomás",
+  "block.wildaside.biofreezer": "Biofagyasztó",
   "block.wildaside.hickory_log": "Hikori rönk",
   "block.wildaside.hickory_wood": "Hikori blokk",
   "block.wildaside.stripped_hickory_log": "Kérgezett hikori rönk",
@@ -232,6 +233,7 @@
   "dna.wildaside.core_traits": "Alap tulajdonságok",
   "dna.wildaside.resistances": "Ellenállások",
   "dna.wildaside.abilities": "Képességek",
+  "dna.wildaside.allele": "Allele",
   "dna.wildaside.alleleA": "Allél A",
   "dna.wildaside.alleleB": "Allél B",
   "dna.wildaside.dominance": "Dominancia",
@@ -287,11 +289,9 @@
 
   "update_checker.wildaside.curseforge_page": "CurseForge oldal",
   "update_checker.wildaside.modrinth_page": "Modrinth oldal",
-  "update_checker.wildaside.dont_show_again": "Többet ne mutassd",
+  "update_checker.wildaside.dont_show_again": "Többet ne mutasd",
   "update_checker.wildaside.update_available": "[%1$s] Egy új verzió, a %s már elérhető! (Jelenleg használt: %2$s)",
 
   "general.wildaside.enabled": "Bekapcsolva",
-  "general.wildaside.disabled": "Kikapcsolva",
-  "block.wildaside.biofreezer": "Biofreezer",
-  "dna.wildaside.allele": "Allele"
+  "general.wildaside.disabled": "Kikapcsolva"
 }
