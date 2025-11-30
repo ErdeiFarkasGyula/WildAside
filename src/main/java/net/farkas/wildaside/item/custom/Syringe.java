@@ -155,10 +155,6 @@ public class Syringe extends Item {
             boolean clotted = DnaUtils.getFrozenItemEffectiveAge(syringeTag, serverLevel) > BLOOD_CLOTTING_TIME_DEFAULT;
             boolean dirty = syringeTag.getInt(DIRTINESS) >= 3;
 
-            if (multipleSources || clotted || dirty) {
-                return fluid;
-            }
-
             DnaImplementation dna = new DnaImplementation();
             dna.deserializeNBT(syringeTag.getCompound(DNA_DATA));
 
@@ -166,6 +162,10 @@ public class Syringe extends Item {
 
             CompoundTag holderTag = offHandStack.getOrCreateTag();
             holderTag.put(DNA_DATA, dna.serializeNBT());
+
+            holderTag.putBoolean(MULTIPLE_SOURCES, multipleSources);
+            holderTag.putBoolean(SAMPLE_CLOTTED, clotted);
+            holderTag.putBoolean(SAMPLE_DIRTY, dirty);
 
             syringeTag.remove(DNA_DATA);
 
@@ -320,36 +320,12 @@ public class Syringe extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> tooltip, TooltipFlag pIsAdvanced) {
         CompoundTag tag = pStack.getOrCreateTag();
         boolean multipleSources = tag.getBoolean(MULTIPLE_SOURCES);
         boolean clotted = DnaUtils.getFrozenItemEffectiveAge(tag, pLevel) > BLOOD_CLOTTING_TIME_DEFAULT;
         boolean dirty = tag.getInt(DIRTINESS) >= 3;
 
-        if (multipleSources || clotted || dirty) {
-            pTooltipComponents.add(
-                    Component.translatable("dna.wildaside.sample_unusable")
-                            .append(Component.literal(": "))
-                            .withStyle(ChatFormatting.RED)
-            );
-
-            if (multipleSources) {
-                pTooltipComponents.add(Component.literal("- ")
-                        .append(Component.translatable("dna.wildaside.multiple_sources"))
-                );
-            }
-
-            if (clotted) {
-                pTooltipComponents.add(Component.literal("- ")
-                        .append(Component.translatable("dna.wildaside.blood_clotted"))
-                );
-            }
-
-            if (dirty) {
-                pTooltipComponents.add(Component.literal("- ")
-                        .append(Component.translatable("dna.wildaside.blood_contaminated"))
-                );
-            }
-        }
+        DnaUtils.handleContaminatedSampleTooltip(tooltip, multipleSources, clotted, dirty);
     }
 }

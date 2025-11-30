@@ -48,7 +48,7 @@ public class PotionBlasterBlockEntity extends BlasterBlockEntity implements Menu
         }
     };
 
-    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.of(() -> itemHandler);
+    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
     public static final int OUTPUT_1 = 9;
 

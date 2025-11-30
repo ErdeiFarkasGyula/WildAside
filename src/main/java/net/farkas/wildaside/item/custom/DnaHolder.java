@@ -84,6 +84,16 @@ public class DnaHolder extends Item {
             return;
         }
 
+        boolean multipleSources = tag.getBoolean(MULTIPLE_SOURCES);
+        boolean clotted = tag.getBoolean(SAMPLE_CLOTTED);
+        boolean dirty = tag.getBoolean(SAMPLE_DIRTY);
+
+        boolean unusable = DnaUtils.handleContaminatedSampleTooltip(tooltip, multipleSources, clotted, dirty);
+        if (unusable) {
+            tag.putBoolean(SAMPLE_UNUSABLE, true);
+            return;
+        }
+
         if (revealSource) {
             Component sourceName = dna.getSource() != null
                     ? dna.getSource().getDescription()

@@ -10,7 +10,9 @@ import net.farkas.wildaside.dna.speed.MobSpeedTesting;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitType;
 import net.farkas.wildaside.dna.trait.Traits;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.EntityTypeTags;
@@ -286,5 +288,35 @@ public class DnaUtils {
         }
 
         return currentTime - creationTime - freezerTicks;
+    }
+
+    public static boolean handleContaminatedSampleTooltip(List<Component> tooltip, boolean multipleSources, boolean clotted, boolean dirty) {
+        if (multipleSources || clotted || dirty) {
+            tooltip.add(
+                    Component.translatable("dna.wildaside.sample_unusable")
+                            .append(Component.literal(": "))
+                            .withStyle(ChatFormatting.RED)
+            );
+
+            if (multipleSources) {
+                tooltip.add(Component.literal("- ")
+                        .append(Component.translatable("dna.wildaside.multiple_sources"))
+                );
+            }
+
+            if (clotted) {
+                tooltip.add(Component.literal("- ")
+                        .append(Component.translatable("dna.wildaside.blood_clotted"))
+                );
+            }
+
+            if (dirty) {
+                tooltip.add(Component.literal("- ")
+                        .append(Component.translatable("dna.wildaside.blood_contaminated"))
+                );
+            }
+            return true;
+        }
+        return false;
     }
 }

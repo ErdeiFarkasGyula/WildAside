@@ -46,7 +46,7 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
         }
     };
 
-    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.of(() -> itemHandler);
+    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
     private static final int INPUT_1 = 0;
     private static final int INPUT_2 = 1;
