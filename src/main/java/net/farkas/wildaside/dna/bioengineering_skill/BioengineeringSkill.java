@@ -1,6 +1,8 @@
 package net.farkas.wildaside.dna.bioengineering_skill;
 
 import net.farkas.wildaside.WildAside;
+import net.farkas.wildaside.dna.bioengineering_skill.category.BioengineeringSkillCategory;
+import net.farkas.wildaside.dna.bioengineering_skill.requirement.AllSkillsRequirement;
 import net.farkas.wildaside.dna.bioengineering_skill.requirement.IBioengineeringSkillRequirement;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -12,7 +14,7 @@ public class BioengineeringSkill {
     private final String name;
     private final ResourceLocation texture;
     private final int minValue, maxValue;
-    private final List<IBioengineeringSkillRequirement> requirements;
+    private final IBioengineeringSkillRequirement requirement;
     private final int cost;
     private final boolean oneTimeCost;
     private final BioengineeringSkill parent;
@@ -24,7 +26,7 @@ public class BioengineeringSkill {
         this.texture = builder.texture;
         this.minValue = builder.minValue;
         this.maxValue = builder.maxValue;
-        this.requirements = builder.requirements;
+        this.requirement = builder.requirement;
         this.cost = builder.cost;
         this.oneTimeCost = builder.oneTimeCost;
         this.parent = builder.parent;
@@ -36,7 +38,7 @@ public class BioengineeringSkill {
     public ResourceLocation getTexture() { return texture; }
     public int getMinValue() { return minValue; }
     public int getMaxValue() { return maxValue; }
-    public List<IBioengineeringSkillRequirement> getRequirements() { return requirements; }
+    public IBioengineeringSkillRequirement getRequirement() { return requirement; }
     public int getCost() { return cost; }
     public boolean isOneTimeCost() { return oneTimeCost; }
     public BioengineeringSkill getParent() { return parent; }
@@ -56,7 +58,7 @@ public class BioengineeringSkill {
         private ResourceLocation texture;
         private int minValue = 0;
         private int maxValue = 1;
-        private List<IBioengineeringSkillRequirement> requirements;
+        private IBioengineeringSkillRequirement requirement = new AllSkillsRequirement(List.of());
         private int cost;
         private boolean oneTimeCost;
         private BioengineeringSkill parent;
@@ -87,8 +89,8 @@ public class BioengineeringSkill {
             return this;
         }
 
-        public Builder requirements(List<IBioengineeringSkillRequirement> requirements) {
-            this.requirements = requirements;
+        public Builder requirement(IBioengineeringSkillRequirement requirement) {
+            this.requirement = requirement;
             return this;
         }
 
@@ -129,6 +131,10 @@ public class BioengineeringSkill {
             if (maxValue < minValue) {
                 WildAside.LOGGER.warn("BioengineeringSkill {}: max value ({}) is less than min value ({}), correcting max value to min value + 1.", name, maxValue, minValue);
                 this.maxValue = minValue + 1;
+            }
+
+            if (requirement == null) {
+                requirement = new AllSkillsRequirement(List.of());
             }
 
             if (category == null) {

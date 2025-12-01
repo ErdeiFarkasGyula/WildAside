@@ -1,24 +1,21 @@
 package net.farkas.wildaside.dna.bioengineering_skill.requirement;
 
+import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
+import java.util.List;
 import java.util.Set;
 
-public class SkillRequirement implements IBioengineeringSkillRequirement {
-    private final Set<ResourceLocation> requirements;
+public class SkillRequirement extends IBioengineeringSkillRequirement {
+    private final ResourceLocation requiredSkill;
 
-    public SkillRequirement(Set<ResourceLocation> requirementIds) {
-        this.requirements = requirementIds;
+    public SkillRequirement(ResourceLocation skill) {
+        this.requiredSkill = skill;
     }
 
     @Override
-    public boolean isSatisfied(ServerPlayer player, Set<ResourceLocation> unlockedSkills) {
-        for (ResourceLocation requirementId : requirements) {
-            if (!unlockedSkills.contains(requirementId)) {
-                return false;
-            }
-        }
-        return true;
+    public boolean isSatisfied(ServerPlayer player) {
+        return BioengineeringSkillUtils.hasSkill(player, requiredSkill);
     }
 }
