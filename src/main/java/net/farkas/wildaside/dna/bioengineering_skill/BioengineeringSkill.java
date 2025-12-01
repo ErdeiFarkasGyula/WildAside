@@ -1,7 +1,7 @@
 package net.farkas.wildaside.dna.bioengineering_skill;
 
 import net.farkas.wildaside.WildAside;
-import net.farkas.wildaside.dna.bioengineering_skill.requirement.BioengineeringSkillRequirement;
+import net.farkas.wildaside.dna.bioengineering_skill.requirement.IBioengineeringSkillRequirement;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -12,7 +12,7 @@ public class BioengineeringSkill {
     private final String name;
     private final ResourceLocation texture;
     private final int minValue, maxValue;
-    private final List<BioengineeringSkillRequirement> requirements;
+    private final List<IBioengineeringSkillRequirement> requirements;
     private final int cost;
     private final boolean oneTimeCost;
     private final BioengineeringSkill parent;
@@ -36,7 +36,7 @@ public class BioengineeringSkill {
     public ResourceLocation getTexture() { return texture; }
     public int getMinValue() { return minValue; }
     public int getMaxValue() { return maxValue; }
-    public List<BioengineeringSkillRequirement> getRequirements() { return requirements; }
+    public List<IBioengineeringSkillRequirement> getRequirements() { return requirements; }
     public int getCost() { return cost; }
     public boolean isOneTimeCost() { return oneTimeCost; }
     public BioengineeringSkill getParent() { return parent; }
@@ -56,7 +56,7 @@ public class BioengineeringSkill {
         private ResourceLocation texture;
         private int minValue = 0;
         private int maxValue = 1;
-        private List<BioengineeringSkillRequirement> requirements;
+        private List<IBioengineeringSkillRequirement> requirements;
         private int cost;
         private boolean oneTimeCost;
         private BioengineeringSkill parent;
@@ -87,7 +87,7 @@ public class BioengineeringSkill {
             return this;
         }
 
-        public Builder requirements(List<BioengineeringSkillRequirement> requirements) {
+        public Builder requirements(List<IBioengineeringSkillRequirement> requirements) {
             this.requirements = requirements;
             return this;
         }
