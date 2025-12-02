@@ -85,8 +85,8 @@ public class ModEvents {
         manageWeather(event);
     }
 
-    private static final int regularTime = 400;
-    private static int irregularTime = 670;
+    private static final int REGULAR_TIME = 60 * 20;
+    private static int irregularTime = 1467;
 
     public static void manageWeather(TickEvent.ServerTickEvent event) {
         if (event.phase != TickEvent.Phase.END) return;
@@ -106,9 +106,10 @@ public class ModEvents {
 
         int tickCount = server.getTickCount();;
 
-        if (server.getTickCount() % regularTime == 0) {
+        if (server.getTickCount() % REGULAR_TIME == 0) {
             WindManager.calculateAndSetWind(overworld, true);
-            irregularTime = overworld.random.nextInt(40, 300);
+            int minTime = raining || thundering ? 40 : 100;
+            irregularTime = overworld.random.nextInt(minTime, 300);
         }
         else if (tickCount % irregularTime == 0) {
             WindManager.calculateAndSetWind(overworld, true);

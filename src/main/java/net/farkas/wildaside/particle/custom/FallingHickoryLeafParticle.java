@@ -30,7 +30,7 @@ public class FallingHickoryLeafParticle extends TextureSheetParticle {
     private final float driftAmplitudeZ;
     private final float rollAmplitude;
 
-    private static final double windInfluence = 0.05;
+    private static final double WIND_INFLUENCE = 0.045;
 
     protected FallingHickoryLeafParticle(ClientLevel level, double x, double y, double z, double vx, double vy, double vz, SpriteSet spriteSet) {
         super(level, x, y, z);
@@ -49,12 +49,13 @@ public class FallingHickoryLeafParticle extends TextureSheetParticle {
         this.zd = vz * 0.1;
 
         this.roll = level.random.nextFloat() * (float)Math.PI * 2;
-        this.setSpriteFromAge(spriteSet);
+
+        this.setSprite(spriteSet.get(level.random));
     }
 
     @Override
     public ParticleRenderType getRenderType() {
-        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 
     @Override
@@ -63,9 +64,9 @@ public class FallingHickoryLeafParticle extends TextureSheetParticle {
 
         Vec3 wind = ClientWindData.getWind();
 
-        this.xd += wind.x * windInfluence;
-        this.yd += wind.y * windInfluence;
-        this.zd += wind.z * windInfluence;
+        this.xd += wind.x * WIND_INFLUENCE;
+        this.yd += wind.y * WIND_INFLUENCE;
+        this.zd += wind.z * WIND_INFLUENCE;
 
         float ageFactor = (this.age + this.phaseOffset) * 0.15f;
         this.xd += Mth.sin(ageFactor) * driftAmplitudeX * 0.01;
