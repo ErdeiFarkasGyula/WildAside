@@ -1,8 +1,6 @@
 package net.farkas.wildaside.network.packets;
 
-import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkill;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillUtils;
-import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkills;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,7 +26,7 @@ public class BioengineeringSkillUnlockRequestPacket {
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             ServerPlayer player = ctx.get().getSender();
-            BioengineeringSkillUtils.unlockSkill(player, skillId);
+            BioengineeringSkillUtils.unlockAndSyncToClient(player, skillId);
         });
         ctx.get().setPacketHandled(true);
     }

@@ -1,6 +1,7 @@
 package net.farkas.wildaside.dna.bioengineering_skill;
 
 import net.farkas.wildaside.capability.bioengineering.BioengineeringSkillsCapability;
+import net.farkas.wildaside.network.NetworkHandler;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -30,29 +31,29 @@ public class BioengineeringSkillUtils {
 
     public static boolean hasSkill(Player player, ResourceLocation skill) {
         if (player instanceof ServerPlayer serverPlayer) {
-            return getUnlocked(player).contains(skill);
+            return getUnlocked(serverPlayer).contains(skill);
         }
         return false;
     }
 
-    public static boolean unlockSkill(Player player, ResourceLocation skillId) {
+    public static void sendUnlockRequestPacket(ResourceLocation skillId) {
+        NetworkHandler.sendBioengineeringSkillRequestPacket(skillId);
+    }
+
+    public static void unlockAndSyncToClient(Player player, ResourceLocation skillId) {
         if (player instanceof ServerPlayer serverPlayer) {
             BioengineeringSkill skill = BioengineeringSkills.get(skillId);
 
-            if (!canUnlock(serverPlayer, skill)) return false;
-
-            if (hasSkill(serverPlayer, skill.getId())) return false;
+            if (!canUnlock(serverPlayer, skill)) return;
+            if (hasSkill(serverPlayer, skillId)) return;
 
             serverPlayer.getCapability(BioengineeringSkillsCapability.INSTANCE).ifPresent(cap -> {
                 skill.getRequirement().unlock(serverPlayer);
-                cap.unlockSkill(skill.getId());
+                cap.unlockSkill(skillId);
                 cap.syncToClient(serverPlayer);
             });
 
             serverPlayer.playSound(SoundEvents.PLAYER_LEVELUP, 0.8f, 1.5f);
-
-            return true;
         }
-        return false;
     }
 }
