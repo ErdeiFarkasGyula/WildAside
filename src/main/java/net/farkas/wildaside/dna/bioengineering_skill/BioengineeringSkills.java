@@ -1,5 +1,6 @@
 package net.farkas.wildaside.dna.bioengineering_skill;
 
+import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.dna.bioengineering_skill.category.BioengineeringSkillCategory;
 import net.minecraft.resources.ResourceLocation;
 
@@ -10,17 +11,15 @@ import java.util.Map;
 public class BioengineeringSkills {
     private static final Map<ResourceLocation, BioengineeringSkill> REGISTRY = new HashMap<>();
 
-    public static final BioengineeringSkillCategory GENETICS = register(
-            new BioengineeringSkillCategory.Builder()
-                    .name("genetic")
-                    .icon()
-    )
-
     public static BioengineeringSkill register(BioengineeringSkill skill) {
         REGISTRY.put(skill.getId(), skill);
         return skill;
     }
 
+    public static BioengineeringSkill get(String name) {
+        return REGISTRY.get(new ResourceLocation(WildAside.MOD_ID, name));
+    }
+    
     public static BioengineeringSkill get(ResourceLocation id) {
         return REGISTRY.get(id);
     }

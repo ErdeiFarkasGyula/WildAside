@@ -18,7 +18,7 @@ public class BioengineeringSkillCategories {
     public static BioengineeringSkillCategory get(String name) {
         return CATEGORIES.get(new ResourceLocation(WildAside.MOD_ID,  name));
     }
-    
+
     public static BioengineeringSkillCategory get(ResourceLocation id) {
         return CATEGORIES.get(id);
     }
