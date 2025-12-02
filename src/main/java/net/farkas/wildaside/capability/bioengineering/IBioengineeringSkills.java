@@ -13,6 +13,7 @@ public interface IBioengineeringSkills {
     void setPoints(int points);
     boolean spendPoints(int points);
     boolean hasSkill(ResourceLocation skillId);
+    void sendUnlockRequest(ResourceLocation skillId);
     void unlockSkill(ResourceLocation skillId);
     void removeSkill(ResourceLocation skillId);
     void setSkills(Set<ResourceLocation> newSkills);

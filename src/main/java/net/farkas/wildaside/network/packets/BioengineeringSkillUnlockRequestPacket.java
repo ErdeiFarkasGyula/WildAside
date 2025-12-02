@@ -28,8 +28,7 @@ public class BioengineeringSkillUnlockRequestPacket {
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             ServerPlayer player = ctx.get().getSender();
-            BioengineeringSkill skill = BioengineeringSkills.get(skillId);
-            BioengineeringSkillUtils.unlockSkill(player, skill);
+            BioengineeringSkillUtils.unlockSkill(player, skillId);
         });
         ctx.get().setPacketHandled(true);
     }

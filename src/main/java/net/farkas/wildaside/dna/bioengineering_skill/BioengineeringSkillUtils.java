@@ -35,15 +35,16 @@ public class BioengineeringSkillUtils {
         return false;
     }
 
-    public static boolean unlockSkill(Player player, BioengineeringSkill skill) {
+    public static boolean unlockSkill(Player player, ResourceLocation skillId) {
         if (player instanceof ServerPlayer serverPlayer) {
+            BioengineeringSkill skill = BioengineeringSkills.get(skillId);
+
             if (!canUnlock(serverPlayer, skill)) return false;
 
             if (hasSkill(serverPlayer, skill.getId())) return false;
 
-            skill.getRequirement().unlock(serverPlayer);
-
             serverPlayer.getCapability(BioengineeringSkillsCapability.INSTANCE).ifPresent(cap -> {
+                skill.getRequirement().unlock(serverPlayer);
                 cap.unlockSkill(skill.getId());
                 cap.syncToClient(serverPlayer);
             });
