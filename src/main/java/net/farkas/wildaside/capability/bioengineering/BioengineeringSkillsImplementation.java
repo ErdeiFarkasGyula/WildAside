@@ -75,6 +75,8 @@ public class BioengineeringSkillsImplementation implements IBioengineeringSkills
         CompoundTag tag = new CompoundTag();
         ListTag skillsTag = new ListTag();
 
+        tag.putInt(BIOENGINEERING_POINTS, points);
+
         for (ResourceLocation skillId : skills) {
             skillsTag.add(StringTag.valueOf(skillId.toString()));
         }
@@ -85,6 +87,8 @@ public class BioengineeringSkillsImplementation implements IBioengineeringSkills
 
     @Override
     public void deserializeNBT(CompoundTag tag) {
+        points = tag.getInt(BIOENGINEERING_POINTS);
+
         skills.clear();
 
         ListTag skillsTag = tag.getList(BIOENGINEERING_SKILL, Tag.TAG_STRING);
