@@ -14,6 +14,7 @@ public class GeneSlot extends ModVisibleSlot {
 
     @Override
     public boolean mayPlace(@NotNull ItemStack stack) {
-        return stack.is(ModItems.GENE.get()) && super.mayPlace(stack);
+        if (stack.isEmpty()) return false;
+        return stack.is(ModItems.GENE.get()) && this.getItemHandler().isItemValid(getSlotIndex(), stack);
     }
 }

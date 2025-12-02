@@ -7,6 +7,7 @@ import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.Traits;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.item.custom.DnaHolder;
+import net.farkas.wildaside.item.custom.GeneItem;
 import net.farkas.wildaside.recipe.BioengineeringWorkstationRecipe;
 import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationMenu;
 import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationTab;
@@ -44,6 +45,44 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
+        }
+    };
+
+    private final IItemHandler automationHandler = new IItemHandler() {
+        @Override
+        public int getSlots() {
+            return itemHandler.getSlots();
+        }
+
+        @Override
+        public @NotNull ItemStack getStackInSlot(int slot) {
+            return itemHandler.getStackInSlot(slot);
+        }
+
+        @Override
+        public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+            if (stack.getItem() instanceof GeneItem) return stack.copy();
+
+            return itemHandler.insertItem(slot, stack, simulate);
+        }
+
+        @Override
+        public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
+            ItemStack existing = itemHandler.getStackInSlot(slot);
+
+            if (existing.getItem() instanceof GeneItem) return ItemStack.EMPTY;
+
+            return itemHandler.extractItem(slot, amount, simulate);
+        }
+
+        @Override
+        public int getSlotLimit(int slot) {
+            return itemHandler.getSlotLimit(slot);
+        }
+
+        @Override
+        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+            return !(stack.getItem() instanceof GeneItem);
         }
     };
 
@@ -98,7 +137,11 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (cap == ForgeCapabilities.ITEM_HANDLER) {
-            return lazyItemHandler.cast();
+            if (side == null) {
+                return LazyOptional.of(() -> itemHandler).cast();
+            }
+
+            return LazyOptional.of(() -> automationHandler).cast();
         }
 
         return super.getCapability(cap, side);

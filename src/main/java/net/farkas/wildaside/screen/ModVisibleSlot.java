@@ -1,5 +1,6 @@
 package net.farkas.wildaside.screen;
 
+import net.farkas.wildaside.item.ModItems;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
@@ -15,7 +16,7 @@ public class ModVisibleSlot extends SlotItemHandler {
 
     @Override
     public boolean mayPlace(@NotNull ItemStack stack) {
-        return active && super.mayPlace(stack);
+        return active && super.mayPlace(stack) && !stack.is(ModItems.GENE.get());
     }
 
     @Override

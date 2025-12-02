@@ -54,7 +54,6 @@ public class GeneItem extends Item {
         }
     }
 
-
     @Override
     public void onInventoryTick(ItemStack stack, Level level, Player player, int slotIndex, int selectedIndex) {
         player.getInventory().removeItem(stack);
