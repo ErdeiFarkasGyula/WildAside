@@ -39,10 +39,10 @@ public class GeneItem extends Item {
             Allele alleleA = gene.getAlleleA();
             Allele alleleB = gene.getAlleleB();
 
-            tooltip.add(Component.translatable("trait.wildaside." + trait.getName())
-                    .withStyle(trait.getTraitType().getHeaderColour()));
+            tooltip.add(Component.translatable("trait.wildaside." + trait.getName()).withStyle(trait.getTraitType().getHeaderColour()));
+            tooltip.add(Component.literal("- " + DnaUtils.getFormattedString(gene.getExpressedValue())).withStyle(ChatFormatting.GREEN));
 
-            tooltip.add(Component.literal("- " + DnaUtils.getFormattedString(gene.getExpressedValue())));
+            tooltip.add(Component.empty());
 
             tooltip.add(Component.translatable("dna.wildaside.alleleA").withStyle(ChatFormatting.AQUA));
             tooltip.add(Component.literal("- ").append(alleleA.getDominance().getComponent()));
