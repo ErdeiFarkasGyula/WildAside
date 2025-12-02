@@ -10,6 +10,10 @@ import java.util.Map;
 public class BioengineeringSkillCategories {
     public static final Map<ResourceLocation, BioengineeringSkillCategory> CATEGORIES = new HashMap<>();
 
+    public static final BioengineeringSkillCategory CATEGORY_1 = register(new BioengineeringSkillCategory.Builder()
+            .name("category_1")
+            .build());
+
     public static BioengineeringSkillCategory register(BioengineeringSkillCategory skillCategory) {
         CATEGORIES.put(skillCategory.getId(), skillCategory);
         return skillCategory;

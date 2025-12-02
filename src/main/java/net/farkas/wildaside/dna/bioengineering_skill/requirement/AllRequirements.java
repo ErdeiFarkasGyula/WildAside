@@ -4,16 +4,16 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.util.List;
 
-public class AllSkillsRequirement extends IBioengineeringSkillRequirement {
-    private final List<SkillRequirement> requirements;
+public class AllRequirements extends IBioengineeringSkillRequirement {
+    private final List<IBioengineeringSkillRequirement> requirements;
 
-    public AllSkillsRequirement(List<SkillRequirement> requirementIds) {
+    public AllRequirements(List<IBioengineeringSkillRequirement> requirementIds) {
         this.requirements = requirementIds;
     }
 
     @Override
     public boolean isSatisfied(ServerPlayer player) {
-        for (SkillRequirement requirement : requirements) {
+        for (IBioengineeringSkillRequirement requirement : requirements) {
             if (!requirement.isSatisfied(player)) {
                 return false;
             }
@@ -23,7 +23,7 @@ public class AllSkillsRequirement extends IBioengineeringSkillRequirement {
 
     @Override
     public void unlock(ServerPlayer player) {
-        for (SkillRequirement requirement : requirements) {
+        for (IBioengineeringSkillRequirement requirement : requirements) {
             requirement.unlock(player);
         }
     }

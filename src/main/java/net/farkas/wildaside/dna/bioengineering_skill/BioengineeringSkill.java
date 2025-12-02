@@ -2,7 +2,7 @@ package net.farkas.wildaside.dna.bioengineering_skill;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.dna.bioengineering_skill.category.BioengineeringSkillCategory;
-import net.farkas.wildaside.dna.bioengineering_skill.requirement.AllSkillsRequirement;
+import net.farkas.wildaside.dna.bioengineering_skill.requirement.AllRequirements;
 import net.farkas.wildaside.dna.bioengineering_skill.requirement.IBioengineeringSkillRequirement;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -58,7 +58,7 @@ public class BioengineeringSkill {
         private ResourceLocation texture;
         private int minValue = 0;
         private int maxValue = 1;
-        private IBioengineeringSkillRequirement requirement = new AllSkillsRequirement(List.of());
+        private IBioengineeringSkillRequirement requirement = new AllRequirements(List.of());
         private int cost;
         private boolean oneTimeCost;
         private BioengineeringSkill parent;
@@ -134,7 +134,7 @@ public class BioengineeringSkill {
             }
 
             if (requirement == null) {
-                requirement = new AllSkillsRequirement(List.of());
+                requirement = new AllRequirements(List.of());
             }
 
             if (category == null) {

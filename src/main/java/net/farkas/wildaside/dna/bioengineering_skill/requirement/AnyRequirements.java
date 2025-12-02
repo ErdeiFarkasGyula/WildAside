@@ -4,16 +4,16 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.util.List;
 
-public class AnySkillsRequirement extends IBioengineeringSkillRequirement {
-    private final List<SkillRequirement> requirements;
+public class AnyRequirements extends IBioengineeringSkillRequirement {
+    private final List<IBioengineeringSkillRequirement> requirements;
 
-    public AnySkillsRequirement(List<SkillRequirement> requirements) {
+    public AnyRequirements(List<IBioengineeringSkillRequirement> requirements) {
         this.requirements = requirements;
     }
 
     @Override
     public boolean isSatisfied(ServerPlayer player) {
-        for (SkillRequirement requirement : requirements) {
+        for (IBioengineeringSkillRequirement requirement : requirements) {
             if (requirement.isSatisfied(player)) {
                 return true;
             }
