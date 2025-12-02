@@ -131,7 +131,7 @@ public class NetworkHandler {
             WildAside.LOGGER.warn("Tried to send bioengineering skill unlock request before network init. Ignoring.");
             return;
         }
-        CHANNEL.send(PacketDistributor.ALL.noArg(), new BioengineeringSkillUnlockRequestPacket(skillId));
+        CHANNEL.send(PacketDistributor.SERVER.noArg(), new BioengineeringSkillUnlockRequestPacket(skillId));
     }
 
     public static void sendBioengineeringSkillClientSyncPacket(Set<ResourceLocation> skills, int points) {

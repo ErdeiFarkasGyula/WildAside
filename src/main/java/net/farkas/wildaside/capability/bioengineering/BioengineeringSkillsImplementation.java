@@ -1,6 +1,7 @@
 package net.farkas.wildaside.capability.bioengineering;
 
 import net.farkas.wildaside.dna.DnaConstants;
+import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillUtils;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkills;
 import net.farkas.wildaside.network.NetworkHandler;
 import net.minecraft.nbt.CompoundTag;
@@ -52,7 +53,7 @@ public class BioengineeringSkillsImplementation implements IBioengineeringSkills
 
     @Override
     public void unlockSkill(ResourceLocation skillId) {
-
+        NetworkHandler.sendBioengineeringSkillRequestPacket(skillId);
     }
 
     @Override
