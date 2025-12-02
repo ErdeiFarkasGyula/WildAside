@@ -84,7 +84,6 @@ public class Syringe extends Item {
                     fluid = Mth.clamp(fluid + NEEDLE_DELTA, 0f, DEFAULT_MAX_LOAD);
                     tag.putString(FLUID_TYPE, WATER);
                     tag.putInt(FLUID_COLOUR, waterColor);
-                    if (fluid >= DEFAULT_MAX_LOAD - 0.25f) tag.putInt(DIRTINESS, 0);
                 }
             }
         } else {
@@ -93,11 +92,16 @@ public class Syringe extends Item {
                 handleDnaHolderInteraction(player, tag, fluid, progress);
             }
             if (fluid <= 0.01f) {
+                if (WATER.equals(fluidType)) {
+                    tag.putInt(DIRTINESS, 0);
+                }
+
                 tag.putString(FLUID_TYPE, NONE);
                 DnaUtils.resetBloodSamplingTick(tag);
                 DnaUtils.resetBloodFreezerTicks(tag);
                 tag.putBoolean(MULTIPLE_SOURCES, false);
                 tag.remove(PREVIOUS_TARGET);
+
             }
         }
 

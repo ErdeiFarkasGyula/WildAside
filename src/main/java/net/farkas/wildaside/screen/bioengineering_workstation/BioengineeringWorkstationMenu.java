@@ -59,7 +59,7 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
     private AdvancementGivingVisibleResultSlot seqOutB;
 
     public BioengineeringWorkstationMenu(int pContainerId, Inventory inv, FriendlyByteBuf extraData) {
-        this(pContainerId, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(4));
+        this(pContainerId, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2));
     }
 
     public BioengineeringWorkstationMenu(int pContainerId, Inventory inv, BlockEntity entity, ContainerData data) {
@@ -217,10 +217,6 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
 
     public boolean isCrafting() {
         return data.get(0) > 0;
-    }
-
-    public boolean hasDnaInSlot(int i) {
-        return data.get(i - 5) == 1;
     }
 
     public int getScaledProgress() {

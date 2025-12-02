@@ -1,15 +1,20 @@
 package net.farkas.wildaside.screen.bioengineering_workstation;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.farkas.wildaside.capability.dna.DnaImplementation;
+import net.farkas.wildaside.dna.DnaConstants;
+import net.farkas.wildaside.item.custom.DnaHolder;
 import net.farkas.wildaside.network.NetworkHandler;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 
 public class BioengineeringWorkstationScreen extends AbstractContainerScreen<BioengineeringWorkstationMenu> {
     private final BioengineeringWorkstationMenu menu;
@@ -47,7 +52,8 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         guiGraphics.blit(background, x, y, 0, 0, imageWidth, imageHeight);
 
         renderProgressArrow(guiGraphics, x, y);
-        renderDnaConnectors(guiGraphics, x, y);
+        renderDnaConnectors(guiGraphics, x, y, 0);
+        renderDnaConnectors(guiGraphics, x, y, 1);
     }
 
     private void renderProgressArrow(GuiGraphics guiGraphics, int x, int y) {
@@ -56,14 +62,18 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         }
     }
 
-    private void renderDnaConnectors(GuiGraphics guiGraphics, int x, int y) {
+    private void renderDnaConnectors(GuiGraphics guiGraphics, int x, int y, int i) {
         if (tab == BioengineeringWorkstationTab.DNA_EDITOR) {
-            System.out.println(menu.blockEntity.data.get(7 - 5));
-            if (menu.blockEntity.data.get(7 - 5) == 1) {
-                guiGraphics.blit(BACKGROUND, x + 25, y + 12, 0, 248, 8, 8);
-            }
-            if (menu.hasDnaInSlot(8)) {
-                guiGraphics.blit(BACKGROUND, x + 25, y + 34, 0, 248, 8, 8);
+            ItemStack stack = menu.getSlot(44 + i).getItem();
+
+            if (stack.getItem() instanceof DnaHolder) {
+                CompoundTag compoundTag = stack.getOrCreateTagElement(DnaConstants.DNA_DATA);
+                DnaImplementation dna = new DnaImplementation();
+                dna.deserializeNBT(compoundTag);
+
+                if (!dna.getGenes().isEmpty()) {
+                    guiGraphics.blit(BACKGROUND, x + 25, y + 12 + i * 22, 0, 248, 8, 8);
+                }
             }
         }
     }
@@ -96,11 +106,11 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         NetworkHandler.sendBioengineeringWorkstationTabPacket(newTab);
 
         menu.setTab(newTab);
+        BACKGROUND = tab.getTexture();
 
         clearWidgets();
         addRecompileButton();
         addTabButtons();
-
     }
 
     private void addTabButtons() {
