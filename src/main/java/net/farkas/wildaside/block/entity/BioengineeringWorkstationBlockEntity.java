@@ -5,6 +5,7 @@ import net.farkas.wildaside.dna.DnaConstants;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.Traits;
+import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.item.custom.DnaHolder;
 import net.farkas.wildaside.recipe.BioengineeringWorkstationRecipe;
 import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationMenu;
@@ -60,9 +61,12 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
     private static final int DNA_OUTPUT_1 = 9;
     private static final int DNA_OUTPUT_2 = 10;
 
-    protected final ContainerData data;
+    public final ContainerData data;
     private int progress = 0;
     private int maxProgress = 200;
+
+    private int hasDnaInSlot1 = 0;
+    private int hasDnaInSlot2 = 0;
 
     private BioengineeringWorkstationTab tab = BioengineeringWorkstationTab.ASSEMBLER;
 
@@ -75,6 +79,8 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
                 return switch (pIndex) {
                     case 0 -> BioengineeringWorkstationBlockEntity.this.progress;
                     case 1 -> BioengineeringWorkstationBlockEntity.this.maxProgress;
+                    case 2 -> BioengineeringWorkstationBlockEntity.this.hasDnaInSlot1;
+                    case 3 -> BioengineeringWorkstationBlockEntity.this.hasDnaInSlot2;
                     default -> 0;
                 };
             }
@@ -84,12 +90,14 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
                 switch (pIndex) {
                     case 0 -> BioengineeringWorkstationBlockEntity.this.progress = pValue;
                     case 1 -> BioengineeringWorkstationBlockEntity.this.maxProgress = pValue;
+                    case 2 -> BioengineeringWorkstationBlockEntity.this.hasDnaInSlot1 = pValue;
+                    case 3 -> BioengineeringWorkstationBlockEntity.this.hasDnaInSlot2 = pValue;
                 }
             }
 
             @Override
             public int getCount() {
-                return 2;
+                return 4;
             }
         };
     }
@@ -155,6 +163,8 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
         pTag.put("inventory", itemHandler.serializeNBT());
         pTag.putInt("bioengineering_workstation.progress", progress);
         pTag.putInt("bioengineering_workstation.tab", tab.ordinal());
+        pTag.putInt("bioengineering_workstation.has_dna_in_slot1", hasDnaInSlot1);
+        pTag.putInt("bioengineering_workstation.has_dna_in_slot2", hasDnaInSlot2);
     }
 
     @Override
@@ -166,6 +176,8 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
         }
         progress = pTag.getInt("bioengineering_workstation.progress");
         tab = BioengineeringWorkstationTab.values()[pTag.getInt("bioengineering_workstation.tab")];
+        hasDnaInSlot1 = pTag.getInt("bioengineering_workstation.has_dna_in_slot_1");
+        hasDnaInSlot2 = pTag.getInt("bioengineering_workstation.has_dna_in_slot_2");
     }
 
     public void tick(Level pLevel, BlockPos pPos, BlockState pState) {
@@ -180,6 +192,26 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
         } else {
             resetProgress();
         }
+
+        handleDnaHolderInputSlotGraphics(7);
+        handleDnaHolderInputSlotGraphics(8);
+    }
+
+    private void handleDnaHolderInputSlotGraphics(int i) {
+        ItemStack stack = itemHandler.getStackInSlot(i);
+        System.out.println(stack);
+        if (stack.getItem() instanceof DnaHolder dnaHolder) {
+            CompoundTag compoundTag = stack.getOrCreateTagElement(DNA_DATA);
+            DnaImplementation dna = new DnaImplementation();
+            dna.deserializeNBT(compoundTag);
+
+            if (!dna.getGenes().isEmpty()) {
+                this.data.set(i - 5, 1);
+                return;
+            }
+        }
+        this.data.set(i - 5, 0);
+        setChanged();
     }
 
     public static Map<Trait, Gene> orderGenes(DnaImplementation dna) {

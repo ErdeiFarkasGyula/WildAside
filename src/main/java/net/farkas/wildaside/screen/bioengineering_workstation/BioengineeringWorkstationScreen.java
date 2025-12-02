@@ -47,11 +47,24 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         guiGraphics.blit(background, x, y, 0, 0, imageWidth, imageHeight);
 
         renderProgressArrow(guiGraphics, x, y);
+        renderDnaConnectors(guiGraphics, x, y);
     }
 
     private void renderProgressArrow(GuiGraphics guiGraphics, int x, int y) {
         if (menu.isCrafting() && tab == BioengineeringWorkstationTab.ASSEMBLER) {
             guiGraphics.blit(BACKGROUND, x + 129, y + 37, 0, 248, menu.getScaledProgress(), 8);
+        }
+    }
+
+    private void renderDnaConnectors(GuiGraphics guiGraphics, int x, int y) {
+        if (tab == BioengineeringWorkstationTab.DNA_EDITOR) {
+            System.out.println(menu.blockEntity.data.get(7 - 5));
+            if (menu.blockEntity.data.get(7 - 5) == 1) {
+                guiGraphics.blit(BACKGROUND, x + 25, y + 12, 0, 248, 8, 8);
+            }
+            if (menu.hasDnaInSlot(8)) {
+                guiGraphics.blit(BACKGROUND, x + 25, y + 34, 0, 248, 8, 8);
+            }
         }
     }
 
