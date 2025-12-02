@@ -84,7 +84,7 @@ public class Syringe extends Item {
                     fluid = Mth.clamp(fluid + NEEDLE_DELTA, 0f, DEFAULT_MAX_LOAD);
                     tag.putString(FLUID_TYPE, WATER);
                     tag.putInt(FLUID_COLOUR, waterColor);
-                    if (fluid >= DEFAULT_MAX_LOAD - 0.01f) tag.putInt(DIRTINESS, 0);
+                    if (fluid >= DEFAULT_MAX_LOAD - 0.25f) tag.putInt(DIRTINESS, 0);
                 }
             }
         } else {
@@ -150,7 +150,7 @@ public class Syringe extends Item {
         ItemStack offHandStack = player.getItemInHand(InteractionHand.OFF_HAND);
         if (!(offHandStack.getItem() instanceof DnaHolder dnaHolder)) return fluid;
 
-        if (progress >= DEFAULT_MAX_LOAD - 0.01f) {
+        if (progress >= DEFAULT_MAX_LOAD - 0.25f) {
             boolean multipleSources = syringeTag.getBoolean(MULTIPLE_SOURCES);
             boolean clotted = DnaUtils.getFrozenItemEffectiveAge(syringeTag, serverLevel) > BLOOD_CLOTTING_TIME_DEFAULT;
             boolean dirty = syringeTag.getInt(DIRTINESS) >= 3;
@@ -252,7 +252,7 @@ public class Syringe extends Item {
         tag.putString(FLUID_TYPE, BLOOD);
         tag.putInt(FLUID_COLOUR, DEFAULT_BLOOD_COLOR);
 
-        if (fluid > DEFAULT_MAX_LOAD - 0.1f) {
+        if (fluid > DEFAULT_MAX_LOAD - 0.25f) {
             DnaUtils.saveBloodSamplingTick(tag, serverLevel);
 
             int dirt = tag.getInt(DIRTINESS);
