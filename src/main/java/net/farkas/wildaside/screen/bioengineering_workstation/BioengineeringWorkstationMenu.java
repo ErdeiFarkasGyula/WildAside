@@ -142,7 +142,7 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
                 setVisibleAnalyzer(true);
                 setVisibleSequencer(false);
             }
-            case DNA_SEQUENCER -> {
+            case DNA_EDITOR -> {
                 setVisibleAsm(false);
                 setVisibleAnalyzer(false);
                 setVisibleSequencer(true);

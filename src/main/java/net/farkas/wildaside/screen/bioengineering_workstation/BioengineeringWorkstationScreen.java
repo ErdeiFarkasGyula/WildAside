@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.Slot;
 
 public class BioengineeringWorkstationScreen extends AbstractContainerScreen<BioengineeringWorkstationMenu> {
     private final BioengineeringWorkstationMenu menu;
@@ -98,15 +97,15 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
                 .tooltip(Tooltip.create(Component.translatable("gui.wildaside.bioengineering_workstation.bio_assembler")))
                 .build());
 
-        this.addWidget(Button.builder(Component.empty(), b -> switchTab(BioengineeringWorkstationTab.DNA_SEQUENCER))
+        this.addWidget(Button.builder(Component.empty(), b -> switchTab(BioengineeringWorkstationTab.DNA_EDITOR))
                 .pos(this.leftPos + 15, this.topPos + 114)
                 .size(26, 25)
-                .tooltip(Tooltip.create(Component.translatable("gui.wildaside.bioengineering_workstation.dna_sequencer")))
+                .tooltip(Tooltip.create(Component.translatable("gui.wildaside.bioengineering_workstation.dna_editor")))
                 .build());
     }
 
     public void addRecompileButton() {
-        if (tab ==  BioengineeringWorkstationTab.DNA_SEQUENCER) {
+        if (tab == BioengineeringWorkstationTab.DNA_EDITOR) {
             this.addRenderableWidget(Button.builder(Component.literal("="), btn -> {
                         NetworkHandler.sendBioengineeringWorkstationRecompileGenesPacket(menu.blockEntity.getBlockPos());
                     }).pos(leftPos + 14, topPos + 55).size(20, 20)
