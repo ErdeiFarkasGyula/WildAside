@@ -263,6 +263,7 @@
   "dominance.wildaside.incomplete": "Hiányos",
 
   "gui.wildaside.bioengineering_workstation.bio_assembler":  "Bio összeszerelő",
+  "gui.wildaside.bioengineering_workstation.dna_analyzer":  "DNS analizáló",
   "gui.wildaside.bioengineering_workstation.dna_editor":  "DNS szerkesztő",
   "gui.wildaside.bioengineering_workstation.recompile_dna":  "DNSek újraalkotása",
 

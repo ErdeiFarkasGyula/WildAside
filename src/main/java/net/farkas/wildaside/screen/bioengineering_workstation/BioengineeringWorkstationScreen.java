@@ -18,18 +18,24 @@ import net.minecraft.world.item.ItemStack;
 
 public class BioengineeringWorkstationScreen extends AbstractContainerScreen<BioengineeringWorkstationMenu> {
     private final BioengineeringWorkstationMenu menu;
-    private BioengineeringWorkstationTab tab;
+    public BioengineeringWorkstationTab tab;
     private static ResourceLocation BACKGROUND;
+
+    private final int yOffset;
 
     public BioengineeringWorkstationScreen(BioengineeringWorkstationMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
         menu = pMenu;
+        yOffset = BioengineeringWorkstationMenu.yOffset;
     }
 
     @Override
     protected void init() {
         this.imageWidth = 256;
+        this.imageHeight = 193;
+
         super.init();
+
         this.inventoryLabelY = 9999;
         this.titleLabelY = 9999;
 
@@ -58,7 +64,7 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
 
     private void renderProgressArrow(GuiGraphics guiGraphics, int x, int y) {
         if (menu.isCrafting() && tab == BioengineeringWorkstationTab.ASSEMBLER) {
-            guiGraphics.blit(BACKGROUND, x + 129, y + 37, 0, 248, menu.getScaledProgress(), 8);
+            guiGraphics.blit(BACKGROUND, x + 129, y + 37 + yOffset, 0, 248, menu.getScaledProgress(), 8);
         }
     }
 
@@ -72,7 +78,7 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
                 dna.deserializeNBT(compoundTag);
 
                 if (!dna.getGenes().isEmpty()) {
-                    guiGraphics.blit(BACKGROUND, x + 25, y + 12 + i * 22, 0, 248, 8, 8);
+                    guiGraphics.blit(BACKGROUND, x + 25, y + 12 + yOffset + i * 22, 0, 248, 8, 8);
                 }
             }
         }
@@ -115,14 +121,20 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
 
     private void addTabButtons() {
         this.addWidget(Button.builder(Component.empty(), b -> switchTab(BioengineeringWorkstationTab.ASSEMBLER))
-                .pos(this.leftPos + 15, this.topPos + 87)
-                .size(26, 25)
+                .pos(this.leftPos + 44, this.topPos + 3)
+                .size(24, 25)
                 .tooltip(Tooltip.create(Component.translatable("gui.wildaside.bioengineering_workstation.bio_assembler")))
                 .build());
 
+        this.addWidget(Button.builder(Component.empty(), b -> switchTab(BioengineeringWorkstationTab.DNA_ANALYZER))
+                .pos(this.leftPos + 71, this.topPos + 3)
+                .size(24, 25)
+                .tooltip(Tooltip.create(Component.translatable("gui.wildaside.bioengineering_workstation.dna_analyzer")))
+                .build());
+
         this.addWidget(Button.builder(Component.empty(), b -> switchTab(BioengineeringWorkstationTab.DNA_EDITOR))
-                .pos(this.leftPos + 15, this.topPos + 114)
-                .size(26, 25)
+                .pos(this.leftPos + 98, this.topPos + 3)
+                .size(24, 25)
                 .tooltip(Tooltip.create(Component.translatable("gui.wildaside.bioengineering_workstation.dna_editor")))
                 .build());
     }
@@ -131,7 +143,7 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         if (tab == BioengineeringWorkstationTab.DNA_EDITOR) {
             this.addRenderableWidget(Button.builder(Component.literal("="), btn -> {
                         NetworkHandler.sendBioengineeringWorkstationRecompileGenesPacket(menu.blockEntity.getBlockPos());
-                    }).pos(leftPos + 14, topPos + 55).size(20, 20)
+                    }).pos(leftPos + 14, topPos + 55 + yOffset).size(20, 20)
                     .tooltip(Tooltip.create(Component.translatable("gui.wildaside.bioengineering_workstation.recompile_dna"))).build());
         }
     }

@@ -58,6 +58,8 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
     private AdvancementGivingVisibleResultSlot seqOutA;
     private AdvancementGivingVisibleResultSlot seqOutB;
 
+    public static final int yOffset = 28;
+
     public BioengineeringWorkstationMenu(int pContainerId, Inventory inv, FriendlyByteBuf extraData) {
         this(pContainerId, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2));
     }
@@ -85,12 +87,12 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
             int before = slots.size();
 
-            assemblerSlot0 = new ModVisibleSlot(iItemHandler, 0, 84, 34);
-            assemblerSlot1 = new ModVisibleSlot(iItemHandler, 1, 84, 16);
-            assemblerSlot2 = new ModVisibleSlot(iItemHandler, 2, 102, 34);
-            assemblerSlot3 = new ModVisibleSlot(iItemHandler, 3, 84, 52);
-            assemblerSlot4 = new ModVisibleSlot(iItemHandler, 4, 66, 34);
-            assemblerResult = new AdvancementGivingVisibleResultSlot(iItemHandler, 5, 170, 34, player, "we_need_to_cook");
+            assemblerSlot0 = new ModVisibleSlot(iItemHandler, 0, 84, 34 + yOffset);
+            assemblerSlot1 = new ModVisibleSlot(iItemHandler, 1, 84, 16 + yOffset);
+            assemblerSlot2 = new ModVisibleSlot(iItemHandler, 2, 102, 34 + yOffset);
+            assemblerSlot3 = new ModVisibleSlot(iItemHandler, 3, 84, 52 + yOffset);
+            assemblerSlot4 = new ModVisibleSlot(iItemHandler, 4, 66, 34 + yOffset);
+            assemblerResult = new AdvancementGivingVisibleResultSlot(iItemHandler, 5, 170, 34 + yOffset, player, "we_need_to_cook");
 
             addSlot(assemblerSlot0);
             addSlot(assemblerSlot1);
@@ -99,15 +101,16 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
             addSlot(assemblerSlot4);
             addSlot(assemblerResult);
 
-            analyzerSlotA = new ModVisibleSlot(iItemHandler, 5, 80, 30);
-            analyzerSlotB = new ModVisibleSlot(iItemHandler, 6, 100, 30);
+            analyzerSlotA = new ModVisibleSlot(iItemHandler, 5, 80, 30 + yOffset);
+            analyzerSlotB = new ModVisibleSlot(iItemHandler, 6, 100, 30 + yOffset);
             addSlot(analyzerSlotA);
             addSlot(analyzerSlotB);
 
-            seqInputA = new DnaInputSlot(this, iItemHandler, 7, 15, 8);
-            seqInputB = new DnaInputSlot(this, iItemHandler, 8, 15, 30);
-            seqOutA = new AdvancementGivingVisibleResultSlot(iItemHandler, 9, 191, 57, player);
-            seqOutB = new AdvancementGivingVisibleResultSlot(iItemHandler, 10, 221, 57, player);
+            seqInputA = new DnaInputSlot(this, iItemHandler, 7, 15, 8 + yOffset);
+            seqInputB = new DnaInputSlot(this, iItemHandler, 8, 15, 30 + yOffset);
+
+            seqOutA = new AdvancementGivingVisibleResultSlot(iItemHandler, 9, 191, 57 + yOffset, player);
+            seqOutB = new AdvancementGivingVisibleResultSlot(iItemHandler, 10, 221, 57 + yOffset, player);
 
             addSlot(seqInputA);
             addSlot(seqInputB);
@@ -115,12 +118,12 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
             addSlot(seqOutB);
 
             for (int i = 0; i <= 12; i++) {
-                GeneSlot currentSlot = new GeneSlot(iItemHandler, TOP_GENE_INDEX_START + i, 33 + i * 16, 8);
+                GeneSlot currentSlot = new GeneSlot(iItemHandler, TOP_GENE_INDEX_START + i, 33 + i * 16, 8 + yOffset);
                 addSlot(currentSlot);
                 topGeneSlots.add(currentSlot);
             }
             for (int i = 0; i <= 12; i++) {
-                GeneSlot currentSlot = new GeneSlot(iItemHandler, BOT_GENE_INDEX_START + i, 33 + i * 16, 30);
+                GeneSlot currentSlot = new GeneSlot(iItemHandler, BOT_GENE_INDEX_START + i, 33 + i * 16, 30 + yOffset);
                 addSlot(currentSlot);
                 botGeneSlots.add(currentSlot);
             }
@@ -290,14 +293,14 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
     private void addPlayerInventory(Inventory playerInventory) {
         for (int i = 0; i < 3; ++i) {
             for (int l = 0; l < 9; ++l) {
-                this.addSlot(new Slot(playerInventory, l + i * 9 + 9, 8 + l * 18 + 40, 84 + i * 18));
+                this.addSlot(new Slot(playerInventory, l + i * 9 + 9, 8 + l * 18 + 40, 84 + yOffset + i * 18));
             }
         }
     }
 
     private void addPlayerHotbar(Inventory playerInventory) {
         for (int i = 0; i < 9; ++i) {
-            this.addSlot(new Slot(playerInventory, i, 8 + i * 18 + 40, 142));
+            this.addSlot(new Slot(playerInventory, i, 8 + i * 18 + 40, 142 + yOffset));
         }
     }
 }

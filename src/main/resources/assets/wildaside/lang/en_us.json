@@ -263,6 +263,7 @@
   "dominance.wildaside.incomplete": "Incomplete",
 
   "gui.wildaside.bioengineering_workstation.bio_assembler":  "Bio Assembler",
+  "gui.wildaside.bioengineering_workstation.dna_analyzer":  "DNA Analyzer",
   "gui.wildaside.bioengineering_workstation.dna_editor":  "DNA Editor",
   "gui.wildaside.bioengineering_workstation.recompile_dna":  "Recompile DNAs",
 

@@ -13,6 +13,7 @@ import mezz.jei.api.runtime.IRecipesGui;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.recipe.BioengineeringWorkstationRecipe;
 import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationScreen;
+import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationTab;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -22,6 +23,7 @@ import net.minecraft.world.item.crafting.RecipeManager;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @JeiPlugin
@@ -54,9 +56,13 @@ public class JEIWildAsidePlugin implements IModPlugin {
         registration.addGuiContainerHandler(BioengineeringWorkstationScreen.class, new IGuiContainerHandler<BioengineeringWorkstationScreen>() {
             @Override
             public Collection<IGuiClickableArea> getGuiClickableAreas(BioengineeringWorkstationScreen containerScreen, double guiMouseX, double guiMouseY) {
-                IGuiClickableArea clickableArea = createSounded(xPos, yPos, width, height, BioengineeringRecipeCategory.BIOENGINEERING_TYPE);
-                return List.of(clickableArea);
+                if (containerScreen.tab == BioengineeringWorkstationTab.ASSEMBLER) {
+                    IGuiClickableArea clickableArea = createSounded(xPos, yPos, width, height, BioengineeringRecipeCategory.BIOENGINEERING_TYPE);
+                    return List.of(clickableArea);
+                }
+                return Collections.emptyList();
             }
+
         });
     }
 
