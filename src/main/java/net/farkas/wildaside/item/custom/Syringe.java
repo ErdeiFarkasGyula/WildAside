@@ -16,6 +16,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -179,6 +180,17 @@ public class Syringe extends Item {
 
             DnaUtils.resetBloodFreezerTicks(holderTag);
             DnaUtils.saveBloodSamplingTick(holderTag, serverLevel);
+
+            int count = offHandStack.getCount();
+
+            if (count > 1) {
+                offHandStack.setCount(1);
+                ItemStack newOffHandStack = new ItemStack(offHandStack.getItem(), count - 1);
+                if (!player.addItem(newOffHandStack)) {
+                    ItemEntity itemEntity = new ItemEntity(player.serverLevel(), player.getX(), player.getY(), player.getZ(), newOffHandStack);
+                    player.serverLevel().addFreshEntity(itemEntity);
+                }
+            }
 
             offHandStack.setTag(holderTag);
         }
