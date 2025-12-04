@@ -28,10 +28,10 @@ import java.util.List;
 
 @JeiPlugin
 public class JEIWildAsidePlugin implements IModPlugin {
-    public static int xPos = 216;
-    public static int yPos = 114;
-    public static int width = 28;
-    public static int height = 26;
+    public static int xPos = 129;
+    public static int yPos = 62;
+    public static int width = 26;
+    public static int height = 16;
 
     @Override
     public ResourceLocation getPluginUid() {
