@@ -14,8 +14,9 @@ public interface IBioengineeringSkills {
     boolean spendPoints(int points);
     boolean hasSkill(ResourceLocation skillId);
     void sendUnlockRequest(ResourceLocation skillId);
-    void unlockSkill(ResourceLocation skillId);
-    void removeSkill(ResourceLocation skillId);
+    void sendRemoveRequest(ResourceLocation skillId);
+    void addSkillToUnlocked(ResourceLocation skillId);
+    void removeSkillFromUnlocked(ResourceLocation skillId);
     void setSkills(Set<ResourceLocation> newSkills);
     void syncToClient(ServerPlayer player);
     CompoundTag serializeNBT();

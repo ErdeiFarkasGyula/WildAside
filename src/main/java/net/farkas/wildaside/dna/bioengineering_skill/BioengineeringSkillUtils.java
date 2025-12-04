@@ -37,7 +37,11 @@ public class BioengineeringSkillUtils {
     }
 
     public static void sendUnlockRequestPacket(ResourceLocation skillId) {
-        NetworkHandler.sendBioengineeringSkillRequestPacket(skillId);
+        NetworkHandler.sendBioengineeringSkillRequestPacket(skillId, true);
+    }
+
+    public static void sendRemoveRequestPacket(ResourceLocation skillId) {
+        NetworkHandler.sendBioengineeringSkillRequestPacket(skillId, false);
     }
 
     public static void unlockAndSyncToClient(Player player, ResourceLocation skillId) {
@@ -49,11 +53,22 @@ public class BioengineeringSkillUtils {
 
             serverPlayer.getCapability(BioengineeringSkillsCapability.INSTANCE).ifPresent(cap -> {
                 skill.getRequirement().unlock(serverPlayer);
-                cap.unlockSkill(skillId);
+                cap.addSkillToUnlocked(skillId);
                 cap.syncToClient(serverPlayer);
             });
 
             serverPlayer.playSound(SoundEvents.PLAYER_LEVELUP, 0.8f, 1.5f);
+        }
+    }
+
+    public static void removeAndSyncToClient(Player player, ResourceLocation skillId) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            serverPlayer.getCapability(BioengineeringSkillsCapability.INSTANCE).ifPresent(cap -> {
+                cap.removeSkillFromUnlocked(skillId);
+                cap.syncToClient(serverPlayer);
+            });
+
+            serverPlayer.playSound(SoundEvents.PLAYER_HURT_FREEZE, 0.8f, 1.5f);
         }
     }
 }

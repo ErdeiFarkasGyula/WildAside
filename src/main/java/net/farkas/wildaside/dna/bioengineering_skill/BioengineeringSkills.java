@@ -16,8 +16,8 @@ import java.util.Map;
 public class BioengineeringSkills {
     private static final Map<ResourceLocation, BioengineeringSkill> REGISTRY = new HashMap<>();
 
-    private static final BioengineeringSkill TEST_1 = register(new BioengineeringSkill.Builder()
-            .name("test_1")
+    private static final BioengineeringSkill REVEAL_ALLELES = register(new BioengineeringSkill.Builder()
+            .name("reveal_alleles")
             .category(BioengineeringSkillCategories.CATEGORY_1)
             .requirement(
                     new AllRequirements(

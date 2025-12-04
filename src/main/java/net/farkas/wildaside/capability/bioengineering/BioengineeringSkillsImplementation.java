@@ -53,16 +53,21 @@ public class BioengineeringSkillsImplementation implements IBioengineeringSkills
 
     @Override
     public void sendUnlockRequest(ResourceLocation skillId) {
-        NetworkHandler.sendBioengineeringSkillRequestPacket(skillId);
+        NetworkHandler.sendBioengineeringSkillRequestPacket(skillId, true);
     }
 
     @Override
-    public void unlockSkill(ResourceLocation skillId) {
+    public void sendRemoveRequest(ResourceLocation skillId) {
+        NetworkHandler.sendBioengineeringSkillRequestPacket(skillId, false);
+    }
+
+    @Override
+    public void addSkillToUnlocked(ResourceLocation skillId) {
         skills.add(skillId);
     }
 
     @Override
-    public void removeSkill(ResourceLocation skillId) {
+    public void removeSkillFromUnlocked(ResourceLocation skillId) {
         skills.remove(skillId);
     }
 

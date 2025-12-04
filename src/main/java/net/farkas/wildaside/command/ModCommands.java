@@ -6,11 +6,15 @@ import com.mojang.brigadier.arguments.*;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
+import net.farkas.wildaside.capability.bioengineering.BioengineeringSkillsCapability;
+import net.farkas.wildaside.capability.bioengineering.IBioengineeringSkills;
 import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.config.ModConfig;
-import net.farkas.wildaside.dna.DnaConstants;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.allele.Allele;
+import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkill;
+import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkills;
 import net.farkas.wildaside.dna.dominance.Dominance;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.Traits;
@@ -23,12 +27,16 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import static net.farkas.wildaside.dna.DnaConstants.*;
 
@@ -63,7 +71,7 @@ public class ModCommands {
                                                                     double z = DoubleArgumentType.getDouble(ctx, "z");
                                                                     float s = FloatArgumentType.getFloat(ctx, "strength");
 
-                                                                    Vec3 vec = new Vec3(x, y ,z);
+                                                                    Vec3 vec = new Vec3(x, y, z);
                                                                     WindManager.setWind(vec, s);
 
                                                                     ServerLevel serverLevel = ctx.getSource().getLevel();
@@ -112,13 +120,13 @@ public class ModCommands {
                         .requires(cs -> cs.hasPermission(0))
                         .then(Commands.argument("enabled", BoolArgumentType.bool())
                                 .executes(context -> {
-                                        boolean value = BoolArgumentType.getBool(context, "enabled");
-                                        ModConfig.setShowUpdates(value);
-                                        context.getSource().sendSuccess(() ->
-                                                Component.translatable("command.wildaside.update_notification",
-                                                Component.translatable("mod.wildaside"),
-                                                Component.translatable(value ? "general.wildaside.enabled" : "general.wildaside.disabled")), false);
-                                        return Command.SINGLE_SUCCESS;
+                                    boolean value = BoolArgumentType.getBool(context, "enabled");
+                                    ModConfig.setShowUpdates(value);
+                                    context.getSource().sendSuccess(() ->
+                                            Component.translatable("command.wildaside.update_notification",
+                                                    Component.translatable("mod.wildaside"),
+                                                    Component.translatable(value ? "general.wildaside.enabled" : "general.wildaside.disabled")), false);
+                                    return Command.SINGLE_SUCCESS;
                                 })
                         )
         );
@@ -152,6 +160,60 @@ public class ModCommands {
                                         )
                                 )
                         )
+        );
+
+        root.then(
+                Commands.literal("bio_skill")
+                        .requires(source -> source.hasPermission(2))
+                        .then(Commands.argument(PLAYER, EntityArgument.entity())
+                                .then(Commands.literal("unlock")
+                                        .then(Commands.argument(SKILL, StringArgumentType.string())
+                                                .suggests((context, builder) -> {
+                                                    for (BioengineeringSkill skill : BioengineeringSkills.all()) {
+                                                        builder.suggest(skill.getName());
+                                                    }
+                                                    return builder.buildFuture();
+                                                })
+                                                .executes(ctx -> {
+                                                            Player player = EntityArgument.getPlayer(ctx, PLAYER);
+                                                            String skill = StringArgumentType.getString(ctx, VALUE);
+                                                            return unlockSkill(ctx.getSource(), player, skill);
+                                                        }
+                                                )
+                                        )
+                                )
+
+                                .then(Commands.literal("remove")
+                                        .then(Commands.argument(SKILL, StringArgumentType.string())
+                                                .suggests((context, builder) -> {
+                                                    for (BioengineeringSkill skill : BioengineeringSkills.all()) {
+                                                        builder.suggest(skill.getName());
+                                                    }
+                                                    return builder.buildFuture();
+                                                })
+                                                .executes(ctx -> removeSkill(
+                                                        ctx.getSource(),
+                                                        StringArgumentType.getString(ctx, SKILL)
+                                                ))
+                                        )
+                                )
+
+                                .then(Commands.literal("has")
+                                        .then(Commands.argument(SKILL, StringArgumentType.string())
+                                                .suggests((context, builder) -> {
+                                                    for (BioengineeringSkill skill : BioengineeringSkills.all()) {
+                                                        builder.suggest(skill.getName());
+                                                    }
+                                                    return builder.buildFuture();
+                                                })
+                                                .executes(ctx -> checkSkill(
+                                                        ctx.getSource(),
+                                                        StringArgumentType.getString(ctx, SKILL)
+                                                ))
+                                        )
+                                )
+                        )
+
         );
 
         dispatcher.register(root);
@@ -204,7 +266,8 @@ public class ModCommands {
             String entityString = affected > 1 ? "command.wildaside.contamination.entities" : "command.wildaside.contamination.entity";
             String actionString = "command.wildaside.contamination.action." + action;
             applyContamination(ctx, actionString, affected, entityString);
-        } else {
+        }
+        else {
             source.sendFailure(Component.translatable("command.wildaside.contamination.no_valid_entities"));
         }
         return affected;
@@ -218,7 +281,7 @@ public class ModCommands {
                     float value = dna.getStability();
                     ctx.getSource().sendSuccess(() ->
                             Component.translatable("command.wildaside.dna.get_trait", livingEntity.getName(), value,
-                            Component.translatable("dna.wildaside.stability")), false);
+                                    Component.translatable("dna.wildaside.stability")), false);
                 });
             }
             else {
@@ -296,5 +359,68 @@ public class ModCommands {
                 Component.translatable("command.wildaside.contamination.apply_contamination",
                         Component.translatable(action).getString().toLowerCase(), finalAffected,
                         Component.translatable(entityString).getString().toLowerCase()), true);
+    }
+
+    private static int unlockSkill(CommandSourceStack source, Player player, String skillStr) {
+        ResourceLocation skillId = ResourceLocation.tryParse(skillStr);
+
+        if (skillId == null) {
+            source.sendFailure(Component.literal("Invalid skill: " + skillStr));
+            return 0;
+        }
+
+        IBioengineeringSkills skills = player.getCapability(BioengineeringSkillsCapability.INSTANCE).orElse(null);
+
+        if (skills.hasSkill(skillId)) {
+            source.sendFailure(Component.literal("You already have this skill: " + skillId));
+            return 0;
+        }
+
+        skills.sendUnlockRequest(skillId);
+
+        source.sendSuccess(() -> Component.literal("Unlocked skill: " + skillId), true);
+
+        return 1;
+    }
+
+    private static int removeSkill(CommandSourceStack source, String skillStr) {
+        ServerPlayer player = source.getPlayer();
+        ResourceLocation skillId = ResourceLocation.tryParse(skillStr);
+
+        if (skillId == null) {
+            source.sendFailure(Component.literal("Invalid skill: " + skillStr));
+            return 0;
+        }
+
+        IBioengineeringSkills skills = player.getCapability(BioengineeringSkillsCapability.INSTANCE).orElse(null);
+
+        if (!skills.hasSkill(skillId)) {
+            source.sendFailure(Component.literal("You don't have this skill: " + skillId));
+            return 0;
+        }
+
+        skills.removeSkillFromUnlocked(skillId);
+
+        source.sendSuccess(() -> Component.literal("Removed skill: " + skillId), true);
+
+        return 1;
+    }
+
+    private static int checkSkill(CommandSourceStack source, String skillStr) {
+        ServerPlayer player = source.getPlayer();
+        ResourceLocation skillId = ResourceLocation.tryParse(skillStr);
+
+        if (skillId == null) {
+            source.sendFailure(Component.literal("Invalid skill: " + skillStr));
+            return 0;
+        }
+
+        IBioengineeringSkills skills = player.getCapability(BioengineeringSkillsCapability.INSTANCE).orElse(null);
+
+        boolean has = skills.hasSkill(skillId);
+
+        source.sendSuccess(() -> Component.literal("Skill " + skillId + ": " + (has ? "§aUNLOCKED" : "§cNOT unlocked")), false);
+
+        return has ? 1 : 0;
     }
 }

@@ -10,23 +10,30 @@ import java.util.function.Supplier;
 
 public class BioengineeringSkillUnlockRequestPacket {
     private final ResourceLocation skillId;
+    private final boolean unlock;
 
-    public BioengineeringSkillUnlockRequestPacket(ResourceLocation skill) {
+    public BioengineeringSkillUnlockRequestPacket(ResourceLocation skill, boolean unlock) {
         this.skillId = skill;
+        this.unlock = unlock;
     }
 
     public static BioengineeringSkillUnlockRequestPacket decode(FriendlyByteBuf buf) {
-        return new BioengineeringSkillUnlockRequestPacket(buf.readResourceLocation());
+        return new BioengineeringSkillUnlockRequestPacket(buf.readResourceLocation(), buf.readBoolean());
     }
 
     public void encode(FriendlyByteBuf buf) {
         buf.writeResourceLocation(skillId);
+        buf.writeBoolean(unlock);
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             ServerPlayer player = ctx.get().getSender();
-            BioengineeringSkillUtils.unlockAndSyncToClient(player, skillId);
+            if (unlock) {
+                BioengineeringSkillUtils.unlockAndSyncToClient(player, skillId);
+            } else {
+                BioengineeringSkillUtils.removeAndSyncToClient(player, skillId);
+            }
         });
         ctx.get().setPacketHandled(true);
     }

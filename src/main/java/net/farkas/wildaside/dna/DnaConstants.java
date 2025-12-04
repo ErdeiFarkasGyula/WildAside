@@ -62,6 +62,7 @@ public class DnaConstants {
     public static final String BLOOD_EFFECTIVE_AGE = "blood_effective_age";
 
     public static final String TARGET = "target";
+    public static final String PLAYER = "player";
     public static final String PREVIOUS_TARGET = "previous_target";
     public static final String MULTIPLE_SOURCES = "multiple_sources";
     public static final String SAMPLE_CLOTTED = "sample_clotted";
@@ -71,6 +72,7 @@ public class DnaConstants {
 
     public static final String BIOENGINEERING_POINTS = "bioengineering_points";
     public static final String BIOENGINEERING_SKILL = "bioengineering_skill";
+    public static final String SKILL = "skill";
     public static final String BIOENGINEERING_SKILLS = "bioengineering_skills";
 
     public static final String INVENTORY = "inventory";
