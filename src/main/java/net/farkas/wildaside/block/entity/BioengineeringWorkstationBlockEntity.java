@@ -1,10 +1,8 @@
 package net.farkas.wildaside.block.entity;
 
 import net.farkas.wildaside.capability.dna.DnaImplementation;
-import net.farkas.wildaside.dna.DnaConstants;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.trait.Trait;
-import net.farkas.wildaside.dna.trait.Traits;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.item.custom.DnaHolder;
 import net.farkas.wildaside.item.custom.GeneItem;
@@ -39,9 +37,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static net.farkas.wildaside.dna.DnaConstants.*;
+import static net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationSlots.*;
 
 public class BioengineeringWorkstationBlockEntity extends BlockEntity implements MenuProvider {
-    private final ItemStackHandler itemHandler = new ItemStackHandler(39) {
+    private final ItemStackHandler itemHandler = new ItemStackHandler(40) {
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
@@ -88,21 +87,13 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
 
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
-    private static final int INPUT_1 = 0;
-    private static final int INPUT_2 = 1;
-    private static final int INPUT_3 = 2;
-    private static final int INPUT_4 = 3;
-    private static final int INPUT_5 = 4;
-    private static final int OUTPUT_1 = 5;
-
-    public static final int DNA_INPUT_1 = 9;
-    public static final int DNA_INPUT_2 = 10;
-    private static final int DNA_OUTPUT_1 = 11;
-    private static final int DNA_OUTPUT_2 = 12;
-
     public final ContainerData data;
-    private int progress = 0;
-    private int maxProgress = 200;
+
+    private int assemblerProgress = 0;
+    private int assemblerMaxProgress = 200;
+
+    private int analyserProgress = 0;
+    private int analyserMaxProgress = 400;
 
     private BioengineeringWorkstationTab tab = BioengineeringWorkstationTab.ASSEMBLER;
 
@@ -113,8 +104,10 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
             @Override
             public int get(int pIndex) {
                 return switch (pIndex) {
-                    case 0 -> BioengineeringWorkstationBlockEntity.this.progress;
-                    case 1 -> BioengineeringWorkstationBlockEntity.this.maxProgress;
+                    case 0 -> BioengineeringWorkstationBlockEntity.this.assemblerProgress;
+                    case 1 -> BioengineeringWorkstationBlockEntity.this.assemblerMaxProgress;
+                    case 2 -> BioengineeringWorkstationBlockEntity.this.analyserProgress;
+                    case 3 -> BioengineeringWorkstationBlockEntity.this.analyserMaxProgress;
                     default -> 0;
                 };
             }
@@ -122,14 +115,16 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
             @Override
             public void set(int pIndex, int pValue) {
                 switch (pIndex) {
-                    case 0 -> BioengineeringWorkstationBlockEntity.this.progress = pValue;
-                    case 1 -> BioengineeringWorkstationBlockEntity.this.maxProgress = pValue;
+                    case 0 -> BioengineeringWorkstationBlockEntity.this.assemblerProgress = pValue;
+                    case 1 -> BioengineeringWorkstationBlockEntity.this.assemblerMaxProgress = pValue;
+                    case 2 -> BioengineeringWorkstationBlockEntity.this.analyserProgress = pValue;
+                    case 3 -> BioengineeringWorkstationBlockEntity.this.analyserMaxProgress = pValue;
                 }
             }
 
             @Override
             public int getCount() {
-                return 2;
+                return 4;
             }
         };
     }
@@ -196,33 +191,47 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
     protected void saveAdditional(CompoundTag pTag) {
         super.saveAdditional(pTag);
 
-        pTag.put("inventory", itemHandler.serializeNBT());
-        pTag.putInt("bioengineering_workstation.progress", progress);
-        pTag.putInt("bioengineering_workstation.tab", tab.ordinal());
+        pTag.put(INVENTORY, itemHandler.serializeNBT());
+        pTag.putInt(ASSEMBLER_PROGRESS, assemblerProgress);
+        pTag.putInt(ANALYSER_PROGRESS, analyserProgress);
+        pTag.putInt(TAB, tab.ordinal());
     }
 
     @Override
     public void load(CompoundTag pTag) {
         super.load(pTag);
 
-        if (pTag.contains("inventory")) {
-            itemHandler.deserializeNBT(pTag.getCompound("inventory"));
+        if (pTag.contains(INVENTORY)) {
+            itemHandler.deserializeNBT(pTag.getCompound(INVENTORY));
         }
-        progress = pTag.getInt("bioengineering_workstation.progress");
-        tab = BioengineeringWorkstationTab.values()[pTag.getInt("bioengineering_workstation.tab")];
+        assemblerProgress = pTag.getInt(ASSEMBLER_PROGRESS);
+        analyserProgress = pTag.getInt(ANALYSER_PROGRESS);
+        tab = BioengineeringWorkstationTab.values()[pTag.getInt(TAB)];
     }
 
     public void tick(Level pLevel, BlockPos pPos, BlockState pState) {
         if (hasRecipe()) {
-            increaseCraftingProgress();
+            assemblerProgress++;
             setChanged(pLevel, pPos, pState);
 
-            if (hasProgressFinished()) {
+            if (assemblerProgress >= assemblerMaxProgress) {
                 craftItem();
-                resetProgress();
+                assemblerProgress = 0;
             }
         } else {
-            resetProgress();
+            assemblerProgress = 0;
+        }
+
+        if (canAnalyse()) {
+            analyserProgress++;
+            setChanged(pLevel, pPos, pState);
+
+            if (analyserProgress >= analyserMaxProgress) {
+                analyseDna();
+                analyserProgress = 0;
+            }
+        } else {
+            analyserProgress = 0;
         }
     }
 
@@ -233,14 +242,37 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));
     }
 
+    public void analyseDna() {
+        ItemStack dnaHolderStack = itemHandler.getStackInSlot(ANA_INPUT_1);
+
+        CompoundTag dnaHolderTag = dnaHolderStack.getOrCreateTag();
+
+        dnaHolderTag.putBoolean(REVEAL_SOURCE, true);
+        dnaHolderTag.putBoolean(REVEAL_STABILITY, true);
+        dnaHolderTag.putBoolean(REVEAL_TRAITS, true);
+
+        dnaHolderStack.setTag(dnaHolderTag);
+
+        itemHandler.setStackInSlot(ANA_INPUT_1, ItemStack.EMPTY);
+        itemHandler.setStackInSlot(ANA_INPUT_2, ItemStack.EMPTY);
+        itemHandler.setStackInSlot(ANA_INPUT_3, ItemStack.EMPTY);
+
+        itemHandler.setStackInSlot(ANA_OUTPUT_1, dnaHolderStack);
+
+        setChanged();
+        if (level != null) {
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+        }
+    }
+
     public void recompileDnas() {
-        ItemStack inA = itemHandler.getStackInSlot(DNA_INPUT_1);
-        ItemStack inB = itemHandler.getStackInSlot(DNA_INPUT_2);
+        ItemStack inA = itemHandler.getStackInSlot(EDITOR_INPUT_1);
+        ItemStack inB = itemHandler.getStackInSlot(EDITOR_INPUT_2);
 
         if (inA.isEmpty() && inB.isEmpty()) return;
 
-        processDnaSlot(inA, DNA_INPUT_1, DNA_OUTPUT_1, BioengineeringWorkstationMenu.TOP_GENE_INDEX_START);
-        processDnaSlot(inB, DNA_INPUT_2, DNA_OUTPUT_2, BioengineeringWorkstationMenu.BOT_GENE_INDEX_START);
+        processDnaSlot(inA, EDITOR_INPUT_1, EDITOR_OUTPUT_1, EDITOR_TOP_GENE_START_INDEX);
+        processDnaSlot(inB, EDITOR_INPUT_2, EDITOR_OUTPUT_2, EDITOR_BOTTOM_GENE_START_INDEX);
 
         setChanged();
         if (level != null) {
@@ -288,21 +320,17 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
         itemHandler.setStackInSlot(inputSlot, ItemStack.EMPTY);
     }
 
-    private void resetProgress() {
-        progress = 0;
-    }
-
     private void craftItem() {
         Optional<BioengineeringWorkstationRecipe> recipe = getCurrentRecipe();
         ItemStack result = recipe.get().getResultItem(null);
 
-        this.itemHandler.extractItem(INPUT_1, 1, false);
-        this.itemHandler.extractItem(INPUT_2, 1, false);
-        this.itemHandler.extractItem(INPUT_3, 1, false);
-        this.itemHandler.extractItem(INPUT_4, 1, false);
-        this.itemHandler.extractItem(INPUT_5, 1, false);
+        this.itemHandler.extractItem(ASSE_INPUT_1, 1, false);
+        this.itemHandler.extractItem(ASSE_INPUT_2, 1, false);
+        this.itemHandler.extractItem(ASSE_INPUT_3, 1, false);
+        this.itemHandler.extractItem(ASSE_INPUT_4, 1, false);
+        this.itemHandler.extractItem(ASSE_INPUT_5, 1, false);
 
-        this.itemHandler.setStackInSlot(OUTPUT_1, new ItemStack(result.getItem(), this.itemHandler.getStackInSlot(OUTPUT_1).getCount() + result.getCount()));
+        this.itemHandler.setStackInSlot(ASSE_OUTPUT_1, new ItemStack(result.getItem(), this.itemHandler.getStackInSlot(ASSE_OUTPUT_1).getCount() + result.getCount()));
     }
 
     private boolean hasRecipe() {
@@ -326,18 +354,22 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
     }
 
     private boolean canInsertItemIntoOutputSlot(Item item) {
-        return this.itemHandler.getStackInSlot(OUTPUT_1).isEmpty() || this.itemHandler.getStackInSlot(OUTPUT_1).is(item);
+        return this.itemHandler.getStackInSlot(ASSE_OUTPUT_1).isEmpty() || this.itemHandler.getStackInSlot(ASSE_OUTPUT_1).is(item);
     }
 
     private boolean canInsertAmountIntoOutputSlot(int count) {
-        return this.itemHandler.getStackInSlot(OUTPUT_1).getCount() + count <= this.itemHandler.getStackInSlot(OUTPUT_1).getMaxStackSize();
+        return this.itemHandler.getStackInSlot(ASSE_OUTPUT_1).getCount() + count <= this.itemHandler.getStackInSlot(ASSE_OUTPUT_1).getMaxStackSize();
     }
 
-    private boolean hasProgressFinished() {
-        return progress >= maxProgress;
-    }
+    private boolean canAnalyse() {
+        ItemStack dnaHolderStack = itemHandler.getStackInSlot(ANA_INPUT_1);
+        ItemStack detergentStack = itemHandler.getStackInSlot(ANA_INPUT_2);
+        ItemStack stabiliserStack = itemHandler.getStackInSlot(ANA_INPUT_3);
 
-    private void increaseCraftingProgress() {
-        progress++;
+        if (dnaHolderStack.isEmpty() || detergentStack.isEmpty() || stabiliserStack.isEmpty()) return false;
+
+        if (!detergentStack.is(ModItems.ENTORIUM.get()) || !stabiliserStack.is(ModItems.VIBRION.get())) return false;
+        if (!dnaHolderStack.is(ModItems.DNA_HOLDER.get())) return false;
+        return true;
     }
 }

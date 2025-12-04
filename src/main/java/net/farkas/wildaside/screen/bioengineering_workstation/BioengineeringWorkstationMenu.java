@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import static net.farkas.wildaside.dna.DnaConstants.*;
+import static net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationSlots.*;
 
 public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
     public final BioengineeringWorkstationBlockEntity blockEntity;
@@ -41,9 +42,6 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
     public List<GeneSlot> topGeneSlots = new ArrayList<>();
     public List<GeneSlot> botGeneSlots = new ArrayList<>();
 
-    public static final int TOP_GENE_INDEX_START = 13;
-    public static final int BOT_GENE_INDEX_START = TOP_GENE_INDEX_START + 13;
-
     private ModVisibleSlot assemblerSlot0;
     private ModVisibleSlot assemblerSlot1;
     private ModVisibleSlot assemblerSlot2;
@@ -51,20 +49,20 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
     private ModVisibleSlot assemblerSlot4;
     private AdvancementGivingVisibleResultSlot assemblerResult;
 
-    private ModVisibleSlot analyzerSlotA;
-    private ModVisibleSlot analyzerSlotB;
-    private ModVisibleSlot analyzerSlotC;
-    private ModVisibleSlot analyzerResult;
+    private ModVisibleSlot analyserSlotA;
+    private ModVisibleSlot analyserSlotB;
+    private ModVisibleSlot analyserSlotC;
+    private ModVisibleSlot analyserResult;
 
-    private DnaInputSlot seqInputA;
-    private DnaInputSlot seqInputB;
-    private AdvancementGivingVisibleResultSlot seqOutA;
-    private AdvancementGivingVisibleResultSlot seqOutB;
+    private DnaInputSlot editorInputA;
+    private DnaInputSlot editorInputB;
+    private AdvancementGivingVisibleResultSlot editorOutA;
+    private AdvancementGivingVisibleResultSlot editorOutB;
 
     public static final int yOffset = 28;
 
     public BioengineeringWorkstationMenu(int pContainerId, Inventory inv, FriendlyByteBuf extraData) {
-        this(pContainerId, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2));
+        this(pContainerId, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(4));
     }
 
     public BioengineeringWorkstationMenu(int pContainerId, Inventory inv, BlockEntity entity, ContainerData data) {
@@ -90,12 +88,12 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
             int before = slots.size();
 
-            assemblerSlot0 = new ModVisibleSlot(iItemHandler, 0, 84, 34 + yOffset);
-            assemblerSlot1 = new ModVisibleSlot(iItemHandler, 1, 84, 16 + yOffset);
-            assemblerSlot2 = new ModVisibleSlot(iItemHandler, 2, 102, 34 + yOffset);
-            assemblerSlot3 = new ModVisibleSlot(iItemHandler, 3, 84, 52 + yOffset);
-            assemblerSlot4 = new ModVisibleSlot(iItemHandler, 4, 66, 34 + yOffset);
-            assemblerResult = new AdvancementGivingVisibleResultSlot(iItemHandler, 5, 170, 34 + yOffset, player, "we_need_to_cook");
+            assemblerSlot0 = new ModVisibleSlot(iItemHandler, ASSE_INPUT_1, 84, 34 + yOffset);
+            assemblerSlot1 = new ModVisibleSlot(iItemHandler, ASSE_INPUT_2, 84, 16 + yOffset);
+            assemblerSlot2 = new ModVisibleSlot(iItemHandler, ASSE_INPUT_3, 102, 34 + yOffset);
+            assemblerSlot3 = new ModVisibleSlot(iItemHandler, ASSE_INPUT_4, 84, 52 + yOffset);
+            assemblerSlot4 = new ModVisibleSlot(iItemHandler, ASSE_INPUT_5, 66, 34 + yOffset);
+            assemblerResult = new AdvancementGivingVisibleResultSlot(iItemHandler, ASSE_OUTPUT_1, 170, 34 + yOffset, player, "we_need_to_cook");
 
             addSlot(assemblerSlot0);
             addSlot(assemblerSlot1);
@@ -104,34 +102,33 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
             addSlot(assemblerSlot4);
             addSlot(assemblerResult);
 
-            analyzerSlotA = new ModVisibleSlot(iItemHandler, 5, 66, 34 + yOffset);
-            analyzerSlotB = new ModVisibleSlot(iItemHandler, 6, 84, 34 + yOffset);
-            analyzerSlotC = new ModVisibleSlot(iItemHandler, 7, 102, 34 + yOffset);
-            analyzerResult = new AdvancementGivingVisibleResultSlot(iItemHandler, 8, 170, 34 + yOffset);
+            analyserSlotA = new ModVisibleSlot(iItemHandler, ANA_INPUT_1, 66, 34 + yOffset);
+            analyserSlotB = new ModVisibleSlot(iItemHandler, ANA_INPUT_2, 84, 34 + yOffset);
+            analyserSlotC = new ModVisibleSlot(iItemHandler, ANA_INPUT_3, 102, 34 + yOffset);
+            analyserResult = new AdvancementGivingVisibleResultSlot(iItemHandler, ANA_OUTPUT_1, 170, 34 + yOffset);
 
-            addSlot(analyzerSlotA);
-            addSlot(analyzerSlotB);
-            addSlot(analyzerSlotC);
-            addSlot(analyzerResult);
+            addSlot(analyserSlotA);
+            addSlot(analyserSlotB);
+            addSlot(analyserSlotC);
+            addSlot(analyserResult);
 
-            seqInputA = new DnaInputSlot(this, iItemHandler, 9, 15, 8 + yOffset);
-            seqInputB = new DnaInputSlot(this, iItemHandler, 10, 15, 30 + yOffset);
+            editorInputA = new DnaInputSlot(this, iItemHandler, EDITOR_INPUT_1, 15, 8 + yOffset);
+            editorInputB = new DnaInputSlot(this, iItemHandler, EDITOR_INPUT_2, 15, 30 + yOffset);
+            editorOutA = new AdvancementGivingVisibleResultSlot(iItemHandler, EDITOR_OUTPUT_1, 191, 57 + yOffset);
+            editorOutB = new AdvancementGivingVisibleResultSlot(iItemHandler, EDITOR_OUTPUT_2, 221, 57 + yOffset);
 
-            seqOutA = new AdvancementGivingVisibleResultSlot(iItemHandler, 11, 191, 57 + yOffset);
-            seqOutB = new AdvancementGivingVisibleResultSlot(iItemHandler, 12, 221, 57 + yOffset);
-
-            addSlot(seqInputA);
-            addSlot(seqInputB);
-            addSlot(seqOutA);
-            addSlot(seqOutB);
+            addSlot(editorInputA);
+            addSlot(editorInputB);
+            addSlot(editorOutA);
+            addSlot(editorOutB);
 
             for (int i = 0; i <= 12; i++) {
-                GeneSlot currentSlot = new GeneSlot(iItemHandler, TOP_GENE_INDEX_START + i, 33 + i * 16, 8 + yOffset);
+                GeneSlot currentSlot = new GeneSlot(iItemHandler, EDITOR_TOP_GENE_START_INDEX + i, 33 + i * 16, 8 + yOffset);
                 addSlot(currentSlot);
                 topGeneSlots.add(currentSlot);
             }
             for (int i = 0; i <= 12; i++) {
-                GeneSlot currentSlot = new GeneSlot(iItemHandler, BOT_GENE_INDEX_START + i, 33 + i * 16, 30 + yOffset);
+                GeneSlot currentSlot = new GeneSlot(iItemHandler, EDITOR_BOTTOM_GENE_START_INDEX + i, 33 + i * 16, 30 + yOffset);
                 addSlot(currentSlot);
                 botGeneSlots.add(currentSlot);
             }
@@ -145,17 +142,17 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
         switch (tab) {
             case ASSEMBLER -> {
                 setVisibleAsm(true);
-                setVisibleAnalyzer(false);
+                setVisibleAnalyser(false);
                 setVisibleSequencer(false);
             }
-            case DNA_ANALYZER -> {
+            case DNA_ANALYSER -> {
                 setVisibleAsm(false);
-                setVisibleAnalyzer(true);
+                setVisibleAnalyser(true);
                 setVisibleSequencer(false);
             }
             case DNA_EDITOR -> {
                 setVisibleAsm(false);
-                setVisibleAnalyzer(false);
+                setVisibleAnalyser(false);
                 setVisibleSequencer(true);
             }
         }
@@ -170,18 +167,18 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
         assemblerResult.setVisible(v);
     }
 
-    private void setVisibleAnalyzer(boolean v) {
-        analyzerSlotA.setVisible(v);
-        analyzerSlotB.setVisible(v);
-        analyzerSlotC.setVisible(v);
-        analyzerResult.setVisible(v);
+    private void setVisibleAnalyser(boolean v) {
+        analyserSlotA.setVisible(v);
+        analyserSlotB.setVisible(v);
+        analyserSlotC.setVisible(v);
+        analyserResult.setVisible(v);
     }
 
     private void setVisibleSequencer(boolean v) {
-        seqInputA.setVisible(v);
-        seqInputB.setVisible(v);
-        seqOutA.setVisible(v);
-        seqOutB.setVisible(v);
+        editorInputA.setVisible(v);
+        editorInputB.setVisible(v);
+        editorOutA.setVisible(v);
+        editorOutB.setVisible(v);
 
         topGeneSlots.forEach(s -> s.setVisible(v));
         botGeneSlots.forEach(s -> s.setVisible(v));
@@ -214,11 +211,11 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
 
                     ItemStack geneStack = GeneItem.createFromTag(gene);
                     int correctedSlot = j - slotCorrection;
-                    if (i == BioengineeringWorkstationBlockEntity.DNA_INPUT_1) {
+                    if (i == EDITOR_INPUT_1) {
                         if (topGeneSlots.size() > correctedSlot) {
                             topGeneSlots.get(correctedSlot).set(geneStack);
                         }
-                    } else if (i == BioengineeringWorkstationBlockEntity.DNA_INPUT_2) {
+                    } else if (i == EDITOR_INPUT_2) {
                         if (botGeneSlots.size() > correctedSlot) {
                             botGeneSlots.get(correctedSlot).set(geneStack);
                         }
@@ -232,9 +229,21 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
         return data.get(0) > 0;
     }
 
-    public int getScaledProgress() {
+    public boolean isAnalysing() {
+        return data.get(2) > 0;
+    }
+
+    public int getScaledCraftingProgress() {
         int progress = this.data.get(0);
         int maxProgress = this.data.get(1);
+        int progressArrowSize = 27;
+
+        return maxProgress != 0 && progress != 0 ? progress * progressArrowSize / maxProgress : 0;
+    }
+
+    public int getScaleAnalysingProgress() {
+        int progress = this.data.get(2);
+        int maxProgress = this.data.get(3);
         int progressArrowSize = 27;
 
         return maxProgress != 0 && progress != 0 ? progress * progressArrowSize / maxProgress : 0;

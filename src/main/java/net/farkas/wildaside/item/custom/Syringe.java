@@ -265,18 +265,20 @@ public class Syringe extends Item {
         }
 
         fluid = Mth.clamp(fluid + NEEDLE_DELTA, 0f, DEFAULT_MAX_LOAD);
+        
         tag.putString(FLUID_TYPE, BLOOD);
         tag.putInt(FLUID_COLOUR, DEFAULT_BLOOD_COLOR);
 
         if (fluid > DEFAULT_MAX_LOAD - 0.25f) {
             DnaUtils.saveBloodSamplingTick(tag, serverLevel);
+            target.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> tag.put(DNA_DATA, dna.serializeNBT())
+            );
+        }
 
+        if (fluid > DEFAULT_MAX_LOAD - 0.01f) {
             int dirt = tag.getInt(DIRTINESS);
             dirt = Mth.clamp(dirt + 1, 0, 3);
             tag.putInt(DIRTINESS, dirt);
-            target.getCapability(DnaCapability.INSTANCE).ifPresent(dna ->
-                    tag.put(DNA_DATA, dna.serializeNBT())
-            );
         }
 
         tag.putUUID(PREVIOUS_TARGET, target.getUUID());

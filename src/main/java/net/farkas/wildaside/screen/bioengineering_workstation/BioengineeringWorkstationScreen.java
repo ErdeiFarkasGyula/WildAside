@@ -64,7 +64,10 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
 
     private void renderProgressArrow(GuiGraphics guiGraphics, int x, int y) {
         if (menu.isCrafting() && tab == BioengineeringWorkstationTab.ASSEMBLER) {
-            guiGraphics.blit(BACKGROUND, x + 129, y + 37 + yOffset, 0, 248, menu.getScaledProgress(), 8);
+            guiGraphics.blit(BACKGROUND, x + 129, y + 37 + yOffset, 0, 248, menu.getScaledCraftingProgress(), 8);
+        }
+        if (menu.isAnalysing() && tab == BioengineeringWorkstationTab.DNA_ANALYSER) {
+            guiGraphics.blit(BACKGROUND, x + 129, y + 37 + yOffset, 0, 248, menu.getScaleAnalysingProgress(), 8);
         }
     }
 
@@ -126,10 +129,10 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
                 .tooltip(Tooltip.create(Component.translatable("gui.wildaside.bioengineering_workstation.bio_assembler")))
                 .build());
 
-        this.addWidget(Button.builder(Component.empty(), b -> switchTab(BioengineeringWorkstationTab.DNA_ANALYZER))
+        this.addWidget(Button.builder(Component.empty(), b -> switchTab(BioengineeringWorkstationTab.DNA_ANALYSER))
                 .pos(this.leftPos + 71, this.topPos + 3)
                 .size(24, 25)
-                .tooltip(Tooltip.create(Component.translatable("gui.wildaside.bioengineering_workstation.dna_analyzer")))
+                .tooltip(Tooltip.create(Component.translatable("gui.wildaside.bioengineering_workstation.dna_analyser")))
                 .build());
 
         this.addWidget(Button.builder(Component.empty(), b -> switchTab(BioengineeringWorkstationTab.DNA_EDITOR))

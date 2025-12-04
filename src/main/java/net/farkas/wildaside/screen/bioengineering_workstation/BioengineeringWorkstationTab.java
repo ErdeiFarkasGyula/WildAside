@@ -5,7 +5,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public enum BioengineeringWorkstationTab {
     ASSEMBLER("textures/gui/bioengineering_workstation_assembler.png"),
-    DNA_ANALYZER("textures/gui/bioengineering_workstation_analyzer.png"),
+    DNA_ANALYSER("textures/gui/bioengineering_workstation_analyser.png"),
     DNA_EDITOR("textures/gui/bioengineering_workstation_dna_editor.png");
 
     private final ResourceLocation texture;

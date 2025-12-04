@@ -72,4 +72,9 @@ public class DnaConstants {
     public static final String BIOENGINEERING_POINTS = "bioengineering_points";
     public static final String BIOENGINEERING_SKILL = "bioengineering_skill";
     public static final String BIOENGINEERING_SKILLS = "bioengineering_skills";
+
+    public static final String INVENTORY = "inventory";
+    public static final String ASSEMBLER_PROGRESS = "assembler_progress";
+    public static final String ANALYSER_PROGRESS = "analyser_progress";
+    public static final String TAB = "tab";
 }
