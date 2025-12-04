@@ -41,7 +41,7 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
     public List<GeneSlot> topGeneSlots = new ArrayList<>();
     public List<GeneSlot> botGeneSlots = new ArrayList<>();
 
-    public static final int TOP_GENE_INDEX_START = 11;
+    public static final int TOP_GENE_INDEX_START = 13;
     public static final int BOT_GENE_INDEX_START = TOP_GENE_INDEX_START + 13;
 
     private ModVisibleSlot assemblerSlot0;
@@ -53,6 +53,9 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
 
     private ModVisibleSlot analyzerSlotA;
     private ModVisibleSlot analyzerSlotB;
+    private ModVisibleSlot analyzerSlotC;
+    private ModVisibleSlot analyzerResult;
+
     private DnaInputSlot seqInputA;
     private DnaInputSlot seqInputB;
     private AdvancementGivingVisibleResultSlot seqOutA;
@@ -101,16 +104,21 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
             addSlot(assemblerSlot4);
             addSlot(assemblerResult);
 
-            analyzerSlotA = new ModVisibleSlot(iItemHandler, 5, 80, 30 + yOffset);
-            analyzerSlotB = new ModVisibleSlot(iItemHandler, 6, 100, 30 + yOffset);
+            analyzerSlotA = new ModVisibleSlot(iItemHandler, 5, 66, 34 + yOffset);
+            analyzerSlotB = new ModVisibleSlot(iItemHandler, 6, 84, 34 + yOffset);
+            analyzerSlotC = new ModVisibleSlot(iItemHandler, 7, 102, 34 + yOffset);
+            analyzerResult = new AdvancementGivingVisibleResultSlot(iItemHandler, 8, 170, 34 + yOffset);
+
             addSlot(analyzerSlotA);
             addSlot(analyzerSlotB);
+            addSlot(analyzerSlotC);
+            addSlot(analyzerResult);
 
-            seqInputA = new DnaInputSlot(this, iItemHandler, 7, 15, 8 + yOffset);
-            seqInputB = new DnaInputSlot(this, iItemHandler, 8, 15, 30 + yOffset);
+            seqInputA = new DnaInputSlot(this, iItemHandler, 9, 15, 8 + yOffset);
+            seqInputB = new DnaInputSlot(this, iItemHandler, 10, 15, 30 + yOffset);
 
-            seqOutA = new AdvancementGivingVisibleResultSlot(iItemHandler, 9, 191, 57 + yOffset, player);
-            seqOutB = new AdvancementGivingVisibleResultSlot(iItemHandler, 10, 221, 57 + yOffset, player);
+            seqOutA = new AdvancementGivingVisibleResultSlot(iItemHandler, 11, 191, 57 + yOffset);
+            seqOutB = new AdvancementGivingVisibleResultSlot(iItemHandler, 12, 221, 57 + yOffset);
 
             addSlot(seqInputA);
             addSlot(seqInputB);
@@ -165,6 +173,8 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
     private void setVisibleAnalyzer(boolean v) {
         analyzerSlotA.setVisible(v);
         analyzerSlotB.setVisible(v);
+        analyzerSlotC.setVisible(v);
+        analyzerResult.setVisible(v);
     }
 
     private void setVisibleSequencer(boolean v) {
@@ -204,11 +214,11 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
 
                     ItemStack geneStack = GeneItem.createFromTag(gene);
                     int correctedSlot = j - slotCorrection;
-                    if (i == 7) {
+                    if (i == BioengineeringWorkstationBlockEntity.DNA_INPUT_1) {
                         if (topGeneSlots.size() > correctedSlot) {
                             topGeneSlots.get(correctedSlot).set(geneStack);
                         }
-                    } else if (i == 8) {
+                    } else if (i == BioengineeringWorkstationBlockEntity.DNA_INPUT_2) {
                         if (botGeneSlots.size() > correctedSlot) {
                             botGeneSlots.get(correctedSlot).set(geneStack);
                         }

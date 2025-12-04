@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 import static net.farkas.wildaside.dna.DnaConstants.*;
 
 public class BioengineeringWorkstationBlockEntity extends BlockEntity implements MenuProvider {
-    private final ItemStackHandler itemHandler = new ItemStackHandler(37) {
+    private final ItemStackHandler itemHandler = new ItemStackHandler(39) {
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
@@ -95,10 +95,10 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
     private static final int INPUT_5 = 4;
     private static final int OUTPUT_1 = 5;
 
-    private static final int DNA_INPUT_1 = 7;
-    private static final int DNA_INPUT_2 = 8;
-    private static final int DNA_OUTPUT_1 = 9;
-    private static final int DNA_OUTPUT_2 = 10;
+    public static final int DNA_INPUT_1 = 9;
+    public static final int DNA_INPUT_2 = 10;
+    private static final int DNA_OUTPUT_1 = 11;
+    private static final int DNA_OUTPUT_2 = 12;
 
     public final ContainerData data;
     private int progress = 0;

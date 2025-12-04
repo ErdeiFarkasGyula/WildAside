@@ -18,9 +18,9 @@ public class AdvancementGivingVisibleResultSlot extends ModVisibleSlot {
         this.advancement = advancement;
     }
 
-    public AdvancementGivingVisibleResultSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition, Player player) {
+    public AdvancementGivingVisibleResultSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
         super(itemHandler, index, xPosition, yPosition);
-        this.player = player;
+        this.player = null;
         this.advancement = null;
     }
 
