@@ -1,6 +1,7 @@
 package net.farkas.wildaside.block.entity;
 
 import net.farkas.wildaside.capability.dna.DnaImplementation;
+import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.item.ModItems;
@@ -370,6 +371,13 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
 
         if (!detergentStack.is(ModItems.ENTORIUM.get()) || !stabiliserStack.is(ModItems.VIBRION.get())) return false;
         if (!dnaHolderStack.is(ModItems.DNA_HOLDER.get())) return false;
-        return true;
+
+        CompoundTag dnaTag = dnaHolderStack.getOrCreateTag();
+
+        boolean multipleSources = dnaTag.getBoolean(MULTIPLE_SOURCES);
+        boolean clotted = dnaTag.getBoolean(SAMPLE_CLOTTED);
+        boolean dirty = dnaTag.getBoolean(SAMPLE_DIRTY);
+
+        return !multipleSources && !clotted && !dirty;
     }
 }

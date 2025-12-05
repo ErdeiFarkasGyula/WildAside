@@ -85,36 +85,55 @@ public class ModEventBusClientEvents {
     @SubscribeEvent
     public static void registerColoredBlocks(RegisterColorHandlersEvent.Block event) {
         event.register((pState, pLevel, pPos, pTintIndex) -> pLevel != null &&
-                pPos != null ? BiomeColors.getAverageFoliageColor(pLevel, pPos) : FoliageColor.getDefaultColor(),
+                        pPos != null ? BiomeColors.getAverageFoliageColor(pLevel, pPos) : FoliageColor.getDefaultColor(),
                 ModBlocks.HICKORY_LEAVES.get(), ModBlocks.FALLEN_HICKORY_LEAVES.get());
     }
 
     @SubscribeEvent
     public static void registerColoredItems(RegisterColorHandlersEvent.Item event) {
         event.register((pStack, pTintIndex) -> {
-            BlockState state = ((BlockItem)pStack.getItem()).getBlock().defaultBlockState();
+            BlockState state = ((BlockItem) pStack.getItem()).getBlock().defaultBlockState();
             return event.getBlockColors().getColor(state, null, null, pTintIndex);
         }, ModBlocks.HICKORY_LEAVES.get());
 
         event.getItemColors().register((stack, tintIndex) -> {
             if (!stack.hasTag() || !stack.getTag().contains(DNA_DATA)) return 0xFFFFFF;
 
-            CompoundTag dnaTag = stack.getTag().getCompound(DNA_DATA);
+            CompoundTag tag = stack.getOrCreateTag();
+            CompoundTag dnaTag = tag.getCompound(DNA_DATA);
             DnaImplementation dna = new DnaImplementation();
             dna.deserializeNBT(dnaTag);
 
             if (dna.getSource() == null) return 0xFFFFFF;
 
-            SpawnEggItem egg = ForgeSpawnEggItem.fromEntityType(dna.getSource());
-            if (egg == null) return 0xFFFFFF;
+            if (tag.getBoolean(REVEAL_SOURCE)) {
+                SpawnEggItem egg = ForgeSpawnEggItem.fromEntityType(dna.getSource());
+                if (egg == null) return 0xFFFFFF;
 
-            return switch (tintIndex) {
-                case 0 -> egg.getColor(0);
-                case 1 -> egg.getColor(1);
-                default -> 0xFFFFFF;
-            };
+                return switch (tintIndex) {
+                    case 0 -> egg.getColor(0);
+                    case 1 -> egg.getColor(1);
+                    default -> 0xFFFFFF;
+                };
+            }
+            else {
+                if (tintIndex == 2) return 0xFFFFFF;
+
+                int baseColor = DEFAULT_BLOOD_COLOR;
+                Level levelWorld = Minecraft.getInstance().level;
+                if (levelWorld != null) {
+                    long age = DnaUtils.getFrozenItemEffectiveAge(tag, levelWorld);
+                    float clotFactor = Mth.clamp(age / (float) DnaConstants.BLOOD_CLOTTING_TIME_DEFAULT, 0f, 1f);
+
+                    int r = (int) Mth.lerp(clotFactor, (baseColor >> 16) & 0xFF, 0x4C);
+                    int g = (int) Mth.lerp(clotFactor, (baseColor >> 8) & 0xFF, 0x00);
+                    int b = (int) Mth.lerp(clotFactor, baseColor & 0xFF, 0x00);
+                    baseColor = (r << 16) | (g << 8) | b;
+                }
+
+                return (1 << 24) | (baseColor & 0xFFFFFF);
+            }
         }, ModItems.DNA_HOLDER.get());
-
 
         event.getItemColors().register((stack, tintIndex) -> {
             if (!stack.hasTag()) return 0xFFFFFFFF;
@@ -127,11 +146,12 @@ public class ModEventBusClientEvents {
                     if (level <= 0.01f) return 0xFFFFFFFF;
 
                     String fluidType = tag.contains(FLUID_TYPE) ? tag.getString(FLUID_TYPE) : NONE;
-                    int baseColor = Syringe.DEFAULT_BLOOD_COLOR;
+                    int baseColor = DEFAULT_BLOOD_COLOR;
 
                     if (WATER.equals(fluidType)) {
                         baseColor = tag.contains(FLUID_COLOUR) ? tag.getInt(FLUID_COLOUR) : 0x3F76E4;
-                    } else if (BLOOD.equals(fluidType)) {
+                    }
+                    else if (BLOOD.equals(fluidType)) {
                         Level levelWorld = Minecraft.getInstance().level;
                         if (levelWorld != null) {
                             long age = DnaUtils.getFrozenItemEffectiveAge(tag, levelWorld);
@@ -144,7 +164,7 @@ public class ModEventBusClientEvents {
                         }
                     }
 
-                    int alpha = (int)(255 * Mth.clamp(level / (float) Syringe.DEFAULT_MAX_LOAD, 0f, 1f));
+                    int alpha = (int) (255 * Mth.clamp(level / (float) Syringe.DEFAULT_MAX_LOAD, 0f, 1f));
                     return (alpha << 24) | (baseColor & 0xFFFFFF);
 
                 case 2:

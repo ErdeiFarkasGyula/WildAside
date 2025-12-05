@@ -77,11 +77,6 @@ public class DnaHolder extends Item {
         boolean revealStability = tag.getBoolean(REVEAL_STABILITY);
         boolean revealTraits = tag.getBoolean(REVEAL_TRAITS);
 
-        if (!(revealSource || revealStability || revealTraits)) {
-            tooltip.add(Component.translatable("dna.wildaside.dna_data_hidden").withStyle(ChatFormatting.STRIKETHROUGH, ChatFormatting.DARK_GRAY));
-            return;
-        }
-
         boolean multipleSources = tag.getBoolean(MULTIPLE_SOURCES);
         boolean clotted = tag.getBoolean(SAMPLE_CLOTTED);
         boolean dirty = tag.getBoolean(SAMPLE_DIRTY);
@@ -92,6 +87,11 @@ public class DnaHolder extends Item {
             return;
         }
 
+        if (!(revealSource || revealStability || revealTraits)) {
+            tooltip.add(Component.translatable("dna.wildaside.dna_data_hidden").withStyle(ChatFormatting.STRIKETHROUGH, ChatFormatting.DARK_GRAY));
+            return;
+        }
+        
         if (revealSource) {
             Component sourceName = dna.getSource() != null
                     ? dna.getSource().getDescription()

@@ -40,7 +40,6 @@ import java.util.UUID;
 import static net.farkas.wildaside.dna.DnaConstants.*;
 
 public class Syringe extends Item {
-    public static final int DEFAULT_BLOOD_COLOR = 0xba260f;
     public static final int DEFAULT_MAX_LOAD = 3;
 
     private static final float NEEDLE_DELTA = 0.1f;
