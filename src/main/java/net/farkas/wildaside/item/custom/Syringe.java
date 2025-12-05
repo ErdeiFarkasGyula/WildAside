@@ -1,4 +1,5 @@
 package net.farkas.wildaside.item.custom;
+
 import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.DnaUtils;
@@ -87,7 +88,8 @@ public class Syringe extends Item {
                     tag.putInt(FLUID_COLOUR, waterColor);
                 }
             }
-        } else {
+        }
+        else {
             fluid = Mth.clamp(fluid - NEEDLE_DELTA, 0f, DEFAULT_MAX_LOAD);
             if (BLOOD.equals(fluidType)) {
                 handleDnaHolderInteraction(player, tag, fluid, progress);
@@ -271,7 +273,16 @@ public class Syringe extends Item {
 
         if (fluid > DEFAULT_MAX_LOAD - 0.25f) {
             DnaUtils.saveBloodSamplingTick(tag, serverLevel);
-            target.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> tag.put(DNA_DATA, dna.serializeNBT()));
+
+            var cap = target.getCapability(DnaCapability.INSTANCE).orElse(null);
+
+            if (cap.getGenes().isEmpty()) {
+                cap.setSource(target.getType());
+                cap.setGenes(DnaUtils.generateBaseGenes(target, true));
+                cap.setStability(100);
+            }
+
+            tag.put(DNA_DATA, cap.serializeNBT());
         }
 
         if (fluid > DEFAULT_MAX_LOAD - 0.01f) {

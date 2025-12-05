@@ -13,6 +13,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -29,7 +30,10 @@ public class DnaEventHandler {
     }
 
     public static void applyDnaOnJoinLevel(EntityJoinLevelEvent event) {
-        if (event.getLevel().dimension() == ModDimensions.TEST_LEVEL || !ModConfig.ACCURATE_DNA_MOVEMENT_SPEEDS.get() || !(event.getLevel() instanceof ServerLevel)) return;
+        if (event.getLevel().dimension() == ModDimensions.TEST_LEVEL || !(event.getLevel() instanceof ServerLevel)) return;
+
+        if (!ModConfig.WILD_MODE.get()) return;
+        if (!ModConfig.EXCLUDE_PLAYERS_FROM_WILD_MODE.get() && event.getEntity() instanceof Player) return;
 
         if (event.getEntity() instanceof LivingEntity livingEntity) {
             livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
@@ -38,9 +42,9 @@ public class DnaEventHandler {
                     Map<Trait, Gene> genes = DnaUtils.generateBaseGenes(livingEntity, true);
                     dna.setGenes(genes);
                     dna.setStability(100);
+                    dna.applyGenes(livingEntity);
                 }
             });
-            livingEntity.getPersistentData().putFloat(IAbility.COOLDOWN, 0);
         }
     }
 

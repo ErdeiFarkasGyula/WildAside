@@ -1,5 +1,6 @@
 package net.farkas.wildaside.dna.trait;
 
+import net.farkas.wildaside.dna.ability.IAbility;
 import net.minecraft.world.entity.LivingEntity;
 
 public class AbilityTrait extends Trait {
@@ -10,6 +11,7 @@ public class AbilityTrait extends Trait {
     @Override
     public void apply(LivingEntity entity, float value) {
         entity.getPersistentData().putFloat("trait_ability_" + getName(), value);
+        entity.getPersistentData().putFloat(IAbility.COOLDOWN, 0);
     }
 
     @Override

@@ -39,14 +39,25 @@ public class ModConfig {
             .comment("Enable/disable the accurate movement speed calculations of mobs for DNAs. " +
                     "If false, both ground and water movement speeds be inaccurate with DNAs, " +
                     "but performance after loading a world might be better for the first few seconds " +
-                    "when loading it up for the first time, or with a different mod list. (def: true)")
+                    "when loading it up for the first time, or with a different mod list. (de" +
+                    "f: true)")
             .define("accurate_dna_movement_speeds", true);
+
     public static final ForgeConfigSpec.BooleanValue ACCURATE_DNA_WATER_MOVEMENT_SPEEDS = COMMON_BUILDER
             .comment("[EXPERIMENTAL!] Enable/disable the accurate movement speed calculations of mobs for DNAs, only in water. " +
                     "If false, water movement speeds can be inaccurate with DNAs," +
                     "but performance after loading a world might be better for the first few seconds " +
                     "when loading it up for the first time, or with a different mod list. (def: false)")
             .define("accurate_dna_water_movement_speeds", false);
+
+    public static final ForgeConfigSpec.BooleanValue WILD_MODE = COMMON_BUILDER
+            .comment("Enable/disable Wild Mode. This means all mobs will spawn with their varied, but deterministic dna generated and applied. (def: false)")
+            .define("wild_mode", false);
+
+    public static final ForgeConfigSpec.BooleanValue EXCLUDE_PLAYERS_FROM_WILD_MODE = COMMON_BUILDER
+            .comment("Exclude/include player from/in Wild Mode. (def: true)")
+            .define("exclude_players_from_wild_mode", true);
+
 
 //    public static final ForgeConfigSpec.ConfigValue<Integer> MUCELLITH_SPAWN_WEIGHT = BUILDER
 //            .pop()
