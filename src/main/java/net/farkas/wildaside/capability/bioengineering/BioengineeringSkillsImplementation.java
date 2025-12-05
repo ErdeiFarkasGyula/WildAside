@@ -1,8 +1,6 @@
 package net.farkas.wildaside.capability.bioengineering;
 
-import net.farkas.wildaside.dna.DnaConstants;
-import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillUtils;
-import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkills;
+import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillPointOperation;
 import net.farkas.wildaside.network.NetworkHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -30,35 +28,36 @@ public class BioengineeringSkillsImplementation implements IBioengineeringSkills
     }
 
     @Override
-    public void addPoints(int pointsToAdd) {
-        points += pointsToAdd;
-    }
-
-    @Override
     public void setPoints(int newPoints) {
         points = newPoints;
     }
 
     @Override
-    public boolean spendPoints(int pointsToRemove) {
-        if (points <= 0 || points < pointsToRemove) return false;
-        points -= pointsToRemove;
-        return true;
+    public void handlePoints(int inPoints, BioengineeringSkillPointOperation operation) {
+        switch (operation) {
+            case ADD:
+                points += inPoints;
+                break;
+            case REMOVE:
+                points -= inPoints;
+                break;
+            case SPEND:
+                if (points <= 0 || points < inPoints) {
+                    return;
+                }
+                points -= inPoints;
+                break;
+            case SET:
+                points = inPoints;
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
     public boolean hasSkill(ResourceLocation skillId) {
         return skills.contains(skillId);
-    }
-
-    @Override
-    public void sendUnlockRequest(ResourceLocation skillId) {
-        NetworkHandler.sendBioengineeringSkillRequestPacket(skillId, true);
-    }
-
-    @Override
-    public void sendRemoveRequest(ResourceLocation skillId) {
-        NetworkHandler.sendBioengineeringSkillRequestPacket(skillId, false);
     }
 
     @Override

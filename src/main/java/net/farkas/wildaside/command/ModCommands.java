@@ -6,14 +6,13 @@ import com.mojang.brigadier.arguments.*;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.farkas.wildaside.capability.bioengineering.BioengineeringSkillsCapability;
 import net.farkas.wildaside.capability.bioengineering.IBioengineeringSkills;
 import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.config.ModConfig;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.allele.Allele;
-import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkill;
+import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillUtils;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkills;
 import net.farkas.wildaside.dna.dominance.Dominance;
 import net.farkas.wildaside.dna.trait.Trait;
@@ -26,6 +25,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -36,7 +36,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 import static net.farkas.wildaside.dna.DnaConstants.*;
 
@@ -165,55 +164,63 @@ public class ModCommands {
         root.then(
                 Commands.literal("bio_skill")
                         .requires(source -> source.hasPermission(2))
-                        .then(Commands.argument(PLAYER, EntityArgument.entity())
+
+                        .then(Commands.argument(PLAYER, EntityArgument.player())
                                 .then(Commands.literal("unlock")
-                                        .then(Commands.argument(SKILL, StringArgumentType.string())
-                                                .suggests((context, builder) -> {
-                                                    for (BioengineeringSkill skill : BioengineeringSkills.all()) {
-                                                        builder.suggest(skill.getName());
-                                                    }
-                                                    return builder.buildFuture();
-                                                })
-                                                .executes(ctx -> {
-                                                            Player player = EntityArgument.getPlayer(ctx, PLAYER);
-                                                            String skill = StringArgumentType.getString(ctx, VALUE);
-                                                            return unlockSkill(ctx.getSource(), player, skill);
-                                                        }
+                                        .then(Commands.argument(SKILL, ResourceLocationArgument.id())
+                                                .suggests((ctx, builder) ->
+                                                        SharedSuggestionProvider.suggest(
+                                                                BioengineeringSkills.all()
+                                                                        .stream()
+                                                                        .map(s -> s.getId().toString())
+                                                                        .toList(),
+                                                                builder
+                                                        )
                                                 )
+                                                .executes(ctx -> {
+                                                    Player player = EntityArgument.getPlayer(ctx, PLAYER);
+                                                    ResourceLocation skillId = ResourceLocationArgument.getId(ctx, SKILL);
+                                                    return unlockSkill(ctx.getSource(), player, skillId);
+                                                })
                                         )
                                 )
 
                                 .then(Commands.literal("remove")
-                                        .then(Commands.argument(SKILL, StringArgumentType.string())
-                                                .suggests((context, builder) -> {
-                                                    for (BioengineeringSkill skill : BioengineeringSkills.all()) {
-                                                        builder.suggest(skill.getName());
-                                                    }
-                                                    return builder.buildFuture();
+                                        .then(Commands.argument(SKILL, ResourceLocationArgument.id())
+                                                .suggests((ctx, builder) ->
+                                                        SharedSuggestionProvider.suggest(
+                                                                BioengineeringSkills.all()
+                                                                        .stream()
+                                                                        .map(s -> s.getId().toString())
+                                                                        .toList(),
+                                                                builder
+                                                        )
+                                                )
+                                                .executes(ctx -> {
+                                                    ResourceLocation skillId = ResourceLocationArgument.getId(ctx, SKILL);
+                                                    return removeSkill(ctx.getSource(), skillId);
                                                 })
-                                                .executes(ctx -> removeSkill(
-                                                        ctx.getSource(),
-                                                        StringArgumentType.getString(ctx, SKILL)
-                                                ))
                                         )
                                 )
 
                                 .then(Commands.literal("has")
-                                        .then(Commands.argument(SKILL, StringArgumentType.string())
-                                                .suggests((context, builder) -> {
-                                                    for (BioengineeringSkill skill : BioengineeringSkills.all()) {
-                                                        builder.suggest(skill.getName());
-                                                    }
-                                                    return builder.buildFuture();
+                                        .then(Commands.argument(SKILL, ResourceLocationArgument.id())
+                                                .suggests((ctx, builder) ->
+                                                        SharedSuggestionProvider.suggest(
+                                                                BioengineeringSkills.all()
+                                                                        .stream()
+                                                                        .map(s -> s.getId().toString())
+                                                                        .toList(),
+                                                                builder
+                                                        )
+                                                )
+                                                .executes(ctx -> {
+                                                    ResourceLocation skillId = ResourceLocationArgument.getId(ctx, SKILL);
+                                                    return checkSkill(ctx.getSource(), skillId);
                                                 })
-                                                .executes(ctx -> checkSkill(
-                                                        ctx.getSource(),
-                                                        StringArgumentType.getString(ctx, SKILL)
-                                                ))
                                         )
                                 )
                         )
-
         );
 
         dispatcher.register(root);
@@ -328,9 +335,9 @@ public class ModCommands {
         Allele alleleB = new Allele(value, 0.05f, trait.getInstabilityModifier(), Dominance.RECESSIVE);
 
         livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-            dna.getGenes().put(trait, new Gene(trait, alleleA, alleleB));
-            dna.applyGenes(livingEntity);
-            dna.setModified(true);
+            Gene gene = new Gene(trait, alleleA, alleleB);
+            dna.getGenes().put(trait, gene);
+            dna.applyGene(livingEntity, gene);
         });
 
         Component message = Component.translatable(
@@ -361,65 +368,46 @@ public class ModCommands {
                         Component.translatable(entityString).getString().toLowerCase()), true);
     }
 
-    private static int unlockSkill(CommandSourceStack source, Player player, String skillStr) {
-        ResourceLocation skillId = ResourceLocation.tryParse(skillStr);
-
-        if (skillId == null) {
-            source.sendFailure(Component.literal("Invalid skill: " + skillStr));
-            return 0;
-        }
-
+    private static int unlockSkill(CommandSourceStack source, Player player, ResourceLocation skillId) {
         IBioengineeringSkills skills = player.getCapability(BioengineeringSkillsCapability.INSTANCE).orElse(null);
 
+        if (skills == null) return 0;
         if (skills.hasSkill(skillId)) {
             source.sendFailure(Component.literal("You already have this skill: " + skillId));
             return 0;
         }
 
-        skills.sendUnlockRequest(skillId);
-
+        BioengineeringSkillUtils.unlockSkill(player, skillId);
         source.sendSuccess(() -> Component.literal("Unlocked skill: " + skillId), true);
 
         return 1;
     }
 
-    private static int removeSkill(CommandSourceStack source, String skillStr) {
+    private static int removeSkill(CommandSourceStack source, ResourceLocation skillId) {
         ServerPlayer player = source.getPlayer();
-        ResourceLocation skillId = ResourceLocation.tryParse(skillStr);
-
-        if (skillId == null) {
-            source.sendFailure(Component.literal("Invalid skill: " + skillStr));
-            return 0;
-        }
-
         IBioengineeringSkills skills = player.getCapability(BioengineeringSkillsCapability.INSTANCE).orElse(null);
 
+        if (skills == null) return 0;
         if (!skills.hasSkill(skillId)) {
             source.sendFailure(Component.literal("You don't have this skill: " + skillId));
             return 0;
         }
 
         skills.removeSkillFromUnlocked(skillId);
-
         source.sendSuccess(() -> Component.literal("Removed skill: " + skillId), true);
-
         return 1;
     }
 
-    private static int checkSkill(CommandSourceStack source, String skillStr) {
+    private static int checkSkill(CommandSourceStack source, ResourceLocation skillId) {
         ServerPlayer player = source.getPlayer();
-        ResourceLocation skillId = ResourceLocation.tryParse(skillStr);
-
-        if (skillId == null) {
-            source.sendFailure(Component.literal("Invalid skill: " + skillStr));
-            return 0;
-        }
-
         IBioengineeringSkills skills = player.getCapability(BioengineeringSkillsCapability.INSTANCE).orElse(null);
 
-        boolean has = skills.hasSkill(skillId);
+        boolean has = skills != null && skills.hasSkill(skillId);
 
-        source.sendSuccess(() -> Component.literal("Skill " + skillId + ": " + (has ? "§aUNLOCKED" : "§cNOT unlocked")), false);
+        source.sendSuccess(
+                () -> Component.literal("Skill " + skillId + ": " + (has ? "§aUNLOCKED" : "§cNOT unlocked")),
+                false
+        );
 
         return has ? 1 : 0;
     }

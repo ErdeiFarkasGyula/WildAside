@@ -36,25 +36,46 @@ public class BioengineeringSkillUtils {
         return false;
     }
 
-    public static void sendUnlockRequestPacket(ResourceLocation skillId) {
-        NetworkHandler.sendBioengineeringSkillRequestPacket(skillId, true);
+    public static void unlockSkill(Player player, ResourceLocation skillId) {
+        NetworkHandler.sendBioengineeringSkillRequestPacket(player, skillId, true);
     }
 
-    public static void sendRemoveRequestPacket(ResourceLocation skillId) {
-        NetworkHandler.sendBioengineeringSkillRequestPacket(skillId, false);
+    public static void removeSkill(Player player,ResourceLocation skillId) {
+        NetworkHandler.sendBioengineeringSkillRequestPacket(player, skillId, false);
+    }
+
+    public static void addPoint(Player player, int points) {
+        NetworkHandler.sendBioengineeringSkillPointsPacket(player, points, BioengineeringSkillPointOperation.ADD);
+    }
+
+    public static void removePoints(Player player, int points) {
+        NetworkHandler.sendBioengineeringSkillPointsPacket(player, points, BioengineeringSkillPointOperation.REMOVE);
+    }
+
+    public static void spendPoints(Player player, int points) {
+        NetworkHandler.sendBioengineeringSkillPointsPacket(player, points, BioengineeringSkillPointOperation.SPEND);
+    }
+
+    public static void setPoints(Player player, int points) {
+        NetworkHandler.sendBioengineeringSkillPointsPacket(player, points, BioengineeringSkillPointOperation.SET);
     }
 
     public static void unlockAndSyncToClient(Player player, ResourceLocation skillId) {
         if (player instanceof ServerPlayer serverPlayer) {
             BioengineeringSkill skill = BioengineeringSkills.get(skillId);
 
+            System.out.println("Trying");
+
             if (!canUnlock(serverPlayer, skill)) return;
             if (hasSkill(serverPlayer, skillId)) return;
+
+            System.out.println("PASSed");
 
             serverPlayer.getCapability(BioengineeringSkillsCapability.INSTANCE).ifPresent(cap -> {
                 skill.getRequirement().unlock(serverPlayer);
                 cap.addSkillToUnlocked(skillId);
                 cap.syncToClient(serverPlayer);
+                System.out.println("PASS");
             });
 
             serverPlayer.playSound(SoundEvents.PLAYER_LEVELUP, 0.8f, 1.5f);
@@ -69,6 +90,17 @@ public class BioengineeringSkillUtils {
             });
 
             serverPlayer.playSound(SoundEvents.PLAYER_HURT_FREEZE, 0.8f, 1.5f);
+        }
+    }
+
+    public static void handlePointsAndSyncToClient(Player player, int points, BioengineeringSkillPointOperation operation) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            serverPlayer.getCapability(BioengineeringSkillsCapability.INSTANCE).ifPresent(cap -> {
+                cap.handlePoints(points, operation);
+                cap.syncToClient(serverPlayer);
+            });
+
+            serverPlayer.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP, 0.8f, 1.5f);
         }
     }
 }

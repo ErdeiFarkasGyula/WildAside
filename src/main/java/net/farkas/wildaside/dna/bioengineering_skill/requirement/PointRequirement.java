@@ -1,6 +1,7 @@
 package net.farkas.wildaside.dna.bioengineering_skill.requirement;
 
 import net.farkas.wildaside.capability.bioengineering.BioengineeringSkillsCapability;
+import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillPointOperation;
 import net.minecraft.server.level.ServerPlayer;
 
 public class PointRequirement extends IBioengineeringSkillRequirement {
@@ -20,7 +21,7 @@ public class PointRequirement extends IBioengineeringSkillRequirement {
     public void unlock(ServerPlayer player) {
         var cap = player.getCapability(BioengineeringSkillsCapability.INSTANCE).orElse(null);
         if (cap != null) {
-            cap.spendPoints(requiredPoints);
+            cap.handlePoints(requiredPoints, BioengineeringSkillPointOperation.SPEND);
         }
     }
 }

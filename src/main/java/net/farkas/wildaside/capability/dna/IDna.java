@@ -19,6 +19,7 @@ public interface IDna extends INBTSerializable<CompoundTag> {
     void setGenes(Map<Trait, Gene> genes);
     void setStability(float stability);
     void setModified(boolean modified);
+    void applyGene(LivingEntity entity, Gene gene);
     void applyGenes(LivingEntity entity);
     void removeGenes(LivingEntity entity);
     float calculateInstabilityChange(Map<Trait, Gene> genes);

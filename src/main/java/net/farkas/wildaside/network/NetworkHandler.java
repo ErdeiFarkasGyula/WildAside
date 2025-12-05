@@ -1,11 +1,13 @@
 package net.farkas.wildaside.network;
 
 import net.farkas.wildaside.WildAside;
+import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillPointOperation;
 import net.farkas.wildaside.network.packets.*;
 import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationTab;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.network.NetworkDirection;
@@ -75,6 +77,13 @@ public class NetworkHandler {
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
 
         CHANNEL.registerMessage(id(),
+                BioengineeringSkillPointPacket.class,
+                BioengineeringSkillPointPacket::encode,
+                BioengineeringSkillPointPacket::decode,
+                BioengineeringSkillPointPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
+
+        CHANNEL.registerMessage(id(),
                 BioengineeringSkillClientSyncPacket.class,
                 BioengineeringSkillClientSyncPacket::encode,
                 BioengineeringSkillClientSyncPacket::decode,
@@ -126,12 +135,20 @@ public class NetworkHandler {
         );
     }
 
-    public static void sendBioengineeringSkillRequestPacket(ResourceLocation skillId, boolean unlock) {
+    public static void sendBioengineeringSkillRequestPacket(Player player, ResourceLocation skillId, boolean unlock) {
         if (CHANNEL == null) {
             WildAside.LOGGER.warn("Tried to send bioengineering skill unlock request before network init. Ignoring.");
             return;
         }
-        CHANNEL.send(PacketDistributor.SERVER.noArg(), new BioengineeringSkillUnlockRequestPacket(skillId, unlock));
+        CHANNEL.send(PacketDistributor.SERVER.noArg(), new BioengineeringSkillUnlockRequestPacket(player.getUUID(), skillId, unlock));
+    }
+
+    public static void sendBioengineeringSkillPointsPacket(Player player, int points, BioengineeringSkillPointOperation operation) {
+        if (CHANNEL == null) {
+            WildAside.LOGGER.warn("Tried to send bioengineering skill points request before network init. Ignoring.");
+            return;
+        }
+        CHANNEL.send(PacketDistributor.SERVER.noArg(), new BioengineeringSkillPointPacket(player.getUUID(), points, operation));
     }
 
     public static void sendBioengineeringSkillClientSyncPacket(Set<ResourceLocation> skills, int points) {

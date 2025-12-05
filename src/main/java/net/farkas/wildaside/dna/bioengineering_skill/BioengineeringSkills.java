@@ -21,10 +21,9 @@ public class BioengineeringSkills {
             .category(BioengineeringSkillCategories.CATEGORY_1)
             .requirement(
                     new AllRequirements(
-                    List.of(
-                            new PointRequirement(67),
-                            new ItemRequirement(ModItems.ENTORIUM.get(), null, false)
-                    )
+                            List.of(
+
+                            )
             )).build());
 
     public static BioengineeringSkill register(BioengineeringSkill skill) {

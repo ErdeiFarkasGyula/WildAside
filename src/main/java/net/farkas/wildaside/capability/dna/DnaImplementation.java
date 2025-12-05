@@ -49,6 +49,11 @@ public class DnaImplementation implements IDna {
     public void setModified(boolean modified) { this.modified = modified; }
 
     @Override
+    public void applyGene(LivingEntity entity, Gene gene) {
+        gene.apply(entity);
+    }
+
+    @Override
     public float getStability() {
         return stability;
     }
