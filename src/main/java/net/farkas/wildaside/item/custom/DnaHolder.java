@@ -66,8 +66,7 @@ public class DnaHolder extends Item {
         tooltip.add(sampleComponent);
 
         if (!tag.contains(DNA_DATA)) {
-            tooltip.add(Component.translatable("dna.wildaside.no_dna_data")
-                    .withStyle(ChatFormatting.DARK_GRAY));
+            tooltip.add(Component.translatable("dna.wildaside.no_dna_data").withStyle(ChatFormatting.DARK_GRAY));
             return;
         }
 
@@ -79,8 +78,7 @@ public class DnaHolder extends Item {
         boolean revealTraits = tag.getBoolean(REVEAL_TRAITS);
 
         if (!(revealSource || revealStability || revealTraits)) {
-            tooltip.add(Component.translatable("dna.wildaside.dna_data_hidden")
-                    .withStyle(ChatFormatting.STRIKETHROUGH, ChatFormatting.DARK_GRAY));
+            tooltip.add(Component.translatable("dna.wildaside.dna_data_hidden").withStyle(ChatFormatting.STRIKETHROUGH, ChatFormatting.DARK_GRAY));
             return;
         }
 

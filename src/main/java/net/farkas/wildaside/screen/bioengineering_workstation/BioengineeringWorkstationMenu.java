@@ -195,7 +195,11 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
             ItemStack stack = iItemHandler.getStackInSlot(i);
 
             if (stack.getItem() instanceof DnaHolder dnaHolder) {
-                CompoundTag dnaDataTag = stack.getOrCreateTagElement(DNA_DATA);
+                CompoundTag tag = stack.getOrCreateTag();
+
+                if (!tag.getBoolean(REVEAL_TRAITS)) return;
+
+                CompoundTag dnaDataTag = tag.getCompound(DNA_DATA);
                 DnaImplementation dna = new DnaImplementation();
                 dna.deserializeNBT(dnaDataTag);
                 Map<Trait, Gene> genes = BioengineeringWorkstationBlockEntity.orderGenes(dna);
