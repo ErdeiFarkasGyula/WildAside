@@ -1,7 +1,7 @@
 package net.farkas.wildaside.network.packets;
 
 import net.farkas.wildaside.dna.DnaConstants;
-import net.farkas.wildaside.item.custom.Syringe;
+import net.farkas.wildaside.item.custom.SyringeItem;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -81,7 +81,7 @@ public class SyringeDataPacket {
 
     public boolean handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            Syringe.handleSyringeProgress(this);
+            SyringeItem.handleSyringeProgress(this);
         });
         ctx.get().setPacketHandled(true);
         return true;

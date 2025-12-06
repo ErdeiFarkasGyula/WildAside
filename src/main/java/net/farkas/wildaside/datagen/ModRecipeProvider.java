@@ -3,7 +3,7 @@ package net.farkas.wildaside.datagen;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.item.ModItems;
-import net.farkas.wildaside.item.custom.HickoryNutTrailMix;
+import net.farkas.wildaside.item.custom.HickoryNutTrailMixItem;
 import net.farkas.wildaside.util.HickoryColour;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
@@ -14,7 +14,6 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
 
 import java.util.List;
@@ -169,7 +168,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         //HICKORY
         for (HickoryColour colour : HickoryColour.values()) {
             simpleShapedRecipe(ModBlocks.HICKORY_LEAVES_BLOCKS.get(colour).get(), 1, ModItems.LEAF_ITEMS.get(colour).get()).save(recipeOutput);
-            hickoryNutTrailMix((HickoryNutTrailMix)ModItems.TRAIL_MIX_ITEMS.get(colour).get()).save(recipeOutput);
+            hickoryNutTrailMix((HickoryNutTrailMixItem)ModItems.TRAIL_MIX_ITEMS.get(colour).get()).save(recipeOutput);
         }
     }
 
@@ -189,7 +188,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .unlockedBy(getHasName(input), has(input));
     }
 
-    private ShapelessRecipeBuilder hickoryNutTrailMix(HickoryNutTrailMix mixItem) {
+    private ShapelessRecipeBuilder hickoryNutTrailMix(HickoryNutTrailMixItem mixItem) {
          return ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, mixItem)
                 .requires(ModItems.HICKORY_NUT.get())
                 .requires(Items.BOWL)

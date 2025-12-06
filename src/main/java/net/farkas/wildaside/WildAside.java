@@ -16,8 +16,8 @@ import net.farkas.wildaside.entity.custom.vibrion.SporeBombEntity;
 import net.farkas.wildaside.item.ModCreativeModeTabs;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.item.VanillaCreativeTabs;
-import net.farkas.wildaside.item.custom.DnaHolder;
-import net.farkas.wildaside.item.custom.Syringe;
+import net.farkas.wildaside.item.custom.DnaHolderItem;
+import net.farkas.wildaside.item.custom.SyringeItem;
 import net.farkas.wildaside.network.NetworkHandler;
 import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.potion.BetterBrewingRecipe;
@@ -221,7 +221,7 @@ public class WildAside
                         CompoundTag tag = stack.getTag();
                         if (tag.contains(SAMPLE_PROGRESS)) {
                             int progress = tag.getInt(SAMPLE_PROGRESS);
-                            return Mth.clamp((float) progress / DnaHolder.DEFAULT_MAX_SAMPLES, 0f, 1f);
+                            return Mth.clamp((float) progress / DnaHolderItem.DEFAULT_MAX_SAMPLES, 0f, 1f);
                         }
                         return 0f;
                     }
@@ -233,7 +233,7 @@ public class WildAside
                     (stack, level, entity, seed) -> {
                         if (!stack.hasTag()) return 0f;
                         float p = stack.getTag().getFloat(SYRINGE_PROGRESS);
-                        return Mth.clamp(p / Syringe.DEFAULT_MAX_LOAD, 0f, 1f);
+                        return Mth.clamp(p / SyringeItem.DEFAULT_MAX_LOAD, 0f, 1f);
                     }
             );
 
@@ -243,7 +243,7 @@ public class WildAside
                     (stack, level, entity, seed) -> {
                         if (!stack.hasTag()) return 0f;
                         float p = stack.getTag().getFloat(FLUID_LEVEL);
-                        return Mth.clamp(p / Syringe.DEFAULT_MAX_LOAD, 0f, 1f);
+                        return Mth.clamp(p / SyringeItem.DEFAULT_MAX_LOAD, 0f, 1f);
                     }
             );
         }

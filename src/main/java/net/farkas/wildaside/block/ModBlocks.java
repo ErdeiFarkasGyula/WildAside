@@ -140,7 +140,7 @@ public class ModBlocks {
                     .requiresCorrectToolForDrops()));
 
     public static final RegistryObject<Block> OVERGROWN_ENTORIUM_ORE = registerBlock("overgrown_entorium_ore",
-            () -> new OvergrownEntoriumOre(BlockBehaviour.Properties.of()
+            () -> new OvergrownEntoriumOreBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_CYAN)
                     .sound(SoundType.NETHER_ORE)
                     .strength(3.5f, 12)));
@@ -162,7 +162,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> SUBSTILIUM_GOLD_ORE = registerBlock("substilium_gold_ore",
             () -> new SubstiliumSoilBlock(BlockBehaviour.Properties.copy(Blocks.GOLD_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(0, 1)));
     public static final RegistryObject<Block> SUBSTILIUM_REDSTONE_ORE = registerBlock("substilium_redstone_ore",
-            () -> new SubstiliumRedstoneOre(BlockBehaviour.Properties.copy(Blocks.REDSTONE_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(0, 1)));
+            () -> new SubstiliumRedstoneOreBlock(BlockBehaviour.Properties.copy(Blocks.REDSTONE_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(0, 1)));
     public static final RegistryObject<Block> SUBSTILIUM_DIAMOND_ORE = registerBlock("substilium_diamond_ore",
             () -> new SubstiliumSoilBlock(BlockBehaviour.Properties.copy(Blocks.DIAMOND_ORE).sound(SoundType.ROOTED_DIRT), UniformInt.of(3, 8)));
     public static final RegistryObject<Block> SUBSTILIUM_EMERALD_ORE = registerBlock("substilium_emerald_ore",

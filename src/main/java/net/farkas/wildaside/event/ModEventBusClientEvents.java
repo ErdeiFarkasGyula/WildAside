@@ -12,7 +12,7 @@ import net.farkas.wildaside.entity.client.ModModelLayers;
 import net.farkas.wildaside.entity.client.hickory.HickoryTreantRenderer;
 import net.farkas.wildaside.entity.client.vibrion.MucellithModel;
 import net.farkas.wildaside.item.ModItems;
-import net.farkas.wildaside.item.custom.Syringe;
+import net.farkas.wildaside.item.custom.SyringeItem;
 import net.farkas.wildaside.particle.*;
 import net.farkas.wildaside.particle.custom.*;
 import net.minecraft.client.Minecraft;
@@ -23,7 +23,6 @@ import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.SpawnEggItem;
@@ -165,7 +164,7 @@ public class ModEventBusClientEvents {
                         }
                     }
 
-                    int alpha = (int) (255 * Mth.clamp(level / (float) Syringe.DEFAULT_MAX_LOAD, 0f, 1f));
+                    int alpha = (int) (255 * Mth.clamp(level / (float) SyringeItem.DEFAULT_MAX_LOAD, 0f, 1f));
                     return (alpha << 24) | (baseColor & 0xFFFFFF);
 
                 case 2:

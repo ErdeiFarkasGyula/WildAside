@@ -3,7 +3,7 @@ package net.farkas.wildaside.screen.bioengineering_workstation;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.DnaConstants;
-import net.farkas.wildaside.item.custom.DnaHolder;
+import net.farkas.wildaside.item.custom.DnaHolderItem;
 import net.farkas.wildaside.network.NetworkHandler;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -75,7 +75,7 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         if (tab == BioengineeringWorkstationTab.DNA_EDITOR) {
             ItemStack stack = menu.getSlot(44 + i).getItem();
 
-            if (stack.getItem() instanceof DnaHolder) {
+            if (stack.getItem() instanceof DnaHolderItem) {
                 CompoundTag compoundTag = stack.getOrCreateTagElement(DnaConstants.DNA_DATA);
                 DnaImplementation dna = new DnaImplementation();
                 dna.deserializeNBT(compoundTag);
