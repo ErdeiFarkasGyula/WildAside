@@ -1,6 +1,6 @@
 package net.farkas.wildaside.item.custom;
 
-import net.farkas.wildaside.entity.custom.vibrion.SporeBombEntity;
+import net.farkas.wildaside.entity.custom.vibrion.FertiliserBombEntity;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -18,8 +18,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class SporeBomb extends Item {
-    public SporeBomb(Properties pProperties) {
+public class FertiliserBombItem extends Item {
+    public FertiliserBombItem(Properties pProperties) {
         super(pProperties);
     }
 
@@ -45,9 +45,9 @@ public class SporeBomb extends Item {
         int chargeTime = this.getUseDuration(stack) - timeLeft;
         float charge = Mth.clamp((float) chargeTime / 20f, 0f, 1f);
 
-        level.playSound((Player) null, player.getX(), player.getY(), player.getZ(), SoundEvents.SNOWBALL_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (player.getRandom().nextFloat() * 0.4F + 0.8F));
+        level.playSound((Player)null, player.getX(), player.getY(), player.getZ(), SoundEvents.SNOWBALL_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (player.getRandom().nextFloat() * 0.4F + 0.8F));
 
-        SporeBombEntity thrown = new SporeBombEntity(level, player, charge);
+        FertiliserBombEntity thrown = new FertiliserBombEntity(level, player, charge);
         thrown.setItem(stack);
         thrown.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0.8F + charge * 0.8F, 1.0F);
         level.addFreshEntity(thrown);
@@ -60,6 +60,6 @@ public class SporeBomb extends Item {
 
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-        pTooltipComponents.add(Component.translatable("item.wildaside.spore_bomb.tooltip"));
+        pTooltipComponents.add(Component.translatable("item.wildaside.fertiliser_bomb.tooltip"));
     }
 }

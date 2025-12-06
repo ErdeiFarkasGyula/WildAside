@@ -6,7 +6,7 @@ import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitType;
-import net.farkas.wildaside.item.custom.DnaHolder;
+import net.farkas.wildaside.item.custom.DnaHolderItem;
 import net.farkas.wildaside.item.custom.GeneItem;
 import net.farkas.wildaside.screen.ModMenuTypes;
 import net.farkas.wildaside.screen.ModVisibleSlot;
@@ -194,7 +194,7 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
             ItemStack stack = iItemHandler.getStackInSlot(i);
 
-            if (stack.getItem() instanceof DnaHolder dnaHolder) {
+            if (stack.getItem() instanceof DnaHolderItem dnaHolder) {
                 CompoundTag tag = stack.getOrCreateTag();
 
                 if (!tag.getBoolean(REVEAL_TRAITS)) return;

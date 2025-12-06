@@ -23,8 +23,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
-public class Lifesteal extends MobEffect {
-    public Lifesteal(MobEffectCategory pCategory, int pColor) {
+public class LifestealEffect extends MobEffect {
+    public LifestealEffect(MobEffectCategory pCategory, int pColor) {
         super(pCategory, pColor);
     }
 }

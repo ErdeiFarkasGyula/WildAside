@@ -1,11 +1,10 @@
 package net.farkas.wildaside.block.entity;
 
 import net.farkas.wildaside.capability.dna.DnaImplementation;
-import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.item.ModItems;
-import net.farkas.wildaside.item.custom.DnaHolder;
+import net.farkas.wildaside.item.custom.DnaHolderItem;
 import net.farkas.wildaside.item.custom.GeneItem;
 import net.farkas.wildaside.recipe.BioengineeringWorkstationRecipe;
 import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationMenu;
@@ -282,7 +281,7 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
     }
 
     private void processDnaSlot(ItemStack input, int inputSlot, int outputSlot, int geneStartIndex) {
-        if (input.isEmpty() || !(input.getItem() instanceof DnaHolder)) {
+        if (input.isEmpty() || !(input.getItem() instanceof DnaHolderItem)) {
             return;
         }
 

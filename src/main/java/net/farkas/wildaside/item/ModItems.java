@@ -33,20 +33,20 @@ public class ModItems {
             () -> new ForgeSpawnEggItem(ModEntities.CONTAMINATED_CREEPER, 0x0db50d, 0xfff571, new Item.Properties()));
 
     public static final RegistryObject<Item> ENTORIUM_PILL = ITEMS.register("entorium_pill",
-            () -> new EntoriumPill(new Item.Properties().food(ModFoods.ENTORIUM_PILL).stacksTo(16)));
+            () -> new EntoriumPillItem(new Item.Properties().food(ModFoods.ENTORIUM_PILL).stacksTo(16)));
     public static final RegistryObject<Item> SPORE_ARROW = ITEMS.register("spore_arrow",
-            () -> new SporeArrow(new Item.Properties()));
+            () -> new SporeArrowItem(new Item.Properties()));
     public static final RegistryObject<Item> SPORE_BOMB = ITEMS.register("spore_bomb",
-            () -> new SporeBomb(new Item.Properties().stacksTo(16)));
+            () -> new SporeBombItem(new Item.Properties().stacksTo(16)));
     public static final RegistryObject<Item> FERTILISER_BOMB = ITEMS.register("fertiliser_bomb",
-            () -> new FertiliserBomb(new Item.Properties().stacksTo(16)));
+            () -> new FertiliserBombItem(new Item.Properties().stacksTo(16)));
 
     public static final RegistryObject<Item> GENE = ITEMS.register("gene",
             () -> new GeneItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> DNA_HOLDER = ITEMS.register("dna_holder",
-            () -> new DnaHolder(new Item.Properties().stacksTo(64)));
+            () -> new DnaHolderItem(new Item.Properties().stacksTo(64)));
     public static final RegistryObject<Item> SYRINGE = ITEMS.register("syringe",
-            () -> new Syringe(new Item.Properties().stacksTo(1)));
+            () -> new SyringeItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> SUBSTILIUM_SIGN = ITEMS.register("substilium_sign",
             () -> new SignItem(new Item.Properties().stacksTo(16), ModBlocks.SUBSTILIUM_SIGN.get(), ModBlocks.SUBSTILIUM_WALL_SIGN.get()));
@@ -91,15 +91,15 @@ public class ModItems {
     }
 
     public static final RegistryObject<Item> HICKORY_NUT_TRAIL_MIX = ITEMS.register("hickory_nut_trail_mix",
-            () -> new HickoryNutTrailMix(new Item.Properties().stacksTo(1).food(ModFoods.HICKORY_NUT_TRAIL_MIX), HickoryColour.HICKORY));
+            () -> new HickoryNutTrailMixItem(new Item.Properties().stacksTo(1).food(ModFoods.HICKORY_NUT_TRAIL_MIX), HickoryColour.HICKORY));
     public static final RegistryObject<Item> RED_HICKORY_NUT_TRAIL_MIX = ITEMS.register("red_hickory_nut_trail_mix",
-            () -> new HickoryNutTrailMix(new Item.Properties().stacksTo(1).food(ModFoods.HICKORY_NUT_TRAIL_MIX), HickoryColour.RED_GLOWING));
+            () -> new HickoryNutTrailMixItem(new Item.Properties().stacksTo(1).food(ModFoods.HICKORY_NUT_TRAIL_MIX), HickoryColour.RED_GLOWING));
     public static final RegistryObject<Item> BROWN_HICKORY_NUT_TRAIL_MIX = ITEMS.register("brown_hickory_nut_trail_mix",
-            () -> new HickoryNutTrailMix(new Item.Properties().stacksTo(1).food(ModFoods.HICKORY_NUT_TRAIL_MIX), HickoryColour.BROWN_GLOWING));
+            () -> new HickoryNutTrailMixItem(new Item.Properties().stacksTo(1).food(ModFoods.HICKORY_NUT_TRAIL_MIX), HickoryColour.BROWN_GLOWING));
     public static final RegistryObject<Item> YELLOW_HICKORY_NUT_TRAIL_MIX = ITEMS.register("yellow_hickory_nut_trail_mix",
-            () -> new HickoryNutTrailMix(new Item.Properties().stacksTo(1).food(ModFoods.HICKORY_NUT_TRAIL_MIX), HickoryColour.YELLOW_GLOWING));
+            () -> new HickoryNutTrailMixItem(new Item.Properties().stacksTo(1).food(ModFoods.HICKORY_NUT_TRAIL_MIX), HickoryColour.YELLOW_GLOWING));
     public static final RegistryObject<Item> GREEN_HICKORY_NUT_TRAIL_MIX = ITEMS.register("green_hickory_nut_trail_mix",
-            () -> new HickoryNutTrailMix(new Item.Properties().stacksTo(1).food(ModFoods.HICKORY_NUT_TRAIL_MIX), HickoryColour.GREEN_GLOWING));
+            () -> new HickoryNutTrailMixItem(new Item.Properties().stacksTo(1).food(ModFoods.HICKORY_NUT_TRAIL_MIX), HickoryColour.GREEN_GLOWING));
 
     public static final EnumMap<HickoryColour, RegistryObject<Item>> TRAIL_MIX_ITEMS = new EnumMap<>(HickoryColour.class);
 

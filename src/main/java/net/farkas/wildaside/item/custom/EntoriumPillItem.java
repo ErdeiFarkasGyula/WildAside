@@ -15,8 +15,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class EntoriumPill extends Item {
-    public EntoriumPill(Properties pProperties) {
+public class EntoriumPillItem extends Item {
+    public EntoriumPillItem(Properties pProperties) {
         super(pProperties);
     }
 

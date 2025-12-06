@@ -7,8 +7,8 @@ import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-public class SporeArrow extends ArrowItem {
-    public SporeArrow(Properties pProperties) {
+public class SporeArrowItem extends ArrowItem {
+    public SporeArrowItem(Properties pProperties) {
         super(pProperties);
     }
 

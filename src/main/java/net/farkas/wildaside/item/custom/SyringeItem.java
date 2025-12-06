@@ -5,7 +5,6 @@ import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.network.NetworkHandler;
 import net.farkas.wildaside.network.packets.SyringeDataPacket;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -17,8 +16,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -43,13 +40,13 @@ import java.util.UUID;
 
 import static net.farkas.wildaside.dna.DnaConstants.*;
 
-public class Syringe extends Item {
+public class SyringeItem extends Item {
     public static final int DEFAULT_MAX_LOAD = 3;
 
     private static final float NEEDLE_DELTA = 0.1f;
     private static final int RAYCAST_RANGE = 3;
 
-    public Syringe(Properties properties) {
+    public SyringeItem(Properties properties) {
         super(properties);
     }
 
@@ -161,7 +158,7 @@ public class Syringe extends Item {
         ServerLevel serverLevel = player.serverLevel();
 
         ItemStack offHandStack = player.getItemInHand(InteractionHand.OFF_HAND);
-        if (!(offHandStack.getItem() instanceof DnaHolder dnaHolder)) return fluid;
+        if (!(offHandStack.getItem() instanceof DnaHolderItem dnaHolder)) return fluid;
 
         if (progress >= DEFAULT_MAX_LOAD - 0.25f) {
             boolean multipleSources = syringeTag.getBoolean(MULTIPLE_SOURCES);
@@ -182,7 +179,7 @@ public class Syringe extends Item {
 
             syringeTag.remove(DNA_DATA);
 
-            int newProgress = Mth.clamp(holderTag.getInt(SAMPLE_PROGRESS) + 1, 0, DnaHolder.DEFAULT_MAX_SAMPLES);
+            int newProgress = Mth.clamp(holderTag.getInt(SAMPLE_PROGRESS) + 1, 0, DnaHolderItem.DEFAULT_MAX_SAMPLES);
 
             holderTag.putInt(SAMPLE_PROGRESS, newProgress);
 
@@ -223,7 +220,7 @@ public class Syringe extends Item {
         if (slot < 0 || slot >= player.getInventory().items.size()) return;
 
         ItemStack stack = player.getInventory().getItem(slot);
-        if (!(stack.getItem() instanceof Syringe)) return;
+        if (!(stack.getItem() instanceof SyringeItem)) return;
 
         CompoundTag tag = stack.getOrCreateTag();
         tag.putFloat(SYRINGE_PROGRESS, packet.getProgress());

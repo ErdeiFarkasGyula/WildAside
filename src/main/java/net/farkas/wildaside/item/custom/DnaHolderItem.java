@@ -1,24 +1,14 @@
 package net.farkas.wildaside.item.custom;
 
-import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
-import net.farkas.wildaside.dna.allele.Allele;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitType;
-import net.farkas.wildaside.dna.trait.Traits;
-import net.farkas.wildaside.sound.ModSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -26,17 +16,16 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import static net.farkas.wildaside.dna.DnaConstants.*;
 
-public class DnaHolder extends Item {
+public class DnaHolderItem extends Item {
     public static final int MAX_COOLDOWN = 60;
 
     public static final int DEFAULT_MAX_SAMPLES = 3;
 
-    public DnaHolder(Properties pProperties) {
+    public DnaHolderItem(Properties pProperties) {
         super(pProperties);
     }
 

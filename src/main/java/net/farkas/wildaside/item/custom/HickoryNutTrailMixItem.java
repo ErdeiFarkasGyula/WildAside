@@ -14,10 +14,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class HickoryNutTrailMix extends Item {
+public class HickoryNutTrailMixItem extends Item {
     private final HickoryColour colour;
 
-    public HickoryNutTrailMix(Properties pProperties, HickoryColour colour) {
+    public HickoryNutTrailMixItem(Properties pProperties, HickoryColour colour) {
         super(pProperties);
         this.colour = colour;
     }
