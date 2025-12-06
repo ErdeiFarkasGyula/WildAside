@@ -283,10 +283,15 @@
   "command.wildaside.dna.set_trait": "Set %1$s of %2$s to %3$s",
   "command.wildaside.dna.get_trait": "%1$s has %2$s of %3$s",
   "command.wildaside.dna.unknown_trait": "Unknown Trait: %s",
-  "command.wildaside.update_notification": "[%1$s] Update notifications: %2$s",
+  "command.wildaside.skill.already_unlocked": "%1$s already has skill: %2$s",
+  "command.wildaside.skill.unlocked": "%1$s unlocked skill: %2$s",
+  "command.wildaside.skill.skill_missing": "%1$s doesn't have skill: %2$s",
+  "command.wildaside.skill.removed_skill": "Removed skill from %1$s: %2$s",
+  "command.wildaside.skill.check_skill": "%2$s skill of %1$s: ",
   "command.wildaside.wind.set": "Set wind to (%2$s, %2$s, %3$s), strength = %4$s",
   "command.wildaside.wind.random": "Set random wind to (%1$s, %2$s, %3$s), strength = %4$s",
   "command.wildaside.wind.get": "Current wind: (%1$s, %2$s, %3$s), strength = %4$s",
+  "command.wildaside.update_notification": "[%1$s] Update notifications: %2$s",
 
   "update_checker.wildaside.curseforge_page": "CurseForge Page",
   "update_checker.wildaside.modrinth_page": "Modrinth Page",
@@ -294,5 +299,7 @@
   "update_checker.wildaside.update_available": "[%1$s] A new version, %s is available! (You have %2$s)",
 
   "general.wildaside.enabled": "Enabled",
-  "general.wildaside.disabled": "Disabled"
+  "general.wildaside.disabled": "Disabled",
+  "general.wildaside.unlocked": "Unlocked",
+  "general.wildaside.locked": "Locked"
 }

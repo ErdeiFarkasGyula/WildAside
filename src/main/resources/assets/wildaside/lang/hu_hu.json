@@ -283,10 +283,15 @@
   "command.wildaside.dna.set_trait": "%2$s: %1$s beállítva: %3$s",
   "command.wildaside.dna.get_trait": "%1$s: %2$s %3$s",
   "command.wildaside.dna.unknown_trait": "Ismeretlen tulajdonság: %s",
-  "command.wildaside.update_notification": "[%1$s] Frissítési értesítés: %2$s",
+  "command.wildaside.skill.already_unlocked": "%1$s már feloldotta: %2$s",
+  "command.wildaside.skill.unlocked": "%1$s feloldotta a képességet: %2$s",
+  "command.wildaside.skill.skill_missing": "%1$s nem oldotta még fel: %2$s",
+  "command.wildaside.skill.removed_skill": "%2$s képesség eltávolítva tőle: %1$s:",
+  "command.wildaside.skill.check_skill": "%1$s %2$s képességépnek állapota: ",
   "command.wildaside.wind.set": "Szél beállítva: (%2$s, %2$s, %3$s), erősség = %4$s",
   "command.wildaside.wind.random": "Véletlenszerű szél beállítva: (%1$s, %2$s, %3$s), erősség = %4$s",
   "command.wildaside.wind.get": "Jelenlegi szél: (%1$s, %2$s, %3$s), erősség = %4$s",
+  "command.wildaside.update_notification": "[%1$s] Frissítési értesítés: %2$s",
 
   "update_checker.wildaside.curseforge_page": "CurseForge oldal",
   "update_checker.wildaside.modrinth_page": "Modrinth oldal",
@@ -294,5 +299,7 @@
   "update_checker.wildaside.update_available": "[%1$s] Egy új verzió, a %s már elérhető! (Jelenleg használt: %2$s)",
 
   "general.wildaside.enabled": "Bekapcsolva",
-  "general.wildaside.disabled": "Kikapcsolva"
+  "general.wildaside.disabled": "Kikapcsolva",
+  "general.wildaside.unlocked": "Feloldva",
+  "general.wildaside.locked": "Nincs feloldva"
 }

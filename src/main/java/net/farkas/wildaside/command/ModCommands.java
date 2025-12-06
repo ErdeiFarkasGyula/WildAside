@@ -21,12 +21,14 @@ import net.farkas.wildaside.network.WindSavedData;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.farkas.wildaside.network.WindData;
 import net.farkas.wildaside.util.WindManager;
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -373,12 +375,12 @@ public class ModCommands {
 
         if (skills == null) return 0;
         if (skills.hasSkill(skillId)) {
-            source.sendFailure(Component.literal("You already have this skill: " + skillId));
+            source.sendFailure(Component.translatable("command.wildaside.skill.already_unlocked", player.getDisplayName(), skillId));
             return 0;
         }
 
         BioengineeringSkillUtils.unlockSkill(player, skillId);
-        source.sendSuccess(() -> Component.literal("Unlocked skill: " + skillId), true);
+        source.sendSuccess(() -> Component.translatable("command.wildaside.skill.unlocked", player.getDisplayName(), skillId), true);
 
         return 1;
     }
@@ -389,12 +391,12 @@ public class ModCommands {
 
         if (skills == null) return 0;
         if (!skills.hasSkill(skillId)) {
-            source.sendFailure(Component.literal("You don't have this skill: " + skillId));
+            source.sendFailure(Component.translatable("command.wildaside.skill.skill_missing", player.getDisplayName(), skillId));
             return 0;
         }
 
         skills.removeSkillFromUnlocked(skillId);
-        source.sendSuccess(() -> Component.literal("Removed skill: " + skillId), true);
+        source.sendSuccess(() -> Component.translatable("command.wildaside.skill.removed_skill", player.getDisplayName(), skillId), true);
         return 1;
     }
 
@@ -404,8 +406,12 @@ public class ModCommands {
 
         boolean has = skills != null && skills.hasSkill(skillId);
 
+        MutableComponent unlocked = Component.translatable("general.wildaside.unlocked").withStyle(ChatFormatting.GREEN);
+        MutableComponent locked = Component.translatable("general.wildaside.locked").withStyle(ChatFormatting.RED);
+
         source.sendSuccess(
-                () -> Component.literal("Skill " + skillId + ": " + (has ? "§aUNLOCKED" : "§cNOT unlocked")),
+                () -> Component.translatable("command.wildaside.skill.check_skill", player.getDisplayName(), skillId)
+                        .append(has ? unlocked : locked),
                 false
         );
 
