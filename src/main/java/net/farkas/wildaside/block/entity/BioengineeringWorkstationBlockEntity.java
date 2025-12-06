@@ -254,9 +254,9 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
 
         dnaHolderStack.setTag(dnaHolderTag);
 
-        itemHandler.setStackInSlot(ANA_INPUT_1, ItemStack.EMPTY);
-        itemHandler.setStackInSlot(ANA_INPUT_2, ItemStack.EMPTY);
-        itemHandler.setStackInSlot(ANA_INPUT_3, ItemStack.EMPTY);
+        itemHandler.extractItem(ANA_INPUT_1, 1, false);
+        itemHandler.extractItem(ANA_INPUT_2, 1, false);
+        itemHandler.extractItem(ANA_INPUT_3, 1, false);
 
         itemHandler.setStackInSlot(ANA_OUTPUT_1, dnaHolderStack);
 
@@ -372,12 +372,9 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
         if (!detergentStack.is(ModItems.ENTORIUM.get()) || !stabiliserStack.is(ModItems.VIBRION.get())) return false;
         if (!dnaHolderStack.is(ModItems.DNA_HOLDER.get())) return false;
 
-        CompoundTag dnaTag = dnaHolderStack.getOrCreateTag();
+        CompoundTag tag = dnaHolderStack.getOrCreateTag();
+        boolean unusable = tag.getBoolean(SAMPLE_UNUSABLE);
 
-        boolean multipleSources = dnaTag.getBoolean(MULTIPLE_SOURCES);
-        boolean clotted = dnaTag.getBoolean(SAMPLE_CLOTTED);
-        boolean dirty = dnaTag.getBoolean(SAMPLE_DIRTY);
-
-        return !multipleSources && !clotted && !dirty;
+        return !unusable;
     }
 }

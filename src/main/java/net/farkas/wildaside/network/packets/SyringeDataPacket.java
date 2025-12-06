@@ -18,7 +18,7 @@ public class SyringeDataPacket {
 
     private final String fluidType;
     private final int fluidColor;
-    private final int dirtiness;
+    private final float dirtiness;
 
     private final long creationTick;
     private final long freezerTicks;
@@ -26,7 +26,7 @@ public class SyringeDataPacket {
     private final boolean multipleSources;
 
     public SyringeDataPacket(UUID playerId, int slot, float progress, float blood, boolean animating, boolean inwards,
-                             String fluidType, int fluidColor, int dirtiness, long creationTick, long freezerTicks, boolean multipleSources) {
+                             String fluidType, int fluidColor, float dirtiness, long creationTick, long freezerTicks, boolean multipleSources) {
         this.playerId = playerId;
         this.slot = slot;
         this.progress = progress;
@@ -51,7 +51,7 @@ public class SyringeDataPacket {
 
         String fluidType = buf.readUtf(32767);
         int fluidColor = buf.readInt();
-        int dirtiness = buf.readInt();
+        float dirtiness = buf.readFloat();
 
         long creationTick = buf.readLong();
         long freezerTicks = buf.readLong();
@@ -71,7 +71,7 @@ public class SyringeDataPacket {
 
         buf.writeUtf(fluidType == null ? DnaConstants.NONE : fluidType);
         buf.writeInt(fluidColor);
-        buf.writeInt(dirtiness);
+        buf.writeFloat(dirtiness);
 
         buf.writeLong(creationTick);
         buf.writeLong(freezerTicks);
@@ -96,7 +96,7 @@ public class SyringeDataPacket {
 
     public String getFluidType() { return fluidType; }
     public int getFluidColor() { return fluidColor; }
-    public int getDirtiness() { return dirtiness; }
+    public float getDirtiness() { return dirtiness; }
 
     public long getCreationTick() { return creationTick; }
     public long getFreezerTicks() { return freezerTicks; }

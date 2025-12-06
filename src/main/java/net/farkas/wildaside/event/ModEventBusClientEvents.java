@@ -123,7 +123,8 @@ public class ModEventBusClientEvents {
                 Level levelWorld = Minecraft.getInstance().level;
                 if (levelWorld != null) {
                     long age = DnaUtils.getFrozenItemEffectiveAge(tag, levelWorld);
-                    float clotFactor = Mth.clamp(age / (float) DnaConstants.BLOOD_CLOTTING_TIME_DEFAULT, 0f, 1f);
+                    long clottingTime = tag.getLong(BLOOD_CLOTTING_TIME);
+                    float clotFactor = Mth.clamp(age / (float) clottingTime, 0f, 1f);
 
                     int r = (int) Mth.lerp(clotFactor, (baseColor >> 16) & 0xFF, 0x4C);
                     int g = (int) Mth.lerp(clotFactor, (baseColor >> 8) & 0xFF, 0x00);
@@ -168,8 +169,8 @@ public class ModEventBusClientEvents {
                     return (alpha << 24) | (baseColor & 0xFFFFFF);
 
                 case 2:
-                    int dirt = tag.contains(DIRTINESS) ? tag.getInt(DIRTINESS) : 0;
-                    if (dirt < 3) return 0xFFFFFFFF;
+                    float dirt = tag.contains(DIRTINESS) ? tag.getFloat(DIRTINESS) : 0;
+                    if (dirt < 3f) return 0xFFFFFFFF;
 
                     int dirtColor = 0x8a4e34;
                     int alphaDirt = (int) (255 * Mth.clamp(dirt / 3f, 0f, 1f));

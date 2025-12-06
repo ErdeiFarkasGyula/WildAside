@@ -279,6 +279,8 @@ public class DnaUtils {
     public static long getFrozenItemEffectiveAge(CompoundTag tag, Level level) {
         if (level == null || tag == null) return 0;
 
+        if (tag.getBoolean(REVEAL_TRAITS)) return 0;
+
         long currentTime = level.getGameTime();
         long creationTime = getBloodSamplingTick(tag);
         long freezerTicks = getBloodFreezerTicks(tag);
@@ -315,6 +317,7 @@ public class DnaUtils {
                         .append(Component.translatable("dna.wildaside.blood_contaminated"))
                 );
             }
+
             return true;
         }
         return false;

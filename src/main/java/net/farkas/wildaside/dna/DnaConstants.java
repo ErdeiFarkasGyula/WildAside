@@ -1,8 +1,8 @@
 package net.farkas.wildaside.dna;
 
 public class DnaConstants {
-    public static final long BLOOD_CLOTTING_TIME_DEFAULT = 60 * 20;
-    public static final long BLOOD_CLOTTING_TIME_WITH_AGENT = 600 * 20;
+    public static final long BLOOD_CLOTTING_TIME_DEFAULT = 120 * 20;
+    public static final long BLOOD_CLOTTING_TIME_WITH_AGENT = 1200 * 20;
 
     public static final int DEFAULT_BLOOD_COLOR = 0xba260f;
 
@@ -62,6 +62,8 @@ public class DnaConstants {
     public static final String BLOOD_CREATION_TICK = "blood_creation_tick";
     public static final String BLOOD_FREEZER_TICKS = "blood_freezer_ticks";
     public static final String BLOOD_EFFECTIVE_AGE = "blood_effective_age";
+
+    public static final String BLOOD_CLOTTING_TIME = "blood_clotting_time";
 
     public static final String TARGET = "target";
     public static final String PLAYER = "player";

@@ -1,16 +1,25 @@
 package net.farkas.wildaside.item.custom;
 
+import net.farkas.wildaside.dna.DnaConstants;
+import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
@@ -23,13 +32,44 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
-public class Vibrion extends Item {
+import static net.farkas.wildaside.dna.DnaConstants.BLOOD_CLOTTING_TIME;
+import static net.farkas.wildaside.dna.DnaConstants.BLOOD_CLOTTING_TIME_WITH_AGENT;
+
+public class VibrionItem extends Item {
     public static final int GRASS_SPREAD_WIDTH = 8;
     public static final int GRASS_SPREAD_HEIGHT = 2;
     public static final int GRASS_COUNT_MULTIPLIER = 8;
 
-    public Vibrion(Properties pProperties) {
+    public VibrionItem(Properties pProperties) {
         super(pProperties);
+    }
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
+        if (!pLevel.isClientSide() && pUsedHand == InteractionHand.MAIN_HAND) {
+            ItemStack mainhandStack = pPlayer.getItemInHand(InteractionHand.MAIN_HAND);
+            ItemStack offhandStack = pPlayer.getItemInHand(InteractionHand.OFF_HAND);
+
+            if (offhandStack.is(ModItems.DNA_HOLDER.get())) {
+                CompoundTag tag = offhandStack.getOrCreateTag();
+                tag.putLong(BLOOD_CLOTTING_TIME, BLOOD_CLOTTING_TIME_WITH_AGENT);
+                offhandStack.setTag(tag);
+
+                int count = mainhandStack.getCount();
+                if (count <= 1) {
+                    pPlayer.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+                }
+                else {
+                    pPlayer.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(mainhandStack.getItem(), mainhandStack.getCount() - 1));
+                }
+
+                pPlayer.setItemInHand(InteractionHand.OFF_HAND, offhandStack);
+
+                pLevel.playSound(pPlayer, pPlayer.blockPosition(), SoundEvents.BOTTLE_FILL, SoundSource.PLAYERS, 1f, 1f);
+            }
+        }
+
+        return super.use(pLevel, pPlayer, pUsedHand);
     }
 
     public InteractionResult useOn(UseOnContext pContext) {
@@ -43,7 +83,8 @@ public class Vibrion extends Item {
             }
 
             return InteractionResult.sidedSuccess(level.isClientSide);
-        } else {
+        }
+        else {
             BlockState blockstate = level.getBlockState(blockpos);
             boolean flag = blockstate.isFaceSturdy(level, blockpos, pContext.getClickedFace());
             if (flag && growWaterPlant(pContext.getItemInHand(), level, blockpos1, pContext.getClickedFace())) {
@@ -52,7 +93,8 @@ public class Vibrion extends Item {
                 }
 
                 return InteractionResult.sidedSuccess(level.isClientSide);
-            } else {
+            }
+            else {
                 return InteractionResult.PASS;
             }
         }
@@ -61,7 +103,7 @@ public class Vibrion extends Item {
     @Deprecated //Forge: Use Player/Hand version
     public static boolean growCrop(ItemStack pStack, Level pLevel, BlockPos pPos) {
         if (pLevel instanceof net.minecraft.server.level.ServerLevel)
-            return applyBonemeal(pStack, pLevel, pPos, net.minecraftforge.common.util.FakePlayerFactory.getMinecraft((net.minecraft.server.level.ServerLevel)pLevel));
+            return applyBonemeal(pStack, pLevel, pPos, net.minecraftforge.common.util.FakePlayerFactory.getMinecraft((net.minecraft.server.level.ServerLevel) pLevel));
         return false;
     }
 
@@ -70,11 +112,11 @@ public class Vibrion extends Item {
         int hook = net.minecraftforge.event.ForgeEventFactory.onApplyBonemeal(player, pLevel, pPos, blockstate, pStack);
         if (hook != 0) return hook > 0;
         if (blockstate.getBlock() instanceof BonemealableBlock) {
-            BonemealableBlock bonemealableblock = (BonemealableBlock)blockstate.getBlock();
+            BonemealableBlock bonemealableblock = (BonemealableBlock) blockstate.getBlock();
             if (bonemealableblock.isValidBonemealTarget(pLevel, pPos, blockstate, pLevel.isClientSide)) {
                 if (pLevel instanceof ServerLevel) {
                     if (bonemealableblock.isBonemealSuccess(pLevel, pLevel.random, pPos, blockstate)) {
-                        bonemealableblock.performBonemeal((ServerLevel)pLevel, pLevel.random, pPos, blockstate);
+                        bonemealableblock.performBonemeal((ServerLevel) pLevel, pLevel.random, pPos, blockstate);
                     }
 
                     pStack.shrink(1);
@@ -115,14 +157,14 @@ public class Vibrion extends Item {
                             if (blockstate.hasProperty(BaseCoralWallFanBlock.FACING)) {
                                 blockstate = blockstate.setValue(BaseCoralWallFanBlock.FACING, pClickedSide);
                             }
-                        } else
-                            if (randomsource.nextInt(4) == 0) {
-                                blockstate = BuiltInRegistries.BLOCK.getTag(BlockTags.UNDERWATER_BONEMEALS).flatMap((p_204091_) -> {
-                                    return p_204091_.getRandomElement(pLevel.random);
-                                }).map((p_204095_) -> {
-                                    return p_204095_.value().defaultBlockState();
-                                }).orElse(blockstate);
-                            }
+                        }
+                        else if (randomsource.nextInt(4) == 0) {
+                            blockstate = BuiltInRegistries.BLOCK.getTag(BlockTags.UNDERWATER_BONEMEALS).flatMap((p_204091_) -> {
+                                return p_204091_.getRandomElement(pLevel.random);
+                            }).map((p_204095_) -> {
+                                return p_204095_.value().defaultBlockState();
+                            }).orElse(blockstate);
+                        }
                     }
 
                     if (blockstate.is(BlockTags.WALL_CORALS, (p_204093_) -> {
@@ -137,17 +179,18 @@ public class Vibrion extends Item {
                         BlockState blockstate1 = pLevel.getBlockState(blockpos);
                         if (blockstate1.is(Blocks.WATER) && pLevel.getFluidState(blockpos).getAmount() == 8) {
                             pLevel.setBlock(blockpos, blockstate, 3);
-                        } else
-                            if (blockstate1.is(Blocks.SEAGRASS) && randomsource.nextInt(10) == 0) {
-                                ((BonemealableBlock) Blocks.SEAGRASS).performBonemeal((ServerLevel) pLevel, randomsource, blockpos, blockstate1);
-                            }
+                        }
+                        else if (blockstate1.is(Blocks.SEAGRASS) && randomsource.nextInt(10) == 0) {
+                            ((BonemealableBlock) Blocks.SEAGRASS).performBonemeal((ServerLevel) pLevel, randomsource, blockpos, blockstate1);
+                        }
                     }
                 }
 
                 pStack.shrink(1);
             }
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }

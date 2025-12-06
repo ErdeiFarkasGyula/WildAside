@@ -21,7 +21,7 @@ public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, WildAside.MOD_ID);
 
     public static final RegistryObject<Item> VIBRION = ITEMS.register("vibrion",
-            () -> new Vibrion(new Item.Properties().food(ModFoods.VIBRION)));
+            () -> new VibrionItem(new Item.Properties().food(ModFoods.VIBRION)));
     public static final RegistryObject<Item> ENTORIUM = ITEMS.register("entorium",
             () -> new Item(new Item.Properties()));
 

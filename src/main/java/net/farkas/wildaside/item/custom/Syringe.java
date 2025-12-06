@@ -12,9 +12,13 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -85,6 +89,8 @@ public class Syringe extends Item {
                     fluid = Mth.clamp(fluid + NEEDLE_DELTA, 0f, DEFAULT_MAX_LOAD);
                     tag.putString(FLUID_TYPE, WATER);
                     tag.putInt(FLUID_COLOUR, waterColor);
+
+                    serverLevel.playSound(player, player.blockPosition(), SoundEvents.BOTTLE_FILL, SoundSource.PLAYERS, 1f, 1.1f);
                 }
             }
         }
@@ -95,7 +101,7 @@ public class Syringe extends Item {
             }
             if (fluid <= 0.01f) {
                 if (WATER.equals(fluidType)) {
-                    tag.putInt(DIRTINESS, 0);
+                    tag.putFloat(DIRTINESS, 0f);
                 }
 
                 tag.putString(FLUID_TYPE, NONE);
@@ -104,6 +110,7 @@ public class Syringe extends Item {
                 tag.putBoolean(MULTIPLE_SOURCES, false);
                 tag.remove(PREVIOUS_TARGET);
 
+                serverLevel.playSound(player, player.blockPosition(), SoundEvents.BOTTLE_EMPTY, SoundSource.PLAYERS, 1f, 1.1f);
             }
         }
 
@@ -118,7 +125,7 @@ public class Syringe extends Item {
                 inwards,
                 tag.getString(FLUID_TYPE),
                 tag.getInt(FLUID_COLOUR),
-                tag.getInt(DIRTINESS),
+                tag.getFloat(DIRTINESS),
                 tag.getInt(BLOOD_CREATION_TICK),
                 tag.getInt(BLOOD_FREEZER_TICKS),
                 tag.getBoolean(MULTIPLE_SOURCES)
@@ -143,7 +150,7 @@ public class Syringe extends Item {
                 tag.getBoolean(INWARDS),
                 tag.getString(FLUID_TYPE),
                 tag.getInt(FLUID_COLOUR),
-                tag.getInt(DIRTINESS),
+                tag.getFloat(DIRTINESS),
                 tag.getInt(BLOOD_CREATION_TICK),
                 tag.getInt(BLOOD_FREEZER_TICKS),
                 tag.getBoolean(MULTIPLE_SOURCES)
@@ -159,7 +166,7 @@ public class Syringe extends Item {
         if (progress >= DEFAULT_MAX_LOAD - 0.25f) {
             boolean multipleSources = syringeTag.getBoolean(MULTIPLE_SOURCES);
             boolean clotted = DnaUtils.getFrozenItemEffectiveAge(syringeTag, serverLevel) > BLOOD_CLOTTING_TIME_DEFAULT;
-            boolean dirty = syringeTag.getInt(DIRTINESS) >= 3;
+            boolean dirty = syringeTag.getFloat(DIRTINESS) >= 2.75;
 
             DnaImplementation dna = new DnaImplementation();
             dna.deserializeNBT(syringeTag.getCompound(DNA_DATA));
@@ -180,7 +187,12 @@ public class Syringe extends Item {
             holderTag.putInt(SAMPLE_PROGRESS, newProgress);
 
             DnaUtils.resetBloodFreezerTicks(holderTag);
-            DnaUtils.saveBloodSamplingTick(holderTag, serverLevel);
+            holderTag.putLong(BLOOD_CREATION_TICK, DnaUtils.getBloodSamplingTick(syringeTag));
+
+            long clottingTime = holderTag.getLong(BLOOD_FREEZER_TICKS);
+            if (clottingTime == 0) {
+                holderTag.putLong(BLOOD_CLOTTING_TIME, BLOOD_CLOTTING_TIME_DEFAULT);
+            }
 
             int count = offHandStack.getCount();
 
@@ -194,6 +206,7 @@ public class Syringe extends Item {
             }
 
             offHandStack.setTag(holderTag);
+            player.setItemInHand(InteractionHand.OFF_HAND, offHandStack);
         }
 
         return fluid;
@@ -218,7 +231,7 @@ public class Syringe extends Item {
         tag.putFloat(FLUID_LEVEL, packet.getBlood());
         tag.putString(FLUID_TYPE, packet.getFluidType());
         tag.putInt(FLUID_COLOUR, packet.getFluidColor());
-        tag.putInt(DIRTINESS, packet.getDirtiness());
+        tag.putFloat(DIRTINESS, packet.getDirtiness());
         tag.putLong(BLOOD_CREATION_TICK, packet.getCreationTick());
         tag.putLong(BLOOD_FREEZER_TICKS, packet.getFreezerTicks());
         tag.putBoolean(MULTIPLE_SOURCES, packet.isMultipleSources());
@@ -240,7 +253,7 @@ public class Syringe extends Item {
         if (!tag.contains(FLUID_LEVEL)) tag.putFloat(FLUID_LEVEL, 0f);
         if (!tag.contains(FLUID_TYPE)) tag.putString(FLUID_TYPE, NONE);
         if (!tag.contains(FLUID_COLOUR)) tag.putInt(FLUID_COLOUR, 0);
-        if (!tag.contains(DIRTINESS)) tag.putInt(DIRTINESS, 0);
+        if (!tag.contains(DIRTINESS)) tag.putFloat(DIRTINESS, 0);
         if (!tag.contains(BLOOD_CREATION_TICK)) tag.putLong(BLOOD_CREATION_TICK, 0);
         if (!tag.contains(BLOOD_FREEZER_TICKS)) tag.putLong(BLOOD_FREEZER_TICKS, 0);
     }
@@ -267,6 +280,10 @@ public class Syringe extends Item {
 
         fluid = Mth.clamp(fluid + NEEDLE_DELTA, 0f, DEFAULT_MAX_LOAD);
 
+        if (NONE.equals(tag.getString(FLUID_TYPE))) {
+            target.hurt(player.damageSources().playerAttack(player), 1);
+        }
+
         tag.putString(FLUID_TYPE, BLOOD);
         tag.putInt(FLUID_COLOUR, DEFAULT_BLOOD_COLOR);
 
@@ -282,12 +299,12 @@ public class Syringe extends Item {
             }
 
             tag.put(DNA_DATA, cap.serializeNBT());
-        }
 
-        if (fluid > DEFAULT_MAX_LOAD - 0.01f) {
-            int dirt = tag.getInt(DIRTINESS);
-            dirt = Mth.clamp(dirt + 1, 0, 3);
-            tag.putInt(DIRTINESS, dirt);
+            serverLevel.playSound(player, player.blockPosition(), SoundEvents.BOTTLE_FILL, SoundSource.PLAYERS, 1f, 0.8f);
+
+            float dirt = tag.getFloat(DIRTINESS);
+            dirt = Mth.clamp(dirt + 0.25f, 0f, 3f);
+            tag.putFloat(DIRTINESS, dirt);
         }
 
         tag.putUUID(PREVIOUS_TARGET, target.getUUID());
@@ -351,7 +368,7 @@ public class Syringe extends Item {
         CompoundTag tag = pStack.getOrCreateTag();
         boolean multipleSources = tag.getBoolean(MULTIPLE_SOURCES);
         boolean clotted = DnaUtils.getFrozenItemEffectiveAge(tag, pLevel) > BLOOD_CLOTTING_TIME_DEFAULT;
-        boolean dirty = tag.getInt(DIRTINESS) >= 3;
+        boolean dirty = tag.getFloat(DIRTINESS) >= 2.75;
 
         DnaUtils.handleContaminatedSampleTooltip(tooltip, multipleSources, clotted, dirty);
     }

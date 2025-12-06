@@ -124,7 +124,7 @@ public class NetworkHandler {
     }
 
     public static void sendSyringeDataClientSyncPacket(ServerPlayer player, int slot, float progress, float fluid, boolean animating, boolean inwards,
-                                                       String fluidType, int fluidColor, int dirtiness, long creationTick, long freezerTicks, boolean multipleSources) {
+                                                       String fluidType, int fluidColor, float dirtiness, long creationTick, long freezerTicks, boolean multipleSources) {
         if (CHANNEL == null) {
             WildAside.LOGGER.warn("Tried to send send syringe data client sync packet before network init. Ignoring.");
             return;
