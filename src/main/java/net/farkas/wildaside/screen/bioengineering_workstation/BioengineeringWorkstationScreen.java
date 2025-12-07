@@ -73,7 +73,7 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
 
     private void renderDnaConnectors(GuiGraphics guiGraphics, int x, int y, int i) {
         if (tab == BioengineeringWorkstationTab.DNA_EDITOR) {
-            ItemStack stack = menu.getSlot(44 + i).getItem();
+            ItemStack stack = menu.getSlot(46 + i).getItem();
 
             if (stack.getItem() instanceof DnaHolderItem) {
                 CompoundTag compoundTag = stack.getOrCreateTagElement(DnaConstants.DNA_DATA);
