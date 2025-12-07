@@ -84,10 +84,4 @@ public class BioengineeringSkillUtils {
             NetworkHandler.sendBioengineeringSkillClientSyncPacket(player, cap.getSkills(), cap.getPoints());
         });
     }
-
-    public static void syncToClients(Iterable<ServerPlayer> players) {
-        for (ServerPlayer player : players) {
-            syncToClient(player);
-        }
-    }
 }

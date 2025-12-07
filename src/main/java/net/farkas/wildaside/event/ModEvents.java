@@ -14,6 +14,7 @@ import net.farkas.wildaside.config.ModConfig;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.ability.IAbility;
+import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillUtils;
 import net.farkas.wildaside.dna.speed.MobSpeedTestTracker;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.Traits;
@@ -85,6 +86,7 @@ public class ModEvents {
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             AdvancementHandler.givePlayerAdvancement(player, "wild_wilder_wildest");
+            BioengineeringSkillUtils.syncToClient(player);
         }
     }
 
