@@ -43,7 +43,7 @@ public class BioengineeringSkillUnlockRequestPacket {
             if (sender == null) return;
 
             if (msg.unlock) {
-                BioengineeringSkillUtils.unlockAndSyncToClient(sender, msg.skillId);
+                BioengineeringSkillUtils.unlockAndSyncToClient(sender, msg.skillId, false);
             } else {
                 BioengineeringSkillUtils.removeAndSyncToClient(sender, msg.skillId);
             }

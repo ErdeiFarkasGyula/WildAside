@@ -423,7 +423,7 @@ public class ModCommands {
             return 0;
         }
 
-        BioengineeringSkillUtils.unlockAndSyncToClient(player, skillId);
+        BioengineeringSkillUtils.unlockAndSyncToClient(player, skillId, true);
         source.sendSuccess(() -> Component.translatable("command.wildaside.skill.unlocked", player.getDisplayName(), skillId), true);
 
         return 1;
