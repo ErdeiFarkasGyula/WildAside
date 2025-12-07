@@ -140,6 +140,12 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
                 .size(24, 25)
                 .tooltip(Tooltip.create(Component.translatable("gui.wildaside.bioengineering_workstation.dna_editor")))
                 .build());
+
+        this.addWidget(Button.builder(Component.empty(), b -> switchTab(BioengineeringWorkstationTab.SKILL_TAB))
+                .pos(this.leftPos + 189, this.topPos + 3)
+                .size(24, 25)
+                .tooltip(Tooltip.create(Component.translatable("gui.wildaside.bioengineering_workstation.skill_tab")))
+                .build());
     }
 
     public void addRecompileButton() {

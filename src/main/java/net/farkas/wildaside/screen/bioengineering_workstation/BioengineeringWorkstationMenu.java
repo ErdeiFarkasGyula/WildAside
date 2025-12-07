@@ -155,6 +155,11 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
                 setVisibleAnalyser(false);
                 setVisibleSequencer(true);
             }
+            case SKILL_TAB -> {
+                setVisibleAsm(false);
+                setVisibleAnalyser(false);
+                setVisibleSequencer(false);
+            }
         }
     }
 
