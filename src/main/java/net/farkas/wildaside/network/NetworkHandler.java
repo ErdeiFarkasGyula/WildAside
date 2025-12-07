@@ -1,13 +1,11 @@
 package net.farkas.wildaside.network;
 
 import net.farkas.wildaside.WildAside;
-import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillPointOperation;
 import net.farkas.wildaside.network.packets.*;
 import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationTab;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.network.NetworkDirection;
@@ -68,13 +66,6 @@ public class NetworkHandler {
                 SyringeDataPacket::decode,
                 SyringeDataPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
-
-        CHANNEL.registerMessage(id(),
-                BioengineeringSkillUnlockRequestPacket.class,
-                BioengineeringSkillUnlockRequestPacket::encode,
-                BioengineeringSkillUnlockRequestPacket::decode,
-                BioengineeringSkillUnlockRequestPacket::handle,
-                Optional.of(NetworkDirection.PLAY_TO_SERVER));
 
         CHANNEL.registerMessage(id(),
                 BioengineeringSkillPointRequestPacket.class,
@@ -138,10 +129,5 @@ public class NetworkHandler {
     public static void sendBioengineeringSkillClientSyncPacket(ServerPlayer target, Set<ResourceLocation> skills, int points) {
         if (CHANNEL == null) return;
         CHANNEL.send(PacketDistributor.PLAYER.with(() -> target), new BioengineeringSkillClientSyncPacket(skills, points));
-    }
-
-    public static void sendBioengineeringSkillClientSyncPacketToAll(Set<ResourceLocation> skills, int points) {
-        if (CHANNEL == null) return;
-        CHANNEL.send(PacketDistributor.ALL.noArg(), new BioengineeringSkillClientSyncPacket(skills, points));
     }
 }
