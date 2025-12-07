@@ -76,11 +76,12 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
             ItemStack stack = menu.getSlot(46 + i).getItem();
 
             if (stack.getItem() instanceof DnaHolderItem) {
-                CompoundTag compoundTag = stack.getOrCreateTagElement(DnaConstants.DNA_DATA);
+                CompoundTag tag = stack.getOrCreateTag();
+                CompoundTag dnaTag = tag.getCompound(DnaConstants.DNA_DATA);
                 DnaImplementation dna = new DnaImplementation();
-                dna.deserializeNBT(compoundTag);
+                dna.deserializeNBT(dnaTag);
 
-                if (!dna.getGenes().isEmpty()) {
+                if (!dna.getGenes().isEmpty() && !tag.getBoolean(DnaConstants.SAMPLE_UNUSABLE)) {
                     guiGraphics.blit(BACKGROUND, x + 25, y + 12 + yOffset + i * 22, 0, 248, 8, 8);
                 }
             }
