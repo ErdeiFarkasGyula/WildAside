@@ -51,16 +51,21 @@ public class ModCommands {
 
         root.then(
                 Commands.literal("contamination")
-                        .then(Commands.argument("action", StringArgumentType.word())
-                                .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(new String[]{"add", "get", "set", "clear"}, builder))
-                                .then(Commands.argument("targets", EntityArgument.entities())
+                        .then(Commands.argument("targets", EntityArgument.entities())
+                                .then(Commands.argument("action", StringArgumentType.word())
+                                        .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(
+                                                new String[]{"add", "get", "set", "clear"}, builder
+                                        ))
+
                                         .then(Commands.argument("amount", IntegerArgumentType.integer(0))
                                                 .executes(ctx -> executeContamination(ctx, true))
                                         )
+
                                         .executes(ctx -> executeContamination(ctx, false))
                                 )
                         )
         );
+
 
         root.then(
                 Commands.literal("wind")
@@ -170,13 +175,15 @@ public class ModCommands {
                 Commands.literal("bio_skill")
                         .requires(src -> src.hasPermission(2))
 
-                        .then(Commands.literal("skill")
-                                .then(Commands.argument("players", EntityArgument.players())
+                        .then(Commands.argument("players", EntityArgument.players())
+
+                                .then(Commands.literal("skill")
                                         .then(Commands.literal("unlock")
                                                 .then(Commands.argument("skill", ResourceLocationArgument.id())
                                                         .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(
                                                                 BioengineeringSkills.all().stream()
-                                                                        .map(s -> s.getId().toString()).toList(),
+                                                                        .map(s -> s.getId().toString())
+                                                                        .toList(),
                                                                 builder
                                                         ))
                                                         .executes(ModCommands::skillUnlock)
@@ -187,7 +194,8 @@ public class ModCommands {
                                                 .then(Commands.argument("skill", ResourceLocationArgument.id())
                                                         .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(
                                                                 BioengineeringSkills.all().stream()
-                                                                        .map(s -> s.getId().toString()).toList(),
+                                                                        .map(s -> s.getId().toString())
+                                                                        .toList(),
                                                                 builder
                                                         ))
                                                         .executes(ModCommands::skillRemove)
@@ -198,7 +206,8 @@ public class ModCommands {
                                                 .then(Commands.argument("skill", ResourceLocationArgument.id())
                                                         .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(
                                                                 BioengineeringSkills.all().stream()
-                                                                        .map(s -> s.getId().toString()).toList(),
+                                                                        .map(s -> s.getId().toString())
+                                                                        .toList(),
                                                                 builder
                                                         ))
                                                         .executes(ModCommands::skillHas)
@@ -209,11 +218,8 @@ public class ModCommands {
                                                 .executes(ModCommands::skillList)
                                         )
                                 )
-                        )
 
-                        .then(Commands.literal("point")
-                                .then(Commands.argument("players", EntityArgument.players())
-
+                                .then(Commands.literal("point")
                                         .then(Commands.literal("add")
                                                 .then(Commands.argument("amount", IntegerArgumentType.integer(0))
                                                         .executes(ctx -> pointOperation(ctx, BioengineeringSkillPointOperation.ADD))
