@@ -10,8 +10,10 @@ import net.farkas.wildaside.capability.bioengineering.BioengineeringSkillsCapabi
 import net.farkas.wildaside.capability.bioengineering.IBioengineeringSkills;
 import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.config.ModConfig;
+import net.farkas.wildaside.dna.DnaConstants;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.allele.Allele;
+import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillPointOperation;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillUtils;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkills;
 import net.farkas.wildaside.dna.dominance.Dominance;
@@ -38,6 +40,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Collection;
+import java.util.Set;
 
 import static net.farkas.wildaside.dna.DnaConstants.*;
 
@@ -165,61 +168,78 @@ public class ModCommands {
 
         root.then(
                 Commands.literal("bio_skill")
-                        .requires(source -> source.hasPermission(2))
+                        .requires(src -> src.hasPermission(2))
 
-                        .then(Commands.argument(PLAYER, EntityArgument.player())
-                                .then(Commands.literal("unlock")
-                                        .then(Commands.argument(SKILL, ResourceLocationArgument.id())
-                                                .suggests((ctx, builder) ->
-                                                        SharedSuggestionProvider.suggest(
-                                                                BioengineeringSkills.all()
-                                                                        .stream()
-                                                                        .map(s -> s.getId().toString())
-                                                                        .toList(),
+                        .then(Commands.literal("skill")
+                                .then(Commands.argument("players", EntityArgument.players())
+                                        .then(Commands.literal("unlock")
+                                                .then(Commands.argument("skill", ResourceLocationArgument.id())
+                                                        .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(
+                                                                BioengineeringSkills.all().stream()
+                                                                        .map(s -> s.getId().toString()).toList(),
                                                                 builder
-                                                        )
+                                                        ))
+                                                        .executes(ModCommands::skillUnlock)
                                                 )
-                                                .executes(ctx -> {
-                                                    Player player = EntityArgument.getPlayer(ctx, PLAYER);
-                                                    ResourceLocation skillId = ResourceLocationArgument.getId(ctx, SKILL);
-                                                    return unlockSkill(ctx.getSource(), player, skillId);
-                                                })
+                                        )
+
+                                        .then(Commands.literal("remove")
+                                                .then(Commands.argument("skill", ResourceLocationArgument.id())
+                                                        .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(
+                                                                BioengineeringSkills.all().stream()
+                                                                        .map(s -> s.getId().toString()).toList(),
+                                                                builder
+                                                        ))
+                                                        .executes(ModCommands::skillRemove)
+                                                )
+                                        )
+
+                                        .then(Commands.literal("has")
+                                                .then(Commands.argument("skill", ResourceLocationArgument.id())
+                                                        .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(
+                                                                BioengineeringSkills.all().stream()
+                                                                        .map(s -> s.getId().toString()).toList(),
+                                                                builder
+                                                        ))
+                                                        .executes(ModCommands::skillHas)
+                                                )
+                                        )
+
+                                        .then(Commands.literal("list")
+                                                .executes(ModCommands::skillList)
                                         )
                                 )
+                        )
 
-                                .then(Commands.literal("remove")
-                                        .then(Commands.argument(SKILL, ResourceLocationArgument.id())
-                                                .suggests((ctx, builder) ->
-                                                        SharedSuggestionProvider.suggest(
-                                                                BioengineeringSkills.all()
-                                                                        .stream()
-                                                                        .map(s -> s.getId().toString())
-                                                                        .toList(),
-                                                                builder
-                                                        )
+                        .then(Commands.literal("point")
+                                .then(Commands.argument("players", EntityArgument.players())
+
+                                        .then(Commands.literal("add")
+                                                .then(Commands.argument("amount", IntegerArgumentType.integer(0))
+                                                        .executes(ctx -> pointOperation(ctx, BioengineeringSkillPointOperation.ADD))
                                                 )
-                                                .executes(ctx -> {
-                                                    ResourceLocation skillId = ResourceLocationArgument.getId(ctx, SKILL);
-                                                    return removeSkill(ctx.getSource(), skillId);
-                                                })
                                         )
-                                )
 
-                                .then(Commands.literal("has")
-                                        .then(Commands.argument(SKILL, ResourceLocationArgument.id())
-                                                .suggests((ctx, builder) ->
-                                                        SharedSuggestionProvider.suggest(
-                                                                BioengineeringSkills.all()
-                                                                        .stream()
-                                                                        .map(s -> s.getId().toString())
-                                                                        .toList(),
-                                                                builder
-                                                        )
+                                        .then(Commands.literal("remove")
+                                                .then(Commands.argument("amount", IntegerArgumentType.integer(0))
+                                                        .executes(ctx -> pointOperation(ctx, BioengineeringSkillPointOperation.REMOVE))
                                                 )
-                                                .executes(ctx -> {
-                                                    ResourceLocation skillId = ResourceLocationArgument.getId(ctx, SKILL);
-                                                    return checkSkill(ctx.getSource(), skillId);
-                                                })
+                                        )
+
+                                        .then(Commands.literal("spend")
+                                                .then(Commands.argument("amount", IntegerArgumentType.integer(0))
+                                                        .executes(ctx -> pointOperation(ctx, BioengineeringSkillPointOperation.SPEND))
+                                                )
+                                        )
+
+                                        .then(Commands.literal("set")
+                                                .then(Commands.argument("amount", IntegerArgumentType.integer(0))
+                                                        .executes(ctx -> pointOperation(ctx, BioengineeringSkillPointOperation.SET))
+                                                )
+                                        )
+
+                                        .then(Commands.literal("get")
+                                                .executes(ModCommands::pointGet)
                                         )
                                 )
                         )
@@ -370,51 +390,202 @@ public class ModCommands {
                         Component.translatable(entityString).getString().toLowerCase()), true);
     }
 
-    private static int unlockSkill(CommandSourceStack source, Player player, ResourceLocation skillId) {
-        IBioengineeringSkills skills = player.getCapability(BioengineeringSkillsCapability.INSTANCE).orElse(null);
+    private static int skillUnlock(CommandContext<CommandSourceStack> ctx) {
+        Collection<ServerPlayer> players;
+        try {
+            players = EntityArgument.getPlayers(ctx, "players");
+        }
+        catch (CommandSyntaxException e) {
+            ctx.getSource().sendFailure(Component.literal("No players found"));
+            return 0;
+        }
 
+        ResourceLocation skillId = ResourceLocationArgument.getId(ctx, "skill");
+        CommandSourceStack src = ctx.getSource();
+
+        int count = (int) players.stream().filter(target -> unlockSkill(src, target, skillId) == 1).count();
+
+        src.sendSuccess(() -> Component.translatable("command.wildaside.skill.summary.unlock", skillId.toString(), count), true);
+
+        return count;
+    }
+
+    private static int unlockSkill(CommandSourceStack source, ServerPlayer player, ResourceLocation skillId) {
+        IBioengineeringSkills skills = player.getCapability(BioengineeringSkillsCapability.INSTANCE).orElse(null);
         if (skills == null) return 0;
+
         if (skills.hasSkill(skillId)) {
             source.sendFailure(Component.translatable("command.wildaside.skill.already_unlocked", player.getDisplayName(), skillId));
             return 0;
         }
 
-        BioengineeringSkillUtils.unlockSkill(player, skillId);
+        BioengineeringSkillUtils.unlockAndSyncToClient(player, skillId);
         source.sendSuccess(() -> Component.translatable("command.wildaside.skill.unlocked", player.getDisplayName(), skillId), true);
 
         return 1;
     }
 
-    private static int removeSkill(CommandSourceStack source, ResourceLocation skillId) {
-        ServerPlayer player = source.getPlayer();
-        IBioengineeringSkills skills = player.getCapability(BioengineeringSkillsCapability.INSTANCE).orElse(null);
-
-        if (skills == null) return 0;
-        if (!skills.hasSkill(skillId)) {
-            source.sendFailure(Component.translatable("command.wildaside.skill.skill_missing", player.getDisplayName(), skillId));
+    private static int skillRemove(CommandContext<CommandSourceStack> ctx) {
+        Collection<ServerPlayer> players;
+        try {
+            players = EntityArgument.getPlayers(ctx, "players");
+        }
+        catch (CommandSyntaxException e) {
+            ctx.getSource().sendFailure(Component.literal("No players found"));
             return 0;
         }
 
-        BioengineeringSkillUtils.removeSkill(player, skillId);
-        source.sendSuccess(() -> Component.translatable("command.wildaside.skill.removed_skill", player.getDisplayName(), skillId), true);
-        return 1;
+        ResourceLocation skillId = ResourceLocationArgument.getId(ctx, "skill");
+        CommandSourceStack src = ctx.getSource();
+
+        int removed = 0;
+
+        for (ServerPlayer player : players) {
+            IBioengineeringSkills skills = player.getCapability(BioengineeringSkillsCapability.INSTANCE).orElse(null);
+            if (skills == null) continue;
+
+            if (!skills.hasSkill(skillId)) {
+                src.sendFailure(Component.translatable("command.wildaside.skill.summary.missing", skillId.toString(), player.getDisplayName()));
+                continue;
+            }
+
+            BioengineeringSkillUtils.removeAndSyncToClient(player, skillId);
+            removed++;
+        }
+
+        int finalRemoved = removed;
+        src.sendSuccess(() -> Component.translatable("command.wildaside.skill.summary.remove", skillId.toString(), finalRemoved), true);
+
+        return removed;
     }
 
-    private static int checkSkill(CommandSourceStack source, ResourceLocation skillId) {
-        ServerPlayer player = source.getPlayer();
-        IBioengineeringSkills skills = player.getCapability(BioengineeringSkillsCapability.INSTANCE).orElse(null);
+    private static int skillHas(CommandContext<CommandSourceStack> ctx) {
+        Collection<ServerPlayer> players;
+        try {
+            players = EntityArgument.getPlayers(ctx, "players");
+        }
+        catch (CommandSyntaxException e) {
+            ctx.getSource().sendFailure(Component.literal("No players found"));
+            return 0;
+        }
 
-        boolean has = skills != null && skills.hasSkill(skillId);
+        ResourceLocation skillId = ResourceLocationArgument.getId(ctx, "skill");
+        CommandSourceStack src = ctx.getSource();
 
-        MutableComponent unlocked = Component.translatable("general.wildaside.unlocked").withStyle(ChatFormatting.GREEN);
-        MutableComponent locked = Component.translatable("general.wildaside.locked").withStyle(ChatFormatting.RED);
+        int count = (int) players.stream().map(
+                        target -> target.getCapability(BioengineeringSkillsCapability.INSTANCE).orElse(null))
+                .filter(skills -> skills != null && skills.hasSkill(skillId)).count();
 
-        source.sendSuccess(
-                () -> Component.translatable("command.wildaside.skill.check_skill", player.getDisplayName(), skillId)
-                        .append(has ? unlocked : locked),
-                false
+        if (count == 0) {
+            src.sendSuccess(
+                    () -> Component.translatable("command.wildaside.skill.summary.missing_all", skillId.toString()), false
+            );
+        }
+        else if (count == 1) {
+            src.sendSuccess(
+                    () -> Component.translatable("command.wildaside.skill.summary.have_single", skillId.toString()), false
+            );
+        }
+        else {
+            src.sendSuccess(
+                    () -> Component.translatable("command.wildaside.skill.summary.have", count, skillId.toString()), false
+            );
+        }
+
+        return count;
+    }
+
+    private static int skillList(CommandContext<CommandSourceStack> ctx) {
+        Collection<ServerPlayer> players;
+        try {
+            players = EntityArgument.getPlayers(ctx, "players");
+        }
+        catch (CommandSyntaxException e) {
+            ctx.getSource().sendFailure(Component.literal("No players found"));
+            return 0;
+        }
+
+        CommandSourceStack src = ctx.getSource();
+
+        for (ServerPlayer player : players) {
+            player.getCapability(BioengineeringSkillsCapability.INSTANCE).ifPresent(cap -> {
+
+                Set<ResourceLocation> skills = cap.getSkills();
+
+                if (skills.isEmpty()) {
+                    src.sendSuccess(() -> Component.translatable("command.wildaside.skill.list.empty", player.getDisplayName()), false);
+                    return;
+                }
+
+                MutableComponent header = Component.translatable("command.wildaside.skill.list.header", player.getDisplayName()).withStyle(ChatFormatting.AQUA);
+
+                src.sendSuccess(() -> header, false);
+
+                for (ResourceLocation id : skills) {
+                    src.sendSuccess(() -> Component.literal(" - " + id), false);
+                }
+            });
+        }
+
+        return players.size();
+    }
+
+    private static int pointOperation(CommandContext<CommandSourceStack> ctx, BioengineeringSkillPointOperation op) {
+        Collection<ServerPlayer> players;
+        try {
+            players = EntityArgument.getPlayers(ctx, "players");
+        }
+        catch (CommandSyntaxException e) {
+            ctx.getSource().sendFailure(Component.translatable("command.wildaside.skill.points.no_players"));
+            return 0;
+        }
+
+        int amount = IntegerArgumentType.getInteger(ctx, "amount");
+        CommandSourceStack src = ctx.getSource();
+
+        for (ServerPlayer player : players) {
+            BioengineeringSkillUtils.handlePointsAndSyncToClient(player, amount, op);
+        }
+
+        src.sendSuccess(
+                () -> Component.translatable(
+                        "command.wildaside.skill.points.operation",
+                        Component.translatable("command.wildaside.skill.points.op." + op.name().toLowerCase()),
+                        amount,
+                        players.size()
+                ),
+                true
         );
 
-        return has ? 1 : 0;
+        return players.size();
     }
+
+    private static int pointGet(CommandContext<CommandSourceStack> ctx) {
+        Collection<ServerPlayer> players;
+        try {
+            players = EntityArgument.getPlayers(ctx, "players");
+        }
+        catch (CommandSyntaxException e) {
+            ctx.getSource().sendFailure(Component.translatable("command.wildaside.skill.points.no_players"));
+            return 0;
+        }
+
+        CommandSourceStack src = ctx.getSource();
+
+        for (ServerPlayer player : players) {
+            player.getCapability(BioengineeringSkillsCapability.INSTANCE).ifPresent(cap -> {
+                src.sendSuccess(
+                        () -> Component.translatable(
+                                "command.wildaside.skill.points.get",
+                                player.getDisplayName(),
+                                cap.getPoints()
+                        ),
+                        false
+                );
+            });
+        }
+
+        return players.size();
+    }
+
 }

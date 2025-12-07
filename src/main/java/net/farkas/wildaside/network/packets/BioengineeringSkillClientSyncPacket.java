@@ -16,37 +16,34 @@ public class BioengineeringSkillClientSyncPacket {
     private final int points;
 
     public BioengineeringSkillClientSyncPacket(Set<ResourceLocation> skills, int points) {
-        this.points = points;
         this.skills = skills;
+        this.points = points;
     }
 
     public static BioengineeringSkillClientSyncPacket decode(FriendlyByteBuf buf) {
         int points = buf.readInt();
         int size = buf.readVarInt();
         Set<ResourceLocation> skills = new HashSet<>();
-        for (int i = 0; i < size; i++) {
-            skills.add(buf.readResourceLocation());
-        }
+        for (int i = 0; i < size; i++) skills.add(buf.readResourceLocation());
         return new BioengineeringSkillClientSyncPacket(skills, points);
     }
 
     public void encode(FriendlyByteBuf buf) {
         buf.writeInt(points);
         buf.writeVarInt(skills.size());
-        for (ResourceLocation rl : skills) {
-            buf.writeResourceLocation(rl);
-        }
+        for (ResourceLocation rl : skills) buf.writeResourceLocation(rl);
     }
 
-    public void handle(Supplier<NetworkEvent.Context> ctxSupplier) {
+    public static void handle(BioengineeringSkillClientSyncPacket msg, Supplier<NetworkEvent.Context> ctxSupplier) {
         NetworkEvent.Context ctx = ctxSupplier.get();
-        ctx.enqueueWork(() -> {
-            Player player = Minecraft.getInstance().player;
+        ctx.enqueueWork(() -> Minecraft.getInstance().execute(() -> {
+            var player = Minecraft.getInstance().player;
+            if (player == null) return;
             player.getCapability(BioengineeringSkillsCapability.INSTANCE).ifPresent(cap -> {
-                cap.setSkills(this.skills);
-                cap.setPoints(this.points);
+                cap.setSkills(msg.skills);
+                cap.setPoints(msg.points);
             });
-        });
+        }));
         ctx.setPacketHandled(true);
     }
 }

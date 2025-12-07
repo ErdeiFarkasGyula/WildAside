@@ -36,30 +36,6 @@ public class BioengineeringSkillUtils {
         return false;
     }
 
-    public static void unlockSkill(Player player, ResourceLocation skillId) {
-        NetworkHandler.sendBioengineeringSkillRequestPacket(player, skillId, true);
-    }
-
-    public static void removeSkill(Player player,ResourceLocation skillId) {
-        NetworkHandler.sendBioengineeringSkillRequestPacket(player, skillId, false);
-    }
-
-    public static void addPoint(Player player, int points) {
-        NetworkHandler.sendBioengineeringSkillPointsPacket(player, points, BioengineeringSkillPointOperation.ADD);
-    }
-
-    public static void removePoints(Player player, int points) {
-        NetworkHandler.sendBioengineeringSkillPointsPacket(player, points, BioengineeringSkillPointOperation.REMOVE);
-    }
-
-    public static void spendPoints(Player player, int points) {
-        NetworkHandler.sendBioengineeringSkillPointsPacket(player, points, BioengineeringSkillPointOperation.SPEND);
-    }
-
-    public static void setPoints(Player player, int points) {
-        NetworkHandler.sendBioengineeringSkillPointsPacket(player, points, BioengineeringSkillPointOperation.SET);
-    }
-
     public static void unlockAndSyncToClient(Player player, ResourceLocation skillId) {
         if (player instanceof ServerPlayer serverPlayer) {
             BioengineeringSkill skill = BioengineeringSkills.get(skillId);
@@ -96,6 +72,18 @@ public class BioengineeringSkillUtils {
             });
 
             serverPlayer.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP, 0.8f, 1.5f);
+        }
+    }
+
+    public static void syncToClient(ServerPlayer player) {
+        player.getCapability(BioengineeringSkillsCapability.INSTANCE).ifPresent(cap -> {
+            NetworkHandler.sendBioengineeringSkillClientSyncPacket(player, cap.getSkills(), cap.getPoints());
+        });
+    }
+
+    public static void syncToClients(Iterable<ServerPlayer> players) {
+        for (ServerPlayer player : players) {
+            syncToClient(player);
         }
     }
 }

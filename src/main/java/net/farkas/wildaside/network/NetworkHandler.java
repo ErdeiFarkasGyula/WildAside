@@ -77,10 +77,10 @@ public class NetworkHandler {
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
 
         CHANNEL.registerMessage(id(),
-                BioengineeringSkillPointPacket.class,
-                BioengineeringSkillPointPacket::encode,
-                BioengineeringSkillPointPacket::decode,
-                BioengineeringSkillPointPacket::handle,
+                BioengineeringSkillPointRequestPacket.class,
+                BioengineeringSkillPointRequestPacket::encode,
+                BioengineeringSkillPointRequestPacket::decode,
+                BioengineeringSkillPointRequestPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
 
         CHANNEL.registerMessage(id(),
@@ -135,27 +135,13 @@ public class NetworkHandler {
         );
     }
 
-    public static void sendBioengineeringSkillRequestPacket(Player player, ResourceLocation skillId, boolean unlock) {
-        if (CHANNEL == null) {
-            WildAside.LOGGER.warn("Tried to send bioengineering skill unlock request before network init. Ignoring.");
-            return;
-        }
-        CHANNEL.send(PacketDistributor.SERVER.noArg(), new BioengineeringSkillUnlockRequestPacket(player.getUUID(), skillId, unlock));
+    public static void sendBioengineeringSkillClientSyncPacket(ServerPlayer target, Set<ResourceLocation> skills, int points) {
+        if (CHANNEL == null) return;
+        CHANNEL.send(PacketDistributor.PLAYER.with(() -> target), new BioengineeringSkillClientSyncPacket(skills, points));
     }
 
-    public static void sendBioengineeringSkillPointsPacket(Player player, int points, BioengineeringSkillPointOperation operation) {
-        if (CHANNEL == null) {
-            WildAside.LOGGER.warn("Tried to send bioengineering skill points request before network init. Ignoring.");
-            return;
-        }
-        CHANNEL.send(PacketDistributor.SERVER.noArg(), new BioengineeringSkillPointPacket(player.getUUID(), points, operation));
-    }
-
-    public static void sendBioengineeringSkillClientSyncPacket(Set<ResourceLocation> skills, int points) {
-        if (CHANNEL == null) {
-            WildAside.LOGGER.warn("Tried to send bioengineering skill sync packet before network init. Ignoring.");
-            return;
-        }
+    public static void sendBioengineeringSkillClientSyncPacketToAll(Set<ResourceLocation> skills, int points) {
+        if (CHANNEL == null) return;
         CHANNEL.send(PacketDistributor.ALL.noArg(), new BioengineeringSkillClientSyncPacket(skills, points));
     }
 }

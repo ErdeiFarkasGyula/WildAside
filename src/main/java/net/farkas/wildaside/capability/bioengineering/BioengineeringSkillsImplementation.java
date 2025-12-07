@@ -77,7 +77,7 @@ public class BioengineeringSkillsImplementation implements IBioengineeringSkills
 
     @Override
     public void syncToClient(ServerPlayer player) {
-        NetworkHandler.sendBioengineeringSkillClientSyncPacket(skills, points);
+        NetworkHandler.sendBioengineeringSkillClientSyncPacket(player, skills, points);
     }
 
     @Override
