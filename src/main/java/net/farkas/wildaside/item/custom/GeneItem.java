@@ -4,15 +4,11 @@ import net.farkas.wildaside.capability.bioengineering.BioengineeringSkillsCapabi
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.allele.Allele;
-import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkill;
-import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkills;
-import net.farkas.wildaside.dna.dominance.Dominance;
+import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillRegistry;
 import net.farkas.wildaside.dna.trait.Trait;
-import net.farkas.wildaside.dna.trait.Traits;
 import net.farkas.wildaside.item.ModItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -24,8 +20,6 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-
-import static net.farkas.wildaside.dna.DnaConstants.*;
 
 public class GeneItem extends Item {
     public GeneItem(Properties pProperties) {
@@ -51,7 +45,7 @@ public class GeneItem extends Item {
             LocalPlayer player = mc.player;
 
             player.getCapability(BioengineeringSkillsCapability.INSTANCE).ifPresent(cap -> {
-                if (cap.hasSkill(BioengineeringSkills.REVEAL_ALLELES.getId())) {
+                if (cap.hasSkill(BioengineeringSkillRegistry.REVEAL_ALLELES.getId())) {
                     tooltip.add(Component.empty());
 
                     tooltip.add(Component.translatable("dna.wildaside.alleleA").withStyle(ChatFormatting.AQUA));

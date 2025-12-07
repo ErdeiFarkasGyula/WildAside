@@ -38,7 +38,7 @@ public class BioengineeringSkillUtils {
 
     public static void unlockAndSyncToClient(Player player, ResourceLocation skillId) {
         if (player instanceof ServerPlayer serverPlayer) {
-            BioengineeringSkill skill = BioengineeringSkills.get(skillId);
+            BioengineeringSkill skill = BioengineeringSkillRegistry.get(skillId);
 
             if (!canUnlock(serverPlayer, skill)) return;
             if (hasSkill(serverPlayer, skillId)) return;

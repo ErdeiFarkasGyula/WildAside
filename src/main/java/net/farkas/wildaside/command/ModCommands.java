@@ -10,12 +10,11 @@ import net.farkas.wildaside.capability.bioengineering.BioengineeringSkillsCapabi
 import net.farkas.wildaside.capability.bioengineering.IBioengineeringSkills;
 import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.config.ModConfig;
-import net.farkas.wildaside.dna.DnaConstants;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.allele.Allele;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillPointOperation;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillUtils;
-import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkills;
+import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillRegistry;
 import net.farkas.wildaside.dna.dominance.Dominance;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.Traits;
@@ -36,7 +35,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Collection;
@@ -181,7 +179,7 @@ public class ModCommands {
                                         .then(Commands.literal("unlock")
                                                 .then(Commands.argument("skill", ResourceLocationArgument.id())
                                                         .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(
-                                                                BioengineeringSkills.all().stream()
+                                                                BioengineeringSkillRegistry.all().stream()
                                                                         .map(s -> s.getId().toString())
                                                                         .toList(),
                                                                 builder
@@ -193,7 +191,7 @@ public class ModCommands {
                                         .then(Commands.literal("remove")
                                                 .then(Commands.argument("skill", ResourceLocationArgument.id())
                                                         .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(
-                                                                BioengineeringSkills.all().stream()
+                                                                BioengineeringSkillRegistry.all().stream()
                                                                         .map(s -> s.getId().toString())
                                                                         .toList(),
                                                                 builder
@@ -205,7 +203,7 @@ public class ModCommands {
                                         .then(Commands.literal("has")
                                                 .then(Commands.argument("skill", ResourceLocationArgument.id())
                                                         .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(
-                                                                BioengineeringSkills.all().stream()
+                                                                BioengineeringSkillRegistry.all().stream()
                                                                         .map(s -> s.getId().toString())
                                                                         .toList(),
                                                                 builder

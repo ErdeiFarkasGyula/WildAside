@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BioengineeringSkillCategories {
+public class BioengineeringSkillCategoryRegistry {
     public static final Map<ResourceLocation, BioengineeringSkillCategory> CATEGORIES = new HashMap<>();
 
     public static final BioengineeringSkillCategory CATEGORY_1 = register(new BioengineeringSkillCategory.Builder()

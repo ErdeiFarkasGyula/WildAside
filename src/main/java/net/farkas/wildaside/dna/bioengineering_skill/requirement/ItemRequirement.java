@@ -1,49 +1,56 @@
 package net.farkas.wildaside.dna.bioengineering_skill.requirement;
 
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
-import javax.annotation.Nullable;
-
 public class ItemRequirement extends IBioengineeringSkillRequirement {
-    private final Item item;
-    private final @Nullable CompoundTag requiredTag;
+    private final ItemStack itemStack;
     private final boolean consume;
 
-    public ItemRequirement(Item item, @Nullable CompoundTag requiredTag, boolean consume) {
-        this.item = item;
-        this.requiredTag = requiredTag;
+    public ItemRequirement(ItemStack stack, boolean consume) {
+        this.itemStack = stack;
         this.consume = consume;
     }
 
     @Override
     public boolean isSatisfied(ServerPlayer player) {
-        return findMatchingStack(player) != null;
+        return getTotalMatching(player) >= itemStack.getCount();
     }
 
     @Override
     public void unlock(ServerPlayer player) {
         if (!consume) return;
 
-        ItemStack match = findMatchingStack(player);
-        if (match != null) {
-            match.shrink(1);
+        int remaining = itemStack.getCount();
+
+        for (ItemStack stack : player.getInventory().items) {
+            if (remaining <= 0) break;
+            if (!matches(stack)) continue;
+
+            int removable = Math.min(stack.getCount(), remaining);
+            stack.shrink(removable);
+            remaining -= removable;
         }
     }
 
-    private ItemStack findMatchingStack(Player player) {
-        for (ItemStack stack : player.getInventory().items) {
-            if (stack.getItem() != item) continue;
+    private int getTotalMatching(Player player) {
+        int total = 0;
 
-            if (requiredTag == null) {
-                if (!stack.isEmpty()) return stack;
-            } else if (stack.hasTag() && stack.getTag().equals(requiredTag)) {
-                return stack;
+        for (ItemStack stack : player.getInventory().items) {
+            if (matches(stack)) {
+                total += stack.getCount();
             }
         }
-        return null;
+
+        return total;
+    }
+
+    private boolean matches(ItemStack stack) {
+        if (stack.isEmpty() || stack.getItem() != itemStack.getItem()) return false;
+
+        if (itemStack.getTag() == null) return true;
+
+        return stack.hasTag() && stack.getTag().equals(itemStack.getTag());
     }
 }
