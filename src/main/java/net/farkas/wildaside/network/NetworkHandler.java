@@ -127,7 +127,10 @@ public class NetworkHandler {
     }
 
     public static void sendBioengineeringSkillClientSyncPacket(ServerPlayer target, Set<ResourceLocation> skills, int points) {
-        if (CHANNEL == null) return;
+        if (CHANNEL == null) {
+            WildAside.LOGGER.warn("Tried to send bioengineering skill client sync packet before network init. Ignoring.");
+            return;
+        }
         CHANNEL.send(PacketDistributor.PLAYER.with(() -> target), new BioengineeringSkillClientSyncPacket(skills, points));
     }
 }
