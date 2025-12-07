@@ -1,14 +1,19 @@
 package net.farkas.wildaside.item.custom;
 
+import net.farkas.wildaside.capability.bioengineering.BioengineeringSkillsCapability;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.allele.Allele;
+import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkill;
+import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkills;
 import net.farkas.wildaside.dna.dominance.Dominance;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.Traits;
 import net.farkas.wildaside.item.ModItems;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
@@ -42,15 +47,22 @@ public class GeneItem extends Item {
             tooltip.add(Component.translatable("trait.wildaside." + trait.getName()).withStyle(trait.getTraitType().getHeaderColour()));
             tooltip.add(Component.literal("- " + DnaUtils.getFormattedString(gene.getExpressedValue())).withStyle(ChatFormatting.GREEN));
 
-            tooltip.add(Component.empty());
+            Minecraft mc = Minecraft.getInstance();
+            LocalPlayer player = mc.player;
 
-            tooltip.add(Component.translatable("dna.wildaside.alleleA").withStyle(ChatFormatting.AQUA));
-            tooltip.add(Component.literal("- ").append(alleleA.getDominance().getComponent()));
-            tooltip.add(Component.literal("- "+ DnaUtils.getFormattedString(alleleA.getValue())));
+            player.getCapability(BioengineeringSkillsCapability.INSTANCE).ifPresent(cap -> {
+                if (cap.hasSkill(BioengineeringSkills.REVEAL_ALLELES.getId())) {
+                    tooltip.add(Component.empty());
 
-            tooltip.add(Component.translatable("dna.wildaside.alleleB").withStyle(ChatFormatting.AQUA));
-            tooltip.add(Component.literal("- ").append(alleleB.getDominance().getComponent()));
-            tooltip.add(Component.literal("- "+ DnaUtils.getFormattedString(alleleB.getValue())));
+                    tooltip.add(Component.translatable("dna.wildaside.alleleA").withStyle(ChatFormatting.AQUA));
+                    tooltip.add(Component.literal("- ").append(alleleA.getDominance().getComponent()));
+                    tooltip.add(Component.literal("- " + DnaUtils.getFormattedString(alleleA.getValue())));
+
+                    tooltip.add(Component.translatable("dna.wildaside.alleleB").withStyle(ChatFormatting.AQUA));
+                    tooltip.add(Component.literal("- ").append(alleleB.getDominance().getComponent()));
+                    tooltip.add(Component.literal("- " + DnaUtils.getFormattedString(alleleB.getValue())));
+                }
+            });
         }
     }
 

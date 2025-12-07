@@ -21,10 +21,9 @@ public class BioengineeringSkillClientSyncPacket {
     }
 
     public static BioengineeringSkillClientSyncPacket decode(FriendlyByteBuf buf) {
-        int points = buf.readVarInt();
+        int points = buf.readInt();
         int size = buf.readVarInt();
-        Set<ResourceLocation> skills;
-        skills = new HashSet<>();
+        Set<ResourceLocation> skills = new HashSet<>();
         for (int i = 0; i < size; i++) {
             skills.add(buf.readResourceLocation());
         }
@@ -34,8 +33,9 @@ public class BioengineeringSkillClientSyncPacket {
     public void encode(FriendlyByteBuf buf) {
         buf.writeInt(points);
         buf.writeVarInt(skills.size());
-        for (ResourceLocation rl : skills)
+        for (ResourceLocation rl : skills) {
             buf.writeResourceLocation(rl);
+        }
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctxSupplier) {

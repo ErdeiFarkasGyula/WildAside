@@ -64,18 +64,13 @@ public class BioengineeringSkillUtils {
         if (player instanceof ServerPlayer serverPlayer) {
             BioengineeringSkill skill = BioengineeringSkills.get(skillId);
 
-            System.out.println("Trying");
-
             if (!canUnlock(serverPlayer, skill)) return;
             if (hasSkill(serverPlayer, skillId)) return;
-
-            System.out.println("PASSed");
 
             serverPlayer.getCapability(BioengineeringSkillsCapability.INSTANCE).ifPresent(cap -> {
                 skill.getRequirement().unlock(serverPlayer);
                 cap.addSkillToUnlocked(skillId);
                 cap.syncToClient(serverPlayer);
-                System.out.println("PASS");
             });
 
             serverPlayer.playSound(SoundEvents.PLAYER_LEVELUP, 0.8f, 1.5f);

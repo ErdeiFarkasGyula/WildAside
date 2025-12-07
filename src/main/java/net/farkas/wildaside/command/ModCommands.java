@@ -395,7 +395,7 @@ public class ModCommands {
             return 0;
         }
 
-        skills.removeSkillFromUnlocked(skillId);
+        BioengineeringSkillUtils.removeSkill(player, skillId);
         source.sendSuccess(() -> Component.translatable("command.wildaside.skill.removed_skill", player.getDisplayName(), skillId), true);
         return 1;
     }
