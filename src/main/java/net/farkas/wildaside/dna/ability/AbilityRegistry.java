@@ -7,7 +7,7 @@ import net.farkas.wildaside.dna.trait.TraitRegistry;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Abilities {
+public class AbilityRegistry {
     private static final Map<Trait, IAbility> ABILITIES = new HashMap<>();
 
     private static final IAbility FIRE_ABILITY = register(TraitRegistry.FIRE_ABILITY, new FireAbility());

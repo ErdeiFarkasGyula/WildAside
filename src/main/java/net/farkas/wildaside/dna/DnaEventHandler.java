@@ -3,7 +3,7 @@ package net.farkas.wildaside.dna;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.config.ModConfig;
-import net.farkas.wildaside.dna.ability.Abilities;
+import net.farkas.wildaside.dna.ability.AbilityRegistry;
 import net.farkas.wildaside.dna.ability.IAbility;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitType;
@@ -112,7 +112,7 @@ public class DnaEventHandler {
             }
             for (Gene gene : dna.getGenes().values()) {
                 if (gene.getTrait().getTraitType() == TraitType.ABILITY) {
-                    IAbility behavior = Abilities.get(gene.getTrait());
+                    IAbility behavior = AbilityRegistry.get(gene.getTrait());
                     if (behavior != null) behavior.onTick(entity, gene);
                 }
             }
