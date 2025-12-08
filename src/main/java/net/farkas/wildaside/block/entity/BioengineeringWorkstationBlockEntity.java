@@ -359,6 +359,8 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
     }
 
     private boolean canAnalyse() {
+        if (!itemHandler.getStackInSlot(ANA_OUTPUT_1).isEmpty()) return false;
+
         ItemStack dnaHolderStack = itemHandler.getStackInSlot(ANA_INPUT_1);
         ItemStack detergentStack = itemHandler.getStackInSlot(ANA_INPUT_2);
         ItemStack stabiliserStack = itemHandler.getStackInSlot(ANA_INPUT_3);

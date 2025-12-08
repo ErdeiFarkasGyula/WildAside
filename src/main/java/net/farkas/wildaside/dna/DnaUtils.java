@@ -9,7 +9,7 @@ import net.farkas.wildaside.dna.speed.MobSpeedResultStorage;
 import net.farkas.wildaside.dna.speed.MobSpeedTesting;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitType;
-import net.farkas.wildaside.dna.trait.Traits;
+import net.farkas.wildaside.dna.trait.TraitRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -98,13 +98,13 @@ public class DnaUtils {
         Map<Trait, Gene> genes = new HashMap<>();
         long seed = entity.getUUID().getLeastSignificantBits();
 
-        for (Trait trait : Traits.TRAITS) {
-            if (trait.getTraitType() == TraitType.CORE || trait == Traits.KNOCKBACK_RESISTANCE) {
+        for (Trait trait : TraitRegistry.TRAITS) {
+            if (trait.getTraitType() == TraitType.CORE || trait == TraitRegistry.KNOCKBACK_RESISTANCE) {
                 Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(DnaUtils.getAttributeRes(trait.getName()));
                 if (attribute != null) {
                     float baseValue = DnaUtils.getAttributeValue(entity, attribute);
 
-                    if (trait == Traits.MOVEMENT_SPEED && ModConfig.ACCURATE_DNA_MOVEMENT_SPEEDS.get() && !preGen) {
+                    if (trait == TraitRegistry.MOVEMENT_SPEED && ModConfig.ACCURATE_DNA_MOVEMENT_SPEEDS.get() && !preGen) {
                         baseValue = (float) MobSpeedResultStorage.getSpeed(entity.getType(), "ground");
                         if (MobSpeedTesting.EXCLUDED_MOBS.contains(entity.getType())) {
                             baseValue = (float) entity.getAttributeBaseValue(attribute);
@@ -119,14 +119,14 @@ public class DnaUtils {
             }
         }
 
-        generateResistanceGene(genes, Traits.FIRE_RESISTANCE, seed, entity.fireImmune());
-        generateResistanceGene(genes, Traits.FREEZE_RESISTANCE, seed, entity.getType().is(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES));
-        generateResistanceGene(genes, Traits.FALL_RESISTANCE, seed, entity.getType().is(EntityTypeTags.FALL_DAMAGE_IMMUNE));
+        generateResistanceGene(genes, TraitRegistry.FIRE_RESISTANCE, seed, entity.fireImmune());
+        generateResistanceGene(genes, TraitRegistry.FREEZE_RESISTANCE, seed, entity.getType().is(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES));
+        generateResistanceGene(genes, TraitRegistry.FALL_RESISTANCE, seed, entity.getType().is(EntityTypeTags.FALL_DAMAGE_IMMUNE));
 
         if (entity.getType() == EntityType.BLAZE) {
-            generateAbilityGene(genes, Traits.FIRE_ABILITY, seed);
+            generateAbilityGene(genes, TraitRegistry.FIRE_ABILITY, seed);
         } else if (entity.getType() == EntityType.ENDERMAN) {
-            generateAbilityGene(genes, Traits.TELEPORT_ABILITY, seed);
+            generateAbilityGene(genes, TraitRegistry.TELEPORT_ABILITY, seed);
         }
 
         return genes;
@@ -148,12 +148,14 @@ public class DnaUtils {
 
     private static void generateResistanceGene(Map<Trait, Gene> genes, Trait trait, long seed, boolean condition) {
         Allele alleleA, alleleB;
+
         if (condition) {
             alleleA = createAllele(trait, 1f, seed, 0);
             alleleB = createAllele(trait, 1f, seed, 1);
         } else {
-            alleleA = new Allele(0f, 0f, trait.getInstabilityModifier(), Dominance.RECESSIVE);
-            alleleB = new Allele(0f, 0f, trait.getInstabilityModifier(), Dominance.RECESSIVE);
+            System.out.println("Cond");
+            alleleA = maybeMutateZeroAllele(trait, seed, 0);
+            alleleB = maybeMutateZeroAllele(trait, seed, 1);
         }
         genes.put(trait, new Gene(trait, alleleA, alleleB));
     }
@@ -170,7 +172,7 @@ public class DnaUtils {
 
         float gaussian = deterministicGaussian(seed, salt);
 
-        float averageMutation = -0.1f;
+        float averageMutation = 0.1f;
 
         float baseMutation = allele.getMutationRate();
         float mutation = gaussian * baseMutation + averageMutation;
@@ -189,6 +191,26 @@ public class DnaUtils {
 
         return new Allele(newValue, newMutationRate, newStability, newDom);
     }
+
+    private static Allele maybeMutateZeroAllele(Trait trait, long seed, int index) {
+        float chance = trait.getInstabilityModifier() / 100;
+
+        float roll = hashToFloat(seed, trait.getName() + "_mutate_zero", index);
+
+        if (roll < chance) {
+            float mutatedValue = 0.02f + 0.13f * Math.abs(deterministicGaussian(seed, trait.getName() + "_zero_val" + index));
+
+            float mutationRate = trait.getInstabilityModifier() * 0.5f;
+            float stability = trait.getInstabilityModifier() * (0.3f + 0.2f * roll);
+
+            Dominance dom = deterministicDominancePick(seed, trait.getName() + "_zero_dom" + index);
+
+            return new Allele(mutatedValue, mutationRate, stability, dom);
+        }
+
+        return new Allele(0f, 0f, trait.getInstabilityModifier(), Dominance.RECESSIVE);
+    }
+
 
     private static long mix64(long x) {
         x ^= (x >>> 30);

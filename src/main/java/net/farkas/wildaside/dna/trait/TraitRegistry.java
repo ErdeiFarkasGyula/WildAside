@@ -5,12 +5,11 @@ import net.farkas.wildaside.dna.Gene;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Traits {
+public class TraitRegistry {
     public static final List<Trait> TRAITS = new ArrayList<>();
 
     public static final Trait MAX_HEALTH = register(new AttributeTrait("max_health", TraitType.CORE, 1.4f, DnaUtils.getAttributeRes("max_health")));

@@ -1,19 +1,17 @@
 package net.farkas.wildaside.screen;
 
 import net.farkas.wildaside.item.ModItems;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
-public class ModVisibleSlot extends Slot {
+public class ModVisibleSlotItemHandler extends SlotItemHandler {
     public boolean active = true;
 
-    public ModVisibleSlot(Inventory inventory, int index, int xPosition, int yPosition) {
-        super(inventory, index, xPosition, yPosition);
+    public ModVisibleSlotItemHandler(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+        super(itemHandler, index, xPosition, yPosition);
     }
 
     @Override

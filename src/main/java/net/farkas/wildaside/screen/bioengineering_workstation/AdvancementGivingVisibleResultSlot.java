@@ -1,6 +1,6 @@
 package net.farkas.wildaside.screen.bioengineering_workstation;
 
-import net.farkas.wildaside.screen.ModVisibleSlot;
+import net.farkas.wildaside.screen.ModVisibleSlotItemHandler;
 import net.farkas.wildaside.util.AdvancementHandler;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -8,7 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 
-public class AdvancementGivingVisibleResultSlot extends ModVisibleSlot {
+public class AdvancementGivingVisibleResultSlot extends ModVisibleSlotItemHandler {
     private final Player player;
     private final String advancement;
 

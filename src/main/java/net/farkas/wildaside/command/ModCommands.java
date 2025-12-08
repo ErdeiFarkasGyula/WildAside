@@ -17,7 +17,7 @@ import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillUtils;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillRegistry;
 import net.farkas.wildaside.dna.dominance.Dominance;
 import net.farkas.wildaside.dna.trait.Trait;
-import net.farkas.wildaside.dna.trait.Traits;
+import net.farkas.wildaside.dna.trait.TraitRegistry;
 import net.farkas.wildaside.network.WindSavedData;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.farkas.wildaside.network.WindData;
@@ -144,7 +144,7 @@ public class ModCommands {
                         .then(Commands.argument(TARGET, EntityArgument.entity())
                                 .then(Commands.argument(TRAIT, StringArgumentType.word())
                                         .suggests((ctx, builder) -> {
-                                            for (Trait trait : Traits.TRAITS) {
+                                            for (Trait trait : TraitRegistry.TRAITS) {
                                                 builder.suggest(STABILITY);
                                                 builder.suggest(trait.getName());
                                             }
@@ -318,13 +318,13 @@ public class ModCommands {
                 });
             }
             else {
-                Trait trait = Traits.getByName(traitName);
+                Trait trait = TraitRegistry.getByName(traitName);
                 if (trait == null) {
                     unknownTrait(ctx, traitName);
                     return 0;
                 }
                 livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-                    float value = Traits.getTraitValue(dna.getGenes(), trait);
+                    float value = TraitRegistry.getTraitValue(dna.getGenes(), trait);
                     getTrait(ctx, livingEntity, trait, value);
                 });
             }
@@ -351,7 +351,7 @@ public class ModCommands {
             return Command.SINGLE_SUCCESS;
         }
 
-        Trait trait = Traits.getByName(traitName);
+        Trait trait = TraitRegistry.getByName(traitName);
         if (trait == null) {
             unknownTrait(ctx, traitName);
             return 0;
@@ -368,7 +368,7 @@ public class ModCommands {
 
         Component message = Component.translatable(
                 "command.wildaside.dna.set_trait",
-                Traits.translatableTrait(trait),
+                TraitRegistry.translatableTrait(trait),
                 livingEntity.getName(),
                 String.valueOf(value)
         );
@@ -384,7 +384,7 @@ public class ModCommands {
 
     public static void getTrait(CommandContext<CommandSourceStack> context, LivingEntity livingEntity, Trait trait, float value) {
         context.getSource().sendSuccess(() ->
-                Component.translatable("command.wildaside.dna.get_trait", livingEntity.getName(), value, Traits.translatableTrait(trait)), false);
+                Component.translatable("command.wildaside.dna.get_trait", livingEntity.getName(), value, TraitRegistry.translatableTrait(trait)), false);
     }
 
     public static void applyContamination(CommandContext<CommandSourceStack> context, String action, int finalAffected, String entityString) {

@@ -1,6 +1,6 @@
 package net.farkas.wildaside.mixin;
 
-import net.farkas.wildaside.screen.ModVisibleSlot;
+import net.farkas.wildaside.screen.ModVisibleSlotItemHandler;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.world.inventory.Slot;
@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class HiddenSlotMixin {
     @Inject(method = "renderSlot", at = @At("HEAD"), cancellable = true)
     private void handleHiddenSlot(GuiGraphics pGuiGraphics, Slot pSlot, CallbackInfo ci) {
-        if (pSlot instanceof ModVisibleSlot modVisibleSlot && !modVisibleSlot.isActive()) {
+        if (pSlot instanceof ModVisibleSlotItemHandler modVisibleSlotItemHandler && !modVisibleSlotItemHandler.isActive()) {
             ci.cancel();
         }
     }

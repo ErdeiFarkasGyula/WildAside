@@ -7,7 +7,7 @@ import net.farkas.wildaside.dna.ability.Abilities;
 import net.farkas.wildaside.dna.ability.IAbility;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitType;
-import net.farkas.wildaside.dna.trait.Traits;
+import net.farkas.wildaside.dna.trait.TraitRegistry;
 import net.farkas.wildaside.worldgen.dimension.ModDimensions;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -75,20 +75,20 @@ public class DnaEventHandler {
         entity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
             Trait trait = null;
             if (source.is(DamageTypes.IN_FIRE) || source.is(DamageTypes.ON_FIRE) || source.is(DamageTypes.LAVA) || source.is(DamageTypes.HOT_FLOOR)) {
-                trait = Traits.FIRE_RESISTANCE;
+                trait = TraitRegistry.FIRE_RESISTANCE;
             }
             else if (source.is(DamageTypes.EXPLOSION) || source.is(DamageTypes.PLAYER_EXPLOSION)) {
-                trait = Traits.EXPLOSION_RESISTANCE;
+                trait = TraitRegistry.EXPLOSION_RESISTANCE;
             }
             else if (source.is(DamageTypes.FALL)) {
-                trait = Traits.FALL_RESISTANCE;
+                trait = TraitRegistry.FALL_RESISTANCE;
             }
             else if (source.is(DamageTypes.FREEZE)) {
-                trait = Traits.FREEZE_RESISTANCE;
+                trait = TraitRegistry.FREEZE_RESISTANCE;
             }
 
             if (trait != null) {
-                float value = Traits.getTraitValue(dna.getGenes(), trait);
+                float value = TraitRegistry.getTraitValue(dna.getGenes(), trait);
                 dna.setStability(dna.getStability() - (event.getAmount() * 0.25f));
                 event.setAmount(event.getAmount() * (1.0f - value));
             }

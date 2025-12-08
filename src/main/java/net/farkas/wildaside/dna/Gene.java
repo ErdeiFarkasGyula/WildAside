@@ -3,7 +3,7 @@ package net.farkas.wildaside.dna;
 import net.farkas.wildaside.dna.allele.Allele;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitExpression;
-import net.farkas.wildaside.dna.trait.Traits;
+import net.farkas.wildaside.dna.trait.TraitRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -82,7 +82,7 @@ public class Gene {
     }
 
     public static Gene deserializeNBT(CompoundTag tag) {
-        Trait trait = Traits.getByName(tag.getString(TRAIT));
+        Trait trait = TraitRegistry.getByName(tag.getString(TRAIT));
         Allele alleleA = Allele.createFromTag(tag.getCompound(ALLELE_A));
         Allele alleleB = Allele.createFromTag(tag.getCompound(ALLELE_B));
 
