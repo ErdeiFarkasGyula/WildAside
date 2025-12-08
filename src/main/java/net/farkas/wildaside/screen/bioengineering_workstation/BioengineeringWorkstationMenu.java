@@ -277,7 +277,7 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
         return maxProgress != 0 && progress != 0 ? progress * progressArrowSize / maxProgress : 0;
     }
 
-    public int getScaleAnalysingProgress() {
+    public int getScaledAnalysingProgress() {
         int progress = this.data.get(2);
         int maxProgress = this.data.get(3);
         int progressArrowSize = 27;

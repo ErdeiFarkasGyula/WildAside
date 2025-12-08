@@ -67,7 +67,7 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
             guiGraphics.blit(BACKGROUND, x + 129, y + 37 + yOffset, 0, 248, menu.getScaledCraftingProgress(), 8);
         }
         if (menu.isAnalysing() && tab == BioengineeringWorkstationTab.DNA_ANALYSER) {
-            guiGraphics.blit(BACKGROUND, x + 129, y + 37 + yOffset, 0, 248, menu.getScaleAnalysingProgress(), 8);
+            guiGraphics.blit(BACKGROUND, x + 129, y + 37 + yOffset, 0, 248, menu.getScaledAnalysingProgress(), 8);
         }
     }
 
