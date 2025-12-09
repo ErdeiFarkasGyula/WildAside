@@ -19,6 +19,11 @@ public class ItemRequirement extends IBioengineeringSkillRequirement {
     }
 
     @Override
+    public boolean isClientSatisfied(Player player) {
+        return getTotalMatching(player) >= itemStack.getCount();
+    }
+
+    @Override
     public void unlock(ServerPlayer player) {
         if (!consume) return;
 

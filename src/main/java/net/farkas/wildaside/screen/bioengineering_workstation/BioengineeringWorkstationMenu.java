@@ -8,6 +8,7 @@ import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitType;
 import net.farkas.wildaside.item.custom.DnaHolderItem;
 import net.farkas.wildaside.item.custom.GeneItem;
+import net.farkas.wildaside.screen.AdvancementGivingVisibleResultSlot;
 import net.farkas.wildaside.screen.ModMenuTypes;
 import net.farkas.wildaside.screen.ModVisibleSlot;
 import net.farkas.wildaside.screen.ModVisibleSlotItemHandler;

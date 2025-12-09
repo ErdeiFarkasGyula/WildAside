@@ -1,6 +1,5 @@
-package net.farkas.wildaside.screen.bioengineering_workstation;
+package net.farkas.wildaside.screen;
 
-import net.farkas.wildaside.screen.ModVisibleSlotItemHandler;
 import net.farkas.wildaside.util.AdvancementHandler;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;

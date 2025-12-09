@@ -21,6 +21,11 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
     public BioengineeringWorkstationTab tab;
     private static ResourceLocation BACKGROUND;
 
+    private float skillOffsetX = 0;
+    private float skillOffsetY = 0;
+    private boolean draggingSkillView = false;
+    private double lastMouseX, lastMouseY;
+
     private final int yOffset;
 
     public BioengineeringWorkstationScreen(BioengineeringWorkstationMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
@@ -57,9 +62,11 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         ResourceLocation background = menu.getTab().getTexture();
         guiGraphics.blit(background, x, y, 0, 0, imageWidth, imageHeight);
 
-        renderProgressArrow(guiGraphics, x, y);
-        renderDnaConnectors(guiGraphics, x, y, 0);
-        renderDnaConnectors(guiGraphics, x, y, 1);
+        if (tab != BioengineeringWorkstationTab.SKILL_TAB) {
+            renderProgressArrow(guiGraphics, x, y);
+            renderDnaConnectors(guiGraphics, x, y, 0);
+            renderDnaConnectors(guiGraphics, x, y, 1);
+        }
     }
 
     private void renderProgressArrow(GuiGraphics guiGraphics, int x, int y) {
@@ -88,10 +95,59 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         }
     }
 
+    private void renderSkillViewport(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+        int x = this.leftPos + 8;
+        int y = this.topPos + 36;
+        int width = 240;
+        int height = 150;
+
+        enableScissor(guiGraphics, x, y, width, height);
+
+        guiGraphics.fill(x, y, x + width, y + height, 0x66000000);
+
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().translate(x + skillOffsetX, y + skillOffsetY, 0);
+
+        drawSkillNodes(guiGraphics);
+
+        guiGraphics.pose().popPose();
+
+        disableScissor(guiGraphics);
+    }
+
+    private void enableScissor(GuiGraphics graphics, int x, int y, int width, int height) {
+        double scale = minecraft.getWindow().getGuiScale();
+
+        int sx = (int)(x * scale);
+        int sy = (int)((this.height - (y + height)) * scale);
+        int sw = (int)(width * scale);
+        int sh = (int)(height * scale);
+
+        RenderSystem.enableScissor(sx, sy, sw, sh);
+    }
+
+    private void disableScissor(GuiGraphics graphics) {
+        RenderSystem.disableScissor();
+    }
+
+    private void drawSkillNodes(GuiGraphics g) {
+        for (int i = 0; i < 20; i++) {
+            int px = (i % 5) * 25;
+            int py = (i / 5) * 25;
+
+            g.fill(px, py, px + 16, py + 16, 0xFF8844FF);
+        }
+    }
+
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
         renderBackground(guiGraphics);
         super.render(guiGraphics, mouseX, mouseY, delta);
+
+        if (tab == BioengineeringWorkstationTab.SKILL_TAB) {
+            renderSkillViewport(guiGraphics, mouseX, mouseY);
+        }
+
         renderTooltip(guiGraphics, mouseX, mouseY);
     }
 
@@ -156,5 +212,44 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
                     }).pos(leftPos + 14, topPos + 55 + yOffset).size(20, 20)
                     .tooltip(Tooltip.create(Component.translatable("gui.wildaside.bioengineering_workstation.recompile_dna"))).build());
         }
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (tab == BioengineeringWorkstationTab.SKILL_TAB && button == 0) {
+            int x = this.leftPos + 8;
+            int y = this.topPos + 32;
+            int width = 240;
+            int height = 150;
+
+            if (mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height) {
+                draggingSkillView = true;
+                lastMouseX = mouseX;
+                lastMouseY = mouseY;
+                return true;
+            }
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
+        if (draggingSkillView && button == 0) {
+            skillOffsetX += (float) (mouseX - lastMouseX);
+            skillOffsetY += (float) (mouseY - lastMouseY);
+
+            lastMouseX = mouseX;
+            lastMouseY = mouseY;
+            return true;
+        }
+        return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+    }
+
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        if (button == 0) {
+            draggingSkillView = false;
+        }
+        return super.mouseReleased(mouseX, mouseY, button);
     }
 }

@@ -12,12 +12,12 @@ import java.util.Set;
 
 public class BioengineeringSkillUtils {
     public static Set<ResourceLocation> getUnlocked(Player player) {
-        Set<ResourceLocation> unlocked = new HashSet<ResourceLocation>();
-        if (player instanceof ServerPlayer serverPlayer) {
-            serverPlayer.getCapability(BioengineeringSkillsCapability.INSTANCE).ifPresent(cap -> {
-                unlocked.addAll(cap.getSkills());
-            });
-        }
+        Set<ResourceLocation> unlocked = new HashSet<>();
+
+        player.getCapability(BioengineeringSkillsCapability.INSTANCE).ifPresent(cap -> {
+            unlocked.addAll(cap.getSkills());
+        });
+
         return unlocked;
     }
 
@@ -26,14 +26,11 @@ public class BioengineeringSkillUtils {
             return skill.getRequirement().isSatisfied(serverPlayer);
         }
 
-        return false;
+        return skill.getRequirement().isClientSatisfied(player);
     }
 
     public static boolean hasSkill(Player player, ResourceLocation skill) {
-        if (player instanceof ServerPlayer serverPlayer) {
-            return getUnlocked(serverPlayer).contains(skill);
-        }
-        return false;
+        return getUnlocked(player).contains(skill);
     }
 
     public static void unlockAndSyncToClient(Player player, ResourceLocation skillId, boolean forceUnlock) {
