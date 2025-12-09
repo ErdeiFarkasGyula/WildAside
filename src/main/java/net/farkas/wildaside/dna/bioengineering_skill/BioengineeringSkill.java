@@ -116,7 +116,11 @@ public class BioengineeringSkill {
 
         public BioengineeringSkill build() {
             if (name == null) {
-                throw new IllegalStateException("BioengineeringSkill must have a name");
+                if (id != null) {
+                    this.name = id.getPath();
+                } else {
+                    throw new IllegalStateException("BioengineeringSkill must have a name");
+                }
             }
 
             if (id == null) {
@@ -124,7 +128,6 @@ public class BioengineeringSkill {
             }
 
             if (texture == null) {
-                WildAside.LOGGER.warn("BioengineeringSkill {}: missing texture, trying to get it based on name.", name);
                 this.texture = new ResourceLocation(WildAside.MOD_ID, "textures/skill/" +  name + ".png");
             }
 

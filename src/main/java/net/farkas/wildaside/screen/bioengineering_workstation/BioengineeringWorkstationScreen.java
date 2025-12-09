@@ -3,6 +3,7 @@ package net.farkas.wildaside.screen.bioengineering_workstation;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.DnaConstants;
+import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillUtils;
 import net.farkas.wildaside.item.custom.DnaHolderItem;
 import net.farkas.wildaside.network.NetworkHandler;
 import net.minecraft.client.gui.GuiGraphics;
@@ -14,6 +15,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 public class BioengineeringWorkstationScreen extends AbstractContainerScreen<BioengineeringWorkstationMenu> {
@@ -118,10 +120,10 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
     private void enableScissor(GuiGraphics graphics, int x, int y, int width, int height) {
         double scale = minecraft.getWindow().getGuiScale();
 
-        int sx = (int)(x * scale);
-        int sy = (int)((this.height - (y + height)) * scale);
-        int sw = (int)(width * scale);
-        int sh = (int)(height * scale);
+        int sx = (int) (x * scale);
+        int sy = (int) ((this.height - (y + height)) * scale);
+        int sw = (int) (width * scale);
+        int sh = (int) (height * scale);
 
         RenderSystem.enableScissor(sx, sy, sw, sh);
     }
@@ -131,11 +133,33 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
     }
 
     private void drawSkillNodes(GuiGraphics g) {
-        for (int i = 0; i < 20; i++) {
-            int px = (i % 5) * 25;
-            int py = (i / 5) * 25;
+        for (SkillNode node : BioengineeringSkillTreeLayout.NODES) {
+            int px = node.x;
+            int py = node.y;
 
-            g.fill(px, py, px + 16, py + 16, 0xFF8844FF);
+            ResourceLocation tex = node.skill.getTexture();
+
+            int borderColor =
+                    node.isUnlocked(minecraft.player) ? 0xFF44FF44 :
+                            node.canUnlock(minecraft.player) ? 0xFFFFFF44 :
+                                    0xFFFF4444;
+
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderTexture(0, BACKGROUND);
+
+            float r = ((borderColor >> 16) & 0xFF) / 255f;
+            float gC = ((borderColor >> 8) & 0xFF) / 255f;
+            float b = (borderColor & 0xFF) / 255f;
+            float a = ((borderColor >> 24) & 0xFF) / 255f;
+
+            RenderSystem.setShaderColor(r, gC, b, a);
+
+            g.blit(BACKGROUND, px - 1, py - 1, 35, 227, 27, 27, 256, 256);
+
+            RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+
+            g.blit(BACKGROUND, px, py, 4, 228, 24, 24, 256, 256);
+            g.blit(tex, px + 4, py + 4, 0, 0, 16, 16, 16, 16);
         }
     }
 
@@ -217,29 +241,44 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (tab == BioengineeringWorkstationTab.SKILL_TAB && button == 0) {
-            int x = this.leftPos + 8;
-            int y = this.topPos + 32;
-            int width = 240;
-            int height = 150;
+            int viewX = this.leftPos + 8;
+            int viewY = this.topPos + 36;
+            int viewW = 240;
+            int viewH = 150;
 
-            if (mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height) {
-                draggingSkillView = true;
-                lastMouseX = mouseX;
-                lastMouseY = mouseY;
-                return true;
+            boolean insideViewport = mouseX >= viewX && mouseX <= viewX + viewW && mouseY >= viewY && mouseY <= viewY + viewH;
+            if (!insideViewport) return super.mouseClicked(mouseX, mouseY, button);
+
+            double localX = mouseX - viewX - skillOffsetX;
+            double localY = mouseY - viewY - skillOffsetY;
+
+            for (SkillNode node : BioengineeringSkillTreeLayout.NODES) {
+                if (localX >= node.x && localX <= node.x + 24 && localY >= node.y && localY <= node.y + 24) {
+                    onSkillNodeClicked(node);
+                    return true;
+                }
             }
+
+            draggingSkillView = true;
+            lastMouseX = mouseX;
+            lastMouseY = mouseY;
+            return true;
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-        if (draggingSkillView && button == 0) {
-            skillOffsetX += (float) (mouseX - lastMouseX);
-            skillOffsetY += (float) (mouseY - lastMouseY);
+        if (tab == BioengineeringWorkstationTab.SKILL_TAB && draggingSkillView && button == 0) {
+            float dx = (float) (mouseX - lastMouseX);
+            float dy = (float) (mouseY - lastMouseY);
+
+            skillOffsetX += dx;
+            skillOffsetY += dy;
 
             lastMouseX = mouseX;
             lastMouseY = mouseY;
+
             return true;
         }
         return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
@@ -247,9 +286,27 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        if (button == 0) {
+        if (tab == BioengineeringWorkstationTab.SKILL_TAB && button == 0) {
             draggingSkillView = false;
+            return true;
         }
         return super.mouseReleased(mouseX, mouseY, button);
+    }
+
+    private void onSkillNodeClicked(SkillNode node) {
+        boolean unlocked = BioengineeringSkillUtils.hasSkill(menu.player, node.skill.getId());
+        boolean canUnlock = BioengineeringSkillUtils.canUnlock(menu.player, node.skill);
+
+        if (unlocked) {
+            minecraft.gui.setOverlayMessage(Component.translatable("skill.wildaside.already_unlocked"), false);
+            return;
+        }
+
+        if (!canUnlock) {
+            minecraft.gui.setOverlayMessage(Component.translatable("skill.wildaside.cannot_unlock"), false);
+            return;
+        }
+
+        NetworkHandler.sendBioengineeringSkillUnlockRequestPacket(node.skill.getId());
     }
 }

@@ -68,6 +68,13 @@ public class NetworkHandler {
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 
         CHANNEL.registerMessage(id(),
+                BioengineeringSkillUnlockRequestPacket.class,
+                BioengineeringSkillUnlockRequestPacket::encode,
+                BioengineeringSkillUnlockRequestPacket::decode,
+                BioengineeringSkillUnlockRequestPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
+
+        CHANNEL.registerMessage(id(),
                 BioengineeringSkillPointRequestPacket.class,
                 BioengineeringSkillPointRequestPacket::encode,
                 BioengineeringSkillPointRequestPacket::decode,
@@ -112,6 +119,14 @@ public class NetworkHandler {
             return;
         }
         CHANNEL.send(PacketDistributor.SERVER.noArg(), new RecompileDnaPacket(pos));
+    }
+
+    public static void sendBioengineeringSkillUnlockRequestPacket(ResourceLocation skillId) {
+        if (CHANNEL == null) {
+            WildAside.LOGGER.warn("Tried to send skill unlock packet before network init. Ignoring.");
+            return;
+        }
+        CHANNEL.send(PacketDistributor.SERVER.noArg(), new BioengineeringSkillUnlockRequestPacket(skillId));
     }
 
     public static void sendSyringeDataClientSyncPacket(ServerPlayer player, int slot, float progress, float fluid, boolean animating, boolean inwards,
