@@ -1,41 +1,53 @@
 package net.farkas.wildaside.dna.bioengineering_skill.requirement;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AllRequirements extends IBioengineeringSkillRequirement {
+
     private final List<IBioengineeringSkillRequirement> requirements;
 
-    public AllRequirements(List<IBioengineeringSkillRequirement> requirementIds) {
-        this.requirements = requirementIds;
+    public AllRequirements(List<IBioengineeringSkillRequirement> requirements) {
+        this.requirements = requirements;
     }
 
     @Override
     public boolean isSatisfied(ServerPlayer player) {
-        for (IBioengineeringSkillRequirement requirement : requirements) {
-            if (!requirement.isSatisfied(player)) {
-                return false;
-            }
-        }
-        return true;
+        return requirements.stream().allMatch(r -> r.isSatisfied(player));
     }
 
     @Override
     public boolean isClientSatisfied(Player player) {
-        for (IBioengineeringSkillRequirement requirement : requirements) {
-            if (!requirement.isClientSatisfied(player)) {
-                return false;
-            }
-        }
-        return true;
+        return requirements.stream().allMatch(r -> r.isClientSatisfied(player));
     }
 
     @Override
     public void unlock(ServerPlayer player) {
-        for (IBioengineeringSkillRequirement requirement : requirements) {
-            requirement.unlock(player);
-        }
+        requirements.forEach(r -> r.unlock(player));
     }
+
+    @Override
+    protected List<Component> getTooltip(Player player, int depth) {
+        List<Component> list = new ArrayList<>();
+
+        boolean satisfied = isClientSatisfied(player);
+
+        list.add(
+                indent(depth)
+                        .append(bullet(satisfied))
+                        .append(Component.translatable("skill.wildaside.requirements.all"))
+        );
+
+        for (IBioengineeringSkillRequirement req : requirements) {
+            list.addAll(req.getTooltip(player, depth + 1));
+        }
+
+        return list;
+    }
+
 }

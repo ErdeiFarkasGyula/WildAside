@@ -259,6 +259,20 @@
 
   "skill.wildaside.already_unlocked": "Skill already unlocked",
   "skill.wildaside.cannot_unlock": "Cannot unlock skill",
+  "skill.wildaside.status.unlocked": "Unlocked",
+  "skill.wildaside.status.available": "Available",
+  "skill.wildaside.status.locked": "Locked",
+  "skill.wildaside.requirements": "Requirements:",
+  "skill.wildaside.requires_skill": "Skill: %1$s",
+  "skill.wildaside.requires_points": "%1$s skill points",
+  "skill.wildaside.requires_item": "Requires %1$s %2$s",
+  "skill.wildaside.consumes": "(Consumes)",
+  "skill.wildaside.not_consumed": "(Doesn't consume)",
+  "skill.wildaside.requirements.all": "All of:",
+  "skill.wildaside.requirements.any": "One of:",
+
+  "skill.wildaside.bioengineering_skill.name.reveal_alleles": "Reveal Alleles",
+  "skill.wildaside.bioengineering_skill.description.reveal_alleles": "Shows the 2 alleles of each gene in the gene editor",
 
   "dominance.wildaside.dominant": "Dominant",
   "dominance.wildaside.recessive": "Recessive",

@@ -3,9 +3,11 @@ package net.farkas.wildaside.screen.bioengineering_workstation;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.DnaConstants;
+import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkill;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillUtils;
 import net.farkas.wildaside.item.custom.DnaHolderItem;
 import net.farkas.wildaside.network.NetworkHandler;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
@@ -19,6 +21,11 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 public class BioengineeringWorkstationScreen extends AbstractContainerScreen<BioengineeringWorkstationMenu> {
     private final BioengineeringWorkstationMenu menu;
     public BioengineeringWorkstationTab tab;
@@ -30,6 +37,9 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
     private double lastMouseX, lastMouseY;
 
     private final int yOffset;
+
+    @Nullable
+    private SkillNode hoveredSkillNode = null;
 
     public BioengineeringWorkstationScreen(BioengineeringWorkstationMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
@@ -169,12 +179,20 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         renderBackground(guiGraphics);
         super.render(guiGraphics, mouseX, mouseY, delta);
 
+        hoveredSkillNode = null;
+
         if (tab == BioengineeringWorkstationTab.SKILL_TAB) {
             renderSkillViewport(guiGraphics, mouseX, mouseY);
+            hoveredSkillNode = getHoveredSkillNode(mouseX, mouseY);
+        }
+
+        if (hoveredSkillNode != null) {
+            renderSkillTooltip(guiGraphics, hoveredSkillNode, mouseX, mouseY);
         }
 
         renderTooltip(guiGraphics, mouseX, mouseY);
     }
+
 
     @Override
     public void containerTick() {
@@ -237,6 +255,32 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
                     }).pos(leftPos + 14, topPos + 55 + yOffset).size(20, 20)
                     .tooltip(Tooltip.create(Component.translatable("gui.wildaside.bioengineering_workstation.recompile_dna"))).build());
         }
+    }
+
+    @Nullable
+    private SkillNode getHoveredSkillNode(double mouseX, double mouseY) {
+        int viewX = this.leftPos + 8;
+        int viewY = this.topPos + 36;
+        int viewW = 240;
+        int viewH = 150;
+
+        boolean insideViewport =
+                mouseX >= viewX && mouseX <= viewX + viewW &&
+                        mouseY >= viewY && mouseY <= viewY + viewH;
+
+        if (!insideViewport) return null;
+
+        double localX = mouseX - viewX - skillOffsetX;
+        double localY = mouseY - viewY - skillOffsetY;
+
+        for (SkillNode node : BioengineeringSkillTreeLayout.NODES) {
+            if (localX >= node.x && localX <= node.x + 24 &&
+                    localY >= node.y && localY <= node.y + 24) {
+                return node;
+            }
+        }
+
+        return null;
     }
 
     @Override
@@ -311,5 +355,42 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         menu.player.playSound(SoundEvents.UI_BUTTON_CLICK.get());
 
         NetworkHandler.sendBioengineeringSkillUnlockRequestPacket(node.skill.getId());
+    }
+
+    private void renderSkillTooltip(GuiGraphics graphics, SkillNode node, int mouseX, int mouseY) {
+        Player player = minecraft.player;
+        if (player == null) return;
+
+        BioengineeringSkill skill = node.skill;
+
+        List<Component> tooltip = new ArrayList<>();
+
+        tooltip.add(skill.getNameComponent().copy().withStyle(ChatFormatting.GOLD));
+
+        tooltip.add(skill.getDescriptionComponent().copy().withStyle(ChatFormatting.GRAY));
+
+        tooltip.add(Component.empty());
+
+        if (node.isUnlocked(player)) {
+            tooltip.add(Component.translatable("skill.wildaside.status.unlocked")
+                    .withStyle(ChatFormatting.GREEN));
+        } else if (node.canUnlock(player)) {
+            tooltip.add(Component.translatable("skill.wildaside.status.available")
+                    .withStyle(ChatFormatting.YELLOW));
+        } else {
+            tooltip.add(Component.translatable("skill.wildaside.status.locked")
+                    .withStyle(ChatFormatting.RED));
+        }
+
+        List<Component> reqTooltip = skill.getRequirement().getTooltip(player);
+        if (!reqTooltip.isEmpty()) {
+            tooltip.add(Component.empty());
+            tooltip.add(Component.translatable("skill.wildaside.requirements")
+                    .withStyle(ChatFormatting.AQUA));
+
+            tooltip.addAll(reqTooltip);
+        }
+
+        graphics.renderTooltip(this.font, tooltip, Optional.empty(), mouseX, mouseY);
     }
 }

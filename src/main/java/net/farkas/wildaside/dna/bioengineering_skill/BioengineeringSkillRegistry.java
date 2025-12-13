@@ -2,8 +2,7 @@ package net.farkas.wildaside.dna.bioengineering_skill;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.dna.bioengineering_skill.category.BioengineeringSkillCategoryRegistry;
-import net.farkas.wildaside.dna.bioengineering_skill.requirement.AllRequirements;
-import net.farkas.wildaside.dna.bioengineering_skill.requirement.ItemRequirement;
+import net.farkas.wildaside.dna.bioengineering_skill.requirement.*;
 import net.farkas.wildaside.item.ModItems;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -22,9 +21,15 @@ public class BioengineeringSkillRegistry {
             .requirement(
                     new AllRequirements(
                             List.of(
-                                new ItemRequirement(new ItemStack(ModItems.HICKORY_NUT.get(), 10), true)
+                                    new PointRequirement(15),
+                                    new AnyRequirements(
+                                            List.of(
+                                                    new ItemRequirement(new ItemStack(ModItems.HICKORY_NUT.get(), 10), true),
+                                                    new ItemRequirement(new ItemStack(ModItems.MUCELLITH_JAW.get(), 1), false)
+                                            )
+                                    )
                             )
-            )).build());
+                    )).build());
 
     public static BioengineeringSkill register(BioengineeringSkill skill) {
         REGISTRY.put(skill.getId(), skill);
