@@ -132,7 +132,7 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         RenderSystem.disableScissor();
     }
 
-    private void drawSkillNodes(GuiGraphics g) {
+    private void drawSkillNodes(GuiGraphics graphics) {
         for (SkillNode node : BioengineeringSkillTreeLayout.NODES) {
             int px = node.x;
             int py = node.y;
@@ -148,18 +148,18 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
             RenderSystem.setShaderTexture(0, BACKGROUND);
 
             float r = ((borderColor >> 16) & 0xFF) / 255f;
-            float gC = ((borderColor >> 8) & 0xFF) / 255f;
+            float g = ((borderColor >> 8) & 0xFF) / 255f;
             float b = (borderColor & 0xFF) / 255f;
             float a = ((borderColor >> 24) & 0xFF) / 255f;
 
-            RenderSystem.setShaderColor(r, gC, b, a);
+            RenderSystem.setShaderColor(r, g, b, a);
 
-            g.blit(BACKGROUND, px - 1, py - 1, 35, 227, 27, 27, 256, 256);
+            graphics.blit(BACKGROUND, px - 1, py - 1, 35, 227, 27, 27, 256, 256);
 
             RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
 
-            g.blit(BACKGROUND, px, py, 4, 228, 24, 24, 256, 256);
-            g.blit(tex, px + 4, py + 4, 0, 0, 16, 16, 16, 16);
+            graphics.blit(BACKGROUND, px, py, 4, 228, 24, 24, 256, 256);
+            graphics.blit(tex, px + 4, py + 4, 0, 0, 16, 16, 16, 16);
         }
     }
 
