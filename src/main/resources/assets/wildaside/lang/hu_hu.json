@@ -259,6 +259,16 @@
 
   "skill.wildaside.already_unlocked": "Képesség már feloldva",
   "skill.wildaside.cannot_unlock": "Képesség nem feloldható",
+  "skill.wildaside.status.unlocked": "Feloldva",
+  "skill.wildaside.status.available": "Elérhető",
+  "skill.wildaside.status.locked": "Lezárva",
+  "skill.wildaside.requirements": "Követelmények:",
+  "skill.wildaside.requires_skill": "Képesség: %1$s",
+  "skill.wildaside.requires_points": "%1$s képesség pont",
+  "skill.wildaside.consumes": "(Felemészt)",
+  "skill.wildaside.not_consumed": "(Nem emészt fel)",
+  "skill.wildaside.requirements.all": "Mindegyik:",
+  "skill.wildaside.requirements.any": "Egyik:",
 
   "dominance.wildaside.dominant": "Domináns",
   "dominance.wildaside.recessive": "Recesszív",

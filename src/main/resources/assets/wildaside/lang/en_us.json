@@ -265,7 +265,6 @@
   "skill.wildaside.requirements": "Requirements:",
   "skill.wildaside.requires_skill": "Skill: %1$s",
   "skill.wildaside.requires_points": "%1$s skill points",
-  "skill.wildaside.requires_item": "Requires %1$s %2$s",
   "skill.wildaside.consumes": "(Consumes)",
   "skill.wildaside.not_consumed": "(Doesn't consume)",
   "skill.wildaside.requirements.all": "All of:",
