@@ -257,6 +257,7 @@
   "trait.wildaside.fire_ability": "Tűz képesség",
   "trait.wildaside.teleport_ability": "Teleportálás képesség",
 
+  "skill.wildaside.points": "Képesség pontok: %1$s",
   "skill.wildaside.already_unlocked": "Képesség már feloldva",
   "skill.wildaside.cannot_unlock": "Képesség nem feloldható",
   "skill.wildaside.status.unlocked": "Feloldva",
@@ -269,6 +270,9 @@
   "skill.wildaside.not_consumed": "(Nem emészt fel)",
   "skill.wildaside.requirements.all": "Mindegyik:",
   "skill.wildaside.requirements.any": "Egyik:",
+
+  "skill.wildaside.bioengineering_skill.name.reveal_alleles": "Allélok mutatása",
+  "skill.wildaside.bioengineering_skill.description.reveal_alleles": "Megmutatja a gének 2 allélját a DNS szerkesztőben",
 
   "dominance.wildaside.dominant": "Domináns",
   "dominance.wildaside.recessive": "Recesszív",

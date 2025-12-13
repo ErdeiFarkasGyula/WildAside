@@ -257,6 +257,7 @@
   "trait.wildaside.fire_ability": "Fire Ability",
   "trait.wildaside.teleport_ability": "Teleport Ability",
 
+  "skill.wildaside.points": "Skill points: %1$s",
   "skill.wildaside.already_unlocked": "Skill already unlocked",
   "skill.wildaside.cannot_unlock": "Cannot unlock skill",
   "skill.wildaside.status.unlocked": "Unlocked",
@@ -271,7 +272,7 @@
   "skill.wildaside.requirements.any": "One of:",
 
   "skill.wildaside.bioengineering_skill.name.reveal_alleles": "Reveal Alleles",
-  "skill.wildaside.bioengineering_skill.description.reveal_alleles": "Shows the 2 alleles of each gene in the gene editor",
+  "skill.wildaside.bioengineering_skill.description.reveal_alleles": "Shows the 2 alleles of each gene in the DNA editor",
 
   "dominance.wildaside.dominant": "Dominant",
   "dominance.wildaside.recessive": "Recessive",

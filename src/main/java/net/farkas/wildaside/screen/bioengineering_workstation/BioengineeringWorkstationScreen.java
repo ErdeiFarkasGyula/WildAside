@@ -1,6 +1,8 @@
 package net.farkas.wildaside.screen.bioengineering_workstation;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.farkas.wildaside.capability.bioengineering.BioengineeringSkillsCapability;
+import net.farkas.wildaside.capability.bioengineering.IBioengineeringSkills;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.DnaConstants;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkill;
@@ -8,6 +10,7 @@ import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillUtils;
 import net.farkas.wildaside.item.custom.DnaHolderItem;
 import net.farkas.wildaside.network.NetworkHandler;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
@@ -25,6 +28,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class BioengineeringWorkstationScreen extends AbstractContainerScreen<BioengineeringWorkstationMenu> {
     private final BioengineeringWorkstationMenu menu;
@@ -62,6 +66,27 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
 
         addTabButtons();
         addRecompileButton();
+    }
+
+    @Override
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+        renderBackground(guiGraphics);
+        super.render(guiGraphics, mouseX, mouseY, delta);
+
+        hoveredSkillNode = null;
+
+        if (tab == BioengineeringWorkstationTab.SKILL_TAB) {
+            renderSkillViewport(guiGraphics, mouseX, mouseY);
+            renderSkillPoints(guiGraphics);
+
+            hoveredSkillNode = getHoveredSkillNode(mouseX, mouseY);
+            if (hoveredSkillNode != null) {
+                renderSkillTooltip(guiGraphics, hoveredSkillNode, mouseX, mouseY);
+            }
+        }
+
+
+        renderTooltip(guiGraphics, mouseX, mouseY);
     }
 
     @Override
@@ -173,26 +198,6 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
             graphics.blit(tex, px + 4, py + 4, 0, 0, 16, 16, 16, 16);
         }
     }
-
-    @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
-        renderBackground(guiGraphics);
-        super.render(guiGraphics, mouseX, mouseY, delta);
-
-        hoveredSkillNode = null;
-
-        if (tab == BioengineeringWorkstationTab.SKILL_TAB) {
-            renderSkillViewport(guiGraphics, mouseX, mouseY);
-            hoveredSkillNode = getHoveredSkillNode(mouseX, mouseY);
-        }
-
-        if (hoveredSkillNode != null) {
-            renderSkillTooltip(guiGraphics, hoveredSkillNode, mouseX, mouseY);
-        }
-
-        renderTooltip(guiGraphics, mouseX, mouseY);
-    }
-
 
     @Override
     public void containerTick() {
@@ -392,5 +397,32 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         }
 
         graphics.renderTooltip(this.font, tooltip, Optional.empty(), mouseX, mouseY);
+    }
+
+    private void renderSkillPoints(GuiGraphics graphics) {
+        if (tab != BioengineeringWorkstationTab.SKILL_TAB) return;
+
+        int x = this.leftPos + 10;
+        int y = this.topPos + 38;
+
+        int points = getClientSkillPoints();
+
+        Component text = Component.translatable(
+                "skill.wildaside.points", points
+        ).withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD);
+
+        int width = font.width(text) + 6;
+        graphics.fill(x - 3, y - 3, x + width, y + 9, 0x88000000);
+
+        graphics.drawString(font, text, x, y, 0xFFFFFF, false);
+    }
+
+    private int getClientSkillPoints() {
+        Player player = minecraft.player;
+        if (player == null) return 0;
+
+        return player.getCapability(BioengineeringSkillsCapability.INSTANCE)
+                .map(IBioengineeringSkills::getPoints)
+                .orElse(0);
     }
 }
