@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -306,6 +307,8 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
             minecraft.gui.setOverlayMessage(Component.translatable("skill.wildaside.cannot_unlock"), false);
             return;
         }
+
+        menu.player.playSound(SoundEvents.UI_BUTTON_CLICK.get());
 
         NetworkHandler.sendBioengineeringSkillUnlockRequestPacket(node.skill.getId());
     }

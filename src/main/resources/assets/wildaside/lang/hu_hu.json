@@ -257,6 +257,9 @@
   "trait.wildaside.fire_ability": "Tűz képesség",
   "trait.wildaside.teleport_ability": "Teleportálás képesség",
 
+  "skill.wildaside.already_unlocked": "Képesség már feloldva",
+  "skill.wildaside.cannot_unlock": "Képesség nem feloldható",
+
   "dominance.wildaside.dominant": "Domináns",
   "dominance.wildaside.recessive": "Recesszív",
   "dominance.wildaside.co_dominant": "Co-domináns",

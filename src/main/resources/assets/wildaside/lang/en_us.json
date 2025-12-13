@@ -257,6 +257,9 @@
   "trait.wildaside.fire_ability": "Fire Ability",
   "trait.wildaside.teleport_ability": "Teleport Ability",
 
+  "skill.wildaside.already_unlocked": "Skill already unlocked",
+  "skill.wildaside.cannot_unlock": "Cannot unlock skill",
+
   "dominance.wildaside.dominant": "Dominant",
   "dominance.wildaside.recessive": "Recessive",
   "dominance.wildaside.co_dominant": "Co-dominant",
