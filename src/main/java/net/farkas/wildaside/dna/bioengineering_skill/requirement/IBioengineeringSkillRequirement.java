@@ -3,6 +3,7 @@ package net.farkas.wildaside.dna.bioengineering_skill.requirement;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
@@ -16,6 +17,10 @@ public abstract class IBioengineeringSkillRequirement {
     }
 
     public void unlock(ServerPlayer player) {
+    }
+
+    public List<ResourceLocation> getRequiredSkills() {
+        return List.of();
     }
 
     public List<Component> getTooltip(Player player) {

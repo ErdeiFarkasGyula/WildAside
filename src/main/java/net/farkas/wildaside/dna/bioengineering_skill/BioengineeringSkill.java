@@ -15,9 +15,6 @@ public class BioengineeringSkill {
     private final ResourceLocation texture;
     private final int minValue, maxValue;
     private final IBioengineeringSkillRequirement requirement;
-    private final int cost;
-    private final boolean oneTimeCost;
-    private final BioengineeringSkill parent;
     private final BioengineeringSkillCategory category;
 
     private BioengineeringSkill(Builder builder) {
@@ -27,9 +24,6 @@ public class BioengineeringSkill {
         this.minValue = builder.minValue;
         this.maxValue = builder.maxValue;
         this.requirement = builder.requirement;
-        this.cost = builder.cost;
-        this.oneTimeCost = builder.oneTimeCost;
-        this.parent = builder.parent;
         this.category = builder.category;
     }
 
@@ -39,9 +33,6 @@ public class BioengineeringSkill {
     public int getMinValue() { return minValue; }
     public int getMaxValue() { return maxValue; }
     public IBioengineeringSkillRequirement getRequirement() { return requirement; }
-    public int getCost() { return cost; }
-    public boolean isOneTimeCost() { return oneTimeCost; }
-    public BioengineeringSkill getParent() { return parent; }
     public BioengineeringSkillCategory getCategory() { return category; }
 
     public Component getNameComponent() {
@@ -59,9 +50,6 @@ public class BioengineeringSkill {
         private int minValue = 0;
         private int maxValue = 1;
         private IBioengineeringSkillRequirement requirement = new AllRequirements(List.of());
-        private int cost;
-        private boolean oneTimeCost;
-        private BioengineeringSkill parent;
         private BioengineeringSkillCategory category;
 
         public ResourceLocation id(ResourceLocation id) {
@@ -94,21 +82,6 @@ public class BioengineeringSkill {
             return this;
         }
 
-        public Builder cost(int cost) {
-            this.cost = cost;
-            return this;
-        }
-
-        public Builder oneTimeCost(boolean oneTimeCost) {
-            this.oneTimeCost = oneTimeCost;
-            return this;
-        }
-
-        public Builder parent(BioengineeringSkill parent) {
-            this.parent = parent;
-            return this;
-        }
-
         public Builder category(BioengineeringSkillCategory category) {
             this.category = category;
             return this;
@@ -138,10 +111,6 @@ public class BioengineeringSkill {
 
             if (requirement == null) {
                 requirement = new AllRequirements(List.of());
-            }
-
-            if (category == null) {
-                this.category = parent.getCategory();
             }
 
             return new BioengineeringSkill(this);

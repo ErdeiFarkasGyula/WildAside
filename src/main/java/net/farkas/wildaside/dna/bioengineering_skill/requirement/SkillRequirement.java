@@ -30,6 +30,11 @@ public class SkillRequirement extends IBioengineeringSkillRequirement {
     }
 
     @Override
+    public List<ResourceLocation> getRequiredSkills() {
+        return List.of(requiredSkill);
+    }
+
+    @Override
     protected List<Component> getTooltip(Player player, int depth) {
         boolean has = isClientSatisfied(player);
 

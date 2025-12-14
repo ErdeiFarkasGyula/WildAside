@@ -2,6 +2,7 @@ package net.farkas.wildaside.dna.bioengineering_skill.requirement;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
@@ -29,6 +30,15 @@ public class AllRequirements extends IBioengineeringSkillRequirement {
     @Override
     public void unlock(ServerPlayer player) {
         requirements.forEach(r -> r.unlock(player));
+    }
+
+    @Override
+    public List<ResourceLocation> getRequiredSkills() {
+        List<ResourceLocation> out = new ArrayList<>();
+        for (var requirement : requirements) {
+            out.addAll(requirement.getRequiredSkills());
+        }
+        return out;
     }
 
     @Override

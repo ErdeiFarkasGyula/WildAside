@@ -31,6 +31,38 @@ public class BioengineeringSkillRegistry {
                             )
                     )).build());
 
+    public static final BioengineeringSkill EDIT_ALLELES = register(new BioengineeringSkill.Builder()
+            .name("edit_alleles")
+            .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
+            .requirement(
+                    new AllRequirements(
+                            List.of(
+                                    new PointRequirement(15),
+                                    new SkillRequirement(REVEAL_ALLELES.getId())
+                            )
+                    )).build());
+
+    public static final BioengineeringSkill MEOW = register(new BioengineeringSkill.Builder()
+            .name("meow")
+            .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
+            .requirement(
+                    new AllRequirements(
+                            List.of(
+                                    new SkillRequirement(REVEAL_ALLELES.getId())
+                            )
+                    )).build());
+
+    public static final BioengineeringSkill WOOF = register(new BioengineeringSkill.Builder()
+            .name("woof")
+            .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
+            .requirement(
+                    new AllRequirements(
+                            List.of(
+                                    new SkillRequirement(MEOW.getId()),
+                                    new SkillRequirement(EDIT_ALLELES.getId())
+                            )
+                    )).build());
+
     public static BioengineeringSkill register(BioengineeringSkill skill) {
         REGISTRY.put(skill.getId(), skill);
         return skill;
