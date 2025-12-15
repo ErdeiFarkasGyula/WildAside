@@ -153,7 +153,6 @@ public class DnaUtils {
             alleleA = createAllele(trait, 1f, seed, 0);
             alleleB = createAllele(trait, 1f, seed, 1);
         } else {
-            System.out.println("Cond");
             alleleA = maybeMutateZeroAllele(trait, seed, 0);
             alleleB = maybeMutateZeroAllele(trait, seed, 1);
         }

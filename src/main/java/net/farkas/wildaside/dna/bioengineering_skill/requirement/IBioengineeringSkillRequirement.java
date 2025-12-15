@@ -1,5 +1,6 @@
 package net.farkas.wildaside.dna.bioengineering_skill.requirement;
 
+import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkill;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -21,6 +22,10 @@ public abstract class IBioengineeringSkillRequirement {
 
     public List<ResourceLocation> getRequiredSkills() {
         return List.of();
+    }
+
+    public boolean dependsOn(ResourceLocation resourceLocation) {
+        return getRequiredSkills().contains(resourceLocation);
     }
 
     public List<Component> getTooltip(Player player) {

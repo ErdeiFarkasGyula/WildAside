@@ -11,7 +11,6 @@ import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillUtils;
 import net.farkas.wildaside.item.custom.DnaHolderItem;
 import net.farkas.wildaside.network.NetworkHandler;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
@@ -65,7 +64,7 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         tab = menu.getTab();
         BACKGROUND = tab.getTexture();
 
-        BioengineeringSkillTreeLayout.rebuildEdges();
+        BioengineeringSkillTreeRegistry.rebuild();
 
         addTabButtons();
         addRecompileButton();
@@ -152,12 +151,9 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         drawSkillEdges(graphics);
         drawSkillNodes(graphics);
 
-        graphics.flush();
-
         graphics.pose().popPose();
 
         disableScissor(graphics);
-
     }
 
     private void enableScissor(GuiGraphics graphics, int x, int y, int width, int height) {
@@ -176,7 +172,7 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
     }
 
     private void drawSkillNodes(GuiGraphics graphics) {
-        for (SkillNode node : BioengineeringSkillTreeLayout.NODES) {
+        for (SkillNode node : BioengineeringSkillTreeRegistry.NODES) {
             int px = node.x;
             int py = node.y;
 
@@ -285,7 +281,7 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         double localX = mouseX - viewX - skillOffsetX;
         double localY = mouseY - viewY - skillOffsetY;
 
-        for (SkillNode node : BioengineeringSkillTreeLayout.NODES) {
+        for (SkillNode node : BioengineeringSkillTreeRegistry.NODES) {
             if (localX >= node.x && localX <= node.x + 24 &&
                     localY >= node.y && localY <= node.y + 24) {
                 return node;
@@ -309,7 +305,7 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
             double localX = mouseX - viewX - skillOffsetX;
             double localY = mouseY - viewY - skillOffsetY;
 
-            for (SkillNode node : BioengineeringSkillTreeLayout.NODES) {
+            for (SkillNode node : BioengineeringSkillTreeRegistry.NODES) {
                 if (localX >= node.x && localX <= node.x + 24 && localY >= node.y && localY <= node.y + 24) {
                     onSkillNodeClicked(node);
                     return true;
@@ -433,81 +429,47 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
                 .orElse(0);
     }
 
-    private void drawCurvedConnector(GuiGraphics graphics, float x1, float y1, float x2, float y2, int color) {
+    private void drawSkillEdges(GuiGraphics graphics) {
         PoseStack pose = graphics.pose();
-        VertexConsumer consumer = graphics.bufferSource().getBuffer(RenderType.gui());
 
-        float r = ((color >> 16) & 255) / 255f;
-        float g = ((color >> 8) & 255) / 255f;
-        float b = (color & 255) / 255f;
-        float a = ((color >> 24) & 255) / 255f;
+        for (SkillNode node : BioengineeringSkillTreeRegistry.NODES) {
+            for (ResourceLocation depId : node.skill.getRequirement().getRequiredSkills()) {
+                SkillNode parent = SkillTreeUtils.getNode(BioengineeringSkillTreeRegistry.NODES, depId);
+                if (parent == null) continue;
 
+                drawLine(graphics, parent.x + 12, parent.y + 12, node.x + 12, node.y + 12, 2, 0xFF44FFAA);
+            }
+        }
+    }
+
+    private void drawLine(GuiGraphics graphics, float x1, float y1, float x2, float y2, float thickness, int color) {
         float dx = x2 - x1;
         float dy = y2 - y1;
+        float length = (float) Math.sqrt(dx * dx + dy * dy);
 
-        float nx = -dy;
-        float ny = dx;
-        float len = (float) Math.sqrt(nx * nx + ny * ny);
-        if (len != 0) {
-            nx /= len;
-            ny /= len;
-        }
+        if (length == 0) return;
 
-        float thickness = 2.5f;
-        nx *= thickness;
-        ny *= thickness;
+        float ux = -dy / length;
+        float uy = dx / length;
 
-        float ratio = Math.abs(dx) / (Math.abs(dx) + Math.abs(dy) + 0.001f);
-        float curve = 18f + 24f * ratio;
+        float hx = ux * (thickness / 2f);
+        float hy = uy * (thickness / 2f);
 
-        float cx = (x1 + x2) / 2f + (-dy / Math.max(1, len)) * curve;
-        float cy = (y1 + y2) / 2f + (dx / Math.max(1, len)) * curve;
+        float x0 = x1 - hx;
+        float y0 = y1 - hy;
+        float x1c = x1 + hx;
+        float y1c = y1 + hy;
+        float x2c = x2 + hx;
+        float y2c = y2 + hy;
+        float x3 = x2 - hx;
+        float y3 = y2 - hy;
 
-        int segments = 32;
+        PoseStack pose = graphics.pose();
+        VertexConsumer vc = graphics.bufferSource().getBuffer(RenderType.gui());
 
-        for (int i = 0; i < segments; i++) {
-            float t1 = i / (float) segments;
-            float t2 = (i + 1) / (float) segments;
-
-            float ax = bezier(x1, cx, x2, t1);
-            float ay = bezier(y1, cy, y2, t1);
-            float bx = bezier(x1, cx, x2, t2);
-            float by = bezier(y1, cy, y2, t2);
-
-            consumer.vertex(pose.last().pose(), ax - nx, ay - ny, 0)
-                    .color(r, g, b, a).endVertex();
-            consumer.vertex(pose.last().pose(), ax + nx, ay + ny, 0)
-                    .color(r, g, b, a).endVertex();
-            consumer.vertex(pose.last().pose(), bx + nx, by + ny, 0)
-                    .color(r, g, b, a).endVertex();
-            consumer.vertex(pose.last().pose(), bx - nx, by - ny, 0)
-                    .color(r, g, b, a).endVertex();
-        }
-    }
-
-    private float bezier(float a, float b, float c, float t) {
-        float inv = 1 - t;
-        return inv * inv * a + 2 * inv * t * b + t * t * c;
-    }
-
-    private void drawSkillEdges(GuiGraphics graphics) {
-        for (SkillEdge edge : BioengineeringSkillTreeLayout.EDGES) {
-            SkillNode from = edge.from();
-            SkillNode to = edge.to();
-
-            int x1 = from.x + 12;
-            int y1 = from.y + 12;
-            int x2 = to.x + 12;
-            int y2 = to.y + 12;
-
-//            int color =
-//                    from.isUnlocked(minecraft.player)
-//                            ? 0xFF44FF44
-//                            : 0xFF888888;
-
-            int color = 0xFFFF00FF;
-
-            drawCurvedConnector(graphics, x1, y1, x2, y2, color);
-        }
+        vc.vertex(pose.last().pose(), x0, y0, 0).color((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF, (color >> 24) & 0xFF).endVertex();
+        vc.vertex(pose.last().pose(), x1c, y1c, 0).color((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF, (color >> 24) & 0xFF).endVertex();
+        vc.vertex(pose.last().pose(), x2c, y2c, 0).color((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF, (color >> 24) & 0xFF).endVertex();
+        vc.vertex(pose.last().pose(), x3, y3, 0).color((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF, (color >> 24) & 0xFF).endVertex();
     }
 }

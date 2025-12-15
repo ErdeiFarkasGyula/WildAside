@@ -31,8 +31,8 @@ public class BioengineeringSkillRegistry {
                             )
                     )).build());
 
-    public static final BioengineeringSkill EDIT_ALLELES = register(new BioengineeringSkill.Builder()
-            .name("edit_alleles")
+    public static final BioengineeringSkill TOP_1 = register(new BioengineeringSkill.Builder()
+            .name("top_1")
             .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
             .requirement(
                     new AllRequirements(
@@ -42,8 +42,28 @@ public class BioengineeringSkillRegistry {
                             )
                     )).build());
 
-    public static final BioengineeringSkill MEOW = register(new BioengineeringSkill.Builder()
-            .name("meow")
+    public static final BioengineeringSkill TOP_2 = register(new BioengineeringSkill.Builder()
+            .name("top_2")
+            .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
+            .requirement(
+                    new AllRequirements(
+                            List.of(
+                                    new SkillRequirement(TOP_1.getId())
+                            )
+                    )).build());
+
+    public static final BioengineeringSkill TOP_3 = register(new BioengineeringSkill.Builder()
+            .name("top_3")
+            .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
+            .requirement(
+                    new AllRequirements(
+                            List.of(
+                                    new SkillRequirement(TOP_2.getId())
+                            )
+                    )).build());
+
+    public static final BioengineeringSkill BOT_1 = register(new BioengineeringSkill.Builder()
+            .name("bot_1")
             .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
             .requirement(
                     new AllRequirements(
@@ -52,14 +72,24 @@ public class BioengineeringSkillRegistry {
                             )
                     )).build());
 
-    public static final BioengineeringSkill WOOF = register(new BioengineeringSkill.Builder()
-            .name("woof")
+    public static final BioengineeringSkill BOT_2 = register(new BioengineeringSkill.Builder()
+            .name("bot_2")
             .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
             .requirement(
                     new AllRequirements(
                             List.of(
-                                    new SkillRequirement(MEOW.getId()),
-                                    new SkillRequirement(EDIT_ALLELES.getId())
+                                    new SkillRequirement(BOT_1.getId())
+                            )
+                    )).build());
+
+    public static final BioengineeringSkill END = register(new BioengineeringSkill.Builder()
+            .name("end")
+            .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
+            .requirement(
+                    new AllRequirements(
+                            List.of(
+                                    new SkillRequirement(TOP_3.getId()),
+                                    new SkillRequirement(BOT_2.getId())
                             )
                     )).build());
 
