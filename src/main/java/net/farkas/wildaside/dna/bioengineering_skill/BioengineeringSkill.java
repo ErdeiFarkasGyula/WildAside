@@ -4,6 +4,7 @@ import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.dna.bioengineering_skill.category.BioengineeringSkillCategory;
 import net.farkas.wildaside.dna.bioengineering_skill.requirement.AllRequirements;
 import net.farkas.wildaside.dna.bioengineering_skill.requirement.IBioengineeringSkillRequirement;
+import net.farkas.wildaside.screen.bioengineering_workstation.VisualStrand;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 

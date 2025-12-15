@@ -4,6 +4,7 @@ import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.dna.bioengineering_skill.category.BioengineeringSkillCategoryRegistry;
 import net.farkas.wildaside.dna.bioengineering_skill.requirement.*;
 import net.farkas.wildaside.item.ModItems;
+import net.farkas.wildaside.screen.bioengineering_workstation.VisualStrand;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
@@ -97,8 +98,8 @@ public class BioengineeringSkillRegistry {
                             )
                     )).build());
 
-    public static final BioengineeringSkill MEOW = register(new BioengineeringSkill.Builder()
-            .name("meow")
+    public static final BioengineeringSkill TOP_11 = register(new BioengineeringSkill.Builder()
+            .name("top_11")
             .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
             .strand(VisualStrand.TOP)
             .requirement(
@@ -108,14 +109,67 @@ public class BioengineeringSkillRegistry {
                             )
                     )).build());
 
-    public static final BioengineeringSkill WOOF = register(new BioengineeringSkill.Builder()
-            .name("woof")
+    public static final BioengineeringSkill TOP_12 = register(new BioengineeringSkill.Builder()
+            .name("top_12")
+            .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
+            .requirement(
+                    new AllRequirements(
+                            List.of(
+                                    new SkillRequirement(TOP_11.getId())
+                            )
+                    )).build());
+
+
+    public static final BioengineeringSkill BOT_11 = register(new BioengineeringSkill.Builder()
+            .name("bot_11")
             .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
             .strand(VisualStrand.BOTTOM)
             .requirement(
                     new AllRequirements(
                             List.of(
                                     new SkillRequirement(END.getId())
+                            )
+                    )).build());
+
+    public static final BioengineeringSkill BOT_12 = register(new BioengineeringSkill.Builder()
+            .name("bot_12")
+            .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
+            .requirement(
+                    new AllRequirements(
+                            List.of(
+                                    new SkillRequirement(BOT_11.getId())
+                            )
+                    )).build());
+
+    public static final BioengineeringSkill BOT_13 = register(new BioengineeringSkill.Builder()
+            .name("bot_13")
+            .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
+            .requirement(
+                    new AllRequirements(
+                            List.of(
+                                    new SkillRequirement(BOT_12.getId())
+                            )
+                    )).build());
+
+    public static final BioengineeringSkill BOT_14 = register(new BioengineeringSkill.Builder()
+            .name("bot_14")
+            .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
+            .requirement(
+                    new AllRequirements(
+                            List.of(
+                                    new SkillRequirement(BOT_13 .getId())
+                            )
+                    )).build());
+
+    public static final BioengineeringSkill END_2 = register(new BioengineeringSkill.Builder()
+            .name("end_2")
+            .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
+            .strand(VisualStrand.CENTER)
+            .requirement(
+                    new AllRequirements(
+                            List.of(
+                                    new SkillRequirement(TOP_12.getId()),
+                                    new SkillRequirement(BOT_14.getId())
                             )
                     )).build());
 
