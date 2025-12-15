@@ -97,27 +97,27 @@ public class BioengineeringSkillRegistry {
                             )
                     )).build());
 
-//    public static final BioengineeringSkill MEOW = register(new BioengineeringSkill.Builder()
-//            .name("meow")
-//            .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
-//            .strand(VisualStrand.TOP)
-//            .requirement(
-//                    new AllRequirements(
-//                            List.of(
-//                                    new SkillRequirement(END.getId())
-//                            )
-//                    )).build());
-//
-//    public static final BioengineeringSkill WOOF = register(new BioengineeringSkill.Builder()
-//            .name("woof")
-//            .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
-//            .strand(VisualStrand.BOTTOM)
-//            .requirement(
-//                    new AllRequirements(
-//                            List.of(
-//                                    new SkillRequirement(END.getId())
-//                            )
-//                    )).build());
+    public static final BioengineeringSkill MEOW = register(new BioengineeringSkill.Builder()
+            .name("meow")
+            .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
+            .strand(VisualStrand.TOP)
+            .requirement(
+                    new AllRequirements(
+                            List.of(
+                                    new SkillRequirement(END.getId())
+                            )
+                    )).build());
+
+    public static final BioengineeringSkill WOOF = register(new BioengineeringSkill.Builder()
+            .name("woof")
+            .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
+            .strand(VisualStrand.BOTTOM)
+            .requirement(
+                    new AllRequirements(
+                            List.of(
+                                    new SkillRequirement(END.getId())
+                            )
+                    )).build());
 
     public static BioengineeringSkill register(BioengineeringSkill skill) {
         REGISTRY.put(skill.getId(), skill);
