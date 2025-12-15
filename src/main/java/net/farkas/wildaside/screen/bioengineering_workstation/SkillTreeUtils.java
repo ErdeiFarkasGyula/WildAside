@@ -1,59 +1,36 @@
 package net.farkas.wildaside.screen.bioengineering_workstation;
 
-import net.minecraft.resources.ResourceLocation;
+import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkill;
 
 import java.util.*;
 
-public class SkillTreeUtils {
-    public static Map<SkillNode, Integer> computeDepths(Collection<SkillNode> nodes) {
-        Map<SkillNode, Integer> depthMap = new HashMap<>();
-        Set<SkillNode> visited = new HashSet<>();
+public final class SkillTreeUtils {
+    public static List<BioengineeringSkill> topologicalSort(Collection<BioengineeringSkill> skills, Map<BioengineeringSkill, List<BioengineeringSkill>> parents) {
+        List<BioengineeringSkill> result = new ArrayList<>();
+        Set<BioengineeringSkill> visited = new HashSet<>();
+        Set<BioengineeringSkill> visiting = new HashSet<>();
 
-        List<SkillNode> roots = nodes.stream()
-                .filter(n -> n.skill.getRequirement().getRequiredSkills().isEmpty())
-                .toList();
-
-        for (SkillNode root : roots) {
-            dfsDepth(root, 0, depthMap, visited, nodes);
+        for (BioengineeringSkill skill : skills) {
+            dfs(skill, parents, visited, visiting, result);
         }
 
-        return depthMap;
+        return result;
     }
 
-    private static void dfsDepth(SkillNode node, int depth, Map<SkillNode, Integer> depthMap, Set<SkillNode> visited, Collection<SkillNode> allNodes) {
-        if (visited.contains(node)) return;
-        visited.add(node);
-
-        depthMap.put(node, Math.max(depthMap.getOrDefault(node, 0), depth));
-
-        for (ResourceLocation depId : node.skill.getRequirement().getRequiredSkills()) {
-            SkillNode child = allNodes.stream()
-                    .filter(n -> n.skill.getId().equals(depId))
-                    .findFirst().orElse(null);
-            if (child != null) dfsDepth(child, depth + 1, depthMap, visited, allNodes);
-        }
-    }
-
-    public static boolean isTopStrand(SkillNode node) {
-        int depth = computeDepths(List.of(node)).getOrDefault(node, 0);
-        return (depth % 2) == 0;
-    }
-
-
-    public static SkillNode getNode(Collection<SkillNode> nodes, ResourceLocation id) {
-        return nodes.stream().filter(n -> n.skill.getId().equals(id)).findFirst().orElse(null);
-    }
-
-    public static List<SkillNode> getDependentNodes(SkillNode node, List<SkillNode> allNodes) {
-        List<SkillNode> dependents = new ArrayList<>();
-        ResourceLocation nodeId = node.skill.getId();
-
-        for (SkillNode candidate : allNodes) {
-            if (candidate.skill.getRequirement().dependsOn(nodeId)) {
-                dependents.add(candidate);
-            }
+    private static void dfs(BioengineeringSkill skill, Map<BioengineeringSkill, List<BioengineeringSkill>> parents,
+            Set<BioengineeringSkill> visited, Set<BioengineeringSkill> visiting, List<BioengineeringSkill> result
+    ) {
+        if (visited.contains(skill)) return;
+        if (visiting.contains(skill)) {
+            throw new IllegalStateException("Cycle detected in skill graph at " + skill.getId());
         }
 
-        return dependents;
+        visiting.add(skill);
+        for (BioengineeringSkill p : parents.get(skill)) {
+            dfs(p, parents, visited, visiting, result);
+        }
+        visiting.remove(skill);
+        visited.add(skill);
+        result.add(skill);
     }
 }

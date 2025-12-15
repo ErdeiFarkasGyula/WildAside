@@ -8,10 +8,10 @@ public class SkillNode {
     public final BioengineeringSkill skill;
     public int x, y;
 
-    public SkillNode(BioengineeringSkill skill) {
+    public SkillNode(BioengineeringSkill skill, int x, int y) {
         this.skill = skill;
-        this.x = 0;
-        this.y = 0;
+        this.x = x;
+        this.y = y;
     }
 
     public boolean isUnlocked(Player player) {

@@ -16,7 +16,6 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -87,7 +86,6 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
             }
         }
 
-
         renderTooltip(guiGraphics, mouseX, mouseY);
     }
 
@@ -148,7 +146,6 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         graphics.pose().pushPose();
         graphics.pose().translate(x + skillOffsetX, y + skillOffsetY, 0);
 
-        drawSkillEdges(graphics);
         drawSkillNodes(graphics);
 
         graphics.pose().popPose();
@@ -410,9 +407,7 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
 
         int points = getClientSkillPoints();
 
-        Component text = Component.translatable(
-                "skill.wildaside.points", points
-        ).withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD);
+        Component text = Component.translatable("skill.wildaside.points", points).withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD);
 
         int width = font.width(text) + 6;
         graphics.fill(x - 3, y - 3, x + width, y + 9, 0x88000000);
@@ -427,49 +422,5 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         return player.getCapability(BioengineeringSkillsCapability.INSTANCE)
                 .map(IBioengineeringSkills::getPoints)
                 .orElse(0);
-    }
-
-    private void drawSkillEdges(GuiGraphics graphics) {
-        PoseStack pose = graphics.pose();
-
-        for (SkillNode node : BioengineeringSkillTreeRegistry.NODES) {
-            for (ResourceLocation depId : node.skill.getRequirement().getRequiredSkills()) {
-                SkillNode parent = SkillTreeUtils.getNode(BioengineeringSkillTreeRegistry.NODES, depId);
-                if (parent == null) continue;
-
-                drawLine(graphics, parent.x + 12, parent.y + 12, node.x + 12, node.y + 12, 2, 0xFF44FFAA);
-            }
-        }
-    }
-
-    private void drawLine(GuiGraphics graphics, float x1, float y1, float x2, float y2, float thickness, int color) {
-        float dx = x2 - x1;
-        float dy = y2 - y1;
-        float length = (float) Math.sqrt(dx * dx + dy * dy);
-
-        if (length == 0) return;
-
-        float ux = -dy / length;
-        float uy = dx / length;
-
-        float hx = ux * (thickness / 2f);
-        float hy = uy * (thickness / 2f);
-
-        float x0 = x1 - hx;
-        float y0 = y1 - hy;
-        float x1c = x1 + hx;
-        float y1c = y1 + hy;
-        float x2c = x2 + hx;
-        float y2c = y2 + hy;
-        float x3 = x2 - hx;
-        float y3 = y2 - hy;
-
-        PoseStack pose = graphics.pose();
-        VertexConsumer vc = graphics.bufferSource().getBuffer(RenderType.gui());
-
-        vc.vertex(pose.last().pose(), x0, y0, 0).color((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF, (color >> 24) & 0xFF).endVertex();
-        vc.vertex(pose.last().pose(), x1c, y1c, 0).color((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF, (color >> 24) & 0xFF).endVertex();
-        vc.vertex(pose.last().pose(), x2c, y2c, 0).color((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF, (color >> 24) & 0xFF).endVertex();
-        vc.vertex(pose.last().pose(), x3, y3, 0).color((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF, (color >> 24) & 0xFF).endVertex();
     }
 }

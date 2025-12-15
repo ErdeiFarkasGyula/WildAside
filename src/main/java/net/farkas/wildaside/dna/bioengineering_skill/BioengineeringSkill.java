@@ -16,6 +16,7 @@ public class BioengineeringSkill {
     private final int minValue, maxValue;
     private final IBioengineeringSkillRequirement requirement;
     private final BioengineeringSkillCategory category;
+    private final VisualStrand strand;
 
     private BioengineeringSkill(Builder builder) {
         this.id = builder.id;
@@ -25,6 +26,7 @@ public class BioengineeringSkill {
         this.maxValue = builder.maxValue;
         this.requirement = builder.requirement;
         this.category = builder.category;
+        this.strand = builder.strand;
     }
 
     public ResourceLocation getId() { return id; }
@@ -34,6 +36,7 @@ public class BioengineeringSkill {
     public int getMaxValue() { return maxValue; }
     public IBioengineeringSkillRequirement getRequirement() { return requirement; }
     public BioengineeringSkillCategory getCategory() { return category; }
+    public VisualStrand getStrand() { return strand; }
 
     public Component getNameComponent() {
         return Component.translatable("skill.wildaside.bioengineering_skill.name." + name);
@@ -51,6 +54,7 @@ public class BioengineeringSkill {
         private int maxValue = 1;
         private IBioengineeringSkillRequirement requirement = new AllRequirements(List.of());
         private BioengineeringSkillCategory category;
+        private VisualStrand strand;
 
         public ResourceLocation id(ResourceLocation id) {
             this.id = id;
@@ -87,6 +91,11 @@ public class BioengineeringSkill {
             return this;
         }
 
+        public Builder strand(VisualStrand strand) {
+            this.strand = strand;
+            return this;
+        }
+
         public BioengineeringSkill build() {
             if (name == null) {
                 if (id != null) {
@@ -111,6 +120,10 @@ public class BioengineeringSkill {
 
             if (requirement == null) {
                 requirement = new AllRequirements(List.of());
+            }
+
+            if (strand == null) {
+                strand = BioengineeringSkillRegistry.get(requirement.getRequiredSkills().get(0)).getStrand();
             }
 
             return new BioengineeringSkill(this);

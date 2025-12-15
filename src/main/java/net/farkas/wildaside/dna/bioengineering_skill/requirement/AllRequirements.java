@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AllRequirements extends IBioengineeringSkillRequirement {
-
     private final List<IBioengineeringSkillRequirement> requirements;
 
     public AllRequirements(List<IBioengineeringSkillRequirement> requirements) {
@@ -59,5 +58,4 @@ public class AllRequirements extends IBioengineeringSkillRequirement {
 
         return list;
     }
-
 }

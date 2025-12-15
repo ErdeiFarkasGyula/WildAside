@@ -83,5 +83,4 @@ public class ItemRequirement extends IBioengineeringSkillRequirement {
                         .append(consumeTag)
         );
     }
-
 }

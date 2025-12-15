@@ -12,7 +12,6 @@ import net.minecraft.world.entity.player.Player;
 import java.util.List;
 
 public class SkillRequirement extends IBioengineeringSkillRequirement {
-
     private final ResourceLocation requiredSkill;
 
     public SkillRequirement(ResourceLocation skill) {
@@ -47,5 +46,4 @@ public class SkillRequirement extends IBioengineeringSkillRequirement {
                                 skill.getNameComponent().copy()))
         );
     }
-
 }
