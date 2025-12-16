@@ -4,7 +4,6 @@ import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.dna.bioengineering_skill.category.BioengineeringSkillCategory;
 import net.farkas.wildaside.dna.bioengineering_skill.requirement.AllRequirements;
 import net.farkas.wildaside.dna.bioengineering_skill.requirement.IBioengineeringSkillRequirement;
-import net.farkas.wildaside.screen.bioengineering_workstation.VisualStrand;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -14,30 +13,22 @@ public class BioengineeringSkill {
     private final ResourceLocation id;
     private final String name;
     private final ResourceLocation texture;
-    private final int minValue, maxValue;
     private final IBioengineeringSkillRequirement requirement;
     private final BioengineeringSkillCategory category;
-    private final VisualStrand strand;
 
     private BioengineeringSkill(Builder builder) {
         this.id = builder.id;
         this.name = builder.name;
         this.texture = builder.texture;
-        this.minValue = builder.minValue;
-        this.maxValue = builder.maxValue;
         this.requirement = builder.requirement;
         this.category = builder.category;
-        this.strand = builder.strand;
     }
 
     public ResourceLocation getId() { return id; }
     public String getName() { return name; }
     public ResourceLocation getTexture() { return texture; }
-    public int getMinValue() { return minValue; }
-    public int getMaxValue() { return maxValue; }
     public IBioengineeringSkillRequirement getRequirement() { return requirement; }
     public BioengineeringSkillCategory getCategory() { return category; }
-    public VisualStrand getStrand() { return strand; }
 
     public Component getNameComponent() {
         return Component.translatable("skill.wildaside.bioengineering_skill.name." + name);
@@ -51,11 +42,8 @@ public class BioengineeringSkill {
         private ResourceLocation id;
         private String name;
         private ResourceLocation texture;
-        private int minValue = 0;
-        private int maxValue = 1;
         private IBioengineeringSkillRequirement requirement = new AllRequirements(List.of());
         private BioengineeringSkillCategory category;
-        private VisualStrand strand;
 
         public ResourceLocation id(ResourceLocation id) {
             this.id = id;
@@ -72,16 +60,6 @@ public class BioengineeringSkill {
             return this;
         }
 
-        public Builder minValue(int minValue) {
-            this.minValue = minValue;
-            return this;
-        }
-
-        public Builder maxValue(int maxValue) {
-            this.maxValue = maxValue;
-            return this;
-        }
-
         public Builder requirement(IBioengineeringSkillRequirement requirement) {
             this.requirement = requirement;
             return this;
@@ -89,11 +67,6 @@ public class BioengineeringSkill {
 
         public Builder category(BioengineeringSkillCategory category) {
             this.category = category;
-            return this;
-        }
-
-        public Builder strand(VisualStrand strand) {
-            this.strand = strand;
             return this;
         }
 
@@ -114,18 +87,10 @@ public class BioengineeringSkill {
                 this.texture = new ResourceLocation(WildAside.MOD_ID, "textures/skill/" +  name + ".png");
             }
 
-            if (maxValue < minValue) {
-                WildAside.LOGGER.warn("BioengineeringSkill {}: max value ({}) is less than min value ({}), correcting max value to min value + 1.", name, maxValue, minValue);
-                this.maxValue = minValue + 1;
-            }
-
             if (requirement == null) {
                 requirement = new AllRequirements(List.of());
             }
 
-            if (strand == null) {
-                strand = BioengineeringSkillRegistry.get(requirement.getRequiredSkills().get(0)).getStrand();
-            }
 
             return new BioengineeringSkill(this);
         }
