@@ -3,8 +3,12 @@ package net.farkas.wildaside.dna.trait;
 import net.minecraft.world.entity.LivingEntity;
 
 public class ResistanceTrait extends Trait {
-    public ResistanceTrait(String name, TraitType type, float baseInstability) {
+    public ResistanceTrait(String name, float baseInstability, TraitType type) {
         super(name, type, baseInstability);
+    }
+
+    public ResistanceTrait(String name, float baseInstability) {
+        super(name, TraitType.RESISTANCE, baseInstability);
     }
 
     @Override

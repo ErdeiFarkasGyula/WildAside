@@ -83,8 +83,8 @@ public class Gene {
 
     public static Gene deserializeNBT(CompoundTag tag) {
         Trait trait = TraitRegistry.getByName(tag.getString(TRAIT));
-        Allele alleleA = Allele.createFromTag(tag.getCompound(ALLELE_A));
-        Allele alleleB = Allele.createFromTag(tag.getCompound(ALLELE_B));
+        Allele alleleA = Allele.deserializeNBT(tag.getCompound(ALLELE_A));
+        Allele alleleB = Allele.deserializeNBT(tag.getCompound(ALLELE_B));
 
         UUID uuid = DnaUtils.generateUuid(trait.getName());
         if (tag.contains(UUID)) {

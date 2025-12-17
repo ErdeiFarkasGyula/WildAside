@@ -1,9 +1,10 @@
 package net.farkas.wildaside.dna;
 
-import com.google.common.collect.Multimap;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.config.ModConfig;
 import net.farkas.wildaside.dna.allele.Allele;
+import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
+import net.farkas.wildaside.dna.allele.value.ResourceLocationAlleleValue;
 import net.farkas.wildaside.dna.dominance.Dominance;
 import net.farkas.wildaside.dna.speed.MobSpeedResultStorage;
 import net.farkas.wildaside.dna.speed.MobSpeedTesting;
@@ -11,19 +12,18 @@ import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitType;
 import net.farkas.wildaside.dna.trait.TraitRegistry;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.EntityTypeTags;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.animal.Cat;
+import net.minecraft.world.entity.animal.CatVariant;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -47,51 +47,11 @@ public class DnaUtils {
         return java.util.UUID.nameUUIDFromBytes(name.getBytes(StandardCharsets.UTF_8));
     }
 
-    public static float getStableAttributeValue(LivingEntity entity, Attribute attribute) {
-        AttributeInstance instance = entity.getAttribute(attribute);
-        if (instance == null) return 0.0f;
-
-        double base = instance.getBaseValue();
-        double add = 0.0;
-        double multBase = 1.0;
-        double multTotal = 1.0;
-
-        for (AttributeModifier mod : instance.getModifiers()) {
-            String name = mod.getName().toLowerCase(Locale.ROOT);
-
-            if (name.contains("potion") || name.contains("effect") || name.contains("temporary")) continue;
-            if (isEquipmentModifier(entity, mod)) continue;
-
-            switch (mod.getOperation()) {
-                case ADDITION -> add += mod.getAmount();
-                case MULTIPLY_BASE -> multBase += mod.getAmount();
-                case MULTIPLY_TOTAL -> multTotal += mod.getAmount();
-            }
-        }
-
-        float result = (float) ((base * multBase + add) * multTotal);
-        if (result == -1) return 0;
-        return result;
-    }
-
     public static float getAttributeValue(LivingEntity entity, Attribute attribute) {
         AttributeInstance instance = entity.getAttribute(attribute);
         if (instance == null) return 0.0f;
 
         return (float) instance.getBaseValue();
-    }
-
-    private static boolean isEquipmentModifier(LivingEntity entity, AttributeModifier modifier) {
-        for (EquipmentSlot slot : EquipmentSlot.values()) {
-            ItemStack stack = entity.getItemBySlot(slot);
-            if (!stack.isEmpty()) {
-                Multimap<Attribute, AttributeModifier> itemModifiers = stack.getAttributeModifiers(slot);
-                if (itemModifiers.containsValue(modifier)) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     public static Map<Trait, Gene> generateBaseGenes(LivingEntity entity, boolean preGen) {
@@ -111,8 +71,8 @@ public class DnaUtils {
                         }
                     }
 
-                    Allele alleleA = createAllele(trait, baseValue, seed, 0);
-                    Allele alleleB = createAllele(trait, baseValue, seed, 1);
+                    Allele alleleA = createFloatAllele(trait, baseValue, seed, 0);
+                    Allele alleleB = createFloatAllele(trait, baseValue, seed, 1);
 
                     genes.put(trait, new Gene(trait, alleleA, alleleB));
                 }
@@ -125,14 +85,37 @@ public class DnaUtils {
 
         if (entity.getType() == EntityType.BLAZE) {
             generateAbilityGene(genes, TraitRegistry.FIRE_ABILITY, seed);
-        } else if (entity.getType() == EntityType.ENDERMAN) {
+        }
+        else if (entity.getType() == EntityType.ENDERMAN) {
             generateAbilityGene(genes, TraitRegistry.TELEPORT_ABILITY, seed);
         }
+
+        generateAppearanceGenes(genes, seed, entity);
 
         return genes;
     }
 
-    private static Allele createAllele(Trait trait, float baseValue, long seed, int index) {
+    private static void generateAppearanceGenes(Map<Trait, Gene> genes, long seed, LivingEntity entity) {
+        if (entity instanceof Cat) {
+
+            Allele alleleA = new Allele(
+                    new ResourceLocationAlleleValue(BuiltInRegistries.CAT_VARIANT.getKey(BuiltInRegistries.CAT_VARIANT.get(CatVariant.TABBY))),
+                    0.02f,
+                    0.6f,
+                    Dominance.DOMINANT
+            );
+            Allele alleleB = new Allele(
+                    new ResourceLocationAlleleValue(BuiltInRegistries.CAT_VARIANT.getKey(BuiltInRegistries.CAT_VARIANT.get(CatVariant.RED))),
+                    0.02f,
+                    0.6f,
+                    Dominance.RECESSIVE
+            );
+
+            genes.put(TraitRegistry.CAT_VARIANT, new Gene(TraitRegistry.CAT_VARIANT, alleleA, alleleB));
+        }
+    }
+
+    private static Allele createFloatAllele(Trait trait, float baseValue, long seed, int index) {
         float gaussian = DnaUtils.deterministicGaussian(seed, trait.getName() + index);
 
         Dominance dominance = trait.getTraitType().getDominanceExpression().chooseDominance(trait, seed, index);
@@ -143,16 +126,17 @@ public class DnaUtils {
 
         float value = baseValue * (1 + 0.2f * gaussian);
 
-        return new Allele(value, mutationRate, stability, dominance);
+        return new Allele(new FloatAlleleValue(value), mutationRate, stability, dominance);
     }
 
     private static void generateResistanceGene(Map<Trait, Gene> genes, Trait trait, long seed, boolean condition) {
         Allele alleleA, alleleB;
 
         if (condition) {
-            alleleA = createAllele(trait, 1f, seed, 0);
-            alleleB = createAllele(trait, 1f, seed, 1);
-        } else {
+            alleleA = createFloatAllele(trait, 1f, seed, 0);
+            alleleB = createFloatAllele(trait, 1f, seed, 1);
+        }
+        else {
             alleleA = maybeMutateZeroAllele(trait, seed, 0);
             alleleB = maybeMutateZeroAllele(trait, seed, 1);
         }
@@ -160,35 +144,9 @@ public class DnaUtils {
     }
 
     private static void generateAbilityGene(Map<Trait, Gene> genes, Trait trait, long seed) {
-        Allele alleleA = createAllele(trait, trait.getInstabilityModifier() * 100f, seed, 0);
-        Allele alleleB = createAllele(trait, trait.getInstabilityModifier() * 100f, seed, 1);
+        Allele alleleA = createFloatAllele(trait, trait.getInstabilityModifier() * 100f, seed, 0);
+        Allele alleleB = createFloatAllele(trait, trait.getInstabilityModifier() * 100f, seed, 1);
         genes.put(trait, new Gene(trait, alleleA, alleleB));
-    }
-
-    public static Allele mutateAllele(Allele allele, LivingEntity entity) {
-        long seed = entity.getUUID().getLeastSignificantBits();
-        String salt = allele.toString();
-
-        float gaussian = deterministicGaussian(seed, salt);
-
-        float averageMutation = 0.1f;
-
-        float baseMutation = allele.getMutationRate();
-        float mutation = gaussian * baseMutation + averageMutation;
-
-        float newValue = allele.getValue() * (1.0f + mutation);
-
-        float traitBaseMutation = 0.03f;
-
-        float newMutationRate = traitBaseMutation * (1f + Math.abs(newValue) * 0.1f);
-
-        float baseStability = allele.getStability();
-        float newStability = baseStability - (Math.abs(newValue) * 0.1f) + (gaussian * 0.05f);
-
-        newStability = Mth.clamp(newStability, 0, 100);
-        Dominance newDom = generateNewDominance(allele, newMutationRate, seed, salt);
-
-        return new Allele(newValue, newMutationRate, newStability, newDom);
     }
 
     private static Allele maybeMutateZeroAllele(Trait trait, long seed, int index) {
@@ -204,12 +162,11 @@ public class DnaUtils {
 
             Dominance dom = deterministicDominancePick(seed, trait.getName() + "_zero_dom" + index);
 
-            return new Allele(mutatedValue, mutationRate, stability, dom);
+            return new Allele(new FloatAlleleValue(mutatedValue), mutationRate, stability, dom);
         }
 
-        return new Allele(0f, 0f, trait.getInstabilityModifier(), Dominance.RECESSIVE);
+        return new Allele(new FloatAlleleValue(0.0f), 0f, trait.getInstabilityModifier(), Dominance.RECESSIVE);
     }
-
 
     private static long mix64(long x) {
         x ^= (x >>> 30);
@@ -226,7 +183,7 @@ public class DnaUtils {
         h ^= mix64(salt.hashCode());
         h = mix64(h);
 
-        return (h >>> 40) / (float)(1L << 24);
+        return (h >>> 40) / (float) (1L << 24);
     }
 
     private static float deterministicGaussian(long seed, String salt) {
@@ -235,7 +192,7 @@ public class DnaUtils {
 
         u1 = Math.max(u1, 1e-12f);
 
-        return (float)(Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2 * Math.PI * u2));
+        return (float) (Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2 * Math.PI * u2));
     }
 
     private static Dominance generateNewDominance(Allele allele, float mutationRate, long seed, String salt) {

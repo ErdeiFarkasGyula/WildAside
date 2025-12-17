@@ -4,8 +4,12 @@ import net.farkas.wildaside.dna.ability.IAbility;
 import net.minecraft.world.entity.LivingEntity;
 
 public class AbilityTrait extends Trait {
-    public AbilityTrait(String name, TraitType type, float baseInstability) {
+    public AbilityTrait(String name, float baseInstability, TraitType type) {
         super(name, type, baseInstability);
+    }
+
+    public AbilityTrait(String name, float baseInstability) {
+        super(name, TraitType.ABILITY, baseInstability);
     }
 
     @Override

@@ -12,6 +12,7 @@ import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.config.ModConfig;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.allele.Allele;
+import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillPointOperation;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillUtils;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillRegistry;
@@ -357,8 +358,8 @@ public class ModCommands {
             return 0;
         }
 
-        Allele alleleA = new Allele(value, 0.05f, trait.getInstabilityModifier(), Dominance.DOMINANT);
-        Allele alleleB = new Allele(value, 0.05f, trait.getInstabilityModifier(), Dominance.RECESSIVE);
+        Allele alleleA = new Allele(new FloatAlleleValue(value), 0.05f, trait.getInstabilityModifier(), Dominance.DOMINANT);
+        Allele alleleB = new Allele(new FloatAlleleValue(value), 0.05f, trait.getInstabilityModifier(), Dominance.RECESSIVE);
 
         livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
             Gene gene = new Gene(trait, alleleA, alleleB);

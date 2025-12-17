@@ -16,14 +16,28 @@ public class AttributeTrait extends Trait {
     private final UUID modifierUuid;
     private final AttributeModifier.Operation operation;
 
-    public AttributeTrait(String name, TraitType type, float baseInstability, ResourceLocation attributeRes, AttributeModifier.Operation operation) {
+    public AttributeTrait(String name, float baseInstability, ResourceLocation attributeRes, TraitType type, AttributeModifier.Operation operation) {
         super(name, type, baseInstability);
         this.attributeRes = attributeRes;
         this.modifierUuid = DnaUtils.generateUuid(DnaUtils.fullName(name));
         this.operation = operation;
     }
 
-    public AttributeTrait(String name, TraitType type, float baseInstability, ResourceLocation attributeRes) {
+    public AttributeTrait(String name, float baseInstability, ResourceLocation attributeRes, AttributeModifier.Operation operation) {
+        super(name, TraitType.CORE, baseInstability);
+        this.attributeRes = attributeRes;
+        this.modifierUuid = DnaUtils.generateUuid(DnaUtils.fullName(name));
+        this.operation = operation;
+    }
+
+    public AttributeTrait(String name, float baseInstability, ResourceLocation attributeRes) {
+        super(name, TraitType.CORE, baseInstability);
+        this.attributeRes = attributeRes;
+        this.modifierUuid = DnaUtils.generateUuid(DnaUtils.fullName(name));
+        this.operation = AttributeModifier.Operation.ADDITION;
+    }
+
+    public AttributeTrait(String name, float baseInstability, TraitType type, ResourceLocation attributeRes) {
         super(name, type, baseInstability);
         this.attributeRes = attributeRes;
         this.modifierUuid = DnaUtils.generateUuid(DnaUtils.fullName(name));
