@@ -4,6 +4,7 @@ import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.allele.value.AlleleValue;
+import net.farkas.wildaside.dna.allele.value.EnumAlleleValue;
 import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitType;
@@ -103,6 +104,7 @@ public class DnaHolderItem extends Item {
             displayGenesSection(tooltip, dna, TraitType.CORE, getTranslatable(CORE_TRAITS));
             displayGenesSection(tooltip, dna, TraitType.RESISTANCE, getTranslatable(RESISTANCES));
             displayGenesSection(tooltip, dna, TraitType.ABILITY, getTranslatable(ABILITIES));
+            displayGenesSection(tooltip, dna, TraitType.APPEARANCE, getTranslatable(APPEARANCE));
         }
     }
 
@@ -127,6 +129,8 @@ public class DnaHolderItem extends Item {
                 float value = floatAlleleValue.get() / 20;
                 value *= 100;
                 valueStr = String.format("%.2f", value) + "%";
+            } else if (type == TraitType.APPEARANCE && valueHolder instanceof EnumAlleleValue<?> enumAlleleValue) {
+                valueStr = enumAlleleValue.get().toString();
             }
 
             tooltip.add(Component.literal("- ")

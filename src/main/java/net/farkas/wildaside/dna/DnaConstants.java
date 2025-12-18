@@ -46,6 +46,7 @@ public class DnaConstants {
     public static final String CORE_TRAITS = "core_traits";
     public static final String RESISTANCES = "resistances";
     public static final String ABILITIES = "abilities";
+    public static final String APPEARANCE = "appearance";
 
     public static final String SYRINGE_PROGRESS = "syringe_progress";
     public static final String INWARDS = "inwards";

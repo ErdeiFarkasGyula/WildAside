@@ -233,6 +233,7 @@
   "dna.wildaside.core_traits": "Alap tulajdonságok",
   "dna.wildaside.resistances": "Ellenállások",
   "dna.wildaside.abilities": "Képességek",
+  "dna.wildaside.appearance": "Kinézet",
   "dna.wildaside.allele": "Allele",
   "dna.wildaside.alleleA": "Allél A",
   "dna.wildaside.alleleB": "Allél B",
@@ -256,6 +257,7 @@
   "trait.wildaside.freeze_resistance": "Fagyás ellenállás",
   "trait.wildaside.fire_ability": "Tűz képesség",
   "trait.wildaside.teleport_ability": "Teleportálás képesség",
+  "trait.wildaside.cat_variant": "Macska fajta",
 
   "skill.wildaside.points": "Képesség pontok: %1$s",
   "skill.wildaside.already_unlocked": "Képesség már feloldva",

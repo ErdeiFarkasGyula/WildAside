@@ -233,6 +233,7 @@
   "dna.wildaside.core_traits": "Core Traits",
   "dna.wildaside.resistances": "Resistances",
   "dna.wildaside.abilities": "Abilities",
+  "dna.wildaside.appearance": "Appearance",
   "dna.wildaside.allele": "Allele",
   "dna.wildaside.alleleA": "Allele A",
   "dna.wildaside.alleleB": "Allele B",
@@ -256,6 +257,7 @@
   "trait.wildaside.freeze_resistance": "Freeze Resistance",
   "trait.wildaside.fire_ability": "Fire Ability",
   "trait.wildaside.teleport_ability": "Teleport Ability",
+  "trait.wildaside.cat_variant": "Cat Variant",
 
   "skill.wildaside.points": "Skill points: %1$s",
   "skill.wildaside.already_unlocked": "Skill already unlocked",
