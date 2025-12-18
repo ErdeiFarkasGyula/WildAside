@@ -243,7 +243,7 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
                 for (int j = 0; j < genes.size(); j++) {
                     Gene gene = genes.values().stream().toList().get(j);
                     if (gene.getTrait().getTraitType() == TraitType.ABILITY) {
-                        if (gene.getExpressedValue() instanceof FloatAlleleValue floatAlleleValue) {
+                        if (gene.getExpressedValueHolder() instanceof FloatAlleleValue floatAlleleValue) {
                             if (floatAlleleValue.get() == 0.0f) {
                                 slotCorrection++;
                                 continue;

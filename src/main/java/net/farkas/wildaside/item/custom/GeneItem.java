@@ -39,12 +39,14 @@ public class GeneItem extends Item {
             Allele alleleB = gene.getAlleleB();
 
             tooltip.add(Component.translatable("trait.wildaside." + trait.getName()).withStyle(trait.getTraitType().getHeaderColour()));
-            Component expressedValueString = gene.getExpressedValue().format();
-            if (gene.getExpressedValue() instanceof FloatAlleleValue floatAlleleValue) {
+            Component expressedValueString = gene.getExpressedValueHolder().format();
+
+            if (gene.getExpressedValueHolder() instanceof FloatAlleleValue floatAlleleValue) {
                 System.out.println(expressedValueString);
                 expressedValueString = floatAlleleValue.format();
             }
-            tooltip.add(Component.literal("- " + expressedValueString).withStyle(ChatFormatting.GREEN));
+
+            tooltip.add(Component.literal("- " + expressedValueString.getString()).withStyle(ChatFormatting.GREEN));
 
 
             Minecraft mc = Minecraft.getInstance();

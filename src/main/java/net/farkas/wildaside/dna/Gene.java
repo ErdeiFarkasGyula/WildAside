@@ -57,13 +57,13 @@ public class Gene {
         this.alleleB = alleleB;
     }
 
-    public AlleleValue getExpressedValue() {
+    public AlleleValue getExpressedValueHolder() {
         return TraitExpression.evaluate(alleleA, alleleB);
     }
 
     public void apply(Entity entity) {
         if (entity instanceof LivingEntity livingEntity) {
-            trait.apply(livingEntity, getExpressedValue());
+            trait.apply(livingEntity, getExpressedValueHolder());
         }
     }
 

@@ -117,7 +117,7 @@ public class DnaHolderItem extends Item {
         tooltip.add(title.withStyle(type.getHeaderColour()));
 
         filtered.values().forEach(gene -> {
-            AlleleValue valueHolder = gene.getExpressedValue();
+            AlleleValue valueHolder = gene.getExpressedValueHolder();
             String valueStr = valueHolder.format().getString();
 
             if (type == TraitType.ABILITY && valueHolder instanceof FloatAlleleValue floatAlleleValue) {

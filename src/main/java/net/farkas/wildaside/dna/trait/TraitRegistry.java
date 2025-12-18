@@ -70,7 +70,7 @@ public class TraitRegistry {
         if (trait == null || genes == null) return new FloatAlleleValue(0.0f);
         Gene gene = genes.get(trait);
         if (gene == null) return new FloatAlleleValue(0.0f);
-        return gene.getExpressedValue();
+        return gene.getExpressedValueHolder();
     }
 
     public static Component translatableTrait(Trait trait) {
