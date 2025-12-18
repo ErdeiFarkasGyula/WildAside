@@ -58,11 +58,11 @@ public class GeneItem extends Item {
 
                     tooltip.add(Component.translatable("dna.wildaside.alleleA").withStyle(ChatFormatting.AQUA));
                     tooltip.add(Component.literal("- ").append(alleleA.getDominance().getComponent()));
-                    tooltip.add(Component.literal("- " + alleleA.getValueHolder().format()));
+                    tooltip.add(Component.literal("- " + alleleA.getValueHolder().format().getString()));
 
                     tooltip.add(Component.translatable("dna.wildaside.alleleB").withStyle(ChatFormatting.AQUA));
                     tooltip.add(Component.literal("- ").append(alleleB.getDominance().getComponent()));
-                    tooltip.add(Component.literal("- " + alleleB.getValueHolder().format()));
+                    tooltip.add(Component.literal("- " + alleleB.getValueHolder().format().getString()));
                 }
             });
         }
