@@ -5,6 +5,8 @@ import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.config.ModConfig;
 import net.farkas.wildaside.dna.ability.AbilityRegistry;
 import net.farkas.wildaside.dna.ability.IAbility;
+import net.farkas.wildaside.dna.allele.value.AlleleValue;
+import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitType;
 import net.farkas.wildaside.dna.trait.TraitRegistry;
@@ -88,9 +90,11 @@ public class DnaEventHandler {
             }
 
             if (trait != null) {
-                float value = TraitRegistry.getTraitValue(dna.getGenes(), trait);
-                dna.setStability(dna.getStability() - (event.getAmount() * 0.25f));
-                event.setAmount(event.getAmount() * (1.0f - value));
+                AlleleValue value = TraitRegistry.getTraitValue(dna.getGenes(), trait);
+                if (value instanceof FloatAlleleValue floatAlleleValue) {
+                    dna.setStability(dna.getStability() - (event.getAmount() * 0.25f));
+                    event.setAmount(event.getAmount() * (1.0f - floatAlleleValue.get()));
+                }
             }
         });
     }

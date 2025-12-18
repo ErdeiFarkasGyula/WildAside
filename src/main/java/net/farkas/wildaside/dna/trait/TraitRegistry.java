@@ -2,6 +2,9 @@ package net.farkas.wildaside.dna.trait;
 
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
+import net.farkas.wildaside.dna.allele.value.AlleleValue;
+import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
+import net.farkas.wildaside.dna.allele.value.ResourceLocationAlleleValue;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -36,10 +39,11 @@ public class TraitRegistry {
     public static final Trait CAT_VARIANT =
             register(new AppearanceTrait<ResourceLocation>("cat_variant", 1.3f) {
                 @Override
-                public void applyAppearance(LivingEntity entity, ResourceLocation value) {
-                    if (entity instanceof Cat cat) {
-                        if (BuiltInRegistries.CAT_VARIANT.containsKey(value)) {
-                            cat.setVariant(BuiltInRegistries.CAT_VARIANT.get(value));
+                public void apply(LivingEntity entity, AlleleValue valueHolder) {
+                    if (entity instanceof Cat cat && valueHolder instanceof ResourceLocationAlleleValue resourceLocationAlleleValue) {
+                        ResourceLocation resourceLocation = resourceLocationAlleleValue.get();
+                        if (BuiltInRegistries.CAT_VARIANT.containsKey(resourceLocation)) {
+                            cat.setVariant(BuiltInRegistries.CAT_VARIANT.get(resourceLocation));
                         }
                     }
                 }
@@ -62,10 +66,10 @@ public class TraitRegistry {
         return MAX_HEALTH;
     }
 
-    public static float getTraitValue(Map<Trait, Gene> genes, Trait trait) {
-        if (trait == null || genes == null) return 0.0f;
+    public static AlleleValue getTraitValue(Map<Trait, Gene> genes, Trait trait) {
+        if (trait == null || genes == null) return new FloatAlleleValue(0.0f);
         Gene gene = genes.get(trait);
-        if (gene == null) return 0.0f;
+        if (gene == null) return new FloatAlleleValue(0.0f);
         return gene.getExpressedValue();
     }
 

@@ -1,6 +1,7 @@
 package net.farkas.wildaside.dna;
 
 import net.farkas.wildaside.dna.allele.Allele;
+import net.farkas.wildaside.dna.allele.value.AlleleValue;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitExpression;
 import net.farkas.wildaside.dna.trait.TraitRegistry;
@@ -56,7 +57,7 @@ public class Gene {
         this.alleleB = alleleB;
     }
 
-    public float getExpressedValue() {
+    public AlleleValue getExpressedValue() {
         return TraitExpression.evaluate(alleleA, alleleB);
     }
 

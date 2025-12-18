@@ -1,6 +1,8 @@
 package net.farkas.wildaside.dna.trait;
 
 import net.farkas.wildaside.dna.DnaUtils;
+import net.farkas.wildaside.dna.allele.value.AlleleValue;
+import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitType;
 import net.minecraft.resources.ResourceLocation;
@@ -45,7 +47,7 @@ public class AttributeTrait extends Trait {
     }
 
     @Override
-    public void apply(LivingEntity entity, float value) {
+    public void apply(LivingEntity entity, AlleleValue valueHolder) {
         var attribute = ForgeRegistries.ATTRIBUTES.getValue(attributeRes);
         if (attribute == null) return;
         AttributeInstance instance = entity.getAttribute(attribute);
@@ -57,28 +59,21 @@ public class AttributeTrait extends Trait {
         double base = instance.getBaseValue();
         if (Double.isNaN(base) || base == 0.0) base = 1.0;
 
-        double modifierValue = value - base;
-        AttributeModifier.Operation op;
+        if (valueHolder instanceof FloatAlleleValue floatAlleleValue) {
+            float value = floatAlleleValue.get();
+            double modifierValue = value - base;
+            AttributeModifier.Operation op;
 
-//        if (attribute == Attributes.ARMOR || attribute == Attributes.ARMOR_TOUGHNESS || attribute == Attributes.ATTACK_KNOCKBACK) {
-//            modifierValue = value - base;
-//            op = AttributeModifier.Operation.ADDITION;
-//        } else {
-//            modifierValue = (value / base) - 1.0;
-//            op = AttributeModifier.Operation.MULTIPLY_BASE;
-//        }
-
-        if (operation == AttributeModifier.Operation.MULTIPLY_BASE) {
-            modifierValue = (value / base) - 1.0;
+            if (operation == AttributeModifier.Operation.MULTIPLY_BASE) {
+                modifierValue = (value / base) - 1.0;
+            }
+            else if (operation == AttributeModifier.Operation.ADDITION) {
+                modifierValue = value - base;
+            }
+            AttributeModifier modifier = new AttributeModifier(modifierUuid, DnaUtils.fullName(getName()), modifierValue, operation);
+            instance.addPermanentModifier(modifier);
         }
-        else if (operation == AttributeModifier.Operation.ADDITION) {
-            modifierValue = value - base;
-        }
-
-        AttributeModifier modifier = new AttributeModifier(modifierUuid, DnaUtils.fullName(getName()), modifierValue, operation);
-        instance.addPermanentModifier(modifier);
     }
-
 
     @Override
     public void remove(LivingEntity entity) {

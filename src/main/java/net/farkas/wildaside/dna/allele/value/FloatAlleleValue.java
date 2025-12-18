@@ -68,6 +68,6 @@ public class FloatAlleleValue implements AlleleValue {
 
     @Override
     public Component format() {
-        return Component.literal(DnaUtils.getFormattedString(value));
+        return Component.literal(DnaUtils.getFormattedFloatString(value));
     }
 }

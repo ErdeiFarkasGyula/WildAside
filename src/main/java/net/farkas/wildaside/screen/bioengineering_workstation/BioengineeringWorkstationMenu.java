@@ -4,6 +4,7 @@ import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.BioengineeringWorkstationBlockEntity;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.Gene;
+import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitType;
 import net.farkas.wildaside.item.custom.DnaHolderItem;
@@ -241,9 +242,13 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
 
                 for (int j = 0; j < genes.size(); j++) {
                     Gene gene = genes.values().stream().toList().get(j);
-                    if (gene.getTrait().getTraitType() == TraitType.ABILITY && gene.getExpressedValue() == 0.0f) {
-                        slotCorrection++;
-                        continue;
+                    if (gene.getTrait().getTraitType() == TraitType.ABILITY) {
+                        if (gene.getExpressedValue() instanceof FloatAlleleValue floatAlleleValue) {
+                            if (floatAlleleValue.get() == 0.0f) {
+                                slotCorrection++;
+                                continue;
+                            }
+                        }
                     }
 
                     ItemStack geneStack = GeneItem.createFromTag(gene);

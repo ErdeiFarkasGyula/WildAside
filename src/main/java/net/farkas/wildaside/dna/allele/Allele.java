@@ -6,21 +6,21 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 
 public class Allele {
-    private AlleleValue value;
+    private AlleleValue valueHolder;
     private float mutationRate;
     private float stability;
     private Dominance dominance;
 
-    public Allele(AlleleValue value, float mutationRate, float stability, Dominance dominance) {
-        this.value = value;
+    public Allele(AlleleValue valueHolder, float mutationRate, float stability, Dominance dominance) {
+        this.valueHolder = valueHolder;
         this.mutationRate = mutationRate;
         this.stability = stability;
         this.dominance = dominance;
     }
 
-    public AlleleValue getValue() { return value; }
-    public void setValue(AlleleValue value) {
-        this.value = value;
+    public AlleleValue getValueHolder() { return valueHolder; }
+    public void setValueHolder(AlleleValue valueHolder) {
+        this.valueHolder = valueHolder;
     }
 
     public float getMutationRate() {
@@ -47,10 +47,10 @@ public class Allele {
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
 
-        tag.putString("ValueType", value.getType().name());
+        tag.putString("ValueType", valueHolder.getType().name());
 
         CompoundTag valueTag = new CompoundTag();
-        value.serialize(valueTag);
+        valueHolder.serialize(valueTag);
         tag.put("Value", valueTag);
 
         tag.putFloat("MutationRate", mutationRate);
@@ -81,6 +81,6 @@ public class Allele {
 
     @Override
     public String toString() {
-        return "Allele[" + "value=" + value + ", mutationRate=" + mutationRate + ", stability=" + stability + ", dominance=" + dominance + ']';
+        return "Allele[" + "value=" + valueHolder + ", mutationRate=" + mutationRate + ", stability=" + stability + ", dominance=" + dominance + ']';
     }
 }

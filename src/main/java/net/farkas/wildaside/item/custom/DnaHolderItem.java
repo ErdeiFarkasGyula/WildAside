@@ -3,6 +3,8 @@ package net.farkas.wildaside.item.custom;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
+import net.farkas.wildaside.dna.allele.value.AlleleValue;
+import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitType;
 import net.minecraft.ChatFormatting;
@@ -115,13 +117,14 @@ public class DnaHolderItem extends Item {
         tooltip.add(title.withStyle(type.getHeaderColour()));
 
         filtered.values().forEach(gene -> {
-            float value = gene.getExpressedValue();
-            String valueStr = String.format("%.2f", value);
+            AlleleValue valueHolder = gene.getExpressedValue();
+            String valueStr = valueHolder.format().getString();
 
-            if (type == TraitType.ABILITY) {
-                value /= 20;
+            if (type == TraitType.ABILITY && valueHolder instanceof FloatAlleleValue floatAlleleValue) {
+                float value = floatAlleleValue.get() / 20;
                 valueStr = String.format("%.2f", value) + "s";
-            } else if (type == TraitType.RESISTANCE) {
+            } else if (type == TraitType.RESISTANCE && valueHolder instanceof FloatAlleleValue floatAlleleValue) {
+                float value = floatAlleleValue.get() / 20;
                 value *= 100;
                 valueStr = String.format("%.2f", value) + "%";
             }

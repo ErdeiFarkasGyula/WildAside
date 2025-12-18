@@ -1,9 +1,9 @@
 package net.farkas.wildaside.item.custom;
 
 import net.farkas.wildaside.capability.bioengineering.BioengineeringSkillsCapability;
-import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.allele.Allele;
+import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillRegistry;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.item.ModItems;
@@ -39,7 +39,13 @@ public class GeneItem extends Item {
             Allele alleleB = gene.getAlleleB();
 
             tooltip.add(Component.translatable("trait.wildaside." + trait.getName()).withStyle(trait.getTraitType().getHeaderColour()));
-            tooltip.add(Component.literal("- " + DnaUtils.getFormattedString(gene.getExpressedValue())).withStyle(ChatFormatting.GREEN));
+            Component expressedValueString = gene.getExpressedValue().format();
+            if (gene.getExpressedValue() instanceof FloatAlleleValue floatAlleleValue) {
+                System.out.println(expressedValueString);
+                expressedValueString = floatAlleleValue.format();
+            }
+            tooltip.add(Component.literal("- " + expressedValueString).withStyle(ChatFormatting.GREEN));
+
 
             Minecraft mc = Minecraft.getInstance();
             LocalPlayer player = mc.player;
@@ -50,11 +56,11 @@ public class GeneItem extends Item {
 
                     tooltip.add(Component.translatable("dna.wildaside.alleleA").withStyle(ChatFormatting.AQUA));
                     tooltip.add(Component.literal("- ").append(alleleA.getDominance().getComponent()));
-                    tooltip.add(Component.literal("- " + alleleA.getValue().format()));
+                    tooltip.add(Component.literal("- " + alleleA.getValueHolder().format()));
 
                     tooltip.add(Component.translatable("dna.wildaside.alleleB").withStyle(ChatFormatting.AQUA));
                     tooltip.add(Component.literal("- ").append(alleleB.getDominance().getComponent()));
-                    tooltip.add(Component.literal("- " + alleleB.getValue().format()));
+                    tooltip.add(Component.literal("- " + alleleB.getValueHolder().format()));
                 }
             });
         }

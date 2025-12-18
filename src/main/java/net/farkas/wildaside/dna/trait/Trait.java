@@ -1,5 +1,6 @@
 package net.farkas.wildaside.dna.trait;
 
+import net.farkas.wildaside.dna.allele.value.AlleleValue;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -18,7 +19,7 @@ public abstract class Trait {
     public TraitType getTraitType() { return traitType; }
     public float getInstabilityModifier() { return instabilityModifier; }
 
-    public abstract void apply(LivingEntity entity, float value);
+    public abstract void apply(LivingEntity entity, AlleleValue valueHolder);
     public abstract void remove(LivingEntity entity);
 
     public Component displayName() {

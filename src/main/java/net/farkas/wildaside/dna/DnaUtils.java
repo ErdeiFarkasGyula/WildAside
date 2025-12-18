@@ -218,7 +218,7 @@ public class DnaUtils {
         return Dominance.CO_DOMINANT;
     }
 
-    public static String getFormattedString(float value) {
+    public static String getFormattedFloatString(float value) {
         return String.format("%.2f", value);
     }
 

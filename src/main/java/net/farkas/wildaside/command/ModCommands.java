@@ -12,6 +12,7 @@ import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.config.ModConfig;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.allele.Allele;
+import net.farkas.wildaside.dna.allele.value.AlleleValue;
 import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillPointOperation;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillUtils;
@@ -325,7 +326,7 @@ public class ModCommands {
                     return 0;
                 }
                 livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-                    float value = TraitRegistry.getTraitValue(dna.getGenes(), trait);
+                    AlleleValue value = TraitRegistry.getTraitValue(dna.getGenes(), trait);
                     getTrait(ctx, livingEntity, trait, value);
                 });
             }
@@ -383,7 +384,7 @@ public class ModCommands {
                 Component.translatable("command.wildaside.dna.unknown_trait", traitName));
     }
 
-    public static void getTrait(CommandContext<CommandSourceStack> context, LivingEntity livingEntity, Trait trait, float value) {
+    public static void getTrait(CommandContext<CommandSourceStack> context, LivingEntity livingEntity, Trait trait, AlleleValue value) {
         context.getSource().sendSuccess(() ->
                 Component.translatable("command.wildaside.dna.get_trait", livingEntity.getName(), value, TraitRegistry.translatableTrait(trait)), false);
     }

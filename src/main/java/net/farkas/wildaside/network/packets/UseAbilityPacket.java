@@ -4,6 +4,8 @@ import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.ability.AbilityRegistry;
 import net.farkas.wildaside.dna.ability.IAbility;
+import net.farkas.wildaside.dna.allele.value.AlleleValueType;
+import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
 import net.farkas.wildaside.dna.trait.TraitType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,9 +28,11 @@ public class UseAbilityPacket {
                 for (Gene gene : dna.getGenes().values()) {
                     if (gene.getTrait().getTraitType() == TraitType.ABILITY) {
                         IAbility ability = AbilityRegistry.get(gene.getTrait());
-                        if (ability != null && gene.getExpressedValue() != 0) {
-                            ability.onUse(player, gene.getExpressedValue());
-                            dna.setStability(dna.getStability() - gene.getTrait().getInstabilityModifier() * 0.5f);
+                        if (gene.getExpressedValue() instanceof FloatAlleleValue floatAlleleValue) {
+                            if (ability != null && floatAlleleValue.get() != 0) {
+                                ability.onUse(player, floatAlleleValue.get());
+                                dna.setStability(dna.getStability() - gene.getTrait().getInstabilityModifier() * 0.5f);
+                            }
                         }
                     }
                 }
