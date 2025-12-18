@@ -5,6 +5,8 @@ import net.farkas.wildaside.config.ModConfig;
 import net.farkas.wildaside.dna.allele.Allele;
 import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
 import net.farkas.wildaside.dna.allele.value.ResourceLocationAlleleValue;
+import net.farkas.wildaside.dna.appearance.AppearanceGeneExtractor;
+import net.farkas.wildaside.dna.appearance.AppearanceGeneRegistry;
 import net.farkas.wildaside.dna.dominance.Dominance;
 import net.farkas.wildaside.dna.speed.MobSpeedResultStorage;
 import net.farkas.wildaside.dna.speed.MobSpeedTesting;
@@ -90,29 +92,9 @@ public class DnaUtils {
             generateAbilityGene(genes, TraitRegistry.TELEPORT_ABILITY, seed);
         }
 
-        generateAppearanceGenes(genes, seed, entity);
+        AppearanceGeneRegistry.extract(entity, genes, seed);
 
         return genes;
-    }
-
-    private static void generateAppearanceGenes(Map<Trait, Gene> genes, long seed, LivingEntity entity) {
-        if (entity instanceof Cat) {
-
-            Allele alleleA = new Allele(
-                    new ResourceLocationAlleleValue(BuiltInRegistries.CAT_VARIANT.getKey(BuiltInRegistries.CAT_VARIANT.get(CatVariant.TABBY))),
-                    0.02f,
-                    0.6f,
-                    Dominance.DOMINANT
-            );
-            Allele alleleB = new Allele(
-                    new ResourceLocationAlleleValue(BuiltInRegistries.CAT_VARIANT.getKey(BuiltInRegistries.CAT_VARIANT.get(CatVariant.RED))),
-                    0.02f,
-                    0.6f,
-                    Dominance.RECESSIVE
-            );
-
-            genes.put(TraitRegistry.CAT_VARIANT, new Gene(TraitRegistry.CAT_VARIANT, alleleA, alleleB));
-        }
     }
 
     private static Allele createFloatAllele(Trait trait, float baseValue, long seed, int index) {

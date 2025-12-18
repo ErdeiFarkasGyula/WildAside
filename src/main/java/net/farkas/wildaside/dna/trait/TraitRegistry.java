@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.animal.Cat;
+import net.minecraft.world.entity.animal.frog.Frog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,18 @@ public class TraitRegistry {
                 }
             });
 
+    public static final Trait FROG_VARIANT =
+            register(new AppearanceTrait<ResourceLocation>("frog_variant", 1.2f) {
+                @Override
+                public void apply(LivingEntity entity, AlleleValue valueHolder) {
+                    if (entity instanceof Frog frog && valueHolder instanceof ResourceLocationAlleleValue resourceLocationAlleleValue) {
+                        ResourceLocation resourceLocation = resourceLocationAlleleValue.get();
+                        if (BuiltInRegistries.FROG_VARIANT.containsKey(resourceLocation)) {
+                            frog.setVariant(BuiltInRegistries.FROG_VARIANT.get(resourceLocation));
+                        }
+                    }
+                }
+            });
 
     private static <T extends Trait> T register(T trait) {
         TRAITS.add(trait);
