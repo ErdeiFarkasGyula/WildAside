@@ -261,6 +261,7 @@
   "trait.wildaside.fire_ability": "Fire Ability",
   "trait.wildaside.teleport_ability": "Teleport Ability",
   "trait.wildaside.cat_variant": "Cat Variant",
+  "trait.wildaside.frog_variant": "Frog Variant",
 
   "skill.wildaside.points": "Skill points: %1$s",
   "skill.wildaside.already_unlocked": "Skill already unlocked",

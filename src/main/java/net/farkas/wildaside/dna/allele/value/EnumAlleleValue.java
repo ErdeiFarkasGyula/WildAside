@@ -4,12 +4,17 @@ import net.farkas.wildaside.dna.dominance.Dominance;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 
+import java.util.Arrays;
+import java.util.Locale;
+
 import static java.util.Objects.hash;
 
 public class EnumAlleleValue<E extends Enum<E>> implements AlleleValue {
+    private Class<E> enumClass;
     private E value;
 
     public EnumAlleleValue(E value) {
+        this.enumClass = value.getDeclaringClass();
         this.value = value;
     }
 
@@ -71,5 +76,14 @@ public class EnumAlleleValue<E extends Enum<E>> implements AlleleValue {
     @Override
     public Component format() {
         return Component.literal(value.name().toLowerCase());
+    }
+
+    public AlleleValue parse(String input) {
+        try {
+            return new EnumAlleleValue<>(Enum.valueOf(enumClass, input.toUpperCase(Locale.ROOT)));
+        }
+        catch (Exception e) {
+            throw new IllegalArgumentException("Expected one of: " + Arrays.toString(enumClass.getEnumConstants()));
+        }
     }
 }

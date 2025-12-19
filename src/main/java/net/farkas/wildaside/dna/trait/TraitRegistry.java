@@ -2,6 +2,7 @@ package net.farkas.wildaside.dna.trait;
 
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.allele.Allele;
@@ -65,6 +66,7 @@ public class TraitRegistry {
                         ResourceLocation resourceLocation = resourceLocationAlleleValue.get();
                         if (BuiltInRegistries.FROG_VARIANT.containsKey(resourceLocation)) {
                             frog.setVariant(BuiltInRegistries.FROG_VARIANT.get(resourceLocation));
+                            System.out.println(resourceLocation);
                         }
                     }
                 }
@@ -97,17 +99,7 @@ public class TraitRegistry {
         return Component.translatable("trait.wildaside." + trait.getName());
     }
 
-
-    public static AlleleValue parseValue(Trait trait, AlleleValue valueHolder, CommandContext<CommandSourceStack> ctx) {
-        if (valueHolder instanceof FloatAlleleValue) {
-            return new FloatAlleleValue(FloatArgumentType.getFloat(ctx, VALUE));
-        }
-        else if (valueHolder instanceof ResourceLocationAlleleValue) {
-            ResourceLocation rl = ResourceLocationArgument.getId(ctx, VALUE);
-            return new ResourceLocationAlleleValue(rl);
-        }
-
-        throw new IllegalStateException("Unsupported allele value type for " + trait.getName());
+    public static AlleleValue parseValue(AlleleValue oldValue, String rawInput) throws CommandSyntaxException {
+        return oldValue.parse(rawInput);
     }
-
 }

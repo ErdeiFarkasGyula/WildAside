@@ -13,4 +13,6 @@ public interface AlleleValue {
     void deserialize(CompoundTag tag);
 
     Component format();
+
+    AlleleValue parse(String input);
 }

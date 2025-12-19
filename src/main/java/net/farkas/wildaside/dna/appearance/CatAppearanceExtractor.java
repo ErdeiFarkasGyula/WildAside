@@ -2,8 +2,6 @@ package net.farkas.wildaside.dna.appearance;
 
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.allele.Allele;
-import net.farkas.wildaside.dna.allele.value.ResourceLocationAlleleValue;
-import net.farkas.wildaside.dna.dominance.Dominance;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -11,12 +9,18 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Cat;
 
+import java.util.Collection;
 import java.util.Map;
 
-public class CatAppearanceExtractor implements AppearanceGeneExtractor<Cat> {
+public class CatAppearanceExtractor implements IAppearanceGeneExtractor<Cat> {
     @Override
     public EntityType<Cat> type() {
         return EntityType.CAT;
+    }
+
+    @Override
+    public Trait trait() {
+        return TraitRegistry.CAT_VARIANT;
     }
 
     @Override
@@ -39,5 +43,13 @@ public class CatAppearanceExtractor implements AppearanceGeneExtractor<Cat> {
 
         int idx = (int) (Math.abs(seed * 17) % all.size());
         return all.get(idx);
+    }
+
+    @Override
+    public Collection<String> getSuggestions() {
+        return BuiltInRegistries.CAT_VARIANT.keySet()
+                .stream()
+                .map(ResourceLocation::toString)
+                .toList();
     }
 }

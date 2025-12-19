@@ -10,10 +10,12 @@ import net.farkas.wildaside.capability.bioengineering.BioengineeringSkillsCapabi
 import net.farkas.wildaside.capability.bioengineering.IBioengineeringSkills;
 import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.config.ModConfig;
+import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.allele.Allele;
 import net.farkas.wildaside.dna.allele.value.AlleleValue;
 import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
+import net.farkas.wildaside.dna.appearance.AppearanceGeneRegistry;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillPointOperation;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillUtils;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillRegistry;
@@ -160,12 +162,36 @@ public class ModCommands {
                                                 }))
 
                                         .then(Commands.literal("set")
-                                                .then(Commands.argument(VALUE, FloatArgumentType.floatArg())
+                                                .then(Commands.argument(VALUE, StringArgumentType.greedyString())
+                                                        .suggests((ctx, builder) -> {
+                                                            Entity target;
+                                                            try {
+                                                                target = EntityArgument.getEntity(ctx, TARGET);
+                                                            }
+                                                            catch (CommandSyntaxException e) {
+                                                                return builder.buildFuture();
+                                                            }
+
+                                                            if (!(target instanceof LivingEntity living)) {
+                                                                return builder.buildFuture();
+                                                            }
+
+                                                            Trait trait = TraitRegistry.getByName(
+                                                                    StringArgumentType.getString(ctx, TRAIT)
+                                                            );
+
+                                                            AppearanceGeneRegistry
+                                                                    .getSuggestions(living, trait)
+                                                                    .forEach(builder::suggest);
+
+                                                            return builder.buildFuture();
+                                                        })
                                                         .executes(ctx -> {
                                                             var target = EntityArgument.getEntity(ctx, TARGET);
                                                             return applyGene(ctx, target);
                                                         })
                                                 )
+
                                         )
                                 )
                         )
@@ -320,7 +346,12 @@ public class ModCommands {
         }
 
         living.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
+            if (dna.getGenes().isEmpty()) {
+                dna.setGenes(DnaUtils.generateBaseGenes(living, true));
+            }
+
             Gene gene = dna.getGenes().get(trait);
+
             if (gene == null) {
                 ctx.getSource().sendFailure(Component.translatable("dna.wildaside.no_gene_for_trait", traitName));
                 return;
@@ -363,7 +394,6 @@ public class ModCommands {
         );
     }
 
-
     private static int applyGene(CommandContext<CommandSourceStack> ctx, Entity target) {
         if (!(target instanceof LivingEntity living)) return 0;
 
@@ -375,11 +405,22 @@ public class ModCommands {
             return 0;
         }
 
-        living.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-            Gene old = dna.getGenes().get(trait);
-            if (old == null) return;
+        String rawInput = StringArgumentType.getString(ctx, VALUE);
 
-            AlleleValue newValue = TraitRegistry.parseValue(trait, old.getExpressedValueHolder(), ctx);
+        living.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
+            if (dna.getGenes().isEmpty()) {
+                dna.setGenes(DnaUtils.generateBaseGenes(living, false));
+            }
+
+            Gene old = dna.getGenes().get(trait);
+
+            AlleleValue newValue;
+            try {
+                newValue = TraitRegistry.parseValue(old.getExpressedValueHolder(), rawInput);
+            }
+            catch (CommandSyntaxException e) {
+                throw new RuntimeException(e);
+            }
 
             Allele a = old.getAlleleA().copyWithValue(newValue);
             Allele b = old.getAlleleB().copyWithValue(newValue);
@@ -389,14 +430,14 @@ public class ModCommands {
             dna.applyGene(living, gene);
         });
 
-        ctx.getSource().sendSuccess(() ->
-                        Component.literal("Updated gene ").append(TraitRegistry.translatableTrait(trait)),
+        ctx.getSource().sendSuccess(
+                () -> Component.literal("Updated gene ")
+                        .append(TraitRegistry.translatableTrait(trait)),
                 true
         );
 
         return Command.SINGLE_SUCCESS;
     }
-
 
     private static void unknownTrait(CommandContext<CommandSourceStack> context, String traitName) {
         context.getSource().sendFailure(
@@ -612,5 +653,4 @@ public class ModCommands {
 
         return players.size();
     }
-
 }

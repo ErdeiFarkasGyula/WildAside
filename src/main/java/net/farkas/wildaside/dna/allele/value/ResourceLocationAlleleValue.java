@@ -58,4 +58,14 @@ public class ResourceLocationAlleleValue implements AlleleValue {
     public Component format() {
         return Component.literal(value.getPath());
     }
+
+    @Override
+    public AlleleValue parse(String input) {
+        try {
+            return new ResourceLocationAlleleValue(new ResourceLocation(input));
+        }
+        catch (Exception e) {
+            throw new IllegalArgumentException("Invalid resource location: " + input);
+        }
+    }
 }

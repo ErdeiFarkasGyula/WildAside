@@ -70,4 +70,14 @@ public class FloatAlleleValue implements AlleleValue {
     public Component format() {
         return Component.literal(DnaUtils.getFormattedFloatString(value));
     }
+
+    @Override
+    public AlleleValue parse(String input) {
+        try {
+            return new FloatAlleleValue(Float.parseFloat(input));
+        }
+        catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Expected a number, got '" + input + "'");
+        }
+    }
 }
