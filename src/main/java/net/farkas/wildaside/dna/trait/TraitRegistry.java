@@ -1,10 +1,15 @@
 package net.farkas.wildaside.dna.trait;
 
+import com.mojang.brigadier.arguments.FloatArgumentType;
+import com.mojang.brigadier.context.CommandContext;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
+import net.farkas.wildaside.dna.allele.Allele;
 import net.farkas.wildaside.dna.allele.value.AlleleValue;
 import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
 import net.farkas.wildaside.dna.allele.value.ResourceLocationAlleleValue;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -16,6 +21,8 @@ import net.minecraft.world.entity.animal.frog.Frog;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static net.farkas.wildaside.dna.DnaConstants.VALUE;
 
 public class TraitRegistry {
     public static final List<Trait> TRAITS = new ArrayList<>();
@@ -79,7 +86,7 @@ public class TraitRegistry {
         return MAX_HEALTH;
     }
 
-    public static AlleleValue getTraitValue(Map<Trait, Gene> genes, Trait trait) {
+    public static AlleleValue getTraitValueHolder(Map<Trait, Gene> genes, Trait trait) {
         if (trait == null || genes == null) return new FloatAlleleValue(0.0f);
         Gene gene = genes.get(trait);
         if (gene == null) return new FloatAlleleValue(0.0f);
@@ -89,4 +96,18 @@ public class TraitRegistry {
     public static Component translatableTrait(Trait trait) {
         return Component.translatable("trait.wildaside." + trait.getName());
     }
+
+
+    public static AlleleValue parseValue(Trait trait, AlleleValue valueHolder, CommandContext<CommandSourceStack> ctx) {
+        if (valueHolder instanceof FloatAlleleValue) {
+            return new FloatAlleleValue(FloatArgumentType.getFloat(ctx, VALUE));
+        }
+        else if (valueHolder instanceof ResourceLocationAlleleValue) {
+            ResourceLocation rl = ResourceLocationArgument.getId(ctx, VALUE);
+            return new ResourceLocationAlleleValue(rl);
+        }
+
+        throw new IllegalStateException("Unsupported allele value type for " + trait.getName());
+    }
+
 }

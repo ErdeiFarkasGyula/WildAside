@@ -90,7 +90,7 @@ public class DnaEventHandler {
             }
 
             if (trait != null) {
-                AlleleValue value = TraitRegistry.getTraitValue(dna.getGenes(), trait);
+                AlleleValue value = TraitRegistry.getTraitValueHolder(dna.getGenes(), trait);
                 if (value instanceof FloatAlleleValue floatAlleleValue) {
                     dna.setStability(dna.getStability() - (event.getAmount() * 0.25f));
                     event.setAmount(event.getAmount() * (1.0f - floatAlleleValue.get()));

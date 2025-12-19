@@ -308,50 +308,10 @@ public class ModCommands {
         return affected;
     }
 
-    public static int getGene(CommandContext<CommandSourceStack> ctx, Entity target) {
-        if (target instanceof LivingEntity livingEntity) {
-            String traitName = StringArgumentType.getString(ctx, TRAIT);
-            if (traitName.equals(STABILITY)) {
-                livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-                    float value = dna.getStability();
-                    ctx.getSource().sendSuccess(() ->
-                            Component.translatable("command.wildaside.dna.get_trait", livingEntity.getName(), value,
-                                    Component.translatable("dna.wildaside.stability")), false);
-                });
-            }
-            else {
-                Trait trait = TraitRegistry.getByName(traitName);
-                if (trait == null) {
-                    unknownTrait(ctx, traitName);
-                    return 0;
-                }
-                livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-                    AlleleValue value = TraitRegistry.getTraitValue(dna.getGenes(), trait);
-                    getTrait(ctx, livingEntity, trait, value);
-                });
-            }
-            return Command.SINGLE_SUCCESS;
-        }
-        return 0;
-    }
-
-    private static int applyGene(CommandContext<CommandSourceStack> ctx, Entity target) {
-        if (!(target instanceof LivingEntity livingEntity)) return 0;
+    private static int getGene(CommandContext<CommandSourceStack> ctx, Entity target) {
+        if (!(target instanceof LivingEntity living)) return 0;
 
         String traitName = StringArgumentType.getString(ctx, TRAIT);
-        float value = FloatArgumentType.getFloat(ctx, VALUE);
-
-        if (traitName.equalsIgnoreCase(STABILITY)) {
-            livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-                dna.setStability(value);
-            });
-
-            ctx.getSource().sendSuccess(() ->
-                    Component.translatable("command.wildaside.dna.set_trait",
-                            Component.translatable("dna.wildaside.stability"), livingEntity.getName(), value), false);
-
-            return Command.SINGLE_SUCCESS;
-        }
 
         Trait trait = TraitRegistry.getByName(traitName);
         if (trait == null) {
@@ -359,25 +319,84 @@ public class ModCommands {
             return 0;
         }
 
-        Allele alleleA = new Allele(new FloatAlleleValue(value), 0.05f, trait.getInstabilityModifier(), Dominance.DOMINANT);
-        Allele alleleB = new Allele(new FloatAlleleValue(value), 0.05f, trait.getInstabilityModifier(), Dominance.RECESSIVE);
+        living.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
+            Gene gene = dna.getGenes().get(trait);
+            if (gene == null) {
+                ctx.getSource().sendFailure(Component.translatable("dna.wildaside.no_gene_for_trait", traitName));
+                return;
+            }
 
-        livingEntity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-            Gene gene = new Gene(trait, alleleA, alleleB);
-            dna.getGenes().put(trait, gene);
-            dna.applyGene(livingEntity, gene);
+            Allele a = gene.getAlleleA();
+            Allele b = gene.getAlleleB();
+
+            ctx.getSource().sendSuccess(() -> Component.translatable("item.wildaside.gene")
+                    .append(": ")
+                    .append(TraitRegistry.translatableTrait(trait)), false);
+
+            sendAllele(ctx, "A", a);
+            sendAllele(ctx, "B", b);
+
+            ctx.getSource().sendSuccess(() ->
+                            Component.translatable("dna.wildaside.expressed_value").append(gene.getExpressedValueHolder().format()),
+                    false
+            );
         });
 
-        Component message = Component.translatable(
-                "command.wildaside.dna.set_trait",
-                TraitRegistry.translatableTrait(trait),
-                livingEntity.getName(),
-                String.valueOf(value)
-        );
-
-        ctx.getSource().sendSuccess(() -> message, true);
         return Command.SINGLE_SUCCESS;
     }
+
+    private static void sendAllele(CommandContext<CommandSourceStack> ctx, String label, Allele allele) {
+        ctx.getSource().sendSuccess(() ->
+                        Component.literal(" - ")
+                                .append(Component.translatable("dna.wildaside.allele"))
+                                .append(" " + label + ": ")
+                                .append(allele.getValueHolder().format())
+                                .append(" | ")
+                                .append(allele.getDominance().getComponent())
+                                .append(" | ")
+                                .append(Component.translatable("dna.wildaside.mutation_rate"))
+                                .append(" = " + allele.getMutationRate())
+                                .append(" | ")
+                                .append(Component.translatable("dna.wildaside.stability"))
+                                .append(" = " + allele.getStability()),
+                false
+        );
+    }
+
+
+    private static int applyGene(CommandContext<CommandSourceStack> ctx, Entity target) {
+        if (!(target instanceof LivingEntity living)) return 0;
+
+        String traitName = StringArgumentType.getString(ctx, TRAIT);
+        Trait trait = TraitRegistry.getByName(traitName);
+
+        if (trait == null) {
+            unknownTrait(ctx, traitName);
+            return 0;
+        }
+
+        living.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
+            Gene old = dna.getGenes().get(trait);
+            if (old == null) return;
+
+            AlleleValue newValue = TraitRegistry.parseValue(trait, old.getExpressedValueHolder(), ctx);
+
+            Allele a = old.getAlleleA().copyWithValue(newValue);
+            Allele b = old.getAlleleB().copyWithValue(newValue);
+
+            Gene gene = new Gene(trait, a, b);
+            dna.getGenes().put(trait, gene);
+            dna.applyGene(living, gene);
+        });
+
+        ctx.getSource().sendSuccess(() ->
+                        Component.literal("Updated gene ").append(TraitRegistry.translatableTrait(trait)),
+                true
+        );
+
+        return Command.SINGLE_SUCCESS;
+    }
+
 
     private static void unknownTrait(CommandContext<CommandSourceStack> context, String traitName) {
         context.getSource().sendFailure(
@@ -386,7 +405,7 @@ public class ModCommands {
 
     public static void getTrait(CommandContext<CommandSourceStack> context, LivingEntity livingEntity, Trait trait, AlleleValue value) {
         context.getSource().sendSuccess(() ->
-                Component.translatable("command.wildaside.dna.get_trait", livingEntity.getName(), value, TraitRegistry.translatableTrait(trait)), false);
+                Component.translatable("command.wildaside.dna.get_trait", livingEntity.getName(), value.format().getString(), TraitRegistry.translatableTrait(trait)), false);
     }
 
     public static void applyContamination(CommandContext<CommandSourceStack> context, String action, int finalAffected, String entityString) {

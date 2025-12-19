@@ -44,6 +44,10 @@ public class Allele {
         this.dominance = dominance;
     }
 
+    public Allele copyWithValue(AlleleValue newValue) {
+        return new Allele(newValue, this.mutationRate, this.stability, this.dominance);
+    }
+
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
 
