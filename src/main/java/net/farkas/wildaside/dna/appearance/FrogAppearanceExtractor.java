@@ -21,25 +21,23 @@ public class FrogAppearanceExtractor implements AppearanceGeneExtractor<Frog> {
 
     @Override
     public void extract(Frog frog, Map<Trait, Gene> genes, long seed) {
-        ResourceLocation variant = BuiltInRegistries.FROG_VARIANT.getKey(frog.getVariant());
+        ResourceLocation current = BuiltInRegistries.FROG_VARIANT.getKey(frog.getVariant());
 
-        Allele a = new Allele(
-                new ResourceLocationAlleleValue(variant),
-                0.01f,
-                0.8f,
-                Dominance.DOMINANT
-        );
+        ResourceLocation other = pickOtherVariant(seed, current);
 
-        Allele b = new Allele(
-                new ResourceLocationAlleleValue(variant),
-                0.01f,
-                0.8f,
-                Dominance.INCOMPLETE
-        );
+        Allele a = AppearanceAlleleHelper.createVariantAllele(current, seed, "frog_var_a");
+        Allele b = AppearanceAlleleHelper.createVariantAllele(other, seed, "frog_var_b");
 
-        genes.put(
-                TraitRegistry.,
-                new Gene(TraitRegistry.FROG_VARIANT, a, b)
-        );
+        genes.put(TraitRegistry.FROG_VARIANT, new Gene(TraitRegistry.FROG_VARIANT, a, b));
+    }
+
+    private ResourceLocation pickOtherVariant(long seed, ResourceLocation exclude) {
+        var all = BuiltInRegistries.FROG_VARIANT.keySet()
+                .stream()
+                .filter(v -> !v.equals(exclude))
+                .toList();
+
+        int idx = (int) (Math.abs(seed * 31) % all.size());
+        return all.get(idx);
     }
 }

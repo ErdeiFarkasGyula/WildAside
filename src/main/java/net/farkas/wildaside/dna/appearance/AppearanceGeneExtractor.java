@@ -10,9 +10,5 @@ import java.util.Map;
 public interface AppearanceGeneExtractor<T extends LivingEntity> {
     EntityType<T> type();
 
-    void extract(
-            T entity,
-            Map<Trait, Gene> genes,
-            long seed
-    );
+    void extract(T entity, Map<Trait, Gene> genes, long seed);
 }

@@ -168,7 +168,7 @@ public class DnaUtils {
         return (h >>> 40) / (float) (1L << 24);
     }
 
-    private static float deterministicGaussian(long seed, String salt) {
+    public static float deterministicGaussian(long seed, String salt) {
         float u1 = hashToFloat(seed, salt, 0);
         float u2 = hashToFloat(seed, salt, 1);
 
@@ -177,7 +177,7 @@ public class DnaUtils {
         return (float) (Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2 * Math.PI * u2));
     }
 
-    private static Dominance generateNewDominance(Allele allele, float mutationRate, long seed, String salt) {
+    public static Dominance generateNewDominance(Allele allele, float mutationRate, long seed, String salt) {
         Dominance newDom = allele.getDominance();
         float dominanceFlipChance = mutationRate * 0.02f;
         float domNoise = deterministicGaussian(seed, salt + "_DOMINANCE");
@@ -190,7 +190,7 @@ public class DnaUtils {
         return newDom;
     }
 
-    private static Dominance deterministicDominancePick(long seed, String salt) {
+    public static Dominance deterministicDominancePick(long seed, String salt) {
         float g = deterministicGaussian(seed, salt + "_DOMINANCE_PICK");
         float p = (g + 1f) * 0.5f;
 

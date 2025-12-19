@@ -11,7 +11,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Cat;
 
-import java.util.List;
 import java.util.Map;
 
 public class CatAppearanceExtractor implements AppearanceGeneExtractor<Cat> {
@@ -24,47 +23,21 @@ public class CatAppearanceExtractor implements AppearanceGeneExtractor<Cat> {
     public void extract(Cat cat, Map<Trait, Gene> genes, long seed) {
         ResourceLocation current = BuiltInRegistries.CAT_VARIANT.getKey(cat.getVariant());
 
-        Allele alleleA = createVariantAllele(
-                current,
-                seed,
-                "cat_variant_a",
-                Dominance.DOMINANT
-        );
+        ResourceLocation other = pickOtherVariant(seed, current);
 
-        Allele alleleB = createVariantAllele(
-                pickRandomCatVariant(seed, current),
-                seed,
-                "cat_variant_b",
-                Dominance.RECESSIVE
-        );
+        Allele a = AppearanceAlleleHelper.createVariantAllele(current, seed, "cat_var_a");
+        Allele b = AppearanceAlleleHelper.createVariantAllele(other, seed, "cat_var_b");
 
-        genes.put(
-                TraitRegistry.CAT_VARIANT,
-                new Gene(TraitRegistry.CAT_VARIANT, alleleA, alleleB)
-        );
+        genes.put(TraitRegistry.CAT_VARIANT, new Gene(TraitRegistry.CAT_VARIANT, a, b));
     }
 
-    private Allele createVariantAllele(
-            ResourceLocation variant,
-            long seed,
-            String salt,
-            Dominance dom
-    ) {
-        return new Allele(
-                new ResourceLocationAlleleValue(variant),
-                0.02f,
-                0.6f,
-                dom
-        );
-    }
-
-    private ResourceLocation pickRandomCatVariant(long seed, ResourceLocation exclude) {
-        List<ResourceLocation> all = BuiltInRegistries.CAT_VARIANT.keySet()
+    private ResourceLocation pickOtherVariant(long seed, ResourceLocation exclude) {
+        var all = BuiltInRegistries.CAT_VARIANT.keySet()
                 .stream()
                 .filter(v -> !v.equals(exclude))
                 .toList();
 
-        int idx = (int) (Math.abs(seed) % all.size());
+        int idx = (int) (Math.abs(seed * 17) % all.size());
         return all.get(idx);
     }
 }
