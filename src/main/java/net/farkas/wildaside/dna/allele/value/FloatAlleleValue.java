@@ -5,6 +5,8 @@ import net.farkas.wildaside.dna.allele.dominance.Dominance;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 
+import static net.farkas.wildaside.dna.allele.dominance.Dominance.*;
+
 public class FloatAlleleValue implements AlleleValue {
     private float value;
 
