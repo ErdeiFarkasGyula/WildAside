@@ -3,7 +3,7 @@ package net.farkas.wildaside.dna.appearance;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.allele.Allele;
 import net.farkas.wildaside.dna.allele.value.ResourceLocationAlleleValue;
-import net.farkas.wildaside.dna.dominance.Dominance;
+import net.farkas.wildaside.dna.allele.dominance.Dominance;
 import net.minecraft.resources.ResourceLocation;
 
 public final class AppearanceAlleleHelper {

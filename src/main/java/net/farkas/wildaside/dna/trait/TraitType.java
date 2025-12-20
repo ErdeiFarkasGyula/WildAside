@@ -1,6 +1,6 @@
 package net.farkas.wildaside.dna.trait;
 
-import net.farkas.wildaside.dna.dominance.DominanceExpression;
+import net.farkas.wildaside.dna.allele.dominance.DominanceExpression;
 import net.minecraft.ChatFormatting;
 
 public enum TraitType {

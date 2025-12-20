@@ -5,7 +5,7 @@ import net.farkas.wildaside.config.ModConfig;
 import net.farkas.wildaside.dna.allele.Allele;
 import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
 import net.farkas.wildaside.dna.appearance.AppearanceGeneRegistry;
-import net.farkas.wildaside.dna.dominance.Dominance;
+import net.farkas.wildaside.dna.allele.dominance.Dominance;
 import net.farkas.wildaside.dna.speed.MobSpeedResultStorage;
 import net.farkas.wildaside.dna.speed.MobSpeedTesting;
 import net.farkas.wildaside.dna.trait.Trait;

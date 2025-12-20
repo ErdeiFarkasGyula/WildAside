@@ -1,4 +1,4 @@
-package net.farkas.wildaside.dna.dominance;
+package net.farkas.wildaside.dna.allele.dominance;
 
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.trait.Trait;

@@ -1,7 +1,7 @@
 package net.farkas.wildaside.dna.allele;
 
 import net.farkas.wildaside.dna.allele.value.*;
-import net.farkas.wildaside.dna.dominance.Dominance;
+import net.farkas.wildaside.dna.allele.dominance.Dominance;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 
