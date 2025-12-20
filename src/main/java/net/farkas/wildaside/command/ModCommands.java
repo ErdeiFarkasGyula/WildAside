@@ -444,11 +444,6 @@ public class ModCommands {
                 Component.translatable("command.wildaside.dna.unknown_trait", traitName));
     }
 
-    public static void getTrait(CommandContext<CommandSourceStack> context, LivingEntity livingEntity, Trait trait, AlleleValue value) {
-        context.getSource().sendSuccess(() ->
-                Component.translatable("command.wildaside.dna.get_trait", livingEntity.getName(), value.format().getString(), TraitRegistry.translatableTrait(trait)), false);
-    }
-
     public static void applyContamination(CommandContext<CommandSourceStack> context, String action, int finalAffected, String entityString) {
         context.getSource().sendSuccess(() ->
                 Component.translatable("command.wildaside.contamination.apply_contamination",
