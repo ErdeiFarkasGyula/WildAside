@@ -428,13 +428,13 @@ public class ModCommands {
             Gene gene = new Gene(trait, a, b);
             dna.getGenes().put(trait, gene);
             dna.applyGene(living, gene);
+
+            ctx.getSource().sendSuccess(
+                    () -> Component.translatable("command.wildaside.dna.set_trait", TraitRegistry.translatableTrait(trait), living.getName(), gene.getExpressedValueHolder().format()),
+                    true
+            );
         });
 
-        ctx.getSource().sendSuccess(
-                () -> Component.literal("Updated gene ")
-                        .append(TraitRegistry.translatableTrait(trait)),
-                true
-        );
 
         return Command.SINGLE_SUCCESS;
     }
