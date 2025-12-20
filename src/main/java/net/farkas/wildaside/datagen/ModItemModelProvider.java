@@ -184,7 +184,7 @@ public class ModItemModelProvider extends ItemModelProvider {
     }
 
     public ItemModelBuilder spawnEggItem(ResourceLocation item) {
-        return (ItemModelBuilder)((ItemModelBuilder)this.getBuilder(item.toString())).parent(new ModelFile.UncheckedModelFile("item/template_spawn_egg"));
+        return this.getBuilder(item.toString()).parent(new ModelFile.UncheckedModelFile("item/template_spawn_egg"));
     }
 
     public void wallItem(RegistryObject<Block> block, RegistryObject<Block> baseBlock) {

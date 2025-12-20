@@ -45,7 +45,7 @@ public class SporeBombItem extends Item {
         int chargeTime = this.getUseDuration(stack) - timeLeft;
         float charge = Mth.clamp((float) chargeTime / 20f, 0f, 1f);
 
-        level.playSound((Player) null, player.getX(), player.getY(), player.getZ(), SoundEvents.SNOWBALL_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (player.getRandom().nextFloat() * 0.4F + 0.8F));
+        level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.SNOWBALL_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (player.getRandom().nextFloat() * 0.4F + 0.8F));
 
         SporeBombEntity thrown = new SporeBombEntity(level, player, charge);
         thrown.setItem(stack);

@@ -1,9 +1,6 @@
 package net.farkas.wildaside.screen.bioengineering_workstation;
 
-import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkill;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillRegistry;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 
 import java.util.*;
 

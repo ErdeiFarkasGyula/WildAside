@@ -24,7 +24,7 @@ public class SubstiliumParticle extends TextureSheetParticle {
     protected SubstiliumParticle(ClientLevel world, double x, double y, double z, double vx, double vy, double vz, SpriteSet spriteSet) {
         super(world, x, y, z);
         this.setSize(0.2f, 0.2f);
-        this.lifetime = (int) Math.max(1, 20 + (this.random.nextInt(20) - 10));
+        this.lifetime = Math.max(1, 20 + (this.random.nextInt(20) - 10));
         this.gravity = -0.1f;
         this.hasPhysics = false;
         this.xd = vx * 1;

@@ -10,7 +10,7 @@ import java.util.Locale;
 import static java.util.Objects.hash;
 
 public class EnumAlleleValue<E extends Enum<E>> implements AlleleValue {
-    private Class<E> enumClass;
+    private final Class<E> enumClass;
     private E value;
 
     public EnumAlleleValue(E value) {

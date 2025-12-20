@@ -46,7 +46,7 @@ public class ContaminationHandler {
         MobEffect immunity = ModMobEffects.IMMUNITY.get();
         MobEffect contamination = ModMobEffects.CONTAMINATION.get();
 
-        int amplifier = Mth.clamp(dose / 1000, 0, MAX_AMPLIFIER);;
+        int amplifier = Mth.clamp(dose / 1000, 0, MAX_AMPLIFIER);
         int contaminationDuration = calculateContaminationDuration(amplifier);
 
         MobEffectInstance existing = entity.getEffect(contamination);

@@ -23,7 +23,7 @@ public class MucellithAttackGoal extends Goal {
 
     public MucellithAttackGoal(MucellithEntity entity, int pAttackInterval, float pAttackRadius) {
         this.entity = entity;
-        this.mob = (Mob)entity;
+        this.mob = entity;
         this.attackTimeMax = pAttackInterval;
         this.attackRadius = pAttackRadius;
         this.setFlags(EnumSet.of(Goal.Flag.LOOK));

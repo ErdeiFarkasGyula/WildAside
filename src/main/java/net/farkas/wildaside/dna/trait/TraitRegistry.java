@@ -1,16 +1,11 @@
 package net.farkas.wildaside.dna.trait;
 
-import com.mojang.brigadier.arguments.FloatArgumentType;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
-import net.farkas.wildaside.dna.allele.Allele;
 import net.farkas.wildaside.dna.allele.value.AlleleValue;
 import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
 import net.farkas.wildaside.dna.allele.value.ResourceLocationAlleleValue;
-import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -22,8 +17,6 @@ import net.minecraft.world.entity.animal.frog.Frog;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import static net.farkas.wildaside.dna.DnaConstants.VALUE;
 
 public class TraitRegistry {
     public static final List<Trait> TRAITS = new ArrayList<>();
@@ -99,7 +92,7 @@ public class TraitRegistry {
         return Component.translatable("trait.wildaside." + trait.getName());
     }
 
-    public static AlleleValue parseValue(AlleleValue oldValue, String rawInput) throws CommandSyntaxException {
+    public static AlleleValue parseValue(AlleleValue oldValue, String rawInput) {
         return oldValue.parse(rawInput);
     }
 }

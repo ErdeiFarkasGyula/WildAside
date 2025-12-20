@@ -14,12 +14,10 @@ import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.allele.Allele;
 import net.farkas.wildaside.dna.allele.value.AlleleValue;
-import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
 import net.farkas.wildaside.dna.appearance.AppearanceGeneRegistry;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillPointOperation;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillUtils;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillRegistry;
-import net.farkas.wildaside.dna.dominance.Dominance;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitRegistry;
 import net.farkas.wildaside.network.WindSavedData;
@@ -415,12 +413,7 @@ public class ModCommands {
             Gene old = dna.getGenes().get(trait);
 
             AlleleValue newValue;
-            try {
-                newValue = TraitRegistry.parseValue(old.getExpressedValueHolder(), rawInput);
-            }
-            catch (CommandSyntaxException e) {
-                throw new RuntimeException(e);
-            }
+            newValue = TraitRegistry.parseValue(old.getExpressedValueHolder(), rawInput);
 
             Allele a = old.getAlleleA().copyWithValue(newValue);
             Allele b = old.getAlleleB().copyWithValue(newValue);

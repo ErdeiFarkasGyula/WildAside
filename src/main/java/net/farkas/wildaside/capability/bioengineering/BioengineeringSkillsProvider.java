@@ -1,8 +1,6 @@
 package net.farkas.wildaside.capability.bioengineering;
 
 import net.farkas.wildaside.WildAside;
-import net.farkas.wildaside.capability.contamination.ContaminationImplementation;
-import net.farkas.wildaside.capability.contamination.IContamination;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;

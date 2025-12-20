@@ -11,6 +11,6 @@ public class ModKeyMappings {
             KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_G,
-            "key.categories.wildaside"
+            "mod.wildaside"
     );
 }

@@ -1,7 +1,6 @@
 package net.farkas.wildaside.dna.trait;
 
 import net.farkas.wildaside.dna.allele.value.AlleleValue;
-import net.farkas.wildaside.dna.allele.value.AlleleValueType;
 import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
 import net.minecraft.world.entity.LivingEntity;
 

@@ -1,6 +1,5 @@
 package net.farkas.wildaside.dna.bioengineering_skill.requirement;
 
-import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkill;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;

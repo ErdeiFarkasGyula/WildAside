@@ -319,6 +319,7 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
 
     private void craftItem() {
         Optional<BioengineeringWorkstationRecipe> recipe = getCurrentRecipe();
+        if (recipe.isEmpty()) return;
         ItemStack result = recipe.get().getResultItem(null);
 
         this.itemHandler.extractItem(ASSE_INPUT_1, 1, false);

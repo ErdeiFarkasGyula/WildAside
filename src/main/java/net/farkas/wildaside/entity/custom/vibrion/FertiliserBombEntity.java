@@ -9,7 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -97,7 +96,7 @@ public class FertiliserBombEntity extends ThrowableItemProjectile {
         String biomePath = biomeHolder.unwrapKey().map(key -> key.location().getPath()).orElse("");
 
         if (biomePath.contains("hickory")) {
-            AdvancementHandler.givePlayerAdvancement((ServerPlayer)thrower, "fertile_forest");
+            AdvancementHandler.givePlayerAdvancement(thrower, "fertile_forest");
             flowerList.add(new WeightedFlowerChoice.WeightedFlower(4, ModBlocks.SPOTTED_WINTERGREEN.get()));
             flowerList.add(new WeightedFlowerChoice.WeightedFlower(4, ModBlocks.PINKSTER_FLOWER.get()));
         }

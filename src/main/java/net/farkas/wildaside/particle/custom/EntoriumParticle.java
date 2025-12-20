@@ -30,7 +30,7 @@ public class EntoriumParticle extends TextureSheetParticle {
         //this.alpha = 1.0f;
         this.spriteSet = spriteSet;
         this.setSize(0.2f, 0.2f);
-        this.lifetime = (int) Math.max(1, 40 + (this.random.nextInt(20) - 10));
+        this.lifetime = Math.max(1, 40 + (this.random.nextInt(20) - 10));
         this.gravity = -0.05f;
         this.hasPhysics = false;
         this.xd = vx * 1;

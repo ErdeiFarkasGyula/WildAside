@@ -1,8 +1,11 @@
 {
   "mod.wildaside": "Wild Aside",
+
   "resourcepack.wildaside.wildaside_legacy": "Wild Aside Legacy",
 
   "creativetab.wildaside_tab": "Wild Aside",
+
+  "key.wildaside.use_ability": "Use ability",
 
   "item.wildaside.vibrion": "Vibrion",
   "item.wildaside.mucellith_jaw": "Mucellith Jaw",

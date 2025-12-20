@@ -4,5 +4,5 @@ public enum BioengineeringSkillPointOperation {
     ADD,
     REMOVE,
     SPEND,
-    SET;
+    SET
 }

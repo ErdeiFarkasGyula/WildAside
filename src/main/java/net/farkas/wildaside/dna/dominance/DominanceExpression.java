@@ -2,9 +2,6 @@ package net.farkas.wildaside.dna.dominance;
 
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.trait.Trait;
-import net.farkas.wildaside.dna.trait.TraitType;
-
-import static net.farkas.wildaside.dna.trait.TraitType.*;
 
 public record DominanceExpression(float dominantChance, float recessiveChance, float coDominantChance, float incompleteChance) {
     public Dominance chooseDominance(Trait trait, long seed, int index) {
