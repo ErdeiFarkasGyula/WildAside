@@ -61,7 +61,7 @@ public class DnaEventHandler {
         LivingEntity entity = event.getEntity();
         float stressGain = event.getAmount() * 0.5f;
         entity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-            if (dna.getModified()) dna.setStress(dna.getStress() + stressGain);
+            dna.setStress(dna.getStress() + stressGain);
         });
     }
 

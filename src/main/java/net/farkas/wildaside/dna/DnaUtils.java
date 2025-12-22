@@ -103,11 +103,9 @@ public class DnaUtils {
 
         float mutationRate = 0.05f * (trait.getTraitType() == TraitType.ABILITY ? 2f : 1f);
 
-        float stability = trait.getInstabilityModifier() * (0.5f + gaussian / 2f);
-
         float value = baseValue * (1 + 0.2f * gaussian);
 
-        return new Allele(new FloatAlleleValue(value), mutationRate, stability, dominance);
+        return new Allele(new FloatAlleleValue(value), mutationRate, dominance);
     }
 
     private static void generateResistanceGene(Map<Trait, Gene> genes, Trait trait, long seed, boolean condition) {
@@ -139,14 +137,12 @@ public class DnaUtils {
             float mutatedValue = 0.02f + 0.13f * Math.abs(deterministicGaussian(seed, trait.getName() + "_zero_val" + index));
 
             float mutationRate = trait.getInstabilityModifier() * 0.5f;
-            float stability = trait.getInstabilityModifier() * (0.3f + 0.2f * roll);
-
             Dominance dom = deterministicDominancePick(seed, trait.getName() + "_zero_dom" + index);
 
-            return new Allele(new FloatAlleleValue(mutatedValue), mutationRate, stability, dom);
+            return new Allele(new FloatAlleleValue(mutatedValue), mutationRate, dom);
         }
 
-        return new Allele(new FloatAlleleValue(0.0f), 0f, trait.getInstabilityModifier(), Dominance.RECESSIVE);
+        return new Allele(new FloatAlleleValue(0.0f), 0f, Dominance.RECESSIVE);
     }
 
     private static long mix64(long x) {

@@ -2,8 +2,8 @@ package net.farkas.wildaside.dna.appearance;
 
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.allele.Allele;
-import net.farkas.wildaside.dna.allele.value.ResourceLocationAlleleValue;
 import net.farkas.wildaside.dna.allele.dominance.Dominance;
+import net.farkas.wildaside.dna.allele.value.ResourceLocationAlleleValue;
 import net.minecraft.resources.ResourceLocation;
 
 public final class AppearanceAlleleHelper {
@@ -14,15 +14,9 @@ public final class AppearanceAlleleHelper {
                 DnaUtils.hashToFloat(seed, salt + "_mut", 0)
         );
 
-        float stability = lerp(
-                0.4f,
-                0.9f,
-                DnaUtils.hashToFloat(seed, salt + "_stab", 0)
-        );
-
         Dominance dominance = DnaUtils.deterministicDominancePick(seed, salt);
 
-        return new Allele(new ResourceLocationAlleleValue(variant), mutationRate, stability, dominance);
+        return new Allele(new ResourceLocationAlleleValue(variant), mutationRate, dominance);
     }
 
     private static float lerp(float min, float max, float t) {

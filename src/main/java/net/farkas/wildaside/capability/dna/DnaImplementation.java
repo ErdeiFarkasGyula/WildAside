@@ -22,7 +22,6 @@ public class DnaImplementation implements IDna {
     private Map<Trait, List<GeneLocus>> loci = new HashMap<>();
     private Map<Trait, AlleleValue> expressedCache = new HashMap<>();
     private float stress = 0f;
-    private boolean modified = false;
 
     @Override public @Nullable EntityType<?> getSource() { return source; }
     @Override public void setSource(EntityType<?> source) { this.source = source; }
@@ -32,9 +31,6 @@ public class DnaImplementation implements IDna {
 
     @Override public float getStress() { return stress; }
     @Override public void setStress(float stress) { this.stress = Math.max(0f, Math.min(100f, stress)); }
-
-    @Override public boolean getModified() { return modified; }
-    @Override public void setModified(boolean modified) { this.modified = modified; }
 
     @Override
     public void applyGenes(LivingEntity entity) {
@@ -76,7 +72,6 @@ public class DnaImplementation implements IDna {
             }
         }
         tag.put("loci", listTag);
-        tag.putBoolean("modified", modified);
         return tag;
     }
 
@@ -84,12 +79,11 @@ public class DnaImplementation implements IDna {
     public void deserializeNBT(CompoundTag tag) {
         loci.clear();
         stress = tag.getFloat("stress");
-        modified = tag.getBoolean("modified");
         String s = tag.getString("source");
         if (!s.isEmpty()) source = ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(s));
 
-        ListTag ltag = tag.getList("loci", Tag.TAG_COMPOUND);
-        for (Tag t : ltag) {
+        ListTag listtag = tag.getList("loci", Tag.TAG_COMPOUND);
+        for (Tag t : listtag) {
             CompoundTag ct = (CompoundTag) t;
             Trait trait = TraitRegistry.getByName(ct.getString("Trait"));
             GeneLocus gl = GeneLocus.deserializeNBT(ct);

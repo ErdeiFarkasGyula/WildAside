@@ -21,9 +21,6 @@ public interface IDna extends INBTSerializable<CompoundTag> {
     float getStress();
     void setStress(float stress);
 
-    boolean getModified();
-    void setModified(boolean modified);
-
     void applyGenes(LivingEntity entity);
     void removeGenes(LivingEntity entity);
     void recomputeAndApply(LivingEntity entity);
