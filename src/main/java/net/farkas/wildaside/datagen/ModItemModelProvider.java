@@ -27,9 +27,15 @@ public class ModItemModelProvider extends ItemModelProvider {
     @Override
     protected void registerModels() {
         //SPAWNEGG
-        spawnEggItem(ModItems.MUCELLITH_SPAWN_EGG.getId());
-        spawnEggItem(ModItems.HICKORY_TREANT_SPAWN_EGG.getId());
-        spawnEggItem(ModItems.CONTAMINATED_CREEPER_SPAWN_EGG.getId());
+        if (ModItems.MUCELLITH_SPAWN_EGG.getId() != null) {
+            spawnEggItem(ModItems.MUCELLITH_SPAWN_EGG.getId());
+        }
+        if (ModItems.HICKORY_TREANT_SPAWN_EGG.getId() != null) {
+            spawnEggItem(ModItems.HICKORY_TREANT_SPAWN_EGG.getId());
+        }
+        if (ModItems.CONTAMINATED_CREEPER_SPAWN_EGG.getId() != null) {
+            spawnEggItem(ModItems.CONTAMINATED_CREEPER_SPAWN_EGG.getId());
+        }
 
         //SIMPLE
         simpleItem(ModItems.VIBRION);
@@ -42,6 +48,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.FERTILISER_BOMB);
 
         simpleItem(ModItems.GENE);
+
+        simpleItem(ModItems.BACILLUS_BLOB);
 
         simpleItem(ModItems.HICKORY_NUT);
         simpleItem(ModItems.HICKORY_NUT_TRAIL_MIX);

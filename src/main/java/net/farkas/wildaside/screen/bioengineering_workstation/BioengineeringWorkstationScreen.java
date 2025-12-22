@@ -125,7 +125,7 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
                 DnaImplementation dna = new DnaImplementation();
                 dna.deserializeNBT(dnaTag);
 
-                if (!dna.getGenes().isEmpty() && !tag.getBoolean(DnaConstants.SAMPLE_UNUSABLE)) {
+                if (!dna.getLoci().isEmpty() && !tag.getBoolean(DnaConstants.SAMPLE_UNUSABLE) && tag.getBoolean(DnaConstants.REVEAL_TRAITS)) {
                     guiGraphics.blit(BACKGROUND, x + 25, y + 12 + yOffset + i * 22, 0, 248, 8, 8);
                 }
             }

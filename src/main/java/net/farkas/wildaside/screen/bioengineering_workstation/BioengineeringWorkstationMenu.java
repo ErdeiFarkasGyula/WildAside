@@ -242,13 +242,10 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
 
                 for (int j = 0; j < genes.size(); j++) {
                     Gene gene = genes.values().stream().toList().get(j);
-                    if (gene.getTrait().getTraitType() == TraitType.ABILITY) {
-                        if (gene.getExpressedValueHolder() instanceof FloatAlleleValue floatAlleleValue) {
-                            if (floatAlleleValue.get() == 0.0f) {
-                                slotCorrection++;
-                                continue;
-                            }
-                        }
+
+                    if (shouldContinue(gene)) {
+                        slotCorrection++;
+                        continue;
                     }
 
                     ItemStack geneStack = GeneItem.createFromTag(gene);
@@ -265,6 +262,14 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
                 }
             }
         });
+    }
+
+    private boolean shouldContinue(Gene gene) {
+        if (gene.getExpressedValueHolder() instanceof FloatAlleleValue floatAlleleValue) {
+            return floatAlleleValue.get() == 0.0f;
+        }
+
+        return false;
     }
 
     public boolean isCrafting() {

@@ -2,6 +2,7 @@ package net.farkas.wildaside.screen.bioengineering_workstation;
 
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.screen.ModVisibleSlotItemHandler;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
@@ -21,6 +22,11 @@ public class DnaInputSlot extends ModVisibleSlotItemHandler {
     @Override
     public boolean mayPlace(@NotNull ItemStack stack) {
         return stack.is(ModItems.DNA_HOLDER.get()) && super.mayPlace(stack);
+    }
+
+    @Override
+    public boolean mayPickup(Player playerIn) {
+        return false;
     }
 
     @Override

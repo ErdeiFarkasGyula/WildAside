@@ -7,6 +7,7 @@ import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -56,7 +57,7 @@ public class AttributeTrait extends Trait {
         try { instance.removePermanentModifier(modifierUuid); } catch (Exception ignored) {}
         try { instance.removeModifier(modifierUuid); } catch (Exception ignored) {}
 
-        double base = instance.getBaseValue();
+        double base = DnaUtils.safeBaseAttribute(entity, attribute);
         if (Double.isNaN(base) || base == 0.0) base = 1.0;
 
         if (valueHolder instanceof FloatAlleleValue floatAlleleValue) {

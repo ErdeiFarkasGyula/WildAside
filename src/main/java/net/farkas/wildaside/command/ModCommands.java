@@ -18,6 +18,7 @@ import net.farkas.wildaside.dna.appearance.AppearanceGeneRegistry;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillPointOperation;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillUtils;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillRegistry;
+import net.farkas.wildaside.dna.locus.GeneLocus;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitRegistry;
 import net.farkas.wildaside.network.WindSavedData;
@@ -40,6 +41,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import static net.farkas.wildaside.dna.DnaConstants.*;
@@ -344,11 +346,14 @@ public class ModCommands {
         }
 
         living.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-            if (dna.getGenes().isEmpty()) {
-                dna.setGenes(DnaUtils.generateBaseGenes(living, true));
+            if (dna.getLoci().isEmpty()) {
+                dna.setSource(living.getType());
+                dna.setLoci(DnaUtils.generateBaseLoci(living));
+                dna.recomputeAndApply(living);
             }
 
-            Gene gene = dna.getGenes().get(trait);
+            var loci = dna.getLoci().get(trait);
+            Gene gene = DnaUtils.asGene(trait, loci);
 
             if (gene == null) {
                 ctx.getSource().sendFailure(Component.translatable("dna.wildaside.no_gene_for_trait", traitName));
@@ -406,28 +411,39 @@ public class ModCommands {
         String rawInput = StringArgumentType.getString(ctx, VALUE);
 
         living.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-            if (dna.getGenes().isEmpty()) {
-                dna.setGenes(DnaUtils.generateBaseGenes(living, false));
+            if (dna.getLoci().isEmpty()) {
+                dna.setSource(living.getType());
+                dna.setLoci(DnaUtils.generateBaseLoci(living));
             }
 
-            Gene old = dna.getGenes().get(trait);
+            List<GeneLocus> loci = dna.getLoci().get(trait);
+            Gene old = DnaUtils.asGene(trait, loci);
+            if (old == null) return;
 
-            AlleleValue newValue;
-            newValue = TraitRegistry.parseValue(old.getExpressedValueHolder(), rawInput);
-
+            AlleleValue newValue = TraitRegistry.parseValue(old.getExpressedValueHolder(), rawInput);
             Allele a = old.getAlleleA().copyWithValue(newValue);
             Allele b = old.getAlleleB().copyWithValue(newValue);
 
-            Gene gene = new Gene(trait, a, b);
-            dna.getGenes().put(trait, gene);
-            dna.applyGene(living, gene);
+            GeneLocus updated = new GeneLocus(
+                    loci.get(0).getId(), a, b,
+                    loci.get(0).getFlags(),
+                    loci.get(0).getStability()
+            );
+
+            loci.set(0, updated);
+            dna.getLoci().put(trait, loci);
+            dna.recomputeAndApply(living);
 
             ctx.getSource().sendSuccess(
-                    () -> Component.translatable("command.wildaside.dna.set_trait", TraitRegistry.translatableTrait(trait), living.getName(), gene.getExpressedValueHolder().format()),
+                    () -> Component.translatable(
+                            "command.wildaside.dna.set_trait",
+                            TraitRegistry.translatableTrait(trait),
+                            living.getName(),
+                            newValue.format()
+                    ),
                     true
             );
         });
-
 
         return Command.SINGLE_SUCCESS;
     }

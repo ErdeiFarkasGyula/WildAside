@@ -234,7 +234,7 @@
   "dna.wildaside.expressed_value": "Kifejezett érték: ",
   "dna.wildaside.unknown": "Ismeretlen",
   "dna.wildaside.source": "Forrás",
-  "dna.wildaside.stability": "Stabilitás",
+  "dna.wildaside.stress": "Stressz",
   "dna.wildaside.core_traits": "Alap tulajdonságok",
   "dna.wildaside.resistances": "Ellenállások",
   "dna.wildaside.abilities": "Képességek",
@@ -264,6 +264,7 @@
   "trait.wildaside.fire_ability": "Tűz képesség",
   "trait.wildaside.teleport_ability": "Teleportálás képesség",
   "trait.wildaside.cat_variant": "Macska fajta",
+  "trait.wildaside.frog_variant": "Béka fajta",
 
   "skill.wildaside.points": "Képesség pontok: %1$s",
   "skill.wildaside.already_unlocked": "Képesség már feloldva",

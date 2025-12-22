@@ -3,9 +3,13 @@ package net.farkas.wildaside.dna;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.config.ModConfig;
 import net.farkas.wildaside.dna.allele.Allele;
+import net.farkas.wildaside.dna.allele.value.AlleleValue;
 import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
 import net.farkas.wildaside.dna.appearance.AppearanceGeneRegistry;
 import net.farkas.wildaside.dna.allele.dominance.Dominance;
+import net.farkas.wildaside.dna.locus.GeneLocus;
+import net.farkas.wildaside.dna.locus.LocusExpression;
+import net.farkas.wildaside.dna.locus.LocusFlag;
 import net.farkas.wildaside.dna.speed.MobSpeedResultStorage;
 import net.farkas.wildaside.dna.speed.MobSpeedTesting;
 import net.farkas.wildaside.dna.trait.Trait;
@@ -51,46 +55,46 @@ public class DnaUtils {
         return (float) instance.getBaseValue();
     }
 
-    public static Map<Trait, Gene> generateBaseGenes(LivingEntity entity, boolean preGen) {
-        Map<Trait, Gene> genes = new HashMap<>();
-        long seed = entity.getUUID().getLeastSignificantBits();
-
-        for (Trait trait : TraitRegistry.TRAITS) {
-            if (trait.getTraitType() == TraitType.CORE || trait == TraitRegistry.KNOCKBACK_RESISTANCE) {
-                Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(DnaUtils.getAttributeRes(trait.getName()));
-                if (attribute != null) {
-                    float baseValue = DnaUtils.getAttributeValue(entity, attribute);
-
-                    if (trait == TraitRegistry.MOVEMENT_SPEED && ModConfig.ACCURATE_DNA_MOVEMENT_SPEEDS.get() && !preGen) {
-                        baseValue = (float) MobSpeedResultStorage.getSpeed(entity.getType(), "ground");
-                        if (MobSpeedTesting.EXCLUDED_MOBS.contains(entity.getType())) {
-                            baseValue = (float) entity.getAttributeBaseValue(attribute);
-                        }
-                    }
-
-                    Allele alleleA = createFloatAllele(trait, baseValue, seed, 0);
-                    Allele alleleB = createFloatAllele(trait, baseValue, seed, 1);
-
-                    genes.put(trait, new Gene(trait, alleleA, alleleB));
-                }
-            }
-        }
-
-        generateResistanceGene(genes, TraitRegistry.FIRE_RESISTANCE, seed, entity.fireImmune());
-        generateResistanceGene(genes, TraitRegistry.FREEZE_RESISTANCE, seed, entity.getType().is(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES));
-        generateResistanceGene(genes, TraitRegistry.FALL_RESISTANCE, seed, entity.getType().is(EntityTypeTags.FALL_DAMAGE_IMMUNE));
-
-        if (entity.getType() == EntityType.BLAZE) {
-            generateAbilityGene(genes, TraitRegistry.FIRE_ABILITY, seed);
-        }
-        else if (entity.getType() == EntityType.ENDERMAN) {
-            generateAbilityGene(genes, TraitRegistry.TELEPORT_ABILITY, seed);
-        }
-
-        AppearanceGeneRegistry.extract(entity, genes, seed);
-
-        return genes;
-    }
+//    public static Map<Trait, Gene> generateBaseGenes(LivingEntity entity, boolean preGen) {
+//        Map<Trait, Gene> genes = new HashMap<>();
+//        long seed = entity.getUUID().getLeastSignificantBits();
+//
+//        for (Trait trait : TraitRegistry.TRAITS) {
+//            if (trait.getTraitType() == TraitType.CORE || trait == TraitRegistry.KNOCKBACK_RESISTANCE) {
+//                Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(DnaUtils.getAttributeRes(trait.getName()));
+//                if (attribute != null) {
+//                    float baseValue = DnaUtils.getAttributeValue(entity, attribute);
+//
+//                    if (trait == TraitRegistry.MOVEMENT_SPEED && ModConfig.ACCURATE_DNA_MOVEMENT_SPEEDS.get() && !preGen) {
+//                        baseValue = (float) MobSpeedResultStorage.getSpeed(entity.getType(), "ground");
+//                        if (MobSpeedTesting.EXCLUDED_MOBS.contains(entity.getType())) {
+//                            baseValue = (float) entity.getAttributeBaseValue(attribute);
+//                        }
+//                    }
+//
+//                    Allele alleleA = createFloatAllele(trait, baseValue, seed, 0);
+//                    Allele alleleB = createFloatAllele(trait, baseValue, seed, 1);
+//
+//                    genes.put(trait, new Gene(trait, alleleA, alleleB));
+//                }
+//            }
+//        }
+//
+//        generateResistanceGene(genes, TraitRegistry.FIRE_RESISTANCE, seed, entity.fireImmune());
+//        generateResistanceGene(genes, TraitRegistry.FREEZE_RESISTANCE, seed, entity.getType().is(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES));
+//        generateResistanceGene(genes, TraitRegistry.FALL_RESISTANCE, seed, entity.getType().is(EntityTypeTags.FALL_DAMAGE_IMMUNE));
+//
+//        if (entity.getType() == EntityType.BLAZE) {
+//            generateAbilityGene(genes, TraitRegistry.FIRE_ABILITY, seed);
+//        }
+//        else if (entity.getType() == EntityType.ENDERMAN) {
+//            generateAbilityGene(genes, TraitRegistry.TELEPORT_ABILITY, seed);
+//        }
+//
+//        AppearanceGeneRegistry.extract(entity, genes, seed);
+//
+//        return genes;
+//    }
 
     private static Allele createFloatAllele(Trait trait, float baseValue, long seed, int index) {
         float gaussian = DnaUtils.deterministicGaussian(seed, trait.getName() + index);
@@ -276,5 +280,114 @@ public class DnaUtils {
             return true;
         }
         return false;
+    }
+
+    public static Map<Trait, List<GeneLocus>> generateBaseLoci(LivingEntity entity) {
+        Map<Trait, List<GeneLocus>> out = new HashMap<>();
+        long seed = entity.getUUID().getLeastSignificantBits();
+
+        AppearanceGeneRegistry.extract(entity, out, seed);
+
+        if (TraitRegistry.MOVEMENT_SPEED != null) {
+            float baseValue = safeBaseAttribute(entity, ForgeRegistries.ATTRIBUTES.getValue(getAttributeRes("movement_speed")));
+
+            if (ModConfig.ACCURATE_DNA_MOVEMENT_SPEEDS.get()) {
+                baseValue = (float) MobSpeedResultStorage.getSpeed(entity.getType(), "ground");
+                if (MobSpeedTesting.EXCLUDED_MOBS.contains(entity.getType())) {
+                    baseValue = safeBaseAttribute(entity, ForgeRegistries.ATTRIBUTES.getValue(getAttributeRes("movement_speed")));
+                }
+            }
+
+            out.put(TraitRegistry.MOVEMENT_SPEED, List.of(
+                    locus("move_base", TraitRegistry.MOVEMENT_SPEED, baseValue, seed, 0),
+                    locus("move_tendon", TraitRegistry.MOVEMENT_SPEED, baseValue, seed, 2),
+                    locus("move_aero", TraitRegistry.MOVEMENT_SPEED, baseValue, seed, 4)
+            ));
+        }
+
+        out.put(TraitRegistry.FIRE_RESISTANCE, List.of(
+                locus("fire_base", TraitRegistry.FIRE_RESISTANCE, entity.fireImmune() ? 1f : 0f, seed, 0),
+                locus("fire_reg", TraitRegistry.FIRE_RESISTANCE, 0.25f, seed, 2, Set.of(LocusFlag.REGULATOR))
+        ));
+
+        out.put(TraitRegistry.FREEZE_RESISTANCE, List.of(
+                locus("freeze_base", TraitRegistry.FREEZE_RESISTANCE,
+                        entity.getType().is(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES) ? 1f : 0f, seed, 0)
+        ));
+
+        out.put(TraitRegistry.FALL_RESISTANCE, List.of(
+                locus("fall_base", TraitRegistry.FALL_RESISTANCE,
+                        entity.getType().is(EntityTypeTags.FALL_DAMAGE_IMMUNE) ? 1f : 0f, seed, 0)
+        ));
+
+        out.put(TraitRegistry.EXPLOSION_RESISTANCE, List.of(
+                locus("explosion_base", TraitRegistry.EXPLOSION_RESISTANCE, 0f, seed, 0)
+        ));
+
+        if (!out.containsKey(TraitRegistry.KNOCKBACK_RESISTANCE)) {
+            Attribute attr = ForgeRegistries.ATTRIBUTES.getValue(getAttributeRes("knockback_resistance"));
+            float baseValue = attr != null ? safeBaseAttribute(entity, attr) : 0f;
+            out.put(TraitRegistry.KNOCKBACK_RESISTANCE, List.of(
+                    locus("knockback_resistance", TraitRegistry.KNOCKBACK_RESISTANCE, baseValue, seed, 0)
+            ));
+        }
+
+        if (entity.getType() == EntityType.BLAZE) {
+            float potBase = TraitRegistry.FIRE_ABILITY.getInstabilityModifier() * 100f;
+            out.put(TraitRegistry.FIRE_ABILITY, List.of(
+                    locus("fire_act", TraitRegistry.FIRE_ABILITY, 1f, seed, 0, Set.of(LocusFlag.ACTIVATOR)),
+                    locus("fire_pot", TraitRegistry.FIRE_ABILITY, potBase, seed, 2, Set.of(LocusFlag.POTENCY)),
+                    locus("fire_side", TraitRegistry.FIRE_ABILITY, 0.1f, seed, 4, Set.of(LocusFlag.SIDE_EFFECT))
+            ));
+        }
+        if (entity.getType() == EntityType.ENDERMAN) {
+            float potBase = TraitRegistry.TELEPORT_ABILITY.getInstabilityModifier() * 100f;
+            out.put(TraitRegistry.TELEPORT_ABILITY, List.of(
+                    locus("tele_act", TraitRegistry.TELEPORT_ABILITY, 1f, seed, 0, Set.of(LocusFlag.ACTIVATOR)),
+                    locus("tele_pot", TraitRegistry.TELEPORT_ABILITY, potBase, seed, 2, Set.of(LocusFlag.POTENCY)),
+                    locus("tele_side", TraitRegistry.TELEPORT_ABILITY, 0.1f, seed, 4, Set.of(LocusFlag.SIDE_EFFECT))
+            ));
+        }
+
+        for (Trait trait : TraitRegistry.TRAITS) {
+            if (out.containsKey(trait)) continue;
+            if (trait.getTraitType() == TraitType.CORE || trait == TraitRegistry.KNOCKBACK_RESISTANCE) {
+                Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(getAttributeRes(trait.getName()));
+                float baseValue = attribute != null ? safeBaseAttribute(entity, attribute) : 0f;
+                out.put(trait, List.of(locus(trait.getName(), trait, baseValue, seed, 0)));
+            }
+        }
+
+//        for (Trait trait : TraitRegistry.TRAITS) {
+//            if (out.containsKey(trait) || trait.getTraitType() == TraitType.APPEARANCE) continue;
+//            out.put(trait, List.of(locus(trait.getName(), trait, 0f, seed, 0)));
+//        }
+
+        return out;
+    }
+
+    private static GeneLocus locus(String id, Trait trait, float baseValue, long seed, int index) {
+        return locus(id, trait, baseValue, seed, index, Set.of());
+    }
+
+    private static GeneLocus locus(String id, Trait trait, float baseValue, long seed, int index, Set<LocusFlag> flags) {
+        Allele a = createFloatAllele(trait, baseValue, seed, index);
+        Allele b = createFloatAllele(trait, baseValue, seed, index + 1);
+        return new GeneLocus(id, a, b, flags, trait.getInstabilityModifier());
+    }
+
+    public static AlleleValue getExpressed(Map<Trait, List<GeneLocus>> loci, Trait trait) {
+        return LocusExpression.express(trait, loci.get(trait));
+    }
+
+    public static Gene asGene(Trait trait, List<GeneLocus> loci) {
+        if (loci == null || loci.isEmpty()) return null;
+        GeneLocus l = loci.get(0);
+        return new Gene(trait, l.getAlleleA(), l.getAlleleB());
+    }
+
+    public static float safeBaseAttribute(LivingEntity entity, Attribute attribute) {
+        var inst = entity.getAttribute(attribute);
+        return inst == null ? 0f : (float) inst.getBaseValue();
     }
 }

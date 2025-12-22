@@ -48,6 +48,9 @@ public class ModItems {
     public static final RegistryObject<Item> SYRINGE = ITEMS.register("syringe",
             () -> new SyringeItem(new Item.Properties().stacksTo(1)));
 
+    public static final RegistryObject<Item> BACILLUS_BLOB = ITEMS.register("bacillus_blob",
+            () -> new BacillusBlobItem(new Item.Properties()));
+
     public static final RegistryObject<Item> SUBSTILIUM_SIGN = ITEMS.register("substilium_sign",
             () -> new SignItem(new Item.Properties().stacksTo(16), ModBlocks.SUBSTILIUM_SIGN.get(), ModBlocks.SUBSTILIUM_WALL_SIGN.get()));
     public static final RegistryObject<Item> SUBSTILIUM_HANGING_SIGN = ITEMS.register("substilium_hanging_sign",

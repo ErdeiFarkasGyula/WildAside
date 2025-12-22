@@ -72,6 +72,8 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.DNA_HOLDER.get());
                         pOutput.accept(ModItems.SYRINGE.get());
 
+                        pOutput.accept(ModItems.BACILLUS_BLOB.get());
+
                         pOutput.accept(ModBlocks.NATURAL_SPORE_BLASTER.get());
                         pOutput.accept(ModBlocks.SPORE_BLASTER.get());
                         pOutput.accept(ModBlocks.POTION_BLASTER.get());

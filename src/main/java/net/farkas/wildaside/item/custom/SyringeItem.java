@@ -289,10 +289,11 @@ public class SyringeItem extends Item {
 
             var cap = target.getCapability(DnaCapability.INSTANCE).orElse(null);
 
-            if (cap.getGenes().isEmpty()) {
+            if (cap.getLoci().isEmpty()) {
                 cap.setSource(target.getType());
-                cap.setGenes(DnaUtils.generateBaseGenes(target, true));
-                cap.setStability(100);
+                cap.setLoci(DnaUtils.generateBaseLoci(target));
+                cap.setStress(0f);
+                cap.recomputeAndApply(target);
             }
 
             tag.put(DNA_DATA, cap.serializeNBT());

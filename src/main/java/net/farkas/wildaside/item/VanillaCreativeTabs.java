@@ -68,6 +68,7 @@ public class VanillaCreativeTabs {
             event.accept(ModItems.BROWN_HICKORY_NUT_TRAIL_MIX);
             event.accept(ModItems.YELLOW_HICKORY_NUT_TRAIL_MIX);
             event.accept(ModItems.GREEN_HICKORY_NUT_TRAIL_MIX);
+            event.accept(ModItems.BACILLUS_BLOB);
         }
         if (tab == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
             event.accept(ModBlocks.BIOENGINEERING_WORKSTATION);

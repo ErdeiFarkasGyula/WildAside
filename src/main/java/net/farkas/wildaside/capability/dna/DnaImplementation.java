@@ -1,7 +1,11 @@
 package net.farkas.wildaside.capability.dna;
 
 import net.farkas.wildaside.dna.Gene;
+import net.farkas.wildaside.dna.locus.GeneLocus;
+import net.farkas.wildaside.dna.locus.LocusExpression;
+import net.farkas.wildaside.dna.allele.value.AlleleValue;
 import net.farkas.wildaside.dna.trait.Trait;
+import net.farkas.wildaside.dna.trait.TraitRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -11,143 +15,86 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class DnaImplementation implements IDna {
     private @Nullable EntityType<?> source;
-    private Map<Trait, Gene> genes = new HashMap<>();
-    private float stability = 100;
+    private Map<Trait, List<GeneLocus>> loci = new HashMap<>();
+    private Map<Trait, AlleleValue> expressedCache = new HashMap<>();
+    private float stress = 0f;
     private boolean modified = false;
+
+    @Override public @Nullable EntityType<?> getSource() { return source; }
+    @Override public void setSource(EntityType<?> source) { this.source = source; }
+
+    @Override public Map<Trait, List<GeneLocus>> getLoci() { return loci; }
+    @Override public void setLoci(Map<Trait, List<GeneLocus>> loci) { this.loci = loci; recomputeCache(); }
+
+    @Override public float getStress() { return stress; }
+    @Override public void setStress(float stress) { this.stress = Math.max(0f, Math.min(100f, stress)); }
+
+    @Override public boolean getModified() { return modified; }
+    @Override public void setModified(boolean modified) { this.modified = modified; }
 
     @Override
     public void applyGenes(LivingEntity entity) {
-        for (Gene gene : genes.values()) {
-            gene.apply(entity);
+        for (Map.Entry<Trait, AlleleValue> e : expressedCache.entrySet()) {
+            e.getKey().apply(entity, e.getValue());
         }
     }
 
     @Override
     public void removeGenes(LivingEntity entity) {
-        for (Gene gene : genes.values()) {
-            gene.remove(entity);
+        for (Trait t : loci.keySet()) t.remove(entity);
+    }
+
+    @Override
+    public void recomputeAndApply(LivingEntity entity) {
+        recomputeCache();
+        removeGenes(entity);
+        applyGenes(entity);
+    }
+
+    private void recomputeCache() {
+        expressedCache.clear();
+        for (Map.Entry<Trait, List<GeneLocus>> e : loci.entrySet()) {
+            expressedCache.put(e.getKey(), LocusExpression.express(e.getKey(), e.getValue()));
         }
-    }
-
-    @Override
-    public void setGenes(Map<Trait, Gene> genes) {
-        this.genes = genes;
-    }
-
-    @Override
-    public void setStability(float stability) {
-        this.stability = stability;
-    }
-
-    @Override
-    public void setModified(boolean modified) { this.modified = modified; }
-
-    @Override
-    public void applyGene(LivingEntity entity, Gene gene) {
-        gene.apply(entity);
-    }
-
-    @Override
-    public float getStability() {
-        return stability;
-    }
-
-    @Override
-    public boolean getModified() { return modified; }
-
-    @Override
-    public void setSource(@Nullable EntityType<?> source) {
-        this.source = source;
-    }
-
-    @Nullable
-    @Override
-    public EntityType<?> getSource() {
-        return source;
-    }
-
-    @Override
-    public Map<Trait, Gene> getGenes() {
-        return genes;
-    }
-
-    @Override
-    public float calculateInstabilityChange(Map<Trait, Gene> newGenes) {
-//        float totalCost = 0.0f;
-//
-//        for (Map.Entry<Trait, Gene> entry : newGenes.entrySet()) {
-//            Trait trait = entry.getKey();
-//            Gene newGene = entry.getValue();
-//
-//            Gene currentGene = genes.get(trait);
-//            if (currentGene == null) {
-//                totalCost += newGene.getTrait().baseInstability();
-//                continue;
-//            }
-//
-//            float oldValue = currentGene.getExpressedValue();
-//            float newValue = newGene.getExpressedValue();
-//
-//            if (Math.abs(oldValue - newValue) <= 0.001f)
-//                continue;
-//
-//            float base = oldValue == 0.0f ? 1.0f : Math.abs(oldValue);
-//            float relativeChange = Math.abs(newValue - oldValue) / base;
-//
-//            relativeChange = Math.min(relativeChange, 2.0f);
-//
-//            float baseInstability = newGene.getTrait().baseInstability();
-//            float instabilityCost = baseInstability * (1.0f + relativeChange * 2.0f);
-//
-//            if (newValue > oldValue)
-//                instabilityCost *= 1.25f;
-//
-//            totalCost += instabilityCost;
-//        }
-//
-//        return totalCost;
-        return 0.0f;
     }
 
     @Override
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
-        if (source != null) {
-            ResourceLocation id = ForgeRegistries.ENTITY_TYPES.getKey(source);
-            tag.putString("source", id.toString());
-        } else {
-            tag.putString("source", "");
+        tag.putFloat("stress", stress);
+        tag.putString("source", source == null ? "" : Objects.toString(ForgeRegistries.ENTITY_TYPES.getKey(source), ""));
+        ListTag listTag = new ListTag();
+        for (Map.Entry<Trait, List<GeneLocus>> e : loci.entrySet()) {
+            for (GeneLocus gl : e.getValue()) {
+                CompoundTag ct = gl.serializeNBT();
+                ct.putString("Trait", e.getKey().getName());
+                listTag.add(ct);
+            }
         }
-        tag.putFloat("stability", stability);
-
-        ListTag list = new ListTag();
-        for (Gene gene : genes.values()) {
-            CompoundTag geneTag = gene.serializeNBT();
-            list.add(geneTag);
-        }
-        tag.put("genes", list);
+        tag.put("loci", listTag);
+        tag.putBoolean("modified", modified);
         return tag;
     }
 
     @Override
     public void deserializeNBT(CompoundTag tag) {
-        String sourceString = tag.getString("source");
-        if (!sourceString.isEmpty()) {
-            source = ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(sourceString));
-        }
+        loci.clear();
+        stress = tag.getFloat("stress");
+        modified = tag.getBoolean("modified");
+        String s = tag.getString("source");
+        if (!s.isEmpty()) source = ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(s));
 
-        stability = tag.getFloat("stability");
-        genes.clear();
-        ListTag list = tag.getList("genes", Tag.TAG_COMPOUND);
-        for (Tag t : list) {
-            CompoundTag geneTag = (CompoundTag) t;
-            Gene gene = Gene.deserializeNBT(geneTag);
-            genes.put(gene.getTrait(), gene);
+        ListTag ltag = tag.getList("loci", Tag.TAG_COMPOUND);
+        for (Tag t : ltag) {
+            CompoundTag ct = (CompoundTag) t;
+            Trait trait = TraitRegistry.getByName(ct.getString("Trait"));
+            GeneLocus gl = GeneLocus.deserializeNBT(ct);
+            loci.computeIfAbsent(trait, k -> new ArrayList<>()).add(gl);
         }
+        recomputeCache();
     }
 }

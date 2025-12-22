@@ -1,7 +1,9 @@
 package net.farkas.wildaside.block.entity;
 
 import net.farkas.wildaside.capability.dna.DnaImplementation;
+import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
+import net.farkas.wildaside.dna.locus.GeneLocus;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.item.custom.DnaHolderItem;
@@ -236,10 +238,17 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
     }
 
     public static Map<Trait, Gene> orderGenes(DnaImplementation dna) {
-        return dna.getGenes().entrySet().stream()
-                .sorted(Map.Entry.comparingByKey(Comparator.comparing(Trait::getName)))
+        return dna.getLoci().entrySet().stream()
                 .sorted(Map.Entry.comparingByKey(Comparator.comparing(Trait::getTraitType)))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));
+                .sorted(Map.Entry.comparingByKey(Comparator.comparing(Trait::getName)))
+                .map(e -> Map.entry(e.getKey(), DnaUtils.asGene(e.getKey(), e.getValue())))
+                .filter(e -> e.getValue() != null)
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (a, b) -> a,
+                        LinkedHashMap::new
+                ));
     }
 
     public void analyseDna() {
@@ -291,28 +300,32 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
         CompoundTag tag = output.getOrCreateTag();
         CompoundTag dnaTag = tag.getCompound(DNA_DATA);
         DnaImplementation dna = new DnaImplementation();
+        if (!dnaTag.isEmpty()) dna.deserializeNBT(dnaTag);
 
-        if (!dnaTag.isEmpty()) {
-            Map<Trait, Gene> genes = new HashMap<>();
-            dna.deserializeNBT(dnaTag);
+        Map<Trait, List<GeneLocus>> loci = new HashMap<>();
+        for (int i = 0; i <= 12; i++) {
+            ItemStack geneStack = itemHandler.getStackInSlot(i + geneStartIndex);
+            System.out.println("i: " + i + " geneStack: " + geneStack + " slot: " + (i + geneStartIndex));
+            System.out.println(geneStack.getOrCreateTag().toString());
 
-            for (int i = 0; i <= 12; i++) {
-                ItemStack geneStack = itemHandler.getStackInSlot(i + geneStartIndex);
-                if (geneStack.isEmpty()) continue;
-                CompoundTag geneTag = geneStack.getOrCreateTag();
-
-                Gene gene = Gene.deserializeNBT(geneTag);
-                Trait trait = gene.getTrait();
-
-                genes.put(trait, new Gene(trait, gene.getAlleleA(), gene.getAlleleB()));
-            }
-
-            dna.setGenes(genes);
-            tag.remove(DNA_DATA);
-            tag.put(DNA_DATA, dna.serializeNBT());
+            if (geneStack.isEmpty()) continue;
+            Gene gene = Gene.deserializeNBT(geneStack.getOrCreateTag());
+            Trait trait = gene.getTrait();
+            GeneLocus gl = new GeneLocus(
+                    trait.getName(),
+                    gene.getAlleleA(),
+                    gene.getAlleleB(),
+                    Set.of(),
+                    trait.getInstabilityModifier()
+            );
+            loci.put(trait, List.of(gl));
         }
 
+        dna.setLoci(loci);
+        tag.put(DNA_DATA, dna.serializeNBT());
+
         output.setTag(tag);
+
         itemHandler.setStackInSlot(outputSlot, output);
         itemHandler.setStackInSlot(inputSlot, ItemStack.EMPTY);
     }

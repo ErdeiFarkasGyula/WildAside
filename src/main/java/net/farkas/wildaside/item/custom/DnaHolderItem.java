@@ -6,6 +6,7 @@ import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.allele.value.AlleleValue;
 import net.farkas.wildaside.dna.allele.value.EnumAlleleValue;
 import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
+import net.farkas.wildaside.dna.locus.GeneLocus;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitType;
 import net.minecraft.ChatFormatting;
@@ -95,49 +96,63 @@ public class DnaHolderItem extends Item {
         }
 
         if (revealStability) {
-            tooltip.add(Component.translatable("dna.wildaside.stability")
-                    .append(": " + String.format("%.2f", dna.getStability()))
+            tooltip.add(Component.translatable("dna.wildaside.stress")
+                    .append(": " + String.format("%.2f", dna.getStress()))
                     .withStyle(ChatFormatting.GREEN));
         }
 
+        Map<Trait, List<GeneLocus>> loci = dna.getLoci();
         if (revealTraits) {
-            displayGenesSection(tooltip, dna, TraitType.CORE, getTranslatable(CORE_TRAITS));
-            displayGenesSection(tooltip, dna, TraitType.RESISTANCE, getTranslatable(RESISTANCES));
-            displayGenesSection(tooltip, dna, TraitType.ABILITY, getTranslatable(ABILITIES));
-            displayGenesSection(tooltip, dna, TraitType.APPEARANCE, getTranslatable(APPEARANCE));
+            displayGenesSection(tooltip, loci, TraitType.CORE, getTranslatable(CORE_TRAITS));
+            displayGenesSection(tooltip, loci, TraitType.RESISTANCE, getTranslatable(RESISTANCES));
+            displayGenesSection(tooltip, loci, TraitType.ABILITY, getTranslatable(ABILITIES));
+            displayGenesSection(tooltip, loci, TraitType.APPEARANCE, getTranslatable(APPEARANCE));
         }
     }
 
-    private void displayGenesSection(List<Component> tooltip, DnaImplementation dna, TraitType type, MutableComponent title) {
-        Map<Trait, Gene> filtered = dna.getGenes().entrySet().stream()
+    private void displayGenesSection(List<Component> tooltip, Map<Trait, List<GeneLocus>> loci, TraitType type, MutableComponent title) {
+        var filtered = loci.entrySet().stream()
                 .filter(e -> e.getKey().getTraitType() == type)
                 .sorted(Map.Entry.comparingByKey(Comparator.comparing(Trait::getName)))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));
+                .toList();
 
         if (filtered.isEmpty()) return;
 
         tooltip.add(title.withStyle(type.getHeaderColour()));
 
-        filtered.values().forEach(gene -> {
+        for (var entry : filtered) {
+            Gene gene = DnaUtils.asGene(entry.getKey(), entry.getValue());
+            if (gene == null) continue;
             AlleleValue valueHolder = gene.getExpressedValueHolder();
             String valueStr = valueHolder.format().getString();
+
+            if (valueHolder instanceof FloatAlleleValue floatAlleleValue) {
+                if (floatAlleleValue.get() == 0f) {
+                    continue;
+                }
+            }
 
             if (type == TraitType.ABILITY && valueHolder instanceof FloatAlleleValue floatAlleleValue) {
                 float value = floatAlleleValue.get() / 20;
                 valueStr = String.format("%.2f", value) + "s";
             } else if (type == TraitType.RESISTANCE && valueHolder instanceof FloatAlleleValue floatAlleleValue) {
-                float value = floatAlleleValue.get() / 20;
-                value *= 100;
+                float value = floatAlleleValue.get() * 100;
                 valueStr = String.format("%.2f", value) + "%";
-            } else if (type == TraitType.APPEARANCE && valueHolder instanceof EnumAlleleValue<?> enumAlleleValue) {
-                valueStr = enumAlleleValue.get().toString();
+            } else if (type == TraitType.APPEARANCE) {
+                if (valueHolder instanceof EnumAlleleValue<?> enumAlleleValue) {
+                    valueStr = enumAlleleValue.get().toString();
+                }
+
+                if (valueStr.startsWith("0")) {
+                    continue;
+                }
             }
 
             tooltip.add(Component.literal("- ")
                     .append(Component.translatable("trait.wildaside." + gene.getTrait().getName()))
                     .append(": " + valueStr)
                     .withStyle(type.getEntryColour()));
-        });
+        }
     }
 
     private int getSampleProgress(ItemStack stack) {
