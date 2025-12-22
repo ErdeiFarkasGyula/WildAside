@@ -389,10 +389,7 @@ public class ModCommands {
                                 .append(allele.getDominance().getComponent())
                                 .append(" | ")
                                 .append(Component.translatable("dna.wildaside.mutation_rate"))
-                                .append(" = " + allele.getMutationRate())
-                                .append(" | ")
-                                .append(Component.translatable("dna.wildaside.stability"))
-                                .append(" = " + allele.getStability()),
+                                .append(" = " + allele.getMutationRate()),
                 false
         );
     }

@@ -11,8 +11,6 @@ import net.minecraft.world.item.ItemStack;
 import java.util.*;
 
 public final class BacillusPayloadUtil {
-    private BacillusPayloadUtil() {}
-
     public static Map<Trait, List<GeneLocus>> readPayload(ItemStack stack) {
         Map<Trait, List<GeneLocus>> out = new HashMap<>();
         CompoundTag root = stack.getTagElement("bacillus_payload");

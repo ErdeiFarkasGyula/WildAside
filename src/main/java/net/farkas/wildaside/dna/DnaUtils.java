@@ -34,10 +34,11 @@ import java.util.*;
 import static net.farkas.wildaside.dna.DnaConstants.*;
 
 public class DnaUtils {
-    public static final String DNA_PREFIX = WildAside.MOD_ID + "_dna_";
+    private static final float LATENT_CHANCE = 0.35f;
+    private static final float ACTIVATOR_MIN = 0.05f;
 
     public static String fullName(String id) {
-        return DNA_PREFIX + id;
+        return WildAside.MOD_ID + "_dna_" + id;
     }
 
     public static ResourceLocation getAttributeRes(String name) {
@@ -301,24 +302,14 @@ public class DnaUtils {
             ));
         }
 
-        out.put(TraitRegistry.FIRE_RESISTANCE, List.of(
-                locus("fire_base", TraitRegistry.FIRE_RESISTANCE, entity.fireImmune() ? 1f : 0f, seed, 0),
-                locus("fire_reg", TraitRegistry.FIRE_RESISTANCE, 0.25f, seed, 2, Set.of(LocusFlag.REGULATOR))
-        ));
-
-        out.put(TraitRegistry.FREEZE_RESISTANCE, List.of(
-                locus("freeze_base", TraitRegistry.FREEZE_RESISTANCE,
-                        entity.getType().is(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES) ? 1f : 0f, seed, 0)
-        ));
-
-        out.put(TraitRegistry.FALL_RESISTANCE, List.of(
-                locus("fall_base", TraitRegistry.FALL_RESISTANCE,
-                        entity.getType().is(EntityTypeTags.FALL_DAMAGE_IMMUNE) ? 1f : 0f, seed, 0)
-        ));
-
-        out.put(TraitRegistry.EXPLOSION_RESISTANCE, List.of(
-                locus("explosion_base", TraitRegistry.EXPLOSION_RESISTANCE, 0f, seed, 0)
-        ));
+        out.put(TraitRegistry.FIRE_RESISTANCE,
+                resistanceLoci(entity.fireImmune() ? 1f : 0f, TraitRegistry.FIRE_RESISTANCE, "fire", seed, true));
+        out.put(TraitRegistry.FREEZE_RESISTANCE,
+                resistanceLoci(entity.getType().is(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES) ? 1f : 0f, TraitRegistry.FREEZE_RESISTANCE, "freeze", seed, false));
+        out.put(TraitRegistry.FALL_RESISTANCE,
+                resistanceLoci(entity.getType().is(EntityTypeTags.FALL_DAMAGE_IMMUNE) ? 1f : 0f, TraitRegistry.FALL_RESISTANCE, "fall", seed, false));
+        out.put(TraitRegistry.EXPLOSION_RESISTANCE,
+                resistanceLoci(0f, TraitRegistry.EXPLOSION_RESISTANCE, "explosion", seed, false));
 
         if (!out.containsKey(TraitRegistry.KNOCKBACK_RESISTANCE)) {
             Attribute attr = ForgeRegistries.ATTRIBUTES.getValue(getAttributeRes("knockback_resistance"));
@@ -328,6 +319,7 @@ public class DnaUtils {
             ));
         }
 
+
         if (entity.getType() == EntityType.BLAZE) {
             float potBase = TraitRegistry.FIRE_ABILITY.getInstabilityModifier() * 100f;
             out.put(TraitRegistry.FIRE_ABILITY, List.of(
@@ -336,6 +328,7 @@ public class DnaUtils {
                     locus("fire_side", TraitRegistry.FIRE_ABILITY, 0.1f, seed, 4, Set.of(LocusFlag.SIDE_EFFECT))
             ));
         }
+
         if (entity.getType() == EntityType.ENDERMAN) {
             float potBase = TraitRegistry.TELEPORT_ABILITY.getInstabilityModifier() * 100f;
             out.put(TraitRegistry.TELEPORT_ABILITY, List.of(
@@ -354,12 +347,19 @@ public class DnaUtils {
             }
         }
 
-//        for (Trait trait : TraitRegistry.TRAITS) {
-//            if (out.containsKey(trait) || trait.getTraitType() == TraitType.APPEARANCE) continue;
-//            out.put(trait, List.of(locus(trait.getName(), trait, 0f, seed, 0)));
-//        }
-
         return out;
+    }
+
+    private static List<GeneLocus> resistanceLoci(float baseVal, Trait trait, String prefix, long seed, boolean includeRegulator) {
+        List<GeneLocus> list = new ArrayList<>();
+        list.add(locus(prefix + "_base", trait, baseVal, seed, 0));
+        if (includeRegulator) {
+            list.add(locus(prefix + "_reg", trait, 0.25f, seed, 2, Set.of(LocusFlag.REGULATOR)));
+        }
+        boolean latent = hashToFloat(seed, prefix + "_latent", 3) < LATENT_CHANCE;
+        float actVal = latent ? 0f : ACTIVATOR_MIN + 0.1f * hashToFloat(seed, prefix + "_actv_val", 4);
+        list.add(locus(prefix + "_act", trait, actVal, seed, 4, Set.of(LocusFlag.ACTIVATOR)));
+        return list;
     }
 
     private static GeneLocus locus(String id, Trait trait, float baseValue, long seed, int index) {
