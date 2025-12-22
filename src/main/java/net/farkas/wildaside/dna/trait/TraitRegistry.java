@@ -59,7 +59,6 @@ public class TraitRegistry {
                         ResourceLocation resourceLocation = resourceLocationAlleleValue.get();
                         if (BuiltInRegistries.FROG_VARIANT.containsKey(resourceLocation)) {
                             frog.setVariant(BuiltInRegistries.FROG_VARIANT.get(resourceLocation));
-                            System.out.println(resourceLocation);
                         }
                     }
                 }

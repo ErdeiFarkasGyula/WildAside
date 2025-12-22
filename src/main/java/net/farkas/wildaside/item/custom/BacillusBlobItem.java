@@ -21,13 +21,10 @@ public class BacillusBlobItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (level.isClientSide()) return InteractionResultHolder.pass(stack);
-        System.out.println("Using bacillus blob");
 
         player.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-            System.out.println("Meow");
             Map<Trait, List<GeneLocus>> payload = BacillusPayloadUtil.readPayload(stack);
             if (payload.isEmpty()) return;
-            System.out.println("Applying bacillus payload with " + payload.size() + " traits");
             Map<Trait, List<GeneLocus>> loci = dna.getLoci();
             loci.putAll(payload);
             dna.setLoci(loci);

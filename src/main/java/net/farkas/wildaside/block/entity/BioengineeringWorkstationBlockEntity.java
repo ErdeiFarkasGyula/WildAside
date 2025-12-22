@@ -305,8 +305,6 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
         Map<Trait, List<GeneLocus>> loci = new HashMap<>();
         for (int i = 0; i <= 12; i++) {
             ItemStack geneStack = itemHandler.getStackInSlot(i + geneStartIndex);
-            System.out.println("i: " + i + " geneStack: " + geneStack + " slot: " + (i + geneStartIndex));
-            System.out.println(geneStack.getOrCreateTag().toString());
 
             if (geneStack.isEmpty()) continue;
             Gene gene = Gene.deserializeNBT(geneStack.getOrCreateTag());
