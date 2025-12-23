@@ -8,8 +8,8 @@ import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 
 public class AdvancementGivingVisibleResultSlot extends ModVisibleSlotItemHandler {
-    private final Player player;
-    private final String advancement;
+    public Player player;
+    public String advancement;
 
     public AdvancementGivingVisibleResultSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition, Player player, String advancement) {
         super(itemHandler, index, xPosition, yPosition);

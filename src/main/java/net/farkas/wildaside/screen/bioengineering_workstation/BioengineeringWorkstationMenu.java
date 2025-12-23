@@ -6,7 +6,6 @@ import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
 import net.farkas.wildaside.dna.trait.Trait;
-import net.farkas.wildaside.dna.trait.TraitType;
 import net.farkas.wildaside.item.custom.DnaHolderItem;
 import net.farkas.wildaside.item.custom.GeneItem;
 import net.farkas.wildaside.screen.AdvancementGivingVisibleResultSlot;
@@ -114,7 +113,7 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
             analyserSlotA = new ModVisibleSlotItemHandler(iItemHandler, ANA_INPUT_1, 66, 34 + yOffset);
             analyserSlotB = new ModVisibleSlotItemHandler(iItemHandler, ANA_INPUT_2, 84, 34 + yOffset);
             analyserSlotC = new ModVisibleSlotItemHandler(iItemHandler, ANA_INPUT_3, 102, 34 + yOffset);
-            analyserResult = new AdvancementGivingVisibleResultSlot(iItemHandler, ANA_OUTPUT_1, 170, 34 + yOffset);
+            analyserResult = new PointGivingRewardSlot(iItemHandler, ANA_OUTPUT_1, 170, 34 + yOffset, player, 10);
 
             addSlot(analyserSlotA);
             addSlot(analyserSlotB);
@@ -254,7 +253,8 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
                         if (topGeneSlots.size() > correctedSlot) {
                             topGeneSlots.get(correctedSlot).set(geneStack);
                         }
-                    } else if (i == EDITOR_INPUT_2) {
+                    }
+                    else if (i == EDITOR_INPUT_2) {
                         if (botGeneSlots.size() > correctedSlot) {
                             botGeneSlots.get(correctedSlot).set(geneStack);
                         }
@@ -339,7 +339,8 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
 
         if (pIndex < VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT) {
             if (!moveItemStackTo(sourceStack, start, end, false)) return ItemStack.EMPTY;
-        } else if (pIndex < end) {
+        }
+        else if (pIndex < end) {
             if (!moveItemStackTo(sourceStack, VANILLA_FIRST_SLOT_INDEX, VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT, false))
                 return ItemStack.EMPTY;
         }
