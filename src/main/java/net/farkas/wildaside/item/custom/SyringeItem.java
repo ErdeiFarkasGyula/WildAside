@@ -293,7 +293,8 @@ public class SyringeItem extends Item {
                 cap.setSource(target.getType());
                 cap.setLoci(DnaUtils.generateBaseLoci(target));
                 cap.setStress(0f);
-                cap.recomputeAndApply(target);
+
+                System.out.println(cap.serializeNBT().toString());
             }
 
             tag.put(DNA_DATA, cap.serializeNBT());

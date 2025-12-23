@@ -286,12 +286,12 @@ public class DnaUtils {
         AppearanceGeneRegistry.extract(entity, out, seed);
 
         if (TraitRegistry.MOVEMENT_SPEED != null) {
-            float baseValue = safeBaseAttribute(entity, ForgeRegistries.ATTRIBUTES.getValue(getAttributeRes("movement_speed")));
+            float baseValue = getSafeBaseAttributeValue(entity, ForgeRegistries.ATTRIBUTES.getValue(getAttributeRes("movement_speed")));
 
             if (ModConfig.ACCURATE_DNA_MOVEMENT_SPEEDS.get()) {
                 baseValue = (float) MobSpeedResultStorage.getSpeed(entity.getType(), "ground");
                 if (MobSpeedTesting.EXCLUDED_MOBS.contains(entity.getType())) {
-                    baseValue = safeBaseAttribute(entity, ForgeRegistries.ATTRIBUTES.getValue(getAttributeRes("movement_speed")));
+                    baseValue = getSafeBaseAttributeValue(entity, ForgeRegistries.ATTRIBUTES.getValue(getAttributeRes("movement_speed")));
                 }
             }
 
@@ -313,12 +313,11 @@ public class DnaUtils {
 
         if (!out.containsKey(TraitRegistry.KNOCKBACK_RESISTANCE)) {
             Attribute attr = ForgeRegistries.ATTRIBUTES.getValue(getAttributeRes("knockback_resistance"));
-            float baseValue = attr != null ? safeBaseAttribute(entity, attr) : 0f;
+            float baseValue = attr != null ? getSafeBaseAttributeValue(entity, attr) : 0f;
             out.put(TraitRegistry.KNOCKBACK_RESISTANCE, List.of(
                     locus("knockback_resistance", TraitRegistry.KNOCKBACK_RESISTANCE, baseValue, seed, 0)
             ));
         }
-
 
         if (entity.getType() == EntityType.BLAZE) {
             float potBase = TraitRegistry.FIRE_ABILITY.getInstabilityModifier() * 100f;
@@ -342,7 +341,7 @@ public class DnaUtils {
             if (out.containsKey(trait)) continue;
             if (trait.getTraitType() == TraitType.CORE || trait == TraitRegistry.KNOCKBACK_RESISTANCE) {
                 Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(getAttributeRes(trait.getName()));
-                float baseValue = attribute != null ? safeBaseAttribute(entity, attribute) : 0f;
+                float baseValue = attribute != null ? getSafeBaseAttributeValue(entity, attribute) : 0f;
                 out.put(trait, List.of(locus(trait.getName(), trait, baseValue, seed, 0)));
             }
         }
@@ -382,7 +381,7 @@ public class DnaUtils {
         return new Gene(trait, l.getAlleleA(), l.getAlleleB());
     }
 
-    public static float safeBaseAttribute(LivingEntity entity, Attribute attribute) {
+    public static float getSafeBaseAttributeValue(LivingEntity entity, Attribute attribute) {
         var inst = entity.getAttribute(attribute);
         return inst == null ? 0f : (float) inst.getBaseValue();
     }
