@@ -3,7 +3,7 @@ package net.farkas.wildaside.event;
 import com.mojang.brigadier.CommandDispatcher;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
-import net.farkas.wildaside.capability.bioengineering.BioengineeringSkillsProvider;
+import net.farkas.wildaside.capability.bioengineering_skill.BioengineeringSkillsProvider;
 import net.farkas.wildaside.capability.contamination.ContaminationCapability;
 import net.farkas.wildaside.capability.contamination.ContaminationProvider;
 import net.farkas.wildaside.capability.dna.DnaProvider;

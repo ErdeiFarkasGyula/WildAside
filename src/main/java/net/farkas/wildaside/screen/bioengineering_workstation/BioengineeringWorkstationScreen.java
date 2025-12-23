@@ -1,8 +1,8 @@
 package net.farkas.wildaside.screen.bioengineering_workstation;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.farkas.wildaside.capability.bioengineering.BioengineeringSkillsCapability;
-import net.farkas.wildaside.capability.bioengineering.IBioengineeringSkills;
+import net.farkas.wildaside.capability.bioengineering_skill.BioengineeringSkillsCapability;
+import net.farkas.wildaside.capability.bioengineering_skill.IBioengineeringSkills;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.DnaConstants;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkill;

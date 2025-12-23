@@ -1,6 +1,6 @@
 package net.farkas.wildaside.network.packets;
 
-import net.farkas.wildaside.capability.bioengineering.BioengineeringSkillsCapability;
+import net.farkas.wildaside.capability.bioengineering_skill.BioengineeringSkillsCapability;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;

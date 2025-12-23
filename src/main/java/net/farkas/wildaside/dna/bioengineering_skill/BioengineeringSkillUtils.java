@@ -1,6 +1,6 @@
 package net.farkas.wildaside.dna.bioengineering_skill;
 
-import net.farkas.wildaside.capability.bioengineering.BioengineeringSkillsCapability;
+import net.farkas.wildaside.capability.bioengineering_skill.BioengineeringSkillsCapability;
 import net.farkas.wildaside.network.NetworkHandler;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;

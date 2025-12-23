@@ -1,4 +1,4 @@
-package net.farkas.wildaside.capability.bioengineering;
+package net.farkas.wildaside.capability.bioengineering_skill;
 
 import net.farkas.wildaside.WildAside;
 import net.minecraft.core.Direction;

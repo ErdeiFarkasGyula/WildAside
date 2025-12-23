@@ -1,4 +1,4 @@
-package net.farkas.wildaside.capability.bioengineering;
+package net.farkas.wildaside.capability.bioengineering_skill;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;

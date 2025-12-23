@@ -1,6 +1,6 @@
 package net.farkas.wildaside.item.custom;
 
-import net.farkas.wildaside.capability.bioengineering.BioengineeringSkillsCapability;
+import net.farkas.wildaside.capability.bioengineering_skill.BioengineeringSkillsCapability;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.allele.Allele;
 import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
