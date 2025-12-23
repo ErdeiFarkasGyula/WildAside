@@ -147,22 +147,7 @@ public class DnaHolderItem extends Item {
                     .withStyle(type.getEntryColour()));
         }
     }
-
-    private int getSampleProgress(ItemStack stack) {
-        return stack.getOrCreateTag().getInt(SAMPLE_PROGRESS);
-    }
-
-    private void setSampleProgress(ItemStack stack, int progress) {
-        stack.getOrCreateTag().putInt(MAX_SAMPLES, progress);
-    }
-
-    private int getMaxSamples(ItemStack stack) {
-        CompoundTag tag = stack.getOrCreateTag();
-        if (!tag.contains(MAX_SAMPLES))
-            tag.putInt(MAX_SAMPLES, DEFAULT_MAX_SAMPLES);
-        return tag.getInt(MAX_SAMPLES);
-    }
-
+    
     public static MutableComponent getTranslatable(String string) {
         return Component.translatable("dna.wildaside." + string);
     }
