@@ -29,6 +29,14 @@ import java.util.List;
 import java.util.Optional;
 
 public class BioengineeringWorkstationScreen extends AbstractContainerScreen<BioengineeringWorkstationMenu> {
+    private static final float HELIX_AMPLITUDE = BioengineeringSkillTreeRegistry.AMPLITUDE;
+    private static final float HELIX_PART_WIDTH = BioengineeringSkillTreeRegistry.PART_WIDTH;
+    private static final float HELIX_K = BioengineeringSkillTreeRegistry.K;
+    private static final float HELIX_Y0 = BioengineeringSkillTreeRegistry.Y0;
+
+    private static final int NODE_SIZE = 24;
+    private static final float NODE_HALF = NODE_SIZE * 0.5f;
+
     private final BioengineeringWorkstationMenu menu;
     public BioengineeringWorkstationTab tab;
     private static ResourceLocation BACKGROUND;
@@ -144,6 +152,8 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
 
         graphics.pose().pushPose();
         graphics.pose().translate(x + skillOffsetX, y + skillOffsetY, 0);
+
+        renderHelixCurves(graphics);
 
         drawSkillNodes(graphics);
 
@@ -378,10 +388,12 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         if (node.isUnlocked(player)) {
             tooltip.add(Component.translatable("skill.wildaside.status.unlocked")
                     .withStyle(ChatFormatting.GREEN));
-        } else if (node.canUnlock(player)) {
+        }
+        else if (node.canUnlock(player)) {
             tooltip.add(Component.translatable("skill.wildaside.status.available")
                     .withStyle(ChatFormatting.YELLOW));
-        } else {
+        }
+        else {
             tooltip.add(Component.translatable("skill.wildaside.status.locked")
                     .withStyle(ChatFormatting.RED));
         }
@@ -421,5 +433,51 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         return player.getCapability(BioengineeringSkillsCapability.INSTANCE)
                 .map(IBioengineeringSkills::getPoints)
                 .orElse(0);
+    }
+
+    private void renderHelixCurves(GuiGraphics graphics) {
+        float maxX = 0f;
+        for (SkillNode n : BioengineeringSkillTreeRegistry.NODES) {
+            maxX = Math.max(maxX, n.x + NODE_HALF);
+        }
+
+        float totalWidth = Math.max(HELIX_PART_WIDTH * 1.5f, maxX + HELIX_PART_WIDTH * 0.5f);
+        float tMax = totalWidth / HELIX_K;
+
+        float step = 0.06f;
+        float prevTopX = kx(0) + NODE_HALF, prevTopY = yTop(0) + NODE_HALF;
+        float prevBotX = kx(0) + NODE_HALF, prevBotY = yBot(0) + NODE_HALF;
+        for (float t = step; t <= tMax + step; t += step) {
+            float xTop = kx(t) + NODE_HALF, yTop = yTop(t) + NODE_HALF;
+            float xBot = kx(t) + NODE_HALF, yBot = yBot(t) + NODE_HALF;
+            drawSegment(graphics, prevTopX, prevTopY, xTop, yTop, 0x40FFFFFF);
+            drawSegment(graphics, prevBotX, prevBotY, xBot, yBot, 0x40FFFFFF);
+            prevTopX = xTop;
+            prevTopY = yTop;
+            prevBotX = xBot;
+            prevBotY = yBot;
+        }
+    }
+
+    private void drawSegment(GuiGraphics graphics, float x1, float y1, float x2, float y2, int argb) {
+        int steps = (int) Math.max(1, Math.hypot(x2 - x1, y2 - y1));
+        for (int i = 0; i <= steps; i++) {
+            float t = i / (float) steps;
+            int px = Math.round(x1 + t * (x2 - x1));
+            int py = Math.round(y1 + t * (y2 - y1));
+            graphics.fill(px, py, px + 1, py + 1, argb);
+        }
+    }
+
+    private static float kx(float t) {
+        return HELIX_K * t;
+    }
+
+    private static float yTop(float t) {
+        return HELIX_Y0 + HELIX_AMPLITUDE * (float) Math.sin(t);
+    }
+
+    private static float yBot(float t) {
+        return HELIX_Y0 - HELIX_AMPLITUDE * (float) Math.sin(t);
     }
 }
