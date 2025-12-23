@@ -27,7 +27,7 @@ import static net.farkas.wildaside.dna.DnaConstants.*;
 public class DnaHolderItem extends Item {
     public static final int MAX_COOLDOWN = 60;
 
-    public static final int DEFAULT_MAX_SAMPLES = 3;
+    public static final int DEFAULT_MAX_SAMPLES = 1;
 
     public DnaHolderItem(Properties pProperties) {
         super(pProperties);
@@ -50,13 +50,6 @@ public class DnaHolderItem extends Item {
         super.appendHoverText(stack, level, tooltip, isAdvanced);
 
         CompoundTag tag = stack.getOrCreateTag();
-        int progress = getSampleProgress(stack);
-        int maxSamples = getMaxSamples(stack);
-
-        Component sampleComponent = Component.translatable("dna.wildaside.sample_progress")
-                .append(Component.literal(": " + progress + "/" + maxSamples))
-                .withStyle(progress >= maxSamples ? ChatFormatting.GREEN : ChatFormatting.GRAY);
-        tooltip.add(sampleComponent);
 
         if (!tag.contains(DNA_DATA)) {
             tooltip.add(Component.translatable("dna.wildaside.no_dna_data").withStyle(ChatFormatting.DARK_GRAY));
