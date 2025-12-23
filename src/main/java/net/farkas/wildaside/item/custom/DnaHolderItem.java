@@ -13,6 +13,10 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -128,10 +132,12 @@ public class DnaHolderItem extends Item {
             if (type == TraitType.ABILITY && valueHolder instanceof FloatAlleleValue floatAlleleValue) {
                 float value = floatAlleleValue.get() / 20;
                 valueStr = String.format("%.2f", value) + "s";
-            } else if (type == TraitType.RESISTANCE && valueHolder instanceof FloatAlleleValue floatAlleleValue) {
+            }
+            else if (type == TraitType.RESISTANCE && valueHolder instanceof FloatAlleleValue floatAlleleValue) {
                 float value = floatAlleleValue.get() * 100;
                 valueStr = String.format("%.2f", value) + "%";
-            } else if (type == TraitType.APPEARANCE) {
+            }
+            else if (type == TraitType.APPEARANCE) {
                 if (valueHolder instanceof EnumAlleleValue<?> enumAlleleValue) {
                     valueStr = enumAlleleValue.get().toString();
                 }
@@ -147,8 +153,37 @@ public class DnaHolderItem extends Item {
                     .withStyle(type.getEntryColour()));
         }
     }
-    
+
     public static MutableComponent getTranslatable(String string) {
         return Component.translatable("dna.wildaside." + string);
+    }
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        if (hand != InteractionHand.MAIN_HAND) return InteractionResultHolder.pass(stack);
+        if (level.isClientSide()) return InteractionResultHolder.success(stack);
+        if (!hasDna(stack)) return InteractionResultHolder.pass(stack);
+
+        CompoundTag tag = stack.getOrCreateTag();
+
+        tag.remove(DNA_DATA);
+        tag.putInt(SAMPLE_PROGRESS, 0);
+        tag.putBoolean(SAMPLE_UNUSABLE, false);
+        tag.putBoolean(MULTIPLE_SOURCES, false);
+        tag.putBoolean(SAMPLE_CLOTTED, false);
+        tag.putBoolean(SAMPLE_DIRTY, false);
+        tag.putBoolean(REVEAL_SOURCE, false);
+        tag.putBoolean(REVEAL_STABILITY, false);
+        tag.putBoolean(REVEAL_TRAITS, false);
+
+        tag.putLong(BLOOD_CLOTTING_TIME, BLOOD_CLOTTING_TIME_DEFAULT);
+        tag.remove(BLOOD_FREEZER_TICKS);
+        tag.remove(BLOOD_CREATION_TICK);
+        tag.putFloat(DIRTINESS, 0f);
+
+        player.playSound(SoundEvents.BOTTLE_EMPTY, 1f, 1.1f);
+
+        return InteractionResultHolder.success(stack);
     }
 }
