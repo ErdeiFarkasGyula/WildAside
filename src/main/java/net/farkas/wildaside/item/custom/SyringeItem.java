@@ -87,7 +87,7 @@ public class SyringeItem extends Item {
                     tag.putString(FLUID_TYPE, WATER);
                     tag.putInt(FLUID_COLOUR, waterColor);
 
-                    serverLevel.playSound(player, player.blockPosition(), SoundEvents.BOTTLE_FILL, SoundSource.PLAYERS, 1f, 1.1f);
+                    serverLevel.playSound(null, player.blockPosition(), SoundEvents.BOTTLE_FILL, SoundSource.PLAYERS, 0.5f, 0.3f);
                 }
             }
         }
@@ -107,7 +107,7 @@ public class SyringeItem extends Item {
                 tag.putBoolean(MULTIPLE_SOURCES, false);
                 tag.remove(PREVIOUS_TARGET);
 
-                serverLevel.playSound(player, player.blockPosition(), SoundEvents.BOTTLE_EMPTY, SoundSource.PLAYERS, 1f, 1.1f);
+                serverLevel.playSound(null, player.blockPosition(), SoundEvents.BOTTLE_EMPTY, SoundSource.PLAYERS, 0.5f, 0.3f);
             }
         }
 
@@ -297,7 +297,7 @@ public class SyringeItem extends Item {
 
             tag.put(DNA_DATA, cap.serializeNBT());
 
-            serverLevel.playSound(player, player.blockPosition(), SoundEvents.BOTTLE_FILL, SoundSource.PLAYERS, 1f, 0.8f);
+            serverLevel.playSound(null, player.blockPosition(), SoundEvents.BOTTLE_FILL, SoundSource.PLAYERS, 0.5f, 0.3f);
 
             float dirt = tag.getFloat(DIRTINESS);
             dirt = Mth.clamp(dirt + 0.25f, 0f, 3f);

@@ -14,6 +14,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -182,7 +183,7 @@ public class DnaHolderItem extends Item {
         tag.remove(BLOOD_CREATION_TICK);
         tag.putFloat(DIRTINESS, 0f);
 
-        player.playSound(SoundEvents.BOTTLE_EMPTY, 1f, 1.1f);
+        level.playSound(null, player.blockPosition(), SoundEvents.BOTTLE_EMPTY, SoundSource.PLAYERS, 0.5f, 0.4f);
 
         return InteractionResultHolder.success(stack);
     }

@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_glass_bottle": {
+    "has_dna_holder": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:glass_bottle"
+              "wildaside:dna_holder"
             ]
           }
         ]
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_glass_bottle",
+      "has_dna_holder",
       "has_the_recipe"
     ]
   ],

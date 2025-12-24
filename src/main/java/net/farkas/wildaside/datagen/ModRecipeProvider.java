@@ -62,12 +62,12 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
         ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ModItems.SYRINGE.get())
                 .pattern("N")
-                .pattern("B")
+                .pattern("H")
                 .pattern("P")
                 .define('N', Items.IRON_NUGGET)
-                .define('B', Items.GLASS_BOTTLE)
+                .define('H', ModItems.DNA_HOLDER.get())
                 .define('P', Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE)
-                .unlockedBy(getHasName(Items.GLASS_BOTTLE), has(Items.GLASS_BOTTLE))
+                .unlockedBy(getHasName(ModItems.DNA_HOLDER.get()), has(ModItems.DNA_HOLDER.get()))
                 .save(recipeOutput);
 
         simpleShapedRecipe(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get(), 2, ModBlocks.SUBSTILIUM_SOIL.get(), RecipeCategory.BUILDING_BLOCKS).save(recipeOutput);

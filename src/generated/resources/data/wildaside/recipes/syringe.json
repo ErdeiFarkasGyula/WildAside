@@ -2,8 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "B": {
-      "item": "minecraft:glass_bottle"
+    "H": {
+      "item": "wildaside:dna_holder"
     },
     "N": {
       "item": "minecraft:iron_nugget"
@@ -14,7 +14,7 @@
   },
   "pattern": [
     "N",
-    "B",
+    "H",
     "P"
   ],
   "result": {
