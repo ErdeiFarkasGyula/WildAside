@@ -55,6 +55,11 @@ public class SyringeItem extends Item {
         ItemStack stack = player.getItemInHand(hand);
 
         if (!level.isClientSide() && hand == InteractionHand.MAIN_HAND) {
+            CompoundTag tag = stack.getOrCreateTag();
+            initTagDefaults(tag);
+            String fluidType = tag.getString(FLUID_TYPE);
+            boolean hasFluid = tag.getFloat(FLUID_LEVEL) > 0.01f && !NONE.equals(fluidType);
+            tag.putBoolean(INWARDS, !hasFluid);
             player.startUsingItem(hand);
         }
 
@@ -80,34 +85,36 @@ public class SyringeItem extends Item {
             if (BLOOD.equals(fluidType) || NONE.equals(fluidType)) {
                 fluid = sampleEntity(serverLevel, player, tag, fluid);
             }
+
             if (NONE.equals(fluidType) || WATER.equals(fluidType)) {
                 int waterColor = raytraceForWater(serverLevel, player, RAYCAST_RANGE);
                 if (waterColor != -1) {
                     fluid = Mth.clamp(fluid + NEEDLE_DELTA, 0f, DEFAULT_MAX_LOAD);
                     tag.putString(FLUID_TYPE, WATER);
                     tag.putInt(FLUID_COLOUR, waterColor);
-
-                    serverLevel.playSound(null, player.blockPosition(), SoundEvents.BOTTLE_FILL, SoundSource.PLAYERS, 0.5f, 0.3f);
                 }
             }
         }
         else {
             fluid = Mth.clamp(fluid - NEEDLE_DELTA, 0f, DEFAULT_MAX_LOAD);
             if (BLOOD.equals(fluidType)) {
-                handleDnaHolderInteraction(player, tag, fluid, progress);
+                handleDnaHolderInteraction(player, tag, progress);
             }
             if (fluid <= 0.01f) {
                 if (WATER.equals(fluidType)) {
                     tag.putFloat(DIRTINESS, 0f);
                 }
 
+                tag.remove(DNA_DATA);
                 tag.putString(FLUID_TYPE, NONE);
-                DnaUtils.resetBloodSamplingTick(tag);
-                DnaUtils.resetBloodFreezerTicks(tag);
                 tag.putBoolean(MULTIPLE_SOURCES, false);
+                tag.putBoolean(SAMPLE_CLOTTED, false);
+                tag.putBoolean(SAMPLE_DIRTY, false);
+
                 tag.remove(PREVIOUS_TARGET);
 
-                serverLevel.playSound(null, player.blockPosition(), SoundEvents.BOTTLE_EMPTY, SoundSource.PLAYERS, 0.5f, 0.3f);
+                DnaUtils.resetBloodFreezerTicks(tag);
+                DnaUtils.resetBloodSamplingTick(tag);
             }
         }
 
@@ -154,13 +161,17 @@ public class SyringeItem extends Item {
         );
     }
 
-    private float handleDnaHolderInteraction(ServerPlayer player, CompoundTag syringeTag, float fluid, float progress) {
+    private void handleDnaHolderInteraction(ServerPlayer player, CompoundTag syringeTag, float progress) {
         ServerLevel serverLevel = player.serverLevel();
 
         ItemStack offHandStack = player.getItemInHand(InteractionHand.OFF_HAND);
-        if (!(offHandStack.getItem() instanceof DnaHolderItem dnaHolder)) return fluid;
+        if (!(offHandStack.getItem() instanceof DnaHolderItem)) return;
+        if (syringeTag.getInt(SAMPLE_PROGRESS) >= DnaHolderItem.DEFAULT_MAX_SAMPLES) {
+            syringeTag.putBoolean(SAMPLE_DIRTY, true);
+            return;
+        }
 
-        if (progress >= DEFAULT_MAX_LOAD - 0.25f) {
+        if (progress >= DEFAULT_MAX_LOAD - 0.5f) {
             boolean multipleSources = syringeTag.getBoolean(MULTIPLE_SOURCES);
             boolean clotted = DnaUtils.getFrozenItemEffectiveAge(syringeTag, serverLevel) > BLOOD_CLOTTING_TIME_DEFAULT;
             boolean dirty = syringeTag.getFloat(DIRTINESS) >= 2.75;
@@ -168,7 +179,7 @@ public class SyringeItem extends Item {
             DnaImplementation dna = new DnaImplementation();
             dna.deserializeNBT(syringeTag.getCompound(DNA_DATA));
 
-            if (dna.getSource() == null) return fluid;
+            if (dna.getSource() == null) return;
 
             CompoundTag holderTag = offHandStack.getOrCreateTag();
             holderTag.put(DNA_DATA, dna.serializeNBT());
@@ -205,8 +216,6 @@ public class SyringeItem extends Item {
             offHandStack.setTag(holderTag);
             player.setItemInHand(InteractionHand.OFF_HAND, offHandStack);
         }
-
-        return fluid;
     }
 
     public static void handleSyringeProgress(SyringeDataPacket packet) {
@@ -319,7 +328,7 @@ public class SyringeItem extends Item {
         LivingEntity hitResult = null;
 
         for (Entity e : entities) {
-            AABB bb = e.getBoundingBox().inflate(0.3);
+            AABB bb = e.getBoundingBox().inflate(0.3f);
             Optional<Vec3> hit = bb.clip(start, end);
             if (hit.isPresent()) {
                 double dist = hit.get().distanceTo(start);

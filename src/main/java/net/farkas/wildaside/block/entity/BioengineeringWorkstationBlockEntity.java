@@ -383,8 +383,11 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
         if (!dnaHolderStack.is(ModItems.DNA_HOLDER.get())) return false;
 
         CompoundTag tag = dnaHolderStack.getOrCreateTag();
-        boolean unusable = tag.getBoolean(SAMPLE_UNUSABLE);
 
-        return !unusable;
+        boolean multipleSources = tag.getBoolean(MULTIPLE_SOURCES);
+        boolean clotted = tag.getBoolean(SAMPLE_CLOTTED) || DnaUtils.getFrozenItemEffectiveAge(tag, level) > tag.getLong(BLOOD_CLOTTING_TIME);
+        boolean dirty = tag.getBoolean(SAMPLE_DIRTY);
+
+        return !multipleSources && !clotted && !dirty;
     }
 }
