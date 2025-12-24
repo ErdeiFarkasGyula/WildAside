@@ -11,6 +11,7 @@ import net.farkas.wildaside.item.custom.DnaHolderItem;
 import net.farkas.wildaside.item.custom.GeneItem;
 import net.farkas.wildaside.recipe.BioengineeringWorkstationRecipe;
 import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationMenu;
+import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationSlots;
 import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationTab;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -100,7 +101,7 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
             if (side == null) {
                 return LazyOptional.of(() -> itemHandler).cast();
             }
-            return LazyOptional.of(() -> new SidedItemHandler(itemHandler, side)).cast();
+            return LazyOptional.of(() -> new SidedItemHandler(itemHandler, side, ASSEMBLER_INPUTS, Set.of(), Set.of(), OUTPUTS_WITHOUT_EDITOR)).cast();
         }
 
         return super.getCapability(cap, side);
@@ -220,9 +221,15 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
 
         CompoundTag dnaHolderTag = dnaHolderStack.getOrCreateTag();
 
-        dnaHolderTag.putBoolean(REVEAL_SOURCE, true);
-        dnaHolderTag.putBoolean(REVEAL_STABILITY, true);
-        dnaHolderTag.putBoolean(REVEAL_TRAITS, true);
+        boolean multipleSources = dnaHolderTag.getBoolean(MULTIPLE_SOURCES);
+        boolean clotted = dnaHolderTag.getBoolean(SAMPLE_CLOTTED) || DnaUtils.getFrozenItemEffectiveAge(dnaHolderTag, level) > dnaHolderTag.getLong(BLOOD_CLOTTING_TIME);
+        boolean dirty = dnaHolderTag.getBoolean(SAMPLE_DIRTY);
+
+        if (!multipleSources && !clotted && !dirty) {
+            dnaHolderTag.putBoolean(REVEAL_SOURCE, true);
+            dnaHolderTag.putBoolean(REVEAL_STABILITY, true);
+            dnaHolderTag.putBoolean(REVEAL_TRAITS, true);
+        }
 
         dnaHolderStack.setTag(dnaHolderTag);
 
@@ -346,12 +353,6 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
         if (!detergentStack.is(ModItems.ENTORIUM.get()) || !stabiliserStack.is(ModItems.VIBRION.get())) return false;
         if (!dnaHolderStack.is(ModItems.DNA_HOLDER.get())) return false;
 
-        CompoundTag tag = dnaHolderStack.getOrCreateTag();
-
-        boolean multipleSources = tag.getBoolean(MULTIPLE_SOURCES);
-        boolean clotted = tag.getBoolean(SAMPLE_CLOTTED) || DnaUtils.getFrozenItemEffectiveAge(tag, level) > tag.getLong(BLOOD_CLOTTING_TIME);
-        boolean dirty = tag.getBoolean(SAMPLE_DIRTY);
-
-        return !multipleSources && !clotted && !dirty;
+        return true;
     }
 }

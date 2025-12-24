@@ -27,4 +27,5 @@ public class BioengineeringWorkstationSlots {
     public static final Set<Integer> ASSEMBLER_INPUTS = Set.of(ASSE_INPUT_1, ASSE_INPUT_2, ASSE_INPUT_3, ASSE_INPUT_4, ASSE_INPUT_5);
     public static final Set<Integer> ANALYSER_INPUTS = Set.of(ANA_INPUT_1, ANA_INPUT_2, ANA_INPUT_3);
     public static final Set<Integer> OUTPUTS = Set.of(ASSE_OUTPUT_1, ANA_OUTPUT_1, EDITOR_OUTPUT_1, EDITOR_OUTPUT_2);
+    public static final Set<Integer> OUTPUTS_WITHOUT_EDITOR = Set.of(ASSE_OUTPUT_1, ANA_OUTPUT_1, EDITOR_OUTPUT_1, EDITOR_OUTPUT_2);
 }
