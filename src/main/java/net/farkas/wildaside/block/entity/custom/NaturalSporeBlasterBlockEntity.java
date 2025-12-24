@@ -1,4 +1,4 @@
-package net.farkas.wildaside.block.entity;
+package net.farkas.wildaside.block.entity.custom;
 
 import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.util.BlasterUtils;

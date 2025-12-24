@@ -1,4 +1,4 @@
-package net.farkas.wildaside.block.entity;
+package net.farkas.wildaside.block.entity.custom;
 
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.screen.biofreezer.BiofreezerMenu;

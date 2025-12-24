@@ -1,4 +1,4 @@
-package net.farkas.wildaside.block.entity;
+package net.farkas.wildaside.block.entity.custom;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;

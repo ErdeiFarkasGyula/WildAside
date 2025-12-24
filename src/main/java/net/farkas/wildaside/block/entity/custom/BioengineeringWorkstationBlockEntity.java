@@ -1,5 +1,6 @@
-package net.farkas.wildaside.block.entity;
+package net.farkas.wildaside.block.entity.custom;
 
+import net.farkas.wildaside.block.entity.SidedItemHandler;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
@@ -49,44 +50,6 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
         }
     };
 
-    private final IItemHandler automationHandler = new IItemHandler() {
-        @Override
-        public int getSlots() {
-            return itemHandler.getSlots();
-        }
-
-        @Override
-        public @NotNull ItemStack getStackInSlot(int slot) {
-            return itemHandler.getStackInSlot(slot);
-        }
-
-        @Override
-        public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-            if (stack.getItem() instanceof GeneItem) return stack.copy();
-
-            return itemHandler.insertItem(slot, stack, simulate);
-        }
-
-        @Override
-        public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
-            ItemStack existing = itemHandler.getStackInSlot(slot);
-
-            if (existing.getItem() instanceof GeneItem) return ItemStack.EMPTY;
-
-            return itemHandler.extractItem(slot, amount, simulate);
-        }
-
-        @Override
-        public int getSlotLimit(int slot) {
-            return itemHandler.getSlotLimit(slot);
-        }
-
-        @Override
-        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-            return !(stack.getItem() instanceof GeneItem);
-        }
-    };
-
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
     public final ContainerData data;
@@ -100,7 +63,7 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
     private BioengineeringWorkstationTab tab = BioengineeringWorkstationTab.ASSEMBLER;
 
     public BioengineeringWorkstationBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super (ModBlockEntities.BIOENGINEERING_WORKSTATION.get(), pPos, pBlockState);
+        super(ModBlockEntities.BIOENGINEERING_WORKSTATION.get(), pPos, pBlockState);
 
         this.data = new ContainerData() {
             @Override
@@ -137,8 +100,7 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
             if (side == null) {
                 return LazyOptional.of(() -> itemHandler).cast();
             }
-
-            return LazyOptional.of(() -> automationHandler).cast();
+            return LazyOptional.of(() -> new SidedItemHandler(itemHandler, side)).cast();
         }
 
         return super.getCapability(cap, side);
@@ -180,7 +142,7 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
 
     @Override
     public Component getDisplayName() {
-        return  Component.translatable("block.wildaside.bioengineering_workstation");
+        return Component.translatable("block.wildaside.bioengineering_workstation");
     }
 
     @Nullable
@@ -220,7 +182,8 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
                 craftItem();
                 assemblerProgress = 0;
             }
-        } else {
+        }
+        else {
             assemblerProgress = 0;
         }
 
@@ -232,7 +195,8 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
                 analyseDna();
                 analyserProgress = 0;
             }
-        } else {
+        }
+        else {
             analyserProgress = 0;
         }
     }

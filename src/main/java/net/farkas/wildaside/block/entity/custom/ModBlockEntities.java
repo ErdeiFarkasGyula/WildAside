@@ -1,9 +1,9 @@
-package net.farkas.wildaside.block.entity;
+package net.farkas.wildaside.block.entity.custom;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
-import net.farkas.wildaside.block.entity.sign.ModHangingSignBlockEntity;
-import net.farkas.wildaside.block.entity.sign.ModSignBlockEntity;
+import net.farkas.wildaside.block.entity.custom.sign.ModHangingSignBlockEntity;
+import net.farkas.wildaside.block.entity.custom.sign.ModSignBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;

@@ -1,6 +1,6 @@
 package net.farkas.wildaside.network.packets;
 
-import net.farkas.wildaside.block.entity.BioengineeringWorkstationBlockEntity;
+import net.farkas.wildaside.block.entity.custom.BioengineeringWorkstationBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;

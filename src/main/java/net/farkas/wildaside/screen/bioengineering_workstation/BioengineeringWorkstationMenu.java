@@ -1,7 +1,7 @@
 package net.farkas.wildaside.screen.bioengineering_workstation;
 
 import net.farkas.wildaside.block.ModBlocks;
-import net.farkas.wildaside.block.entity.BioengineeringWorkstationBlockEntity;
+import net.farkas.wildaside.block.entity.custom.BioengineeringWorkstationBlockEntity;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
@@ -21,8 +21,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +30,6 @@ import static net.farkas.wildaside.dna.DnaConstants.*;
 import static net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationSlots.*;
 
 public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
-    private static final Logger log = LoggerFactory.getLogger(BioengineeringWorkstationMenu.class);
     public final BioengineeringWorkstationBlockEntity blockEntity;
     public final Inventory inventory;
     public final Player player;

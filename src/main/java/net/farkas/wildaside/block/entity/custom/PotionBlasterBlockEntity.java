@@ -1,4 +1,4 @@
-package net.farkas.wildaside.block.entity;
+package net.farkas.wildaside.block.entity.custom;
 
 import net.farkas.wildaside.block.custom.vibrion.PotionBlasterBlock;
 import net.farkas.wildaside.screen.potion_blaster.PotionBlasterMenu;

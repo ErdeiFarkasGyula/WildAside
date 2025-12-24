@@ -1,4 +1,4 @@
-package net.farkas.wildaside.block.entity;
+package net.farkas.wildaside.block.entity.custom;
 
 import net.farkas.wildaside.block.custom.vibrion.WindBlasterBlock;
 import net.farkas.wildaside.particle.ModParticles;

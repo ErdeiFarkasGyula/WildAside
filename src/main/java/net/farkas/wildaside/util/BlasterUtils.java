@@ -1,6 +1,6 @@
 package net.farkas.wildaside.util;
 
-import net.farkas.wildaside.block.entity.BlasterBlockEntity;
+import net.farkas.wildaside.block.entity.custom.BlasterBlockEntity;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;

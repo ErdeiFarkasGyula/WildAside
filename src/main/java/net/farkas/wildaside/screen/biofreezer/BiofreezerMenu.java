@@ -2,7 +2,7 @@ package net.farkas.wildaside.screen.biofreezer;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
-import net.farkas.wildaside.block.entity.BiofreezerBlockEntity;
+import net.farkas.wildaside.block.entity.custom.BiofreezerBlockEntity;
 import net.farkas.wildaside.screen.ModMenuTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;

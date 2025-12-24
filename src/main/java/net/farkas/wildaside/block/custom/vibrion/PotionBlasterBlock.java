@@ -1,7 +1,7 @@
 package net.farkas.wildaside.block.custom.vibrion;
 
-import net.farkas.wildaside.block.entity.ModBlockEntities;
-import net.farkas.wildaside.block.entity.PotionBlasterBlockEntity;
+import net.farkas.wildaside.block.entity.custom.ModBlockEntities;
+import net.farkas.wildaside.block.entity.custom.PotionBlasterBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;

@@ -2,7 +2,7 @@ package net.farkas.wildaside.screen.potion_blaster;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
-import net.farkas.wildaside.block.entity.PotionBlasterBlockEntity;
+import net.farkas.wildaside.block.entity.custom.PotionBlasterBlockEntity;
 import net.farkas.wildaside.screen.ModMenuTypes;
 import net.farkas.wildaside.screen.ModOutputSlot;
 import net.minecraft.core.BlockPos;
