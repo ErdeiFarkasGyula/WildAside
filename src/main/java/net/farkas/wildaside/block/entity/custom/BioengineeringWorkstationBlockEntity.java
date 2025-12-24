@@ -190,7 +190,6 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
 
         if (canAnalyse()) {
             analyserProgress++;
-            setChanged(pLevel, pPos, pState);
 
             if (analyserProgress >= analyserMaxProgress) {
                 analyseDna();
