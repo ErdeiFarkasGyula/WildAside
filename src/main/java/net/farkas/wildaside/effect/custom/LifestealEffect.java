@@ -1,6 +1,7 @@
 package net.farkas.wildaside.effect.custom;
 
 import net.farkas.wildaside.WildAside;
+import net.farkas.wildaside.advancement.ModAdvancements;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.advancement.AdvancementHandler;
@@ -99,7 +100,7 @@ class LifestealHandler {
             t.ticksElapsed++;
             if (t.ticksElapsed >= t.totalTicks) {
                 if (a instanceof ServerPlayer serverPlayer) {
-                    AdvancementHandler.givePlayerAdvancement(serverPlayer, "life_leech");
+                    AdvancementHandler.givePlayerAdvancement(serverPlayer, ModAdvancements.LIFE_LEECH);
                 }
                 a.heal(t.healAmount);
                 it.remove();

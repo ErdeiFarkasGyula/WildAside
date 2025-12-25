@@ -2,6 +2,7 @@ package net.farkas.wildaside.event;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.farkas.wildaside.WildAside;
+import net.farkas.wildaside.advancement.ModAdvancements;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.capability.bioengineering_skill.BioengineeringSkillsProvider;
 import net.farkas.wildaside.capability.contamination.ContaminationCapability;
@@ -67,7 +68,7 @@ public class ModEvents {
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            AdvancementHandler.givePlayerAdvancement(player, "wild_wilder_wildest");
+            AdvancementHandler.givePlayerAdvancement(player, ModAdvancements.WILD_WILDER_WILDEST);
             BioengineeringSkillUtils.syncToClient(player);
         }
     }
@@ -137,7 +138,7 @@ public class ModEvents {
             ResourceKey<Biome> biomeKey = biomeHolder.unwrapKey().orElse(null);
 
             if (biomeKey != null && biomeKey.location().equals(GLOWING_HICKORY_FOREST)) {
-                AdvancementHandler.givePlayerAdvancement(player, "glow_up");
+                AdvancementHandler.givePlayerAdvancement(player, ModAdvancements.GLOW_UP);
             }
         }
     }
@@ -156,9 +157,9 @@ public class ModEvents {
         Block block = level.getBlockState(blockPos).getBlock();
 
         if (block.equals(ModBlocks.OVERGROWN_ENTORIUM_ORE.get())) {
-            AdvancementHandler.givePlayerAdvancement(player, "its_shearing_time");
+            AdvancementHandler.givePlayerAdvancement(player, ModAdvancements.ITS_SHEARING_TIME);
         } else if (block.equals(ModBlocks.SPORE_BLASTER.get()) && level.getBestNeighborSignal(blockPos) > 0) {
-            AdvancementHandler.givePlayerAdvancement(player, "bacteria_beacon");
+            AdvancementHandler.givePlayerAdvancement(player, ModAdvancements.BACTERIA_BEACON);
         }
     }
 
@@ -170,7 +171,7 @@ public class ModEvents {
 
     public static void blasterBustedAdvancement(BlockEvent.BreakEvent event) {
         if (event.getLevel().getBlockState(event.getPos()).getBlock() == ModBlocks.NATURAL_SPORE_BLASTER.get()) {
-            AdvancementHandler.givePlayerAdvancement(event.getPlayer(), "blaster_busted");
+            AdvancementHandler.givePlayerAdvancement(event.getPlayer(), ModAdvancements.BLASTER_BUSTED);
         }
     }
 

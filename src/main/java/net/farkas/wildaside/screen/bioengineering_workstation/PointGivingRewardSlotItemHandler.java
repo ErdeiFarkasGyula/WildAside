@@ -3,6 +3,7 @@ package net.farkas.wildaside.screen.bioengineering_workstation;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillPointOperation;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillUtils;
 import net.farkas.wildaside.screen.AdvancementGivingVisibleResultSlotItemHandler;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -11,7 +12,7 @@ import net.minecraftforge.items.IItemHandler;
 public class PointGivingRewardSlotItemHandler extends AdvancementGivingVisibleResultSlotItemHandler {
     private final int points;
 
-    public PointGivingRewardSlotItemHandler(IItemHandler itemHandler, int index, int xPosition, int yPosition, Player player, String advancement, int points) {
+    public PointGivingRewardSlotItemHandler(IItemHandler itemHandler, int index, int xPosition, int yPosition, Player player, ResourceLocation advancement, int points) {
         super(itemHandler, index, xPosition, yPosition, player, advancement);
         this.points = points;
     }

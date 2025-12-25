@@ -1,5 +1,6 @@
 package net.farkas.wildaside.screen.bioengineering_workstation;
 
+import net.farkas.wildaside.advancement.ModAdvancements;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.custom.BioengineeringWorkstationBlockEntity;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
@@ -96,7 +97,7 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
             assemblerSlot2 = new VisibleSlotItemHandler(iItemHandler, ASSE_INPUT_3, 102, 34 + yOffset);
             assemblerSlot3 = new VisibleSlotItemHandler(iItemHandler, ASSE_INPUT_4, 84, 52 + yOffset);
             assemblerSlot4 = new VisibleSlotItemHandler(iItemHandler, ASSE_INPUT_5, 66, 34 + yOffset);
-            assemblerResult = new AdvancementGivingVisibleResultSlotItemHandler(iItemHandler, ASSE_OUTPUT_1, 170, 34 + yOffset, player, "we_need_to_cook");
+            assemblerResult = new AdvancementGivingVisibleResultSlotItemHandler(iItemHandler, ASSE_OUTPUT_1, 170, 34 + yOffset, player, ModAdvancements.WE_NEED_TO_COOK);
 
             addSlot(assemblerSlot0);
             addSlot(assemblerSlot1);

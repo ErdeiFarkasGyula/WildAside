@@ -1,5 +1,6 @@
 package net.farkas.wildaside.item.custom;
 
+import net.farkas.wildaside.advancement.ModAdvancements;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.advancement.AdvancementHandler;
 import net.minecraft.network.chat.Component;
@@ -29,7 +30,7 @@ public class EntoriumPillItem extends Item {
                 MobEffectInstance cont = pLivingEntity.getEffect(ModMobEffects.CONTAMINATION.get());
                 amplifier = cont.getAmplifier() + 1;
                 if (amplifier >= 5) {
-                    AdvancementHandler.givePlayerAdvancement(player, "purification_pill");
+                    AdvancementHandler.givePlayerAdvancement(player, ModAdvancements.PURIFICATION_PILL);
                 }
             }
 

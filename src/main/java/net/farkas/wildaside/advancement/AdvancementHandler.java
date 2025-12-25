@@ -8,13 +8,12 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 
 public class AdvancementHandler {
-    public static void givePlayerAdvancement(Entity entity, String advName) {
+    public static void givePlayerAdvancement(Entity entity, ResourceLocation resourceLocation) {
         if (entity instanceof ServerPlayer player) {
-            ResourceLocation advancementID = new ResourceLocation(WildAside.MOD_ID, advName);
-            Advancement advancement = player.server.getAdvancements().getAdvancement(advancementID);
+            Advancement advancement = player.server.getAdvancements().getAdvancement(resourceLocation);
 
             if (advancement == null) {
-                WildAside.LOGGER.warn("Advancement {} can't be found!", advName);
+                WildAside.LOGGER.warn("Advancement {} can't be found!", resourceLocation);
                 return;
             }
 

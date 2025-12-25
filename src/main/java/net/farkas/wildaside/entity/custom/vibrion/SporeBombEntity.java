@@ -1,5 +1,6 @@
 package net.farkas.wildaside.entity.custom.vibrion;
 
+import net.farkas.wildaside.advancement.ModAdvancements;
 import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.particle.ModParticles;
@@ -104,7 +105,7 @@ public class SporeBombEntity extends ThrowableItemProjectile {
         }
 
         if (entityCount >= 5) {
-            AdvancementHandler.givePlayerAdvancement(this.getOwner(), "weapons_of_mass_infection");
+            AdvancementHandler.givePlayerAdvancement(this.getOwner(), ModAdvancements.WEAPONS_OF_MASS_INFECTION);
         }
     }
 }

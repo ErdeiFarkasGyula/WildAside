@@ -1,5 +1,6 @@
 package net.farkas.wildaside.block.entity.custom;
 
+import net.farkas.wildaside.advancement.ModAdvancements;
 import net.farkas.wildaside.block.custom.vibrion.PotionBlasterBlock;
 import net.farkas.wildaside.screen.potion_blaster.PotionBlasterMenu;
 import net.farkas.wildaside.advancement.AdvancementHandler;
@@ -163,7 +164,7 @@ public class PotionBlasterBlockEntity extends BlasterBlockEntity implements Menu
                             entity.getX(), entity.getY(), entity.getZ(), 1, direction.getStepX(), direction.getStepY(), direction.getStepZ(), 0.1
                     );
                     if (entity instanceof ServerPlayer player) {
-                        AdvancementHandler.givePlayerAdvancement(player, "brew_barrage");
+                        AdvancementHandler.givePlayerAdvancement(player, ModAdvancements.BREW_BARRAGE);
                     }
                 }
             }
