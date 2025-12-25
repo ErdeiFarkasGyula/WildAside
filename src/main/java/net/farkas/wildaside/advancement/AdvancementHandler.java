@@ -1,4 +1,4 @@
-package net.farkas.wildaside.util;
+package net.farkas.wildaside.advancement;
 
 import net.farkas.wildaside.WildAside;
 import net.minecraft.advancements.Advancement;

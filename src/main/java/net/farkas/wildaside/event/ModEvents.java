@@ -11,7 +11,7 @@ import net.farkas.wildaside.command.ModCommands;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillUtils;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.network.WindSavedData;
-import net.farkas.wildaside.util.AdvancementHandler;
+import net.farkas.wildaside.advancement.AdvancementHandler;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.farkas.wildaside.util.WindManager;
 import net.minecraft.commands.CommandSourceStack;

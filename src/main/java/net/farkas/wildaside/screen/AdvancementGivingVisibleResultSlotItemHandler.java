@@ -1,23 +1,23 @@
 package net.farkas.wildaside.screen;
 
-import net.farkas.wildaside.util.AdvancementHandler;
+import net.farkas.wildaside.advancement.AdvancementHandler;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 
-public class AdvancementGivingVisibleResultSlot extends ModVisibleSlotItemHandler {
+public class AdvancementGivingVisibleResultSlotItemHandler extends VisibleSlotItemHandler {
     public Player player;
     public String advancement;
 
-    public AdvancementGivingVisibleResultSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition, Player player, String advancement) {
+    public AdvancementGivingVisibleResultSlotItemHandler(IItemHandler itemHandler, int index, int xPosition, int yPosition, Player player, String advancement) {
         super(itemHandler, index, xPosition, yPosition);
         this.player = player;
         this.advancement = advancement;
     }
 
-    public AdvancementGivingVisibleResultSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+    public AdvancementGivingVisibleResultSlotItemHandler(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
         super(itemHandler, index, xPosition, yPosition);
         this.player = null;
         this.advancement = null;

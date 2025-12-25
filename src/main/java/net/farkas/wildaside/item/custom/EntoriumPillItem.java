@@ -1,7 +1,7 @@
 package net.farkas.wildaside.item.custom;
 
 import net.farkas.wildaside.effect.ModMobEffects;
-import net.farkas.wildaside.util.AdvancementHandler;
+import net.farkas.wildaside.advancement.AdvancementHandler;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;

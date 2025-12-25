@@ -1,7 +1,7 @@
 package net.farkas.wildaside.screen.bioengineering_workstation;
 
 import net.farkas.wildaside.item.ModItems;
-import net.farkas.wildaside.screen.ModVisibleSlotItemHandler;
+import net.farkas.wildaside.screen.VisibleSlotItemHandler;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
@@ -9,11 +9,11 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationSlots.*;
 
-public class DnaInputSlot extends ModVisibleSlotItemHandler {
+public class DnaEditorInputSlotItemHandler extends VisibleSlotItemHandler {
     private final BioengineeringWorkstationMenu menu;
     private final int index;
 
-    public DnaInputSlot(BioengineeringWorkstationMenu menu, IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+    public DnaEditorInputSlotItemHandler(BioengineeringWorkstationMenu menu, IItemHandler itemHandler, int index, int xPosition, int yPosition) {
        super(itemHandler, index, xPosition, yPosition);
        this.menu = menu;
        this.index = index;

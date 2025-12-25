@@ -3,7 +3,7 @@ package net.farkas.wildaside.entity.custom.vibrion;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.item.ModItems;
-import net.farkas.wildaside.util.AdvancementHandler;
+import net.farkas.wildaside.advancement.AdvancementHandler;
 import net.farkas.wildaside.util.WeightedFlowerChoice;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;

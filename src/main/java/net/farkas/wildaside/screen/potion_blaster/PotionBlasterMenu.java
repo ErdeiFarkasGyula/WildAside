@@ -4,7 +4,7 @@ import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.custom.PotionBlasterBlockEntity;
 import net.farkas.wildaside.screen.ModMenuTypes;
-import net.farkas.wildaside.screen.ModOutputSlot;
+import net.farkas.wildaside.screen.OutputSlot;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -55,7 +55,7 @@ public class PotionBlasterMenu extends AbstractContainerMenu {
             this.addSlot(new SlotItemHandler(iItemHandler, 6, 26, 51));
             this.addSlot(new SlotItemHandler(iItemHandler, 7, 44, 51));
             this.addSlot(new SlotItemHandler(iItemHandler, 8, 62, 51));
-            this.addSlot(new ModOutputSlot(iItemHandler, 9, 102, 35));
+            this.addSlot(new OutputSlot(iItemHandler, 9, 102, 35));
         });
 
         addDataSlots(data);

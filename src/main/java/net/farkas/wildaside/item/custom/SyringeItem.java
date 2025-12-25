@@ -165,7 +165,9 @@ public class SyringeItem extends Item {
         ServerLevel serverLevel = player.serverLevel();
 
         ItemStack offHandStack = player.getItemInHand(InteractionHand.OFF_HAND);
+
         if (!(offHandStack.getItem() instanceof DnaHolderItem)) return;
+
         if (syringeTag.getInt(SAMPLE_PROGRESS) >= DnaHolderItem.DEFAULT_MAX_SAMPLES) {
             syringeTag.putBoolean(SAMPLE_DIRTY, true);
             return;
@@ -182,6 +184,11 @@ public class SyringeItem extends Item {
             if (dna.getSource() == null) return;
 
             CompoundTag holderTag = offHandStack.getOrCreateTag();
+
+            holderTag.putBoolean(REVEAL_SOURCE, false);
+            holderTag.putBoolean(REVEAL_STABILITY, false);
+            holderTag.putBoolean(REVEAL_TRAITS, false);
+
             holderTag.put(DNA_DATA, dna.serializeNBT());
 
             holderTag.putBoolean(MULTIPLE_SOURCES, multipleSources);

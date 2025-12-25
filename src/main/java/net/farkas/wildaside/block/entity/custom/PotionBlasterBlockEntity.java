@@ -2,7 +2,7 @@ package net.farkas.wildaside.block.entity.custom;
 
 import net.farkas.wildaside.block.custom.vibrion.PotionBlasterBlock;
 import net.farkas.wildaside.screen.potion_blaster.PotionBlasterMenu;
-import net.farkas.wildaside.util.AdvancementHandler;
+import net.farkas.wildaside.advancement.AdvancementHandler;
 import net.farkas.wildaside.util.BlasterUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
