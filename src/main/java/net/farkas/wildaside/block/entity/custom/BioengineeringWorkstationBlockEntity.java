@@ -1,6 +1,6 @@
 package net.farkas.wildaside.block.entity.custom;
 
-import net.farkas.wildaside.block.entity.SidedItemHandler;
+import net.farkas.wildaside.block.entity.GeneSlotRestrictingItemHandler;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
@@ -8,10 +8,8 @@ import net.farkas.wildaside.dna.locus.GeneLocus;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.item.custom.DnaHolderItem;
-import net.farkas.wildaside.item.custom.GeneItem;
 import net.farkas.wildaside.recipe.BioengineeringWorkstationRecipe;
 import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationMenu;
-import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationSlots;
 import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationTab;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -101,7 +99,7 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
             if (side == null) {
                 return LazyOptional.of(() -> itemHandler).cast();
             }
-            return LazyOptional.of(() -> new SidedItemHandler(itemHandler, side, ASSEMBLER_INPUTS, Set.of(), Set.of(), OUTPUTS_WITHOUT_EDITOR)).cast();
+            return LazyOptional.of(() -> new GeneSlotRestrictingItemHandler(itemHandler, side, ASSEMBLER_INPUTS, Set.of(), ASSEMBLER_INPUTS, OUTPUTS_WITHOUT_EDITOR)).cast();
         }
 
         return super.getCapability(cap, side);

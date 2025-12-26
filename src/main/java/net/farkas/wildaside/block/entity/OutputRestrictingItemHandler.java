@@ -1,5 +1,6 @@
 package net.farkas.wildaside.block.entity;
 
+import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationSlots;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
@@ -8,22 +9,16 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-public class SidedItemHandler implements IItemHandler {
-    private final ItemStackHandler delegate;
-    private final Direction side;
+import static net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationSlots.EDITOR_BOTTOM_GENE_START_INDEX;
+import static net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationSlots.EDITOR_TOP_GENE_START_INDEX;
 
-    private final Set<Integer> upSlots;
-    private final Set<Integer> downSlots;
-    private final Set<Integer> sideSlots;
+public class OutputRestrictingItemHandler implements IItemHandler {
+    private final ItemStackHandler delegate;
 
     private final Set<Integer> outputSlots;
 
-    public SidedItemHandler(ItemStackHandler delegate, Direction side, Set<Integer> upSlots, Set<Integer> downSlots, Set<Integer> sideSlots, Set<Integer> outputSlots) {
+    public OutputRestrictingItemHandler(ItemStackHandler delegate, Set<Integer> outputSlots) {
         this.delegate = delegate;
-        this.side = side;
-        this.upSlots = upSlots;
-        this.downSlots = downSlots;
-        this.sideSlots = sideSlots;
         this.outputSlots = outputSlots;
     }
 
@@ -39,7 +34,7 @@ public class SidedItemHandler implements IItemHandler {
 
     @Override
     public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-        if (!canInsertForSide(slot) || outputSlots.contains(slot)) {
+        if (outputSlots.contains(slot)) {
             return stack;
         }
 
@@ -60,20 +55,6 @@ public class SidedItemHandler implements IItemHandler {
 
     @Override
     public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-        return canInsertForSide(slot) && !outputSlots.contains(slot);
-    }
-
-    private boolean canInsertForSide(int slot) {
-        switch (side) {
-            case UP -> {
-                return upSlots.contains(slot);
-            }
-            case DOWN -> {
-                return downSlots.contains(slot);
-            }
-            default -> {
-                return sideSlots.contains(slot);
-            }
-        }
+        return !outputSlots.contains(slot);
     }
 }

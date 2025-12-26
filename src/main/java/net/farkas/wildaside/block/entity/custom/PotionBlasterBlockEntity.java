@@ -2,6 +2,7 @@ package net.farkas.wildaside.block.entity.custom;
 
 import net.farkas.wildaside.advancement.ModAdvancements;
 import net.farkas.wildaside.block.custom.vibrion.PotionBlasterBlock;
+import net.farkas.wildaside.block.entity.OutputRestrictingItemHandler;
 import net.farkas.wildaside.screen.potion_blaster.PotionBlasterMenu;
 import net.farkas.wildaside.advancement.AdvancementHandler;
 import net.farkas.wildaside.util.BlasterUtils;
@@ -39,6 +40,7 @@ import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.StreamSupport;
 
 public class PotionBlasterBlockEntity extends BlasterBlockEntity implements MenuProvider {
@@ -240,7 +242,10 @@ public class PotionBlasterBlockEntity extends BlasterBlockEntity implements Menu
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (cap == ForgeCapabilities.ITEM_HANDLER) {
-            return lazyItemHandler.cast();
+            if (side == null) {
+                return LazyOptional.of(() -> itemHandler).cast();
+            }
+            return LazyOptional.of(() -> new OutputRestrictingItemHandler(itemHandler, Set.of(9))).cast();
         }
         return super.getCapability(cap, side);
     }
@@ -261,14 +266,11 @@ public class PotionBlasterBlockEntity extends BlasterBlockEntity implements Menu
     protected void saveAdditional(CompoundTag pTag) {
         super.saveAdditional(pTag);
 
-        if (pTag.contains("inventory")) {
-            pTag.put("inventory", itemHandler.serializeNBT());
-        }
+        pTag.put("inventory", itemHandler.serializeNBT());
         pTag.putInt("ticks_left", potionTicksLeft);
         pTag.putInt("max_ticks", maxPotionTicks);
         pTag.putInt("colour", potionColour);
         pTag.put("potion", activePotion.save(new CompoundTag()));
-
     }
 
     @Override
