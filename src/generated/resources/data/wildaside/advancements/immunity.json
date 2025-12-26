@@ -1,0 +1,19 @@
+{
+  "parent": "wildaside:wild_wilder_wildest",
+  "criteria": {
+    "immunity": {
+      "conditions": {
+        "effects": {
+          "wildaside:immunity": {}
+        }
+      },
+      "trigger": "minecraft:effects_changed"
+    }
+  },
+  "requirements": [
+    [
+      "immunity"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

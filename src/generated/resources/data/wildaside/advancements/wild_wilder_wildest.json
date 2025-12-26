@@ -1,0 +1,29 @@
+{
+  "criteria": {
+    "impossible": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "wildaside:textures/gui/entorium_shroom.png",
+    "description": {
+      "translate": "advancements.wild_wilder_wildest.descr"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "wildaside:vibrion_block"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.wild_wilder_wildest.title"
+    }
+  },
+  "requirements": [
+    [
+      "impossible"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

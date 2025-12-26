@@ -16,13 +16,17 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditions;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.ForgeAdvancementProvider.AdvancementGenerator;
 import net.minecraftforge.common.extensions.IForgeAdvancementBuilder;
 
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public class ModAdvancements implements AdvancementGenerator {
     public static final ResourceLocation WILD_WILDER_WILDEST = id("wild_wilder_wildest");
@@ -56,16 +60,6 @@ public class ModAdvancements implements AdvancementGenerator {
                 new ResourceLocation(WildAside.MOD_ID, "textures/gui/entorium_shroom.png"))
                 .showToast(false).announceToChat(false)
                 .addImpossible()
-                .saveWithHelper(saver, helper);
-
-        Advancement hickoryForest = builder(HICKORY_FOREST, Items.ACACIA_LEAVES, FrameType.TASK)
-                .parent(wildWilderWildest)
-                .addCriterion("in_biome", PlayerTrigger.TriggerInstance.located(
-                        LocationPredicate.inBiome(ResourceKey.create(Registries.BIOME,
-                                new ResourceLocation(WildAside.MOD_ID, "hickory_forest")))))
-                .rewards(AdvancementRewards.Builder.experience(3)
-                        .addRecipe(new ResourceLocation(WildAside.MOD_ID, "spotted_wintergreen_to_dye"))
-                        .addRecipe(new ResourceLocation(WildAside.MOD_ID, "pinkster_flower_to_dye")))
                 .saveWithHelper(saver, helper);
 
         Advancement colourfulInnit = builder(COLOURFUL_INNIT, ModBlocks.YELLOW_GLOWING_HICKORY_LEAVES.get(), FrameType.TASK)
@@ -170,9 +164,11 @@ public class ModAdvancements implements AdvancementGenerator {
                 .parent(weNeedToCook)
                 .addCriterion("placed_glass",
                         ItemUsedOnLocationTrigger.TriggerInstance.placedBlock(
-                                LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.LIT_VIBRION_GLASS.get()),
-                                LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.LIT_VIBRION_GLASS_PANE.get())
-                        ))
+                                new AnyOfCondition.Builder()
+                                        .or(LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.LIT_VIBRION_GLASS.get()))
+                                        .or(LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.LIT_VIBRION_GLASS_PANE.get()))
+                        )
+                )
                 .rewards(AdvancementRewards.Builder.experience(3))
                 .saveWithHelper(saver, helper);
 
@@ -186,22 +182,37 @@ public class ModAdvancements implements AdvancementGenerator {
                 .parent(wildWilderWildest)
                 .addCriterion("contamination", EffectsChangedTrigger.TriggerInstance.hasEffects(
                         MobEffectsPredicate.effects().and(ModMobEffects.CONTAMINATION.get(), new MobEffectsPredicate.MobEffectInstancePredicate())))
+                .noDisplay()
                 .saveWithHelper(saver, helper);
 
         builder(IMMUNITY, Items.POTION, FrameType.TASK)
                 .parent(wildWilderWildest)
                 .addCriterion("immunity", EffectsChangedTrigger.TriggerInstance.hasEffects(
                         MobEffectsPredicate.effects().and(ModMobEffects.IMMUNITY.get(), new MobEffectsPredicate.MobEffectInstancePredicate())))
+                .noDisplay()
                 .saveWithHelper(saver, helper);
 
         builder(LIFESTEAL, Items.POTION, FrameType.TASK)
                 .parent(wildWilderWildest)
                 .addCriterion("lifesteal", EffectsChangedTrigger.TriggerInstance.hasEffects(
                         MobEffectsPredicate.effects().and(ModMobEffects.LIFESTEAL.get(), new MobEffectsPredicate.MobEffectInstancePredicate())))
+                .noDisplay()
                 .saveWithHelper(saver, helper);
 
         builder(MUCELLITH, Items.SPYGLASS, FrameType.TASK)
                 .addImpossible()
+                .noDisplay()
+                .saveWithHelper(saver, helper);
+
+        Advancement hickoryForest = builder(HICKORY_FOREST, Items.ACACIA_LEAVES, FrameType.TASK)
+                .parent(wildWilderWildest)
+                .addCriterion("in_biome", PlayerTrigger.TriggerInstance.located(
+                        LocationPredicate.inBiome(ResourceKey.create(Registries.BIOME,
+                                new ResourceLocation(WildAside.MOD_ID, "hickory_forest")))))
+                .rewards(AdvancementRewards.Builder.experience(3)
+                        .addRecipe(new ResourceLocation(WildAside.MOD_ID, "spotted_wintergreen_to_dye"))
+                        .addRecipe(new ResourceLocation(WildAside.MOD_ID, "pinkster_flower_to_dye")))
+                .noDisplay()
                 .saveWithHelper(saver, helper);
     }
 
@@ -274,6 +285,7 @@ public class ModAdvancements implements AdvancementGenerator {
         private boolean showToast = true;
         private boolean announce = true;
         private boolean hidden = false;
+        private boolean withDisplay = true;
         private final Advancement.Builder builder;
 
         AdvancementBuilder(ResourceLocation id, ItemLike icon, FrameType frame, ResourceLocation background) {
@@ -286,6 +298,7 @@ public class ModAdvancements implements AdvancementGenerator {
         }
 
         private void rebuildDisplay() {
+            if (!withDisplay) return;
             builder.display(new DisplayInfo(
                     new ItemStack(icon.asItem()),
                     Component.translatable("advancements." + id.getPath() + ".title"),
@@ -332,6 +345,12 @@ public class ModAdvancements implements AdvancementGenerator {
         AdvancementBuilder hidden(boolean v) {
             this.hidden = v;
             rebuildDisplay();
+            return this;
+        }
+
+        AdvancementBuilder noDisplay() {
+            this.withDisplay = false;
+            builder.display(null);
             return this;
         }
 

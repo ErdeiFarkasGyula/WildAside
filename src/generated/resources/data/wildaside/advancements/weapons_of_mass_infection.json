@@ -1,0 +1,32 @@
+{
+  "parent": "wildaside:we_need_to_cook",
+  "criteria": {
+    "impossible": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.weapons_of_mass_infection.descr"
+    },
+    "frame": "challenge",
+    "hidden": false,
+    "icon": {
+      "item": "wildaside:spore_bomb"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.weapons_of_mass_infection.title"
+    }
+  },
+  "requirements": [
+    [
+      "impossible"
+    ]
+  ],
+  "rewards": {
+    "experience": 5
+  },
+  "sends_telemetry_event": true
+}

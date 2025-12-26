@@ -1,0 +1,32 @@
+{
+  "parent": "wildaside:petrified_prescription",
+  "criteria": {
+    "impossible": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.we_need_to_cook.descr"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "wildaside:bioengineering_workstation"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.we_need_to_cook.title"
+    }
+  },
+  "requirements": [
+    [
+      "impossible"
+    ]
+  ],
+  "rewards": {
+    "experience": 10
+  },
+  "sends_telemetry_event": true
+}

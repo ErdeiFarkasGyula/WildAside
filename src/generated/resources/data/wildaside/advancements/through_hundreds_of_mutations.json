@@ -1,0 +1,45 @@
+{
+  "parent": "wildaside:descent",
+  "criteria": {
+    "has_vibrion": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "wildaside:vibrion"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.through_hundreds_of_mutations.descr"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "wildaside:vibrion"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.through_hundreds_of_mutations.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_vibrion"
+    ]
+  ],
+  "rewards": {
+    "experience": 3,
+    "recipes": [
+      "wildaside:vibrion_block",
+      "wildaside:vibrion_to_dye"
+    ]
+  },
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,49 @@
+{
+  "parent": "wildaside:wild_wilder_wildest",
+  "criteria": {
+    "in_glowing_biome": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "wildaside:glowing_hickory_forest"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.colourful_innit.descr"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "wildaside:yellow_glowing_hickory_leaves"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.colourful_innit.title"
+    }
+  },
+  "requirements": [
+    [
+      "in_glowing_biome"
+    ]
+  ],
+  "rewards": {
+    "experience": 3,
+    "recipes": [
+      "wildaside:spotted_wintergreen_to_dye",
+      "wildaside:pinkster_flower_to_dye"
+    ]
+  },
+  "sends_telemetry_event": true
+}

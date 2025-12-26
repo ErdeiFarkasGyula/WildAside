@@ -1,0 +1,49 @@
+{
+  "parent": "wildaside:we_need_to_cook",
+  "criteria": {
+    "placed_glass": {
+      "conditions": {
+        "location": [
+          {
+            "condition": "minecraft:any_of",
+            "terms": [
+              {
+                "block": "wildaside:lit_vibrion_glass",
+                "condition": "minecraft:block_state_property"
+              },
+              {
+                "block": "wildaside:lit_vibrion_glass_pane",
+                "condition": "minecraft:block_state_property"
+              }
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:placed_block"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.glimmering_glass.descr"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "wildaside:lit_vibrion_glass"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.glimmering_glass.title"
+    }
+  },
+  "requirements": [
+    [
+      "placed_glass"
+    ]
+  ],
+  "rewards": {
+    "experience": 3
+  },
+  "sends_telemetry_event": true
+}

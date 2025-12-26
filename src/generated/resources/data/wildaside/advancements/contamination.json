@@ -1,0 +1,19 @@
+{
+  "parent": "wildaside:wild_wilder_wildest",
+  "criteria": {
+    "contamination": {
+      "conditions": {
+        "effects": {
+          "wildaside:contamination": {}
+        }
+      },
+      "trigger": "minecraft:effects_changed"
+    }
+  },
+  "requirements": [
+    [
+      "contamination"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
