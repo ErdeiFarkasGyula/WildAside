@@ -100,6 +100,7 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
             if (side == null) {
                 return LazyOptional.of(() -> itemHandler).cast();
             }
+
             Map<Direction, Set<Integer>> insertBySide = Map.of(
                     Direction.UP, Set.of(ASSE_INPUT_1),
                     Direction.NORTH, Set.of(ASSE_INPUT_4),
@@ -108,8 +109,8 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
                     Direction.WEST, Set.of(ASSE_INPUT_3),
                     Direction.DOWN, Set.of()
             );
-            Set<Integer> outputs = Set.of(ASSE_OUTPUT_1, ANA_OUTPUT_1, EDITOR_OUTPUT_1, EDITOR_OUTPUT_2);
-            return LazyOptional.of(() -> new GeneSlotRestrictingItemHandler(itemHandler, side, insertBySide, outputs, EDITOR_TOP_GENE_START_INDEX, EDITOR_BOTTOM_GENE_START_INDEX)).cast();
+
+            return LazyOptional.of(() -> new GeneSlotRestrictingItemHandler(itemHandler, side, insertBySide, OUTPUTS_WITHOUT_EDITOR, EDITOR_TOP_GENE_START_INDEX, EDITOR_BOTTOM_GENE_START_INDEX)).cast();
         }
 
         return super.getCapability(cap, side);
