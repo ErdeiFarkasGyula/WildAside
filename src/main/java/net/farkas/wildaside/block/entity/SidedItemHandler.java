@@ -6,24 +6,19 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
 import java.util.Set;
 
 public class SidedItemHandler implements IItemHandler {
     private final ItemStackHandler delegate;
     private final Direction side;
-
-    private final Set<Integer> upSlots;
-    private final Set<Integer> downSlots;
-    private final Set<Integer> sideSlots;
-
+    private final Map<Direction, Set<Integer>> insertSlotsBySide;
     private final Set<Integer> outputSlots;
 
-    public SidedItemHandler(ItemStackHandler delegate, Direction side, Set<Integer> upSlots, Set<Integer> downSlots, Set<Integer> sideSlots, Set<Integer> outputSlots) {
+    public SidedItemHandler(ItemStackHandler delegate, Direction side, Map<Direction, Set<Integer>> insertSlotsBySide, Set<Integer> outputSlots) {
         this.delegate = delegate;
         this.side = side;
-        this.upSlots = upSlots;
-        this.downSlots = downSlots;
-        this.sideSlots = sideSlots;
+        this.insertSlotsBySide = insertSlotsBySide;
         this.outputSlots = outputSlots;
     }
 
@@ -42,14 +37,12 @@ public class SidedItemHandler implements IItemHandler {
         if (!canInsertForSide(slot) || outputSlots.contains(slot)) {
             return stack;
         }
-
         return delegate.insertItem(slot, stack, simulate);
     }
 
     @Override
     public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
         if (!outputSlots.contains(slot)) return ItemStack.EMPTY;
-
         return delegate.extractItem(slot, amount, simulate);
     }
 
@@ -64,16 +57,7 @@ public class SidedItemHandler implements IItemHandler {
     }
 
     private boolean canInsertForSide(int slot) {
-        switch (side) {
-            case UP -> {
-                return upSlots.contains(slot);
-            }
-            case DOWN -> {
-                return downSlots.contains(slot);
-            }
-            default -> {
-                return sideSlots.contains(slot);
-            }
-        }
+        Set<Integer> allowed = insertSlotsBySide.getOrDefault(side, Set.of());
+        return allowed.contains(slot);
     }
 }

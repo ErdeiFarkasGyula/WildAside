@@ -1,6 +1,7 @@
 package net.farkas.wildaside.block.entity.custom;
 
 import net.farkas.wildaside.block.entity.GeneSlotRestrictingItemHandler;
+import net.farkas.wildaside.block.entity.SidedItemHandler;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
@@ -99,7 +100,16 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
             if (side == null) {
                 return LazyOptional.of(() -> itemHandler).cast();
             }
-            return LazyOptional.of(() -> new GeneSlotRestrictingItemHandler(itemHandler, side, ASSEMBLER_INPUTS, Set.of(), ASSEMBLER_INPUTS, OUTPUTS_WITHOUT_EDITOR)).cast();
+            Map<Direction, Set<Integer>> insertBySide = Map.of(
+                    Direction.UP, Set.of(ASSE_INPUT_1),
+                    Direction.NORTH, Set.of(ASSE_INPUT_4),
+                    Direction.EAST, Set.of(ASSE_INPUT_5),
+                    Direction.SOUTH, Set.of(ASSE_INPUT_2),
+                    Direction.WEST, Set.of(ASSE_INPUT_3),
+                    Direction.DOWN, Set.of()
+            );
+            Set<Integer> outputs = Set.of(ASSE_OUTPUT_1, ANA_OUTPUT_1, EDITOR_OUTPUT_1, EDITOR_OUTPUT_2);
+            return LazyOptional.of(() -> new GeneSlotRestrictingItemHandler(itemHandler, side, insertBySide, outputs, EDITOR_TOP_GENE_START_INDEX, EDITOR_BOTTOM_GENE_START_INDEX)).cast();
         }
 
         return super.getCapability(cap, side);

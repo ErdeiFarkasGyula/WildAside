@@ -5,22 +5,23 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
 import java.util.Set;
 
-import static net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationSlots.EDITOR_BOTTOM_GENE_START_INDEX;
-import static net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationSlots.EDITOR_TOP_GENE_START_INDEX;
-
 public class GeneSlotRestrictingItemHandler extends SidedItemHandler {
-    public GeneSlotRestrictingItemHandler(ItemStackHandler delegate, Direction side, Set<Integer> upSlots, Set<Integer> downSlots, Set<Integer> sideSlots, Set<Integer> outputSlots) {
-        super(delegate, side, upSlots, downSlots, sideSlots, outputSlots);
+    private final int topStart;
+    private final int bottomStart;
+
+    public GeneSlotRestrictingItemHandler(ItemStackHandler delegate, Direction side, Map<Direction, Set<Integer>> insertSlotsBySide, Set<Integer> outputSlots, int topStart, int bottomStart) {
+        super(delegate, side, insertSlotsBySide, outputSlots);
+        this.topStart = topStart;
+        this.bottomStart = bottomStart;
     }
 
-    private static boolean isGeneSlot(int slot) {
-        int topStart = EDITOR_TOP_GENE_START_INDEX;
-        int topEnd = EDITOR_TOP_GENE_START_INDEX + 12;
-        int botStart = EDITOR_BOTTOM_GENE_START_INDEX;
-        int botEnd = EDITOR_BOTTOM_GENE_START_INDEX + 12;
-        return (slot >= topStart && slot <= topEnd) || (slot >= botStart && slot <= botEnd);
+    private boolean isGeneSlot(int slot) {
+        int topEnd = topStart + 12;
+        int botEnd = bottomStart + 12;
+        return (slot >= topStart && slot <= topEnd) || (slot >= bottomStart && slot <= botEnd);
     }
 
     @Override
