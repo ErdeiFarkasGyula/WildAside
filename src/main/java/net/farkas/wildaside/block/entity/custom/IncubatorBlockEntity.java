@@ -1,21 +1,30 @@
 package net.farkas.wildaside.block.entity.custom;
 
+import net.farkas.wildaside.block.custom.IncubatorBlock;
 import net.farkas.wildaside.block.entity.ModBlockEntities;
 import net.farkas.wildaside.block.entity.SidedItemHandler;
-import net.farkas.wildaside.dna.BacillusBlobPayload;
-import net.farkas.wildaside.item.ModItems;
+import net.farkas.wildaside.screen.incubator.IncubatorMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.Containers;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.SimpleContainer;
+import net.minecraft.network.Connection;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.util.Mth;
+import net.minecraft.world.*;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -42,68 +51,73 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
 
     private boolean hasBlob = false;
     private CompoundTag dnaPayload = new CompoundTag();
+
     private float maturity = 0f;
     private float maturityRequired = 1f;
-    private boolean glassBroken = false;
+    private boolean glassOpen = false;
+
+    private int coldTicks = 0;
+    private final int coldTicksThreshold = 20 * 60;
 
     private int burnTime = 0;
     private int burnTimeTotal = 0;
+
+    private int heatLevel = 2;
+    private int mutationRisk = 0;
 
     public IncubatorBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.INCUBATOR.get(), pos, state);
     }
 
-    public net.minecraft.world.InteractionResult onUse(Player player, net.minecraft.world.InteractionHand hand) {
-        ItemStack held = player.getItemInHand(hand);
-
-        if (!hasBlob && held.is(ModItems.BACILLUS_BLOB.get())) {
-            hasBlob = true;
-            dnaPayload = held.hasTag() ? held.getTag().copy() : new CompoundTag();
-            held.shrink(1);
-            setChanged();
-            return net.minecraft.world.InteractionResult.SUCCESS;
+    public final ContainerData data = new ContainerData() {
+        @Override
+        public int get(int i) {
+            return switch (i) {
+                case 0 -> burnTime;
+                case 1 -> burnTimeTotal;
+                case 2 -> (int) (maturity * 1000f);
+                case 3 -> (int) (maturityRequired * 1000f);
+                case 4 -> heatLevel;
+                case 5 -> mutationRisk;
+                case 6 -> coldTicks;
+                case 7 -> coldTicksThreshold;
+                case 8 -> glassOpen ? 1 : 0;
+                default -> 0;
+            };
         }
 
-        if (hasBlob && dnaPayload.isEmpty() && held.is(ModItems.DNA_HOLDER.get())) {
-            if (BacillusBlobPayload.copyDnaFromHolderInternal(dnaPayload, held)) {
-                setChanged();
-                return net.minecraft.world.InteractionResult.SUCCESS;
+        @Override
+        public void set(int i, int v) {
+            switch (i) {
+                case 0 -> burnTime = v;
+                case 1 -> burnTimeTotal = v;
+                case 2 -> maturity = v / 1000f;
+                case 3 -> maturityRequired = v / 1000f;
+                case 4 -> heatLevel = v;
+                case 5 -> mutationRisk = v;
+                case 6 -> coldTicks = v;
+                case 8 -> glassOpen = v != 0;
             }
         }
 
-        int burn = ForgeHooks.getBurnTime(held, null);
-        if (burn > 0 && items.getStackInSlot(SLOT_FUEL).isEmpty()) {
-            ItemStack insert = held.split(1);
-            items.setStackInSlot(SLOT_FUEL, insert);
-            setChanged();
-            return net.minecraft.world.InteractionResult.SUCCESS;
+        @Override
+        public int getCount() {
+            return 9;
         }
+    };
 
-        if (hasBlob && player.isShiftKeyDown() && held.isEmpty()) {
-            glassBroken = !glassBroken;
-            setChanged();
-            return net.minecraft.world.InteractionResult.SUCCESS;
-        }
-
-        if (hasBlob && glassBroken && held.isEmpty()) {
-            applyBlobToPlayer(player);
-            clearBlob();
-            return net.minecraft.world.InteractionResult.SUCCESS;
-        }
-
-        return net.minecraft.world.InteractionResult.PASS;
-    }
 
     private void applyBlobToPlayer(Player player) {
 
     }
 
     private void clearBlob() {
-        hasBlob = false;
         dnaPayload = new CompoundTag();
+        hasBlob = false;
+        glassOpen = false;
         maturity = 0f;
-        glassBroken = false;
-        setChanged();
+        coldTicks = 0;
+        sync();
     }
 
     public void tickServer() {
@@ -111,22 +125,51 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
         if (getBlockState().getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) != DoubleBlockHalf.LOWER) return;
 
         boolean dirty = false;
+        float factor = heatFactor();
 
-        if (burnTime > 0) burnTime--;
+        if (burnTime > 0) {
+            burnTime -= Math.max(1, (int) Math.ceil(Math.max(1f, factor)));
+            if (burnTime < 0) burnTime = 0;
+            dirty = true;
+        }
 
-        if (burnTime == 0 && hasBlob && !items.getStackInSlot(SLOT_FUEL).isEmpty()) {
+        if (burnTime == 0 && factor > 0f && hasBlob && !items.getStackInSlot(SLOT_FUEL).isEmpty()) {
             ItemStack fuel = items.extractItem(SLOT_FUEL, 1, false);
             burnTimeTotal = burnTime = ForgeHooks.getBurnTime(fuel, null);
             dirty = true;
         }
 
-        if (hasBlob && burnTime > 0 && maturity < maturityRequired) {
-            float increment = 1f / 200f;
-            maturity = Math.min(maturityRequired, maturity + increment);
-            dirty = true;
+        if (hasBlob) {
+            if (burnTime > 0 && factor > 0f) {
+                float inc = (1f / 200f) * factor;
+                maturity = Math.min(maturityRequired, maturity + inc);
+                coldTicks = 0;
+                if (maturity > 0.7f * maturityRequired) {
+                    mutationRisk = Math.min(1000, mutationRisk + (int) (2 * factor));
+                    dirty = true;
+                }
+                dirty = true;
+            }
+            else {
+                coldTicks++;
+                if (coldTicks >= coldTicksThreshold) {
+                    clearBlob();
+                    dirty = true;
+                }
+                else {
+                    dirty = true;
+                }
+            }
         }
 
-        if (dirty) setChanged();
+        if (dirty) sync();
+    }
+
+    private void sync() {
+        setChanged();
+        if (level != null && !level.isClientSide) {
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+        }
     }
 
     @Override
@@ -164,9 +207,12 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
         tag.put("dnaPayload", dnaPayload);
         tag.putFloat("maturity", maturity);
         tag.putFloat("maturityRequired", maturityRequired);
-        tag.putBoolean("glassBroken", glassBroken);
+        tag.putBoolean("glassOpen", glassOpen);
         tag.putInt("burnTime", burnTime);
         tag.putInt("burnTimeTotal", burnTimeTotal);
+        tag.putInt("coldTicks", coldTicks);
+        tag.putInt("heatLevel", heatLevel);
+        tag.putInt("mutationRisk", mutationRisk);
     }
 
     @Override
@@ -177,9 +223,23 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
         dnaPayload = tag.getCompound("dnaPayload");
         maturity = tag.getFloat("maturity");
         maturityRequired = tag.getFloat("maturityRequired");
-        glassBroken = tag.getBoolean("glassBroken");
+        glassOpen = tag.getBoolean("glassOpen");
         burnTime = tag.getInt("burnTime");
         burnTimeTotal = tag.getInt("burnTimeTotal");
+        coldTicks = tag.getInt("coldTicks");
+        heatLevel = tag.getInt("heatLevel");
+        mutationRisk = tag.getInt("mutationRisk");
+    }
+
+    public float heatFactor() {
+        return switch (heatLevel) {
+            case 0 -> 0f;
+            case 1 -> 1.0f;
+            case 2 -> 1.4f;
+            case 3 -> 1.8f;
+            case 4 -> 2.3f;
+            default -> 1.0f;
+        };
     }
 
     public void dropContents() {
@@ -191,13 +251,102 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     @Override
-    public net.minecraft.network.chat.Component getDisplayName() {
-        return net.minecraft.network.chat.Component.translatable("block.wildaside.incubator");
+    public Component getDisplayName() {
+        return Component.translatable("block.wildaside.incubator");
     }
 
     @Nullable
     @Override
-    public net.minecraft.world.inventory.AbstractContainerMenu createMenu(int id, net.minecraft.world.entity.player.Inventory inv, Player player) {
-        return null;
+    public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
+        return new IncubatorMenu(id, inv, this, data);
+    }
+
+    @Override
+    public @Nullable Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    @Override
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+        if (pkt.getTag() == null) return;
+        this.load(pkt.getTag());
+    }
+
+    @Override
+    public CompoundTag getUpdateTag() {
+        return saveWithFullMetadata();
+    }
+
+    @Override
+    public void handleUpdateTag(CompoundTag tag) {
+        load(tag);
+    }
+
+    public void setOpenState(boolean cracked) {
+        if (level == null) return;
+
+        BlockState st = level.getBlockState(worldPosition);
+
+        if (st.hasProperty(IncubatorBlock.OPEN)) {
+            level.setBlock(worldPosition, st.setValue(IncubatorBlock.OPEN, cracked), 3);
+        }
+
+        BlockPos up = worldPosition.above();
+        BlockState stUp = level.getBlockState(up);
+
+        if (stUp.getBlock() == st.getBlock() && stUp.hasProperty(IncubatorBlock.OPEN)) {
+            level.setBlock(up, stUp.setValue(IncubatorBlock.OPEN, cracked), 3);
+        }
+    }
+
+    public ItemStackHandler getItems() {
+        return items;
+    }
+
+    public boolean hasBlob() {
+        return hasBlob;
+    }
+
+    public float getMaturity() {
+        return maturity;
+    }
+
+    public float getMaturityRequired() {
+        return maturityRequired;
+    }
+
+    public int getBurnTime() {
+        return burnTime;
+    }
+
+    public int getColdTicks() {
+        return coldTicks;
+    }
+
+    public int getColdTicksThreshold() {
+        return coldTicksThreshold;
+    }
+
+    public void setHeatLevel(int level) {
+        heatLevel = Mth.clamp(level, 0, 4);
+        sync();
+    }
+
+    public boolean isOpen() {
+        return glassOpen;
+    }
+
+    public void setOpen(boolean open) {
+        glassOpen = open;
+        setOpenState(open);
+        sync();
+    }
+
+    public int getHeatLevel() {
+        return heatLevel;
+    }
+
+    public int getMutationRisk() {
+        return mutationRisk;
     }
 }

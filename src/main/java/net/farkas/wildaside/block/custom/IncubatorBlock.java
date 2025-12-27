@@ -1,8 +1,10 @@
 package net.farkas.wildaside.block.custom;
 
+import net.farkas.wildaside.block.entity.custom.BioengineeringWorkstationBlockEntity;
 import net.farkas.wildaside.block.entity.custom.IncubatorBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,23 +21,28 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 public class IncubatorBlock extends BaseEntityBlock {
+    public static final BooleanProperty OPEN = BooleanProperty.create("open");
+
     public IncubatorBlock(Properties props) {
         super(props);
         this.registerDefaultState(
                 this.stateDefinition.any()
                         .setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH)
                         .setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER)
+                        .setValue(OPEN, false)
         );
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(BlockStateProperties.HORIZONTAL_FACING, BlockStateProperties.DOUBLE_BLOCK_HALF);
+        builder.add(BlockStateProperties.HORIZONTAL_FACING, BlockStateProperties.DOUBLE_BLOCK_HALF, OPEN);
     }
 
     @Override
@@ -68,25 +75,27 @@ public class IncubatorBlock extends BaseEntityBlock {
         if (pos.getY() < level.getMaxBuildHeight() - 1 && level.getBlockState(pos.above()).canBeReplaced(ctx)) {
             return this.defaultBlockState()
                     .setValue(BlockStateProperties.HORIZONTAL_FACING, ctx.getHorizontalDirection().getOpposite())
-                    .setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER);
+                    .setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER)
+                    .setValue(OPEN, false);
         }
         return null;
     }
 
     @Override
     public void setPlacedBy(Level pLevel, BlockPos pPos, BlockState pState, @Nullable LivingEntity pPlacer, ItemStack pStack) {
-        pLevel.setBlock(pPos.above(), pState.setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER), 3);
+        pLevel.setBlock(pPos.above(), pState.setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER).setValue(OPEN, Boolean.FALSE), 3);
     }
 
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (level.isClientSide()) return InteractionResult.SUCCESS;
-        BlockPos bePos = state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.LOWER ? pos : pos.below();
-        BlockEntity be = level.getBlockEntity(bePos);
-        if (be instanceof IncubatorBlockEntity inc) {
-            return inc.onUse(player, hand);
+        BlockPos basePos = state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.LOWER ? pos : pos.below();
+
+        if (level.getBlockEntity(basePos) instanceof IncubatorBlockEntity blockEntity) {
+            NetworkHooks.openScreen((ServerPlayer) player, blockEntity, basePos);
         }
-        return InteractionResult.PASS;
+
+        return InteractionResult.sidedSuccess(level.isClientSide());
     }
 
     @Override

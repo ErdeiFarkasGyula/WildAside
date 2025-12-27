@@ -1,33 +1,63 @@
 {
   "variants": {
-    "facing=east,half=lower": {
+    "facing=east,half=lower,open=false": {
       "model": "wildaside:block/incubator_lower",
       "y": 90
     },
-    "facing=east,half=upper": {
+    "facing=east,half=lower,open=true": {
+      "model": "wildaside:block/incubator_lower",
+      "y": 90
+    },
+    "facing=east,half=upper,open=false": {
       "model": "wildaside:block/incubator_upper",
       "y": 90
     },
-    "facing=north,half=lower": {
+    "facing=east,half=upper,open=true": {
+      "model": "wildaside:block/incubator_upper_open",
+      "y": 90
+    },
+    "facing=north,half=lower,open=false": {
       "model": "wildaside:block/incubator_lower"
     },
-    "facing=north,half=upper": {
+    "facing=north,half=lower,open=true": {
+      "model": "wildaside:block/incubator_lower"
+    },
+    "facing=north,half=upper,open=false": {
       "model": "wildaside:block/incubator_upper"
     },
-    "facing=south,half=lower": {
+    "facing=north,half=upper,open=true": {
+      "model": "wildaside:block/incubator_upper_open"
+    },
+    "facing=south,half=lower,open=false": {
       "model": "wildaside:block/incubator_lower",
       "y": 180
     },
-    "facing=south,half=upper": {
+    "facing=south,half=lower,open=true": {
+      "model": "wildaside:block/incubator_lower",
+      "y": 180
+    },
+    "facing=south,half=upper,open=false": {
       "model": "wildaside:block/incubator_upper",
       "y": 180
     },
-    "facing=west,half=lower": {
+    "facing=south,half=upper,open=true": {
+      "model": "wildaside:block/incubator_upper_open",
+      "y": 180
+    },
+    "facing=west,half=lower,open=false": {
       "model": "wildaside:block/incubator_lower",
       "y": 270
     },
-    "facing=west,half=upper": {
+    "facing=west,half=lower,open=true": {
+      "model": "wildaside:block/incubator_lower",
+      "y": 270
+    },
+    "facing=west,half=upper,open=false": {
       "model": "wildaside:block/incubator_upper",
+      "y": 270
+    },
+    "facing=west,half=upper,open=true": {
+      "model": "wildaside:block/incubator_upper_open",
       "y": 270
     }
   }

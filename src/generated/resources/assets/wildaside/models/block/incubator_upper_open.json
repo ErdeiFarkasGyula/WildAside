@@ -106,7 +106,7 @@
   "textures": {
     "down": "wildaside:block/incubator_lower_top",
     "east": "wildaside:block/incubator_upper_side",
-    "north": "wildaside:block/incubator_upper_front",
+    "north": "wildaside:block/incubator_upper_front_open",
     "particle": "wildaside:block/incubator_upper_side",
     "south": "wildaside:block/incubator_upper_side",
     "up": "wildaside:block/incubator_upper_top",

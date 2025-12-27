@@ -54,7 +54,8 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 .add(ModBlocks.POTION_BLASTER.get())
                 .add(ModBlocks.WIND_BLASTER.get())
                 .add(ModBlocks.BIOENGINEERING_WORKSTATION.get())
-                .add(ModBlocks.BIOFREEZER.get());
+                .add(ModBlocks.BIOFREEZER.get())
+                .add(ModBlocks.INCUBATOR.get());
 
         this.tag(BlockTags.MINEABLE_WITH_SHOVEL)
                 .add(ModBlocks.NATURAL_SPORE_BLASTER.get())

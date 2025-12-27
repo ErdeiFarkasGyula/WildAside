@@ -3,6 +3,7 @@ package net.farkas.wildaside.datagen;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.custom.FallenHickoryLeavesBlock;
+import net.farkas.wildaside.block.custom.IncubatorBlock;
 import net.farkas.wildaside.block.custom.RootBushBlock;
 import net.farkas.wildaside.util.HickoryColour;
 import net.minecraft.core.Direction;
@@ -262,12 +263,12 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     private void incubatorBlock() {
         var incubatorLower = models().withExistingParent("incubator_lower", mcLoc("block/block"))
-                .texture("down",   modLoc("block/incubator_lower_side"))
-                .texture("up",     modLoc("block/incubator_lower_top"))
-                .texture("north",  modLoc("block/incubator_lower_front"))
-                .texture("south",  modLoc("block/incubator_lower_side"))
-                .texture("west",   modLoc("block/incubator_lower_side"))
-                .texture("east",   modLoc("block/incubator_lower_side"))
+                .texture("down", modLoc("block/incubator_lower_side"))
+                .texture("up", modLoc("block/incubator_lower_top"))
+                .texture("north", modLoc("block/incubator_lower_front"))
+                .texture("south", modLoc("block/incubator_lower_side"))
+                .texture("west", modLoc("block/incubator_lower_side"))
+                .texture("east", modLoc("block/incubator_lower_side"))
                 .texture("particle", modLoc("block/incubator_lower_side"))
                 .renderType("opaque");
 
@@ -281,16 +282,48 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 .face(Direction.EAST).texture("#east").end();
 
         var incubatorUpper = models().withExistingParent("incubator_upper", mcLoc("block/block"))
-                .texture("down",   modLoc("block/incubator_lower_top")) // solid underside
-                .texture("up",     modLoc("block/incubator_upper_top"))
-                .texture("north",  modLoc("block/incubator_upper_side"))
-                .texture("south",  modLoc("block/incubator_upper_side"))
-                .texture("west",   modLoc("block/incubator_upper_side"))
-                .texture("east",   modLoc("block/incubator_upper_side"))
+                .texture("down", modLoc("block/incubator_lower_top"))
+                .texture("up", modLoc("block/incubator_upper_top"))
+                .texture("north", modLoc("block/incubator_upper_front"))
+                .texture("south", modLoc("block/incubator_upper_side"))
+                .texture("west", modLoc("block/incubator_upper_side"))
+                .texture("east", modLoc("block/incubator_upper_side"))
                 .texture("particle", modLoc("block/incubator_upper_side"))
                 .renderType("cutout");
 
         incubatorUpper.element()
+                .from(0, 0, 0).to(16, 16, 16)
+                .face(Direction.DOWN).texture("#down").cullface(null).end()
+                .face(Direction.UP).texture("#up").end()
+                .face(Direction.NORTH).texture("#north").end()  // window
+                .face(Direction.SOUTH).texture("#south").end()
+                .face(Direction.WEST).texture("#west").end()
+                .face(Direction.EAST).texture("#east").end();
+
+        incubatorUpper.element()
+                .from(0, 0, 15.99f).to(16, 16, 16)
+                .face(Direction.NORTH).texture("#south").cullface(null).end();
+        incubatorUpper.element()
+                .from(0, 0, 0).to(0.01f, 16, 16)
+                .face(Direction.EAST).texture("#west").cullface(null).end();
+        incubatorUpper.element()
+                .from(15.99f, 0, 0).to(16, 16, 16)
+                .face(Direction.WEST).texture("#east").cullface(null).end();
+        incubatorUpper.element()
+                .from(0, 15.99f, 0).to(16, 16, 16)
+                .face(Direction.DOWN).texture("#up").cullface(null).end();
+
+        var incubatorUpperOpen = models().withExistingParent("incubator_upper_open", mcLoc("block/block"))
+                .texture("down", modLoc("block/incubator_lower_top"))
+                .texture("up", modLoc("block/incubator_upper_top"))
+                .texture("north", modLoc("block/incubator_upper_front_open"))
+                .texture("south", modLoc("block/incubator_upper_side"))
+                .texture("west", modLoc("block/incubator_upper_side"))
+                .texture("east", modLoc("block/incubator_upper_side"))
+                .texture("particle", modLoc("block/incubator_upper_side"))
+                .renderType("cutout");
+
+        incubatorUpperOpen.element()
                 .from(0, 0, 0).to(16, 16, 16)
                 .face(Direction.DOWN).texture("#down").cullface(null).end()
                 .face(Direction.UP).texture("#up").end()
@@ -299,12 +332,29 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 .face(Direction.WEST).texture("#west").end()
                 .face(Direction.EAST).texture("#east").end();
 
+        incubatorUpperOpen.element()
+                .from(0, 0, 15.99f).to(16, 16, 16)
+                .face(Direction.NORTH).texture("#south").cullface(null).end();
+        incubatorUpperOpen.element()
+                .from(0, 0, 0).to(0.01f, 16, 16)
+                .face(Direction.EAST).texture("#west").cullface(null).end();
+        incubatorUpperOpen.element()
+                .from(15.99f, 0, 0).to(16, 16, 16)
+                .face(Direction.WEST).texture("#east").cullface(null).end();
+        incubatorUpperOpen.element()
+                .from(0, 15.99f, 0).to(16, 16, 16)
+                .face(Direction.DOWN).texture("#up").cullface(null).end();
+
         getVariantBuilder(ModBlocks.INCUBATOR.get()).forAllStates(state -> {
             Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
             DoubleBlockHalf half = state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF);
+            boolean open = state.getValue(IncubatorBlock.OPEN);
             boolean lower = half == DoubleBlockHalf.LOWER;
+            ModelFile model = lower
+                    ? incubatorLower
+                    : (open ? incubatorUpperOpen : incubatorUpper);
             return ConfiguredModel.builder()
-                    .modelFile(lower ? incubatorLower : incubatorUpper)
+                    .modelFile(model)
                     .rotationY(((int) facing.toYRot() + 180) % 360)
                     .build();
         });

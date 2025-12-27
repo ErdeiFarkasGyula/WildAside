@@ -5,6 +5,7 @@ import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.ModBlockEntities;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.client.ModKeyMappings;
+import net.farkas.wildaside.client.renderer.IncubatorRenderer;
 import net.farkas.wildaside.dna.DnaConstants;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.entity.ModEntities;
@@ -61,8 +62,11 @@ public class ModEventBusClientEvents {
     public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(ModBlockEntities.MOD_SIGN.get(), SignRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.MOD_HANGING_SIGN.get(), HangingSignRenderer::new);
+
         event.registerEntityRenderer(ModEntities.HICKORY_LEAF_PROJECTILE.get(), ThrownItemRenderer::new);
         event.registerEntityRenderer(ModEntities.HICKORY_TREANT.get(), HickoryTreantRenderer::new);
+
+        event.registerBlockEntityRenderer(ModBlockEntities.INCUBATOR.get(), IncubatorRenderer::new);
     }
 
     @SubscribeEvent

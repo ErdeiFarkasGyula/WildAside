@@ -1,4 +1,4 @@
-package net.farkas.wildaside.network.packets;
+package net.farkas.wildaside.network.packets.bioengineering_workstation;
 
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillPointOperation;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillUtils;

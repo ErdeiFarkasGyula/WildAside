@@ -2,6 +2,9 @@ package net.farkas.wildaside.network;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.network.packets.*;
+import net.farkas.wildaside.network.packets.bioengineering_workstation.*;
+import net.farkas.wildaside.network.packets.incubator.SetIncubatorHeatLevelPacket;
+import net.farkas.wildaside.network.packets.incubator.ToggleIncubatorOpenPacket;
 import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationTab;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -87,6 +90,20 @@ public class NetworkHandler {
                 BioengineeringSkillClientSyncPacket::decode,
                 BioengineeringSkillClientSyncPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
+        CHANNEL.registerMessage(id(),
+                SetIncubatorHeatLevelPacket.class,
+                SetIncubatorHeatLevelPacket::encode,
+                SetIncubatorHeatLevelPacket::decode,
+                SetIncubatorHeatLevelPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
+
+        CHANNEL.registerMessage(id(),
+                ToggleIncubatorOpenPacket.class,
+                ToggleIncubatorOpenPacket::encode,
+                ToggleIncubatorOpenPacket::decode,
+                ToggleIncubatorOpenPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
     }
 
     public static void sendWindUpdateToAll(Vec3 dir, float strength) {
@@ -147,5 +164,21 @@ public class NetworkHandler {
             return;
         }
         CHANNEL.send(PacketDistributor.PLAYER.with(() -> target), new BioengineeringSkillClientSyncPacket(skills, points));
+    }
+
+    public static void sendSetIncubatorHeatLevelPacket(BlockPos pos, int level) {
+        if (CHANNEL == null) {
+            WildAside.LOGGER.warn("Tried to send set incubator heat level packet before network init. Ignoring.");
+            return;
+        }
+        CHANNEL.send(PacketDistributor.SERVER.noArg(), new SetIncubatorHeatLevelPacket(pos, level));
+    }
+
+    public static void sendToggleIncubatorOpenPacket(BlockPos pos) {
+        if (CHANNEL == null) {
+            WildAside.LOGGER.warn("Tried to send toggle incubator open packet before network init. Ignoring.");
+            return;
+        }
+        CHANNEL.send(PacketDistributor.SERVER.noArg(), new ToggleIncubatorOpenPacket(pos));
     }
 }

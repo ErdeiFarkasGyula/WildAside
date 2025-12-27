@@ -62,7 +62,7 @@ public class PotionBlasterBlock extends BaseEntityBlock {
         if (pState.getBlock() != pNewState.getBlock()) {
             BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
             if (blockEntity instanceof PotionBlasterBlockEntity) {
-                ((PotionBlasterBlockEntity)blockEntity).drops();
+                ((PotionBlasterBlockEntity) blockEntity).drops();
             }
         }
 
@@ -71,13 +71,10 @@ public class PotionBlasterBlock extends BaseEntityBlock {
 
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        if (!pLevel.isClientSide()) {
-            BlockEntity entity = pLevel.getBlockEntity(pPos);
-            if (entity instanceof PotionBlasterBlockEntity) {
-                NetworkHooks.openScreen(((ServerPlayer)pPlayer), (PotionBlasterBlockEntity)entity, pPos);
-            } else {
-                throw new IllegalStateException("Our Container provider is missing!");
-            }
+        if (pLevel.isClientSide()) return InteractionResult.SUCCESS;
+
+        if (pLevel.getBlockEntity(pPos) instanceof PotionBlasterBlockEntity blockEntity) {
+            NetworkHooks.openScreen(((ServerPlayer) pPlayer), blockEntity, pPos);
         }
 
         return InteractionResult.sidedSuccess(pLevel.isClientSide());

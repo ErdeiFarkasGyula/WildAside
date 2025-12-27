@@ -58,13 +58,10 @@ public class BioengineeringWorkstationBlock extends BaseEntityBlock {
 
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        if (!pLevel.isClientSide()) {
-            BlockEntity entity = pLevel.getBlockEntity(pPos);
-            if (entity instanceof BioengineeringWorkstationBlockEntity) {
-                NetworkHooks.openScreen(((ServerPlayer)pPlayer), (BioengineeringWorkstationBlockEntity)entity, pPos);
-            } else {
-                throw new IllegalStateException("Bioengineering Workstation container provider is missing!");
-            }
+        if (pLevel.isClientSide()) return InteractionResult.SUCCESS;
+
+        if (pLevel.getBlockEntity(pPos) instanceof BioengineeringWorkstationBlockEntity blockEntity) {
+            NetworkHooks.openScreen(((ServerPlayer) pPlayer), blockEntity, pPos);
         }
 
         return InteractionResult.sidedSuccess(pLevel.isClientSide());

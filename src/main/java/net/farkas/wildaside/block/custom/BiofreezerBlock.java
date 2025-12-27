@@ -2,6 +2,7 @@ package net.farkas.wildaside.block.custom;
 
 import net.farkas.wildaside.block.entity.custom.BiofreezerBlockEntity;
 import net.farkas.wildaside.block.entity.ModBlockEntities;
+import net.farkas.wildaside.block.entity.custom.PotionBlasterBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -58,13 +59,10 @@ public class BiofreezerBlock extends BaseEntityBlock {
 
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        if (!pLevel.isClientSide()) {
-            BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-            if (blockEntity instanceof BiofreezerBlockEntity bioFreezer) {
-                NetworkHooks.openScreen(((ServerPlayer)pPlayer), bioFreezer, pPos);
-            } else {
-                throw new IllegalStateException("Bio Freezer container provider is missing!");
-            }
+        if (pLevel.isClientSide()) return InteractionResult.SUCCESS;
+
+        if (pLevel.getBlockEntity(pPos) instanceof BiofreezerBlockEntity blockEntity) {
+            NetworkHooks.openScreen(((ServerPlayer) pPlayer), blockEntity, pPos);
         }
 
         return InteractionResult.sidedSuccess(pLevel.isClientSide());

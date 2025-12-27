@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.advancement.ModAdvancements;
 import net.farkas.wildaside.block.ModBlocks;
+import net.farkas.wildaside.block.custom.IncubatorBlock;
 import net.farkas.wildaside.capability.bioengineering_skill.BioengineeringSkillsProvider;
 import net.farkas.wildaside.capability.contamination.ContaminationCapability;
 import net.farkas.wildaside.capability.contamination.ContaminationProvider;
@@ -23,6 +24,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -32,6 +35,9 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -47,7 +53,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = WildAside.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class ModEvents {
+public class ModForgeEvents {
     @SubscribeEvent
     public static void attach(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof LivingEntity livingEntity) {

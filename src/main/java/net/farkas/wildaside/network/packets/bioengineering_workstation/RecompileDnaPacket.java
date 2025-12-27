@@ -1,4 +1,4 @@
-package net.farkas.wildaside.network.packets;
+package net.farkas.wildaside.network.packets.bioengineering_workstation;
 
 import net.farkas.wildaside.block.entity.custom.BioengineeringWorkstationBlockEntity;
 import net.minecraft.core.BlockPos;
