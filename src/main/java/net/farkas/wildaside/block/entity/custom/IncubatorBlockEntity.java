@@ -210,9 +210,9 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
                 : Direction.NORTH;
 
         BlockPos upper = worldPosition.above();
-        double cx = upper.getX() + 0.5;
-        double cy = upper.getY() + 0.65;
-        double cz = upper.getZ() + 0.5;
+        double cx = worldPosition.getX() + 0.5;
+        double cy = worldPosition.getY() + 1.0;
+        double cz = worldPosition.getZ() + 0.5;
         double fx = cx + facing.getStepX() * 0.35;
         double fz = cz + facing.getStepZ() * 0.35;
 
@@ -225,11 +225,16 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
         };
 
         for (int i = 0; i < count; i++) {
-            double ox = (level.random.nextDouble() - 0.5) * 0.1;
-            double oy = (level.random.nextDouble()) * 0.1;
-            double oz = (level.random.nextDouble() - 0.5) * 0.1;
-            level.addParticle(ParticleTypes.FLAME, fx + ox, cy + oy, fz + oz, 0, 0.01, 0);
-            level.addParticle(ParticleTypes.SMOKE, fx + ox, cy + oy, fz + oz, 0, 0.003, 0);
+            if (level.random.nextFloat() > 0.2f + count / 10f) continue;
+
+            double r = 0.32 + level.random.nextDouble() * 0.12;
+            double a = level.random.nextDouble() * Math.PI * 2.0;
+            double ox = Math.cos(a) * r;
+            double oz = Math.sin(a) * r;
+            double oy = level.random.nextDouble() * 0.08;
+
+            level.addParticle(ParticleTypes.FLAME, cx + ox, cy + oy, cz + oz, 0, 0.01, 0);
+            level.addParticle(ParticleTypes.SMOKE, cx + ox, cy + oy, cz + oz, 0, 0.003, 0);
         }
     }
 

@@ -18,9 +18,6 @@ public class IncubatorScreen extends AbstractContainerScreen<IncubatorMenu> {
 
     public IncubatorScreen(IncubatorMenu menu, Inventory inv, Component title) {
         super(menu, inv, title);
-        this.imageWidth = 176;
-        this.imageHeight = 166;
-        this.titleLabelY = 9999;
     }
 
     @Override
@@ -28,6 +25,12 @@ public class IncubatorScreen extends AbstractContainerScreen<IncubatorMenu> {
         super.init();
         int x = leftPos;
         int y = topPos;
+
+        this.imageWidth = 176;
+        this.imageHeight = 166;
+
+        this.inventoryLabelY = 9999;
+        this.titleLabelY = 9999;
 
         minus = addRenderableWidget(Button.builder(Component.literal("-"), b -> changeHeat(-1)).bounds(x + 140, y + 20, 12, 12).build());
         plus = addRenderableWidget(Button.builder(Component.literal("+"), b -> changeHeat(+1)).bounds(x + 156, y + 20, 12, 12).build());
@@ -50,6 +53,7 @@ public class IncubatorScreen extends AbstractContainerScreen<IncubatorMenu> {
         graphics.blit(BACKGROUND, leftPos, topPos, 0, 0, imageWidth, imageHeight);
 
         drawHeatMeter(graphics, partialTicks);
+        drawFuelMeter(graphics);
     }
 
     private void drawHeatMeter(GuiGraphics graphics, float partialTicks) {
@@ -76,10 +80,30 @@ public class IncubatorScreen extends AbstractContainerScreen<IncubatorMenu> {
         graphics.fillGradient(x1 + 1, y1, x2 - 1, y1 + Math.min(6, barHeight), 0xFFFFEE77, 0x00FFFFEE);
     }
 
+    private void drawFuelMeter(GuiGraphics graphics) {
+        int burn = menu.getData().get(0);
+        int burnTotal = menu.getData().get(1);
+        if (burn <= 0 || burnTotal <= 0) return;
+
+        int maxH = 52;
+        int barHeight = Math.max(0, Math.min(maxH, (int) ((burn / (float) burnTotal) * maxH)));
+        if (barHeight == 0) return;
+
+        int x1 = leftPos + 24;
+        int y1 = topPos + 36 + (maxH - barHeight);
+        int x2 = x1 + 8;
+        int y2 = topPos + 36 + maxH;
+
+        int bottom = 0xFF774000;
+        int top = 0xFFFF8800;
+        graphics.fillGradient(x1, y1, x2, y2, top, bottom);
+        graphics.fillGradient(x1 + 1, y1, x2 - 1, y1 + Math.min(6, barHeight), 0xFFFFCC55, 0x00FFFFCC);
+    }
+
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-        graphics.drawString(font, title, 8, 6, 0x404040, false);
         graphics.drawString(font, Component.literal("Heat"), 140, 10, 0xFFFFFF, false);
+        graphics.drawString(font, Component.literal("Fuel"), 24, 10, 0xFFFFFF, false);
     }
 
     @Override
