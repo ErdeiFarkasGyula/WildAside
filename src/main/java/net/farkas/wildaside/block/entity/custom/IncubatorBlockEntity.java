@@ -3,9 +3,12 @@ package net.farkas.wildaside.block.entity.custom;
 import net.farkas.wildaside.block.custom.IncubatorBlock;
 import net.farkas.wildaside.block.entity.ModBlockEntities;
 import net.farkas.wildaside.block.entity.SidedItemHandler;
+import net.farkas.wildaside.dna.BacillusBlobPayload;
+import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.screen.incubator.IncubatorMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
@@ -106,6 +109,34 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
         }
     };
 
+    public InteractionResult handleUse(Player player, InteractionHand hand) {
+        ItemStack held = player.getItemInHand(hand);
+
+        if (!glassOpen) return InteractionResult.PASS;
+
+        if (!hasBlob && held.is(ModItems.BACILLUS_BLOB.get())) {
+            hasBlob = true;
+            dnaPayload = held.hasTag() ? held.getTag().copy() : new CompoundTag();
+            held.shrink(1);
+            sync();
+            return InteractionResult.SUCCESS;
+        }
+
+        if (hasBlob && dnaPayload.isEmpty() && held.is(ModItems.DNA_HOLDER.get())) {
+            if (BacillusBlobPayload.copyDnaFromHolderInternal(dnaPayload, held)) {
+                sync();
+                return InteractionResult.SUCCESS;
+            }
+        }
+
+        if (hasBlob && held.isEmpty() && player.isShiftKeyDown()) {
+            applyBlobToPlayer(player);
+            clearBlob();
+            return InteractionResult.SUCCESS;
+        }
+
+        return InteractionResult.PASS;
+    }
 
     private void applyBlobToPlayer(Player player) {
 
@@ -133,7 +164,7 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
             dirty = true;
         }
 
-        if (burnTime == 0 && factor > 0f && hasBlob && !items.getStackInSlot(SLOT_FUEL).isEmpty()) {
+        if (burnTime == 0 && factor > 0f && !items.getStackInSlot(SLOT_FUEL).isEmpty()) {
             ItemStack fuel = items.extractItem(SLOT_FUEL, 1, false);
             burnTimeTotal = burnTime = ForgeHooks.getBurnTime(fuel, null);
             dirty = true;
@@ -146,7 +177,6 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
                 coldTicks = 0;
                 if (maturity > 0.7f * maturityRequired) {
                     mutationRisk = Math.min(1000, mutationRisk + (int) (2 * factor));
-                    dirty = true;
                 }
                 dirty = true;
             }
@@ -154,11 +184,8 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
                 coldTicks++;
                 if (coldTicks >= coldTicksThreshold) {
                     clearBlob();
-                    dirty = true;
                 }
-                else {
-                    dirty = true;
-                }
+                dirty = true;
             }
         }
 
@@ -169,6 +196,40 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
         setChanged();
         if (level != null && !level.isClientSide) {
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+        }
+    }
+
+    public void tickClient() {
+        if (level == null || !level.isClientSide) return;
+        if (burnTime <= 0) return;
+        if (heatLevel <= 0) return;
+
+        BlockState st = getBlockState();
+        Direction facing = st.hasProperty(BlockStateProperties.HORIZONTAL_FACING)
+                ? st.getValue(BlockStateProperties.HORIZONTAL_FACING)
+                : Direction.NORTH;
+
+        BlockPos upper = worldPosition.above();
+        double cx = upper.getX() + 0.5;
+        double cy = upper.getY() + 0.65;
+        double cz = upper.getZ() + 0.5;
+        double fx = cx + facing.getStepX() * 0.35;
+        double fz = cz + facing.getStepZ() * 0.35;
+
+        int count = switch (heatLevel) {
+            case 1 -> 1;
+            case 2 -> 2;
+            case 3 -> 3;
+            case 4 -> 5;
+            default -> 0;
+        };
+
+        for (int i = 0; i < count; i++) {
+            double ox = (level.random.nextDouble() - 0.5) * 0.1;
+            double oy = (level.random.nextDouble()) * 0.1;
+            double oz = (level.random.nextDouble() - 0.5) * 0.1;
+            level.addParticle(ParticleTypes.FLAME, fx + ox, cy + oy, fz + oz, 0, 0.01, 0);
+            level.addParticle(ParticleTypes.SMOKE, fx + ox, cy + oy, fz + oz, 0, 0.003, 0);
         }
     }
 

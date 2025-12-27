@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 public class IncubatorScreen extends AbstractContainerScreen<IncubatorMenu> {
-    private static final ResourceLocation BG = new ResourceLocation(WildAside.MOD_ID, "textures/gui/incubator.png");
+    private static final ResourceLocation BACKGROUND = new ResourceLocation(WildAside.MOD_ID, "textures/gui/incubator.png");
     private Button minus;
     private Button plus;
     private Button openBtn;
@@ -20,6 +20,7 @@ public class IncubatorScreen extends AbstractContainerScreen<IncubatorMenu> {
         super(menu, inv, title);
         this.imageWidth = 176;
         this.imageHeight = 166;
+        this.titleLabelY = 9999;
     }
 
     @Override
@@ -44,27 +45,47 @@ public class IncubatorScreen extends AbstractContainerScreen<IncubatorMenu> {
     }
 
     @Override
-    protected void renderBg(GuiGraphics gg, float partialTicks, int mouseX, int mouseY) {
-        RenderSystem.setShaderTexture(0, BG);
-        gg.blit(BG, leftPos, topPos, 0, 0, imageWidth, imageHeight);
+    protected void renderBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
+        RenderSystem.setShaderTexture(0, BACKGROUND);
+        graphics.blit(BACKGROUND, leftPos, topPos, 0, 0, imageWidth, imageHeight);
 
-        int heat = menu.getData().get(4); // 0-4
-        int barHeight = (int) ((heat / 4f) * 52);
-        if (barHeight > 0) {
-            gg.blit(BG, leftPos + 148, topPos + 36 + (52 - barHeight), 176, 52 - barHeight, 8, barHeight);
-        }
+        drawHeatMeter(graphics, partialTicks);
+    }
+
+    private void drawHeatMeter(GuiGraphics graphics, float partialTicks) {
+        int heat = menu.getData().get(4);
+        int burnTime = menu.getData().get(0);
+        if (heat <= 0 || burnTime <= 0) return;
+
+        int maxH = 52;
+        int barHeight = (int) ((heat / 4f) * maxH);
+
+        float wobble = (float) Math.sin((minecraft.level != null ? minecraft.level.getGameTime() : 0) * 0.2f + partialTicks) * 2f;
+        barHeight = Math.max(0, Math.min(maxH, barHeight + (int) wobble));
+        if (barHeight <= 0) return;
+
+        int x1 = leftPos + 148;
+        int y1 = topPos + 36 + (maxH - barHeight);
+        int x2 = x1 + 8;
+        int y2 = topPos + 36 + maxH;
+
+        int bottom = 0xFFB24A00;
+        int top = 0xFFFFCC33;
+        graphics.fillGradient(x1, y1, x2, y2, top, bottom);
+
+        graphics.fillGradient(x1 + 1, y1, x2 - 1, y1 + Math.min(6, barHeight), 0xFFFFEE77, 0x00FFFFEE);
     }
 
     @Override
-    protected void renderLabels(GuiGraphics gg, int mouseX, int mouseY) {
-        gg.drawString(font, title, 8, 6, 0x404040, false);
-        gg.drawString(font, Component.literal("Heat"), 140, 10, 0xFFFFFF, false);
+    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
+        graphics.drawString(font, title, 8, 6, 0x404040, false);
+        graphics.drawString(font, Component.literal("Heat"), 140, 10, 0xFFFFFF, false);
     }
 
     @Override
-    public void render(GuiGraphics gg, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(gg);
-        super.render(gg, mouseX, mouseY, partialTicks);
-        this.renderTooltip(gg, mouseX, mouseY);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(graphics);
+        super.render(graphics, mouseX, mouseY, partialTicks);
+        this.renderTooltip(graphics, mouseX, mouseY);
     }
 }
