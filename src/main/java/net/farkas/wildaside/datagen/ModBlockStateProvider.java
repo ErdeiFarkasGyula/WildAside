@@ -10,6 +10,8 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
@@ -64,8 +66,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockWithItem(ModBlocks.LIT_VIBRION_GLASS.get(), translucentAll(ModBlocks.VIBRION_GLASS.get()));
 
         //PANE
-        paneBlockWithRenderType(((IronBarsBlock)ModBlocks.VIBRION_GLASS_PANE.get()), modLoc("block/vibrion_glass"), modLoc("block/vibrion_glass"), "translucent");
-        paneBlockWithRenderType(((IronBarsBlock)ModBlocks.LIT_VIBRION_GLASS_PANE.get()), modLoc("block/vibrion_glass"), modLoc("block/vibrion_glass"), "translucent");
+        paneBlockWithRenderType(((IronBarsBlock) ModBlocks.VIBRION_GLASS_PANE.get()), modLoc("block/vibrion_glass"), modLoc("block/vibrion_glass"), "translucent");
+        paneBlockWithRenderType(((IronBarsBlock) ModBlocks.LIT_VIBRION_GLASS_PANE.get()), modLoc("block/vibrion_glass"), modLoc("block/vibrion_glass"), "translucent");
 
         //CROSS
         crossBlock(ModBlocks.VIBRION_GROWTH);
@@ -86,13 +88,13 @@ public class ModBlockStateProvider extends BlockStateProvider {
         pottedBlock(ModBlocks.POTTED_PINKSTER_FLOWER);
 
         //DIRECTIONAL
-        axisBlock(((RotatedPillarBlock)ModBlocks.NATURAL_SPORE_BLASTER.get()), modLoc("block/substilium_soil"), modLoc("block/natural_spore_blaster"));
+        axisBlock(((RotatedPillarBlock) ModBlocks.NATURAL_SPORE_BLASTER.get()), modLoc("block/substilium_soil"), modLoc("block/natural_spore_blaster"));
         simpleBlockItem(ModBlocks.NATURAL_SPORE_BLASTER.get(), new ModelFile.UncheckedModelFile(modLoc("custom/natural_spore_blaster")));
 
-        directionalBlock(ModBlocks.SPORE_BLASTER.get(),  new ModelFile.UncheckedModelFile(modLoc("custom/spore_blaster")));
+        directionalBlock(ModBlocks.SPORE_BLASTER.get(), new ModelFile.UncheckedModelFile(modLoc("custom/spore_blaster")));
         simpleBlockItem(ModBlocks.SPORE_BLASTER.get(), new ModelFile.UncheckedModelFile(modLoc("custom/spore_blaster")));
 
-        directionalBlock(ModBlocks.POTION_BLASTER.get(),  new ModelFile.UncheckedModelFile(modLoc("custom/potion_blaster")));
+        directionalBlock(ModBlocks.POTION_BLASTER.get(), new ModelFile.UncheckedModelFile(modLoc("custom/potion_blaster")));
         simpleBlockItem(ModBlocks.POTION_BLASTER.get(), new ModelFile.UncheckedModelFile(modLoc("custom/potion_blaster")));
 
         directionalBlock(ModBlocks.WIND_BLASTER.get(), new ModelFile.UncheckedModelFile(modLoc("custom/wind_blaster")));
@@ -109,48 +111,48 @@ public class ModBlockStateProvider extends BlockStateProvider {
         axisBlock(((RotatedPillarBlock) ModBlocks.STRIPPED_HICKORY_WOOD.get()), modLoc("block/stripped_hickory_log_side"), modLoc("block/stripped_hickory_log_side"));
 
         //STAIRS
-        stairsBlock(((StairBlock)ModBlocks.SMOOTH_SUBSTILIUM_SOIL_STAIRS.get()), blockTexture(ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get()));
-        stairsBlock(((StairBlock)ModBlocks.SUBSTILIUM_TILE_STAIRS.get()), blockTexture(ModBlocks.SUBSTILIUM_TILES.get()));
-        stairsBlock(((StairBlock)ModBlocks.SUBSTILIUM_STAIRS.get()), blockTexture(ModBlocks.SUBSTILIUM_PLANKS.get()));
-        stairsBlock(((StairBlock)ModBlocks.HICKORY_STAIRS.get()), blockTexture(ModBlocks.HICKORY_PLANKS.get()));
+        stairsBlock(((StairBlock) ModBlocks.SMOOTH_SUBSTILIUM_SOIL_STAIRS.get()), blockTexture(ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get()));
+        stairsBlock(((StairBlock) ModBlocks.SUBSTILIUM_TILE_STAIRS.get()), blockTexture(ModBlocks.SUBSTILIUM_TILES.get()));
+        stairsBlock(((StairBlock) ModBlocks.SUBSTILIUM_STAIRS.get()), blockTexture(ModBlocks.SUBSTILIUM_PLANKS.get()));
+        stairsBlock(((StairBlock) ModBlocks.HICKORY_STAIRS.get()), blockTexture(ModBlocks.HICKORY_PLANKS.get()));
 
         //SLAB
-        slabBlock(((SlabBlock)ModBlocks.SMOOTH_SUBSTILIUM_SOIL_SLAB.get()), blockTexture(ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get()), blockTexture(ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get()));
-        slabBlock(((SlabBlock)ModBlocks.SUBSTILIUM_TILE_SLAB.get()), blockTexture(ModBlocks.SUBSTILIUM_TILES.get()), blockTexture(ModBlocks.SUBSTILIUM_TILES.get()));
-        slabBlock(((SlabBlock)ModBlocks.SUBSTILIUM_SLAB.get()), blockTexture(ModBlocks.SUBSTILIUM_PLANKS.get()), blockTexture(ModBlocks.SUBSTILIUM_PLANKS.get()));
-        slabBlock(((SlabBlock)ModBlocks.HICKORY_SLAB.get()), blockTexture(ModBlocks.HICKORY_PLANKS.get()), blockTexture(ModBlocks.HICKORY_PLANKS.get()));
+        slabBlock(((SlabBlock) ModBlocks.SMOOTH_SUBSTILIUM_SOIL_SLAB.get()), blockTexture(ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get()), blockTexture(ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get()));
+        slabBlock(((SlabBlock) ModBlocks.SUBSTILIUM_TILE_SLAB.get()), blockTexture(ModBlocks.SUBSTILIUM_TILES.get()), blockTexture(ModBlocks.SUBSTILIUM_TILES.get()));
+        slabBlock(((SlabBlock) ModBlocks.SUBSTILIUM_SLAB.get()), blockTexture(ModBlocks.SUBSTILIUM_PLANKS.get()), blockTexture(ModBlocks.SUBSTILIUM_PLANKS.get()));
+        slabBlock(((SlabBlock) ModBlocks.HICKORY_SLAB.get()), blockTexture(ModBlocks.HICKORY_PLANKS.get()), blockTexture(ModBlocks.HICKORY_PLANKS.get()));
 
         //WALLS
         wallBlock((WallBlock) ModBlocks.SMOOTH_SUBSTILIUM_SOIL_WALLS.get(), blockTexture(ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get()));
         wallBlock((WallBlock) ModBlocks.SUBSTILIUM_TILE_WALLS.get(), blockTexture(ModBlocks.SUBSTILIUM_TILES.get()));
 
         //FENCE
-        fenceBlock(((FenceBlock)ModBlocks.SUBSTILIUM_FENCE.get()), blockTexture(ModBlocks.SUBSTILIUM_PLANKS.get()));
-        fenceBlock(((FenceBlock)ModBlocks.HICKORY_FENCE.get()), blockTexture(ModBlocks.HICKORY_PLANKS.get()));
+        fenceBlock(((FenceBlock) ModBlocks.SUBSTILIUM_FENCE.get()), blockTexture(ModBlocks.SUBSTILIUM_PLANKS.get()));
+        fenceBlock(((FenceBlock) ModBlocks.HICKORY_FENCE.get()), blockTexture(ModBlocks.HICKORY_PLANKS.get()));
 
         //FENCEGATE
-        fenceGateBlock(((FenceGateBlock)ModBlocks.SUBSTILIUM_FENCE_GATE.get()), blockTexture(ModBlocks.SUBSTILIUM_PLANKS.get()));
-        fenceGateBlock(((FenceGateBlock)ModBlocks.HICKORY_FENCE_GATE.get()), blockTexture(ModBlocks.HICKORY_PLANKS.get()));
+        fenceGateBlock(((FenceGateBlock) ModBlocks.SUBSTILIUM_FENCE_GATE.get()), blockTexture(ModBlocks.SUBSTILIUM_PLANKS.get()));
+        fenceGateBlock(((FenceGateBlock) ModBlocks.HICKORY_FENCE_GATE.get()), blockTexture(ModBlocks.HICKORY_PLANKS.get()));
 
         //PRESSUREPLATE
-        pressurePlateBlock(((PressurePlateBlock)ModBlocks.SMOOTH_SUBSTILIUM_SOIL_PRESSURE_PLATE.get()), blockTexture(ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get()));
-        pressurePlateBlock(((PressurePlateBlock)ModBlocks.SUBSTILIUM_TILE_PRESSURE_PLATE.get()), blockTexture(ModBlocks.SUBSTILIUM_TILES.get()));
-        pressurePlateBlock(((PressurePlateBlock)ModBlocks.SUBSTILIUM_PRESSURE_PLATE.get()), blockTexture(ModBlocks.SUBSTILIUM_PLANKS.get()));
-        pressurePlateBlock(((PressurePlateBlock)ModBlocks.HICKORY_PRESSURE_PLATE.get()), blockTexture(ModBlocks.HICKORY_PLANKS.get()));
+        pressurePlateBlock(((PressurePlateBlock) ModBlocks.SMOOTH_SUBSTILIUM_SOIL_PRESSURE_PLATE.get()), blockTexture(ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get()));
+        pressurePlateBlock(((PressurePlateBlock) ModBlocks.SUBSTILIUM_TILE_PRESSURE_PLATE.get()), blockTexture(ModBlocks.SUBSTILIUM_TILES.get()));
+        pressurePlateBlock(((PressurePlateBlock) ModBlocks.SUBSTILIUM_PRESSURE_PLATE.get()), blockTexture(ModBlocks.SUBSTILIUM_PLANKS.get()));
+        pressurePlateBlock(((PressurePlateBlock) ModBlocks.HICKORY_PRESSURE_PLATE.get()), blockTexture(ModBlocks.HICKORY_PLANKS.get()));
 
         //BUTTON
-        buttonBlock(((ButtonBlock)ModBlocks.SMOOTH_SUBSTILIUM_SOIL_BUTTON.get()), blockTexture(ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get()));
-        buttonBlock(((ButtonBlock)ModBlocks.SUBSTILIUM_TILE_BUTTON.get()), blockTexture(ModBlocks.SUBSTILIUM_TILES.get()));
-        buttonBlock(((ButtonBlock)ModBlocks.SUBSTILIUM_BUTTON.get()), blockTexture(ModBlocks.SUBSTILIUM_PLANKS.get()));
-        buttonBlock(((ButtonBlock)ModBlocks.HICKORY_BUTTON.get()), blockTexture(ModBlocks.HICKORY_PLANKS.get()));
+        buttonBlock(((ButtonBlock) ModBlocks.SMOOTH_SUBSTILIUM_SOIL_BUTTON.get()), blockTexture(ModBlocks.SMOOTH_SUBSTILIUM_SOIL.get()));
+        buttonBlock(((ButtonBlock) ModBlocks.SUBSTILIUM_TILE_BUTTON.get()), blockTexture(ModBlocks.SUBSTILIUM_TILES.get()));
+        buttonBlock(((ButtonBlock) ModBlocks.SUBSTILIUM_BUTTON.get()), blockTexture(ModBlocks.SUBSTILIUM_PLANKS.get()));
+        buttonBlock(((ButtonBlock) ModBlocks.HICKORY_BUTTON.get()), blockTexture(ModBlocks.HICKORY_PLANKS.get()));
 
         //DOOR
-        doorBlockWithRenderType(((DoorBlock)ModBlocks.SUBSTILIUM_DOOR.get()), modLoc("block/substilium_door_bottom"), modLoc("block/substilium_door_top"), "cutout");
-        doorBlockWithRenderType(((DoorBlock)ModBlocks.HICKORY_DOOR.get()), modLoc("block/hickory_door_bottom"), modLoc("block/hickory_door_top"), "cutout");
+        doorBlockWithRenderType(((DoorBlock) ModBlocks.SUBSTILIUM_DOOR.get()), modLoc("block/substilium_door_bottom"), modLoc("block/substilium_door_top"), "cutout");
+        doorBlockWithRenderType(((DoorBlock) ModBlocks.HICKORY_DOOR.get()), modLoc("block/hickory_door_bottom"), modLoc("block/hickory_door_top"), "cutout");
 
         //TRAPDOOR
-        trapdoorBlockWithRenderType(((TrapDoorBlock)ModBlocks.SUBSTILIUM_TRAPDOOR.get()), modLoc("block/substilium_trapdoor"), true, "cutout");
-        trapdoorBlockWithRenderType(((TrapDoorBlock)ModBlocks.HICKORY_TRAPDOOR.get()), modLoc("block/hickory_trapdoor"), true, "cutout");
+        trapdoorBlockWithRenderType(((TrapDoorBlock) ModBlocks.SUBSTILIUM_TRAPDOOR.get()), modLoc("block/substilium_trapdoor"), true, "cutout");
+        trapdoorBlockWithRenderType(((TrapDoorBlock) ModBlocks.HICKORY_TRAPDOOR.get()), modLoc("block/hickory_trapdoor"), true, "cutout");
 
         //SIGN
         signBlock(((StandingSignBlock) ModBlocks.SUBSTILIUM_SIGN.get()), ((WallSignBlock) ModBlocks.SUBSTILIUM_WALL_SIGN.get()), blockTexture(ModBlocks.SUBSTILIUM_PLANKS.get()));
@@ -169,7 +171,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         ResourceLocation parentModel = modLoc("custom/flat_block");
         ResourceLocation tintedModel = modLoc("custom/flat_tinted_block");
 
-        simpleBlockWithItem(ModBlocks.VIBRION_SPOREHOLDER.get(),  new ModelFile.UncheckedModelFile(modLoc("custom/vibrion_sporeholder")));
+        simpleBlockWithItem(ModBlocks.VIBRION_SPOREHOLDER.get(), new ModelFile.UncheckedModelFile(modLoc("custom/vibrion_sporeholder")));
         simpleBlock(ModBlocks.BIOENGINEERING_WORKSTATION.get(), new ModelFile.UncheckedModelFile(modLoc("custom/bioengineering_workstation")));
         simpleBlockItem(ModBlocks.BIOENGINEERING_WORKSTATION.get(), new ModelFile.UncheckedModelFile(modLoc("custom/bioengineering_workstation")));
 
@@ -180,16 +182,16 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 String modelName = String.format("fallen_%s_leaves_%d", colName, count);
                 ResourceLocation tex = modLoc("block/" + modelName);
                 ResourceLocation chosenModel = colName == "hickory" ? tintedModel : parentModel;
-                models[ci][count-1] = models().withExistingParent(modelName, chosenModel).texture("leaves", tex);
+                models[ci][count - 1] = models().withExistingParent(modelName, chosenModel).texture("leaves", tex);
             }
         }
 
         getVariantBuilder(fallenLeaves).forAllStatesExcept(
                 state -> {
-                    int ci    = state.getValue(FallenHickoryLeavesBlock.COLOUR).ordinal();
-                    int cnt   = Mth.clamp(state.getValue(FallenHickoryLeavesBlock.COUNT), 1, 3);
+                    int ci = state.getValue(FallenHickoryLeavesBlock.COLOUR).ordinal();
+                    int cnt = Mth.clamp(state.getValue(FallenHickoryLeavesBlock.COUNT), 1, 3);
                     Direction face = state.getValue(FallenHickoryLeavesBlock.FACING);
-                    int yRot = (int)face.toYRot();
+                    int yRot = (int) face.toYRot();
 
                     ModelFile chosen = models[ci][cnt - 1];
 
@@ -209,6 +211,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
             ModelFile model = models().cross(name, modLoc(name));
             return ConfiguredModel.builder().modelFile(model).build();
         });
+
+        incubatorBlock();
     }
 
     private void crossBlock(RegistryObject<Block> blockRegistryObject) {
@@ -254,5 +258,55 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockWithItem(blockRegistryObject.get(),
                 models().singleTexture(ForgeRegistries.BLOCKS.getKey(blockRegistryObject.get()).getPath(), new ResourceLocation("minecraft:block/leaves"),
                         "all", blockTexture(blockRegistryObject.get())));
+    }
+
+    private void incubatorBlock() {
+        var incubatorLower = models().withExistingParent("incubator_lower", mcLoc("block/block"))
+                .texture("down",   modLoc("block/incubator_lower_side"))
+                .texture("up",     modLoc("block/incubator_lower_top"))
+                .texture("north",  modLoc("block/incubator_lower_front"))
+                .texture("south",  modLoc("block/incubator_lower_side"))
+                .texture("west",   modLoc("block/incubator_lower_side"))
+                .texture("east",   modLoc("block/incubator_lower_side"))
+                .texture("particle", modLoc("block/incubator_lower_side"))
+                .renderType("opaque");
+
+        incubatorLower.element()
+                .from(0, 0, 0).to(16, 16, 16)
+                .face(Direction.DOWN).texture("#down").end()
+                .face(Direction.UP).texture("#up").cullface(null).end()
+                .face(Direction.NORTH).texture("#north").end()
+                .face(Direction.SOUTH).texture("#south").end()
+                .face(Direction.WEST).texture("#west").end()
+                .face(Direction.EAST).texture("#east").end();
+
+        var incubatorUpper = models().withExistingParent("incubator_upper", mcLoc("block/block"))
+                .texture("down",   modLoc("block/incubator_lower_top")) // solid underside
+                .texture("up",     modLoc("block/incubator_upper_top"))
+                .texture("north",  modLoc("block/incubator_upper_side"))
+                .texture("south",  modLoc("block/incubator_upper_side"))
+                .texture("west",   modLoc("block/incubator_upper_side"))
+                .texture("east",   modLoc("block/incubator_upper_side"))
+                .texture("particle", modLoc("block/incubator_upper_side"))
+                .renderType("cutout");
+
+        incubatorUpper.element()
+                .from(0, 0, 0).to(16, 16, 16)
+                .face(Direction.DOWN).texture("#down").cullface(null).end()
+                .face(Direction.UP).texture("#up").end()
+                .face(Direction.NORTH).texture("#north").end()
+                .face(Direction.SOUTH).texture("#south").end()
+                .face(Direction.WEST).texture("#west").end()
+                .face(Direction.EAST).texture("#east").end();
+
+        getVariantBuilder(ModBlocks.INCUBATOR.get()).forAllStates(state -> {
+            Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+            DoubleBlockHalf half = state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF);
+            boolean lower = half == DoubleBlockHalf.LOWER;
+            return ConfiguredModel.builder()
+                    .modelFile(lower ? incubatorLower : incubatorUpper)
+                    .rotationY(((int) facing.toYRot() + 180) % 360)
+                    .build();
+        });
     }
 }

@@ -53,6 +53,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.dropSelf(ModBlocks.ENTORIUM_SHROOM.get());
         this.dropSelf(ModBlocks.BIOENGINEERING_WORKSTATION.get());
         this.dropSelf(ModBlocks.BIOFREEZER.get());
+        this.dropSelf(ModBlocks.INCUBATOR.get());
 
         this.dropSelf(ModBlocks.SUBSTILIUM_SOIL.get());
         this.dropSelf(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get());

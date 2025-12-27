@@ -20,6 +20,8 @@
   "item.wildaside.gene": "Gén",
   "item.wildaside.syringe": "Fecskendő",
 
+  "item.wildaside.bacillus_blob": "Bacilus Gömb",
+
   "item.wildaside.hickory_nut_trail_mix": "Hikori dió diákcsemege",
   "item.wildaside.red_hickory_nut_trail_mix": "Vörös hikori dió diákcsemege",
   "item.wildaside.brown_hickory_nut_trail_mix": "Barna hikori dió diákcsemege",
@@ -123,6 +125,8 @@
   "block.wildaside.substilium_sprouts": "Szubsztílium csírák",
   "block.wildaside.bioengineering_workstation": "Biomérnöki munkaállomás",
   "block.wildaside.biofreezer": "Biofagyasztó",
+  "block.wildaside.incubator": "Inkubátor",
+
   "block.wildaside.hickory_log": "Hikori rönk",
   "block.wildaside.hickory_wood": "Hikori blokk",
   "block.wildaside.stripped_hickory_log": "Kérgezett hikori rönk",

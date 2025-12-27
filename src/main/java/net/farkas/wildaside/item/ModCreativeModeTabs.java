@@ -65,6 +65,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.ENTORIUM.get());
                         pOutput.accept(ModBlocks.BIOENGINEERING_WORKSTATION.get());
                         pOutput.accept(ModBlocks.BIOFREEZER.get());
+                        pOutput.accept(ModBlocks.INCUBATOR.get());
                         pOutput.accept(ModItems.ENTORIUM_PILL.get());
                         pOutput.accept(ModItems.FERTILISER_BOMB.get());
                         pOutput.accept(ModItems.SPORE_BOMB.get());

@@ -1,4 +1,4 @@
-// 1.20.1	2025-12-23T19:37:59.0337912	Item Models: wildaside
+// 1.20.1	2025-12-27T10:20:07.1233153	Item Models: wildaside
 61f4e5ca8ae8a271a63092e9ed1e44a3320da0f0 assets/wildaside/models/item/bacillus_blob.json
 97ec986340aeed12ebc0d678c97ba34a7afb7b7c assets/wildaside/models/item/brown_glowing_hickory_leaf.json
 657a44b343b52d1185c119350b9599bc495c3976 assets/wildaside/models/item/brown_glowing_hickory_sapling.json
@@ -36,6 +36,7 @@ bca321864b0b7fec2f767d30f7c73d2574a6752e assets/wildaside/models/item/hickory_ro
 7a077921036b4c3009840fe3946985d7a965f1e1 assets/wildaside/models/item/hickory_trapdoor.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/wildaside/models/item/hickory_treant_spawn_egg.json
 6423758f57bd46ac66d09d2ec8c876a3f96a78fa assets/wildaside/models/item/hickory_wood.json
+f5f706950e9b0ecd46455694a7bbf2c36df9f751 assets/wildaside/models/item/incubator.json
 28b841c1b7ab30aa3f867a711da8e464c43ecf6b assets/wildaside/models/item/lit_vibrion_glass_pane.json
 36e2883a7556c4fcefc7bc6049546bda34a728d6 assets/wildaside/models/item/mucellith_jaw.json
 63ec6c618a3a23eab4cab9c52d7d3250de9b516e assets/wildaside/models/item/mucellith_spawn_egg.json

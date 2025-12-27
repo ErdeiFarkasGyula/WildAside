@@ -1,0 +1,47 @@
+{
+  "parent": "minecraft:block/block",
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "texture": "#down"
+        },
+        "east": {
+          "texture": "#east"
+        },
+        "north": {
+          "texture": "#north"
+        },
+        "south": {
+          "texture": "#south"
+        },
+        "up": {
+          "texture": "#up"
+        },
+        "west": {
+          "texture": "#west"
+        }
+      },
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ]
+    }
+  ],
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "down": "wildaside:block/incubator_lower_top",
+    "east": "wildaside:block/incubator_upper_side",
+    "north": "wildaside:block/incubator_upper_side",
+    "particle": "wildaside:block/incubator_upper_side",
+    "south": "wildaside:block/incubator_upper_side",
+    "up": "wildaside:block/incubator_upper_top",
+    "west": "wildaside:block/incubator_upper_side"
+  }
+}

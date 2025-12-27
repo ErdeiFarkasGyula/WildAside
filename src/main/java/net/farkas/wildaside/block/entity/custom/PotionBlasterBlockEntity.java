@@ -2,6 +2,7 @@ package net.farkas.wildaside.block.entity.custom;
 
 import net.farkas.wildaside.advancement.ModAdvancements;
 import net.farkas.wildaside.block.custom.vibrion.PotionBlasterBlock;
+import net.farkas.wildaside.block.entity.ModBlockEntities;
 import net.farkas.wildaside.block.entity.OutputRestrictingItemHandler;
 import net.farkas.wildaside.screen.potion_blaster.PotionBlasterMenu;
 import net.farkas.wildaside.advancement.AdvancementHandler;

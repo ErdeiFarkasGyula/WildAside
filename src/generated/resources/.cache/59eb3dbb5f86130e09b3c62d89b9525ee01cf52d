@@ -1,4 +1,4 @@
-// 1.20.1	2025-11-24T10:03:26.802408	Loot Tables
+// 1.20.1	2025-12-27T10:20:07.1233153	Loot Tables
 cb111f4aa2094610caccd6c93bb58846842f1adf data/wildaside/loot_tables/blocks/bioengineering_workstation.json
 8a8b5782b149204d6e179cc12b0579fca1c215a3 data/wildaside/loot_tables/blocks/biofreezer.json
 9af05efdb1326dfab1d8ce52f3587c6b2314e19e data/wildaside/loot_tables/blocks/brown_glowing_hickory_leaves.json
@@ -32,6 +32,7 @@ b490f04ee92cd8edbbf4bb0f7885c628b6f53e93 data/wildaside/loot_tables/blocks/hicko
 7087c0c4daa563ded604df51833a3e9c72812aac data/wildaside/loot_tables/blocks/hickory_trapdoor.json
 99e47d7ef3c0248c1042f12cfd79bc4071d51fc6 data/wildaside/loot_tables/blocks/hickory_wall_sign.json
 1805d0ee1b4a05c064d190b989da3484b46f2012 data/wildaside/loot_tables/blocks/hickory_wood.json
+1d08a8ac0df534dc61221d463263964d0190aaa2 data/wildaside/loot_tables/blocks/incubator.json
 0bef178ae67a6024159dd08a0fe237f7d3618556 data/wildaside/loot_tables/blocks/lit_vibrion_gel.json
 a9d7110d017cae6ecae57e7987b0a079c9f8df89 data/wildaside/loot_tables/blocks/lit_vibrion_glass.json
 bad11729bfea8fe7cbf6961230937f8e2a03f376 data/wildaside/loot_tables/blocks/lit_vibrion_glass_pane.json

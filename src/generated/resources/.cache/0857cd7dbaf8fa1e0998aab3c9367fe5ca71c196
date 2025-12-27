@@ -1,4 +1,4 @@
-// 1.20.1	2025-11-24T10:03:26.807928	Block States: wildaside
+// 1.20.1	2025-12-27T10:41:59.3623497	Block States: wildaside
 38a24b92f303bb5285d9a988d6c1d7ee8278e463 assets/wildaside/blockstates/bioengineering_workstation.json
 c09ce2518f9c57049f02f1228fae92e42760cc81 assets/wildaside/blockstates/biofreezer.json
 a6f417d7a5e3c62f22064fbdec6661e901c45ab1 assets/wildaside/blockstates/brown_glowing_hickory_leaves.json
@@ -32,6 +32,7 @@ a3f80e0657e007dfdf23b4a8f649de93e26a822f assets/wildaside/blockstates/hickory_sl
 00696fb32828ae73d96a7bf1759c7d7849b448f5 assets/wildaside/blockstates/hickory_trapdoor.json
 807ea792e1e7636a332fb345f2a6633f3b388442 assets/wildaside/blockstates/hickory_wall_sign.json
 6a644ede18a0ce66f80a162fed534258829050a6 assets/wildaside/blockstates/hickory_wood.json
+5db035d1893e480c6fcb93d41e9ca9bf3050e0f9 assets/wildaside/blockstates/incubator.json
 fe44a7ba27d8fd2953488b36dba98d25c2fc9f50 assets/wildaside/blockstates/lit_vibrion_gel.json
 2ff6d148899cdf1619c4711a53d25f3e767a479e assets/wildaside/blockstates/lit_vibrion_glass.json
 684fe4fc915796c80edee2c244971821dc4a8b49 assets/wildaside/blockstates/lit_vibrion_glass_pane.json
@@ -164,6 +165,8 @@ beee78e47cd4f1241b234009b8bda475b47a722a assets/wildaside/models/block/hickory_t
 01a360580740a234a1f0b79db23f6bc7e56d67ba assets/wildaside/models/block/hickory_trapdoor_top.json
 a82fb7770a8ff19087f8caf14ee2b046baff1e41 assets/wildaside/models/block/hickory_wood.json
 7409f9413874229d647e450d2a170a18e0efd9d6 assets/wildaside/models/block/hickory_wood_horizontal.json
+7fff183eeaf0315699d2379e71d904fe744fa01e assets/wildaside/models/block/incubator_lower.json
+cf2db0a2e4596dd5a3ecf5cae923de201b43ccb5 assets/wildaside/models/block/incubator_upper.json
 3c1b244c4ca7d3e939b601acd5eaa1e8776602f7 assets/wildaside/models/block/lit_vibrion_gel.json
 cf753ef51654ed6ecc7dbdc5b1dcf0289bc14014 assets/wildaside/models/block/lit_vibrion_glass_pane_noside.json
 dd4c8783e9e323cb55e32195b1c4170b698a0b02 assets/wildaside/models/block/lit_vibrion_glass_pane_noside_alt.json

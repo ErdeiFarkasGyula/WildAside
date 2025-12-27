@@ -1,6 +1,7 @@
 package net.farkas.wildaside.block.entity.custom;
 
 import net.farkas.wildaside.block.custom.vibrion.WindBlasterBlock;
+import net.farkas.wildaside.block.entity.ModBlockEntities;
 import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.util.BlasterUtils;
 import net.minecraft.core.BlockPos;

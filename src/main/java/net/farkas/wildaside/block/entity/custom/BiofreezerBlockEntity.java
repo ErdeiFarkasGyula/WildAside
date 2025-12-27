@@ -1,5 +1,6 @@
 package net.farkas.wildaside.block.entity.custom;
 
+import net.farkas.wildaside.block.entity.ModBlockEntities;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.screen.biofreezer.BiofreezerMenu;
 import net.farkas.wildaside.util.ModTags;

@@ -154,6 +154,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         //CUSTOM
         dnaHolder(ModItems.DNA_HOLDER.get());
         syringe(ModItems.SYRINGE.get());
+
+        simpleBlockItem(ModBlocks.INCUBATOR);
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item) {

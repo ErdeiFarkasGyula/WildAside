@@ -20,6 +20,8 @@
   "item.wildaside.gene": "Gene",
   "item.wildaside.syringe": "Syringe",
 
+  "item.wildaside.bacillus_blob": "Bacillus Blob",
+
   "item.wildaside.hickory_nut_trail_mix": "Hickory Nut Trail Mix",
   "item.wildaside.red_hickory_nut_trail_mix": "Red Hickory Nut Trail Mix",
   "item.wildaside.brown_hickory_nut_trail_mix": "Brown Hickory Nut Trail Mix",
@@ -123,6 +125,8 @@
   "block.wildaside.substilium_sprouts": "Substilium Sprouts",
   "block.wildaside.bioengineering_workstation": "Bioengineering Workstation",
   "block.wildaside.biofreezer": "Biofreezer",
+  "block.wildaside.incubator": "Incubator",
+
   "block.wildaside.hickory_log": "Hickory Log",
   "block.wildaside.hickory_wood": "Hickory Wood",
   "block.wildaside.stripped_hickory_log": "Stripped Hickory Log",

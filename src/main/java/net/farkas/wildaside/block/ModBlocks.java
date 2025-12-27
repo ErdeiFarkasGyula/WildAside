@@ -325,6 +325,9 @@ public class ModBlocks {
     public static final RegistryObject<Block> BIOFREEZER = registerBlock("biofreezer",
             () -> new BiofreezerBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
 
+    public static final RegistryObject<Block> INCUBATOR = registerBlock("incubator",
+            () -> new IncubatorBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
+
     //HICKORY
     public static final RegistryObject<Block> HICKORY_LOG = registerBlock("hickory_log",
             () -> new ModFlammableRotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG)

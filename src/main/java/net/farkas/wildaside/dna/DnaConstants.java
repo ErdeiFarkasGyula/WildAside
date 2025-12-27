@@ -85,4 +85,7 @@ public class DnaConstants {
     public static final String ASSEMBLER_PROGRESS = "assembler_progress";
     public static final String ANALYSER_PROGRESS = "analyser_progress";
     public static final String TAB = "tab";
+
+    public static final String MATURITY = "maturity";
+    public static final String READY = "ready";
 }

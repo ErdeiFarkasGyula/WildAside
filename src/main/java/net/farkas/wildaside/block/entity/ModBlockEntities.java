@@ -1,7 +1,8 @@
-package net.farkas.wildaside.block.entity.custom;
+package net.farkas.wildaside.block.entity;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
+import net.farkas.wildaside.block.entity.custom.*;
 import net.farkas.wildaside.block.entity.custom.sign.ModHangingSignBlockEntity;
 import net.farkas.wildaside.block.entity.custom.sign.ModSignBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -32,6 +33,10 @@ public class ModBlockEntities {
     public static final RegistryObject<BlockEntityType<BiofreezerBlockEntity>> BIOFREEZER =
             BLOCK_ENTITIES.register("biofreezer", () -> BlockEntityType.Builder.of(BiofreezerBlockEntity::new,
                     ModBlocks.BIOFREEZER.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<IncubatorBlockEntity>> INCUBATOR =
+            BLOCK_ENTITIES.register("incubator", () -> BlockEntityType.Builder.of(IncubatorBlockEntity::new,
+                    ModBlocks.INCUBATOR.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<NaturalSporeBlasterBlockEntity>> NATURAL_SPORE_BLASTER =
             BLOCK_ENTITIES.register("natural_spore_blaster",

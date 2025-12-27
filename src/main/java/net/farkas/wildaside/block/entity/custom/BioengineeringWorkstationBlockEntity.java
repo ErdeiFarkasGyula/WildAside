@@ -1,7 +1,7 @@
 package net.farkas.wildaside.block.entity.custom;
 
 import net.farkas.wildaside.block.entity.GeneSlotRestrictingItemHandler;
-import net.farkas.wildaside.block.entity.SidedItemHandler;
+import net.farkas.wildaside.block.entity.ModBlockEntities;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;

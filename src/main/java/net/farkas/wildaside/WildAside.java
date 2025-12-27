@@ -2,7 +2,7 @@ package net.farkas.wildaside;
 
 import com.mojang.logging.LogUtils;
 import net.farkas.wildaside.block.ModBlocks;
-import net.farkas.wildaside.block.entity.custom.ModBlockEntities;
+import net.farkas.wildaside.block.entity.ModBlockEntities;
 import net.farkas.wildaside.config.ModConfig;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.enchantment.ModEnchantments;
