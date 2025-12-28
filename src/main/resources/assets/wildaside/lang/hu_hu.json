@@ -189,8 +189,8 @@
   "entity.wildaside.hickory_treant": "Hikori ent",
   "entity.wildaside.hickory_leaf_projectile": "Hikori levél lövedék",
 
-  "advancements.wildaside.wild_wilder_wildest.title": "Vad, Vadabb, Legvadabb!",
-  "advancements.wildaside.wild_wilder_wildest.descr": "Köszönjük, hogy a Wild Aside-ot használod! <3",
+  "advancements.wild_wilder_wildest.title": "Vad, Vadabb, Legvadabb!",
+  "advancements.wild_wilder_wildest.descr": "Köszönjük, hogy a Wild Aside-ot használod! <3",
   "advancements.descent.title": "Leereszkedés",
   "advancements.descent.descr": "Lépj be a vibrion kaptárba",
   "advancements.bacteria_bricks.title": "Baktérium téglák",
@@ -299,6 +299,9 @@
   "gui.wildaside.bioengineering_workstation.skill_tab":  "Képesség menü",
   "gui.wildaside.bioengineering_workstation.recompile_dna":  "DNSek újraalkotása",
 
+  "gui.wildaside.incubator.fuel": "Üzemanyag",
+  "gui.wildaside.incubator.heat": "Hőmérséklet",
+
   "command.wildaside.contamination.apply_contamination": "%1$s elvégezve %2$s %3$s",
   "command.wildaside.contamination.add_contamination": "%3$s: %1$s %2$s hozzáadva",
   "command.wildaside.contamination.get_contamination": "%1$s: %2$s %3$s",
@@ -354,5 +357,7 @@
   "general.wildaside.enabled": "Bekapcsolva",
   "general.wildaside.disabled": "Kikapcsolva",
   "general.wildaside.unlocked": "Feloldva",
-  "general.wildaside.locked": "Nincs feloldva"
+  "general.wildaside.locked": "Nincs feloldva",
+  "general.wildaside.open": "Open",
+  "general.wildaside.close": "Close"
 }

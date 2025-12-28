@@ -299,6 +299,9 @@
   "gui.wildaside.bioengineering_workstation.skill_tab":  "Skill Tab",
   "gui.wildaside.bioengineering_workstation.recompile_dna":  "Recompile DNAs",
 
+  "gui.wildaside.incubator.fuel": "Fuel",
+  "gui.wildaside.incubator.heat": "Heat",
+
   "command.wildaside.contamination.apply_contamination": "Applied %1$s to %2$s to %3$s",
   "command.wildaside.contamination.add_contamination": "Added %1$s of %2$s %3$s",
   "command.wildaside.contamination.get_contamination": "%1$s has %2$s %3$s",
@@ -354,5 +357,7 @@
   "general.wildaside.enabled": "Enabled",
   "general.wildaside.disabled": "Disabled",
   "general.wildaside.unlocked": "Unlocked",
-  "general.wildaside.locked": "Locked"
+  "general.wildaside.locked": "Locked",
+  "general.wildaside.open": "Open",
+  "general.wildaside.close": "Close"
 }

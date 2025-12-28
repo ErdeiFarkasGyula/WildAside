@@ -15,6 +15,7 @@ public class IncubatorScreen extends AbstractContainerScreen<IncubatorMenu> {
     private Button minus;
     private Button plus;
     private Button openBtn;
+    private boolean cachedOpen;
 
     public IncubatorScreen(IncubatorMenu menu, Inventory inv, Component title) {
         super(menu, inv, title);
@@ -34,7 +35,9 @@ public class IncubatorScreen extends AbstractContainerScreen<IncubatorMenu> {
 
         minus = addRenderableWidget(Button.builder(Component.literal("-"), b -> changeHeat(-1)).bounds(x + 140, y + 20, 12, 12).build());
         plus = addRenderableWidget(Button.builder(Component.literal("+"), b -> changeHeat(+1)).bounds(x + 156, y + 20, 12, 12).build());
-        openBtn = addRenderableWidget(Button.builder(Component.literal("Open"), b -> toggleOpen()).bounds(x + 130, y + 50, 38, 14).build());
+
+        cachedOpen = isOpenFlag();
+        openBtn = addRenderableWidget(Button.builder(labelForOpen(cachedOpen), b -> toggleOpen()).bounds(x + 130, y + 50, 38, 14).build());
     }
 
     private void changeHeat(int delta) {
@@ -43,9 +46,6 @@ public class IncubatorScreen extends AbstractContainerScreen<IncubatorMenu> {
         if (next != current) NetworkHandler.sendSetIncubatorHeatLevelPacket(menu.getBlockEntity().getBlockPos(), next);
     }
 
-    private void toggleOpen() {
-        NetworkHandler.sendToggleIncubatorOpenPacket(menu.getBlockEntity().getBlockPos());
-    }
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
@@ -59,25 +59,21 @@ public class IncubatorScreen extends AbstractContainerScreen<IncubatorMenu> {
     private void drawHeatMeter(GuiGraphics graphics, float partialTicks) {
         int heat = menu.getData().get(4);
         int burnTime = menu.getData().get(0);
-        if (heat <= 0 || burnTime <= 0) return;
+        if (burnTime <= 0) return;
 
-        int maxH = 52;
-        int barHeight = (int) ((heat / 4f) * maxH);
+        int maxW = 52;
+        int maxLevels = 4;
+        int filled = Math.max(0, Math.min(maxW, (int) ((heat / (float) maxLevels) * maxW)));
 
-        float wobble = (float) Math.sin((minecraft.level != null ? minecraft.level.getGameTime() : 0) * 0.2f + partialTicks) * 2f;
-        barHeight = Math.max(0, Math.min(maxH, barHeight + (int) wobble));
-        if (barHeight <= 0) return;
+        int barHeight = 6;
+        int x1 = leftPos + 118;
+        int y1 = topPos + 24;
+        int x2 = x1 + filled;
+        int y2 = y1 + barHeight;
 
-        int x1 = leftPos + 148;
-        int y1 = topPos + 36 + (maxH - barHeight);
-        int x2 = x1 + 8;
-        int y2 = topPos + 36 + maxH;
-
-        int bottom = 0xFFB24A00;
-        int top = 0xFFFFCC33;
-        graphics.fillGradient(x1, y1, x2, y2, top, bottom);
-
-        graphics.fillGradient(x1 + 1, y1, x2 - 1, y1 + Math.min(6, barHeight), 0xFFFFEE77, 0x00FFFFEE);
+        int leftColor = 0xFFFFCC33;
+        int rightColor = 0xFFB24A00;
+        graphics.fillGradient(x1, y1, x2, y2, leftColor, rightColor);
     }
 
     private void drawFuelMeter(GuiGraphics graphics) {
@@ -102,8 +98,8 @@ public class IncubatorScreen extends AbstractContainerScreen<IncubatorMenu> {
 
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-        graphics.drawString(font, Component.literal("Heat"), 140, 10, 0xFFFFFF, false);
-        graphics.drawString(font, Component.literal("Fuel"), 24, 10, 0xFFFFFF, false);
+        graphics.drawString(font, Component.translatable("gui.wildaside.incubator.heat"), 118, 12, 0xFFFFFF, false);
+        graphics.drawString(font, Component.translatable("gui.wildaside.incubator.fuel"), 24, 10, 0xFFFFFF, false);
     }
 
     @Override
@@ -111,5 +107,20 @@ public class IncubatorScreen extends AbstractContainerScreen<IncubatorMenu> {
         this.renderBackground(graphics);
         super.render(graphics, mouseX, mouseY, partialTicks);
         this.renderTooltip(graphics, mouseX, mouseY);
+    }
+
+    private void toggleOpen() {
+        cachedOpen = !cachedOpen;
+        openBtn.setMessage(labelForOpen(cachedOpen));
+        NetworkHandler.sendToggleIncubatorOpenPacket(menu.getBlockEntity().getBlockPos());
+    }
+
+    private boolean isOpenFlag() {
+        System.out.println(menu.getData().get(8));
+        return menu.getData().get(8) != 0;
+    }
+
+    private Component labelForOpen(boolean open) {
+        return open ? Component.translatable("general.wildaside.close") : Component.translatable("general.wildaside.open");
     }
 }
