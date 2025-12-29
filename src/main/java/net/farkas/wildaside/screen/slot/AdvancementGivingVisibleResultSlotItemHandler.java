@@ -1,4 +1,4 @@
-package net.farkas.wildaside.screen;
+package net.farkas.wildaside.screen.slot;
 
 import net.farkas.wildaside.advancement.AdvancementHandler;
 import net.minecraft.resources.ResourceLocation;

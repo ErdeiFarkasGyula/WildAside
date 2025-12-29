@@ -1,4 +1,4 @@
-package net.farkas.wildaside.screen;
+package net.farkas.wildaside.screen.slot;
 
 import net.farkas.wildaside.item.ModItems;
 import net.minecraft.world.entity.player.Inventory;

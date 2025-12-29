@@ -4,7 +4,7 @@ import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.custom.PotionBlasterBlockEntity;
 import net.farkas.wildaside.screen.ModMenuTypes;
-import net.farkas.wildaside.screen.OutputSlot;
+import net.farkas.wildaside.screen.slot.OutputSlot;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;

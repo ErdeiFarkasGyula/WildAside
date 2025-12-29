@@ -1,4 +1,4 @@
-package net.farkas.wildaside.screen;
+package net.farkas.wildaside.screen.slot;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;

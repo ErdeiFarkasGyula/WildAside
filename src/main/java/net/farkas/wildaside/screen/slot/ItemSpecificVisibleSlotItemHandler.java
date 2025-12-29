@@ -1,6 +1,5 @@
-package net.farkas.wildaside.screen;
+package net.farkas.wildaside.screen.slot;
 
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.items.IItemHandler;

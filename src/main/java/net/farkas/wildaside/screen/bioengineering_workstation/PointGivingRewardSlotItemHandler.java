@@ -2,7 +2,7 @@ package net.farkas.wildaside.screen.bioengineering_workstation;
 
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillPointOperation;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillUtils;
-import net.farkas.wildaside.screen.AdvancementGivingVisibleResultSlotItemHandler;
+import net.farkas.wildaside.screen.slot.AdvancementGivingVisibleResultSlotItemHandler;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;

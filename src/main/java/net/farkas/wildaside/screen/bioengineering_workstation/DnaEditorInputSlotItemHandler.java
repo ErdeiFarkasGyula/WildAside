@@ -1,7 +1,7 @@
 package net.farkas.wildaside.screen.bioengineering_workstation;
 
 import net.farkas.wildaside.item.ModItems;
-import net.farkas.wildaside.screen.VisibleSlotItemHandler;
+import net.farkas.wildaside.screen.slot.VisibleSlotItemHandler;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
