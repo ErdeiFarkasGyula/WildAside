@@ -8,13 +8,15 @@ import net.minecraft.world.level.Level;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraft.world.entity.EntityType;
+
 import java.util.List;
 
 import static net.farkas.wildaside.dna.DnaConstants.*;
 
 public abstract class AbstractDnaSampleItem extends net.minecraft.world.item.Item {
-
-    protected AbstractDnaSampleItem(Properties props) { super(props); }
+    protected AbstractDnaSampleItem(Properties props) {
+        super(props);
+    }
 
     protected boolean hasDna(ItemStack stack) {
         return stack.hasTag() && stack.getTag().contains(DNA_DATA);

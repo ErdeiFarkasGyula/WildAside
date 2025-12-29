@@ -18,42 +18,34 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 
 import static net.farkas.wildaside.dna.DnaConstants.*;
 
-public class DnaHolderItem extends Item {
+public class DnaHolderItem extends AbstractDnaSampleItem {
     public static final int MAX_COOLDOWN = 60;
-
     public static final int DEFAULT_MAX_SAMPLES = 1;
 
     public DnaHolderItem(Properties pProperties) {
         super(pProperties);
     }
 
-    public boolean hasDna(ItemStack stack) {
-        return stack.getOrCreateTag().getInt(SAMPLE_PROGRESS) > 0;
-    }
-
     @Override
     public int getMaxStackSize(ItemStack stack) {
-        if (stack.hasTag() && stack.getTag().getInt(SAMPLE_PROGRESS) > 0) {
-            return 1;
-        }
+        if (stack.hasTag() && stack.getTag().getInt(SAMPLE_PROGRESS) > 0) return 1;
         return super.getMaxStackSize(stack);
     }
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag isAdvanced) {
         super.appendHoverText(stack, level, tooltip, isAdvanced);
-
         CompoundTag tag = stack.getOrCreateTag();
 
         if (!tag.contains(DNA_DATA)) {
@@ -65,21 +57,7 @@ public class DnaHolderItem extends Item {
         boolean revealStability = tag.getBoolean(REVEAL_STABILITY);
         boolean revealTraits = tag.getBoolean(REVEAL_TRAITS);
 
-        boolean analyzed = revealSource || revealStability || revealTraits;
-
-        if (!analyzed) {
-            boolean multipleSources = tag.getBoolean(MULTIPLE_SOURCES);
-            boolean clotted = DnaUtils.getFrozenItemEffectiveAge(tag, level) > tag.getLong(BLOOD_CLOTTING_TIME) || tag.getBoolean(SAMPLE_CLOTTED);
-            boolean dirty = tag.getBoolean(SAMPLE_DIRTY);
-            boolean unusable = DnaUtils.handleContaminatedSampleTooltip(tooltip, multipleSources, clotted, dirty);
-            if (unusable) {
-                tag.putBoolean(SAMPLE_UNUSABLE, true);
-                return;
-            }
-        }
-        else {
-            tag.putBoolean(SAMPLE_UNUSABLE, false);
-        }
+        if (appendContaminationTooltipIfNeeded(tooltip, tag, level)) return;
 
         if (!(revealSource || revealStability || revealTraits)) {
             tooltip.add(Component.translatable("dna.wildaside.dna_data_hidden").withStyle(ChatFormatting.STRIKETHROUGH, ChatFormatting.DARK_GRAY));
@@ -90,9 +68,7 @@ public class DnaHolderItem extends Item {
         dna.deserializeNBT(tag.getCompound(DNA_DATA));
 
         if (revealSource) {
-            Component sourceName = dna.getSource() != null
-                    ? dna.getSource().getDescription()
-                    : Component.translatable("dna.wildaside.unknown");
+            Component sourceName = dna.getSource() != null ? dna.getSource().getDescription() : Component.translatable("dna.wildaside.unknown");
             tooltip.add(Component.translatable("dna.wildaside.source")
                     .append(": " + sourceName.getString())
                     .withStyle(ChatFormatting.AQUA));
@@ -129,28 +105,19 @@ public class DnaHolderItem extends Item {
             AlleleValue valueHolder = gene.getExpressedValueHolder();
             String valueStr = valueHolder.format().getString();
 
-            if (valueHolder instanceof FloatAlleleValue floatAlleleValue) {
-                if (floatAlleleValue.get() == 0f) {
-                    continue;
-                }
-            }
+            if (valueHolder instanceof FloatAlleleValue floatAlleleValue && floatAlleleValue.get() == 0f) continue;
 
-            if (type == TraitType.ABILITY && valueHolder instanceof FloatAlleleValue floatAlleleValue) {
-                float value = floatAlleleValue.get() / 20;
-                valueStr = String.format("%.2f", value) + "s";
+            if (type == TraitType.ABILITY && valueHolder instanceof FloatAlleleValue fa) {
+                valueStr = String.format("%.2f", fa.get() / 20f) + "s";
             }
-            else if (type == TraitType.RESISTANCE && valueHolder instanceof FloatAlleleValue floatAlleleValue) {
-                float value = floatAlleleValue.get() * 100;
-                valueStr = String.format("%.2f", value) + "%";
+            else if (type == TraitType.RESISTANCE && valueHolder instanceof FloatAlleleValue fa) {
+                valueStr = String.format("%.2f", fa.get() * 100f) + "%";
             }
             else if (type == TraitType.APPEARANCE) {
                 if (valueHolder instanceof EnumAlleleValue<?> enumAlleleValue) {
                     valueStr = enumAlleleValue.get().toString();
                 }
-
-                if (valueStr.startsWith("0")) {
-                    continue;
-                }
+                if (valueStr.startsWith("0")) continue;
             }
 
             tooltip.add(Component.literal("- ")

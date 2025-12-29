@@ -20,7 +20,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
@@ -41,7 +40,7 @@ import java.util.UUID;
 
 import static net.farkas.wildaside.dna.DnaConstants.*;
 
-public class SyringeItem extends Item {
+public class SyringeItem extends AbstractDnaSampleItem {
     public static final int DEFAULT_MAX_LOAD = 3;
 
     private static final float NEEDLE_DELTA = 0.1f;
@@ -165,17 +164,15 @@ public class SyringeItem extends Item {
                 tag.getInt(BLOOD_CREATION_TICK),
                 tag.getInt(BLOOD_FREEZER_TICKS),
                 tag.getBoolean(MULTIPLE_SOURCES),
-                tag.getBoolean(REVEAL_TRAITS),
+                tag.getBoolean(REVEAL_SOURCE),
                 tag.getBoolean(REVEAL_STABILITY),
-                tag.getBoolean(REVEAL_SOURCE)
+                tag.getBoolean(REVEAL_TRAITS)
         );
     }
 
     private void handleDnaHolderInteraction(ServerPlayer player, CompoundTag syringeTag, float progress) {
         ServerLevel serverLevel = player.serverLevel();
-
         ItemStack offHandStack = player.getItemInHand(InteractionHand.OFF_HAND);
-
         if (!(offHandStack.getItem() instanceof DnaHolderItem)) return;
 
         if (syringeTag.getInt(SAMPLE_PROGRESS) >= DnaHolderItem.DEFAULT_MAX_SAMPLES) {
@@ -190,14 +187,11 @@ public class SyringeItem extends Item {
 
             DnaImplementation dna = new DnaImplementation();
             dna.deserializeNBT(syringeTag.getCompound(DNA_DATA));
-
             if (dna.getSource() == null) return;
 
             CompoundTag holderTag = offHandStack.getOrCreateTag();
 
-            holderTag.putBoolean(REVEAL_SOURCE, syringeTag.getBoolean(REVEAL_SOURCE));
-            holderTag.putBoolean(REVEAL_STABILITY, syringeTag.getBoolean(REVEAL_STABILITY));
-            holderTag.putBoolean(REVEAL_TRAITS, syringeTag.getBoolean(REVEAL_TRAITS));
+            applyRevealFlags(holderTag, syringeTag);
             holderTag.put(DNA_DATA, dna.serializeNBT());
             holderTag.putInt(FLUID_COLOUR, syringeTag.getInt(FLUID_COLOUR));
 
@@ -211,7 +205,6 @@ public class SyringeItem extends Item {
             syringeTag.remove(DNA_DATA);
 
             int newProgress = Mth.clamp(holderTag.getInt(SAMPLE_PROGRESS) + 1, 0, DnaHolderItem.DEFAULT_MAX_SAMPLES);
-
             holderTag.putInt(SAMPLE_PROGRESS, newProgress);
 
             DnaUtils.resetBloodFreezerTicks(holderTag);
@@ -223,7 +216,6 @@ public class SyringeItem extends Item {
             }
 
             int count = offHandStack.getCount();
-
             if (count > 1) {
                 offHandStack.setCount(1);
                 ItemStack newOffHandStack = new ItemStack(offHandStack.getItem(), count - 1);
@@ -261,6 +253,7 @@ public class SyringeItem extends Item {
         tag.putLong(BLOOD_CREATION_TICK, packet.getCreationTick());
         tag.putLong(BLOOD_FREEZER_TICKS, packet.getFreezerTicks());
         tag.putBoolean(MULTIPLE_SOURCES, packet.isMultipleSources());
+        // Reveal flags already synced in packet; add setters if packet carries them.
     }
 
     @Override
@@ -398,25 +391,19 @@ public class SyringeItem extends Item {
 
         String fluidType = syringeTag.getString(FLUID_TYPE);
         if (!(NONE.equals(fluidType) || BLOOD.equals(fluidType))) return fluid;
-
         if (syringeTag.contains(DNA_DATA)) return fluid;
 
         float newFluid = Mth.clamp(fluid + NEEDLE_DELTA, 0f, DEFAULT_MAX_LOAD);
         syringeTag.putString(FLUID_TYPE, BLOOD);
 
         int holderColor = holderTag.contains(FLUID_COLOUR) ? holderTag.getInt(FLUID_COLOUR) : DEFAULT_BLOOD_COLOR;
-
         if (holderTag.getBoolean(REVEAL_SOURCE) && holderTag.contains(DNA_DATA)) {
             int eggColor = resolveSourceEggColor(holderTag.getCompound(DNA_DATA));
             holderColor = eggColor != -1 ? eggColor : holderColor;
         }
-
-        syringeTag.putInt(FLUID_COLOUR, holderColor);
         syringeTag.putInt(FLUID_COLOUR, holderColor);
 
-        syringeTag.putBoolean(REVEAL_SOURCE, holderTag.getBoolean(REVEAL_SOURCE));
-        syringeTag.putBoolean(REVEAL_STABILITY, holderTag.getBoolean(REVEAL_STABILITY));
-        syringeTag.putBoolean(REVEAL_TRAITS, holderTag.getBoolean(REVEAL_TRAITS));
+        applyRevealFlags(syringeTag, holderTag);
 
         syringeTag.putLong(BLOOD_CREATION_TICK, holderTag.getLong(BLOOD_CREATION_TICK));
         syringeTag.putLong(BLOOD_FREEZER_TICKS, holderTag.getLong(BLOOD_FREEZER_TICKS));
@@ -489,26 +476,9 @@ public class SyringeItem extends Item {
         level.playSound(null, pos, SoundEvents.BOTTLE_FILL, SoundSource.PLAYERS, 0.5f, 0.4f);
     }
 
-    private int resolveSourceEggColor(CompoundTag dnaTag) {
-        DnaImplementation dna = new DnaImplementation();
-        dna.deserializeNBT(dnaTag);
-        if (dna.getSource() == null) return -1;
-        var egg = net.minecraftforge.common.ForgeSpawnEggItem.fromEntityType(dna.getSource());
-        return egg != null ? egg.getColor(0) : -1;
-    }
-
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> tooltip, TooltipFlag pIsAdvanced) {
         CompoundTag tag = pStack.getOrCreateTag();
-        boolean analyzed = tag.getBoolean(REVEAL_SOURCE) || tag.getBoolean(REVEAL_STABILITY) || tag.getBoolean(REVEAL_TRAITS);
-        if (!analyzed) {
-            boolean multipleSources = tag.getBoolean(MULTIPLE_SOURCES);
-            boolean clotted = DnaUtils.getFrozenItemEffectiveAge(tag, pLevel) > BLOOD_CLOTTING_TIME_DEFAULT;
-            boolean dirty = tag.getFloat(DIRTINESS) >= 2.75;
-            DnaUtils.handleContaminatedSampleTooltip(tooltip, multipleSources, clotted, dirty);
-        }
-        else {
-            tag.putBoolean(SAMPLE_UNUSABLE, false);
-        }
+        if (appendContaminationTooltipIfNeeded(tooltip, tag, pLevel)) return;
     }
 }
