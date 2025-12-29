@@ -27,6 +27,7 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -82,11 +83,17 @@ public class SyringeItem extends Item {
         progress = updateProgress(tag, progress, inwards);
 
         if (inwards) {
-            if (BLOOD.equals(fluidType) || NONE.equals(fluidType)) {
+            boolean canFill = fluid < DEFAULT_MAX_LOAD - NEEDLE_DELTA * 0.5f;
+            if (canFill) {
+                fluid = pullFromDnaHolder(player, tag, fluid);
+                fluidType = tag.getString(FLUID_TYPE);
+            }
+
+            if (canFill && !tag.contains(DNA_DATA) && (BLOOD.equals(fluidType) || NONE.equals(fluidType))) {
                 fluid = sampleEntity(serverLevel, player, tag, fluid);
             }
 
-            if (NONE.equals(fluidType) || WATER.equals(fluidType)) {
+            if (canFill && (NONE.equals(fluidType) || WATER.equals(fluidType))) {
                 int waterColor = raytraceForWater(serverLevel, player, RAYCAST_RANGE);
                 if (waterColor != -1) {
                     fluid = Mth.clamp(fluid + NEEDLE_DELTA, 0f, DEFAULT_MAX_LOAD);
@@ -99,6 +106,7 @@ public class SyringeItem extends Item {
             fluid = Mth.clamp(fluid - NEEDLE_DELTA, 0f, DEFAULT_MAX_LOAD);
             if (BLOOD.equals(fluidType)) {
                 handleDnaHolderInteraction(player, tag, progress);
+                injectIntoIncubator(player, tag, serverLevel);
             }
             if (fluid <= 0.01f) {
                 if (WATER.equals(fluidType)) {
@@ -132,12 +140,11 @@ public class SyringeItem extends Item {
                 tag.getFloat(DIRTINESS),
                 tag.getInt(BLOOD_CREATION_TICK),
                 tag.getInt(BLOOD_FREEZER_TICKS),
-                tag.getBoolean(MULTIPLE_SOURCES)
+                tag.getBoolean(MULTIPLE_SOURCES),
+                tag.getBoolean(REVEAL_SOURCE),
+                tag.getBoolean(REVEAL_STABILITY),
+                tag.getBoolean(REVEAL_TRAITS)
         );
-
-        if (progress <= 0f || progress >= DEFAULT_MAX_LOAD) {
-            player.stopUsingItem();
-        }
     }
 
     @Override
@@ -157,7 +164,10 @@ public class SyringeItem extends Item {
                 tag.getFloat(DIRTINESS),
                 tag.getInt(BLOOD_CREATION_TICK),
                 tag.getInt(BLOOD_FREEZER_TICKS),
-                tag.getBoolean(MULTIPLE_SOURCES)
+                tag.getBoolean(MULTIPLE_SOURCES),
+                tag.getBoolean(REVEAL_TRAITS),
+                tag.getBoolean(REVEAL_STABILITY),
+                tag.getBoolean(REVEAL_SOURCE)
         );
     }
 
@@ -185,11 +195,14 @@ public class SyringeItem extends Item {
 
             CompoundTag holderTag = offHandStack.getOrCreateTag();
 
-            holderTag.putBoolean(REVEAL_SOURCE, false);
-            holderTag.putBoolean(REVEAL_STABILITY, false);
-            holderTag.putBoolean(REVEAL_TRAITS, false);
-
+            holderTag.putBoolean(REVEAL_SOURCE, syringeTag.getBoolean(REVEAL_SOURCE));
+            holderTag.putBoolean(REVEAL_STABILITY, syringeTag.getBoolean(REVEAL_STABILITY));
+            holderTag.putBoolean(REVEAL_TRAITS, syringeTag.getBoolean(REVEAL_TRAITS));
             holderTag.put(DNA_DATA, dna.serializeNBT());
+            holderTag.putInt(FLUID_COLOUR, syringeTag.getInt(FLUID_COLOUR));
+
+            syringeTag.putFloat(FLUID_LEVEL, 0f);
+            syringeTag.putString(FLUID_TYPE, NONE);
 
             holderTag.putBoolean(MULTIPLE_SOURCES, multipleSources);
             holderTag.putBoolean(SAMPLE_CLOTTED, clotted);
@@ -376,13 +389,126 @@ public class SyringeItem extends Item {
         return level.getBiome(pos).value().getWaterColor();
     }
 
+    private float pullFromDnaHolder(ServerPlayer player, CompoundTag syringeTag, float fluid) {
+        ItemStack offHandStack = player.getItemInHand(InteractionHand.OFF_HAND);
+        if (!(offHandStack.getItem() instanceof DnaHolderItem)) return fluid;
+
+        CompoundTag holderTag = offHandStack.getOrCreateTag();
+        if (!holderTag.contains(DNA_DATA) || holderTag.getInt(SAMPLE_PROGRESS) <= 0) return fluid;
+
+        String fluidType = syringeTag.getString(FLUID_TYPE);
+        if (!(NONE.equals(fluidType) || BLOOD.equals(fluidType))) return fluid;
+
+        if (syringeTag.contains(DNA_DATA)) return fluid;
+
+        float newFluid = Mth.clamp(fluid + NEEDLE_DELTA, 0f, DEFAULT_MAX_LOAD);
+        syringeTag.putString(FLUID_TYPE, BLOOD);
+
+        int holderColor = holderTag.contains(FLUID_COLOUR) ? holderTag.getInt(FLUID_COLOUR) : DEFAULT_BLOOD_COLOR;
+
+        if (holderTag.getBoolean(REVEAL_SOURCE) && holderTag.contains(DNA_DATA)) {
+            int eggColor = resolveSourceEggColor(holderTag.getCompound(DNA_DATA));
+            holderColor = eggColor != -1 ? eggColor : holderColor;
+        }
+
+        syringeTag.putInt(FLUID_COLOUR, holderColor);
+        syringeTag.putInt(FLUID_COLOUR, holderColor);
+
+        syringeTag.putBoolean(REVEAL_SOURCE, holderTag.getBoolean(REVEAL_SOURCE));
+        syringeTag.putBoolean(REVEAL_STABILITY, holderTag.getBoolean(REVEAL_STABILITY));
+        syringeTag.putBoolean(REVEAL_TRAITS, holderTag.getBoolean(REVEAL_TRAITS));
+
+        syringeTag.putLong(BLOOD_CREATION_TICK, holderTag.getLong(BLOOD_CREATION_TICK));
+        syringeTag.putLong(BLOOD_FREEZER_TICKS, holderTag.getLong(BLOOD_FREEZER_TICKS));
+
+        syringeTag.putBoolean(MULTIPLE_SOURCES, holderTag.getBoolean(MULTIPLE_SOURCES));
+        syringeTag.putBoolean(SAMPLE_CLOTTED, holderTag.getBoolean(SAMPLE_CLOTTED));
+        syringeTag.putBoolean(SAMPLE_DIRTY, holderTag.getBoolean(SAMPLE_DIRTY));
+        syringeTag.putFloat(DIRTINESS, holderTag.getFloat(DIRTINESS));
+
+        boolean ready = newFluid >= DEFAULT_MAX_LOAD - 0.25f;
+
+        if (ready) {
+            CompoundTag dnaCopy = holderTag.getCompound(DNA_DATA).copy();
+            syringeTag.put(DNA_DATA, dnaCopy);
+
+            newFluid = DEFAULT_MAX_LOAD;
+
+            holderTag.remove(DNA_DATA);
+            holderTag.putInt(SAMPLE_PROGRESS, 0);
+            holderTag.putBoolean(SAMPLE_UNUSABLE, false);
+            holderTag.putBoolean(MULTIPLE_SOURCES, false);
+            holderTag.putBoolean(SAMPLE_CLOTTED, false);
+            holderTag.putBoolean(SAMPLE_DIRTY, false);
+            holderTag.putBoolean(REVEAL_SOURCE, false);
+            holderTag.putBoolean(REVEAL_STABILITY, false);
+            holderTag.putBoolean(REVEAL_TRAITS, false);
+            holderTag.putLong(BLOOD_CLOTTING_TIME, BLOOD_CLOTTING_TIME_DEFAULT);
+            holderTag.remove(BLOOD_FREEZER_TICKS);
+            holderTag.remove(BLOOD_CREATION_TICK);
+            holderTag.putFloat(DIRTINESS, 0f);
+            offHandStack.setTag(holderTag);
+            player.setItemInHand(InteractionHand.OFF_HAND, offHandStack);
+
+            player.level().playSound(null, player.blockPosition(), SoundEvents.BOTTLE_FILL, SoundSource.PLAYERS, 0.5f, 0.4f);
+
+        }
+        return newFluid;
+    }
+
+    private void injectIntoIncubator(ServerPlayer player, CompoundTag syringeTag, ServerLevel level) {
+        if (!syringeTag.contains(DNA_DATA)) return;
+        if (!BLOOD.equals(syringeTag.getString(FLUID_TYPE))) return;
+
+        BlockHitResult hit = level.clip(new ClipContext(
+                player.getEyePosition(),
+                player.getEyePosition().add(player.getViewVector(1f).scale(RAYCAST_RANGE)),
+                ClipContext.Block.OUTLINE,
+                ClipContext.Fluid.ANY,
+                player
+        ));
+        if (hit.getType() != BlockHitResult.Type.BLOCK) return;
+
+        BlockPos pos = hit.getBlockPos();
+        BlockEntity be = level.getBlockEntity(pos);
+        if (!(be instanceof net.farkas.wildaside.block.entity.custom.IncubatorBlockEntity incubator)) return;
+
+        if (!incubator.tryInjectDnaFromSyringe(syringeTag)) return;
+
+
+        syringeTag.remove(DNA_DATA);
+        syringeTag.putFloat(FLUID_LEVEL, 0f);
+        syringeTag.putString(FLUID_TYPE, NONE);
+        syringeTag.putBoolean(MULTIPLE_SOURCES, false);
+        syringeTag.putBoolean(SAMPLE_CLOTTED, false);
+        syringeTag.putBoolean(SAMPLE_DIRTY, false);
+        syringeTag.putFloat(DIRTINESS, 0f);
+        syringeTag.putLong(BLOOD_CREATION_TICK, 0);
+        syringeTag.putLong(BLOOD_FREEZER_TICKS, 0);
+
+        level.playSound(null, pos, SoundEvents.BOTTLE_FILL, SoundSource.PLAYERS, 0.5f, 0.4f);
+    }
+
+    private int resolveSourceEggColor(CompoundTag dnaTag) {
+        DnaImplementation dna = new DnaImplementation();
+        dna.deserializeNBT(dnaTag);
+        if (dna.getSource() == null) return -1;
+        var egg = net.minecraftforge.common.ForgeSpawnEggItem.fromEntityType(dna.getSource());
+        return egg != null ? egg.getColor(0) : -1;
+    }
+
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> tooltip, TooltipFlag pIsAdvanced) {
         CompoundTag tag = pStack.getOrCreateTag();
-        boolean multipleSources = tag.getBoolean(MULTIPLE_SOURCES);
-        boolean clotted = DnaUtils.getFrozenItemEffectiveAge(tag, pLevel) > BLOOD_CLOTTING_TIME_DEFAULT;
-        boolean dirty = tag.getFloat(DIRTINESS) >= 2.75;
-
-        DnaUtils.handleContaminatedSampleTooltip(tooltip, multipleSources, clotted, dirty);
+        boolean analyzed = tag.getBoolean(REVEAL_SOURCE) || tag.getBoolean(REVEAL_STABILITY) || tag.getBoolean(REVEAL_TRAITS);
+        if (!analyzed) {
+            boolean multipleSources = tag.getBoolean(MULTIPLE_SOURCES);
+            boolean clotted = DnaUtils.getFrozenItemEffectiveAge(tag, pLevel) > BLOOD_CLOTTING_TIME_DEFAULT;
+            boolean dirty = tag.getFloat(DIRTINESS) >= 2.75;
+            DnaUtils.handleContaminatedSampleTooltip(tooltip, multipleSources, clotted, dirty);
+        }
+        else {
+            tag.putBoolean(SAMPLE_UNUSABLE, false);
+        }
     }
 }

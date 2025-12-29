@@ -40,6 +40,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 import java.util.Set;
 
+import static net.farkas.wildaside.dna.DnaConstants.*;
+
 public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
     private static final int SLOT_FUEL = 0;
 
@@ -414,5 +416,18 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
 
     public int getMutationRisk() {
         return mutationRisk;
+    }
+
+    public boolean blobHasDna() {
+        return !dnaPayload.isEmpty();
+    }
+
+    public boolean tryInjectDnaFromSyringe(CompoundTag syringeTag) {
+        if (!hasBlob || !glassOpen || !dnaPayload.isEmpty()) return false;
+        if (!syringeTag.contains(DNA_DATA)) return false;
+
+        dnaPayload = syringeTag.getCompound(DNA_DATA).copy();
+        sync();
+        return true;
     }
 }

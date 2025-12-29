@@ -2,6 +2,7 @@ package net.farkas.wildaside.block.custom;
 
 import net.farkas.wildaside.block.entity.custom.BioengineeringWorkstationBlockEntity;
 import net.farkas.wildaside.block.entity.custom.IncubatorBlockEntity;
+import net.farkas.wildaside.item.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -88,6 +89,7 @@ public class IncubatorBlock extends BaseEntityBlock {
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (level.isClientSide()) return InteractionResult.SUCCESS;
+        if (player.getItemInHand(hand).is(ModItems.SYRINGE.get())) return InteractionResult.PASS;
 
         BlockPos basePos = state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.LOWER ? pos : pos.below();
         if (level.getBlockEntity(basePos) instanceof IncubatorBlockEntity blockEntity) {

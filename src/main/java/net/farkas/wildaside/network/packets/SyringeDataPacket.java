@@ -24,9 +24,13 @@ public class SyringeDataPacket {
     private final long freezerTicks;
 
     private final boolean multipleSources;
+    private final boolean revealSource;
+    private final boolean revealStability;
+    private final boolean revealTraits;
 
     public SyringeDataPacket(UUID playerId, int slot, float progress, float blood, boolean animating, boolean inwards,
-                             String fluidType, int fluidColor, float dirtiness, long creationTick, long freezerTicks, boolean multipleSources) {
+                             String fluidType, int fluidColor, float dirtiness, long creationTick, long freezerTicks,
+                             boolean multipleSources, boolean revealSource, boolean revealStability, boolean revealTraits) {
         this.playerId = playerId;
         this.slot = slot;
         this.progress = progress;
@@ -39,6 +43,9 @@ public class SyringeDataPacket {
         this.creationTick = creationTick;
         this.freezerTicks = freezerTicks;
         this.multipleSources = multipleSources;
+        this.revealSource = revealSource;
+        this.revealStability = revealStability;
+        this.revealTraits = revealTraits;
     }
 
     public static SyringeDataPacket decode(FriendlyByteBuf buf) {
@@ -57,8 +64,12 @@ public class SyringeDataPacket {
         long freezerTicks = buf.readLong();
 
         boolean multipleSources = buf.readBoolean();
+        boolean revealSource = buf.readBoolean();
+        boolean revealStability = buf.readBoolean();
+        boolean revealTraits = buf.readBoolean();
 
-        return new SyringeDataPacket(playerId, slot, progress, blood, animating, inwards, fluidType, fluidColor, dirtiness, creationTick, freezerTicks, multipleSources);
+        return new SyringeDataPacket(playerId, slot, progress, blood, animating, inwards, fluidType, fluidColor,
+                dirtiness, creationTick, freezerTicks, multipleSources, revealSource, revealStability, revealTraits);
     }
 
     public void encode(FriendlyByteBuf buf) {
@@ -77,6 +88,9 @@ public class SyringeDataPacket {
         buf.writeLong(freezerTicks);
 
         buf.writeBoolean(multipleSources);
+        buf.writeBoolean(revealSource);
+        buf.writeBoolean(revealStability);
+        buf.writeBoolean(revealTraits);
     }
 
     public boolean handle(Supplier<NetworkEvent.Context> ctx) {
@@ -87,19 +101,63 @@ public class SyringeDataPacket {
         return true;
     }
 
-    public UUID getPlayerId() { return playerId; }
-    public int getSlot() { return slot; }
-    public float getProgress() { return progress; }
-    public float getBlood() { return blood; }
-    public boolean isAnimating() { return animating; }
-    public boolean isInwards() { return inwards; }
+    public UUID getPlayerId() {
+        return playerId;
+    }
 
-    public String getFluidType() { return fluidType; }
-    public int getFluidColor() { return fluidColor; }
-    public float getDirtiness() { return dirtiness; }
+    public int getSlot() {
+        return slot;
+    }
 
-    public long getCreationTick() { return creationTick; }
-    public long getFreezerTicks() { return freezerTicks; }
+    public float getProgress() {
+        return progress;
+    }
 
-    public boolean isMultipleSources() { return multipleSources; }
+    public float getBlood() {
+        return blood;
+    }
+
+    public boolean isAnimating() {
+        return animating;
+    }
+
+    public boolean isInwards() {
+        return inwards;
+    }
+
+    public String getFluidType() {
+        return fluidType;
+    }
+
+    public int getFluidColor() {
+        return fluidColor;
+    }
+
+    public float getDirtiness() {
+        return dirtiness;
+    }
+
+    public long getCreationTick() {
+        return creationTick;
+    }
+
+    public long getFreezerTicks() {
+        return freezerTicks;
+    }
+
+    public boolean isMultipleSources() {
+        return multipleSources;
+    }
+
+    public boolean isRevealSource() {
+        return revealSource;
+    }
+
+    public boolean isRevealStability() {
+        return revealStability;
+    }
+
+    public boolean isRevealTraits() {
+        return revealTraits;
+    }
 }

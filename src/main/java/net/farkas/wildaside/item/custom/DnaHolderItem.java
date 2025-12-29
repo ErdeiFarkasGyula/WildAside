@@ -65,15 +65,20 @@ public class DnaHolderItem extends Item {
         boolean revealStability = tag.getBoolean(REVEAL_STABILITY);
         boolean revealTraits = tag.getBoolean(REVEAL_TRAITS);
 
-        boolean multipleSources = tag.getBoolean(MULTIPLE_SOURCES);
-        boolean clotted = DnaUtils.getFrozenItemEffectiveAge(tag, level) > tag.getLong(BLOOD_CLOTTING_TIME) || tag.getBoolean(SAMPLE_CLOTTED);
-        boolean dirty = tag.getBoolean(SAMPLE_DIRTY);
+        boolean analyzed = revealSource || revealStability || revealTraits;
 
-        boolean unusable = DnaUtils.handleContaminatedSampleTooltip(tooltip, multipleSources, clotted, dirty);
-
-        if (unusable) {
-            tag.putBoolean(SAMPLE_UNUSABLE, true);
-            return;
+        if (!analyzed) {
+            boolean multipleSources = tag.getBoolean(MULTIPLE_SOURCES);
+            boolean clotted = DnaUtils.getFrozenItemEffectiveAge(tag, level) > tag.getLong(BLOOD_CLOTTING_TIME) || tag.getBoolean(SAMPLE_CLOTTED);
+            boolean dirty = tag.getBoolean(SAMPLE_DIRTY);
+            boolean unusable = DnaUtils.handleContaminatedSampleTooltip(tooltip, multipleSources, clotted, dirty);
+            if (unusable) {
+                tag.putBoolean(SAMPLE_UNUSABLE, true);
+                return;
+            }
+        }
+        else {
+            tag.putBoolean(SAMPLE_UNUSABLE, false);
         }
 
         if (!(revealSource || revealStability || revealTraits)) {

@@ -152,7 +152,24 @@ public class ModEventBusClientEvents {
                     String fluidType = tag.contains(FLUID_TYPE) ? tag.getString(FLUID_TYPE) : NONE;
                     int baseColor = DEFAULT_BLOOD_COLOR;
 
-                    if (WATER.equals(fluidType)) {
+                    if (BLOOD.equals(fluidType) && tag.getBoolean(REVEAL_SOURCE)) {
+                        if (tag.contains(DNA_DATA)) {
+                            CompoundTag dnaTag = tag.getCompound(DNA_DATA);
+                            DnaImplementation dna = new DnaImplementation();
+                            dna.deserializeNBT(dnaTag);
+                            if (dna.getSource() != null) {
+                                SpawnEggItem egg = ForgeSpawnEggItem.fromEntityType(dna.getSource());
+                                if (egg != null) baseColor = egg.getColor(0);
+                            }
+                        }
+                        else if (tag.contains(FLUID_COLOUR)) {
+                            baseColor = tag.getInt(FLUID_COLOUR);
+                        }
+                    }
+                    else if (BLOOD.equals(fluidType) && tag.contains(FLUID_COLOUR)) {
+                        baseColor = tag.getInt(FLUID_COLOUR);
+                    }
+                    else if (WATER.equals(fluidType)) {
                         baseColor = tag.contains(FLUID_COLOUR) ? tag.getInt(FLUID_COLOUR) : 0x3F76E4;
                     }
                     else if (BLOOD.equals(fluidType)) {
