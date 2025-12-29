@@ -1,5 +1,6 @@
 package net.farkas.wildaside.item.custom;
 
+import net.farkas.wildaside.block.entity.custom.IncubatorBlockEntity;
 import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.DnaUtils;
@@ -15,6 +16,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -23,10 +25,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -64,6 +68,38 @@ public class SyringeItem extends AbstractDnaSampleItem {
         }
 
         return InteractionResultHolder.success(stack);
+    }
+
+    @Override
+    public InteractionResult useOn(UseOnContext ctx) {
+        Level level = ctx.getLevel();
+        BlockPos pos = ctx.getClickedPos();
+        Player player = ctx.getPlayer();
+
+        if (player == null) return InteractionResult.PASS;
+
+        BlockEntity be = level.getBlockEntity(pos);
+        if (!(be instanceof IncubatorBlockEntity)) {
+            be = level.getBlockEntity(pos.below());
+        }
+        if (!(be instanceof IncubatorBlockEntity)) {
+            return super.useOn(ctx);
+        }
+
+        ItemStack stack = ctx.getItemInHand();
+        CompoundTag tag = stack.getOrCreateTag();
+        initTagDefaults(tag);
+        String fluidType = tag.getString(FLUID_TYPE);
+        boolean hasFluid = tag.getFloat(FLUID_LEVEL) > 0.01f && !NONE.equals(fluidType);
+        tag.putBoolean(INWARDS, !hasFluid);
+
+        if (!level.isClientSide()) {
+            player.startUsingItem(ctx.getHand());
+        }
+        else {
+            player.startUsingItem(ctx.getHand());
+        }
+        return InteractionResult.SUCCESS;
     }
 
     @Override
@@ -253,7 +289,9 @@ public class SyringeItem extends AbstractDnaSampleItem {
         tag.putLong(BLOOD_CREATION_TICK, packet.getCreationTick());
         tag.putLong(BLOOD_FREEZER_TICKS, packet.getFreezerTicks());
         tag.putBoolean(MULTIPLE_SOURCES, packet.isMultipleSources());
-        // Reveal flags already synced in packet; add setters if packet carries them.
+        tag.putBoolean(REVEAL_SOURCE, packet.isRevealSource());
+        tag.putBoolean(REVEAL_STABILITY, packet.isRevealStability());
+        tag.putBoolean(REVEAL_TRAITS, packet.isRevealTraits());
     }
 
     @Override
@@ -458,10 +496,20 @@ public class SyringeItem extends AbstractDnaSampleItem {
 
         BlockPos pos = hit.getBlockPos();
         BlockEntity be = level.getBlockEntity(pos);
-        if (!(be instanceof net.farkas.wildaside.block.entity.custom.IncubatorBlockEntity incubator)) return;
+
+        IncubatorBlockEntity incubator;
+
+        if (be instanceof IncubatorBlockEntity) {
+            incubator = (IncubatorBlockEntity) be;
+        }
+        else {
+            BlockPos belowPos = pos.below();
+            BlockEntity belowBe = level.getBlockEntity(belowPos);
+            if (!(belowBe instanceof IncubatorBlockEntity)) return;
+            incubator = (IncubatorBlockEntity) belowBe;
+        }
 
         if (!incubator.tryInjectDnaFromSyringe(syringeTag)) return;
-
 
         syringeTag.remove(DNA_DATA);
         syringeTag.putFloat(FLUID_LEVEL, 0f);

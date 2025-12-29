@@ -87,7 +87,7 @@ public class IncubatorBlock extends BaseEntityBlock {
 
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (level.isClientSide()) return InteractionResult.SUCCESS;
+        if (level.isClientSide()) return InteractionResult.PASS;
         if (player.getItemInHand(hand).is(ModItems.SYRINGE.get())) return InteractionResult.PASS;
 
         BlockPos basePos = state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.LOWER ? pos : pos.below();

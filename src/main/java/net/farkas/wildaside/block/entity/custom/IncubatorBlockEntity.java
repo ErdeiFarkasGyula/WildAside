@@ -417,7 +417,7 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     public boolean blobHasDna() {
-        return !dnaPayload.isEmpty();
+        return hasBlob && !dnaPayload.isEmpty();
     }
 
     public boolean tryInjectDnaFromSyringe(CompoundTag syringeTag) {

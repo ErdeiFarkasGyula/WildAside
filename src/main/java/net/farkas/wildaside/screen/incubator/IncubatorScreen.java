@@ -100,6 +100,10 @@ public class IncubatorScreen extends AbstractContainerScreen<IncubatorMenu> {
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
         graphics.drawString(font, Component.translatable("gui.wildaside.incubator.heat"), 118, 12, 0xFFFFFF, false);
         graphics.drawString(font, Component.translatable("gui.wildaside.incubator.fuel"), 24, 10, 0xFFFFFF, false);
+
+        boolean hasDna = menu.getBlockEntity().blobHasDna();
+        int color = hasDna ? 0x7CFC00 : 0xFF5555;
+        graphics.drawString(font, Component.translatable("gui.wildaside.incubator.blob_dna"), 118, 40, color, false);
     }
 
     @Override
@@ -116,7 +120,6 @@ public class IncubatorScreen extends AbstractContainerScreen<IncubatorMenu> {
     }
 
     private boolean isOpenFlag() {
-        System.out.println(menu.getData().get(8));
         return menu.getData().get(8) != 0;
     }
 
