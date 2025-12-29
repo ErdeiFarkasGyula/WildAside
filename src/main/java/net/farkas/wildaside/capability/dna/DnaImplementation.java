@@ -1,6 +1,5 @@
 package net.farkas.wildaside.capability.dna;
 
-import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.locus.GeneLocus;
 import net.farkas.wildaside.dna.locus.LocusExpression;
 import net.farkas.wildaside.dna.allele.value.AlleleValue;

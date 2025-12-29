@@ -1,16 +1,11 @@
 package net.farkas.wildaside.block.entity;
 
-import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationSlots;
-import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
-
-import static net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationSlots.EDITOR_BOTTOM_GENE_START_INDEX;
-import static net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationSlots.EDITOR_TOP_GENE_START_INDEX;
 
 public class OutputRestrictingItemHandler implements IItemHandler {
     private final ItemStackHandler delegate;

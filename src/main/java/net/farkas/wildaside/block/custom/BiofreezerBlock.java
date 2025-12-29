@@ -2,7 +2,6 @@ package net.farkas.wildaside.block.custom;
 
 import net.farkas.wildaside.block.entity.custom.BiofreezerBlockEntity;
 import net.farkas.wildaside.block.entity.ModBlockEntities;
-import net.farkas.wildaside.block.entity.custom.PotionBlasterBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;

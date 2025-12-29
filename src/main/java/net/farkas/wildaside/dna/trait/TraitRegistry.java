@@ -1,6 +1,5 @@
 package net.farkas.wildaside.dna.trait;
 
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.allele.value.AlleleValue;
