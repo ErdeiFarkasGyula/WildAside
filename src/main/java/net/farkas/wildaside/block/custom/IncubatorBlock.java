@@ -63,8 +63,12 @@ public class IncubatorBlock extends BaseEntityBlock {
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         if (state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) != DoubleBlockHalf.LOWER) return null;
         return level.isClientSide()
-                        ? (lvl, pos, st, be) -> { if (be instanceof IncubatorBlockEntity inc) inc.tickClient(); }
-                        : (lvl, pos, st, be) -> { if (be instanceof IncubatorBlockEntity inc) inc.tickServer(); };
+                ? (lvl, pos, st, be) -> {
+            if (be instanceof IncubatorBlockEntity inc) inc.tickClient();
+        }
+                : (lvl, pos, st, be) -> {
+            if (be instanceof IncubatorBlockEntity inc) inc.tickServer();
+        };
     }
 
     @Override
@@ -87,7 +91,14 @@ public class IncubatorBlock extends BaseEntityBlock {
 
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (level.isClientSide()) return InteractionResult.PASS;
+        if (level.isClientSide()) {
+            if (player.getItemInHand(hand).is(ModItems.SYRINGE.get())) {
+                return InteractionResult.PASS;
+            }
+
+            return InteractionResult.SUCCESS;
+        }
+
         if (player.getItemInHand(hand).is(ModItems.SYRINGE.get())) return InteractionResult.PASS;
 
         BlockPos basePos = state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.LOWER ? pos : pos.below();

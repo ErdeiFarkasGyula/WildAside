@@ -152,8 +152,11 @@ public class ModEventBusClientEvents {
                     String fluidType = tag.contains(FLUID_TYPE) ? tag.getString(FLUID_TYPE) : NONE;
                     int baseColor = DEFAULT_BLOOD_COLOR;
 
-                    if (BLOOD.equals(fluidType) && tag.getBoolean(REVEAL_SOURCE)) {
-                        if (tag.contains(DNA_DATA)) {
+                    if (BLOOD.equals(fluidType)) {
+                        if (tag.contains(FLUID_COLOUR)) {
+                            baseColor = tag.getInt(FLUID_COLOUR);
+                        }
+                        if (tag.getBoolean(REVEAL_SOURCE) && tag.contains(DNA_DATA)) {
                             CompoundTag dnaTag = tag.getCompound(DNA_DATA);
                             DnaImplementation dna = new DnaImplementation();
                             dna.deserializeNBT(dnaTag);
@@ -162,27 +165,20 @@ public class ModEventBusClientEvents {
                                 if (egg != null) baseColor = egg.getColor(0);
                             }
                         }
-                        else if (tag.contains(FLUID_COLOUR)) {
-                            baseColor = tag.getInt(FLUID_COLOUR);
+                        else if (!tag.getBoolean(REVEAL_SOURCE)) {
+                            Level levelWorld = Minecraft.getInstance().level;
+                            if (levelWorld != null) {
+                                long age = DnaUtils.getFrozenItemEffectiveAge(tag, levelWorld);
+                                float clotFactor = Mth.clamp(age / (float) DnaConstants.BLOOD_CLOTTING_TIME_DEFAULT, 0f, 1f);
+                                int r = (int) Mth.lerp(clotFactor, (baseColor >> 16) & 0xFF, 0x4C);
+                                int g = (int) Mth.lerp(clotFactor, (baseColor >> 8) & 0xFF, 0x00);
+                                int b = (int) Mth.lerp(clotFactor, baseColor & 0xFF, 0x00);
+                                baseColor = (r << 16) | (g << 8) | b;
+                            }
                         }
-                    }
-                    else if (BLOOD.equals(fluidType) && tag.contains(FLUID_COLOUR)) {
-                        baseColor = tag.getInt(FLUID_COLOUR);
                     }
                     else if (WATER.equals(fluidType)) {
                         baseColor = tag.contains(FLUID_COLOUR) ? tag.getInt(FLUID_COLOUR) : 0x3F76E4;
-                    }
-                    else if (BLOOD.equals(fluidType)) {
-                        Level levelWorld = Minecraft.getInstance().level;
-                        if (levelWorld != null) {
-                            long age = DnaUtils.getFrozenItemEffectiveAge(tag, levelWorld);
-                            float clotFactor = Mth.clamp(age / (float) DnaConstants.BLOOD_CLOTTING_TIME_DEFAULT, 0f, 1f);
-
-                            int r = (int) Mth.lerp(clotFactor, (baseColor >> 16) & 0xFF, 0x4C);
-                            int g = (int) Mth.lerp(clotFactor, (baseColor >> 8) & 0xFF, 0x00);
-                            int b = (int) Mth.lerp(clotFactor, baseColor & 0xFF, 0x00);
-                            baseColor = (r << 16) | (g << 8) | b;
-                        }
                     }
 
                     int alpha = (int) (255 * Mth.clamp(level / (float) SyringeItem.DEFAULT_MAX_LOAD, 0f, 1f));
