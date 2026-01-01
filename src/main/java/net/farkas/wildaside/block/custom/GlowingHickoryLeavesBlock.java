@@ -120,7 +120,6 @@ public class GlowingHickoryLeavesBlock extends LeavesBlock {
         int x = pPos.getX() + random.nextIntBetweenInclusive(-2, 2);
         int z = pPos.getZ() + random.nextIntBetweenInclusive(-2, 2);
 
-
         int groundY = -100;
         for (int y = pPos.getY(); y >= -64; y--) {
             BlockPos pos = new BlockPos(x, y, z);
