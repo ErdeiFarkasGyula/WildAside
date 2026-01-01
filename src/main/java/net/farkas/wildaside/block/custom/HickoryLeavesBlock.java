@@ -39,7 +39,7 @@ public class HickoryLeavesBlock extends LeavesBlock {
     }
 
     private void spawnNewFallenLeaves(Level level, BlockPos pPos, RandomSource random) {
-        if (level.isClientSide) return;
+        if (level.isClientSide()) return;
 
         int x = pPos.getX() + random.nextIntBetweenInclusive(-2, 2);
         int z = pPos.getZ() + random.nextIntBetweenInclusive(-2, 2);
@@ -66,7 +66,9 @@ public class HickoryLeavesBlock extends LeavesBlock {
 
             if (state.getBlock() instanceof FallenHickoryLeavesBlock) {
                 if (state.getValue(FallenHickoryLeavesBlock.COLOUR) != HickoryColour.HICKORY) return;
-                count = Math.min(level.getBlockState(target).getValue(FallenHickoryLeavesBlock.COUNT) + 1, 3);
+                int currentCount = state.getValue(FallenHickoryLeavesBlock.COUNT);
+                if (currentCount >= 3) return;
+                count = Math.min(currentCount + 1, 3);
                 direction = level.getBlockState(target).getValue(FallenHickoryLeavesBlock.FACING);
             } else {
                 direction = Direction.Plane.HORIZONTAL.getRandomDirection(random);
