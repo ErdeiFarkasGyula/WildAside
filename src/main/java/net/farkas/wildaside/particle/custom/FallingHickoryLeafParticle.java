@@ -41,7 +41,7 @@ public class FallingHickoryLeafParticle extends TextureSheetParticle {
         this.setSize(0.2f, 0.2f);
         this.quadSize = (this.random.nextFloat() + 1) / 4f;
         this.lifetime = 1000;
-        this.gravity = 0.025f + level.random.nextFloat() * 0.125f;
+        this.gravity = 0.02f + level.random.nextFloat() * 0.1f;
         this.hasPhysics = true;
 
         this.xd = vx * 0.1;
@@ -79,7 +79,7 @@ public class FallingHickoryLeafParticle extends TextureSheetParticle {
         super.tick();
 
         this.oRoll = this.roll;
-        this.roll = (float)(Mth.sin(ageFactor * 0.5f) * rollAmplitude + (Math.PI / 6));
+        this.roll = (float)(Mth.sin(ageFactor * 0.5f) * rollAmplitude - (Math.PI / 6));
 
         if (this.onGround) this.remove();
     }
