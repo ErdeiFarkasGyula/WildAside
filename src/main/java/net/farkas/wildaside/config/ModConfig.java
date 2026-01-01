@@ -17,8 +17,8 @@ public class ModConfig {
             .comment("Spawn weight of the Glowing Hickory Forest biome. (def: 1)")
             .define("glowing_hickory_forest_weight", 1);
     public static final ForgeConfigSpec.ConfigValue<Integer> VIBRION_HIVE_WEIGHT = COMMON_BUILDER
-            .comment("Spawn weight of the Vibrion Hive biome. (def: 4)")
-            .define("vibrion_hive_weight", 4);
+            .comment("Spawn weight of the Vibrion Hive biome. (def: 2)")
+            .define("vibrion_hive_weight", 2);
 
     public static final ForgeConfigSpec.ConfigValue<Integer> HICKORY_COLOUR_NOISE_SEED = COMMON_BUILDER
             .pop()
