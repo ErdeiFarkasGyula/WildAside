@@ -37,7 +37,7 @@ public class ModConfig {
 
     public static final ForgeConfigSpec.BooleanValue ACCURATE_DNA_MOVEMENT_SPEEDS = COMMON_BUILDER
             .comment("Enable/disable the accurate movement speed calculations of mobs for DNAs. " +
-                    "If false, both ground and water movement speeds be inaccurate with DNAs, " +
+                    "If false, both ground and water movement speeds can be inaccurate with DNAs, " +
                     "but performance after loading a world might be better for the first few seconds " +
                     "when loading it up for the first time, or with a different mod list. (def: true)")
             .define("accurate_dna_movement_speeds", true);
