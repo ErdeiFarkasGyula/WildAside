@@ -33,11 +33,11 @@ public class IncubatorScreen extends AbstractContainerScreen<IncubatorMenu> {
         this.inventoryLabelY = 9999;
         this.titleLabelY = 9999;
 
-        minus = addRenderableWidget(Button.builder(Component.literal("-"), b -> changeHeat(-1)).bounds(x + 140, y + 20, 12, 12).build());
-        plus = addRenderableWidget(Button.builder(Component.literal("+"), b -> changeHeat(+1)).bounds(x + 156, y + 20, 12, 12).build());
+        minus = addRenderableWidget(Button.builder(Component.literal("-"), b -> changeHeat(-1)).bounds(x + 38, y + 50, 12, 12).build());
+        plus = addRenderableWidget(Button.builder(Component.literal("+"), b -> changeHeat(+1)).bounds(x + 53, y + 50, 12, 12).build());
 
         cachedOpen = isOpenFlag();
-        openBtn = addRenderableWidget(Button.builder(labelForOpen(cachedOpen), b -> toggleOpen()).bounds(x + 130, y + 50, 38, 14).build());
+        openBtn = addRenderableWidget(Button.builder(labelForOpen(cachedOpen), b -> toggleOpen()).bounds(x + 115, y + 61, 54, 18).build());
     }
 
     private void changeHeat(int delta) {
@@ -45,7 +45,6 @@ public class IncubatorScreen extends AbstractContainerScreen<IncubatorMenu> {
         int next = Math.max(0, Math.min(4, current + delta));
         if (next != current) NetworkHandler.sendSetIncubatorHeatLevelPacket(menu.getBlockEntity().getBlockPos(), next);
     }
-
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
@@ -65,9 +64,9 @@ public class IncubatorScreen extends AbstractContainerScreen<IncubatorMenu> {
         int maxLevels = 4;
         int filled = Math.max(0, Math.min(maxW, (int) ((heat / (float) maxLevels) * maxW)));
 
-        int barHeight = 6;
-        int x1 = leftPos + 118;
-        int y1 = topPos + 24;
+        int barHeight = 8;
+        int x1 = leftPos + 25;
+        int y1 = topPos + 66;
         int x2 = x1 + filled;
         int y2 = y1 + barHeight;
 
@@ -81,14 +80,14 @@ public class IncubatorScreen extends AbstractContainerScreen<IncubatorMenu> {
         int burnTotal = menu.getData().get(1);
         if (burn <= 0 || burnTotal <= 0) return;
 
-        int maxH = 52;
+        int maxH = 50;
         int barHeight = Math.max(0, Math.min(maxH, (int) ((burn / (float) burnTotal) * maxH)));
         if (barHeight == 0) return;
 
-        int x1 = leftPos + 24;
-        int y1 = topPos + 36 + (maxH - barHeight);
-        int x2 = x1 + 8;
-        int y2 = topPos + 36 + maxH;
+        int x1 = leftPos + 11;
+        int y1 = topPos + 11 + (maxH - barHeight);
+        int x2 = x1 + 10;
+        int y2 = topPos + 11 + maxH;
 
         int bottom = 0xFF774000;
         int top = 0xFFFF8800;
@@ -98,9 +97,6 @@ public class IncubatorScreen extends AbstractContainerScreen<IncubatorMenu> {
 
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-        graphics.drawString(font, Component.translatable("gui.wildaside.incubator.heat"), 118, 12, 0xFFFFFF, false);
-        graphics.drawString(font, Component.translatable("gui.wildaside.incubator.fuel"), 24, 10, 0xFFFFFF, false);
-
         boolean hasDna = menu.getBlockEntity().blobHasDna();
         int color = hasDna ? 0x7CFC00 : 0xFF5555;
         graphics.drawString(font, Component.translatable("gui.wildaside.incubator.blob_dna"), 118, 40, color, false);

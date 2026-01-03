@@ -38,18 +38,13 @@ public class IncubatorMenu extends AbstractContainerMenu {
         this.blockEntity = blockEntity;
         this.data = data;
 
-//        this.getBlockEntity().getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
-//            this.addSlot(new SlotItemHandler(handler, 0, 8, 34));
-//        });
-
-        this.addSlot(new SlotItemHandler(blockEntity.getItems(), 0, 8, 34));
+        this.addSlot(new SlotItemHandler(blockEntity.getItems(), 0, 8, 62));
 
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
 
         addDataSlots(data);
     }
-
 
     @Override
     public boolean stillValid(Player player) {
