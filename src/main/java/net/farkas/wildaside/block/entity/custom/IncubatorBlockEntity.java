@@ -208,13 +208,10 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
         Direction facing = st.hasProperty(BlockStateProperties.HORIZONTAL_FACING)
                 ? st.getValue(BlockStateProperties.HORIZONTAL_FACING)
                 : Direction.NORTH;
-
-        BlockPos upper = worldPosition.above();
+        
         double cx = worldPosition.getX() + 0.5;
         double cy = worldPosition.getY() + 1.0;
         double cz = worldPosition.getZ() + 0.5;
-        double fx = cx + facing.getStepX() * 0.35;
-        double fz = cz + facing.getStepZ() * 0.35;
 
         int count = switch (heatLevel) {
             case 1 -> 1;
