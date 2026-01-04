@@ -1,0 +1,71 @@
+{
+  "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "wildaside:item/syringe_needle0_fluid0",
+      "predicate": {
+        "wildaside:fluid_level": 0.0,
+        "wildaside:syringe_progress": 0.0
+      }
+    },
+    {
+      "model": "wildaside:item/syringe_needle0_fluid1",
+      "predicate": {
+        "wildaside:fluid_level": 0.33333334,
+        "wildaside:syringe_progress": 0.0
+      }
+    },
+    {
+      "model": "wildaside:item/syringe_needle0_fluid2",
+      "predicate": {
+        "wildaside:fluid_level": 0.6666667,
+        "wildaside:syringe_progress": 0.0
+      }
+    },
+    {
+      "model": "wildaside:item/syringe_needle1_fluid0",
+      "predicate": {
+        "wildaside:fluid_level": 0.0,
+        "wildaside:syringe_progress": 0.33333334
+      }
+    },
+    {
+      "model": "wildaside:item/syringe_needle1_fluid1",
+      "predicate": {
+        "wildaside:fluid_level": 0.33333334,
+        "wildaside:syringe_progress": 0.33333334
+      }
+    },
+    {
+      "model": "wildaside:item/syringe_needle1_fluid2",
+      "predicate": {
+        "wildaside:fluid_level": 0.6666667,
+        "wildaside:syringe_progress": 0.33333334
+      }
+    },
+    {
+      "model": "wildaside:item/syringe_needle2_fluid0",
+      "predicate": {
+        "wildaside:fluid_level": 0.0,
+        "wildaside:syringe_progress": 0.6666667
+      }
+    },
+    {
+      "model": "wildaside:item/syringe_needle2_fluid1",
+      "predicate": {
+        "wildaside:fluid_level": 0.33333334,
+        "wildaside:syringe_progress": 0.6666667
+      }
+    },
+    {
+      "model": "wildaside:item/syringe_needle2_fluid2",
+      "predicate": {
+        "wildaside:fluid_level": 0.6666667,
+        "wildaside:syringe_progress": 0.6666667
+      }
+    }
+  ],
+  "textures": {
+    "layer0": "wildaside:item/syringe_base"
+  }
+}

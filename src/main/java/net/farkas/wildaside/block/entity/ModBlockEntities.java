@@ -2,8 +2,9 @@ package net.farkas.wildaside.block.entity;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
-import net.farkas.wildaside.block.entity.sign.ModHangingSignBlockEntity;
-import net.farkas.wildaside.block.entity.sign.ModSignBlockEntity;
+import net.farkas.wildaside.block.entity.custom.*;
+import net.farkas.wildaside.block.entity.custom.sign.ModHangingSignBlockEntity;
+import net.farkas.wildaside.block.entity.custom.sign.ModSignBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -28,6 +29,14 @@ public class ModBlockEntities {
     public static final RegistryObject<BlockEntityType<BioengineeringWorkstationBlockEntity>> BIOENGINEERING_WORKSTATION =
             BLOCK_ENTITIES.register("bioengineering_workstation", () -> BlockEntityType.Builder.of(BioengineeringWorkstationBlockEntity::new,
                     ModBlocks.BIOENGINEERING_WORKSTATION.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<BiofreezerBlockEntity>> BIOFREEZER =
+            BLOCK_ENTITIES.register("biofreezer", () -> BlockEntityType.Builder.of(BiofreezerBlockEntity::new,
+                    ModBlocks.BIOFREEZER.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<IncubatorBlockEntity>> INCUBATOR =
+            BLOCK_ENTITIES.register("incubator", () -> BlockEntityType.Builder.of(IncubatorBlockEntity::new,
+                    ModBlocks.INCUBATOR.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<NaturalSporeBlasterBlockEntity>> NATURAL_SPORE_BLASTER =
             BLOCK_ENTITIES.register("natural_spore_blaster",

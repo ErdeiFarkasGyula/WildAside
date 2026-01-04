@@ -1,0 +1,32 @@
+{
+  "parent": "wildaside:descent",
+  "criteria": {
+    "impossible": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.blaster_busted.descr"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "wildaside:natural_spore_blaster"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.blaster_busted.title"
+    }
+  },
+  "requirements": [
+    [
+      "impossible"
+    ]
+  ],
+  "rewards": {
+    "experience": 5
+  },
+  "sends_telemetry_event": true
+}

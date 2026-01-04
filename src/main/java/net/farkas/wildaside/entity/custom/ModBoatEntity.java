@@ -61,7 +61,7 @@ public class ModBoatEntity extends Boat {
         }
     }
 
-    public static enum Type implements StringRepresentable {
+    public enum Type implements StringRepresentable {
         SUBSTILIUM(ModBlocks.SUBSTILIUM_PLANKS.get(), "substilium"),
         HICKORY(ModBlocks.HICKORY_PLANKS.get(), "hickory");
 

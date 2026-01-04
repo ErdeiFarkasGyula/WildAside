@@ -1,0 +1,32 @@
+{
+  "parent": "wildaside:bacteria_beacon",
+  "criteria": {
+    "impossible": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.brew_barrage.descr"
+    },
+    "frame": "challenge",
+    "hidden": false,
+    "icon": {
+      "item": "wildaside:potion_blaster"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.brew_barrage.title"
+    }
+  },
+  "requirements": [
+    [
+      "impossible"
+    ]
+  ],
+  "rewards": {
+    "experience": 10
+  },
+  "sends_telemetry_event": true
+}

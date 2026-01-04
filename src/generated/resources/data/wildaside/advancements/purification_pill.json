@@ -1,0 +1,32 @@
+{
+  "parent": "wildaside:we_need_to_cook",
+  "criteria": {
+    "impossible": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.purification_pill.descr"
+    },
+    "frame": "challenge",
+    "hidden": false,
+    "icon": {
+      "item": "wildaside:entorium_pill"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.purification_pill.title"
+    }
+  },
+  "requirements": [
+    [
+      "impossible"
+    ]
+  ],
+  "rewards": {
+    "experience": 4
+  },
+  "sends_telemetry_event": true
+}

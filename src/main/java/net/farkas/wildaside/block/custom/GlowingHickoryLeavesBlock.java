@@ -1,7 +1,7 @@
 package net.farkas.wildaside.block.custom;
 
 import net.farkas.wildaside.block.ModBlocks;
-import net.farkas.wildaside.config.Config;
+import net.farkas.wildaside.config.ModConfig;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.util.GlowingHickoryLightUtil;
@@ -81,7 +81,7 @@ public class GlowingHickoryLeavesBlock extends LeavesBlock {
     public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
         super.tick(pState, pLevel, pPos, pRandom);
 
-        if (pLevel.isClientSide() || pState.getValue(GlowingHickoryLeavesBlock.FIXED_LIGHTING) || !Config.GLOWING_HICKORY_TICK.get()) return;
+        if (pLevel.isClientSide() || pState.getValue(GlowingHickoryLeavesBlock.FIXED_LIGHTING) || !ModConfig.GLOWING_HICKORY_TICK.get()) return;
 
         int time = (int)pLevel.dayTime();
         int currentLight = pState.getValue(LIGHT);

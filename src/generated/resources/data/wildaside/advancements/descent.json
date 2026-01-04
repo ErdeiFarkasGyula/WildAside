@@ -1,0 +1,45 @@
+{
+  "parent": "wildaside:wild_wilder_wildest",
+  "criteria": {
+    "in_hive": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "wildaside:vibrion_hive"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.descent.descr"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "wildaside:substilium_soil"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.descent.title"
+    }
+  },
+  "requirements": [
+    [
+      "in_hive"
+    ]
+  ],
+  "rewards": {
+    "experience": 2
+  },
+  "sends_telemetry_event": true
+}

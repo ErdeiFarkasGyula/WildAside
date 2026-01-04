@@ -46,7 +46,7 @@ public class ModEventBusEvent {
         event.addRepositorySource(consumer -> {
             Pack pack = Pack.readMetaAndCreate(
                     id,
-                    Component.literal("Wild Aside Legacy"),
+                    Component.translatable("resourcepack.wildaside.wildaside_legacy"),
                     false,
                     (name) -> new PathPackResources(name, packPath, false),
                     event.getPackType(),

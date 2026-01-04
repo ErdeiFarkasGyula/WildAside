@@ -19,8 +19,8 @@ public class PotionBlasterScreen extends AbstractContainerScreen<PotionBlasterMe
     @Override
     protected void init() {
         super.init();
-        this.inventoryLabelY = 9999;
         this.titleLabelY = 9999;
+        this.inventoryLabelY = 9999;
     }
 
     @Override
@@ -39,14 +39,14 @@ public class PotionBlasterScreen extends AbstractContainerScreen<PotionBlasterMe
     private void renderProgress(GuiGraphics gui, int x, int y) {
         final int bottomX = x + 142;
         final int bottomY = y + 67;
-        final int width   = 4;
+        final int width = 4;
 
         int rgb = this.menu.data.get(2) & 0xFFFFFF;
         int argb = 0xFF000000 | rgb;
 
         int filled = menu.getScaledProgress();
 
-        gui.fill(bottomX, bottomY - filled,bottomX + width, bottomY, argb);
+        gui.fill(bottomX, bottomY - filled, bottomX + width, bottomY, argb);
     }
 
     @Override

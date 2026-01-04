@@ -1,0 +1,46 @@
+{
+  "parent": "wildaside:its_shearing_time",
+  "criteria": {
+    "has_entorium": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "wildaside:entorium"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.petrified_prescription.descr"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "wildaside:entorium"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.petrified_prescription.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_entorium"
+    ]
+  ],
+  "rewards": {
+    "experience": 5,
+    "recipes": [
+      "wildaside:entorium_pill",
+      "wildaside:spore_blaster",
+      "wildaside:entorium_gauntlet"
+    ]
+  },
+  "sends_telemetry_event": true
+}

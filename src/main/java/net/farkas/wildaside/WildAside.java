@@ -3,7 +3,7 @@ package net.farkas.wildaside;
 import com.mojang.logging.LogUtils;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.ModBlockEntities;
-import net.farkas.wildaside.config.Config;
+import net.farkas.wildaside.config.ModConfig;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.enchantment.ModEnchantments;
 import net.farkas.wildaside.entity.ModEntities;
@@ -16,6 +16,8 @@ import net.farkas.wildaside.entity.custom.vibrion.SporeBombEntity;
 import net.farkas.wildaside.item.ModCreativeModeTabs;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.item.VanillaCreativeTabs;
+import net.farkas.wildaside.item.custom.DnaHolderItem;
+import net.farkas.wildaside.item.custom.SyringeItem;
 import net.farkas.wildaside.network.NetworkHandler;
 import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.potion.BetterBrewingRecipe;
@@ -23,6 +25,8 @@ import net.farkas.wildaside.potion.ModPotions;
 import net.farkas.wildaside.recipe.ModRecipes;
 import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationScreen;
 import net.farkas.wildaside.screen.ModMenuTypes;
+import net.farkas.wildaside.screen.biofreezer.BiofreezerScreen;
+import net.farkas.wildaside.screen.incubator.IncubatorScreen;
 import net.farkas.wildaside.screen.potion_blaster.PotionBlasterScreen;
 import net.farkas.wildaside.sound.ModSounds;
 import net.farkas.wildaside.util.ModWoodTypes;
@@ -39,9 +43,12 @@ import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.entity.ArrowRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -58,12 +65,13 @@ import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 import terrablender.api.SurfaceRuleManager;
+
+import static net.farkas.wildaside.dna.DnaConstants.*;
 
 @Mod(WildAside.MOD_ID)
 public class WildAside
@@ -73,8 +81,8 @@ public class WildAside
 
     public WildAside(FMLJavaModLoadingContext context)
     {
-        context.registerConfig(ModConfig.Type.COMMON, Config.COMMON_SPEC);
-        context.registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_SPEC);
+        context.registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, ModConfig.COMMON_SPEC);
+        context.registerConfig(net.minecraftforge.fml.config.ModConfig.Type.CLIENT, ModConfig.CLIENT_SPEC);
 
         IEventBus modEventBus = context.getModEventBus();
 
@@ -107,9 +115,15 @@ public class WildAside
         event.enqueueWork(() -> {
             ModTerraBlenderAPI.registerRegions();
 
-            ((FlowerPotBlock)Blocks.FLOWER_POT).addPlant(ModBlocks.VIBRION_GROWTH.getId(), ModBlocks.POTTED_VIBRION_GROWTH);
-            ((FlowerPotBlock)Blocks.FLOWER_POT).addPlant(ModBlocks.SPOTTED_WINTERGREEN.getId(), ModBlocks.POTTED_SPOTTED_WINTERGREEN);
-            ((FlowerPotBlock)Blocks.FLOWER_POT).addPlant(ModBlocks.PINKSTER_FLOWER.getId(), ModBlocks.POTTED_PINKSTER_FLOWER);
+            if (ModBlocks.VIBRION_GROWTH.getId() != null) {
+                ((FlowerPotBlock)Blocks.FLOWER_POT).addPlant(ModBlocks.VIBRION_GROWTH.getId(), ModBlocks.POTTED_VIBRION_GROWTH);
+            }
+            if (ModBlocks.SPOTTED_WINTERGREEN.getId() != null) {
+                ((FlowerPotBlock)Blocks.FLOWER_POT).addPlant(ModBlocks.SPOTTED_WINTERGREEN.getId(), ModBlocks.POTTED_SPOTTED_WINTERGREEN);
+            }
+            if (ModBlocks.PINKSTER_FLOWER.getId() != null) {
+                ((FlowerPotBlock)Blocks.FLOWER_POT).addPlant(ModBlocks.PINKSTER_FLOWER.getId(), ModBlocks.POTTED_PINKSTER_FLOWER);
+            }
 
             DispenserBlock.registerBehavior(ModItems.FERTILISER_BOMB.get(), new AbstractProjectileDispenseBehavior() {
                 @Override
@@ -197,6 +211,8 @@ public class WildAside
             EntityRenderers.register(ModEntities.CONTAMINATED_CREEPER.get(), ContaminatedCreeperRenderer::new);
 
             MenuScreens.register(ModMenuTypes.BIOENGINEERING_WORKSTATION_MENU.get(), BioengineeringWorkstationScreen::new);
+            MenuScreens.register(ModMenuTypes.BIOFREEZER_MENU.get(), BiofreezerScreen::new);
+            MenuScreens.register(ModMenuTypes.INCUBATOR.get(), IncubatorScreen::new);
             MenuScreens.register(ModMenuTypes.POTION_BLASTER_MENU.get(), PotionBlasterScreen::new);
 
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.VIBRION_GLASS_PANE.get(), RenderType.translucent());
@@ -204,6 +220,40 @@ public class WildAside
 
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.FALLEN_HICKORY_LEAVES.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.HICKORY_ROOT_BUSH.get(), RenderType.cutout());
+
+            ItemProperties.register(
+                    ModItems.DNA_HOLDER.get(),
+                    new ResourceLocation(MOD_ID, SAMPLE_PROGRESS),
+                    (stack, level, entity, seed) -> {
+                        if (!stack.hasTag()) return 0f;
+                        CompoundTag tag = stack.getTag();
+                        if (tag.contains(SAMPLE_PROGRESS)) {
+                            int progress = tag.getInt(SAMPLE_PROGRESS);
+                            return Mth.clamp((float) progress / DnaHolderItem.DEFAULT_MAX_SAMPLES, 0f, 1f);
+                        }
+                        return 0f;
+                    }
+            );
+
+            ItemProperties.register(
+                    ModItems.SYRINGE.get(),
+                    new ResourceLocation(WildAside.MOD_ID, SYRINGE_PROGRESS),
+                    (stack, level, entity, seed) -> {
+                        if (!stack.hasTag()) return 0f;
+                        float p = stack.getTag().getFloat(SYRINGE_PROGRESS);
+                        return Mth.clamp(p / SyringeItem.DEFAULT_MAX_LOAD, 0f, 1f);
+                    }
+            );
+
+            ItemProperties.register(
+                    ModItems.SYRINGE.get(),
+                    new ResourceLocation(WildAside.MOD_ID, FLUID_LEVEL),
+                    (stack, level, entity, seed) -> {
+                        if (!stack.hasTag()) return 0f;
+                        float p = stack.getTag().getFloat(FLUID_LEVEL);
+                        return Mth.clamp(p / SyringeItem.DEFAULT_MAX_LOAD, 0f, 1f);
+                    }
+            );
         }
     }
 

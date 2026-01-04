@@ -1,9 +1,10 @@
 package net.farkas.wildaside.screen.potion_blaster;
 
+import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
-import net.farkas.wildaside.block.entity.PotionBlasterBlockEntity;
+import net.farkas.wildaside.block.entity.custom.PotionBlasterBlockEntity;
 import net.farkas.wildaside.screen.ModMenuTypes;
-import net.farkas.wildaside.screen.ModOutputSlot;
+import net.farkas.wildaside.screen.slot.OutputSlot;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -25,7 +26,7 @@ public class PotionBlasterMenu extends AbstractContainerMenu {
     }
 
     private static PotionBlasterBlockEntity getBlockEntityFromBuffer(Inventory inv, FriendlyByteBuf extraData) {
-        BlockPos pos = extraData.readBlockPos();  // Read once!
+        BlockPos pos = extraData.readBlockPos();
         BlockEntity entity = inv.player.level().getBlockEntity(pos);
         return (PotionBlasterBlockEntity) entity;
     }
@@ -37,7 +38,6 @@ public class PotionBlasterMenu extends AbstractContainerMenu {
     public PotionBlasterMenu(int pContainerId, Inventory inv, BlockEntity entity, ContainerData data) {
         super(ModMenuTypes.POTION_BLASTER_MENU.get(), pContainerId);
 
-        checkContainerSize(inv, 10);
         this.blockEntity = ((PotionBlasterBlockEntity)entity);
         this.level = inv.player.level();
         this.data = data;
@@ -55,7 +55,7 @@ public class PotionBlasterMenu extends AbstractContainerMenu {
             this.addSlot(new SlotItemHandler(iItemHandler, 6, 26, 51));
             this.addSlot(new SlotItemHandler(iItemHandler, 7, 44, 51));
             this.addSlot(new SlotItemHandler(iItemHandler, 8, 62, 51));
-            this.addSlot(new ModOutputSlot(iItemHandler, 9, 102, 35));
+            this.addSlot(new OutputSlot(iItemHandler, 9, 102, 35));
         });
 
         addDataSlots(data);
@@ -89,7 +89,7 @@ public class PotionBlasterMenu extends AbstractContainerMenu {
     @Override
     public ItemStack quickMoveStack(Player playerIn, int pIndex) {
         Slot sourceSlot = slots.get(pIndex);
-        if (sourceSlot == null || !sourceSlot.hasItem()) return ItemStack.EMPTY;  //EMPTY_ITEM
+        if (sourceSlot == null || !sourceSlot.hasItem()) return ItemStack.EMPTY;
         ItemStack sourceStack = sourceSlot.getItem();
         ItemStack copyOfSourceStack = sourceStack.copy();
 
@@ -107,7 +107,7 @@ public class PotionBlasterMenu extends AbstractContainerMenu {
             }
         }
         else {
-            System.out.println("Invalid slotIndex:" + pIndex);
+            WildAside.LOGGER.warn("Invalid slotIndex: {}", pIndex);
             return ItemStack.EMPTY;
         }
         // If stack size == 0 (the entire stack was moved) set slot contents to null

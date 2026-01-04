@@ -3,7 +3,7 @@ package net.farkas.wildaside.datagen;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.item.ModItems;
-import net.farkas.wildaside.item.custom.HickoryNutTrailMix;
+import net.farkas.wildaside.item.custom.HickoryNutTrailMixItem;
 import net.farkas.wildaside.util.HickoryColour;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
@@ -31,17 +31,19 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         smelting(recipeOutput, List.of(ModBlocks.VIBRION_GEL.get()), RecipeCategory.MISC, ModItems.VIBRION.get(), 0.25f, 200, "vibrion");
         smelting(recipeOutput, List.of(ModBlocks.LIT_VIBRION_GEL.get()), RecipeCategory.MISC, ModItems.VIBRION.get(), 0.25f, 200, "vibrion");
 
+        smelting(recipeOutput, List.of(Items.GLASS_BOTTLE), RecipeCategory.TOOLS, ModItems.DNA_HOLDER.get(), 0.0f, 100, "dna_holder");
+
         //SHAPED
         simpleShapedRecipe(ModBlocks.VIBRION_BLOCK.get(), 1, ModItems.VIBRION.get()).save(recipeOutput);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.VIBRION_GLASS_PANE.get(), 16)
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.VIBRION_GLASS_PANE.get(), 16)
                 .pattern("SSS")
                 .pattern("SSS")
                 .define('S', ModBlocks.VIBRION_GLASS.get())
                 .unlockedBy(getHasName( ModBlocks.VIBRION_GLASS.get()), has( ModBlocks.VIBRION_GLASS.get()))
                 .save(recipeOutput);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.LIT_VIBRION_GLASS_PANE.get(), 16)
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.LIT_VIBRION_GLASS_PANE.get(), 16)
                 .pattern("SSS")
                 .pattern("SSS")
                 .define('S', ModBlocks.LIT_VIBRION_GLASS.get())
@@ -56,6 +58,16 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('V', ModBlocks.VIBRION_BLOCK.get())
                 .define('E', ModItems.ENTORIUM.get())
                 .unlockedBy(getHasName(ModBlocks.VIBRION_BLOCK.get()), has(ModBlocks.VIBRION_BLOCK.get()))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ModItems.SYRINGE.get())
+                .pattern("N")
+                .pattern("H")
+                .pattern("P")
+                .define('N', Items.IRON_NUGGET)
+                .define('H', ModItems.DNA_HOLDER.get())
+                .define('P', Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE)
+                .unlockedBy(getHasName(ModItems.DNA_HOLDER.get()), has(ModItems.DNA_HOLDER.get()))
                 .save(recipeOutput);
 
         simpleShapedRecipe(ModBlocks.COMPRESSED_SUBSTILIUM_SOIL.get(), 2, ModBlocks.SUBSTILIUM_SOIL.get(), RecipeCategory.BUILDING_BLOCKS).save(recipeOutput);
@@ -156,7 +168,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         //HICKORY
         for (HickoryColour colour : HickoryColour.values()) {
             simpleShapedRecipe(ModBlocks.HICKORY_LEAVES_BLOCKS.get(colour).get(), 1, ModItems.LEAF_ITEMS.get(colour).get()).save(recipeOutput);
-            hickoryNutTrailMix((HickoryNutTrailMix)ModItems.TRAIL_MIX_ITEMS.get(colour).get()).save(recipeOutput);
+            hickoryNutTrailMix((HickoryNutTrailMixItem)ModItems.TRAIL_MIX_ITEMS.get(colour).get()).save(recipeOutput);
         }
     }
 
@@ -176,7 +188,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .unlockedBy(getHasName(input), has(input));
     }
 
-    private ShapelessRecipeBuilder hickoryNutTrailMix(HickoryNutTrailMix mixItem) {
+    private ShapelessRecipeBuilder hickoryNutTrailMix(HickoryNutTrailMixItem mixItem) {
          return ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, mixItem)
                 .requires(ModItems.HICKORY_NUT.get())
                 .requires(Items.BOWL)

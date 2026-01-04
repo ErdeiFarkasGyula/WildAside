@@ -1,7 +1,7 @@
 package net.farkas.wildaside.worldgen.feature.custom;
 
 import com.mojang.serialization.Codec;
-import net.farkas.wildaside.block.custom.vibrion.NaturalSporeBlaster;
+import net.farkas.wildaside.block.custom.vibrion.NaturalSporeBlasterBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.WorldGenLevel;
@@ -51,7 +51,7 @@ public class NaturalSporeBlasterFeature extends ReplaceBlockFeature {
 
                 Direction.Axis chosenAxis = freeAxes.get(context.random().nextInt(freeAxes.size()));
 
-                worldgenlevel.setBlock(blockpos, oreconfiguration$targetblockstate.state.setValue(NaturalSporeBlaster.AXIS, chosenAxis), 3);
+                worldgenlevel.setBlock(blockpos, oreconfiguration$targetblockstate.state.setValue(NaturalSporeBlasterBlock.AXIS, chosenAxis), 3);
                 worldgenlevel.scheduleTick(blockpos, worldgenlevel.getBlockState(blockpos).getBlock(), 10);
                 break;
             }

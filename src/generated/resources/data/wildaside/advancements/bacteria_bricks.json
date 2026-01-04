@@ -1,0 +1,79 @@
+{
+  "parent": "wildaside:descent",
+  "criteria": {
+    "has_bricks": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "wildaside:compressed_substilium_soil"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.bacteria_bricks.descr"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "wildaside:compressed_substilium_soil"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.bacteria_bricks.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_bricks"
+    ]
+  ],
+  "rewards": {
+    "experience": 3,
+    "recipes": [
+      "wildaside:compressed_substilium_soil",
+      "wildaside:substilium_soil_tiles",
+      "wildaside:chiseled_substilium_soil",
+      "wildaside:cracked_substilium_soil_tiles",
+      "wildaside:cracked_substilium_soil_tiles_2",
+      "wildaside:smooth_substilium_soil",
+      "wildaside:substilium_soil_tile_stairs",
+      "wildaside:substilium_soil_tile_stairs_cut",
+      "wildaside:substilium_soil_tile_slab",
+      "wildaside:substilium_soil_tile_slab_cut",
+      "wildaside:substilium_soil_tile_pressure_plate_craft",
+      "wildaside:substilium_soil_tile_pressure_plate_cut",
+      "wildaside:substilium_soil_tile_wall",
+      "wildaside:substilium_soil_tile_wall_cut",
+      "wildaside:substilium_soil_tile_button_craft",
+      "wildaside:substilium_soil_tile_button_cut",
+      "wildaside:smooth_substilium_soil_button_cut",
+      "wildaside:smooth_substilium_soil_button_craft",
+      "wildaside:smooth_substilium_soil_stairs_craft",
+      "wildaside:smooth_substilium_soil_stairs_cut",
+      "wildaside:smooth_substilium_soil_slab_craft",
+      "wildaside:smooth_substilium_soil_slab_cut",
+      "wildaside:smooth_substilium_soil_wall_craft",
+      "wildaside:smooth_substilium_soil_wall_cut",
+      "wildaside:smooth_substilium_soil_pressure_plate_craft",
+      "wildaside:smooth_substilium_soil_pressure_plate_cut",
+      "wildaside:cracked_substilium_soil_tile_button_cut",
+      "wildaside:cracked_substilium_soil_tile_button_craft",
+      "wildaside:cracked_substilium_soil_tile_pressure_plate_cut",
+      "wildaside:cracked_substilium_soil_tile_stairs_craft",
+      "wildaside:cracked_substilium_soil_tile_stairs_cut",
+      "wildaside:cracked_substilium_soil_tile_slab_craft",
+      "wildaside:cracked_substilium_soil_tile_slab_cut",
+      "wildaside:cracked_substilium_soil_tile_wall_craft",
+      "wildaside:cracked_substilium_soil_tile_wall_cut",
+      "wildaside:cracked_substilium_soil_tile_pressure_plate_craft"
+    ]
+  },
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,34 @@
+{
+  "parent": "wildaside:wild_wilder_wildest",
+  "criteria": {
+    "in_biome": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "wildaside:hickory_forest"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "requirements": [
+    [
+      "in_biome"
+    ]
+  ],
+  "rewards": {
+    "experience": 3,
+    "recipes": [
+      "wildaside:spotted_wintergreen_to_dye",
+      "wildaside:pinkster_flower_to_dye"
+    ]
+  },
+  "sends_telemetry_event": true
+}

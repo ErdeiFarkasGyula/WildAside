@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "wildaside:item/syringe_fill_2",
+    "layer1": "wildaside:item/syringe_needle_1",
+    "layer2": "wildaside:item/syringe_tip",
+    "layer3": "wildaside:item/syringe_base"
+  }
+}

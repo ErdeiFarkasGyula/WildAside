@@ -1,0 +1,32 @@
+{
+  "parent": "wildaside:colourful_innit",
+  "criteria": {
+    "impossible": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.glow_up.descr"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "wildaside:red_glowing_hickory_leaves"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.glow_up.title"
+    }
+  },
+  "requirements": [
+    [
+      "impossible"
+    ]
+  ],
+  "rewards": {
+    "experience": 10
+  },
+  "sends_telemetry_event": true
+}

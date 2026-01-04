@@ -1,0 +1,32 @@
+{
+  "parent": "wildaside:descent",
+  "criteria": {
+    "impossible": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.life_leech.descr"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "wildaside:mucellith_jaw"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.life_leech.title"
+    }
+  },
+  "requirements": [
+    [
+      "impossible"
+    ]
+  ],
+  "rewards": {
+    "experience": 10
+  },
+  "sends_telemetry_event": true
+}

@@ -11,6 +11,8 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.recipe.BioengineeringWorkstationRecipe;
+import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationMenu;
+import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationTab;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -18,16 +20,17 @@ import org.jetbrains.annotations.Nullable;
 
 public class BioengineeringRecipeCategory implements IRecipeCategory<BioengineeringWorkstationRecipe> {
     public static final ResourceLocation UID = new ResourceLocation(WildAside.MOD_ID, "bioengineering");
-    public static final ResourceLocation TEXTURE = new ResourceLocation(WildAside.MOD_ID, "textures/gui/bioengineering_workstation.png");
+    public static final ResourceLocation TEXTURE = BioengineeringWorkstationTab.ASSEMBLER.getTexture();
 
-    public static final RecipeType<BioengineeringWorkstationRecipe> BIOENGINEERING_TYPE =
-            new RecipeType<>(UID, BioengineeringWorkstationRecipe.class);
+    private static final int yOffset = BioengineeringWorkstationMenu.yOffset;
+
+    public static final RecipeType<BioengineeringWorkstationRecipe> BIOENGINEERING_TYPE = new RecipeType<>(UID, BioengineeringWorkstationRecipe.class);
 
     private final IDrawable background;
     private final IDrawable icon;
 
     public BioengineeringRecipeCategory(IGuiHelper helper) {
-        this.background = helper.createDrawable(TEXTURE, 17, 10, 140, 65);
+        this.background = helper.createDrawable(TEXTURE, 57, 10 + yOffset, 140, 65);
         this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModBlocks.BIOENGINEERING_WORKSTATION.get()));
     }
 

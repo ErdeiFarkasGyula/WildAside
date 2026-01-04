@@ -1,6 +1,5 @@
 {
   "values": [
-    "wildaside:spore_blaster",
     "wildaside:compressed_substilium_soil",
     "wildaside:smooth_substilium_soil",
     "wildaside:smooth_substilium_soil_stairs",
@@ -8,13 +7,19 @@
     "wildaside:smooth_substilium_soil_button",
     "wildaside:smooth_substilium_soil_pressure_plate",
     "wildaside:smooth_substilium_soil_walls",
-    "wildaside:chiseled_substilium_soil",
     "wildaside:substilium_tiles",
     "wildaside:cracked_substilium_tiles",
     "wildaside:substilium_tile_stairs",
     "wildaside:substilium_tile_slab",
     "wildaside:substilium_tile_button",
     "wildaside:substilium_tile_pressure_plate",
-    "wildaside:substilium_tile_walls"
+    "wildaside:substilium_tile_walls",
+    "wildaside:chiseled_substilium_soil",
+    "wildaside:spore_blaster",
+    "wildaside:potion_blaster",
+    "wildaside:wind_blaster",
+    "wildaside:bioengineering_workstation",
+    "wildaside:biofreezer",
+    "wildaside:incubator"
   ]
 }

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "H": {
+      "item": "wildaside:dna_holder"
+    },
+    "N": {
+      "item": "minecraft:iron_nugget"
+    },
+    "P": {
+      "item": "minecraft:heavy_weighted_pressure_plate"
+    }
+  },
+  "pattern": [
+    "N",
+    "H",
+    "P"
+  ],
+  "result": {
+    "item": "wildaside:syringe"
+  },
+  "show_notification": true
+}

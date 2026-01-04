@@ -1,15 +1,15 @@
 package net.farkas.wildaside.entity.custom.vibrion;
 
+import net.farkas.wildaside.advancement.ModAdvancements;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.entity.ModEntities;
 import net.farkas.wildaside.item.ModItems;
-import net.farkas.wildaside.util.AdvancementHandler;
+import net.farkas.wildaside.advancement.AdvancementHandler;
 import net.farkas.wildaside.util.WeightedFlowerChoice;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -97,7 +97,7 @@ public class FertiliserBombEntity extends ThrowableItemProjectile {
         String biomePath = biomeHolder.unwrapKey().map(key -> key.location().getPath()).orElse("");
 
         if (biomePath.contains("hickory")) {
-            AdvancementHandler.givePlayerAdvancement((ServerPlayer)thrower, "fertile_forest");
+            AdvancementHandler.givePlayerAdvancement(thrower, ModAdvancements.FERTILE_FOREST);
             flowerList.add(new WeightedFlowerChoice.WeightedFlower(4, ModBlocks.SPOTTED_WINTERGREEN.get()));
             flowerList.add(new WeightedFlowerChoice.WeightedFlower(4, ModBlocks.PINKSTER_FLOWER.get()));
         }

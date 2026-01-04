@@ -1,0 +1,19 @@
+{
+  "parent": "wildaside:wild_wilder_wildest",
+  "criteria": {
+    "lifesteal": {
+      "conditions": {
+        "effects": {
+          "wildaside:lifesteal": {}
+        }
+      },
+      "trigger": "minecraft:effects_changed"
+    }
+  },
+  "requirements": [
+    [
+      "lifesteal"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

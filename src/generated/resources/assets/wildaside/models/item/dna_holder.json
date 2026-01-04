@@ -1,0 +1,20 @@
+{
+  "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "wildaside:item/dna_holder_stage0",
+      "predicate": {
+        "wildaside:sample_progress": 0.0
+      }
+    },
+    {
+      "model": "wildaside:item/dna_holder_stage1",
+      "predicate": {
+        "wildaside:sample_progress": 1.0
+      }
+    }
+  ],
+  "textures": {
+    "layer0": "wildaside:item/dna_holder_base"
+  }
+}

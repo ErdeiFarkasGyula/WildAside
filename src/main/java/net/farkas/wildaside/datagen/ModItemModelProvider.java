@@ -2,8 +2,10 @@ package net.farkas.wildaside.datagen;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
+import net.farkas.wildaside.dna.DnaConstants;
 import net.farkas.wildaside.item.ModItems;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.farkas.wildaside.item.custom.DnaHolderItem;
+import net.farkas.wildaside.item.custom.SyringeItem;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -15,6 +17,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import static net.farkas.wildaside.dna.DnaConstants.*;
+
 public class ModItemModelProvider extends ItemModelProvider {
     public ModItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
         super(output, WildAside.MOD_ID, existingFileHelper);
@@ -23,9 +27,15 @@ public class ModItemModelProvider extends ItemModelProvider {
     @Override
     protected void registerModels() {
         //SPAWNEGG
-        spawnEggItem(ModItems.MUCELLITH_SPAWN_EGG.getId());
-        spawnEggItem(ModItems.HICKORY_TREANT_SPAWN_EGG.getId());
-        spawnEggItem(ModItems.CONTAMINATED_CREEPER_SPAWN_EGG.getId());
+        if (ModItems.MUCELLITH_SPAWN_EGG.getId() != null) {
+            spawnEggItem(ModItems.MUCELLITH_SPAWN_EGG.getId());
+        }
+        if (ModItems.HICKORY_TREANT_SPAWN_EGG.getId() != null) {
+            spawnEggItem(ModItems.HICKORY_TREANT_SPAWN_EGG.getId());
+        }
+        if (ModItems.CONTAMINATED_CREEPER_SPAWN_EGG.getId() != null) {
+            spawnEggItem(ModItems.CONTAMINATED_CREEPER_SPAWN_EGG.getId());
+        }
 
         //SIMPLE
         simpleItem(ModItems.VIBRION);
@@ -36,6 +46,10 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.SPORE_ARROW);
         simpleItem(ModItems.SPORE_BOMB);
         simpleItem(ModItems.FERTILISER_BOMB);
+
+        simpleItem(ModItems.GENE);
+
+        simpleItem(ModItems.BACILLUS_BLOB);
 
         simpleItem(ModItems.HICKORY_NUT);
         simpleItem(ModItems.HICKORY_NUT_TRAIL_MIX);
@@ -49,7 +63,6 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.BROWN_GLOWING_HICKORY_LEAF);
         simpleItem(ModItems.YELLOW_GLOWING_HICKORY_LEAF);
         simpleItem(ModItems.GREEN_GLOWING_HICKORY_LEAF);
-
 
         //SIMPLE BLOCK ITEM
         simpleBlockItem(ModBlocks.VIBRION_GLASS_PANE, ModBlocks.VIBRION_GLASS);
@@ -137,6 +150,12 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.SUBSTILIUM_CHEST_BOAT);
         simpleItem(ModItems.HICKORY_BOAT);
         simpleItem(ModItems.HICKORY_CHEST_BOAT);
+
+        //CUSTOM
+        dnaHolder(ModItems.DNA_HOLDER.get());
+        syringe(ModItems.SYRINGE.get());
+
+        simpleBlockItem(ModBlocks.INCUBATOR);
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item) {
@@ -175,7 +194,7 @@ public class ModItemModelProvider extends ItemModelProvider {
     }
 
     public ItemModelBuilder spawnEggItem(ResourceLocation item) {
-        return (ItemModelBuilder)((ItemModelBuilder)this.getBuilder(item.toString())).parent(new ModelFile.UncheckedModelFile("item/template_spawn_egg"));
+        return this.getBuilder(item.toString()).parent(new ModelFile.UncheckedModelFile("item/template_spawn_egg"));
     }
 
     public void wallItem(RegistryObject<Block> block, RegistryObject<Block> baseBlock) {
@@ -196,5 +215,65 @@ public class ModItemModelProvider extends ItemModelProvider {
     public void trapdoorItem(RegistryObject<Block> block) {
         this.withExistingParent(ForgeRegistries.BLOCKS.getKey(block.get()).getPath(),
                 modLoc("block/" + ForgeRegistries.BLOCKS.getKey(block.get()).getPath() + "_bottom"));
+    }
+
+    private void dnaHolder(Item item) {
+        String baseName = ForgeRegistries.ITEMS.getKey(item).getPath();
+
+        for (int i = 0; i <= DnaHolderItem.DEFAULT_MAX_SAMPLES; i++) {
+            getBuilder(baseName + "_stage" + i)
+                    .parent(getExistingFile(mcLoc("item/generated")))
+                    .texture("layer0", WildAside.MOD_ID + ":item/" + baseName + "_fill1_" + i)
+                    .texture("layer1", WildAside.MOD_ID + ":item/" + baseName + "_fill2_" + i)
+                    .texture("layer2", WildAside.MOD_ID + ":item/" + baseName + "_base");
+        }
+
+        var builder = getBuilder(baseName)
+                .parent(getExistingFile(mcLoc("item/generated")))
+                .texture("layer0", WildAside.MOD_ID + ":item/" + baseName + "_base");
+
+        for (int i = 0; i <= DnaHolderItem.DEFAULT_MAX_SAMPLES; i++) {
+            float progress = i / (float) DnaHolderItem.DEFAULT_MAX_SAMPLES;
+            builder.override()
+                    .predicate(new ResourceLocation(WildAside.MOD_ID, DnaConstants.SAMPLE_PROGRESS), progress)
+                    .model(getExistingFile(modLoc("item/" + baseName + "_stage" + i)))
+                    .end();
+        }
+    }
+
+    private void syringe(Item item) {
+        String baseName = ForgeRegistries.ITEMS.getKey(item).getPath();
+
+        int max = SyringeItem.DEFAULT_MAX_LOAD;
+
+        for (int needle = 0; needle < max; needle++) {
+            for (int fluid = 0; fluid < max; fluid++) {
+
+                getBuilder(baseName + "_needle" + needle + "_fluid" + fluid)
+                        .parent(getExistingFile(mcLoc("item/generated")))
+                        .texture("layer0", WildAside.MOD_ID + ":item/" + baseName + "_fill_" + fluid)
+                        .texture("layer1", WildAside.MOD_ID + ":item/" + baseName + "_needle_" + needle)
+                        .texture("layer2", WildAside.MOD_ID + ":item/" + baseName + "_tip")
+                        .texture("layer3", WildAside.MOD_ID + ":item/" + baseName + "_base");
+            }
+        }
+
+        var builder = getBuilder(baseName)
+                .parent(getExistingFile(mcLoc("item/generated")))
+                .texture("layer0", WildAside.MOD_ID + ":item/" + baseName + "_base");
+
+        for (int needle = 0; needle < max; needle++) {
+            float needleVal = needle / (float) max;
+
+            for (int fluid = 0; fluid < max; fluid++) {
+                float fluidVal = fluid / (float) max;
+
+                builder.override()
+                       .predicate(new ResourceLocation(WildAside.MOD_ID, SYRINGE_PROGRESS), needleVal)
+                       .predicate(new ResourceLocation(WildAside.MOD_ID, FLUID_LEVEL), fluidVal)
+                       .model(getExistingFile(modLoc("item/" + baseName + "_needle" + needle + "_fluid" + fluid)))
+                       .end();
+            }
+        }
     }
 }

@@ -1,0 +1,115 @@
+{
+  "parent": "minecraft:block/block",
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "texture": "#down"
+        },
+        "east": {
+          "texture": "#east"
+        },
+        "north": {
+          "texture": "#north"
+        },
+        "south": {
+          "texture": "#south"
+        },
+        "up": {
+          "texture": "#up"
+        },
+        "west": {
+          "texture": "#west"
+        }
+      },
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "faces": {
+        "north": {
+          "texture": "#south"
+        }
+      },
+      "from": [
+        0,
+        0,
+        15.99
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "faces": {
+        "east": {
+          "texture": "#west"
+        }
+      },
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        0.01,
+        16,
+        16
+      ]
+    },
+    {
+      "faces": {
+        "west": {
+          "texture": "#east"
+        }
+      },
+      "from": [
+        15.99,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#up"
+        }
+      },
+      "from": [
+        0,
+        15.99,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ]
+    }
+  ],
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "down": "wildaside:block/incubator_lower_top",
+    "east": "wildaside:block/incubator_upper_side",
+    "north": "wildaside:block/incubator_upper_front_open",
+    "particle": "wildaside:block/incubator_upper_side",
+    "south": "wildaside:block/incubator_upper_side",
+    "up": "wildaside:block/incubator_upper_top",
+    "west": "wildaside:block/incubator_upper_side"
+  }
+}

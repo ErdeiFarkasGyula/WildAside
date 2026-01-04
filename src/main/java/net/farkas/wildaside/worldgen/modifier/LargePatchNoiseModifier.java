@@ -2,7 +2,7 @@ package net.farkas.wildaside.worldgen.modifier;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.farkas.wildaside.config.Config;
+import net.farkas.wildaside.config.ModConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.placement.PlacementContext;
@@ -30,8 +30,8 @@ public class LargePatchNoiseModifier extends PlacementModifier {
 
     @Override
     public Stream<BlockPos> getPositions(PlacementContext context, RandomSource random, BlockPos pos) {
-        double scale = Config.HICKORY_COLOUR_NOISE_SCALE.get();
-        PerlinSimplexNoise NOISE = new PerlinSimplexNoise(RandomSource.create(Config.HICKORY_COLOUR_NOISE_SEED.get()), List.of(0));
+        double scale = ModConfig.HICKORY_COLOUR_NOISE_SCALE.get();
+        PerlinSimplexNoise NOISE = new PerlinSimplexNoise(RandomSource.create(ModConfig.HICKORY_COLOUR_NOISE_SEED.get()), List.of(0));
 
         double n = NOISE.getValue(pos.getX() * scale, pos.getZ() * scale, false);
         return (n >= min && n < max) ? Stream.of(pos) : Stream.empty();

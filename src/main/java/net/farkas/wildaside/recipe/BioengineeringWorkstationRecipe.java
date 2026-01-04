@@ -60,7 +60,7 @@ public class BioengineeringWorkstationRecipe implements Recipe<SimpleContainer> 
             if (!matched) return false;
         }
 
-        return true;
+        return stacks.isEmpty();
     }
 
     @Override
