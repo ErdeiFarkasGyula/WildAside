@@ -25,7 +25,6 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -49,6 +48,8 @@ public class SyringeItem extends AbstractDnaSampleItem {
 
     private static final float NEEDLE_DELTA = 0.1f;
     private static final int RAYCAST_RANGE = 3;
+    private static final float READY_THRESHOLD = DEFAULT_MAX_LOAD - 0.5f;
+    private static final float VOLUME_EPS = 0.05f;
 
     public SyringeItem(Properties properties) {
         super(properties);
@@ -97,8 +98,7 @@ public class SyringeItem extends AbstractDnaSampleItem {
             WildAside.LOGGER.info("[Syringe] useOn start server: player={}, pos={}, fluidType={}, level={}",
                     player.getName().getString(), pos, fluidType, tag.getFloat(FLUID_LEVEL));
             player.startUsingItem(ctx.getHand());
-        }
-        else {
+        } else {
             player.startUsingItem(ctx.getHand());
         }
         return InteractionResult.SUCCESS;
@@ -112,66 +112,79 @@ public class SyringeItem extends AbstractDnaSampleItem {
         CompoundTag tag = stack.getOrCreateTag();
         initTagDefaults(tag);
 
-        boolean inwards = tag.getBoolean(INWARDS);
         float progress = tag.getFloat(SYRINGE_PROGRESS);
+        float prevProgress = progress;
+
+        boolean hintInwards = tag.getBoolean(INWARDS);
         float fluid = tag.getFloat(FLUID_LEVEL);
         String fluidType = tag.getString(FLUID_TYPE);
 
-        progress = updateProgress(tag, progress, inwards);
+        progress += hintInwards ? -NEEDLE_DELTA : NEEDLE_DELTA;
+        progress = Mth.clamp(progress, 0f, DEFAULT_MAX_LOAD);
+
+        boolean inwards = progress < prevProgress;
+
+        if (progress <= 0f) inwards = false;
+        if (progress >= DEFAULT_MAX_LOAD) inwards = true;
+        tag.putBoolean(INWARDS, inwards);
+
+        fluid = clampFluidToBarrel(fluid, progress);
 
         if (inwards) {
-            boolean canFill = fluid < DEFAULT_MAX_LOAD - NEEDLE_DELTA * 0.5f;
+            boolean canFill = fluid < DEFAULT_MAX_LOAD - VOLUME_EPS;
             if (canFill) {
                 fluid = pullFromDnaHolder(player, tag, fluid);
+                fluid = clampFluidToBarrel(fluid, progress);
                 fluidType = tag.getString(FLUID_TYPE);
             }
 
             if (canFill && !tag.contains(DNA_DATA) && (BLOOD.equals(fluidType) || NONE.equals(fluidType))) {
                 fluid = sampleEntity(serverLevel, player, tag, fluid);
+                fluid = clampFluidToBarrel(fluid, progress);
+                fluidType = tag.getString(FLUID_TYPE);
             }
 
             if (canFill && (NONE.equals(fluidType) || WATER.equals(fluidType))) {
                 int waterColor = raytraceForWater(serverLevel, player, RAYCAST_RANGE);
                 if (waterColor != -1) {
-                    fluid = Mth.clamp(fluid + NEEDLE_DELTA, 0f, DEFAULT_MAX_LOAD);
+                    fluid = clampFluidToBarrel(fluid + NEEDLE_DELTA, progress);
                     tag.putString(FLUID_TYPE, WATER);
                     tag.putInt(FLUID_COLOUR, waterColor);
+                    fluidType = WATER;
                 }
             }
-        }
-        else {
-            if (BLOOD.equals(fluidType)) {
-                float storedLevel = fluid;
-                handleDnaHolderInteraction(player, tag, progress);
+        } else {
+            boolean actionDone = false;
 
-                boolean injected = false;
-                boolean attempt = progress >= DEFAULT_MAX_LOAD - 0.25f;
-                if (level.getGameTime() % 5 == 0) {
-                    WildAside.LOGGER.info("[Syringe] outward tick: player={}, progress={}, storedLevel={}, fluidType={}, attempt={}",
-                            player.getName().getString(), progress, storedLevel, fluidType, attempt);
-                }
-                if (!attempt && level.getGameTime() % 10 == 0) {
-                    WildAside.LOGGER.info("[Syringe] no attempt: progressOK={}, levelOK=skipped",
-                            progress >= DEFAULT_MAX_LOAD - 0.25f);
-                }
-
-                if (attempt) {
-                    injected = injectIntoIncubator(player, tag, serverLevel);
-                }
-
-                if (injected) {
+            if (BLOOD.equals(fluidType) && progress >= READY_THRESHOLD) {
+                boolean hadDNA = tag.contains(DNA_DATA);
+                float beforeFluid = tag.getFloat(FLUID_LEVEL);
+                pushIntoDnaHolder(player, tag, progress);
+                if (!tag.contains(DNA_DATA) && tag.getFloat(FLUID_LEVEL) < 0.01f && hadDNA && beforeFluid > 0.1f) {
                     fluid = 0f;
                     fluidType = NONE;
-                    tag.putFloat(FLUID_LEVEL, 0f);
-                    tag.putString(FLUID_TYPE, NONE);
-                    WildAside.LOGGER.info("[Syringe] Inject success: player={}, cleared syringe", player.getName().getString());
-                }
-                else {
-                    fluid = storedLevel;
+                    actionDone = true;
+                    WildAside.LOGGER.info("[Syringe] Holder transfer success: player={}", player.getName().getString());
+                } else {
+                    fluid = tag.getFloat(FLUID_LEVEL);
+                    fluidType = tag.getString(FLUID_TYPE);
                 }
             }
-            else {
-                fluid = Mth.clamp(fluid - NEEDLE_DELTA, 0f, DEFAULT_MAX_LOAD);
+
+            if (!actionDone && BLOOD.equals(fluidType) && progress >= READY_THRESHOLD) {
+                if (injectIntoIncubator(player, tag, serverLevel)) {
+                    fluid = 0f;
+                    fluidType = NONE;
+                    actionDone = true;
+                    WildAside.LOGGER.info("[Syringe] Inject success: player={}", player.getName().getString());
+                } else {
+                    fluid = tag.getFloat(FLUID_LEVEL);
+                    fluidType = tag.getString(FLUID_TYPE);
+                }
+            }
+
+            if (!actionDone && (BLOOD.equals(fluidType) || WATER.equals(fluidType))) {
+                fluid = clampFluidToBarrel(fluid - NEEDLE_DELTA, progress);
             }
 
             if (fluid <= 0.01f) {
@@ -179,6 +192,7 @@ public class SyringeItem extends AbstractDnaSampleItem {
                     tag.putFloat(DIRTINESS, 0f);
                 }
                 tag.remove(DNA_DATA);
+                fluidType = NONE;
                 tag.putString(FLUID_TYPE, NONE);
                 tag.putBoolean(MULTIPLE_SOURCES, false);
                 tag.putBoolean(SAMPLE_CLOTTED, false);
@@ -189,7 +203,17 @@ public class SyringeItem extends AbstractDnaSampleItem {
             }
         }
 
+        fluid = clampFluidToBarrel(fluid, progress);
+        if (fluid <= 0.001f) {
+            fluid = 0f;
+            fluidType = NONE;
+            tag.putString(FLUID_TYPE, NONE);
+            tag.remove(DNA_DATA);
+        }
+
         tag.putFloat(FLUID_LEVEL, fluid);
+        tag.putString(FLUID_TYPE, fluidType);
+        tag.putFloat(SYRINGE_PROGRESS, progress);
 
         NetworkHandler.sendSyringeDataClientSyncPacket(
                 player,
@@ -234,102 +258,9 @@ public class SyringeItem extends AbstractDnaSampleItem {
         );
     }
 
-    private void handleDnaHolderInteraction(ServerPlayer player, CompoundTag syringeTag, float progress) {
-        ServerLevel serverLevel = player.serverLevel();
-        ItemStack offHandStack = player.getItemInHand(InteractionHand.OFF_HAND);
-        if (!(offHandStack.getItem() instanceof DnaHolderItem)) return;
-
-        if (syringeTag.getInt(SAMPLE_PROGRESS) >= DnaHolderItem.DEFAULT_MAX_SAMPLES) {
-            syringeTag.putBoolean(SAMPLE_DIRTY, true);
-            return;
-        }
-
-        if (progress >= DEFAULT_MAX_LOAD - 0.5f) {
-            boolean multipleSources = syringeTag.getBoolean(MULTIPLE_SOURCES);
-            boolean clotted = DnaUtils.getFrozenItemEffectiveAge(syringeTag, serverLevel) > BLOOD_CLOTTING_TIME_DEFAULT;
-            boolean dirty = syringeTag.getFloat(DIRTINESS) >= 2.75;
-
-            DnaImplementation dna = new DnaImplementation();
-            dna.deserializeNBT(syringeTag.getCompound(DNA_DATA));
-            if (dna.getSource() == null) return;
-
-            CompoundTag holderTag = offHandStack.getOrCreateTag();
-
-            applyRevealFlags(holderTag, syringeTag);
-            holderTag.put(DNA_DATA, dna.serializeNBT());
-            holderTag.putInt(FLUID_COLOUR, syringeTag.getInt(FLUID_COLOUR));
-
-            syringeTag.putFloat(FLUID_LEVEL, 0f);
-            syringeTag.putString(FLUID_TYPE, NONE);
-
-            holderTag.putBoolean(MULTIPLE_SOURCES, multipleSources);
-            holderTag.putBoolean(SAMPLE_CLOTTED, clotted);
-            holderTag.putBoolean(SAMPLE_DIRTY, dirty);
-
-            syringeTag.remove(DNA_DATA);
-
-            int newProgress = Mth.clamp(holderTag.getInt(SAMPLE_PROGRESS) + 1, 0, DnaHolderItem.DEFAULT_MAX_SAMPLES);
-            holderTag.putInt(SAMPLE_PROGRESS, newProgress);
-
-            DnaUtils.resetBloodFreezerTicks(holderTag);
-            holderTag.putLong(BLOOD_CREATION_TICK, DnaUtils.getBloodSamplingTick(syringeTag));
-
-            long clottingTime = holderTag.getLong(BLOOD_FREEZER_TICKS);
-            if (clottingTime == 0) {
-                holderTag.putLong(BLOOD_CLOTTING_TIME, BLOOD_CLOTTING_TIME_DEFAULT);
-            }
-
-            int count = offHandStack.getCount();
-            if (count > 1) {
-                offHandStack.setCount(1);
-                ItemStack newOffHandStack = new ItemStack(offHandStack.getItem(), count - 1);
-                if (!player.addItem(newOffHandStack)) {
-                    ItemEntity itemEntity = new ItemEntity(player.serverLevel(), player.getX(), player.getY(), player.getZ(), newOffHandStack);
-                    player.serverLevel().addFreshEntity(itemEntity);
-                }
-            }
-
-            offHandStack.setTag(holderTag);
-            player.setItemInHand(InteractionHand.OFF_HAND, offHandStack);
-        }
-    }
-
-    public static void handleSyringeProgress(SyringeDataPacket packet) {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.level == null) return;
-
-        Player player = mc.level.getPlayerByUUID(packet.getPlayerId());
-        if (player == null) return;
-
-        int slot = packet.getSlot();
-        if (slot < 0 || slot >= player.getInventory().items.size()) return;
-
-        ItemStack stack = player.getInventory().getItem(slot);
-        if (!(stack.getItem() instanceof SyringeItem)) return;
-
-        CompoundTag tag = stack.getOrCreateTag();
-        tag.putFloat(SYRINGE_PROGRESS, packet.getProgress());
-        tag.putBoolean(INWARDS, packet.isInwards());
-        tag.putFloat(FLUID_LEVEL, packet.getBlood());
-        tag.putString(FLUID_TYPE, packet.getFluidType());
-        tag.putInt(FLUID_COLOUR, packet.getFluidColor());
-        tag.putFloat(DIRTINESS, packet.getDirtiness());
-        tag.putLong(BLOOD_CREATION_TICK, packet.getCreationTick());
-        tag.putLong(BLOOD_FREEZER_TICKS, packet.getFreezerTicks());
-        tag.putBoolean(MULTIPLE_SOURCES, packet.isMultipleSources());
-        tag.putBoolean(REVEAL_SOURCE, packet.isRevealSource());
-        tag.putBoolean(REVEAL_STABILITY, packet.isRevealStability());
-        tag.putBoolean(REVEAL_TRAITS, packet.isRevealTraits());
-    }
-
-    @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.NONE;
-    }
-
-    @Override
-    public int getUseDuration(ItemStack stack) {
-        return 72000;
+    private float clampFluidToBarrel(float fluid, float progress) {
+        float maxVolume = DEFAULT_MAX_LOAD - progress + VOLUME_EPS;
+        return Mth.clamp(Math.min(fluid, maxVolume), 0f, DEFAULT_MAX_LOAD);
     }
 
     private void initTagDefaults(CompoundTag tag) {
@@ -341,17 +272,6 @@ public class SyringeItem extends AbstractDnaSampleItem {
         if (!tag.contains(DIRTINESS)) tag.putFloat(DIRTINESS, 0);
         if (!tag.contains(BLOOD_CREATION_TICK)) tag.putLong(BLOOD_CREATION_TICK, 0);
         if (!tag.contains(BLOOD_FREEZER_TICKS)) tag.putLong(BLOOD_FREEZER_TICKS, 0);
-    }
-
-    private float updateProgress(CompoundTag tag, float progress, boolean inwards) {
-        progress += inwards ? -NEEDLE_DELTA : NEEDLE_DELTA;
-        progress = Mth.clamp(progress, 0f, DEFAULT_MAX_LOAD);
-        tag.putFloat(SYRINGE_PROGRESS, progress);
-
-        if (progress >= DEFAULT_MAX_LOAD) tag.putBoolean(INWARDS, true);
-        if (progress <= 0f) tag.putBoolean(INWARDS, false);
-
-        return progress;
     }
 
     private float sampleEntity(ServerLevel serverLevel, ServerPlayer player, CompoundTag tag, float fluid) {
@@ -509,6 +429,66 @@ public class SyringeItem extends AbstractDnaSampleItem {
         return newFluid;
     }
 
+    private void pushIntoDnaHolder(ServerPlayer player, CompoundTag syringeTag, float progress) {
+        ServerLevel serverLevel = player.serverLevel();
+        ItemStack offHandStack = player.getItemInHand(InteractionHand.OFF_HAND);
+        if (!(offHandStack.getItem() instanceof DnaHolderItem)) return;
+
+        if (syringeTag.getInt(SAMPLE_PROGRESS) >= DnaHolderItem.DEFAULT_MAX_SAMPLES) {
+            syringeTag.putBoolean(SAMPLE_DIRTY, true);
+            return;
+        }
+
+        if (progress >= READY_THRESHOLD) {
+            boolean multipleSources = syringeTag.getBoolean(MULTIPLE_SOURCES);
+            boolean clotted = DnaUtils.getFrozenItemEffectiveAge(syringeTag, serverLevel) > BLOOD_CLOTTING_TIME_DEFAULT;
+            boolean dirty = syringeTag.getFloat(DIRTINESS) >= 2.75;
+
+            DnaImplementation dna = new DnaImplementation();
+            dna.deserializeNBT(syringeTag.getCompound(DNA_DATA));
+            if (dna.getSource() == null) return;
+
+            CompoundTag holderTag = offHandStack.getOrCreateTag();
+
+            applyRevealFlags(holderTag, syringeTag);
+            holderTag.put(DNA_DATA, dna.serializeNBT());
+            holderTag.putInt(FLUID_COLOUR, syringeTag.getInt(FLUID_COLOUR));
+
+            syringeTag.putFloat(FLUID_LEVEL, 0f);
+            syringeTag.putString(FLUID_TYPE, NONE);
+
+            holderTag.putBoolean(MULTIPLE_SOURCES, multipleSources);
+            holderTag.putBoolean(SAMPLE_CLOTTED, clotted);
+            holderTag.putBoolean(SAMPLE_DIRTY, dirty);
+
+            syringeTag.remove(DNA_DATA);
+
+            int newProgress = Mth.clamp(holderTag.getInt(SAMPLE_PROGRESS) + 1, 0, DnaHolderItem.DEFAULT_MAX_SAMPLES);
+            holderTag.putInt(SAMPLE_PROGRESS, newProgress);
+
+            DnaUtils.resetBloodFreezerTicks(holderTag);
+            holderTag.putLong(BLOOD_CREATION_TICK, DnaUtils.getBloodSamplingTick(syringeTag));
+
+            long clottingTime = holderTag.getLong(BLOOD_FREEZER_TICKS);
+            if (clottingTime == 0) {
+                holderTag.putLong(BLOOD_CLOTTING_TIME, BLOOD_CLOTTING_TIME_DEFAULT);
+            }
+
+            int count = offHandStack.getCount();
+            if (count > 1) {
+                offHandStack.setCount(1);
+                ItemStack newOffHandStack = new ItemStack(offHandStack.getItem(), count - 1);
+                if (!player.addItem(newOffHandStack)) {
+                    ItemEntity itemEntity = new ItemEntity(player.serverLevel(), player.getX(), player.getY(), player.getZ(), newOffHandStack);
+                    player.serverLevel().addFreshEntity(itemEntity);
+                }
+            }
+
+            offHandStack.setTag(holderTag);
+            player.setItemInHand(InteractionHand.OFF_HAND, offHandStack);
+        }
+    }
+
     private boolean injectIntoIncubator(ServerPlayer player, CompoundTag syringeTag, ServerLevel level) {
         boolean hasDNA = syringeTag.contains(DNA_DATA);
         String fType = syringeTag.getString(FLUID_TYPE);
@@ -541,8 +521,7 @@ public class SyringeItem extends AbstractDnaSampleItem {
 
         if (be instanceof IncubatorBlockEntity) {
             incubator = (IncubatorBlockEntity) be;
-        }
-        else {
+        } else {
             BlockPos belowPos = pos.below();
             BlockEntity belowBe = level.getBlockEntity(belowPos);
             if (!(belowBe instanceof IncubatorBlockEntity)) return false;
@@ -572,9 +551,42 @@ public class SyringeItem extends AbstractDnaSampleItem {
         return true;
     }
 
+    public static void handleSyringeProgress(SyringeDataPacket packet) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.level == null) return;
+
+        Player player = mc.level.getPlayerByUUID(packet.getPlayerId());
+        if (player == null) return;
+
+        int slot = packet.getSlot();
+        if (slot < 0 || slot >= player.getInventory().items.size()) return;
+
+        ItemStack stack = player.getInventory().getItem(slot);
+        if (!(stack.getItem() instanceof SyringeItem)) return;
+
+        CompoundTag tag = stack.getOrCreateTag();
+        tag.putFloat(SYRINGE_PROGRESS, packet.getProgress());
+        tag.putBoolean(INWARDS, packet.isInwards());
+        tag.putFloat(FLUID_LEVEL, packet.getBlood());
+        tag.putString(FLUID_TYPE, packet.getFluidType());
+        tag.putInt(FLUID_COLOUR, packet.getFluidColor());
+        tag.putFloat(DIRTINESS, packet.getDirtiness());
+        tag.putLong(BLOOD_CREATION_TICK, packet.getCreationTick());
+        tag.putLong(BLOOD_FREEZER_TICKS, packet.getFreezerTicks());
+        tag.putBoolean(MULTIPLE_SOURCES, packet.isMultipleSources());
+        tag.putBoolean(REVEAL_SOURCE, packet.isRevealSource());
+        tag.putBoolean(REVEAL_STABILITY, packet.isRevealStability());
+        tag.putBoolean(REVEAL_TRAITS, packet.isRevealTraits());
+    }
+
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> tooltip, TooltipFlag pIsAdvanced) {
         CompoundTag tag = pStack.getOrCreateTag();
         if (appendContaminationTooltipIfNeeded(tooltip, tag, pLevel)) return;
+    }
+
+    @Override
+    public int getUseDuration(ItemStack pStack) {
+        return 72000;
     }
 }
