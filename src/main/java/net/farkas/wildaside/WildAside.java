@@ -64,6 +64,7 @@ import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -74,13 +75,11 @@ import terrablender.api.SurfaceRuleManager;
 import static net.farkas.wildaside.dna.DnaConstants.*;
 
 @Mod(WildAside.MOD_ID)
-public class WildAside
-{
+public class WildAside {
     public static final String MOD_ID = "wildaside";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public WildAside(FMLJavaModLoadingContext context)
-    {
+    public WildAside(FMLJavaModLoadingContext context) {
         context.registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, ModConfig.COMMON_SPEC);
         context.registerConfig(net.minecraftforge.fml.config.ModConfig.Type.CLIENT, ModConfig.CLIENT_SPEC);
 
@@ -113,40 +112,57 @@ public class WildAside
         NetworkHandler.init(event);
 
         event.enqueueWork(() -> {
-            ModTerraBlenderAPI.registerRegions();
-
-            if (ModBlocks.VIBRION_GROWTH.getId() != null) {
-                ((FlowerPotBlock)Blocks.FLOWER_POT).addPlant(ModBlocks.VIBRION_GROWTH.getId(), ModBlocks.POTTED_VIBRION_GROWTH);
-            }
-            if (ModBlocks.SPOTTED_WINTERGREEN.getId() != null) {
-                ((FlowerPotBlock)Blocks.FLOWER_POT).addPlant(ModBlocks.SPOTTED_WINTERGREEN.getId(), ModBlocks.POTTED_SPOTTED_WINTERGREEN);
-            }
-            if (ModBlocks.PINKSTER_FLOWER.getId() != null) {
-                ((FlowerPotBlock)Blocks.FLOWER_POT).addPlant(ModBlocks.PINKSTER_FLOWER.getId(), ModBlocks.POTTED_PINKSTER_FLOWER);
-            }
-
-            DispenserBlock.registerBehavior(ModItems.FERTILISER_BOMB.get(), new AbstractProjectileDispenseBehavior() {
-                @Override
-                protected Projectile getProjectile(Level pLevel, Position pPosition, ItemStack pStack) {
-                    return new FertiliserBombEntity(pLevel, pPosition.x(), pPosition.y(), pPosition.z());
-                }
-            });
-            DispenserBlock.registerBehavior(ModItems.SPORE_BOMB.get(), new AbstractProjectileDispenseBehavior() {
-                @Override
-                protected Projectile getProjectile(Level pLevel, Position pPosition, ItemStack pStack) {
-                    return new SporeBombEntity(pLevel, pPosition.x(), pPosition.y(), pPosition.z());
-                }
-            });
-            DispenserBlock.registerBehavior(ModItems.SPORE_ARROW.get(), new AbstractProjectileDispenseBehavior() {
-                @Override
-                protected Projectile getProjectile(Level pLevel, Position pPosition, ItemStack pStack) {
-                    return new SporeArrowEntity(pLevel, pPosition.x(), pPosition.y(), pPosition.z());
-                }
-            });
+            validateConfig();
         });
 
-        SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MOD_ID, ModSurfaceRules.makeRules());
+        event.enqueueWork(() -> {
+            ModTerraBlenderAPI.registerRegions();
 
+            addPottableBlocks();
+            addDispenserBehaviours();
+            addCompostables();
+            addBrewingRecipes();
+        });
+
+        event.enqueueWork(() -> {
+            addSurfaceRules();
+        });
+    }
+
+    private static void addPottableBlocks() {
+        if (ModBlocks.VIBRION_GROWTH.getId() != null) {
+            ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(ModBlocks.VIBRION_GROWTH.getId(), ModBlocks.POTTED_VIBRION_GROWTH);
+        }
+        if (ModBlocks.SPOTTED_WINTERGREEN.getId() != null) {
+            ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(ModBlocks.SPOTTED_WINTERGREEN.getId(), ModBlocks.POTTED_SPOTTED_WINTERGREEN);
+        }
+        if (ModBlocks.PINKSTER_FLOWER.getId() != null) {
+            ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(ModBlocks.PINKSTER_FLOWER.getId(), ModBlocks.POTTED_PINKSTER_FLOWER);
+        }
+    }
+
+    private static void addDispenserBehaviours() {
+        DispenserBlock.registerBehavior(ModItems.FERTILISER_BOMB.get(), new AbstractProjectileDispenseBehavior() {
+            @Override
+            protected Projectile getProjectile(Level pLevel, Position pPosition, ItemStack pStack) {
+                return new FertiliserBombEntity(pLevel, pPosition.x(), pPosition.y(), pPosition.z());
+            }
+        });
+        DispenserBlock.registerBehavior(ModItems.SPORE_BOMB.get(), new AbstractProjectileDispenseBehavior() {
+            @Override
+            protected Projectile getProjectile(Level pLevel, Position pPosition, ItemStack pStack) {
+                return new SporeBombEntity(pLevel, pPosition.x(), pPosition.y(), pPosition.z());
+            }
+        });
+        DispenserBlock.registerBehavior(ModItems.SPORE_ARROW.get(), new AbstractProjectileDispenseBehavior() {
+            @Override
+            protected Projectile getProjectile(Level pLevel, Position pPosition, ItemStack pStack) {
+                return new SporeArrowEntity(pLevel, pPosition.x(), pPosition.y(), pPosition.z());
+            }
+        });
+    }
+
+    private static void addCompostables() {
         ComposterBlock.COMPOSTABLES.put(ModItems.VIBRION.get(), 0.25f);
         ComposterBlock.COMPOSTABLES.put(ModItems.ENTORIUM.get(), 0.3f);
         ComposterBlock.COMPOSTABLES.put(ModBlocks.VIBRION_BLOCK.get().asItem(), 1);
@@ -176,90 +192,122 @@ public class WildAside
         ComposterBlock.COMPOSTABLES.put(ModBlocks.SPOTTED_WINTERGREEN.get().asItem(), 0.65f);
         ComposterBlock.COMPOSTABLES.put(ModBlocks.PINKSTER_FLOWER.get().asItem(), 0.65f);
         ComposterBlock.COMPOSTABLES.put(ModItems.HICKORY_NUT.get(), 0.65f);
+    }
 
+    private static void addBrewingRecipes() {
         BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(Potions.AWKWARD, ModItems.MUCELLITH_JAW.get(), ModPotions.LIFESTEAL_POTION.get()));
         BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(ModPotions.LIFESTEAL_POTION.get(), Items.REDSTONE, ModPotions.LIFESTEAL_POTION_2.get()));
     }
 
+    private static void addSurfaceRules() {
+        SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MOD_ID, ModSurfaceRules.makeRules());
+    }
+
+    private static void validateConfig() {
+        String currentVersion = ModList.get().getModContainerById("wildaside")
+                .map(mod -> mod.getModInfo().getVersion().toString())
+                .orElse("unknown");
+
+        String configVersion = ModConfig.CONFIG_VERSION.get();
+        if (!configVersion.equals(currentVersion)) {
+            WildAside.LOGGER.warn("Outdated config detected! Resetting to default...");
+            ModConfig.CONFIG_VERSION.set(currentVersion);
+
+            ModConfig.COMMON_SPEC.save();
+        }
+    }
+
     @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event)
-    {
+    public void onServerStarting(ServerStartingEvent event) {
 
     }
 
     @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public static class ClientModEvents
-    {
+    public static class ClientModEvents {
         @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event)
-        {
-            Sheets.addWoodType(ModWoodTypes.SUBSTILIUM);
-            Sheets.addWoodType(ModWoodTypes.HICKORY);
-            Sheets.addWoodType(ModWoodTypes.CYPRESS);
-
-            EntityRenderers.register(ModEntities.MOD_BOAT.get(), pContext -> new ModBoatRenderer(pContext, false));
-            EntityRenderers.register(ModEntities.MOD_CHEST_BOAT.get(), pContext -> new ModBoatRenderer(pContext, true));
-            EntityRenderers.register(ModEntities.SPORE_BOMB.get(), ThrownItemRenderer::new);
-            EntityRenderers.register(ModEntities.FERTILISER_BOMB.get(), ThrownItemRenderer::new);
-            EntityRenderers.register(ModEntities.SPORE_ARROW.get(),pContext -> new ArrowRenderer<SporeArrowEntity>(pContext) {
-                @Override
-                public ResourceLocation getTextureLocation(SporeArrowEntity pEntity) {
-                    return new ResourceLocation(WildAside.MOD_ID, "textures/entity/projectiles/spore_arrow.png");
-                }
-            });
-            EntityRenderers.register(ModEntities.MUCELLITH.get(), MucellithRenderer::new);
-            EntityRenderers.register(ModEntities.CONTAMINATED_CREEPER.get(), ContaminatedCreeperRenderer::new);
-
-            MenuScreens.register(ModMenuTypes.BIOENGINEERING_WORKSTATION_MENU.get(), BioengineeringWorkstationScreen::new);
-            MenuScreens.register(ModMenuTypes.BIOFREEZER_MENU.get(), BiofreezerScreen::new);
-            MenuScreens.register(ModMenuTypes.INCUBATOR.get(), IncubatorScreen::new);
-            MenuScreens.register(ModMenuTypes.POTION_BLASTER_MENU.get(), PotionBlasterScreen::new);
-
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.VIBRION_GLASS_PANE.get(), RenderType.translucent());
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.LIT_VIBRION_GLASS_PANE.get(), RenderType.translucent());
-
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.FALLEN_HICKORY_LEAVES.get(), RenderType.cutout());
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.HICKORY_ROOT_BUSH.get(), RenderType.cutout());
-
-            ItemProperties.register(
-                    ModItems.DNA_HOLDER.get(),
-                    new ResourceLocation(MOD_ID, SAMPLE_PROGRESS),
-                    (stack, level, entity, seed) -> {
-                        if (!stack.hasTag()) return 0f;
-                        CompoundTag tag = stack.getTag();
-                        if (tag.contains(SAMPLE_PROGRESS)) {
-                            int progress = tag.getInt(SAMPLE_PROGRESS);
-                            return Mth.clamp((float) progress / DnaHolderItem.DEFAULT_MAX_SAMPLES, 0f, 1f);
-                        }
-                        return 0f;
-                    }
-            );
-
-            ItemProperties.register(
-                    ModItems.SYRINGE.get(),
-                    new ResourceLocation(WildAside.MOD_ID, SYRINGE_PROGRESS),
-                    (stack, level, entity, seed) -> {
-                        if (!stack.hasTag()) return 0f;
-                        float p = stack.getTag().getFloat(SYRINGE_PROGRESS);
-                        return Mth.clamp(p / SyringeItem.DEFAULT_MAX_LOAD, 0f, 1f);
-                    }
-            );
-
-            ItemProperties.register(
-                    ModItems.SYRINGE.get(),
-                    new ResourceLocation(WildAside.MOD_ID, FLUID_LEVEL),
-                    (stack, level, entity, seed) -> {
-                        if (!stack.hasTag()) return 0f;
-                        float p = stack.getTag().getFloat(FLUID_LEVEL);
-                        return Mth.clamp(p / SyringeItem.DEFAULT_MAX_LOAD, 0f, 1f);
-                    }
-            );
+        public static void onClientSetup(FMLClientSetupEvent event) {
+            registerWoodTypes();
+            registerEntityRenderers();
+            registerScreens();
+            setRenderTypes();
+            registerItemProperties();
         }
     }
 
+    private static void registerWoodTypes() {
+        Sheets.addWoodType(ModWoodTypes.SUBSTILIUM);
+        Sheets.addWoodType(ModWoodTypes.HICKORY);
+        Sheets.addWoodType(ModWoodTypes.CYPRESS);
+    }
+
+    private static void registerEntityRenderers() {
+        EntityRenderers.register(ModEntities.MOD_BOAT.get(), pContext -> new ModBoatRenderer(pContext, false));
+        EntityRenderers.register(ModEntities.MOD_CHEST_BOAT.get(), pContext -> new ModBoatRenderer(pContext, true));
+        EntityRenderers.register(ModEntities.SPORE_BOMB.get(), ThrownItemRenderer::new);
+        EntityRenderers.register(ModEntities.FERTILISER_BOMB.get(), ThrownItemRenderer::new);
+        EntityRenderers.register(ModEntities.SPORE_ARROW.get(), pContext -> new ArrowRenderer<SporeArrowEntity>(pContext) {
+            @Override
+            public ResourceLocation getTextureLocation(SporeArrowEntity pEntity) {
+                return new ResourceLocation(WildAside.MOD_ID, "textures/entity/projectiles/spore_arrow.png");
+            }
+        });
+        EntityRenderers.register(ModEntities.MUCELLITH.get(), MucellithRenderer::new);
+        EntityRenderers.register(ModEntities.CONTAMINATED_CREEPER.get(), ContaminatedCreeperRenderer::new);
+    }
+
+    private static void registerScreens() {
+        MenuScreens.register(ModMenuTypes.BIOENGINEERING_WORKSTATION_MENU.get(), BioengineeringWorkstationScreen::new);
+        MenuScreens.register(ModMenuTypes.BIOFREEZER_MENU.get(), BiofreezerScreen::new);
+        MenuScreens.register(ModMenuTypes.INCUBATOR.get(), IncubatorScreen::new);
+        MenuScreens.register(ModMenuTypes.POTION_BLASTER_MENU.get(), PotionBlasterScreen::new);
+    }
+
+    private static void setRenderTypes() {
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.VIBRION_GLASS_PANE.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.LIT_VIBRION_GLASS_PANE.get(), RenderType.translucent());
+
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.FALLEN_HICKORY_LEAVES.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.HICKORY_ROOT_BUSH.get(), RenderType.cutout());
+    }
+
+    private static void registerItemProperties() {
+        ItemProperties.register(
+                ModItems.DNA_HOLDER.get(),
+                new ResourceLocation(MOD_ID, SAMPLE_PROGRESS),
+                (stack, level, entity, seed) -> {
+                    if (!stack.hasTag()) return 0f;
+                    CompoundTag tag = stack.getTag();
+                    if (tag.contains(SAMPLE_PROGRESS)) {
+                        int progress = tag.getInt(SAMPLE_PROGRESS);
+                        return Mth.clamp((float) progress / DnaHolderItem.DEFAULT_MAX_SAMPLES, 0f, 1f);
+                    }
+                    return 0f;
+                }
+        );
+
+        ItemProperties.register(
+                ModItems.SYRINGE.get(),
+                new ResourceLocation(WildAside.MOD_ID, SYRINGE_PROGRESS),
+                (stack, level, entity, seed) -> {
+                    if (!stack.hasTag()) return 0f;
+                    float p = stack.getTag().getFloat(SYRINGE_PROGRESS);
+                    return Mth.clamp(p / SyringeItem.DEFAULT_MAX_LOAD, 0f, 1f);
+                }
+        );
+
+        ItemProperties.register(
+                ModItems.SYRINGE.get(),
+                new ResourceLocation(WildAside.MOD_ID, FLUID_LEVEL),
+                (stack, level, entity, seed) -> {
+                    if (!stack.hasTag()) return 0f;
+                    float p = stack.getTag().getFloat(FLUID_LEVEL);
+                    return Mth.clamp(p / SyringeItem.DEFAULT_MAX_LOAD, 0f, 1f);
+                }
+        );
+    }
+
     @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.DEDICATED_SERVER)
-    public static class ServerModEvents
-    {
+    public static class ServerModEvents {
 
     }
 }

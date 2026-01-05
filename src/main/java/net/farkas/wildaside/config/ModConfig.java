@@ -2,14 +2,25 @@ package net.farkas.wildaside.config;
 
 import net.farkas.wildaside.WildAside;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = WildAside.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModConfig {
     private static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
 
+    private static final String currentVersion = ModList.get().getModContainerById("wildaside")
+            .map(mod -> mod.getModInfo().getVersion().toString())
+            .orElse("unknown");
+
     //COMMON
+    public static final ForgeConfigSpec.ConfigValue<String> CONFIG_VERSION = COMMON_BUILDER
+            .push("Config version")
+            .comment("Must match internal mod version for compatibility.")
+            .define("config_version", currentVersion);
+
     public static final ForgeConfigSpec.ConfigValue<Integer> HICKORY_FOREST_WEIGHT = COMMON_BUILDER
+            .pop()
             .push("Biome weights")
             .comment("Spawn weight of the Hickory Forest biome. (def: 3)")
             .define("hickory_forest_weight", 3);
