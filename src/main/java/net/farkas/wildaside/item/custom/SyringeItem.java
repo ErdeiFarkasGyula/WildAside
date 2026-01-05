@@ -159,6 +159,22 @@ public class SyringeItem extends AbstractDnaSampleItem {
             if (BLOOD.equals(fluidType) && progress >= READY_THRESHOLD) {
                 boolean hadDNA = tag.contains(DNA_DATA);
                 float beforeFluid = tag.getFloat(FLUID_LEVEL);
+                if (injectIntoIncubator(player, tag, serverLevel)) {
+                    if (!tag.contains(DNA_DATA) && tag.getFloat(FLUID_LEVEL) < 0.01f && hadDNA && beforeFluid > 0.1f) {
+                        fluid = 0f;
+                        fluidType = NONE;
+                        actionDone = true;
+                        WildAside.LOGGER.info("[Syringe] Inject success: player={}", player.getName().getString());
+                    } else {
+                        fluid = tag.getFloat(FLUID_LEVEL);
+                        fluidType = tag.getString(FLUID_TYPE);
+                    }
+                }
+            }
+
+            if (!actionDone && BLOOD.equals(fluidType) && progress >= READY_THRESHOLD) {
+                boolean hadDNA = tag.contains(DNA_DATA);
+                float beforeFluid = tag.getFloat(FLUID_LEVEL);
                 pushIntoDnaHolder(player, tag, progress);
                 if (!tag.contains(DNA_DATA) && tag.getFloat(FLUID_LEVEL) < 0.01f && hadDNA && beforeFluid > 0.1f) {
                     fluid = 0f;
@@ -171,17 +187,6 @@ public class SyringeItem extends AbstractDnaSampleItem {
                 }
             }
 
-            if (!actionDone && BLOOD.equals(fluidType) && progress >= READY_THRESHOLD) {
-                if (injectIntoIncubator(player, tag, serverLevel)) {
-                    fluid = 0f;
-                    fluidType = NONE;
-                    actionDone = true;
-                    WildAside.LOGGER.info("[Syringe] Inject success: player={}", player.getName().getString());
-                } else {
-                    fluid = tag.getFloat(FLUID_LEVEL);
-                    fluidType = tag.getString(FLUID_TYPE);
-                }
-            }
 
             if (!actionDone && (BLOOD.equals(fluidType) || WATER.equals(fluidType))) {
                 fluid = clampFluidToBarrel(fluid - NEEDLE_DELTA, progress);
@@ -490,35 +495,29 @@ public class SyringeItem extends AbstractDnaSampleItem {
     }
 
     private boolean injectIntoIncubator(ServerPlayer player, CompoundTag syringeTag, ServerLevel level) {
+        float fluidLevel = syringeTag.getFloat(FLUID_LEVEL);
+        String fluidType = syringeTag.getString(FLUID_TYPE);
         boolean hasDNA = syringeTag.contains(DNA_DATA);
-        String fType = syringeTag.getString(FLUID_TYPE);
-        WildAside.LOGGER.info("[Syringe] injectIntoIncubator enter: player={}, fluidType={}, hasDNA={}, posHit=?",
-                player.getName().getString(), fType, hasDNA);
-        if (!hasDNA) {
-            WildAside.LOGGER.info("[Syringe] inject abort: no DNA");
-            return false;
-        }
-        if (!BLOOD.equals(fType)) {
-            WildAside.LOGGER.info("[Syringe] inject abort: fluidType not BLOOD ({})", fType);
-            return false;
-        }
+
+        WildAside.LOGGER.info("[Syringe] Trying incubator injection: player={}, fluidType={}, fluidLevel={}, READY_THRESHOLD={}, hasDNA={}",
+                player.getName().getString(), fluidType, fluidLevel, READY_THRESHOLD, hasDNA);
+
+        if (!BLOOD.equals(fluidType) || !hasDNA) return false;
 
         BlockHitResult hit = level.clip(new ClipContext(
                 player.getEyePosition(),
                 player.getEyePosition().add(player.getViewVector(1f).scale(RAYCAST_RANGE)),
                 ClipContext.Block.OUTLINE,
-                ClipContext.Fluid.ANY,
+                ClipContext.Fluid.NONE,
                 player
         ));
 
         if (hit.getType() != BlockHitResult.Type.BLOCK) return false;
 
         BlockPos pos = hit.getBlockPos();
-        WildAside.LOGGER.info("[Syringe] ray hit block: {}", pos);
         BlockEntity be = level.getBlockEntity(pos);
 
         IncubatorBlockEntity incubator;
-
         if (be instanceof IncubatorBlockEntity) {
             incubator = (IncubatorBlockEntity) be;
         } else {
@@ -534,7 +533,12 @@ public class SyringeItem extends AbstractDnaSampleItem {
                 incubator.hasBlob(),
                 !incubator.blobHasDna());
 
-        if (!incubator.tryInjectDnaFromSyringe(syringeTag)) return false;
+        boolean successfulInjection = incubator.tryInjectDnaFromSyringe(syringeTag);
+        if (!successfulInjection) {
+            return false;
+        }
+
+        WildAside.LOGGER.info("[Syringe] DNA successfully injected into incubator: player={}", player.getName().getString());
 
         syringeTag.remove(DNA_DATA);
         syringeTag.putFloat(FLUID_LEVEL, 0f);
@@ -543,8 +547,8 @@ public class SyringeItem extends AbstractDnaSampleItem {
         syringeTag.putBoolean(SAMPLE_CLOTTED, false);
         syringeTag.putBoolean(SAMPLE_DIRTY, false);
         syringeTag.putFloat(DIRTINESS, 0f);
-        syringeTag.putLong(BLOOD_CREATION_TICK, 0);
-        syringeTag.putLong(BLOOD_FREEZER_TICKS, 0);
+        syringeTag.putLong(BLOOD_CREATION_TICK, 0L);
+        syringeTag.putLong(BLOOD_FREEZER_TICKS, 0L);
 
         level.playSound(null, pos, SoundEvents.BOTTLE_FILL, SoundSource.PLAYERS, 0.5f, 0.4f);
 
