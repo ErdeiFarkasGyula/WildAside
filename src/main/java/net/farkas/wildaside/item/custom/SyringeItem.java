@@ -187,7 +187,6 @@ public class SyringeItem extends AbstractDnaSampleItem {
                 }
             }
 
-
             if (!actionDone && (BLOOD.equals(fluidType) || WATER.equals(fluidType))) {
                 fluid = clampFluidToBarrel(fluid - NEEDLE_DELTA, progress);
             }
@@ -296,6 +295,7 @@ public class SyringeItem extends AbstractDnaSampleItem {
 
         tag.putString(FLUID_TYPE, BLOOD);
         tag.putInt(FLUID_COLOUR, DEFAULT_BLOOD_COLOR);
+        resetRevealFlags(tag);
 
         if (fluid > DEFAULT_MAX_LOAD - 0.25f) {
             DnaUtils.saveBloodSamplingTick(tag, serverLevel);
@@ -418,9 +418,7 @@ public class SyringeItem extends AbstractDnaSampleItem {
             holderTag.putBoolean(MULTIPLE_SOURCES, false);
             holderTag.putBoolean(SAMPLE_CLOTTED, false);
             holderTag.putBoolean(SAMPLE_DIRTY, false);
-            holderTag.putBoolean(REVEAL_SOURCE, false);
-            holderTag.putBoolean(REVEAL_STABILITY, false);
-            holderTag.putBoolean(REVEAL_TRAITS, false);
+            resetRevealFlags(holderTag);
             holderTag.putLong(BLOOD_CLOTTING_TIME, BLOOD_CLOTTING_TIME_DEFAULT);
             holderTag.remove(BLOOD_FREEZER_TICKS);
             holderTag.remove(BLOOD_CREATION_TICK);
@@ -455,7 +453,12 @@ public class SyringeItem extends AbstractDnaSampleItem {
 
             CompoundTag holderTag = offHandStack.getOrCreateTag();
 
+            System.out.println(syringeTag);
+            System.out.println(holderTag);
+
             applyRevealFlags(holderTag, syringeTag);
+            resetRevealFlags(syringeTag);
+
             holderTag.put(DNA_DATA, dna.serializeNBT());
             holderTag.putInt(FLUID_COLOUR, syringeTag.getInt(FLUID_COLOUR));
 
@@ -549,6 +552,7 @@ public class SyringeItem extends AbstractDnaSampleItem {
         syringeTag.putFloat(DIRTINESS, 0f);
         syringeTag.putLong(BLOOD_CREATION_TICK, 0L);
         syringeTag.putLong(BLOOD_FREEZER_TICKS, 0L);
+        resetRevealFlags(syringeTag);
 
         level.playSound(null, pos, SoundEvents.BOTTLE_FILL, SoundSource.PLAYERS, 0.5f, 0.4f);
 

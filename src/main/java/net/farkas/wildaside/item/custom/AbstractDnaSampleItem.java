@@ -14,25 +14,31 @@ import java.util.List;
 import static net.farkas.wildaside.dna.DnaConstants.*;
 
 public abstract class AbstractDnaSampleItem extends net.minecraft.world.item.Item {
-    protected AbstractDnaSampleItem(Properties props) {
+    public AbstractDnaSampleItem(Properties props) {
         super(props);
     }
 
-    protected boolean hasDna(ItemStack stack) {
+    public boolean hasDna(ItemStack stack) {
         return stack.hasTag() && stack.getTag().contains(DNA_DATA);
     }
 
-    protected boolean isAnalyzed(CompoundTag tag) {
+    public boolean isAnalyzed(CompoundTag tag) {
         return tag.getBoolean(REVEAL_SOURCE) || tag.getBoolean(REVEAL_STABILITY) || tag.getBoolean(REVEAL_TRAITS);
     }
 
-    protected void applyRevealFlags(CompoundTag target, CompoundTag source) {
+    public void applyRevealFlags(CompoundTag target, CompoundTag source) {
         target.putBoolean(REVEAL_SOURCE, source.getBoolean(REVEAL_SOURCE));
         target.putBoolean(REVEAL_STABILITY, source.getBoolean(REVEAL_STABILITY));
         target.putBoolean(REVEAL_TRAITS, source.getBoolean(REVEAL_TRAITS));
     }
 
-    protected int resolveSourceEggColor(CompoundTag dnaTag) {
+    public void resetRevealFlags(CompoundTag tag) {
+        tag.putBoolean(REVEAL_SOURCE, false);
+        tag.putBoolean(REVEAL_STABILITY, false);
+        tag.putBoolean(REVEAL_TRAITS, false);
+    }
+
+    public int resolveSourceEggColor(CompoundTag dnaTag) {
         DnaImplementation dna = new DnaImplementation();
         dna.deserializeNBT(dnaTag);
         EntityType<?> src = dna.getSource();
@@ -41,7 +47,7 @@ public abstract class AbstractDnaSampleItem extends net.minecraft.world.item.Ite
         return egg != null ? egg.getColor(0) : -1;
     }
 
-    protected boolean appendContaminationTooltipIfNeeded(List<Component> tooltip, CompoundTag tag, Level level) {
+    public boolean appendContaminationTooltipIfNeeded(List<Component> tooltip, CompoundTag tag, Level level) {
         if (isAnalyzed(tag)) {
             tag.putBoolean(SAMPLE_UNUSABLE, false);
             return false;
