@@ -3,6 +3,7 @@ package net.farkas.wildaside.screen.incubator;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.network.NetworkHandler;
+import net.farkas.wildaside.util.ColourUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -65,14 +66,19 @@ public class IncubatorScreen extends AbstractContainerScreen<IncubatorMenu> {
         int filled = Math.max(0, Math.min(maxW, (int) ((heat / (float) maxLevels) * maxW)));
 
         int barHeight = 8;
-        int x1 = leftPos + 25;
-        int y1 = topPos + 66;
-        int x2 = x1 + filled;
-        int y2 = y1 + barHeight;
+        int xStart = leftPos + 25;
+        int yStart = topPos + 66;
 
-        int leftColor = 0xFFFFCC33;
-        int rightColor = 0xFFB24A00;
-        graphics.fillGradient(x1, y1, x2, y2, leftColor, rightColor);
+        int leftColor = 0xFFB24A00;
+        int rightColor = 0xFFFFCC33;
+
+        for (int i = 0; i < filled; i++) {
+            float progress = i / (float) maxW;
+
+            int color = ColourUtils.blendColors(leftColor, rightColor, progress);
+
+            graphics.fill(xStart + i, yStart, xStart + i + 1, yStart + barHeight, color);
+        }
     }
 
     private void drawFuelMeter(GuiGraphics graphics) {
