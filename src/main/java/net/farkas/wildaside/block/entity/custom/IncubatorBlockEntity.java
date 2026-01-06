@@ -43,14 +43,16 @@ import static net.farkas.wildaside.dna.DnaConstants.*;
 public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
     private static final int SLOT_FUEL = 0;
 
-    private final ItemStackHandler items = new ItemStackHandler(1) {
+    private final ItemStackHandler itemHandler = new ItemStackHandler(1) {
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
         }
     };
 
-    private LazyOptional<IItemHandler> sided = LazyOptional.empty();
+    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
+
+    public final ContainerData data;
 
     private boolean hasBlob = false;
     private CompoundTag dnaPayload = new CompoundTag();
@@ -70,44 +72,66 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
 
     public IncubatorBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.INCUBATOR.get(), pos, state);
+
+        this.data = new ContainerData() {
+            @Override
+            public int get(int i) {
+                return switch (i) {
+                    case 0 -> burnTime;
+                    case 1 -> burnTimeTotal;
+                    case 2 -> (int) (maturity * 1000f);
+                    case 3 -> (int) (maturityRequired * 1000f);
+                    case 4 -> heatLevel;
+                    case 5 -> mutationRisk;
+                    case 6 -> coldTicks;
+                    case 7 -> coldTicksThreshold;
+                    case 8 -> glassOpen ? 1 : 0;
+                    default -> 0;
+                };
+            }
+
+            @Override
+            public void set(int i, int v) {
+                switch (i) {
+                    case 0 -> burnTime = v;
+                    case 1 -> burnTimeTotal = v;
+                    case 2 -> maturity = v / 1000f;
+                    case 3 -> maturityRequired = v / 1000f;
+                    case 4 -> heatLevel = v;
+                    case 5 -> mutationRisk = v;
+                    case 6 -> coldTicks = v;
+                    case 8 -> glassOpen = v != 0;
+                }
+            }
+
+            @Override
+            public int getCount() {
+                return 9;
+            }
+        };
     }
 
-    public final ContainerData data = new ContainerData() {
-        @Override
-        public int get(int i) {
-            return switch (i) {
-                case 0 -> burnTime;
-                case 1 -> burnTimeTotal;
-                case 2 -> (int) (maturity * 1000f);
-                case 3 -> (int) (maturityRequired * 1000f);
-                case 4 -> heatLevel;
-                case 5 -> mutationRisk;
-                case 6 -> coldTicks;
-                case 7 -> coldTicksThreshold;
-                case 8 -> glassOpen ? 1 : 0;
-                default -> 0;
-            };
-        }
-
-        @Override
-        public void set(int i, int v) {
-            switch (i) {
-                case 0 -> burnTime = v;
-                case 1 -> burnTimeTotal = v;
-                case 2 -> maturity = v / 1000f;
-                case 3 -> maturityRequired = v / 1000f;
-                case 4 -> heatLevel = v;
-                case 5 -> mutationRisk = v;
-                case 6 -> coldTicks = v;
-                case 8 -> glassOpen = v != 0;
+    @Override
+    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+        if (cap == ForgeCapabilities.ITEM_HANDLER) {
+            if (side == null) {
+                return LazyOptional.of(() -> itemHandler).cast();
             }
+
+            Map<Direction, Set<Integer>> insertBySide = Map.of(
+                    Direction.UP, Set.of(SLOT_FUEL),
+                    Direction.DOWN, Set.of(),
+                    Direction.NORTH, Set.of(SLOT_FUEL),
+                    Direction.SOUTH, Set.of(SLOT_FUEL),
+                    Direction.EAST, Set.of(SLOT_FUEL),
+                    Direction.WEST, Set.of(SLOT_FUEL)
+            );
+
+            return LazyOptional.of(() -> new SidedItemHandler(itemHandler, side, insertBySide, Set.of())).cast();
         }
 
-        @Override
-        public int getCount() {
-            return 9;
-        }
-    };
+        return super.getCapability(cap, side);
+    }
 
     public InteractionResult handleUse(Player player, InteractionHand hand) {
         ItemStack held = player.getItemInHand(hand);
@@ -164,8 +188,8 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
             dirty = true;
         }
 
-        if (burnTime == 0 && factor > 0f && !items.getStackInSlot(SLOT_FUEL).isEmpty()) {
-            ItemStack fuel = items.extractItem(SLOT_FUEL, 1, false);
+        if (burnTime == 0 && factor > 0f && !itemHandler.getStackInSlot(SLOT_FUEL).isEmpty()) {
+            ItemStack fuel = itemHandler.extractItem(SLOT_FUEL, 1, false);
             burnTimeTotal = burnTime = ForgeHooks.getBurnTime(fuel, null);
             dirty = true;
         }
@@ -208,7 +232,7 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
         Direction facing = st.hasProperty(BlockStateProperties.HORIZONTAL_FACING)
                 ? st.getValue(BlockStateProperties.HORIZONTAL_FACING)
                 : Direction.NORTH;
-        
+
         double cx = worldPosition.getX() + 0.5;
         double cy = worldPosition.getY() + 1.0;
         double cz = worldPosition.getZ() + 0.5;
@@ -236,36 +260,21 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     @Override
-    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == ForgeCapabilities.ITEM_HANDLER) {
-            if (!sided.isPresent()) {
-                Map<Direction, Set<Integer>> insertBySide = Map.of(
-                        Direction.UP, Set.of(SLOT_FUEL),
-                        Direction.DOWN, Set.of(),
-                        Direction.NORTH, Set.of(SLOT_FUEL),
-                        Direction.SOUTH, Set.of(SLOT_FUEL),
-                        Direction.EAST, Set.of(SLOT_FUEL),
-                        Direction.WEST, Set.of(SLOT_FUEL)
-                );
-
-                Set<Integer> outputs = Set.of();
-                sided = LazyOptional.of(() -> new SidedItemHandler(items, side, insertBySide, outputs));
-            }
-            return sided.cast();
-        }
-        return super.getCapability(cap, side);
+    public void onLoad() {
+        super.onLoad();
+        lazyItemHandler = LazyOptional.of(() -> itemHandler);
     }
 
     @Override
     public void invalidateCaps() {
         super.invalidateCaps();
-        sided.invalidate();
+        lazyItemHandler.invalidate();
     }
 
     @Override
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
-        tag.put("items", items.serializeNBT());
+        tag.put("items", itemHandler.serializeNBT());
         tag.putBoolean("hasBlob", hasBlob);
         tag.put("dnaPayload", dnaPayload);
         tag.putFloat("maturity", maturity);
@@ -281,7 +290,11 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
     @Override
     public void load(CompoundTag tag) {
         super.load(tag);
-        items.deserializeNBT(tag.getCompound("items"));
+
+        if (tag.contains(INVENTORY)) {
+            itemHandler.deserializeNBT(tag.getCompound(INVENTORY));
+        }
+
         hasBlob = tag.getBoolean("hasBlob");
         dnaPayload = tag.getCompound("dnaPayload");
         maturity = tag.getFloat("maturity");
@@ -306,9 +319,9 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     public void dropContents() {
-        SimpleContainer inv = new SimpleContainer(items.getSlots());
-        for (int i = 0; i < items.getSlots(); i++) {
-            inv.setItem(i, items.getStackInSlot(i));
+        SimpleContainer inv = new SimpleContainer(itemHandler.getSlots());
+        for (int i = 0; i < itemHandler.getSlots(); i++) {
+            inv.setItem(i, itemHandler.getStackInSlot(i));
         }
         Containers.dropContents(level, worldPosition, inv);
     }
@@ -362,8 +375,8 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
         }
     }
 
-    public ItemStackHandler getItems() {
-        return items;
+    public ItemStackHandler getItemHandler() {
+        return itemHandler;
     }
 
     public boolean hasBlob() {

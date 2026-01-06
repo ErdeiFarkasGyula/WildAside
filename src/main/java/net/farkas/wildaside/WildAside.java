@@ -256,10 +256,10 @@ public class WildAside {
     }
 
     private static void registerScreens() {
-        MenuScreens.register(ModMenuTypes.BIOENGINEERING_WORKSTATION_MENU.get(), BioengineeringWorkstationScreen::new);
-        MenuScreens.register(ModMenuTypes.BIOFREEZER_MENU.get(), BiofreezerScreen::new);
+        MenuScreens.register(ModMenuTypes.BIOENGINEERING_WORKSTATION.get(), BioengineeringWorkstationScreen::new);
+        MenuScreens.register(ModMenuTypes.BIOFREEZER.get(), BiofreezerScreen::new);
         MenuScreens.register(ModMenuTypes.INCUBATOR.get(), IncubatorScreen::new);
-        MenuScreens.register(ModMenuTypes.POTION_BLASTER_MENU.get(), PotionBlasterScreen::new);
+        MenuScreens.register(ModMenuTypes.POTION_BLASTER.get(), PotionBlasterScreen::new);
     }
 
     private static void setRenderTypes() {

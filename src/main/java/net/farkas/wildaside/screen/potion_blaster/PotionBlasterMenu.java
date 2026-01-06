@@ -4,21 +4,19 @@ import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.custom.PotionBlasterBlockEntity;
 import net.farkas.wildaside.screen.ModMenuTypes;
-import net.farkas.wildaside.screen.slot.OutputSlot;
+import net.farkas.wildaside.screen.slot.OutputSlotItemHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class PotionBlasterMenu extends AbstractContainerMenu {
     public final PotionBlasterBlockEntity blockEntity;
-    public final Level level;
     public final ContainerData data;
 
     public PotionBlasterMenu(int pContainerId, Inventory inv, FriendlyByteBuf extraData) {
@@ -35,16 +33,21 @@ public class PotionBlasterMenu extends AbstractContainerMenu {
         this(pContainerId, inv, blockEntity, blockEntity.data);
     }
 
-    public PotionBlasterMenu(int pContainerId, Inventory inv, BlockEntity entity, ContainerData data) {
-        super(ModMenuTypes.POTION_BLASTER_MENU.get(), pContainerId);
+    public PotionBlasterMenu(int pContainerId, Inventory inv, PotionBlasterBlockEntity blockEntity, ContainerData data) {
+        super(ModMenuTypes.POTION_BLASTER.get(), pContainerId);
 
-        this.blockEntity = ((PotionBlasterBlockEntity)entity);
-        this.level = inv.player.level();
+        this.blockEntity = blockEntity;
         this.data = data;
 
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
 
+        addMenuSlots();
+
+        addDataSlots(data);
+    }
+
+    private void addMenuSlots() {
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
             this.addSlot(new SlotItemHandler(iItemHandler, 0, 26, 15));
             this.addSlot(new SlotItemHandler(iItemHandler, 1, 44, 15));
@@ -55,10 +58,8 @@ public class PotionBlasterMenu extends AbstractContainerMenu {
             this.addSlot(new SlotItemHandler(iItemHandler, 6, 26, 51));
             this.addSlot(new SlotItemHandler(iItemHandler, 7, 44, 51));
             this.addSlot(new SlotItemHandler(iItemHandler, 8, 62, 51));
-            this.addSlot(new OutputSlot(iItemHandler, 9, 102, 35));
+            this.addSlot(new OutputSlotItemHandler(iItemHandler, 9, 102, 35));
         });
-
-        addDataSlots(data);
     }
 
     public int getScaledProgress() {
@@ -123,8 +124,7 @@ public class PotionBlasterMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player pPlayer) {
-        return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()),
-                pPlayer, ModBlocks.POTION_BLASTER.get());
+        return stillValid(ContainerLevelAccess.create(pPlayer.level(), blockEntity.getBlockPos()), pPlayer, ModBlocks.POTION_BLASTER.get());
     }
 
     private void addPlayerInventory(Inventory playerInventory) {

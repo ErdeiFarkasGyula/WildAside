@@ -1,6 +1,7 @@
 package net.farkas.wildaside.screen.incubator;
 
 import net.farkas.wildaside.WildAside;
+import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.custom.IncubatorBlockEntity;
 import net.farkas.wildaside.screen.ModMenuTypes;
 import net.minecraft.core.BlockPos;
@@ -9,9 +10,11 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class IncubatorMenu extends AbstractContainerMenu {
@@ -38,17 +41,23 @@ public class IncubatorMenu extends AbstractContainerMenu {
         this.blockEntity = blockEntity;
         this.data = data;
 
-        this.addSlot(new SlotItemHandler(blockEntity.getItems(), 0, 8, 62));
-
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
+
+        addMenuSlots();
 
         addDataSlots(data);
     }
 
+    private void addMenuSlots() {
+        this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
+            this.addSlot(new SlotItemHandler(iItemHandler, 0, 8, 62));
+        });
+    }
+
     @Override
     public boolean stillValid(Player player) {
-        return blockEntity != null && player.distanceToSqr(blockEntity.getBlockPos().getX() + 0.5, blockEntity.getBlockPos().getY() + 0.5, blockEntity.getBlockPos().getZ() + 0.5) <= 64.0;
+        return stillValid(ContainerLevelAccess.create(player.level(), blockEntity.getBlockPos()), player, ModBlocks.INCUBATOR.get());
     }
 
     public ContainerData getData() {
@@ -91,6 +100,7 @@ public class IncubatorMenu extends AbstractContainerMenu {
 
     // THIS YOU HAVE TO DEFINE!
     private static final int TE_INVENTORY_SLOT_COUNT = 1;  // must be the number of slots you have!
+
     @Override
     public ItemStack quickMoveStack(Player playerIn, int pIndex) {
         Slot sourceSlot = slots.get(pIndex);

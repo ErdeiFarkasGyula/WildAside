@@ -5,8 +5,8 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
-public class OutputSlot extends SlotItemHandler {
-    public OutputSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+public class OutputSlotItemHandler extends SlotItemHandler {
+    public OutputSlotItemHandler(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
         super(itemHandler, index, xPosition, yPosition);
     }
 

@@ -35,7 +35,7 @@ public class BiofreezerMenu extends AbstractContainerMenu {
     }
 
     public BiofreezerMenu(int pContainerId, Inventory inv, BlockEntity entity, ContainerData data) {
-        super(ModMenuTypes.BIOFREEZER_MENU.get(), pContainerId);
+        super(ModMenuTypes.BIOFREEZER.get(), pContainerId);
 
         this.blockEntity = ((BiofreezerBlockEntity)entity);
         this.level = inv.player.level();
@@ -44,6 +44,12 @@ public class BiofreezerMenu extends AbstractContainerMenu {
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
 
+        addMenuSlots();
+
+        addDataSlots(data);
+    }
+
+    private void addMenuSlots() {
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
             int index = 0;
             for (int i = 0; i < 6; ++i) {
@@ -53,8 +59,6 @@ public class BiofreezerMenu extends AbstractContainerMenu {
                 }
             }
         });
-
-        addDataSlots(data);
     }
 
     // CREDIT GOES TO: diesieben07 | https://github.com/diesieben07/SevenCommons

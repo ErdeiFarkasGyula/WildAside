@@ -74,7 +74,7 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
     }
 
     public BioengineeringWorkstationMenu(int pContainerId, Inventory inv, BlockEntity entity, ContainerData data) {
-        super(ModMenuTypes.BIOENGINEERING_WORKSTATION_MENU.get(), pContainerId);
+        super(ModMenuTypes.BIOENGINEERING_WORKSTATION.get(), pContainerId);
 
         this.blockEntity = (BioengineeringWorkstationBlockEntity) entity;
         this.inventory = inv;
@@ -85,14 +85,14 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
 
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
-        addMenuSlots(tab);
+        addMenuSlots();
 
         applyTabVisibility();
 
         addDataSlots(data);
     }
 
-    private void addMenuSlots(BioengineeringWorkstationTab tab) {
+    private void addMenuSlots() {
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
             int before = slots.size();
 
