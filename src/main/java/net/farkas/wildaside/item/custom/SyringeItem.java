@@ -156,7 +156,8 @@ public class SyringeItem extends AbstractDnaSampleItem {
         } else {
             boolean actionDone = false;
 
-            if (BLOOD.equals(fluidType) && progress >= READY_THRESHOLD) {
+            boolean analyzed = isAnalyzed(tag);
+            if (BLOOD.equals(fluidType) && progress >= READY_THRESHOLD && analyzed) {
                 boolean hadDNA = tag.contains(DNA_DATA);
                 float beforeFluid = tag.getFloat(FLUID_LEVEL);
                 if (injectIntoIncubator(player, tag, serverLevel)) {
