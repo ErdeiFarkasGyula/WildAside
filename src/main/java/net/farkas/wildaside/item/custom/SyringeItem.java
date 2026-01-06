@@ -454,9 +454,6 @@ public class SyringeItem extends AbstractDnaSampleItem {
 
             CompoundTag holderTag = offHandStack.getOrCreateTag();
 
-            System.out.println(syringeTag);
-            System.out.println(holderTag);
-
             applyRevealFlags(holderTag, syringeTag);
             resetRevealFlags(syringeTag);
 
