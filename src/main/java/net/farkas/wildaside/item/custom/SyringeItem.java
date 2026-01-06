@@ -275,6 +275,9 @@ public class SyringeItem extends AbstractDnaSampleItem {
         if (!tag.contains(FLUID_TYPE)) tag.putString(FLUID_TYPE, NONE);
         if (!tag.contains(FLUID_COLOUR)) tag.putInt(FLUID_COLOUR, 0);
         if (!tag.contains(DIRTINESS)) tag.putFloat(DIRTINESS, 0);
+        if (!tag.contains(REVEAL_SOURCE)) tag.putBoolean(REVEAL_SOURCE, false);
+        if (!tag.contains(REVEAL_STABILITY)) tag.putBoolean(REVEAL_STABILITY, false);
+        if (!tag.contains(REVEAL_TRAITS)) tag.putBoolean(REVEAL_TRAITS, false);
         if (!tag.contains(BLOOD_CREATION_TICK)) tag.putLong(BLOOD_CREATION_TICK, 0);
         if (!tag.contains(BLOOD_FREEZER_TICKS)) tag.putLong(BLOOD_FREEZER_TICKS, 0);
     }
