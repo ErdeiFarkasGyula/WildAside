@@ -22,6 +22,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -189,9 +190,20 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
         }
 
         if (burnTime == 0 && factor > 0f && !itemHandler.getStackInSlot(SLOT_FUEL).isEmpty()) {
-            ItemStack fuel = itemHandler.extractItem(SLOT_FUEL, 1, false);
-            burnTimeTotal = burnTime = ForgeHooks.getBurnTime(fuel, null);
-            dirty = true;
+            ItemStack fuel = itemHandler.getStackInSlot(SLOT_FUEL);
+            int burnValue = ForgeHooks.getBurnTime(fuel, null);
+
+            if (burnValue > 0) {
+                burnTimeTotal = burnTime = burnValue;
+
+                if (fuel.getItem() == Items.LAVA_BUCKET) {
+                    itemHandler.setStackInSlot(SLOT_FUEL, new ItemStack(Items.BUCKET));
+                } else {
+                    // Otherwise, consume the fuel item
+                    itemHandler.extractItem(SLOT_FUEL, 1, false);
+                }
+                dirty = true;
+            }
         }
 
         if (hasBlob) {
@@ -203,8 +215,7 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
                     mutationRisk = Math.min(1000, mutationRisk + (int) (2 * factor));
                 }
                 dirty = true;
-            }
-            else {
+            } else {
                 coldTicks++;
                 if (coldTicks >= coldTicksThreshold) {
                     clearBlob();
