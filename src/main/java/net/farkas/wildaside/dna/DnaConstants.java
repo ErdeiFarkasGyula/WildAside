@@ -86,6 +86,16 @@ public class DnaConstants {
     public static final String ANALYSER_PROGRESS = "analyser_progress";
     public static final String TAB = "tab";
 
+    public static final String HAS_BLOB = "hasBlob";
+    public static final String DNA_PAYLOAD = "dnaPayload";
     public static final String MATURITY = "maturity";
+    public static final String MATURITY_REQUIRED = "maturityRequired";
+    public static final String GLASS_OPEN = "glassOpen";
+    public static final String BURN_TIME = "burnTime";
+    public static final String BURN_TIME_TOTAL = "burnTimeTotal";
+    public static final String COLD_TICKS = "coldTicks";
+    public static final String HEAT_LEVEL = "heatLevel";
+    public static final String MUTATION_RISK = "mutationRisk";
+
     public static final String READY = "ready";
 }

@@ -199,7 +199,6 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
                 if (fuel.getItem() == Items.LAVA_BUCKET) {
                     itemHandler.setStackInSlot(SLOT_FUEL, new ItemStack(Items.BUCKET));
                 } else {
-                    // Otherwise, consume the fuel item
                     itemHandler.extractItem(SLOT_FUEL, 1, false);
                 }
                 dirty = true;
@@ -285,17 +284,17 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
     @Override
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
-        tag.put("items", itemHandler.serializeNBT());
-        tag.putBoolean("hasBlob", hasBlob);
-        tag.put("dnaPayload", dnaPayload);
-        tag.putFloat("maturity", maturity);
-        tag.putFloat("maturityRequired", maturityRequired);
-        tag.putBoolean("glassOpen", glassOpen);
-        tag.putInt("burnTime", burnTime);
-        tag.putInt("burnTimeTotal", burnTimeTotal);
-        tag.putInt("coldTicks", coldTicks);
-        tag.putInt("heatLevel", heatLevel);
-        tag.putInt("mutationRisk", mutationRisk);
+        tag.put(INVENTORY, itemHandler.serializeNBT());
+        tag.putBoolean(HAS_BLOB, hasBlob);
+        tag.put(DNA_PAYLOAD, dnaPayload);
+        tag.putFloat(MATURITY, maturity);
+        tag.putFloat(MATURITY, maturityRequired);
+        tag.putBoolean(GLASS_OPEN, glassOpen);
+        tag.putInt(BURN_TIME, burnTime);
+        tag.putInt(BURN_TIME_TOTAL, burnTimeTotal);
+        tag.putInt(COLD_TICKS, coldTicks);
+        tag.putInt(HEAT_LEVEL, heatLevel);
+        tag.putInt(MATURITY_REQUIRED, mutationRisk);
     }
 
     @Override
@@ -306,16 +305,16 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
             itemHandler.deserializeNBT(tag.getCompound(INVENTORY));
         }
 
-        hasBlob = tag.getBoolean("hasBlob");
-        dnaPayload = tag.getCompound("dnaPayload");
-        maturity = tag.getFloat("maturity");
-        maturityRequired = tag.getFloat("maturityRequired");
-        glassOpen = tag.getBoolean("glassOpen");
-        burnTime = tag.getInt("burnTime");
-        burnTimeTotal = tag.getInt("burnTimeTotal");
-        coldTicks = tag.getInt("coldTicks");
-        heatLevel = tag.getInt("heatLevel");
-        mutationRisk = tag.getInt("mutationRisk");
+        hasBlob = tag.getBoolean(HAS_BLOB);
+        dnaPayload = tag.getCompound(DNA_PAYLOAD);
+        maturity = tag.getFloat(MATURITY);
+        maturityRequired = tag.getFloat(MATURITY_REQUIRED);
+        glassOpen = tag.getBoolean(GLASS_OPEN);
+        burnTime = tag.getInt(BURN_TIME);
+        burnTimeTotal = tag.getInt(BURN_TIME_TOTAL);
+        coldTicks = tag.getInt(COLD_TICKS);
+        heatLevel = tag.getInt(HEAT_LEVEL);
+        mutationRisk = tag.getInt(MUTATION_RISK);
     }
 
     public float heatFactor() {
