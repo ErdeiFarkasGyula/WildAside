@@ -95,8 +95,8 @@ public class IncubatorScreen extends AbstractContainerScreen<IncubatorMenu> {
         int x2 = x1 + 10;
         int y2 = topPos + 11 + maxH;
 
-        int bottom = 0xFF774000;
-        int top = 0xFFFF8800;
+        int bottom = 0xFFB24A00;
+        int top = 0xFFFFCC33;
         graphics.fillGradient(x1, y1, x2, y2, top, bottom);
         graphics.fillGradient(x1 + 1, y1, x2 - 1, y1 + Math.min(6, barHeight), 0xFFFFCC55, 0x00FFFFCC);
     }
