@@ -3,6 +3,8 @@ package net.farkas.wildaside.block.entity.custom;
 import net.farkas.wildaside.block.custom.IncubatorBlock;
 import net.farkas.wildaside.block.entity.ModBlockEntities;
 import net.farkas.wildaside.block.entity.SidedItemHandler;
+import net.farkas.wildaside.capability.dna.DnaCapability;
+import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.BacillusBlobPayload;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.screen.incubator.IncubatorMenu;
@@ -15,6 +17,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.*;
 import net.minecraft.world.entity.player.Inventory;
@@ -134,7 +137,7 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
         return super.getCapability(cap, side);
     }
 
-    public InteractionResult handleUse(Player player, InteractionHand hand) {
+    public InteractionResult handleUse(ServerPlayer player, InteractionHand hand) {
         ItemStack held = player.getItemInHand(hand);
 
         if (!glassOpen) return InteractionResult.PASS;
@@ -163,14 +166,19 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
         return InteractionResult.PASS;
     }
 
-    private void applyBlobToPlayer(Player player) {
+    private void applyBlobToPlayer(ServerPlayer player) {
+        System.out.println(dnaPayload);
+        DnaImplementation dnaImplementation = new DnaImplementation();
+        dnaImplementation.deserializeNBT(dnaPayload);
+        System.out.println(dnaImplementation.getLoci().toString());
+        player.getCapability(DnaCapability.INSTANCE).ifPresent(dnaCap -> {
 
+        });
     }
 
     private void clearBlob() {
         dnaPayload = new CompoundTag();
         hasBlob = false;
-        glassOpen = false;
         maturity = 0f;
         coldTicks = 0;
         sync();

@@ -99,14 +99,16 @@ public class IncubatorBlock extends BaseEntityBlock {
             return InteractionResult.SUCCESS;
         }
 
-        if (player.getItemInHand(hand).is(ModItems.SYRINGE.get())) return InteractionResult.PASS;
+        ServerPlayer serverPlayer = (ServerPlayer) player;
+
+        if (serverPlayer.getItemInHand(hand).is(ModItems.SYRINGE.get())) return InteractionResult.PASS;
 
         BlockPos basePos = state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.LOWER ? pos : pos.below();
         if (level.getBlockEntity(basePos) instanceof IncubatorBlockEntity blockEntity) {
-            InteractionResult res = blockEntity.handleUse(player, hand);
+            InteractionResult res = blockEntity.handleUse(serverPlayer, hand);
             if (res.consumesAction()) return res;
 
-            NetworkHooks.openScreen((ServerPlayer) player, blockEntity, basePos);
+            NetworkHooks.openScreen(serverPlayer, blockEntity, basePos);
             return InteractionResult.CONSUME;
         }
         return InteractionResult.PASS;
