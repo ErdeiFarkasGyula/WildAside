@@ -16,4 +16,10 @@ public class GeneSlotItemHandler extends VisibleSlotItemHandler {
         if (stack.isEmpty()) return false;
         return stack.is(ModItems.GENE.get()) && this.getItemHandler().isItemValid(getSlotIndex(), stack);
     }
+
+    public boolean isLatentGene() {
+        ItemStack stack = getItem();
+        if (stack.isEmpty()) return false;
+        return stack.hasTag() && stack.getTag().getBoolean("latent");
+    }
 }

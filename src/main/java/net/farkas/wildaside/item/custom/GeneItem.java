@@ -63,6 +63,16 @@ public class GeneItem extends Item {
                     tooltip.add(Component.literal("- " + alleleB.getValueHolder().format().getString()));
                 }
             });
+
+            if (tag.getBoolean("latent")) {
+                tooltip.add(Component.empty());
+                tooltip.add(Component.translatable("dna.wildaside.latent")
+                        .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
+                tooltip.add(Component.translatable("dna.wildaside.latent.description.1")
+                        .withStyle(ChatFormatting.GRAY));
+                tooltip.add(Component.translatable("dna.wildaside.latent.description.2")
+                        .withStyle(ChatFormatting.GRAY));
+            }
         }
     }
 

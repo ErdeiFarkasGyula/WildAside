@@ -19,7 +19,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
@@ -34,16 +33,19 @@ import java.util.Map;
 @Mod.EventBusSubscriber(modid = WildAside.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class DnaEventHandler {
     private static final int TICK_CADENCE = 20;
+    private static final int DEGRADATION_CADENCE = 10 * 20;
 
     @SubscribeEvent
     public static void onEntityJoinLevel(EntityJoinLevelEvent event) {
-        if (event.getLevel().dimension() == ModDimensions.TEST_LEVEL || !(event.getLevel() instanceof ServerLevel)) return;
+        if (event.getLevel().dimension() == ModDimensions.TEST_LEVEL || !(event.getLevel() instanceof ServerLevel))
+            return;
         if (!ModConfig.WILD_MODE.get()) return;
         if (!ModConfig.EXCLUDE_PLAYERS_FROM_WILD_MODE.get() && event.getEntity() instanceof Player) return;
 
         if (event.getEntity() instanceof LivingEntity living) {
             living.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
                 if (dna.getLoci().isEmpty()) {
+                    WildAside.LOGGER.debug("Generating base DNA for {}", living.getName().getString());
                     dna.setSource(living.getType());
                     dna.setLoci(DnaUtils.generateBaseLoci(living));
                     dna.setStress(0f);
@@ -64,7 +66,13 @@ public class DnaEventHandler {
         LivingEntity entity = event.getEntity();
         float stressGain = event.getAmount() * 0.5f;
         entity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-            dna.setStress(dna.getStress() + stressGain);
+            float oldStress = dna.getStress();
+            dna.setStress(oldStress + stressGain);
+            WildAside.LOGGER.trace("{} took {} damage, stress:  {} -> {}",
+                    entity.getName().getString(),
+                    String.format("%.2f", event.getAmount()),
+                    String.format("%.2f", oldStress),
+                    String.format("%.2f", dna.getStress()));
         });
     }
 
@@ -76,19 +84,32 @@ public class DnaEventHandler {
             Trait trait = null;
             if (source.is(DamageTypes.IN_FIRE) || source.is(DamageTypes.ON_FIRE) || source.is(DamageTypes.LAVA) || source.is(DamageTypes.HOT_FLOOR)) {
                 trait = TraitRegistry.FIRE_RESISTANCE;
-            } else if (source.is(DamageTypes.EXPLOSION) || source.is(DamageTypes.PLAYER_EXPLOSION)) {
+            }
+            else if (source.is(DamageTypes.EXPLOSION) || source.is(DamageTypes.PLAYER_EXPLOSION)) {
                 trait = TraitRegistry.EXPLOSION_RESISTANCE;
-            } else if (source.is(DamageTypes.FALL)) {
+            }
+            else if (source.is(DamageTypes.FALL)) {
                 trait = TraitRegistry.FALL_RESISTANCE;
-            } else if (source.is(DamageTypes.FREEZE)) {
+            }
+            else if (source.is(DamageTypes.FREEZE)) {
                 trait = TraitRegistry.FREEZE_RESISTANCE;
             }
 
             if (trait != null) {
                 AlleleValue v = DnaUtils.getExpressed(dna.getLoci(), trait);
                 if (v instanceof FloatAlleleValue fv) {
-                    dna.setStress(dna.getStress() + (event.getAmount() * 0.25f));
-                    event.setAmount(event.getAmount() * (1.0f - fv.get()));
+                    float resistance = fv.get();
+                    float originalDamage = event.getAmount();
+                    float reducedDamage = originalDamage * (1.0f - resistance);
+
+                    dna.setStress(dna.getStress() + (originalDamage * 0.25f));
+                    event.setAmount(reducedDamage);
+
+                    WildAside.LOGGER.debug("{} resistance {} reduced damage {} -> {}",
+                            trait.getName(),
+                            String.format("%.2f", resistance),
+                            String.format("%.2f", originalDamage),
+                            String.format("%.2f", reducedDamage));
                 }
             }
         });
@@ -96,49 +117,70 @@ public class DnaEventHandler {
 
     @SubscribeEvent
     public static void onLivingTick(LivingEvent.LivingTickEvent event) {
+        if (event.getEntity().level().isClientSide()) return;
+
         handleAbility(event);
         handleStressDecay(event);
+        handleDegradationAndSideEffects(event);
+    }
+
+    private static void handleDegradationAndSideEffects(LivingEvent.LivingTickEvent event) {
+        LivingEntity entity = event.getEntity();
+        if (entity.tickCount % DEGRADATION_CADENCE != 0) return;
+
+        DnaDegradationHandler.tickDegradation(entity);
+
+        entity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
+            long seed = entity.getUUID().getLeastSignificantBits() ^ entity.tickCount;
+            RejectionSideEffects.tickSideEffects(entity, dna.getLoci(), seed);
+        });
     }
 
     private static void handleStressDecay(LivingEvent.LivingTickEvent event) {
-        if (event.getEntity().level().isClientSide()) return;
         LivingEntity entity = event.getEntity();
         if (entity.tickCount % 200 != 0) return;
 
         entity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
             boolean resting = entity.getCombatTracker().getCombatDuration() <= 0 && !entity.isOnFire();
             float decay = resting ? 1.5f : 0.5f;
-            dna.setStress(dna.getStress() - decay);
+            float oldStress = dna.getStress();
+            dna.setStress(oldStress - decay);
+
+            if (oldStress > 10f) {
+                WildAside.LOGGER.trace("{} stress decay: {} -> {} (resting: {})",
+                        entity.getName().getString(),
+                        String.format("%.2f", oldStress),
+                        String.format("%.2f", dna.getStress()),
+                        resting);
+            }
+
             applyStressTierEffects(entity, dna.getStress());
         });
     }
 
-    private static void tickSideEffects(LivingEvent.LivingTickEvent event) {
-        LivingEntity entity = event.getEntity();
-        if (entity.tickCount % 200 == 0) {
-            DnaDegradationHandler.tickDegradation(entity);
-
-            entity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-                long seed = entity.getUUID().getLeastSignificantBits() ^ entity.tickCount;
-                RejectionSideEffects.tickSideEffects(entity, dna. getLoci(), seed);
-            });
-        }
-    }
-
     private static void applyStressTierEffects(LivingEntity entity, float stress) {
         if (stress >= 85f) {
+            WildAside.LOGGER.debug("{} at critical stress ({}), applying severe effects", entity.getName().getString(), String.format("%.2f", stress));
+
             entity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 60, 0, false, false, true));
-            if (entity.getRandom().nextFloat() < 0.1f) entity.hurt(entity.damageSources().generic(), 0.5f);
-        } else if (stress >= 70f) {
+            if (entity.getRandom().nextFloat() < 0.1f) {
+                entity.hurt(entity.damageSources().generic(), 0.5f);
+            }
+        }
+        else if (stress >= 70f) {
+            WildAside.LOGGER.debug("{} at high stress ({}), applying moderate effects", entity.getName().getString(), String.format("%.2f", stress));
+
             entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 60, 0, false, false, true));
             entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 0, false, false, true));
-        } else if (stress >= 50f) {
+        }
+        else if (stress >= 50f) {
+            WildAside.LOGGER.trace("{} at moderate stress ({}), applying mild effects", entity.getName().getString(), String.format("%.2f", stress));
+
             entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 40, 0, false, false, true));
         }
     }
 
     private static void handleAbility(LivingEvent.LivingTickEvent event) {
-        if (event.getEntity().level().isClientSide()) return;
         LivingEntity entity = event.getEntity();
         if (entity.tickCount % TICK_CADENCE != 0) return;
 

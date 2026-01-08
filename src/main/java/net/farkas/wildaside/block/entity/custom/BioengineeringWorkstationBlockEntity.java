@@ -212,10 +212,12 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
 
     public static Map<Trait, Gene> orderGenes(DnaImplementation dna) {
         return dna.getLoci().entrySet().stream()
-                .sorted(Map.Entry.comparingByKey(Comparator.comparing(Trait::getTraitType)))
-                .sorted(Map.Entry.comparingByKey(Comparator.comparing(Trait::getName)))
                 .map(e -> Map.entry(e.getKey(), DnaUtils.asGene(e.getKey(), e.getValue())))
                 .filter(e -> e.getValue() != null)
+                .sorted(Map.Entry.comparingByKey(
+                        Comparator.comparing(Trait::getTraitType)
+                                .thenComparing(Trait::getName)
+                ))
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
                         Map.Entry::getValue,

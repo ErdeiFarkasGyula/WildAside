@@ -257,6 +257,9 @@
   "dna.wildaside.merge.transient": "Transient",
   "dna.wildaside.merge.replaced": "Replaced",
   "dna.wildaside.merge.rejected": "Rejected",
+  "dna.wildaside.latent":  "Latent",
+  "dna.wildaside.latent.description.1": "This gene is present but not expressed.",
+  "dna.wildaside.latent.description.2": "It may activate through mutation or breeding.",
 
   "trait.wildaside.max_health": "Max Health",
   "trait.wildaside.movement_speed": "Movement Speed",
@@ -296,6 +299,8 @@
   "dominance.wildaside.recessive": "Recessive",
   "dominance.wildaside.co_dominant": "Co-dominant",
   "dominance.wildaside.incomplete": "Incomplete",
+
+  "gui.wildaside.gene.latent": "Latent Gene",
 
   "gui.wildaside.bioengineering_workstation.bio_assembler":  "Bio Assembler",
   "gui.wildaside.bioengineering_workstation.dna_analyser":  "DNA Analyzer",

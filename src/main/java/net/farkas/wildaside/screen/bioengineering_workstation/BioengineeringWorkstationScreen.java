@@ -92,6 +92,9 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
                 renderSkillTooltip(guiGraphics, hoveredSkillNode, mouseX, mouseY);
             }
         }
+        else if (tab == BioengineeringWorkstationTab.DNA_EDITOR) {
+            renderLatentGeneOverlays(guiGraphics, mouseX, mouseY);
+        }
 
         renderTooltip(guiGraphics, mouseX, mouseY);
     }
@@ -138,6 +141,26 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
                 }
             }
         }
+    }
+
+    private void renderLatentGeneOverlays(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+        if (tab != BioengineeringWorkstationTab.DNA_EDITOR) return;
+
+        for (GeneSlotItemHandler slot : menu.topGeneSlots) {
+            if (slot.isActive() && slot.isLatentGene()) {
+                renderLatentOverlay(guiGraphics, slot.x + leftPos, slot.y + topPos);
+            }
+        }
+
+        for (GeneSlotItemHandler slot : menu.botGeneSlots) {
+            if (slot.isActive() && slot.isLatentGene()) {
+                renderLatentOverlay(guiGraphics, slot.x + leftPos, slot.y + topPos);
+            }
+        }
+    }
+
+    private void renderLatentOverlay(GuiGraphics guiGraphics, int x, int y) {
+        guiGraphics.fill(x, y, x + 16, y + 16, 0x80000000);
     }
 
     private void renderSkillViewport(GuiGraphics graphics, int mouseX, int mouseY) {
@@ -467,6 +490,12 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
             int py = Math.round(y1 + t * (y2 - y1));
             graphics.fill(px, py, px + 1, py + 1, argb);
         }
+    }
+
+    private boolean isHovering(GeneSlotItemHandler slot, int mouseX, int mouseY) {
+        int x = slot.x + leftPos;
+        int y = slot.y + topPos;
+        return mouseX >= x && mouseX < x + 16 && mouseY >= y && mouseY < y + 16;
     }
 
     private static float kx(float t) {

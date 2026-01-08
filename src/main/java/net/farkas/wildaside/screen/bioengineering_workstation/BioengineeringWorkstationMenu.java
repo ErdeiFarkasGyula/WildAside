@@ -250,38 +250,37 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
                 dna.deserializeNBT(dnaDataTag);
                 Map<Trait, Gene> genes = BioengineeringWorkstationBlockEntity.orderGenes(dna);
 
-                int slotCorrection = 0;
+                int slotIndex = 0;
 
-                for (int j = 0; j < genes.size(); j++) {
-                    Gene gene = genes.values().stream().toList().get(j);
-
-                    if (shouldContinue(gene)) {
-                        slotCorrection++;
-                        continue;
-                    }
+                for (Gene gene : genes.values()) {
+                    if (slotIndex >= 13) break;
 
                     ItemStack geneStack = GeneItem.createFromTag(gene);
-                    int correctedSlot = j - slotCorrection;
+
+                    if (isLatentGene(gene)) {
+                        geneStack.getOrCreateTag().putBoolean("latent", true);
+                    }
+
                     if (i == EDITOR_INPUT_1) {
-                        if (topGeneSlots.size() > correctedSlot) {
-                            topGeneSlots.get(correctedSlot).set(geneStack);
+                        if (topGeneSlots.size() > slotIndex) {
+                            topGeneSlots.get(slotIndex).set(geneStack);
                         }
                     }
                     else if (i == EDITOR_INPUT_2) {
-                        if (botGeneSlots.size() > correctedSlot) {
-                            botGeneSlots.get(correctedSlot).set(geneStack);
+                        if (botGeneSlots.size() > slotIndex) {
+                            botGeneSlots.get(slotIndex).set(geneStack);
                         }
                     }
+                    slotIndex++;
                 }
             }
         });
     }
 
-    private boolean shouldContinue(Gene gene) {
+    public boolean isLatentGene(Gene gene) {
         if (gene.getExpressedValueHolder() instanceof FloatAlleleValue floatAlleleValue) {
             return floatAlleleValue.get() == 0.0f;
         }
-
         return false;
     }
 
