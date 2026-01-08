@@ -13,7 +13,7 @@ public class AdvancementHandler {
             Advancement advancement = player.server.getAdvancements().getAdvancement(resourceLocation);
 
             if (advancement == null) {
-                WildAside.LOGGER.warn("Advancement {} can't be found!", resourceLocation);
+                WildAside.LOGGER.warn("Tried giving advancement {} to {}, but it can't be found!", resourceLocation, player.getName().getString());
                 return;
             }
 
