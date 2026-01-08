@@ -1,0 +1,69 @@
+package net.farkas.wildaside.dna.merge;
+
+import net.farkas.wildaside.capability.dna.DnaCapability;
+import net.farkas.wildaside.dna.DnaUtils;
+import net.farkas.wildaside.dna.locus.GeneLocus;
+import net.farkas.wildaside.dna.locus.LocusSource;
+import net.farkas.wildaside.dna.trait.Trait;
+import net.minecraft.world.entity.LivingEntity;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+public class DnaDegradationHandler {
+    public static final float TRANSIENT_DEGRADATION_RATE = 0.005f;
+    public static final float REJECTED_DEGRADATION_RATE = 0.02f;
+
+    public static final float STABILIZATION_CHANCE = 0.002f;
+
+    public static void tickDegradation(LivingEntity entity) {
+        entity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
+            Map<Trait, List<GeneLocus>> loci = dna.getLoci();
+            boolean changed = false;
+            long seed = entity.getUUID().getLeastSignificantBits() ^ entity.tickCount;
+
+            for (var entry : loci.entrySet()) {
+                List<GeneLocus> group = entry.getValue();
+                Iterator<GeneLocus> iter = group.iterator();
+
+                while (iter.hasNext()) {
+                    GeneLocus locus = iter.next();
+
+                    if (locus.getSource().isDegrading()) {
+                        float rate = locus.getSource() == LocusSource.REJECTED
+                                ? REJECTED_DEGRADATION_RATE
+                                : TRANSIENT_DEGRADATION_RATE;
+
+                        rate /= Math.max(0.1f, locus.getStability());
+
+                        locus.addDegradation(rate);
+                        changed = true;
+
+                        if (locus.isFullyDegraded()) {
+                            iter.remove();
+                            continue;
+                        }
+
+                        if (locus.getSource() == LocusSource.TRANSIENT) {
+                            float stabChance = STABILIZATION_CHANCE * locus.getStability();
+                            if (DnaUtils.hashToFloat(seed, locus.getId(), 0) < stabChance) {
+                                int idx = group.indexOf(locus);
+                                if (idx >= 0) {
+                                    group.set(idx, locus.withSource(
+                                            LocusSource.INTEGRATED,
+                                            entity.level().getGameTime()
+                                    ));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (changed) {
+                dna.recomputeAndApply(entity);
+            }
+        });
+    }
+}

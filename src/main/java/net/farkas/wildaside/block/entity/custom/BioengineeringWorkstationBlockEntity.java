@@ -247,10 +247,7 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
 
         itemHandler.setStackInSlot(ANA_OUTPUT_1, dnaHolderStack);
 
-        setChanged();
-        if (level != null) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
-        }
+        sync();
     }
 
     public void recompileDnas() {
@@ -262,10 +259,7 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
         processDnaSlot(inA, EDITOR_INPUT_1, EDITOR_OUTPUT_1, EDITOR_TOP_GENE_START_INDEX);
         processDnaSlot(inB, EDITOR_INPUT_2, EDITOR_OUTPUT_2, EDITOR_BOTTOM_GENE_START_INDEX);
 
-        setChanged();
-        if (level != null) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
-        }
+        sync();
     }
 
     private void processDnaSlot(ItemStack input, int inputSlot, int outputSlot, int geneStartIndex) {
@@ -362,5 +356,12 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
         if (!dnaHolderStack.is(ModItems.DNA_HOLDER.get())) return false;
 
         return true;
+    }
+
+    private void sync() {
+        setChanged();
+        if (level != null) {
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+        }
     }
 }

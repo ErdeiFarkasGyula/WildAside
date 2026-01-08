@@ -253,6 +253,10 @@
   "dna.wildaside.blood_clotted": "Blood clotted",
   "dna.wildaside.blood_contaminated": "Blood contaminated",
   "dna.wildaside.multiple_sources": "Multiple sources",
+  "dna.wildaside.merge.integrated": "Integrated",
+  "dna.wildaside.merge.transient": "Transient",
+  "dna.wildaside.merge.replaced": "Replaced",
+  "dna.wildaside.merge.rejected": "Rejected",
 
   "trait.wildaside.max_health": "Max Health",
   "trait.wildaside.movement_speed": "Movement Speed",

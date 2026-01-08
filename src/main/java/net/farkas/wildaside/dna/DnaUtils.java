@@ -146,7 +146,7 @@ public class DnaUtils {
         return new Allele(new FloatAlleleValue(0.0f), 0f, Dominance.RECESSIVE);
     }
 
-    private static long mix64(long x) {
+    public static long mix64(long x) {
         x ^= (x >>> 30);
         x *= 0xBF58476D1CE4E5B9L;
         x ^= (x >>> 27);

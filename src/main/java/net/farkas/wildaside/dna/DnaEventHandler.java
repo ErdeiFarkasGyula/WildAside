@@ -8,6 +8,8 @@ import net.farkas.wildaside.dna.ability.IAbility;
 import net.farkas.wildaside.dna.allele.value.AlleleValue;
 import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
 import net.farkas.wildaside.dna.locus.GeneLocus;
+import net.farkas.wildaside.dna.merge.DnaDegradationHandler;
+import net.farkas.wildaside.dna.merge.RejectionSideEffects;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitRegistry;
 import net.farkas.wildaside.dna.trait.TraitType;
@@ -17,6 +19,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
@@ -108,6 +111,18 @@ public class DnaEventHandler {
             dna.setStress(dna.getStress() - decay);
             applyStressTierEffects(entity, dna.getStress());
         });
+    }
+
+    private static void tickSideEffects(LivingEvent.LivingTickEvent event) {
+        LivingEntity entity = event.getEntity();
+        if (entity.tickCount % 200 == 0) {
+            DnaDegradationHandler.tickDegradation(entity);
+
+            entity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
+                long seed = entity.getUUID().getLeastSignificantBits() ^ entity.tickCount;
+                RejectionSideEffects.tickSideEffects(entity, dna. getLoci(), seed);
+            });
+        }
     }
 
     private static void applyStressTierEffects(LivingEntity entity, float stress) {

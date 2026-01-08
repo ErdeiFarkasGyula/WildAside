@@ -3,9 +3,7 @@ package net.farkas.wildaside.block.entity.custom;
 import net.farkas.wildaside.block.custom.IncubatorBlock;
 import net.farkas.wildaside.block.entity.ModBlockEntities;
 import net.farkas.wildaside.block.entity.SidedItemHandler;
-import net.farkas.wildaside.capability.dna.DnaCapability;
-import net.farkas.wildaside.capability.dna.DnaImplementation;
-import net.farkas.wildaside.dna.BacillusBlobPayload;
+import net.farkas.wildaside.dna.BacillusBlobConsumption;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.screen.incubator.IncubatorMenu;
 import net.minecraft.core.BlockPos;
@@ -151,7 +149,7 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
         }
 
         if (hasBlob && dnaPayload.isEmpty() && held.is(ModItems.DNA_HOLDER.get())) {
-            if (BacillusBlobPayload.copyDnaFromHolderInternal(dnaPayload, held)) {
+            if (copyDnaFromHolderInternal(dnaPayload, held)) {
                 sync();
                 return InteractionResult.SUCCESS;
             }
@@ -166,14 +164,16 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
         return InteractionResult.PASS;
     }
 
-    private void applyBlobToPlayer(ServerPlayer player) {
-        System.out.println(dnaPayload);
-        DnaImplementation dnaImplementation = new DnaImplementation();
-        dnaImplementation.deserializeNBT(dnaPayload);
-        System.out.println(dnaImplementation.getLoci().toString());
-        player.getCapability(DnaCapability.INSTANCE).ifPresent(dnaCap -> {
+    private boolean copyDnaFromHolderInternal(CompoundTag target, ItemStack dnaHolder) {
+        if (!dnaHolder.hasTag()) return false;
+        CompoundTag src = dnaHolder.getOrCreateTag();
+        if (!src.contains(DNA_DATA)) return false;
+        target.put(DNA_DATA, src.getCompound(DNA_DATA).copy());
+        return true;
+    }
 
-        });
+    private void applyBlobToPlayer(ServerPlayer player) {
+        BacillusBlobConsumption.consume(player, dnaPayload);
     }
 
     private void clearBlob() {
