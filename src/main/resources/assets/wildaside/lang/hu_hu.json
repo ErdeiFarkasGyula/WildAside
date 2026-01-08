@@ -253,6 +253,13 @@
   "dna.wildaside.blood_clotted": "Vér megalvadt",
   "dna.wildaside.blood_contaminated": "Vér megfertőzve",
   "dna.wildaside.multiple_sources": "Több forrás",
+  "dna.wildaside.merge.integrated": "Integrált",
+  "dna.wildaside.merge.transient": "Átmeneti",
+  "dna.wildaside.merge.replaced": "Kicserélt",
+  "dna.wildaside.merge.rejected": "Elutasított",
+  "dna.wildaside.latent": "Rejtett",
+  "dna.wildaside.latent.description.1": "Ez a gén jelen van, de nincs hatása.",
+  "dna.wildaside.latent.description.2": "Mutáció és szaporítás által beaktiválódhat.",
 
   "trait.wildaside.max_health": "Max életerő",
   "trait.wildaside.movement_speed": "Mozgási sebesség",
@@ -293,6 +300,8 @@
   "dominance.wildaside.co_dominant": "Co-domináns",
   "dominance.wildaside.incomplete": "Hiányos",
 
+  "gui.wildaside.gene.latent": "Elrejtett gén",
+
   "gui.wildaside.bioengineering_workstation.bio_assembler":  "Bio összeszerelő",
   "gui.wildaside.bioengineering_workstation.dna_analyser":  "DNS analizáló",
   "gui.wildaside.bioengineering_workstation.dna_editor":  "DNS szerkesztő",
@@ -301,6 +310,7 @@
 
   "gui.wildaside.incubator.fuel": "Üzemanyag",
   "gui.wildaside.incubator.heat": "Hőmérséklet",
+  "gui.wildaside.incubator.blob_dna": "Gömb DNS",
 
   "command.wildaside.contamination.apply_contamination": "%1$s elvégezve %2$s %3$s",
   "command.wildaside.contamination.add_contamination": "%3$s: %1$s %2$s hozzáadva",
