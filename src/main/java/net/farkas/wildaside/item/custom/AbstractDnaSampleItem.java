@@ -3,6 +3,7 @@ package net.farkas.wildaside.item.custom;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.network.chat.Component;
@@ -10,10 +11,11 @@ import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraft.world.entity.EntityType;
 
 import java.util.List;
+import java.util.Properties;
 
 import static net.farkas.wildaside.dna.DnaConstants.*;
 
-public abstract class AbstractDnaSampleItem extends net.minecraft.world.item.Item {
+public abstract class AbstractDnaSampleItem extends Item {
     public AbstractDnaSampleItem(Properties props) {
         super(props);
     }
