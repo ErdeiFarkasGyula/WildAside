@@ -9,7 +9,7 @@ import net.farkas.wildaside.dna.trait.TraitType;
 import java.util.List;
 import java.util.Set;
 
-public final class DnaPolicy {
+public class DnaPolicy {
     public static final float ACTIVATOR_THRESHOLD = 0.05f;
     public static final float REGULATOR_CAP = 1.0f;
     public static final float REGULATOR_DR = 0.6f;

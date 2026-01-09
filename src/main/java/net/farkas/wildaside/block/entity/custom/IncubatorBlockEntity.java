@@ -1,10 +1,11 @@
 package net.farkas.wildaside.block.entity.custom;
 
+import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.custom.IncubatorBlock;
 import net.farkas.wildaside.block.entity.ModBlockEntities;
 import net.farkas.wildaside.block.entity.SidedItemHandler;
-import net.farkas.wildaside.dna.BacillusBlobConsumption;
 import net.farkas.wildaside.item.ModItems;
+import net.farkas.wildaside.item.custom.BacillusBlobItem;
 import net.farkas.wildaside.screen.incubator.IncubatorMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -44,6 +45,10 @@ import static net.farkas.wildaside.dna.DnaConstants.*;
 
 public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
     private static final int SLOT_FUEL = 0;
+
+    public static final float MATURITY_TARGET = 1.0f;
+    public static final float MATURITY_CAP = 2.0f;
+    public static final int TICKS_TO_MATURE_BASE = 200;
 
     private final ItemStackHandler itemHandler = new ItemStackHandler(1) {
         @Override
@@ -138,25 +143,37 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
     public InteractionResult handleUse(ServerPlayer player, InteractionHand hand) {
         ItemStack held = player.getItemInHand(hand);
 
-        if (!glassOpen) return InteractionResult.PASS;
+        if (!glassOpen) {
+            WildAside.LOGGER.debug("Incubator interaction failed:  glass not open");
+            return InteractionResult.PASS;
+        }
 
         if (!hasBlob && held.is(ModItems.BACILLUS_BLOB.get())) {
             hasBlob = true;
             dnaPayload = held.hasTag() ? held.getTag().copy() : new CompoundTag();
+            dnaPayload.remove(BacillusBlobItem.BLOB_EXTRACTION_TICK);
+            dnaPayload.remove(BacillusBlobItem.BLOB_EXPIRED);
             held.shrink(1);
+            maturity = dnaPayload.getFloat(BacillusBlobItem.BLOB_MATURITY);
+            mutationRisk = dnaPayload.getInt(BacillusBlobItem.BLOB_MUTATION_RISK);
             sync();
+            WildAside.LOGGER.info("Blob inserted into incubator (maturity:  {}, risk: {}, hasDna: {})",
+                    maturity, mutationRisk, hasDnaInPayload());
             return InteractionResult.SUCCESS;
         }
 
-        if (hasBlob && dnaPayload.isEmpty() && held.is(ModItems.DNA_HOLDER.get())) {
-            if (copyDnaFromHolderInternal(dnaPayload, held)) {
-                sync();
-                return InteractionResult.SUCCESS;
-            }
-        }
-
         if (hasBlob && held.isEmpty() && player.isShiftKeyDown()) {
-            applyBlobToPlayer(player);
+            ItemStack blobItem = createBlobItem();
+
+            BacillusBlobItem.setExtractionTick(blobItem, level.getGameTime());
+
+            if (!player.getInventory().add(blobItem)) {
+                player.drop(blobItem, false);
+            }
+
+            WildAside.LOGGER.info("Blob extracted from incubator (maturity: {}, risk: {}, hasDna: {}, expires in {} ticks)",
+                    maturity, mutationRisk, hasDnaInPayload(), BacillusBlobItem.getViabilityTime(blobItem));
+
             clearBlob();
             return InteractionResult.SUCCESS;
         }
@@ -164,29 +181,75 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
         return InteractionResult.PASS;
     }
 
-    private boolean copyDnaFromHolderInternal(CompoundTag target, ItemStack dnaHolder) {
-        if (!dnaHolder.hasTag()) return false;
-        CompoundTag src = dnaHolder.getOrCreateTag();
-        if (!src.contains(DNA_DATA)) return false;
-        target.put(DNA_DATA, src.getCompound(DNA_DATA).copy());
-        return true;
+    private ItemStack createBlobItem() {
+        ItemStack blob = new ItemStack(ModItems.BACILLUS_BLOB.get());
+        CompoundTag tag = blob.getOrCreateTag();
+
+        if (dnaPayload.contains(DNA_DATA)) {
+            tag.put(DNA_DATA, dnaPayload.getCompound(DNA_DATA).copy());
+            WildAside.LOGGER.debug("createBlobItem: DNA_DATA copied to blob item");
+        } else {
+            WildAside.LOGGER.debug("createBlobItem: No DNA_DATA in payload");
+        }
+
+        if (dnaPayload.contains(SOURCE)) {
+            tag.putString(SOURCE, dnaPayload.getString(SOURCE));
+        }
+
+        tag.putBoolean(BacillusBlobItem.BLOB_INCUBATED, true);
+        tag.putFloat(BacillusBlobItem.BLOB_MATURITY, maturity);
+        tag.putInt(BacillusBlobItem.BLOB_MUTATION_RISK, mutationRisk);
+
+        WildAside.LOGGER.debug("createBlobItem: incubated={}, maturity={}, risk={}, hasDna={}",
+                true, maturity, mutationRisk, tag.contains(DNA_DATA));
+
+        return blob;
     }
 
-    private void applyBlobToPlayer(ServerPlayer player) {
-        BacillusBlobConsumption.consume(player, dnaPayload);
+    public boolean hasDnaInPayload() {
+        return dnaPayload.contains(DNA_DATA) && !dnaPayload.getCompound(DNA_DATA).isEmpty();
+    }
+
+    public boolean tryInjectDnaFromSyringe(CompoundTag syringeTag) {
+        if (!hasBlob) {
+            WildAside.LOGGER.debug("tryInjectDnaFromSyringe failed: no blob in incubator");
+            return false;
+        }
+
+        if (!glassOpen) {
+            WildAside.LOGGER.debug("tryInjectDnaFromSyringe failed: glass not open");
+            return false;
+        }
+
+        if (hasDnaInPayload()) {
+            WildAside.LOGGER.debug("tryInjectDnaFromSyringe failed:  blob already has DNA");
+            return false;
+        }
+
+        if (!syringeTag.contains(DNA_DATA)) {
+            WildAside.LOGGER.debug("tryInjectDnaFromSyringe failed: syringe has no DNA_DATA");
+            return false;
+        }
+
+        dnaPayload.put(DNA_DATA, syringeTag.getCompound(DNA_DATA).copy());
+
+        WildAside.LOGGER.info("DNA injected into blob from syringe");
+        sync();
+        return true;
     }
 
     private void clearBlob() {
         dnaPayload = new CompoundTag();
         hasBlob = false;
         maturity = 0f;
+        mutationRisk = 0;
         coldTicks = 0;
         sync();
     }
 
     public void tickServer() {
         if (level == null || level.isClientSide) return;
-        if (getBlockState().getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) != DoubleBlockHalf.LOWER) return;
+        if (getBlockState().getValue(BlockStateProperties. DOUBLE_BLOCK_HALF) != DoubleBlockHalf.LOWER) return;
 
         boolean dirty = false;
         float factor = heatFactor();
@@ -197,7 +260,7 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
             dirty = true;
         }
 
-        if (burnTime == 0 && factor > 0f && !itemHandler.getStackInSlot(SLOT_FUEL).isEmpty()) {
+        if (burnTime == 0 && factor > 0f && ! itemHandler.getStackInSlot(SLOT_FUEL).isEmpty()) {
             ItemStack fuel = itemHandler.getStackInSlot(SLOT_FUEL);
             int burnValue = ForgeHooks.getBurnTime(fuel, null);
 
@@ -215,16 +278,30 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
 
         if (hasBlob) {
             if (burnTime > 0 && factor > 0f) {
-                float inc = (1f / 200f) * factor;
-                maturity = Math.min(maturityRequired, maturity + inc);
+                float baseIncrement = 1f / TICKS_TO_MATURE_BASE;
+                float inc = baseIncrement * factor;
+
+                float prevMaturity = maturity;
+                maturity = Math.min(MATURITY_CAP, maturity + inc);
+
                 coldTicks = 0;
-                if (maturity > 0.7f * maturityRequired) {
-                    mutationRisk = Math.min(1000, mutationRisk + (int) (2 * factor));
+
+                if (maturity > BacillusBlobItem.MATURITY_OPTIMAL_MAX) {
+                    float overheatedFactor = (maturity - BacillusBlobItem.MATURITY_OPTIMAL_MAX) * 2f;
+                    int riskIncrease = (int) (factor * (1 + overheatedFactor));
+                    mutationRisk = Math.min(1000, mutationRisk + riskIncrease);
+
+                    if (prevMaturity <= BacillusBlobItem. MATURITY_OPTIMAL_MAX) {
+                        WildAside.LOGGER.info("Blob starting to overheat!  Maturity: {}%, Risk: {}‰",
+                                String.format("%.1f", maturity * 100), mutationRisk);
+                    }
                 }
+
                 dirty = true;
             } else {
                 coldTicks++;
                 if (coldTicks >= coldTicksThreshold) {
+                    WildAside.LOGGER.info("Blob died from cold after {} ticks", coldTicks);
                     clearBlob();
                 }
                 dirty = true;
@@ -296,13 +373,13 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
         tag.putBoolean(HAS_BLOB, hasBlob);
         tag.put(DNA_PAYLOAD, dnaPayload);
         tag.putFloat(MATURITY, maturity);
-        tag.putFloat(MATURITY, maturityRequired);
+        tag.putFloat(MATURITY_REQUIRED, maturityRequired);
         tag.putBoolean(GLASS_OPEN, glassOpen);
         tag.putInt(BURN_TIME, burnTime);
         tag.putInt(BURN_TIME_TOTAL, burnTimeTotal);
         tag.putInt(COLD_TICKS, coldTicks);
         tag.putInt(HEAT_LEVEL, heatLevel);
-        tag.putInt(MATURITY_REQUIRED, mutationRisk);
+        tag.putInt(MUTATION_RISK, mutationRisk);
     }
 
     @Override
@@ -444,16 +521,8 @@ public class IncubatorBlockEntity extends BlockEntity implements MenuProvider {
         return mutationRisk;
     }
 
+
     public boolean blobHasDna() {
-        return hasBlob && !dnaPayload.isEmpty();
-    }
-
-    public boolean tryInjectDnaFromSyringe(CompoundTag syringeTag) {
-        if (!hasBlob || !glassOpen || !dnaPayload.isEmpty()) return false;
-        if (!syringeTag.contains(DNA_DATA)) return false;
-
-        dnaPayload = syringeTag.getCompound(DNA_DATA).copy();
-        sync();
-        return true;
+        return hasBlob && hasDnaInPayload();
     }
 }
