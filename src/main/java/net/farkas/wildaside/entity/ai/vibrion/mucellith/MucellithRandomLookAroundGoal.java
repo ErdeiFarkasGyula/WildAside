@@ -1,4 +1,4 @@
-package net.farkas.wildaside.entity.ai.mucellith;
+package net.farkas.wildaside.entity.ai.vibrion.mucellith;
 
 import net.farkas.wildaside.entity.custom.vibrion.MucellithEntity;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;

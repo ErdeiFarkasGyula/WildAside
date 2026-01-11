@@ -6,7 +6,7 @@ import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.network.NetworkHandler;
-import net.farkas.wildaside.network.packets.SyringeDataPacket;
+import net.farkas.wildaside.network.packet.SyringeDataPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -298,7 +298,7 @@ public class SyringeItem extends AbstractDnaSampleItem {
         }
 
         tag.putString(FLUID_TYPE, BLOOD);
-        tag.putInt(FLUID_COLOUR, DEFAULT_BLOOD_COLOR);
+        tag.putInt(FLUID_COLOUR, DEFAULT_BLOOD_COLOUR);
         resetRevealFlags(tag);
 
         if (fluid > DEFAULT_MAX_LOAD - 0.25f) {
@@ -391,7 +391,7 @@ public class SyringeItem extends AbstractDnaSampleItem {
         float newFluid = Mth.clamp(fluid + NEEDLE_DELTA, 0f, DEFAULT_MAX_LOAD);
         syringeTag.putString(FLUID_TYPE, BLOOD);
 
-        int holderColor = holderTag.contains(FLUID_COLOUR) ? holderTag.getInt(FLUID_COLOUR) : DEFAULT_BLOOD_COLOR;
+        int holderColor = holderTag.contains(FLUID_COLOUR) ? holderTag.getInt(FLUID_COLOUR) : DEFAULT_BLOOD_COLOUR;
         if (holderTag.getBoolean(REVEAL_SOURCE) && holderTag.contains(DNA_DATA)) {
             int eggColor = resolveSourceEggColor(holderTag.getCompound(DNA_DATA));
             holderColor = eggColor != -1 ? eggColor : holderColor;

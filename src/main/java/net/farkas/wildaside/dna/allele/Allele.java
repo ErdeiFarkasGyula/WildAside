@@ -29,6 +29,14 @@ public class Allele {
         return new Allele(newValue, this.mutationRate, this.dominance);
     }
 
+    public Allele copy() {
+        return new Allele(this.valueHolder, this.mutationRate, this.dominance);
+    }
+
+    public Allele copyWithDominance(Dominance newDominance) {
+        return new Allele(this.valueHolder, this.mutationRate, newDominance);
+    }
+
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
 

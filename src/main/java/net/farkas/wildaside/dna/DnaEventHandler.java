@@ -9,6 +9,7 @@ import net.farkas.wildaside.dna.allele.value.AlleleValue;
 import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
 import net.farkas.wildaside.dna.locus.GeneLocus;
 import net.farkas.wildaside.dna.merge.DnaDegradationHandler;
+import net.farkas.wildaside.dna.merge.DnaIntegrationHandler;
 import net.farkas.wildaside.dna.merge.RejectionSideEffects;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitRegistry;
@@ -119,42 +120,69 @@ public class DnaEventHandler {
     public static void onLivingTick(LivingEvent.LivingTickEvent event) {
         if (event.getEntity().level().isClientSide()) return;
 
-        handleAbility(event);
-        handleStressDecay(event);
-        handleDegradationAndSideEffects(event);
+        LivingEntity entity = event.getEntity();
+        long currentTick = entity.level().getGameTime();
+
+        entity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
+            if (!dna.getActiveTransitions().isEmpty()) {
+                dna.tickTransitions(entity, currentTick);
+            }
+        });
+
+        if (entity.tickCount % DnaIntegrationHandler.TICK_INTERVAL == 0) {
+            DnaIntegrationHandler.tickIntegrations(entity);
+        }
+
+        if (entity.tickCount % 200 == 0) {
+            handleStressDecay(entity);
+            tickDegradation(entity);
+            tickSideEffects(entity);
+        }
+
+        handleAbility(entity);
     }
 
-    private static void handleDegradationAndSideEffects(LivingEvent.LivingTickEvent event) {
-        LivingEntity entity = event.getEntity();
-        if (entity.tickCount % DEGRADATION_CADENCE != 0) return;
+    private static void handleStressDecay(LivingEntity entity) {
+        entity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
+            float stress = dna.getStress();
+            if (stress <= 0) return;
 
+            boolean resting = entity.onGround() && entity.getDeltaMovement().lengthSqr() < 0.01;
+            boolean safe = !entity.isOnFire() && entity.getLastHurtByMob() == null;
+
+            float decay = (resting && safe) ? 1.5f : 0.5f;
+            dna.setStress(stress - decay);
+        });
+    }
+
+    private static void tickDegradation(LivingEntity entity) {
         DnaDegradationHandler.tickDegradation(entity);
+    }
 
+    private static void tickSideEffects(LivingEntity entity) {
         entity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
             long seed = entity.getUUID().getLeastSignificantBits() ^ entity.tickCount;
             RejectionSideEffects.tickSideEffects(entity, dna.getLoci(), seed);
         });
     }
 
-    private static void handleStressDecay(LivingEvent.LivingTickEvent event) {
-        LivingEntity entity = event.getEntity();
-        if (entity.tickCount % 200 != 0) return;
+    private static void handleAbility(LivingEntity entity) {
+        if (entity.tickCount % TICK_CADENCE != 0) return;
 
         entity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-            boolean resting = entity.getCombatTracker().getCombatDuration() <= 0 && !entity.isOnFire();
-            float decay = resting ? 1.5f : 0.5f;
-            float oldStress = dna.getStress();
-            dna.setStress(oldStress - decay);
-
-            if (oldStress > 10f) {
-                WildAside.LOGGER.trace("{} stress decay: {} -> {} (resting: {})",
-                        entity.getName().getString(),
-                        String.format("%.2f", oldStress),
-                        String.format("%.2f", dna.getStress()),
-                        resting);
+            float cooldown = entity.getPersistentData().getFloat(IAbility.COOLDOWN);
+            if (cooldown > 0) {
+                entity.getPersistentData().putFloat(IAbility.COOLDOWN, cooldown - TICK_CADENCE);
             }
-
-            applyStressTierEffects(entity, dna.getStress());
+            for (Map.Entry<Trait, List<GeneLocus>> e : dna.getLoci().entrySet()) {
+                if (e.getKey().getTraitType() == TraitType.ABILITY) {
+                    var gene = DnaUtils.asGene(e.getKey(), e.getValue());
+                    if (gene != null) {
+                        IAbility behavior = AbilityRegistry.get(e.getKey());
+                        if (behavior != null) behavior.onTick(entity, gene);
+                    }
+                }
+            }
         });
     }
 
@@ -178,26 +206,5 @@ public class DnaEventHandler {
 
             entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 40, 0, false, false, true));
         }
-    }
-
-    private static void handleAbility(LivingEvent.LivingTickEvent event) {
-        LivingEntity entity = event.getEntity();
-        if (entity.tickCount % TICK_CADENCE != 0) return;
-
-        entity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-            float cooldown = entity.getPersistentData().getFloat(IAbility.COOLDOWN);
-            if (cooldown > 0) {
-                entity.getPersistentData().putFloat(IAbility.COOLDOWN, cooldown - TICK_CADENCE);
-            }
-            for (Map.Entry<Trait, List<GeneLocus>> e : dna.getLoci().entrySet()) {
-                if (e.getKey().getTraitType() == TraitType.ABILITY) {
-                    var gene = DnaUtils.asGene(e.getKey(), e.getValue());
-                    if (gene != null) {
-                        IAbility behavior = AbilityRegistry.get(e.getKey());
-                        if (behavior != null) behavior.onTick(entity, gene);
-                    }
-                }
-            }
-        });
     }
 }

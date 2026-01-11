@@ -1,10 +1,13 @@
 package net.farkas.wildaside.network;
 
 import net.farkas.wildaside.WildAside;
-import net.farkas.wildaside.network.packets.*;
-import net.farkas.wildaside.network.packets.bioengineering_workstation.*;
-import net.farkas.wildaside.network.packets.incubator.SetIncubatorHeatLevelPacket;
-import net.farkas.wildaside.network.packets.incubator.ToggleIncubatorOpenPacket;
+import net.farkas.wildaside.capability.dna.DnaImplementation;
+import net.farkas.wildaside.network.packet.*;
+import net.farkas.wildaside.network.packet.bioengineering_workstation.*;
+import net.farkas.wildaside.network.packet.gene_editor.GeneEditorUpdatePacket;
+import net.farkas.wildaside.network.packet.gene_editor.OpenAdvancedGeneEditorPacket;
+import net.farkas.wildaside.network.packet.incubator.SetIncubatorHeatLevelPacket;
+import net.farkas.wildaside.network.packet.incubator.ToggleIncubatorOpenPacket;
 import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationTab;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -23,7 +26,10 @@ public class NetworkHandler {
     private static final String PROTOCOL_VERSION = "1";
     private static SimpleChannel CHANNEL = null;
     private static int packetId = 0;
-    private static int id() { return packetId++; }
+
+    private static int id() {
+        return packetId++;
+    }
 
     public static void init(final FMLCommonSetupEvent event) {
         if (CHANNEL != null) return;
@@ -104,6 +110,20 @@ public class NetworkHandler {
                 ToggleIncubatorOpenPacket::decode,
                 ToggleIncubatorOpenPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
+
+        CHANNEL.registerMessage(id(),
+                OpenAdvancedGeneEditorPacket.class,
+                OpenAdvancedGeneEditorPacket::encode,
+                OpenAdvancedGeneEditorPacket::decode,
+                OpenAdvancedGeneEditorPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
+        CHANNEL.registerMessage(id(),
+                GeneEditorUpdatePacket.class,
+                GeneEditorUpdatePacket::encode,
+                GeneEditorUpdatePacket::decode,
+                GeneEditorUpdatePacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
     }
 
     public static void sendWindUpdateToAll(Vec3 dir, float strength) {
@@ -162,7 +182,7 @@ public class NetworkHandler {
 
     public static void sendBioengineeringSkillClientSyncPacket(ServerPlayer target, Set<ResourceLocation> skills, int points) {
         if (CHANNEL == null) {
-            WildAside.LOGGER.warn("Tried to send bioengineering skill client sync packet before network init. Ignoring.");
+            WildAside.LOGGER.warn("Tried to send bioengineering skill client sync packet before network init.  Ignoring.");
             return;
         }
         CHANNEL.send(PacketDistributor.PLAYER.with(() -> target), new BioengineeringSkillClientSyncPacket(skills, points));
@@ -182,5 +202,21 @@ public class NetworkHandler {
             return;
         }
         CHANNEL.send(PacketDistributor.SERVER.noArg(), new ToggleIncubatorOpenPacket(pos));
+    }
+
+    public static void sendOpenAdvancedGeneEditorPacket(ServerPlayer player, BlockPos pos, DnaImplementation dnaA, DnaImplementation dnaB) {
+        if (CHANNEL == null) {
+            WildAside.LOGGER.warn("Tried to send open advanced gene editor packet before network init. Ignoring.");
+            return;
+        }
+        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new OpenAdvancedGeneEditorPacket(pos, dnaA, dnaB));
+    }
+
+    public static void sendGeneEditorUpdatePacket(BlockPos pos, DnaImplementation dnaA, DnaImplementation dnaB) {
+        if (CHANNEL == null) {
+            WildAside.LOGGER.warn("Tried to send gene editor update packet before network init. Ignoring.");
+            return;
+        }
+        CHANNEL.send(PacketDistributor.SERVER.noArg(), new GeneEditorUpdatePacket(pos, dnaA, dnaB));
     }
 }

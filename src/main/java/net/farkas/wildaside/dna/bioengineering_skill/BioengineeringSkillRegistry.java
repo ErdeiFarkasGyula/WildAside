@@ -31,139 +31,62 @@ public class BioengineeringSkillRegistry {
                             )
                     )).build());
 
-    public static final BioengineeringSkill TOP_1 = register(new BioengineeringSkill.Builder()
-            .name("top_1")
+    public static final BioengineeringSkill SWAP_ALLELES = register(new BioengineeringSkill. Builder()
+            .name("swap_alleles")
             .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
-            .requirement(
-                    new AllRequirements(
-                            List.of(
-                                    new PointRequirement(15),
-                                    new SkillRequirement(REVEAL_ALLELES.getId())
-                            )
-                    )).build());
+            .requirement(new AllRequirements(List.of(
+                    new PointRequirement(20),
+                    new SkillRequirement(REVEAL_ALLELES. getId())
+            ))).build());
 
-    public static final BioengineeringSkill TOP_2 = register(new BioengineeringSkill.Builder()
-            .name("top_2")
+    public static final BioengineeringSkill MODIFY_DOMINANCE = register(new BioengineeringSkill. Builder()
+            .name("modify_dominance")
             .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
-            .requirement(
-                    new AllRequirements(
-                            List.of(
-                                    new SkillRequirement(TOP_1.getId())
-                            )
-                    )).build());
+            .requirement(new AllRequirements(List.of(
+                    new PointRequirement(30),
+                    new SkillRequirement(SWAP_ALLELES.getId())
+            ))).build());
 
-    public static final BioengineeringSkill TOP_3 = register(new BioengineeringSkill.Builder()
-            .name("top_3")
+    public static final BioengineeringSkill STABILIZE_GENE = register(new BioengineeringSkill.Builder()
+            .name("stabilize_gene")
+            .category(BioengineeringSkillCategoryRegistry. CATEGORY_1)
+            .requirement(new AllRequirements(List.of(
+                    new PointRequirement(25),
+                    new SkillRequirement(REVEAL_ALLELES.getId())
+            ))).build());
+
+    public static final BioengineeringSkill AMPLIFY_GENE = register(new BioengineeringSkill.Builder()
+            .name("amplify_gene")
             .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
-            .requirement(
-                    new AllRequirements(
-                            List.of(
-                                    new SkillRequirement(TOP_2.getId())
-                            )
-                    )).build());
+            .requirement(new AllRequirements(List. of(
+                    new PointRequirement(35),
+                    new SkillRequirement(MODIFY_DOMINANCE.getId())
+            ))).build());
 
-    public static final BioengineeringSkill BOT_1 = register(new BioengineeringSkill.Builder()
-            .name("bot_1")
+    public static final BioengineeringSkill SUPPRESS_GENE = register(new BioengineeringSkill.Builder()
+            .name("suppress_gene")
             .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
-            .requirement(
-                    new AllRequirements(
-                            List.of(
-                                    new SkillRequirement(REVEAL_ALLELES.getId())
-                            )
-                    )).build());
+            .requirement(new AllRequirements(List.of(
+                    new PointRequirement(35),
+                    new SkillRequirement(MODIFY_DOMINANCE.getId())
+            ))).build());
 
-    public static final BioengineeringSkill BOT_2 = register(new BioengineeringSkill.Builder()
-            .name("bot_2")
+    public static final BioengineeringSkill SPLICE_LOCUS = register(new BioengineeringSkill.Builder()
+            .name("splice_locus")
+            .category(BioengineeringSkillCategoryRegistry. CATEGORY_1)
+            .requirement(new AllRequirements(List.of(
+                    new PointRequirement(50),
+                    new SkillRequirement(AMPLIFY_GENE.getId()),
+                    new SkillRequirement(SUPPRESS_GENE.getId())
+            ))).build());
+
+    public static final BioengineeringSkill ISOLATE_ALLELE = register(new BioengineeringSkill.Builder()
+            .name("isolate_allele")
             .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
-            .requirement(
-                    new AllRequirements(
-                            List.of(
-                                    new SkillRequirement(BOT_1.getId())
-                            )
-                    )).build());
-
-    public static final BioengineeringSkill END = register(new BioengineeringSkill.Builder()
-            .name("end")
-            .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
-            .requirement(
-                    new AllRequirements(
-                            List.of(
-                                    new SkillRequirement(TOP_3.getId()),
-                                    new SkillRequirement(BOT_2.getId())
-                            )
-                    )).build());
-
-    public static final BioengineeringSkill TOP_11 = register(new BioengineeringSkill.Builder()
-            .name("top_11")
-            .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
-            .requirement(
-                    new AllRequirements(
-                            List.of(
-                                    new SkillRequirement(END.getId())
-                            )
-                    )).build());
-
-    public static final BioengineeringSkill TOP_12 = register(new BioengineeringSkill.Builder()
-            .name("top_12")
-            .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
-            .requirement(
-                    new AllRequirements(
-                            List.of(
-                                    new SkillRequirement(TOP_11.getId())
-                            )
-                    )).build());
-
-
-    public static final BioengineeringSkill BOT_11 = register(new BioengineeringSkill.Builder()
-            .name("bot_11")
-            .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
-            .requirement(
-                    new AllRequirements(
-                            List.of(
-                                    new SkillRequirement(END.getId())
-                            )
-                    )).build());
-
-    public static final BioengineeringSkill BOT_12 = register(new BioengineeringSkill.Builder()
-            .name("bot_12")
-            .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
-            .requirement(
-                    new AllRequirements(
-                            List.of(
-                                    new SkillRequirement(BOT_11.getId())
-                            )
-                    )).build());
-
-    public static final BioengineeringSkill BOT_13 = register(new BioengineeringSkill.Builder()
-            .name("bot_13")
-            .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
-            .requirement(
-                    new AllRequirements(
-                            List.of(
-                                    new SkillRequirement(BOT_12.getId())
-                            )
-                    )).build());
-
-    public static final BioengineeringSkill BOT_14 = register(new BioengineeringSkill.Builder()
-            .name("bot_14")
-            .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
-            .requirement(
-                    new AllRequirements(
-                            List.of(
-                                    new SkillRequirement(BOT_13 .getId())
-                            )
-                    )).build());
-
-    public static final BioengineeringSkill END_2 = register(new BioengineeringSkill.Builder()
-            .name("end_2")
-            .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
-            .requirement(
-                    new AllRequirements(
-                            List.of(
-                                    new SkillRequirement(TOP_12.getId()),
-                                    new SkillRequirement(BOT_14.getId())
-                            )
-                    )).build());
+            .requirement(new AllRequirements(List.of(
+                    new PointRequirement(40),
+                    new SkillRequirement(SWAP_ALLELES.getId())
+            ))).build());
 
     public static BioengineeringSkill register(BioengineeringSkill skill) {
         REGISTRY.put(skill.getId(), skill);

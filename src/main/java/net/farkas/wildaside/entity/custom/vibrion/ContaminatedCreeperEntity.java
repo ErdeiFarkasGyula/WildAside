@@ -1,6 +1,6 @@
 package net.farkas.wildaside.entity.custom.vibrion;
 
-import net.farkas.wildaside.entity.ai.contaminated.ApproachWhenLookedAtGoal;
+import net.farkas.wildaside.entity.ai.vibrion.contaminated.ApproachWhenLookedAtGoal;
 import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.minecraft.core.BlockPos;

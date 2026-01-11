@@ -1,7 +1,7 @@
 package net.farkas.wildaside.entity.custom.vibrion;
 
 import net.farkas.wildaside.advancement.ModAdvancements;
-import net.farkas.wildaside.entity.ModEntities;
+import net.farkas.wildaside.entity.ModEntityTypes;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.advancement.AdvancementHandler;
@@ -29,17 +29,17 @@ public class SporeBombEntity extends ThrowableItemProjectile {
     }
 
     public SporeBombEntity(Level pLevel, LivingEntity livingEntity, float charge) {
-        super(ModEntities.SPORE_BOMB.get(), livingEntity, pLevel);
+        super(ModEntityTypes.SPORE_BOMB.get(), livingEntity, pLevel);
         this.charge = charge;
     }
 
     public SporeBombEntity(Level pLevel, double pX, double pY, double pZ) {
-        super(ModEntities.SPORE_BOMB.get(), pX, pY, pZ, pLevel);
+        super(ModEntityTypes.SPORE_BOMB.get(), pX, pY, pZ, pLevel);
         this.charge = level().random.nextFloat();
     }
 
     public SporeBombEntity(Level pLevel) {
-        super(ModEntities.SPORE_BOMB.get(), pLevel);
+        super(ModEntityTypes.SPORE_BOMB.get(), pLevel);
         this.charge = level().random.nextFloat();
     }
 

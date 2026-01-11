@@ -2,9 +2,10 @@ package net.farkas.wildaside.event;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.capability.contamination.IContamination;
-import net.farkas.wildaside.entity.ModEntities;
+import net.farkas.wildaside.entity.ModEntityTypes;
 import net.farkas.wildaside.entity.ModEntitySpawns;
 import net.farkas.wildaside.entity.custom.hickory.HickoryTreantEntity;
+import net.farkas.wildaside.entity.custom.vibrion.BacillusBlobEntity;
 import net.farkas.wildaside.entity.custom.vibrion.ContaminatedCreeperEntity;
 import net.farkas.wildaside.entity.custom.vibrion.MucellithEntity;
 import net.minecraft.network.chat.Component;
@@ -26,9 +27,10 @@ import java.nio.file.Path;
 public class ModEventBusEvent {
     @SubscribeEvent
     public static void registerAttributes(EntityAttributeCreationEvent event) {
-        event.put(ModEntities.MUCELLITH.get(), MucellithEntity.createAttributes().build());
-        event.put(ModEntities.HICKORY_TREANT.get(), HickoryTreantEntity.createAttributes().build());
-        event.put(ModEntities.CONTAMINATED_CREEPER.get(), ContaminatedCreeperEntity.createAttributes().build());
+        event.put(ModEntityTypes.MUCELLITH.get(), MucellithEntity.createAttributes().build());
+        event.put(ModEntityTypes.HICKORY_TREANT.get(), HickoryTreantEntity.createAttributes().build());
+        event.put(ModEntityTypes.CONTAMINATED_CREEPER.get(), ContaminatedCreeperEntity.createAttributes().build());
+        event.put(ModEntityTypes.BACILLUS_BLOB.get(), BacillusBlobEntity.createAttributes().build());
     }
 
     @SubscribeEvent

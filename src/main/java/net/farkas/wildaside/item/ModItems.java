@@ -2,7 +2,7 @@ package net.farkas.wildaside.item;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.ModBlocks;
-import net.farkas.wildaside.entity.ModEntities;
+import net.farkas.wildaside.entity.ModEntityTypes;
 import net.farkas.wildaside.entity.custom.ModBoatEntity;
 import net.farkas.wildaside.item.custom.*;
 import net.farkas.wildaside.util.HickoryColour;
@@ -26,11 +26,11 @@ public class ModItems {
             () -> new Item(new Item.Properties()));
 
     public static final RegistryObject<Item> MUCELLITH_SPAWN_EGG = ITEMS.register("mucellith_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.MUCELLITH, 0xbfd8f2, 0xf6e392, new Item.Properties()));
+            () -> new ForgeSpawnEggItem(ModEntityTypes.MUCELLITH, 0xbfd8f2, 0xf6e392, new Item.Properties()));
     public static final RegistryObject<Item> MUCELLITH_JAW = ITEMS.register("mucellith_jaw",
             () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> CONTAMINATED_CREEPER_SPAWN_EGG = ITEMS.register("contaminated_creeper_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.CONTAMINATED_CREEPER, 0x0db50d, 0xfff571, new Item.Properties()));
+            () -> new ForgeSpawnEggItem(ModEntityTypes.CONTAMINATED_CREEPER, 0x0db50d, 0xfff571, new Item.Properties()));
 
     public static final RegistryObject<Item> ENTORIUM_PILL = ITEMS.register("entorium_pill",
             () -> new EntoriumPillItem(new Item.Properties().food(ModFoods.ENTORIUM_PILL).stacksTo(16)));
@@ -115,7 +115,7 @@ public class ModItems {
     }
 
     public static final RegistryObject<Item> HICKORY_TREANT_SPAWN_EGG = ITEMS.register("hickory_treant_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.HICKORY_TREANT, 0x704626, 0x409312, new Item.Properties()));
+            () -> new ForgeSpawnEggItem(ModEntityTypes.HICKORY_TREANT, 0x704626, 0x409312, new Item.Properties()));
 
 
     public static void register(IEventBus eventBus) {

@@ -6,8 +6,9 @@ import net.farkas.wildaside.block.entity.ModBlockEntities;
 import net.farkas.wildaside.config.ModConfig;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.enchantment.ModEnchantments;
-import net.farkas.wildaside.entity.ModEntities;
+import net.farkas.wildaside.entity.ModEntityTypes;
 import net.farkas.wildaside.entity.client.ModBoatRenderer;
+import net.farkas.wildaside.entity.client.vibrion.BacillusBlobEntityRenderer;
 import net.farkas.wildaside.entity.client.vibrion.ContaminatedCreeperRenderer;
 import net.farkas.wildaside.entity.client.vibrion.MucellithRenderer;
 import net.farkas.wildaside.entity.custom.vibrion.FertiliserBombEntity;
@@ -89,7 +90,7 @@ public class WildAside {
         ModSounds.register(modEventBus);
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
-        ModEntities.register(modEventBus);
+        ModEntityTypes.register(modEventBus);
         ModBlockEntities.register(modEventBus);
         ModEnchantments.register(modEventBus);
         ModMenuTypes.register(modEventBus);
@@ -241,18 +242,19 @@ public class WildAside {
     }
 
     private static void registerEntityRenderers() {
-        EntityRenderers.register(ModEntities.MOD_BOAT.get(), pContext -> new ModBoatRenderer(pContext, false));
-        EntityRenderers.register(ModEntities.MOD_CHEST_BOAT.get(), pContext -> new ModBoatRenderer(pContext, true));
-        EntityRenderers.register(ModEntities.SPORE_BOMB.get(), ThrownItemRenderer::new);
-        EntityRenderers.register(ModEntities.FERTILISER_BOMB.get(), ThrownItemRenderer::new);
-        EntityRenderers.register(ModEntities.SPORE_ARROW.get(), pContext -> new ArrowRenderer<SporeArrowEntity>(pContext) {
+        EntityRenderers.register(ModEntityTypes.MOD_BOAT.get(), pContext -> new ModBoatRenderer(pContext, false));
+        EntityRenderers.register(ModEntityTypes.MOD_CHEST_BOAT.get(), pContext -> new ModBoatRenderer(pContext, true));
+        EntityRenderers.register(ModEntityTypes.SPORE_BOMB.get(), ThrownItemRenderer::new);
+        EntityRenderers.register(ModEntityTypes.FERTILISER_BOMB.get(), ThrownItemRenderer::new);
+        EntityRenderers.register(ModEntityTypes.SPORE_ARROW.get(), pContext -> new ArrowRenderer<SporeArrowEntity>(pContext) {
             @Override
             public ResourceLocation getTextureLocation(SporeArrowEntity pEntity) {
                 return new ResourceLocation(WildAside.MOD_ID, "textures/entity/projectiles/spore_arrow.png");
             }
         });
-        EntityRenderers.register(ModEntities.MUCELLITH.get(), MucellithRenderer::new);
-        EntityRenderers.register(ModEntities.CONTAMINATED_CREEPER.get(), ContaminatedCreeperRenderer::new);
+        EntityRenderers.register(ModEntityTypes.MUCELLITH.get(), MucellithRenderer::new);
+        EntityRenderers.register(ModEntityTypes.CONTAMINATED_CREEPER.get(), ContaminatedCreeperRenderer::new);
+        EntityRenderers.register(ModEntityTypes.BACILLUS_BLOB.get(), BacillusBlobEntityRenderer::new);
     }
 
     private static void registerScreens() {

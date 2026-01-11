@@ -9,6 +9,7 @@ import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkill;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillUtils;
 import net.farkas.wildaside.item.custom.DnaHolderItem;
 import net.farkas.wildaside.network.NetworkHandler;
+import net.farkas.wildaside.screen.gene_editor.AdvancedGeneEditorScreen;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -257,6 +258,47 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
         clearWidgets();
         addRecompileButton();
         addTabButtons();
+        addAdvancedEditorButton();
+    }
+
+    private void addAdvancedEditorButton() {
+        if (tab == BioengineeringWorkstationTab.DNA_EDITOR) {
+            this.addRenderableWidget(Button.builder(Component.translatable("gui.wildaside.open_advanced_editor"), btn -> {
+                        openAdvancedEditor();
+                    }).pos(leftPos + 120, topPos + 55 + yOffset).size(60, 20)
+                    .tooltip(Tooltip.create(Component.translatable("gui.wildaside.open_advanced_editor.tooltip"))).build());
+        }
+    }
+
+    private void openAdvancedEditor() {
+        ItemStack stackA = menu.getSlot(46).getItem();
+        ItemStack stackB = menu.getSlot(47).getItem();
+
+        DnaImplementation dnaA = null;
+        DnaImplementation dnaB = null;
+
+        if (stackA.getItem() instanceof DnaHolderItem) {
+            CompoundTag tag = stackA.getOrCreateTag();
+            if (tag.contains(DnaConstants.DNA_DATA)) {
+                dnaA = new DnaImplementation();
+                dnaA.deserializeNBT(tag.getCompound(DnaConstants.DNA_DATA));
+            }
+        }
+
+        if (stackB.getItem() instanceof DnaHolderItem) {
+            CompoundTag tag = stackB.getOrCreateTag();
+            if (tag.contains(DnaConstants.DNA_DATA)) {
+                dnaB = new DnaImplementation();
+                dnaB.deserializeNBT(tag.getCompound(DnaConstants.DNA_DATA));
+            }
+        }
+
+        if (dnaA == null && dnaB == null) {
+            minecraft.gui.setOverlayMessage(Component.translatable("gui.wildaside.gene_editor.no_dna"), false);
+            return;
+        }
+
+        minecraft.setScreen(new AdvancedGeneEditorScreen(menu.blockEntity.getBlockPos(), dnaA, dnaB));
     }
 
     private void addTabButtons() {

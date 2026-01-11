@@ -3,7 +3,7 @@ package net.farkas.wildaside.item.custom;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
-import net.farkas.wildaside.dna.BacillusBlobConsumption;
+import net.farkas.wildaside.dna.bacillus_blob.BacillusBlobConsumption;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.locus.GeneLocus;
 import net.farkas.wildaside.dna.locus.LocusSource;
@@ -74,7 +74,8 @@ public class BacillusBlobItem extends Item {
             float maturity = getMaturity(stack);
             if (maturity < MATURITY_SUBOPTIMAL) {
                 return 72;
-            } else if (maturity < MATURITY_OPTIMAL_MIN) {
+            }
+            else if (maturity < MATURITY_OPTIMAL_MIN) {
                 return 56;
             }
             return 48;
@@ -183,7 +184,8 @@ public class BacillusBlobItem extends Item {
                             true
                     );
                 }
-            } else {
+            }
+            else {
                 WildAside.LOGGER.warn("Bacillus blob consumption failed for {}", entity.getName().getString());
                 if (entity instanceof Player player) {
                     player.displayClientMessage(
@@ -290,7 +292,8 @@ public class BacillusBlobItem extends Item {
                             .withStyle(ChatFormatting.RED),
                     true
             );
-        } else if (!isIncubated(stack)) {
+        }
+        else if (!isIncubated(stack)) {
             player.displayClientMessage(
                     Component.translatable("item.wildaside.bacillus_blob.not_incubated")
                             .withStyle(ChatFormatting.YELLOW),
@@ -319,18 +322,23 @@ public class BacillusBlobItem extends Item {
 
         if (maturity < MATURITY_POOR) {
             return BlobQuality.TERRIBLE;
-        } else if (maturity < MATURITY_SUBOPTIMAL) {
+        }
+        else if (maturity < MATURITY_SUBOPTIMAL) {
             return BlobQuality.POOR;
-        } else if (maturity < MATURITY_OPTIMAL_MIN) {
+        }
+        else if (maturity < MATURITY_OPTIMAL_MIN) {
             return BlobQuality.SUBOPTIMAL;
-        } else if (maturity <= MATURITY_OPTIMAL_MAX) {
+        }
+        else if (maturity <= MATURITY_OPTIMAL_MAX) {
             if (mutationRisk >= MUTATION_RISK_HIGH) {
                 return BlobQuality.OVERHEATED;
             }
             return BlobQuality.OPTIMAL;
-        } else if (maturity <= MATURITY_OVERHEATED) {
+        }
+        else if (maturity <= MATURITY_OVERHEATED) {
             return BlobQuality.OVERHEATED;
-        } else {
+        }
+        else {
             return BlobQuality.CRITICAL;
         }
     }
@@ -596,9 +604,15 @@ public class BacillusBlobItem extends Item {
     }
 
     public static boolean hasDna(ItemStack stack) {
-        if (!stack.hasTag()) return false;
+        if (!stack.hasTag()) {
+            return false;
+        }
+
         CompoundTag tag = stack.getTag();
-        return tag.contains(DNA_DATA) && !tag.getCompound(DNA_DATA).isEmpty();
+        boolean containsKey = tag.contains(DNA_DATA);
+        boolean isEmpty = containsKey && tag.getCompound(DNA_DATA).isEmpty();
+
+        return containsKey && !isEmpty;
     }
 
     public static boolean isIncubated(ItemStack stack) {
@@ -654,7 +668,8 @@ public class BacillusBlobItem extends Item {
 
             tooltip.add(Component.translatable("item.wildaside.bacillus_blob.has_dna")
                     .withStyle(ChatFormatting.GREEN));
-        } else {
+        }
+        else {
             tooltip.add(Component.translatable("item.wildaside.bacillus_blob.no_dna")
                     .withStyle(ChatFormatting.RED));
         }
@@ -714,7 +729,8 @@ public class BacillusBlobItem extends Item {
                 tooltip.add(Component.translatable("item.wildaside.bacillus_blob.apply_hint")
                         .withStyle(ChatFormatting.DARK_GREEN, ChatFormatting.ITALIC));
             }
-        } else {
+        }
+        else {
             tooltip.add(Component.translatable("item.wildaside.bacillus_blob.not_incubated")
                     .withStyle(ChatFormatting.YELLOW));
             tooltip.add(Component.translatable("item.wildaside.bacillus_blob.incubate_hint")
@@ -734,17 +750,23 @@ public class BacillusBlobItem extends Item {
     private Component getMaturityDescription(float maturity) {
         if (maturity < MATURITY_MIN_USABLE) {
             return Component.translatable("item.wildaside.bacillus_blob.maturity_unusable");
-        } else if (maturity < MATURITY_POOR) {
+        }
+        else if (maturity < MATURITY_POOR) {
             return Component.translatable("item.wildaside.bacillus_blob.maturity_terrible");
-        } else if (maturity < MATURITY_SUBOPTIMAL) {
+        }
+        else if (maturity < MATURITY_SUBOPTIMAL) {
             return Component.translatable("item.wildaside.bacillus_blob.maturity_poor");
-        } else if (maturity < MATURITY_OPTIMAL_MIN) {
+        }
+        else if (maturity < MATURITY_OPTIMAL_MIN) {
             return Component.translatable("item.wildaside.bacillus_blob.maturity_suboptimal");
-        } else if (maturity <= MATURITY_OPTIMAL_MAX) {
+        }
+        else if (maturity <= MATURITY_OPTIMAL_MAX) {
             return Component.translatable("item.wildaside.bacillus_blob.maturity_optimal");
-        } else if (maturity <= MATURITY_OVERHEATED) {
+        }
+        else if (maturity <= MATURITY_OVERHEATED) {
             return Component.translatable("item.wildaside.bacillus_blob.maturity_overheated");
-        } else {
+        }
+        else {
             return Component.translatable("item.wildaside.bacillus_blob.maturity_critical");
         }
     }
@@ -764,7 +786,8 @@ public class BacillusBlobItem extends Item {
 
         if (minutes > 0) {
             return String.format("%dm %ds", minutes, seconds);
-        } else {
+        }
+        else {
             return String.format("%ds", seconds);
         }
     }

@@ -1,4 +1,4 @@
-package net.farkas.wildaside.network.packets.bioengineering_workstation;
+package net.farkas.wildaside.network.packet.bioengineering_workstation;
 
 import net.farkas.wildaside.capability.bioengineering_skill.BioengineeringSkillsCapability;
 import net.minecraft.client.Minecraft;

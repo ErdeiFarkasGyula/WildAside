@@ -1,6 +1,6 @@
 package net.farkas.wildaside.entity.custom.vibrion;
 
-import net.farkas.wildaside.entity.ModEntities;
+import net.farkas.wildaside.entity.ModEntityTypes;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.util.ContaminationHandler;
@@ -17,15 +17,15 @@ public class SporeArrowEntity extends AbstractArrow {
     }
 
     public SporeArrowEntity(Level pLevel, double pX, double pY, double pZ) {
-        super(ModEntities.SPORE_ARROW.get(), pX, pY, pZ, pLevel);
+        super(ModEntityTypes.SPORE_ARROW.get(), pX, pY, pZ, pLevel);
     }
 
     public SporeArrowEntity(Level pLevel, LivingEntity thrower) {
-        super(ModEntities.SPORE_ARROW.get(), thrower, pLevel);
+        super(ModEntityTypes.SPORE_ARROW.get(), thrower, pLevel);
     }
 
     public SporeArrowEntity(Level pLevel) {
-        super(ModEntities.SPORE_ARROW.get(), pLevel);
+        super(ModEntityTypes.SPORE_ARROW.get(), pLevel);
     }
 
     @Override

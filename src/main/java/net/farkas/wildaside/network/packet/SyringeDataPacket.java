@@ -1,4 +1,4 @@
-package net.farkas.wildaside.network.packets;
+package net.farkas.wildaside.network.packet;
 
 import net.farkas.wildaside.dna.DnaConstants;
 import net.farkas.wildaside.item.custom.SyringeItem;

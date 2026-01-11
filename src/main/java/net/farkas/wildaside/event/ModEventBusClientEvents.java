@@ -8,7 +8,7 @@ import net.farkas.wildaside.client.ModKeyMappings;
 import net.farkas.wildaside.client.renderer.IncubatorRenderer;
 import net.farkas.wildaside.dna.DnaConstants;
 import net.farkas.wildaside.dna.DnaUtils;
-import net.farkas.wildaside.entity.ModEntities;
+import net.farkas.wildaside.entity.ModEntityTypes;
 import net.farkas.wildaside.entity.client.ModModelLayers;
 import net.farkas.wildaside.entity.client.hickory.HickoryTreantRenderer;
 import net.farkas.wildaside.entity.client.vibrion.MucellithModel;
@@ -63,8 +63,8 @@ public class ModEventBusClientEvents {
         event.registerBlockEntityRenderer(ModBlockEntities.MOD_SIGN.get(), SignRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.MOD_HANGING_SIGN.get(), HangingSignRenderer::new);
 
-        event.registerEntityRenderer(ModEntities.HICKORY_LEAF_PROJECTILE.get(), ThrownItemRenderer::new);
-        event.registerEntityRenderer(ModEntities.HICKORY_TREANT.get(), HickoryTreantRenderer::new);
+        event.registerEntityRenderer(ModEntityTypes.HICKORY_LEAF_PROJECTILE.get(), ThrownItemRenderer::new);
+        event.registerEntityRenderer(ModEntityTypes.HICKORY_TREANT.get(), HickoryTreantRenderer::new);
 
         event.registerBlockEntityRenderer(ModBlockEntities.INCUBATOR.get(), IncubatorRenderer::new);
     }
@@ -122,7 +122,7 @@ public class ModEventBusClientEvents {
             else {
                 if (tintIndex == 2) return 0xFFFFFF;
 
-                int baseColor = DEFAULT_BLOOD_COLOR;
+                int baseColor = DEFAULT_BLOOD_COLOUR;
                 Level levelWorld = Minecraft.getInstance().level;
                 if (levelWorld != null) {
                     long age = DnaUtils.getFrozenItemEffectiveAge(tag, levelWorld);
@@ -150,7 +150,7 @@ public class ModEventBusClientEvents {
                     if (level <= 0.01f) return 0xFFFFFFFF;
 
                     String fluidType = tag.contains(FLUID_TYPE) ? tag.getString(FLUID_TYPE) : NONE;
-                    int baseColor = DEFAULT_BLOOD_COLOR;
+                    int baseColor = DEFAULT_BLOOD_COLOUR;
 
                     if (BLOOD.equals(fluidType)) {
                         if (tag.contains(FLUID_COLOUR)) {

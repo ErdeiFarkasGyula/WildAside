@@ -1,6 +1,6 @@
 package net.farkas.wildaside.entity.custom;
 
-import net.farkas.wildaside.entity.ModEntities;
+import net.farkas.wildaside.entity.ModEntityTypes;
 import net.farkas.wildaside.item.ModItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -19,7 +19,7 @@ public class ModChestBoatEntity extends ChestBoat {
     }
 
     public ModChestBoatEntity(Level pLevel, double pX, double pY, double pZ) {
-        this(ModEntities.MOD_CHEST_BOAT.get(), pLevel);
+        this(ModEntityTypes.MOD_CHEST_BOAT.get(), pLevel);
         this.setPos(pX, pY, pZ);
         this.xo = pX;
         this.yo = pY;

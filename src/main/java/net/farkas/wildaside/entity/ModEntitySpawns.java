@@ -14,7 +14,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 public class ModEntitySpawns {
     public static void registerSpawnPlacements() {
         SpawnPlacements.register(
-                ModEntities.MUCELLITH.get(),
+                ModEntityTypes.MUCELLITH.get(),
                 SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 ModEntitySpawns::canSpawnVibrionEntity

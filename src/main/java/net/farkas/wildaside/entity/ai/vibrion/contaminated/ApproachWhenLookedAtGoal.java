@@ -1,4 +1,4 @@
-package net.farkas.wildaside.entity.ai.contaminated;
+package net.farkas.wildaside.entity.ai.vibrion.contaminated;
 
 import net.farkas.wildaside.entity.custom.vibrion.ContaminatedCreeperEntity;
 import net.minecraft.world.entity.ai.goal.Goal;

@@ -4,7 +4,7 @@ public class DnaConstants {
     public static final long BLOOD_CLOTTING_TIME_DEFAULT = 120 * 20;
     public static final long BLOOD_CLOTTING_TIME_WITH_AGENT = 1200 * 20;
 
-    public static final int DEFAULT_BLOOD_COLOR = 0xba260f;
+    public static final int DEFAULT_BLOOD_COLOUR = 0xba260f;
 
     public static final String ID = "id";
 

@@ -97,6 +97,26 @@ public class GeneLocus {
         return new GeneLocus(id, newA, newB, flags, stability, source, integrationTick, degradation);
     }
 
+    public GeneLocus withAlleleA(Allele newAlleleA) {
+        return new GeneLocus(id, newAlleleA, alleleB, flags, stability, source, integrationTick, degradation);
+    }
+
+    public GeneLocus withAlleleB(Allele newAlleleB) {
+        return new GeneLocus(id, alleleA, newAlleleB, flags, stability, source, integrationTick, degradation);
+    }
+
+    public GeneLocus withStability(float newStability) {
+        return new GeneLocus(id, alleleA, alleleB, flags, Math.max(0f, Math.min(1f, newStability)), source, integrationTick, degradation);
+    }
+
+    public GeneLocus withSource(LocusSource newSource) {
+        return new GeneLocus(id, alleleA, alleleB, flags, stability, newSource, integrationTick, degradation);
+    }
+
+    public GeneLocus withDegradation(float newDegradation) {
+        return new GeneLocus(id, alleleA, alleleB, flags, stability, source, integrationTick, Math.max(0f, Math.min(1f, newDegradation)));
+    }
+
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
         tag.putString("Id", id);

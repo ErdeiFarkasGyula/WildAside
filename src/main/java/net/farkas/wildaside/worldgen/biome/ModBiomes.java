@@ -1,7 +1,7 @@
 package net.farkas.wildaside.worldgen.biome;
 
 import net.farkas.wildaside.WildAside;
-import net.farkas.wildaside.entity.ModEntities;
+import net.farkas.wildaside.entity.ModEntityTypes;
 import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.sound.ModSounds;
 import net.farkas.wildaside.worldgen.ModPlacedFeatures;
@@ -157,7 +157,7 @@ public class ModBiomes {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
 
-        spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntities.MUCELLITH.get(), 67, 2, 4));
+        spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntityTypes.MUCELLITH.get(), 67, 2, 4));
 
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 

@@ -1,6 +1,6 @@
 package net.farkas.wildaside.entity.custom.hickory;
 
-import net.farkas.wildaside.entity.ModEntities;
+import net.farkas.wildaside.entity.ModEntityTypes;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.util.HickoryColour;
@@ -32,7 +32,7 @@ public class HickoryLeafProjectile extends ThrowableItemProjectile implements It
     }
 
     public HickoryLeafProjectile(Level world, LivingEntity shooter, HickoryColour colour) {
-        super(ModEntities.HICKORY_LEAF_PROJECTILE.get(), shooter, world);
+        super(ModEntityTypes.HICKORY_LEAF_PROJECTILE.get(), shooter, world);
         this.entityData.set(COLOUR, colour.ordinal());
         if (shooter instanceof HickoryTreantEntity hickoryTreant) {
             this.phase = hickoryTreant.getPhase();

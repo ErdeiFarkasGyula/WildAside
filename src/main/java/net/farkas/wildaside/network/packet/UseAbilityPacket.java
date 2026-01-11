@@ -1,4 +1,4 @@
-package net.farkas.wildaside.network.packets;
+package net.farkas.wildaside.network.packet;
 
 import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.dna.DnaUtils;

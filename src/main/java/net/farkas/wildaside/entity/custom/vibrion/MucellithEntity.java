@@ -1,9 +1,9 @@
 package net.farkas.wildaside.entity.custom.vibrion;
 
 import net.farkas.wildaside.effect.ModMobEffects;
-import net.farkas.wildaside.entity.ai.mucellith.MucellithAttackGoal;
-import net.farkas.wildaside.entity.ai.mucellith.MucellithLookAtPlayerGoal;
-import net.farkas.wildaside.entity.ai.mucellith.MucellithRandomLookAroundGoal;
+import net.farkas.wildaside.entity.ai.vibrion.mucellith.MucellithAttackGoal;
+import net.farkas.wildaside.entity.ai.vibrion.mucellith.MucellithLookAtPlayerGoal;
+import net.farkas.wildaside.entity.ai.vibrion.mucellith.MucellithRandomLookAroundGoal;
 import net.farkas.wildaside.sound.ModSounds;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;

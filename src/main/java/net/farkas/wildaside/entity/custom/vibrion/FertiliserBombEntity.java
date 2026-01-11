@@ -2,7 +2,7 @@ package net.farkas.wildaside.entity.custom.vibrion;
 
 import net.farkas.wildaside.advancement.ModAdvancements;
 import net.farkas.wildaside.block.ModBlocks;
-import net.farkas.wildaside.entity.ModEntities;
+import net.farkas.wildaside.entity.ModEntityTypes;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.advancement.AdvancementHandler;
 import net.farkas.wildaside.util.WeightedFlowerChoice;
@@ -54,19 +54,19 @@ public class FertiliserBombEntity extends ThrowableItemProjectile {
     }
 
     public FertiliserBombEntity(Level pLevel, LivingEntity thrower, float charge) {
-        super(ModEntities.FERTILISER_BOMB.get(), thrower, pLevel);
+        super(ModEntityTypes.FERTILISER_BOMB.get(), thrower, pLevel);
         this.charge = charge + 0.1f;
         this.thrower = thrower;
     }
 
     public FertiliserBombEntity(Level pLevel, double pX, double pY, double pZ) {
-        super(ModEntities.FERTILISER_BOMB.get(), pX, pY, pZ, pLevel);
+        super(ModEntityTypes.FERTILISER_BOMB.get(), pX, pY, pZ, pLevel);
         this.charge = level().random.nextFloat();
         this.thrower = null;
     }
 
     public FertiliserBombEntity(Level pLevel) {
-        super(ModEntities.FERTILISER_BOMB.get(), pLevel);
+        super(ModEntityTypes.FERTILISER_BOMB.get(), pLevel);
         this.charge = level().random.nextFloat();
         this.thrower = null;
     }
