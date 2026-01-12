@@ -5,6 +5,7 @@ import net.farkas.wildaside.block.entity.ModBlockEntities;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
+import net.farkas.wildaside.dna.chromosome.Genome;
 import net.farkas.wildaside.dna.locus.GeneLocus;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.item.ModItems;
@@ -234,7 +235,7 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
                 ));
     }
 
-    private static boolean hasGenomeSequences(net.farkas.wildaside.dna.chromosome.Genome genome) {
+    private static boolean hasGenomeSequences(Genome genome) {
         return DnaUtils.hasGenomeSequences(genome);
     }
 
@@ -306,7 +307,7 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
             loci.put(trait, List.of(gl));
         }
 
-        net.farkas.wildaside.dna.chromosome.Genome genome = DnaUtils.convertLociToGenome(dna.getSource(), loci);
+        Genome genome = DnaUtils.convertLociToGenome(dna.getSource(), loci);
         dna.setGenome(genome);
         tag.put(DNA_DATA, dna.serializeNBT());
 
