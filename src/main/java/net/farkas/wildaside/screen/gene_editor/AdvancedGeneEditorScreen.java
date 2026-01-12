@@ -447,7 +447,7 @@ public class AdvancedGeneEditorScreen extends Screen {
         graphics.drawString(font, label, px + innerPadding, py + innerPadding, labelColor, false);
 
         if (dna == null || genes.isEmpty()) {
-            graphics.drawString(font, Component.translatable("gui.wildaside. gene_editor.no_dna")
+            graphics.drawString(font, Component.translatable("gui.wildaside.ene_editor.no_dna")
                     .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC), px + innerPadding, py + dnaPanelHeaderHeight, 0xFFAAAAAA, false);
             return;
         }
@@ -1209,7 +1209,7 @@ public class AdvancedGeneEditorScreen extends Screen {
         GeneEditorOperation op = state.getCurrentOperation();
 
         if (dnaA == null && dnaB == null) {
-            addStatusMessage(Component.translatable("gui.wildaside. gene_editor.need_both_dna").withStyle(ChatFormatting.RED));
+            addStatusMessage(Component.translatable("gui.wildaside.gene_editor.need_both_dna").withStyle(ChatFormatting.RED));
             return;
         }
 
