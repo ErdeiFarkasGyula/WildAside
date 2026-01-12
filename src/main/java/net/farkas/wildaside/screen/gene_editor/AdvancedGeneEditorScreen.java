@@ -24,7 +24,6 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 import org.lwjgl.glfw.GLFW;
@@ -97,6 +96,7 @@ public class AdvancedGeneEditorScreen extends Screen {
     private final GeneEditorState state = new GeneEditorState();
 
     private float scale = 1.0f;
+    private float textScale = 1.0f;
     private int leftPos;
     private int topPos;
     private int screenWidth;
@@ -233,15 +233,18 @@ public class AdvancedGeneEditorScreen extends Screen {
 
         if (guiScale >= GUI_SCALE_6_THRESHOLD) {
             scale = Math.min(scale, GUI_SCALE_6_MAX);
-        }
-        else if (guiScale >= GUI_SCALE_5_THRESHOLD) {
+            textScale = 0.7f;
+        } else if (guiScale >= GUI_SCALE_5_THRESHOLD) {
             scale = Math.min(scale, GUI_SCALE_5_MAX);
-        }
-        else if (guiScale >= GUI_SCALE_4_THRESHOLD) {
+            textScale = 0.8f;
+        } else if (guiScale >= GUI_SCALE_4_THRESHOLD) {
             scale = Math.min(scale, GUI_SCALE_4_MAX);
-        }
-        else if (guiScale >= GUI_SCALE_3_THRESHOLD) {
+            textScale = 0.9f;
+        } else if (guiScale >= GUI_SCALE_3_THRESHOLD) {
             scale = Math.min(scale, GUI_SCALE_3_MAX);
+            textScale = 1.0f;
+        } else {
+            textScale = 1.0f;
         }
     }
 
@@ -271,9 +274,9 @@ public class AdvancedGeneEditorScreen extends Screen {
         dnaPanelWidth = (int) (contentWidth * DNA_PANEL_WIDTH_RATIO);
         detailPanelWidth = contentWidth - dnaPanelWidth;
 
-        int contentHeight = screenHeight - headerHeight - footerHeight;
+        int contentHeight = screenHeight - headerHeight - footerHeight - outerPadding * 2;
         dnaPanelHeight = (contentHeight - outerPadding) / 2;
-        detailPanelHeight = contentHeight;
+        detailPanelHeight = contentHeight + outerPadding;
 
         dnaPanelHeaderHeight = scaledMin(BASE_DNA_PANEL_HEADER_HEIGHT, fontHeight * 2 + innerPadding);
         geneEntryHeight = scaledMin(BASE_GENE_ENTRY_HEIGHT, MIN_ENTRY_HEIGHT);
@@ -381,14 +384,14 @@ public class AdvancedGeneEditorScreen extends Screen {
         renderTitle(graphics);
 
         int dnaPanelX = leftPos + outerPadding;
-        int dnaPanelAY = topPos + headerHeight;
+        int dnaPanelAY = topPos + headerHeight + outerPadding;
         int dnaPanelBY = dnaPanelAY + dnaPanelHeight + outerPadding;
 
         renderDnaPanel(graphics, dnaPanelX, dnaPanelAY, dnaA, genesA, true, scrollOffsetA, mouseX, mouseY);
         renderDnaPanel(graphics, dnaPanelX, dnaPanelBY, dnaB, genesB, false, scrollOffsetB, mouseX, mouseY);
 
         int detailPanelX = dnaPanelX + dnaPanelWidth + outerPadding;
-        int detailPanelY = topPos + headerHeight;
+        int detailPanelY = topPos + headerHeight + outerPadding;
         renderDetailPanel(graphics, detailPanelX, detailPanelY, mouseX, mouseY);
 
         renderFooter(graphics);
@@ -413,7 +416,16 @@ public class AdvancedGeneEditorScreen extends Screen {
         Component title = Component.translatable("gui.wildaside.advanced_gene_editor")
                 .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD);
         int titleY = topPos + (headerHeight - font.lineHeight) / 2;
-        graphics.drawString(font, title, leftPos + outerPadding, titleY, 0xFFFFFFFF, true);
+
+        if (textScale < 1.0f) {
+            graphics.pose().pushPose();
+            graphics.pose().translate(leftPos + outerPadding, titleY, 0);
+            graphics.pose().scale(textScale, textScale, 1.0f);
+            graphics.drawString(font, title, 0, 0, 0xFFFFFFFF, true);
+            graphics.pose().popPose();
+        } else {
+            graphics.drawString(font, title, leftPos + outerPadding, titleY, 0xFFFFFFFF, true);
+        }
 
         String scaleInfo = String.format("%.0f%%", scale * 100);
         int scaleInfoX = leftPos + screenWidth - font.width(scaleInfo) - closeButtonSize - outerPadding - buttonSpacing;
@@ -434,8 +446,41 @@ public class AdvancedGeneEditorScreen extends Screen {
             Component lastMessage = statusMessages.get(statusMessages.size() - 1);
             String msgStr = truncateToWidth(lastMessage.getString(), statusBarWidth - elementSpacing * 2);
             int textY = statusBarY + (statusBarHeight - font.lineHeight) / 2;
-            graphics.drawString(font, msgStr, statusBarX + elementSpacing, textY, 0xFFFFFFFF, false);
+
+            if (textScale < 1.0f) {
+                graphics.pose().pushPose();
+                graphics.pose().translate(statusBarX + elementSpacing, textY, 0);
+                graphics.pose().scale(textScale, textScale, 1.0f);
+                graphics.drawString(font, msgStr, 0, 0, 0xFFFFFFFF, false);
+                graphics.pose().popPose();
+            } else {
+                graphics.drawString(font, msgStr, statusBarX + elementSpacing, textY, 0xFFFFFFFF, false);
+            }
         }
+    }
+
+    private void drawScaledString(GuiGraphics graphics, String text, int x, int y, int color, boolean shadow) {
+        if (textScale < 1.0f) {
+            graphics.pose().pushPose();
+            graphics.pose().translate(x, y, 0);
+            graphics.pose().scale(textScale, textScale, 1.0f);
+            graphics.drawString(font, text, 0, 0, color, shadow);
+            graphics.pose().popPose();
+        } else {
+            graphics.drawString(font, text, x, y, color, shadow);
+        }
+    }
+
+    private void drawScaledString(GuiGraphics graphics, Component text, int x, int y, int color, boolean shadow) {
+        drawScaledString(graphics, text.getString(), x, y, color, shadow);
+    }
+
+    private int getScaledTextWidth(String text) {
+        return (int) (font.width(text) * textScale);
+    }
+
+    private int getScaledFontHeight() {
+        return (int) (font.lineHeight * textScale);
     }
 
     private void renderDnaPanel(GuiGraphics graphics, int px, int py, DnaImplementation dna, Map<Trait, Gene> genes, boolean isTop, int scrollOffset, int mouseX, int mouseY) {
@@ -444,18 +489,18 @@ public class AdvancedGeneEditorScreen extends Screen {
 
         String label = isTop ? "DNA A" : "DNA B";
         int labelColor = isTop ? 0xFF88AAFF : 0xFFFFAA88;
-        graphics.drawString(font, label, px + innerPadding, py + innerPadding, labelColor, false);
+        drawScaledString(graphics, label, px + innerPadding, py + innerPadding, labelColor, false);
 
         if (dna == null || genes.isEmpty()) {
-            graphics.drawString(font, Component.translatable("gui.wildaside.ene_editor.no_dna")
+            drawScaledString(graphics, Component.translatable("gui.wildaside.gene_editor.no_dna")
                     .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC), px + innerPadding, py + dnaPanelHeaderHeight, 0xFFAAAAAA, false);
             return;
         }
 
         String sourceStr = dna.getSource() != null ? dna.getSource().toString() : "Unknown";
-        int maxSourceWidth = dnaPanelWidth - innerPadding * 2;
+        int maxSourceWidth = (int) ((dnaPanelWidth - innerPadding * 2) / textScale);
         sourceStr = truncateToWidth(sourceStr, maxSourceWidth);
-        graphics.drawString(font, sourceStr, px + innerPadding, py + innerPadding + font.lineHeight + elementSpacing, 0xFF888888, false);
+        drawScaledString(graphics, sourceStr, px + innerPadding, py + innerPadding + getScaledFontHeight() + elementSpacing, 0xFF888888, false);
 
         int contentX = px + innerPadding;
         int contentY = py + dnaPanelHeaderHeight;
@@ -482,9 +527,9 @@ public class AdvancedGeneEditorScreen extends Screen {
                     int clippedBottom = Math.min(contentY + contentHeight, headerBottom);
                     graphics.fill(contentX, clippedTop, contentX + contentWidth, clippedBottom, 0x44FFFFFF);
 
-                    int textY = entryY + (traitTypeHeaderHeight - font.lineHeight) / 2;
-                    if (textY >= contentY && textY + font.lineHeight <= contentY + contentHeight) {
-                        graphics.drawString(font, currentType.name(), contentX + elementSpacing, textY, currentType.getHeaderColour().getColor(), false);
+                    int textY = entryY + (traitTypeHeaderHeight - getScaledFontHeight()) / 2;
+                    if (textY >= contentY && textY + getScaledFontHeight() <= contentY + contentHeight) {
+                        drawScaledString(graphics, currentType.name(), contentX + elementSpacing, textY, currentType.getHeaderColour().getColor(), false);
                     }
                 }
                 entryY += traitTypeHeaderHeight;
@@ -506,17 +551,17 @@ public class AdvancedGeneEditorScreen extends Screen {
                     graphics.fill(contentX, clippedTop, contentX + contentWidth, clippedBottom, bgColor);
                 }
 
-                int textY = entryY + (geneEntryHeight - font.lineHeight) / 2;
-                if (textY >= contentY && textY + font.lineHeight <= contentY + contentHeight) {
+                int textY = entryY + (geneEntryHeight - getScaledFontHeight()) / 2;
+                if (textY >= contentY && textY + getScaledFontHeight() <= contentY + contentHeight) {
                     String traitName = TraitRegistry.translatableTrait(trait).getString();
                     String valueStr = formatGeneValue(gene);
-                    int valueWidth = font.width(valueStr);
-                    int maxTraitWidth = contentWidth - valueWidth - elementSpacing * 3;
+                    int valueWidth = getScaledTextWidth(valueStr);
+                    int maxTraitWidth = (int) ((contentWidth - valueWidth - elementSpacing * 3) / textScale);
                     traitName = truncateToWidth(traitName, maxTraitWidth);
 
                     int textColor = selected ? 0xFFFFFF44 : 0xFFFFFFFF;
-                    graphics.drawString(font, traitName, contentX + elementSpacing, textY, textColor, false);
-                    graphics.drawString(font, valueStr, contentX + contentWidth - valueWidth - elementSpacing, textY, 0xFFAAFFAA, false);
+                    drawScaledString(graphics, traitName, contentX + elementSpacing, textY, textColor, false);
+                    drawScaledString(graphics, valueStr, contentX + contentWidth - valueWidth - elementSpacing, textY, 0xFFAAFFAA, false);
                 }
             }
 
@@ -555,7 +600,7 @@ public class AdvancedGeneEditorScreen extends Screen {
         graphics.fill(px, py, px + detailPanelWidth, py + detailPanelHeight, 0xCC1E1E38);
         graphics.renderOutline(px, py, detailPanelWidth, detailPanelHeight, 0xFF4A4AAA);
 
-        graphics.drawString(font, "Details", px + innerPadding, py + innerPadding, 0xFFAAAAFF, false);
+        drawScaledString(graphics, "Details", px + innerPadding, py + innerPadding, 0xFFAAAAFF, false);
 
         Gene selectedGene = null;
         boolean fromTop = true;
@@ -563,8 +608,7 @@ public class AdvancedGeneEditorScreen extends Screen {
         if (selectionA != null) {
             selectedGene = selectionA.gene;
             fromTop = true;
-        }
-        else if (selectionB != null) {
+        } else if (selectionB != null) {
             selectedGene = selectionB.gene;
             fromTop = false;
         }
@@ -572,35 +616,35 @@ public class AdvancedGeneEditorScreen extends Screen {
         int opsStartY;
 
         if (selectedGene == null) {
-            int noSelectionY = py + innerPadding + font.lineHeight + elementSpacing * 2;
-            graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.select_gene")
+            int noSelectionY = py + innerPadding + getScaledFontHeight() + elementSpacing * 2;
+            drawScaledString(graphics, Component.translatable("gui.wildaside.gene_editor.select_gene")
                     .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC), px + innerPadding, noSelectionY, 0xFFAAAAAA, false);
-            opsStartY = noSelectionY + font.lineHeight + elementSpacing * 2;
-        }
-        else {
+            opsStartY = noSelectionY + getScaledFontHeight() + elementSpacing * 2;
+        } else {
             Trait trait = selectedGene.getTrait();
 
-            int traitHeaderY = py + innerPadding + font.lineHeight + elementSpacing;
+            int traitHeaderY = py + innerPadding + getScaledFontHeight() + elementSpacing;
             graphics.fill(px + innerPadding, traitHeaderY, px + detailPanelWidth - innerPadding, traitHeaderY + traitHeaderHeight, 0x66000000);
 
-            int traitTextY = traitHeaderY + (traitHeaderHeight - font.lineHeight) / 2;
+            int traitTextY = traitHeaderY + (traitHeaderHeight - getScaledFontHeight()) / 2;
             String traitName = TraitRegistry.translatableTrait(trait).getString();
             String typeStr = trait.getTraitType().name();
-            int typeWidth = font.width(typeStr);
-            int maxTraitNameWidth = detailPanelWidth - innerPadding * 2 - typeWidth - elementSpacing * 3;
+            int typeWidth = getScaledTextWidth(typeStr);
+            int maxTraitNameWidth = (int) ((detailPanelWidth - innerPadding * 2 - typeWidth - elementSpacing * 3) / textScale);
             traitName = truncateToWidth(traitName, maxTraitNameWidth);
 
-            graphics.drawString(font, traitName, px + innerPadding + elementSpacing, traitTextY, 0xFFFFAA00, false);
+            drawScaledString(graphics, traitName, px + innerPadding + elementSpacing, traitTextY, 0xFFFFAA00, false);
 
             int typeColor = trait.getTraitType().getHeaderColour().getColor();
-            graphics.drawString(font, typeStr, px + detailPanelWidth - innerPadding - typeWidth - elementSpacing, traitTextY, typeColor, false);
+            drawScaledString(graphics, typeStr, px + detailPanelWidth - innerPadding - typeWidth - elementSpacing, traitTextY, typeColor, false);
 
             int infoY = traitHeaderY + traitHeaderHeight + elementSpacing;
             String expressedStr = "Value: " + formatGeneValue(selectedGene);
-            expressedStr = truncateToWidth(expressedStr, detailPanelWidth - innerPadding * 2);
-            graphics.drawString(font, expressedStr, px + innerPadding, infoY, 0xFFFFFFFF, false);
+            int maxExprWidth = (int) ((detailPanelWidth - innerPadding * 2) / textScale);
+            expressedStr = truncateToWidth(expressedStr, maxExprWidth);
+            drawScaledString(graphics, expressedStr, px + innerPadding, infoY, 0xFFFFFFFF, false);
 
-            int alleleY = infoY + font.lineHeight + elementSpacing;
+            int alleleY = infoY + getScaledFontHeight() + elementSpacing;
             int alleleBoxWidth = (detailPanelWidth - innerPadding * 2 - alleleBoxSpacing) / 2;
 
             renderAlleleBox(graphics, px + innerPadding, alleleY, alleleBoxWidth, alleleBoxHeight,
@@ -614,9 +658,9 @@ public class AdvancedGeneEditorScreen extends Screen {
             int lociY = alleleY + alleleBoxHeight + elementSpacing;
             List<GeneLocus> loci = fromTop ? dnaA.getLoci().get(trait) : dnaB.getLoci().get(trait);
             if (loci != null && !loci.isEmpty()) {
-                graphics.drawString(font, "Loci (" + loci.size() + "):", px + innerPadding, lociY, 0xFFAAAAFF, false);
+                drawScaledString(graphics, "Loci (" + loci.size() + "):", px + innerPadding, lociY, 0xFFAAAAFF, false);
 
-                int locusEntryY = lociY + font.lineHeight;
+                int locusEntryY = lociY + getScaledFontHeight();
                 int displayCount = Math.min(loci.size(), maxLociDisplay);
                 for (int i = 0; i < displayCount; i++) {
                     GeneLocus locus = loci.get(i);
@@ -625,20 +669,19 @@ public class AdvancedGeneEditorScreen extends Screen {
                     if (sourceName.length() > 3) sourceName = sourceName.substring(0, 3);
 
                     String locusInfo = String.format("• %s [%s] s=%.2f", locusId, sourceName, locus.getStability());
-                    int maxLocusWidth = detailPanelWidth - innerPadding * 2 - elementSpacing;
+                    int maxLocusWidth = (int) ((detailPanelWidth - innerPadding * 2 - elementSpacing) / textScale);
                     locusInfo = truncateToWidth(locusInfo, maxLocusWidth);
 
-                    graphics.drawString(font, locusInfo, px + innerPadding + elementSpacing, locusEntryY, locus.getSource().getColor().getColor(), false);
+                    drawScaledString(graphics, locusInfo, px + innerPadding + elementSpacing, locusEntryY, locus.getSource().getColor().getColor(), false);
                     locusEntryY += lociLineHeight;
                 }
                 if (loci.size() > displayCount) {
-                    graphics.drawString(font, "+" + (loci.size() - displayCount) + " more", px + innerPadding + elementSpacing, locusEntryY, 0xFF888888, false);
+                    drawScaledString(graphics, "+" + (loci.size() - displayCount) + " more", px + innerPadding + elementSpacing, locusEntryY, 0xFF888888, false);
                     locusEntryY += lociLineHeight;
                 }
                 opsStartY = locusEntryY + elementSpacing;
-            }
-            else {
-                opsStartY = lociY + font.lineHeight + elementSpacing;
+            } else {
+                opsStartY = lociY + getScaledFontHeight() + elementSpacing;
             }
         }
 
@@ -659,21 +702,20 @@ public class AdvancedGeneEditorScreen extends Screen {
         graphics.renderOutline(bx, by, bw, bh, selected ? 0xFF8888FF : 0xFF444488);
 
         int textX = bx + elementSpacing;
-        int textWidth = bw - elementSpacing * 2;
+        int textWidth = (int) ((bw - elementSpacing * 2) / textScale);
         int currentY = by + elementSpacing;
 
-        graphics.drawString(font, label, textX, currentY, 0xFFAAAAFF, false);
+        drawScaledString(graphics, label, textX, currentY, 0xFFAAAAFF, false);
         currentY += alleleLineHeight;
 
         String valueStr;
         if (allele.getValueHolder() instanceof FloatAlleleValue fav) {
             valueStr = String.format("%.3f", fav.get());
-        }
-        else {
+        } else {
             valueStr = allele.getValueHolder().format().getString();
         }
         valueStr = truncateToWidth(valueStr, textWidth);
-        graphics.drawString(font, valueStr, textX, currentY, 0xFFFFFFFF, false);
+        drawScaledString(graphics, valueStr, textX, currentY, 0xFFFFFFFF, false);
         currentY += alleleLineHeight;
 
         Dominance dom = allele.getDominance();
@@ -685,19 +727,19 @@ public class AdvancedGeneEditorScreen extends Screen {
         };
 
         String domStr = truncateToWidth(dom.name(), textWidth);
-        graphics.drawString(font, domStr, textX, currentY, domColor, false);
+        drawScaledString(graphics, domStr, textX, currentY, domColor, false);
         currentY += alleleLineHeight;
 
-        String mutStr = String.format("M: %.1f%%", allele.getMutationRate() * 100);
+        String mutStr = String.format("M:  %.1f%%", allele.getMutationRate() * 100);
         mutStr = truncateToWidth(mutStr, textWidth);
-        graphics.drawString(font, mutStr, textX, currentY, 0xFF888888, false);
+        drawScaledString(graphics, mutStr, textX, currentY, 0xFF888888, false);
     }
 
     private void renderOperationsList(GuiGraphics graphics, int ox, int oy, int ow, int oh, int mouseX, int mouseY) {
         graphics.fill(ox, oy, ox + ow, oy + oh, 0x44000000);
         graphics.renderOutline(ox, oy, ow, oh, 0xFF3A3A6A);
 
-        graphics.drawString(font, "Ops:", ox + elementSpacing, oy + (opsHeaderHeight - font.lineHeight) / 2, 0xFFAAAAFF, false);
+        drawScaledString(graphics, "Ops:", ox + elementSpacing, oy + (opsHeaderHeight - getScaledFontHeight()) / 2, 0xFFAAAAFF, false);
 
         int contentX = ox + elementSpacing;
         int contentY = oy + opsHeaderHeight;
@@ -730,15 +772,16 @@ public class AdvancedGeneEditorScreen extends Screen {
                     graphics.renderOutline(contentX, clippedTop, contentWidth, clippedBottom - clippedTop, 0xFF6666FF);
                 }
 
-                int textY = entryY + (operationEntryHeight - 1 - font.lineHeight) / 2;
-                if (textY >= contentY && textY + font.lineHeight <= contentY + contentHeight) {
+                int textY = entryY + (operationEntryHeight - 1 - getScaledFontHeight()) / 2;
+                if (textY >= contentY && textY + getScaledFontHeight() <= contentY + contentHeight) {
                     int textColor = !canPerform ? 0xFF555555 : (opSelected ? 0xFFFFFF44 : 0xFFDDDDDD);
-                    int lockIconWidth = canPerform ? 0 : font.width("X") + elementSpacing;
-                    String opName = truncateToWidth(op.getDisplayName().getString(), contentWidth - elementSpacing * 2 - lockIconWidth);
-                    graphics.drawString(font, opName, contentX + elementSpacing, textY, textColor, false);
+                    int lockIconWidth = canPerform ? 0 : getScaledTextWidth("X") + elementSpacing;
+                    int maxOpWidth = (int) ((contentWidth - elementSpacing * 2 - lockIconWidth) / textScale);
+                    String opName = truncateToWidth(op.getDisplayName().getString(), maxOpWidth);
+                    drawScaledString(graphics, opName, contentX + elementSpacing, textY, textColor, false);
 
                     if (!canPerform) {
-                        graphics.drawString(font, "X", contentX + contentWidth - font.width("X") - elementSpacing, textY, 0xFFFF4444, false);
+                        drawScaledString(graphics, "X", contentX + contentWidth - getScaledTextWidth("X") - elementSpacing, textY, 0xFFFF4444, false);
                     }
                 }
             }
@@ -853,15 +896,13 @@ public class AdvancedGeneEditorScreen extends Screen {
                 Map.Entry<Trait, Gene> next = allGenesA.get(nextIndex);
                 selectionA = new GeneSelection(next.getKey(), next.getValue());
                 state.selectGeneTop(next.getValue(), nextIndex);
-            }
-            else if (!reverse && !allGenesB.isEmpty()) {
+            } else if (!reverse && !allGenesB.isEmpty()) {
                 selectionA = null;
                 Map.Entry<Trait, Gene> first = allGenesB.get(0);
                 selectionB = new GeneSelection(first.getKey(), first.getValue());
                 state.selectGeneBottom(first.getValue(), 0);
             }
-        }
-        else if (selectionB != null) {
+        } else if (selectionB != null) {
             int currentIndex = getGeneIndex(genesB, selectionB.trait);
             int nextIndex = reverse ? currentIndex - 1 : currentIndex + 1;
 
@@ -869,8 +910,7 @@ public class AdvancedGeneEditorScreen extends Screen {
                 Map.Entry<Trait, Gene> next = allGenesB.get(nextIndex);
                 selectionB = new GeneSelection(next.getKey(), next.getValue());
                 state.selectGeneBottom(next.getValue(), nextIndex);
-            }
-            else if (reverse && !allGenesA.isEmpty()) {
+            } else if (reverse && !allGenesA.isEmpty()) {
                 selectionB = null;
                 Map.Entry<Trait, Gene> last = allGenesA.get(allGenesA.size() - 1);
                 selectionA = new GeneSelection(last.getKey(), last.getValue());
@@ -904,8 +944,7 @@ public class AdvancedGeneEditorScreen extends Screen {
         int visibleOps = Math.max(1, opsContentHeight / operationEntryHeight);
         if (newIndex < scrollOffsetOps) {
             scrollOffsetOps = newIndex;
-        }
-        else if (newIndex >= scrollOffsetOps + visibleOps) {
+        } else if (newIndex >= scrollOffsetOps + visibleOps) {
             scrollOffsetOps = newIndex - visibleOps + 1;
         }
 
@@ -934,8 +973,7 @@ public class AdvancedGeneEditorScreen extends Screen {
             if (GeneEditorOperations.canPerformOperation(player, ops[index])) {
                 state.setCurrentOperation(ops[index]);
                 player.playSound(SoundEvents.UI_BUTTON_CLICK.get(), 0.3f, 1.0f);
-            }
-            else {
+            } else {
                 addStatusMessage(Component.translatable("gui.wildaside.gene_editor.skill_required").withStyle(ChatFormatting.RED));
                 player.playSound(SoundEvents.VILLAGER_NO, 0.3f, 1.0f);
             }
@@ -950,7 +988,7 @@ public class AdvancedGeneEditorScreen extends Screen {
             if (handleScrollbarClick(mouseX, mouseY)) return true;
 
             int dnaPanelX = leftPos + outerPadding;
-            int dnaPanelAY = topPos + headerHeight;
+            int dnaPanelAY = topPos + headerHeight + outerPadding;
             int dnaPanelBY = dnaPanelAY + dnaPanelHeight + outerPadding;
 
             if (handleDnaPanelClick(mouseX, mouseY, dnaPanelX, dnaPanelAY, genesA, true)) return true;
@@ -963,22 +1001,22 @@ public class AdvancedGeneEditorScreen extends Screen {
 
     private boolean handleScrollbarClick(double mouseX, double mouseY) {
         int dnaPanelX = leftPos + outerPadding;
-        int dnaPanelAY = topPos + headerHeight;
+        int dnaPanelAY = topPos + headerHeight + outerPadding;
         int dnaPanelBY = dnaPanelAY + dnaPanelHeight + outerPadding;
 
         int scrollbarX = dnaPanelX + dnaPanelWidth - scrollbarWidth - innerPadding;
-        int contentY = dnaPanelHeaderHeight;
+        int contentYOffset = dnaPanelHeaderHeight;
         int contentHeight = getDnaPanelContentHeight();
 
         if (mouseX >= scrollbarX && mouseX <= scrollbarX + scrollbarWidth) {
-            if (mouseY >= dnaPanelAY + contentY && mouseY <= dnaPanelAY + contentY + contentHeight && maxScrollA > 0) {
+            if (mouseY >= dnaPanelAY + contentYOffset && mouseY <= dnaPanelAY + contentYOffset + contentHeight && maxScrollA > 0) {
                 draggingScrollbarA = true;
                 dragStartY = mouseY;
                 dragStartScroll = scrollOffsetA;
                 return true;
             }
 
-            if (mouseY >= dnaPanelBY + contentY && mouseY <= dnaPanelBY + contentY + contentHeight && maxScrollB > 0) {
+            if (mouseY >= dnaPanelBY + contentYOffset && mouseY <= dnaPanelBY + contentYOffset + contentHeight && maxScrollB > 0) {
                 draggingScrollbarB = true;
                 dragStartY = mouseY;
                 dragStartScroll = scrollOffsetB;
@@ -1092,8 +1130,7 @@ public class AdvancedGeneEditorScreen extends Screen {
                 if (isTop) {
                     selectionA = new GeneSelection(trait, gene);
                     state.selectGeneTop(gene, getGeneIndex(genes, trait));
-                }
-                else {
+                } else {
                     selectionB = new GeneSelection(trait, gene);
                     state.selectGeneBottom(gene, getGeneIndex(genes, trait));
                 }
@@ -1110,7 +1147,7 @@ public class AdvancedGeneEditorScreen extends Screen {
 
     private boolean handleDetailPanelClick(double mouseX, double mouseY) {
         int px = leftPos + outerPadding + dnaPanelWidth + outerPadding;
-        int py = topPos + headerHeight;
+        int py = topPos + headerHeight + outerPadding;
 
         Gene selectedGene = selectionA != null ? selectionA.gene : (selectionB != null ? selectionB.gene : null);
 
@@ -1118,8 +1155,8 @@ public class AdvancedGeneEditorScreen extends Screen {
 
         if (selectedGene == null) return false;
 
-        int traitHeaderY = py + innerPadding + font.lineHeight + elementSpacing;
-        int alleleY = traitHeaderY + traitHeaderHeight + elementSpacing + font.lineHeight + elementSpacing;
+        int traitHeaderY = py + innerPadding + getScaledFontHeight() + elementSpacing;
+        int alleleY = traitHeaderY + traitHeaderHeight + elementSpacing + getScaledFontHeight() + elementSpacing;
         int alleleBoxWidth = (detailPanelWidth - innerPadding * 2 - alleleBoxSpacing) / 2;
 
         int alleleAX = px + innerPadding;
@@ -1163,8 +1200,7 @@ public class AdvancedGeneEditorScreen extends Screen {
                     state.setCurrentOperation(op);
                     player.playSound(SoundEvents.UI_BUTTON_CLICK.get(), 0.5f, 1.0f);
                     return true;
-                }
-                else {
+                } else {
                     addStatusMessage(Component.translatable("gui.wildaside.gene_editor.skill_required")
                             .withStyle(ChatFormatting.RED));
                     player.playSound(SoundEvents.VILLAGER_NO, 0.5f, 1.0f);
@@ -1180,7 +1216,7 @@ public class AdvancedGeneEditorScreen extends Screen {
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
         int dnaPanelX = leftPos + outerPadding;
-        int dnaPanelAY = topPos + headerHeight;
+        int dnaPanelAY = topPos + headerHeight + outerPadding;
         int dnaPanelBY = dnaPanelAY + dnaPanelHeight + outerPadding;
 
         if (mouseX >= dnaPanelX && mouseX <= dnaPanelX + dnaPanelWidth) {
@@ -1312,8 +1348,7 @@ public class AdvancedGeneEditorScreen extends Screen {
                 state.clearSelection();
 
                 NetworkHandler.sendGeneEditorUpdatePacket(workstationPos, dnaA, dnaB);
-            }
-            else {
+            } else {
                 addStatusMessage(Component.literal(result.getMessage()).withStyle(ChatFormatting.RED));
                 player.playSound(SoundEvents.VILLAGER_NO, 0.5f, 1.0f);
             }
