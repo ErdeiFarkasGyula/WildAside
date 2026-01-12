@@ -74,6 +74,10 @@ public class TraitRegistry {
         return out;
     }
 
+    public static List<Trait> getAllTraits() {
+        return new ArrayList<>(TRAITS);
+    }
+
     public static Trait getByName(String name) {
         for (Trait t : TRAITS) if (t.getName().equalsIgnoreCase(name)) return t;
         return MAX_HEALTH;

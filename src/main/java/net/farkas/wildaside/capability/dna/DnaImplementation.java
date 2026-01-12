@@ -1,6 +1,8 @@
 package net.farkas.wildaside.capability.dna;
 
 import net.farkas.wildaside.WildAside;
+import net.farkas.wildaside.dna.chromosome.Genome;
+import net.farkas.wildaside.dna.expression.ExpressionContext;
 import net.farkas.wildaside.dna.locus.GeneLocus;
 import net.farkas.wildaside.dna.locus.LocusExpression;
 import net.farkas.wildaside.dna.allele.value.AlleleValue;
@@ -23,13 +25,25 @@ import java.util.*;
 
 public class DnaImplementation implements IDna {
     private @Nullable EntityType<?> source;
+    
+    // New genome-based structure
+    private Genome genome;
+    
+    // Legacy structures (kept for backward compatibility during migration)
     private Map<Trait, List<GeneLocus>> loci = new HashMap<>();
     private Map<Trait, List<GeneLocus>> invadingLoci = new HashMap<>();
     private Map<Trait, AlleleValue> expressedCache = new HashMap<>();
+    
+    // Common structures
     private Map<Trait, TraitTransition> activeTransitions = new HashMap<>();
     private Map<Trait, Float> currentAppliedValues = new HashMap<>();
     private List<PendingDnaIntegration> pendingIntegrations = new ArrayList<>();
     private float stress = 0f;
+
+    public DnaImplementation() {
+        // Initialize with empty genome
+        this.genome = new Genome(null);
+    }
 
     @Override
     public @Nullable EntityType<?> getSource() {
@@ -42,11 +56,26 @@ public class DnaImplementation implements IDna {
     }
 
     @Override
+    public Genome getGenome() {
+        return genome;
+    }
+
+    @Override
+    public void setGenome(Genome genome) {
+        this.genome = genome;
+        if (genome != null && genome.getEntityType() != null) {
+            this.source = genome.getEntityType();
+        }
+    }
+
+    @Override
+    @Deprecated
     public Map<Trait, List<GeneLocus>> getLoci() {
         return loci;
     }
 
     @Override
+    @Deprecated
     public void setLoci(Map<Trait, List<GeneLocus>> loci) {
         this.loci = loci;
         recomputeCache();
@@ -157,6 +186,72 @@ public class DnaImplementation implements IDna {
     public void applyGenes(LivingEntity entity) {
         long currentTick = entity.level().getGameTime();
 
+        // Use new genome-based system if genome has any sequences
+        if (genome != null && hasGenomeSequences()) {
+            applyGenesFromGenome(entity, currentTick);
+            return;
+        }
+
+        // Fall back to legacy loci-based system
+        applyGenesFromLoci(entity, currentTick);
+    }
+
+    private boolean hasGenomeSequences() {
+        if (genome == null) return false;
+        // Check if any chromosome has gene sequences
+        for (var chromosome : genome.getMaternal().getAllChromosomes()) {
+            if (!chromosome.getAllGeneSequences().isEmpty()) {
+                return true;
+            }
+        }
+        for (var chromosome : genome.getPaternal().getAllChromosomes()) {
+            if (!chromosome.getAllGeneSequences().isEmpty()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void applyGenesFromGenome(LivingEntity entity, long currentTick) {
+        ExpressionContext context = new ExpressionContext(entity);
+
+        // Get all traits from registry and express them
+        for (Trait trait : TraitRegistry.getAllTraits()) {
+            float targetValue = genome.getExpressedValue(trait, context);
+
+            if (!currentAppliedValues.containsKey(trait)) {
+                trait.applyRaw(entity, targetValue);
+                currentAppliedValues.put(trait, targetValue);
+                continue;
+            }
+
+            float current = currentAppliedValues.get(trait);
+
+            if (Math.abs(targetValue - current) < 0.001f) {
+                continue;
+            }
+
+            if (!hasActiveTransition(trait)) {
+                int duration = getTransitionDuration(trait);
+                TraitTransition transition = new TraitTransition(trait, current, targetValue, currentTick, duration);
+                addTransition(transition);
+                WildAside.LOGGER.info("Started transition for [{}]: {} -> {} over {}t",
+                        trait.getName(), current, targetValue, duration);
+            } else {
+                TraitTransition existing = activeTransitions.get(trait);
+                if (Math.abs(existing.getTargetValue() - targetValue) > 0.001f) {
+                    float currentTransitionValue = existing.getCurrentValue();
+                    int duration = getTransitionDuration(trait);
+                    TraitTransition newTransition = new TraitTransition(trait, currentTransitionValue, targetValue, currentTick, duration);
+                    addTransition(newTransition);
+                    WildAside.LOGGER.info("Updated transition for [{}]: {} -> {} over {}t",
+                            trait.getName(), currentTransitionValue, targetValue, duration);
+                }
+            }
+        }
+    }
+
+    private void applyGenesFromLoci(LivingEntity entity, long currentTick) {
         for (Map.Entry<Trait, AlleleValue> entry : expressedCache.entrySet()) {
             Trait trait = entry.getKey();
             AlleleValue targetValue = entry.getValue();
@@ -263,6 +358,12 @@ public class DnaImplementation implements IDna {
         tag.putFloat("stress", stress);
         tag.putString("source", source == null ? "" : Objects.toString(ForgeRegistries.ENTITY_TYPES.getKey(source), ""));
 
+        // Save new genome structure
+        if (genome != null) {
+            tag.put("genome", genome.serializeNBT());
+        }
+
+        // Save legacy loci for backward compatibility
         ListTag lociTag = new ListTag();
         for (Map.Entry<Trait, List<GeneLocus>> e : loci.entrySet()) {
             for (GeneLocus gl : e.getValue()) {
@@ -316,6 +417,18 @@ public class DnaImplementation implements IDna {
         String s = tag.getString("source");
         if (!s.isEmpty()) source = ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(s));
 
+        // Load new genome structure if present
+        if (tag.contains("genome")) {
+            genome = Genome.deserializeNBT(tag.getCompound("genome"));
+            if (genome.getEntityType() != null) {
+                source = genome.getEntityType();
+            }
+        } else {
+            // Initialize empty genome if not present
+            genome = new Genome(source);
+        }
+
+        // Load legacy loci for backward compatibility
         ListTag lociTag = tag.getList("loci", Tag.TAG_COMPOUND);
         for (Tag t : lociTag) {
             CompoundTag ct = (CompoundTag) t;

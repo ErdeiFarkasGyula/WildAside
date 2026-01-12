@@ -1,5 +1,6 @@
 package net.farkas.wildaside.capability.dna;
 
+import net.farkas.wildaside.dna.chromosome.Genome;
 import net.farkas.wildaside.dna.locus.GeneLocus;
 import net.farkas.wildaside.dna.merge.PendingDnaIntegration;
 import net.farkas.wildaside.dna.trait.Trait;
@@ -14,10 +15,17 @@ import java.util.List;
 import java.util.Map;
 
 public interface IDna extends INBTSerializable<CompoundTag> {
-    @Nullable EntityType<? > getSource();
+    @Nullable EntityType<?> getSource();
     void setSource(EntityType<?> source);
 
+    // New Genome-based API
+    Genome getGenome();
+    void setGenome(Genome genome);
+
+    // Legacy loci-based API (kept for backward compatibility during migration)
+    @Deprecated
     Map<Trait, List<GeneLocus>> getLoci();
+    @Deprecated
     void setLoci(Map<Trait, List<GeneLocus>> loci);
 
     Map<Trait, List<GeneLocus>> getInvadingLoci();
