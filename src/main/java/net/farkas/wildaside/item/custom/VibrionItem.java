@@ -100,12 +100,12 @@ public class VibrionItem extends Item {
 
     @Deprecated //Forge: Use Player/Hand version
     public static boolean growCrop(ItemStack pStack, Level pLevel, BlockPos pPos) {
-        if (pLevel instanceof net.minecraft.server.level.ServerLevel)
-            return applyBonemeal(pStack, pLevel, pPos, net.minecraftforge.common.util.FakePlayerFactory.getMinecraft((net.minecraft.server.level.ServerLevel) pLevel));
+        if (pLevel instanceof ServerLevel)
+            return applyBonemeal(pStack, pLevel, pPos, net.minecraftforge.common.util.FakePlayerFactory.getMinecraft((ServerLevel) pLevel));
         return false;
     }
 
-    public static boolean applyBonemeal(ItemStack pStack, Level pLevel, BlockPos pPos, net.minecraft.world.entity.player.Player player) {
+    public static boolean applyBonemeal(ItemStack pStack, Level pLevel, BlockPos pPos, Player player) {
         BlockState blockstate = pLevel.getBlockState(pPos);
         int hook = net.minecraftforge.event.ForgeEventFactory.onApplyBonemeal(player, pLevel, pPos, blockstate, pStack);
         if (hook != 0) return hook > 0;

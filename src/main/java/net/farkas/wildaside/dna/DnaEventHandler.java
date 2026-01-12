@@ -38,17 +38,16 @@ public class DnaEventHandler {
 
     @SubscribeEvent
     public static void onEntityJoinLevel(EntityJoinLevelEvent event) {
-        if (event.getLevel().dimension() == ModDimensions.TEST_LEVEL || !(event.getLevel() instanceof ServerLevel))
-            return;
+        if (event.getLevel().dimension() == ModDimensions.TEST_LEVEL || !(event.getLevel() instanceof ServerLevel)) return;
         if (!ModConfig.WILD_MODE.get()) return;
         if (!ModConfig.EXCLUDE_PLAYERS_FROM_WILD_MODE.get() && event.getEntity() instanceof Player) return;
 
         if (event.getEntity() instanceof LivingEntity living) {
             living.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-                if (dna.getLoci().isEmpty()) {
+                if (dna.getGenomeLociView().isEmpty()) {
                     WildAside.LOGGER.debug("Generating base DNA for {}", living.getName().getString());
                     dna.setSource(living.getType());
-                    dna.setLoci(DnaUtils.generateBaseLoci(living));
+                    dna.setGenomeFromLoci(DnaUtils.generateBaseLoci(living));
                     dna.setStress(0f);
                 }
                 dna.recomputeAndApply(living);
@@ -97,7 +96,7 @@ public class DnaEventHandler {
             }
 
             if (trait != null) {
-                AlleleValue v = DnaUtils.getExpressed(dna.getLoci(), trait);
+                AlleleValue v = DnaUtils.getExpressed(dna.getGenomeLociView(), trait);
                 if (v instanceof FloatAlleleValue fv) {
                     float resistance = fv.get();
                     float originalDamage = event.getAmount();
@@ -162,7 +161,7 @@ public class DnaEventHandler {
     private static void tickSideEffects(LivingEntity entity) {
         entity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
             long seed = entity.getUUID().getLeastSignificantBits() ^ entity.tickCount;
-            RejectionSideEffects.tickSideEffects(entity, dna.getLoci(), seed);
+            RejectionSideEffects.tickSideEffects(entity, dna.getGenomeLociView(), seed);
         });
     }
 
@@ -174,7 +173,7 @@ public class DnaEventHandler {
             if (cooldown > 0) {
                 entity.getPersistentData().putFloat(IAbility.COOLDOWN, cooldown - TICK_CADENCE);
             }
-            for (Map.Entry<Trait, List<GeneLocus>> e : dna.getLoci().entrySet()) {
+            for (Map.Entry<Trait, List<GeneLocus>> e : dna.getGenomeLociView().entrySet()) {
                 if (e.getKey().getTraitType() == TraitType.ABILITY) {
                     var gene = DnaUtils.asGene(e.getKey(), e.getValue());
                     if (gene != null) {

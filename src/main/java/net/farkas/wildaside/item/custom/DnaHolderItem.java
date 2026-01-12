@@ -80,12 +80,58 @@ public class DnaHolderItem extends AbstractDnaSampleItem {
                     .withStyle(ChatFormatting.GREEN));
         }
 
-        Map<Trait, List<GeneLocus>> loci = dna.getLoci();
         if (revealTraits) {
+            displayGenesFromGenome(tooltip, dna);
+        }
+    }
+
+    private void displayGenesFromGenome(List<Component> tooltip, DnaImplementation dna) {
+        if (dna.getGenome() == null) {
+            Map<Trait, List<GeneLocus>> loci = dna.getGenomeLociView();
             displayGenesSection(tooltip, loci, TraitType.CORE, getTranslatable(CORE_TRAITS));
             displayGenesSection(tooltip, loci, TraitType.RESISTANCE, getTranslatable(RESISTANCES));
             displayGenesSection(tooltip, loci, TraitType.ABILITY, getTranslatable(ABILITIES));
             displayGenesSection(tooltip, loci, TraitType.APPEARANCE, getTranslatable(APPEARANCE));
+            return;
+        }
+
+        net.farkas.wildaside.dna.expression.ExpressionContext context = new net.farkas.wildaside.dna.expression.ExpressionContext(null);
+        
+        displayGenomeSection(tooltip, dna, TraitType.CORE, getTranslatable(CORE_TRAITS), context);
+        displayGenomeSection(tooltip, dna, TraitType.RESISTANCE, getTranslatable(RESISTANCES), context);
+        displayGenomeSection(tooltip, dna, TraitType.ABILITY, getTranslatable(ABILITIES), context);
+        displayGenomeSection(tooltip, dna, TraitType.APPEARANCE, getTranslatable(APPEARANCE), context);
+    }
+
+    private void displayGenomeSection(List<Component> tooltip, DnaImplementation dna, TraitType type, MutableComponent title, net.farkas.wildaside.dna.expression.ExpressionContext context) {
+        var filtered = net.farkas.wildaside.dna.trait.TraitRegistry.getAllTraits().stream()
+                .filter(trait -> trait.getTraitType() == type)
+                .filter(trait -> {
+                    float value = dna.getGenome().getExpressedValue(trait, context);
+                    return Math.abs(value) > 0.001f;
+                })
+                .sorted(Comparator.comparing(Trait::getName))
+                .toList();
+
+        if (filtered.isEmpty()) return;
+
+        tooltip.add(title.withStyle(type.getHeaderColour()));
+
+        for (Trait trait : filtered) {
+            float value = dna.getGenome().getExpressedValue(trait, context);
+            String valueStr = String.format("%.2f", value);
+
+            if (type == TraitType.ABILITY) {
+                valueStr = String.format("%.2f", value / 20f) + "s";
+            }
+            else if (type == TraitType.RESISTANCE) {
+                valueStr = String.format("%.2f", value * 100f) + "%";
+            }
+
+            tooltip.add(Component.literal("- ")
+                    .append(Component.translatable("trait.wildaside." + trait.getName()))
+                    .append(": " + valueStr)
+                    .withStyle(type.getEntryColour()));
         }
     }
 

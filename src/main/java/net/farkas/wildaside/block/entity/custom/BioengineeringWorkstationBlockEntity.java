@@ -211,7 +211,15 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
     }
 
     public static Map<Trait, Gene> orderGenes(DnaImplementation dna) {
-        return dna.getLoci().entrySet().stream()
+        Map<Trait, List<GeneLocus>> loci;
+        
+        if (dna.getGenome() != null && hasGenomeSequences(dna.getGenome())) {
+            loci = DnaUtils.convertGenomeToLoci(dna.getGenome());
+        } else {
+            loci = dna.getGenomeLociView();
+        }
+        
+        return loci.entrySet().stream()
                 .map(e -> Map.entry(e.getKey(), DnaUtils.asGene(e.getKey(), e.getValue())))
                 .filter(e -> e.getValue() != null)
                 .sorted(Map.Entry.comparingByKey(
@@ -224,6 +232,10 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
                         (a, b) -> a,
                         LinkedHashMap::new
                 ));
+    }
+
+    private static boolean hasGenomeSequences(net.farkas.wildaside.dna.chromosome.Genome genome) {
+        return DnaUtils.hasGenomeSequences(genome);
     }
 
     public void analyseDna() {
@@ -294,7 +306,8 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
             loci.put(trait, List.of(gl));
         }
 
-        dna.setLoci(loci);
+        net.farkas.wildaside.dna.chromosome.Genome genome = DnaUtils.convertLociToGenome(dna.getSource(), loci);
+        dna.setGenome(genome);
         tag.put(DNA_DATA, dna.serializeNBT());
 
         output.setTag(tag);

@@ -19,7 +19,7 @@ public class BlobLeapAtTargetGoal extends Goal {
 
     public BlobLeapAtTargetGoal(BacillusBlobEntity blob) {
         this.blob = blob;
-        this.setFlags(EnumSet.of(Goal.Flag.JUMP, Goal.Flag.MOVE));
+        this.setFlags(EnumSet.of(Flag.JUMP, Flag.MOVE));
     }
 
     @Override

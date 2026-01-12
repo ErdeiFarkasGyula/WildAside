@@ -1,15 +1,23 @@
 package net.farkas.wildaside.dna;
 
 import net.farkas.wildaside.WildAside;
+import net.farkas.wildaside.capability.dna.IDna;
 import net.farkas.wildaside.config.ModConfig;
 import net.farkas.wildaside.dna.allele.Allele;
 import net.farkas.wildaside.dna.allele.value.AlleleValue;
 import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
 import net.farkas.wildaside.dna.appearance.AppearanceGeneRegistry;
 import net.farkas.wildaside.dna.allele.dominance.Dominance;
+import net.farkas.wildaside.dna.chromosome.Genome;
+import net.farkas.wildaside.dna.chromosome.GenomeBuilder;
+import net.farkas.wildaside.dna.expression.GeneExpressionPair;
 import net.farkas.wildaside.dna.locus.GeneLocus;
 import net.farkas.wildaside.dna.locus.LocusExpression;
 import net.farkas.wildaside.dna.locus.LocusFlag;
+import net.farkas.wildaside.dna.sequence.CodingRegion;
+import net.farkas.wildaside.dna.sequence.CombineMethod;
+import net.farkas.wildaside.dna.sequence.GeneSequence;
+import net.farkas.wildaside.dna.sequence.GeneSource;
 import net.farkas.wildaside.dna.speed.MobSpeedResultStorage;
 import net.farkas.wildaside.dna.speed.MobSpeedTesting;
 import net.farkas.wildaside.dna.trait.Trait;
@@ -55,47 +63,6 @@ public class DnaUtils {
 
         return (float) instance.getBaseValue();
     }
-
-//    public static Map<Trait, Gene> generateBaseGenes(LivingEntity entity, boolean preGen) {
-//        Map<Trait, Gene> genes = new HashMap<>();
-//        long seed = entity.getUUID().getLeastSignificantBits();
-//
-//        for (Trait trait : TraitRegistry.TRAITS) {
-//            if (trait.getTraitType() == TraitType.CORE || trait == TraitRegistry.KNOCKBACK_RESISTANCE) {
-//                Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(DnaUtils.getAttributeRes(trait.getName()));
-//                if (attribute != null) {
-//                    float baseValue = DnaUtils.getAttributeValue(entity, attribute);
-//
-//                    if (trait == TraitRegistry.MOVEMENT_SPEED && ModConfig.ACCURATE_DNA_MOVEMENT_SPEEDS.get() && !preGen) {
-//                        baseValue = (float) MobSpeedResultStorage.getSpeed(entity.getType(), "ground");
-//                        if (MobSpeedTesting.EXCLUDED_MOBS.contains(entity.getType())) {
-//                            baseValue = (float) entity.getAttributeBaseValue(attribute);
-//                        }
-//                    }
-//
-//                    Allele alleleA = createFloatAllele(trait, baseValue, seed, 0);
-//                    Allele alleleB = createFloatAllele(trait, baseValue, seed, 1);
-//
-//                    genes.put(trait, new Gene(trait, alleleA, alleleB));
-//                }
-//            }
-//        }
-//
-//        generateResistanceGene(genes, TraitRegistry.FIRE_RESISTANCE, seed, entity.fireImmune());
-//        generateResistanceGene(genes, TraitRegistry.FREEZE_RESISTANCE, seed, entity.getType().is(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES));
-//        generateResistanceGene(genes, TraitRegistry.FALL_RESISTANCE, seed, entity.getType().is(EntityTypeTags.FALL_DAMAGE_IMMUNE));
-//
-//        if (entity.getType() == EntityType.BLAZE) {
-//            generateAbilityGene(genes, TraitRegistry.FIRE_ABILITY, seed);
-//        }
-//        else if (entity.getType() == EntityType.ENDERMAN) {
-//            generateAbilityGene(genes, TraitRegistry.TELEPORT_ABILITY, seed);
-//        }
-//
-//        AppearanceGeneRegistry.extract(entity, genes, seed);
-//
-//        return genes;
-//    }
 
     private static Allele createFloatAllele(Trait trait, float baseValue, long seed, int index) {
         float gaussian = DnaUtils.deterministicGaussian(seed, trait.getName() + index);
@@ -384,5 +351,119 @@ public class DnaUtils {
     public static float getSafeBaseAttributeValue(LivingEntity entity, Attribute attribute) {
         var inst = entity.getAttribute(attribute);
         return inst == null ? 0f : (float) inst.getBaseValue();
+    }
+
+    public static Genome generateBaseGenome(LivingEntity entity) {
+        Map<Trait, List<GeneLocus>> loci = generateBaseLoci(entity);
+        return convertLociToGenome(entity.getType(), loci);
+    }
+
+    public static Genome convertLociToGenome(EntityType<?> entityType, Map<Trait, List<GeneLocus>> loci) {
+        GenomeBuilder builder = new GenomeBuilder(entityType);
+
+        for (Map.Entry<Trait, List<GeneLocus>> entry : loci.entrySet()) {
+            Trait trait = entry.getKey();
+            List<GeneLocus> lociList = entry.getValue();
+            
+            if (lociList == null || lociList.isEmpty()) continue;
+
+            GeneLocus primaryLocus = lociList.get(0);
+            
+            GeneSequence maternalSeq = convertLocusToGeneSequence(trait, primaryLocus, true);
+            GeneSequence paternalSeq = convertLocusToGeneSequence(trait, primaryLocus, false);
+            
+            builder.addMaternalSequence(trait, maternalSeq);
+            builder.addPaternalSequence(trait, paternalSeq);
+        }
+
+        return builder.build();
+    }
+
+    private static GeneSequence convertLocusToGeneSequence(Trait trait, GeneLocus locus, boolean maternal) {
+        Allele allele = maternal ? locus.getAlleleA() : locus.getAlleleB();
+        
+        if (!(allele.getValueHolder() instanceof FloatAlleleValue floatValue)) {
+            return null;
+        }
+
+        float value = floatValue.get();
+        
+        GeneSequence.Builder builder = GeneSequence.builder()
+                .trait(trait)
+                .dominance(allele.getDominance())
+                .mutationRate(allele.getMutationRate())
+                .stability(locus.getStability())
+                .source(GeneSource.NATURAL);
+
+        builder.codingRegion(new CodingRegion(
+                locus.getId() + (maternal ? "_m" : "_p"),
+                value,
+                CombineMethod.SET
+        ));
+
+        return builder.build();
+    }
+
+    public static Map<Trait, List<GeneLocus>> convertGenomeToLoci(Genome genome) {
+        Map<Trait, List<GeneLocus>> loci = new HashMap<>();
+        
+        if (genome == null) return loci;
+
+        for (Trait trait : TraitRegistry.getAllTraits()) {
+            GeneExpressionPair pair = genome.getGeneExpression(trait);
+            
+            if (pair.getMaternal() == null && pair.getPaternal() == null) continue;
+
+            float maternalValue = pair.getMaternal() != null ? pair.getMaternal().calculateBaseValue() : 0f;
+            float paternalValue = pair.getPaternal() != null ? pair.getPaternal().calculateBaseValue() : 0f;
+
+            Dominance maternalDom = pair.getMaternal() != null ? pair.getMaternal().getDominance() : Dominance.RECESSIVE;
+            Dominance paternalDom = pair.getPaternal() != null ? pair.getPaternal().getDominance() : Dominance.RECESSIVE;
+
+            float mutationRate = 0.01f;
+            if (pair.getMaternal() != null) {
+                mutationRate = pair.getMaternal().getMutationRate();
+            } else if (pair.getPaternal() != null) {
+                mutationRate = pair.getPaternal().getMutationRate();
+            }
+
+            Allele alleleA = new Allele(new FloatAlleleValue(maternalValue), mutationRate, maternalDom);
+            Allele alleleB = new Allele(new FloatAlleleValue(paternalValue), mutationRate, paternalDom);
+
+            GeneLocus locus = new GeneLocus(
+                    trait.getName(),
+                    alleleA,
+                    alleleB,
+                    Set.of(),
+                    trait.getInstabilityModifier()
+            );
+
+            loci.put(trait, List.of(locus));
+        }
+
+        return loci;
+    }
+
+    public static boolean hasGenomeSequences(Genome genome) {
+        if (genome == null) return false;
+        for (var chromosome : genome.getMaternal().getAllChromosomes()) {
+            if (!chromosome.getAllGeneSequences().isEmpty()) {
+                return true;
+            }
+        }
+        for (var chromosome : genome.getPaternal().getAllChromosomes()) {
+            if (!chromosome.getAllGeneSequences().isEmpty()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean hasValidDna(IDna dna) {
+        if (dna == null) return false;
+        if (dna.getGenome() != null && hasGenomeSequences(dna.getGenome())) {
+            return true;
+        }
+        return dna.getGenomeLociView() != null && !dna.getGenomeLociView().isEmpty();
     }
 }

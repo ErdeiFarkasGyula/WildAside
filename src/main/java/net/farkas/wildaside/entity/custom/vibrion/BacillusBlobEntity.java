@@ -288,24 +288,26 @@ public class BacillusBlobEntity extends PathfinderMob {
             return;
         }
 
-        WildAside.LOGGER.info("carriedDna. getLoci() is null: {}", carriedDna.getLoci() == null);
+        WildAside.LOGGER.info("carriedDna. getLoci() is null: {}", carriedDna.getGenomeLociView() == null);
 
-        if (carriedDna.getLoci() == null) {
-            WildAside.LOGGER.error("carriedDna. getLoci() is null!");
+        Map<Trait, List<GeneLocus>> loci = getEffectiveLoci(carriedDna);
+        
+        if (loci == null) {
+            WildAside.LOGGER.error("carriedDna. effective loci is null!");
             discardWithMessage(host, "entity.wildaside.bacillus_blob.entered_empty", 0xFFAA00);
             return;
         }
 
-        WildAside.LOGGER.info("carriedDna. getLoci().isEmpty(): {}", carriedDna.getLoci().isEmpty());
-        WildAside.LOGGER.info("carriedDna. getLoci().size(): {}", carriedDna.getLoci().size());
+        WildAside.LOGGER.info("carriedDna. effective loci isEmpty(): {}", loci.isEmpty());
+        WildAside.LOGGER.info("carriedDna. effective loci size(): {}", loci.size());
 
-        for (Map.Entry<Trait, List<GeneLocus>> entry : carriedDna.getLoci().entrySet()) {
+        for (Map.Entry<Trait, List<GeneLocus>> entry : loci.entrySet()) {
             WildAside.LOGGER.info("  Trait [{}]: {} loci",
                     entry.getKey() != null ? entry.getKey().getName() : "NULL",
                     entry.getValue() != null ? entry.getValue().size() : "NULL");
         }
 
-        if (carriedDna.getLoci().isEmpty()) {
+        if (loci.isEmpty()) {
             WildAside.LOGGER.warn("Blob has no DNA to transfer!");
             discardWithMessage(host, "entity.wildaside.bacillus_blob.entered_empty", 0xFFAA00);
             return;
@@ -317,9 +319,9 @@ public class BacillusBlobEntity extends PathfinderMob {
 
         WildAside.LOGGER.info("Serialized DNA tag keys: {}", serializedDna.getAllKeys());
 
-        int totalLoci = carriedDna.getLoci().values().stream().mapToInt(List::size).sum();
+        int totalLoci = loci.values().stream().mapToInt(List::size).sum();
         WildAside.LOGGER.info("Blob DNA being transferred: {} traits, {} total loci",
-                carriedDna.getLoci().size(), totalLoci);
+                loci.size(), totalLoci);
 
         boolean success = BacillusBlobConsumption.consume(host, dnaTag);
 
@@ -543,13 +545,14 @@ public class BacillusBlobEntity extends PathfinderMob {
 
         this.carriedDna = dna;
 
-        boolean hasDna = !dna.getLoci().isEmpty();
+        boolean hasDna = hasValidDna(dna);
         entityData.set(DATA_HAS_DNA, hasDna);
 
         if (hasDna) {
-            int totalLoci = dna.getLoci().values().stream().mapToInt(List::size).sum();
-            WildAside.LOGGER.info("setCarriedDna: {} traits, {} loci", dna.getLoci().size(), totalLoci);
-            for (Map.Entry<Trait, List<GeneLocus>> entry : dna.getLoci().entrySet()) {
+            Map<Trait, List<GeneLocus>> loci = getEffectiveLoci(dna);
+            int totalLoci = loci.values().stream().mapToInt(List::size).sum();
+            WildAside.LOGGER.info("setCarriedDna: {} traits, {} loci", loci.size(), totalLoci);
+            for (Map.Entry<Trait, List<GeneLocus>> entry : loci.entrySet()) {
                 WildAside.LOGGER.info("  Trait [{}]: {} loci", entry.getKey().getName(), entry.getValue().size());
             }
         }
@@ -603,9 +606,10 @@ public class BacillusBlobEntity extends PathfinderMob {
             tag.putUUID(TAG_ATTACHED_TO, attached.getUUID());
         }
 
-        if (carriedDna != null && !carriedDna.getLoci().isEmpty()) {
+        if (carriedDna != null && hasValidDna(carriedDna)) {
             tag.put(TAG_CARRIED_DNA, carriedDna.serializeNBT());
-            WildAside.LOGGER.info("Saved blob DNA:  {} traits", carriedDna.getLoci().size());
+            Map<Trait, List<GeneLocus>> loci = getEffectiveLoci(carriedDna);
+            WildAside.LOGGER.info("Saved blob DNA:  {} traits", loci.size());
         }
     }
 
@@ -626,8 +630,9 @@ public class BacillusBlobEntity extends PathfinderMob {
         if (tag.contains(TAG_CARRIED_DNA)) {
             carriedDna = new DnaImplementation();
             carriedDna.deserializeNBT(tag.getCompound(TAG_CARRIED_DNA));
-            entityData.set(DATA_HAS_DNA, !carriedDna.getLoci().isEmpty());
-            WildAside.LOGGER.info("Loaded blob DNA: {} traits", carriedDna.getLoci().size());
+            entityData.set(DATA_HAS_DNA, hasValidDna(carriedDna));
+            Map<Trait, List<GeneLocus>> loci = getEffectiveLoci(carriedDna);
+            WildAside.LOGGER.info("Loaded blob DNA: {} traits", loci.size());
         }
     }
 
@@ -680,5 +685,17 @@ public class BacillusBlobEntity extends PathfinderMob {
             return Component.translatable("entity.wildaside.bacillus_blob.with_dna");
         }
         return super.getName();
+    }
+
+    private boolean hasValidDna(DnaImplementation dna) {
+        return net.farkas.wildaside.dna.DnaUtils.hasValidDna(dna);
+    }
+
+    private Map<Trait, List<GeneLocus>> getEffectiveLoci(DnaImplementation dna) {
+        if (dna == null) return Map.of();
+        if (net.farkas.wildaside.dna.DnaUtils.hasValidDna(dna) && dna.getGenome() != null) {
+            return net.farkas.wildaside.dna.DnaUtils.convertGenomeToLoci(dna.getGenome());
+        }
+        return dna.getGenomeLociView();
     }
 }

@@ -20,7 +20,7 @@ public class DnaDegradationHandler {
 
     public static void tickDegradation(LivingEntity entity) {
         entity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-            Map<Trait, List<GeneLocus>> loci = dna.getLoci();
+            Map<Trait, List<GeneLocus>> loci = new java.util.HashMap<>(dna.getGenomeLociView());
             boolean changed = false;
             long seed = entity.getUUID().getLeastSignificantBits() ^ entity.tickCount;
 
@@ -91,6 +91,7 @@ public class DnaDegradationHandler {
             }
 
             if (changed) {
+                dna.setGenomeFromLoci(loci);
                 dna.recomputeAndApply(entity);
             }
         });

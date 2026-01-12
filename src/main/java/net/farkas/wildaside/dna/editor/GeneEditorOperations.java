@@ -1,21 +1,22 @@
-package net.farkas.wildaside.dna. editor;
+package net.farkas.wildaside.dna.editor;
 
 import net.farkas.wildaside.WildAside;
-import net.farkas. wildaside.capability. dna.DnaImplementation;
-import net.farkas.wildaside.dna. Gene;
-import net.farkas.wildaside.dna. allele.Allele;
-import net.farkas.wildaside.dna.allele.dominance. Dominance;
+import net.farkas.wildaside.capability.dna.DnaImplementation;
+import net.farkas.wildaside.dna.Gene;
+import net.farkas.wildaside.dna.allele.Allele;
+import net.farkas.wildaside.dna.allele.dominance.Dominance;
 import net.farkas.wildaside.dna.allele.value.AlleleValue;
 import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillUtils;
-import net.farkas. wildaside.dna.locus.GeneLocus;
-import net.farkas.wildaside.dna.locus. LocusSource;
-import net.farkas. wildaside.dna.trait.Trait;
-import net. minecraft.resources.ResourceLocation;
-import net. minecraft.world.entity.player. Player;
+import net.farkas.wildaside.dna.locus.GeneLocus;
+import net.farkas.wildaside.dna.locus.LocusSource;
+import net.farkas.wildaside.dna.trait.Trait;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 
-import java.util. ArrayList;
-import java.util. List;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -43,17 +44,23 @@ public class GeneEditorOperations {
 
         Trait trait = geneA.getTrait();
 
-        List<GeneLocus> lociA = dnaA.getLoci().get(trait);
-        List<GeneLocus> lociB = dnaB.getLoci().get(trait);
+        List<GeneLocus> lociA = dnaA.getGenomeLociView().get(trait);
+        List<GeneLocus> lociB = dnaB.getGenomeLociView().get(trait);
 
         if (lociA == null || lociB == null) {
             return GeneEditorResult.failure("Missing loci data");
         }
 
-        dnaA.getLoci().put(trait, new ArrayList<>(lociB));
-        dnaB.getLoci().put(trait, new ArrayList<>(lociA));
+        Map<Trait, List<GeneLocus>> allLociA = new HashMap<>(dnaA.getGenomeLociView());
+        Map<Trait, List<GeneLocus>> allLociB = new HashMap<>(dnaB.getGenomeLociView());
+        
+        allLociA.put(trait, new ArrayList<>(lociB));
+        allLociB.put(trait, new ArrayList<>(lociA));
+        
+        dnaA.setGenomeFromLoci(allLociA);
+        dnaB.setGenomeFromLoci(allLociB);
 
-        WildAside. LOGGER.info("Swapped trait [{}] between DNAs", trait.getName());
+        WildAside.LOGGER.info("Swapped trait [{}] between DNAs", trait.getName());
 
         return GeneEditorResult.success("Trait swapped successfully", 0f);
     }
@@ -65,8 +72,8 @@ public class GeneEditorOperations {
 
         Trait trait = geneA. getTrait();
 
-        List<GeneLocus> lociA = dnaA.getLoci().get(trait);
-        List<GeneLocus> lociB = dnaB.getLoci().get(trait);
+        List<GeneLocus> lociA = dnaA.getGenomeLociView().get(trait);
+        List<GeneLocus> lociB = dnaB.getGenomeLociView().get(trait);
 
         if (lociA == null || lociA.isEmpty() || lociB == null || lociB.isEmpty()) {
             return GeneEditorResult.failure("Missing loci data");
@@ -109,14 +116,15 @@ public class GeneEditorOperations {
             DnaImplementation dna, Gene gene, boolean modifyAlleleA, Dominance newDominance) {
 
         Trait trait = gene.getTrait();
-        List<GeneLocus> loci = dna.getLoci().get(trait);
+        Map<Trait, List<GeneLocus>> allLoci = new HashMap<>(dna.getGenomeLociView());
+        List<GeneLocus> loci = allLoci.get(trait);
 
         if (loci == null || loci.isEmpty()) {
             return GeneEditorResult.failure("Missing loci data");
         }
 
         GeneLocus locus = loci.get(0);
-        Allele target = modifyAlleleA ? locus. getAlleleA() : locus.getAlleleB();
+        Allele target = modifyAlleleA ? locus.getAlleleA() : locus.getAlleleB();
         Allele modified = target.copyWithDominance(newDominance);
 
         GeneLocus newLocus;
@@ -130,6 +138,7 @@ public class GeneEditorOperations {
         newLocus = newLocus.withStability(newLocus.getStability() - stabilityLoss);
 
         loci.set(0, newLocus);
+        dna.setGenomeFromLoci(allLoci);
 
         WildAside.LOGGER.info("Modified dominance for trait [{}] allele {} to {}",
                 trait.getName(), modifyAlleleA ? "A" : "B", newDominance);
@@ -139,7 +148,8 @@ public class GeneEditorOperations {
 
     public static GeneEditorResult stabilize(DnaImplementation dna, Gene gene, float amount) {
         Trait trait = gene.getTrait();
-        List<GeneLocus> loci = dna.getLoci().get(trait);
+        Map<Trait, List<GeneLocus>> allLoci = new HashMap<>(dna.getGenomeLociView());
+        List<GeneLocus> loci = allLoci.get(trait);
 
         if (loci == null || loci.isEmpty()) {
             return GeneEditorResult.failure("Missing loci data");
@@ -155,6 +165,7 @@ public class GeneEditorOperations {
         }
 
         loci.set(0, newLocus);
+        dna.setGenomeFromLoci(allLoci);
 
         WildAside.LOGGER.info("Stabilized trait [{}] by {} to {}", trait.getName(), amount, newStability);
 
@@ -163,13 +174,14 @@ public class GeneEditorOperations {
 
     public static GeneEditorResult amplify(DnaImplementation dna, Gene gene, float multiplier) {
         Trait trait = gene.getTrait();
-        List<GeneLocus> loci = dna.getLoci().get(trait);
+        Map<Trait, List<GeneLocus>> allLoci = new HashMap<>(dna.getGenomeLociView());
+        List<GeneLocus> loci = allLoci.get(trait);
 
         if (loci == null || loci.isEmpty()) {
             return GeneEditorResult.failure("Missing loci data");
         }
 
-        GeneLocus locus = loci. get(0);
+        GeneLocus locus = loci.get(0);
 
         Allele alleleA = locus.getAlleleA();
         Allele alleleB = locus.getAlleleB();
@@ -193,10 +205,11 @@ public class GeneEditorOperations {
         newLocus = newLocus.withStability(Math.max(0.1f, newLocus.getStability() - stabilityLoss));
 
         loci.set(0, newLocus);
+        dna.setGenomeFromLoci(allLoci);
 
         WildAside.LOGGER.info("Amplified trait [{}] by {}x", trait.getName(), multiplier);
 
-        return GeneEditorResult. success("Gene amplified", stabilityLoss * 20f);
+        return GeneEditorResult.success("Gene amplified", stabilityLoss * 20f);
     }
 
     public static GeneEditorResult suppress(DnaImplementation dna, Gene gene, float multiplier) {
@@ -213,8 +226,8 @@ public class GeneEditorOperations {
 
         Trait trait = targetGene.getTrait();
 
-        List<GeneLocus> targetLoci = targetDna.getLoci().get(trait);
-        List<GeneLocus> sourceLoci = sourceDna.getLoci().get(trait);
+        List<GeneLocus> targetLoci = targetDna.getGenomeLociView().get(trait);
+        List<GeneLocus> sourceLoci = sourceDna.getGenomeLociView().get(trait);
 
         if (targetLoci == null || sourceLoci == null || sourceLoci.isEmpty()) {
             return GeneEditorResult.failure("Missing loci data");

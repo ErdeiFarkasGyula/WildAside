@@ -227,12 +227,21 @@ public class AdvancedGeneEditorScreen extends Screen {
     }
 
     private Map<Trait, Gene> buildGeneMap(DnaImplementation dna) {
-        if (dna == null || dna.getLoci().isEmpty()) return new LinkedHashMap<>();
+        if (dna == null) return new LinkedHashMap<>();
+        
+        Map<Trait, List<GeneLocus>> loci;
+        if (dna.getGenome() != null && hasGenomeSequences(dna.getGenome())) {
+            loci = DnaUtils.convertGenomeToLoci(dna.getGenome());
+        } else {
+            loci = dna.getGenomeLociView();
+        }
+        
+        if (loci.isEmpty()) return new LinkedHashMap<>();
 
         Map<Trait, Gene> result = new LinkedHashMap<>();
 
         for (TraitType type : TraitType.values()) {
-            for (Map.Entry<Trait, List<GeneLocus>> entry : dna.getLoci().entrySet()) {
+            for (Map.Entry<Trait, List<GeneLocus>> entry : loci.entrySet()) {
                 if (entry.getKey().getTraitType() == type) {
                     Gene gene = DnaUtils.asGene(entry.getKey(), entry.getValue());
                     if (gene != null) {
@@ -495,7 +504,21 @@ public class AdvancedGeneEditorScreen extends Screen {
                     state.getSelectedAllele() != null && !state.isSelectedAlleleA(), mouseX, mouseY);
 
             int lociY = alleleY + alleleBoxHeight + ELEMENT_SPACING;
-            List<GeneLocus> loci = fromTop ? dnaA.getLoci().get(trait) : dnaB.getLoci().get(trait);
+            Map<Trait, List<GeneLocus>> lociMap;
+            if (fromTop) {
+                if (dnaA.getGenome() != null && hasGenomeSequences(dnaA.getGenome())) {
+                    lociMap = DnaUtils.convertGenomeToLoci(dnaA.getGenome());
+                } else {
+                    lociMap = dnaA.getGenomeLociView();
+                }
+            } else {
+                if (dnaB.getGenome() != null && hasGenomeSequences(dnaB.getGenome())) {
+                    lociMap = DnaUtils.convertGenomeToLoci(dnaB.getGenome());
+                } else {
+                    lociMap = dnaB.getGenomeLociView();
+                }
+            }
+            List<GeneLocus> loci = lociMap.get(trait);
             if (loci != null && !loci.isEmpty()) {
                 graphics.drawString(font, "Loci (" + loci.size() + "):", px + INNER_PADDING, lociY, 0xFFAAAAFF, false);
 
@@ -1246,6 +1269,10 @@ public class AdvancedGeneEditorScreen extends Screen {
     @Override
     public boolean isPauseScreen() {
         return false;
+    }
+
+    private boolean hasGenomeSequences(net.farkas.wildaside.dna.chromosome.Genome genome) {
+        return DnaUtils.hasGenomeSequences(genome);
     }
 
     private record GeneSelection(Trait trait, Gene gene) {

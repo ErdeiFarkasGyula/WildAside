@@ -4,6 +4,7 @@ import net.farkas.wildaside.advancement.ModAdvancements;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.custom.BioengineeringWorkstationBlockEntity;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
+import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
 import net.farkas.wildaside.dna.trait.Trait;
@@ -120,11 +121,19 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
                     DnaImplementation dna = new DnaImplementation();
                     dna.deserializeNBT(tag.getCompound(DNA_DATA));
 
-                    if (dna.getLoci().isEmpty()) {
+                    if (dna.getGenome() != null && hasGenomeSequences(dna.getGenome())) {
+                        return super.shouldGivePoint(pPlayer, pStack);
+                    }
+
+                    if (dna.getGenomeLociView().isEmpty()) {
                         return false;
                     }
 
                     return super.shouldGivePoint(pPlayer, pStack);
+                }
+
+                private boolean hasGenomeSequences(net.farkas.wildaside.dna.chromosome.Genome genome) {
+                    return DnaUtils.hasGenomeSequences(genome);
                 }
             };
 

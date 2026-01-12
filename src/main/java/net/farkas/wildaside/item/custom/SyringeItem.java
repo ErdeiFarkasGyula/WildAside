@@ -306,9 +306,9 @@ public class SyringeItem extends AbstractDnaSampleItem {
 
             var cap = target.getCapability(DnaCapability.INSTANCE).orElse(null);
 
-            if (cap.getLoci().isEmpty()) {
+            if (cap.getGenome() == null || !hasGenomeSequences(cap)) {
                 cap.setSource(target.getType());
-                cap.setLoci(DnaUtils.generateBaseLoci(target));
+                cap.setGenome(DnaUtils.generateBaseGenome(target));
                 cap.setStress(0f);
             }
 
@@ -597,5 +597,9 @@ public class SyringeItem extends AbstractDnaSampleItem {
     @Override
     public int getUseDuration(ItemStack pStack) {
         return 72000;
+    }
+
+    private boolean hasGenomeSequences(net.farkas.wildaside.capability.dna.IDna cap) {
+        return cap != null && cap.getGenome() != null && DnaUtils.hasGenomeSequences(cap.getGenome());
     }
 }

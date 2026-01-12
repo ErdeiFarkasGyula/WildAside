@@ -244,7 +244,7 @@ public class ModCommands {
             Map<Trait, List<GeneLocus>> lociToPrint;
             boolean isGenerated = false;
 
-            if (dna.getLoci().isEmpty()) {
+            if (dna.getGenomeLociView().isEmpty()) {
                 lociToPrint = DnaUtils.generateBaseLoci(living);
                 isGenerated = true;
 
@@ -252,7 +252,7 @@ public class ModCommands {
                         .withStyle(ChatFormatting.YELLOW, ChatFormatting.ITALIC), false);
             }
             else {
-                lociToPrint = dna.getLoci();
+                lociToPrint = dna.getGenomeLociView();
             }
 
             src.sendSuccess(() -> Component.literal("").withStyle(ChatFormatting.STRIKETHROUGH)
@@ -493,7 +493,7 @@ public class ModCommands {
             Map<Trait, List<GeneLocus>> lociToPrint;
             boolean isGenerated = false;
 
-            if (dna.getLoci().isEmpty()) {
+            if (dna.getGenomeLociView().isEmpty()) {
                 lociToPrint = DnaUtils.generateBaseLoci(living);
                 isGenerated = true;
 
@@ -501,7 +501,7 @@ public class ModCommands {
                         .withStyle(ChatFormatting.YELLOW, ChatFormatting.ITALIC), false);
             }
             else {
-                lociToPrint = dna.getLoci();
+                lociToPrint = dna.getGenomeLociView();
             }
 
             List<GeneLocus> loci = lociToPrint.get(trait);
@@ -619,12 +619,12 @@ public class ModCommands {
         String rawInput = StringArgumentType.getString(ctx, VALUE);
 
         living.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-            if (dna.getLoci().isEmpty()) {
+            if (dna.getGenomeLociView().isEmpty()) {
                 dna.setSource(living.getType());
-                dna.setLoci(DnaUtils.generateBaseLoci(living));
+                dna.setGenomeFromLoci(DnaUtils.generateBaseLoci(living));
             }
 
-            List<GeneLocus> loci = dna.getLoci().get(trait);
+            List<GeneLocus> loci = dna.getGenomeLociView().get(trait);
             if (loci == null || loci.isEmpty()) {
                 ctx.getSource().sendFailure(Component.translatable("command.wildaside.dna.no_gene_for_trait", traitName));
                 return;
@@ -652,7 +652,9 @@ public class ModCommands {
                     updatedLoci.add(updated);
                 }
 
-                dna.getLoci().put(trait, updatedLoci);
+                Map<Trait, List<GeneLocus>> allLoci = new HashMap<>(dna.getGenomeLociView());
+                allLoci.put(trait, updatedLoci);
+                dna.setGenomeFromLoci(allLoci);
 
                 applySingleTrait(living, dna, trait);
 
@@ -672,7 +674,7 @@ public class ModCommands {
     }
 
     private static void applySingleTrait(LivingEntity entity, IDna dna, Trait trait) {
-        List<GeneLocus> loci = dna.getLoci().get(trait);
+        List<GeneLocus> loci = dna.getGenomeLociView().get(trait);
         if (loci == null || loci.isEmpty()) return;
 
         AlleleValue expressed = LocusExpression.express(trait, loci);
@@ -728,7 +730,7 @@ public class ModCommands {
             dna.getCurrentAppliedValues().clear();
 
             dna.setSource(living.getType());
-            dna.setLoci(DnaUtils.generateBaseLoci(living));
+            dna.setGenomeFromLoci(DnaUtils.generateBaseLoci(living));
             dna.setStress(0f);
 
             dna.recomputeAndApply(living);
@@ -757,7 +759,7 @@ public class ModCommands {
             dna.clearInvadingLoci();
             dna.getCurrentAppliedValues().clear();
 
-            dna.setLoci(new HashMap<>());
+            dna.setGenomeFromLoci(new HashMap<>());
             dna.setSource(null);
             dna.setStress(0f);
 

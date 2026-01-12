@@ -36,7 +36,7 @@ public class SporeBlasterBlock extends DirectionalBlock implements EntityBlock {
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level world, BlockPos pos, net.minecraft.world.level.block.Block neighbor, BlockPos neighborPos, boolean moved) {
+    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block neighbor, BlockPos neighborPos, boolean moved) {
         if (!world.isClientSide) world.scheduleTick(pos, this, 2);
         super.neighborChanged(state, world, pos, neighbor, neighborPos, moved);
     }

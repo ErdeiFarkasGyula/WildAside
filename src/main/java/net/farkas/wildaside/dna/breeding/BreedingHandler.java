@@ -42,7 +42,7 @@ public class BreedingHandler {
             WildAside.LOGGER.info("Neither parent has DNA capability, generating fresh DNA for child");
             child.getCapability(DnaCapability.INSTANCE).ifPresent(childDna -> {
                 childDna.setSource(child.getType());
-                childDna.setLoci(DnaUtils.generateBaseLoci(child));
+                childDna.setGenomeFromLoci(DnaUtils.generateBaseLoci(child));
             });
             return;
         }
@@ -63,13 +63,13 @@ public class BreedingHandler {
 
         child.getCapability(DnaCapability.INSTANCE).ifPresent(childDna -> {
             Map<Trait, List<GeneLocus>> childLoci = inheritLoci(
-                    finalParent1Dna.getLoci(),
-                    finalParent2Dna.getLoci(),
+                    finalParent1Dna.getGenomeLociView(),
+                    finalParent2Dna.getGenomeLociView(),
                     child
             );
 
             childDna.setSource(child.getType());
-            childDna.setLoci(childLoci);
+            childDna.setGenomeFromLoci(childLoci);
             childDna.setStress(0f);
 
             int totalLoci = childLoci.values().stream().mapToInt(List::size).sum();
@@ -82,9 +82,9 @@ public class BreedingHandler {
     private static void ensureParentDna(AgeableMob parent, IDna dna) {
         if (dna == null) return;
 
-        if (dna.getLoci().isEmpty()) {
+        if (dna.getGenomeLociView().isEmpty()) {
             dna.setSource(parent.getType());
-            dna.setLoci(DnaUtils.generateBaseLoci(parent));
+            dna.setGenomeFromLoci(DnaUtils.generateBaseLoci(parent));
             WildAside.LOGGER.info("Generated DNA for parent:  {}", parent.getName().getString());
         }
     }

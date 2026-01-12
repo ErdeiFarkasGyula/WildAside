@@ -67,8 +67,8 @@ public class ModBoatEntity extends Boat {
 
         private final String name;
         private final Block planks;
-        public static final StringRepresentable.EnumCodec<ModBoatEntity.Type> CODEC = StringRepresentable.fromEnum(ModBoatEntity.Type::values);
-        private static final IntFunction<ModBoatEntity.Type> BY_ID = ByIdMap.continuous(Enum::ordinal, values(), ByIdMap.OutOfBoundsStrategy.ZERO);
+        public static final EnumCodec<Type> CODEC = StringRepresentable.fromEnum(Type::values);
+        private static final IntFunction<Type> BY_ID = ByIdMap.continuous(Enum::ordinal, values(), ByIdMap.OutOfBoundsStrategy.ZERO);
 
         Type(Block pPlanks, String pName) {
             this.name = pName;
@@ -95,11 +95,11 @@ public class ModBoatEntity extends Boat {
          * Get a boat type by its enum ordinal
          */
 
-        public static ModBoatEntity.Type byId(int pId) {
+        public static Type byId(int pId) {
             return BY_ID.apply(pId);
         }
 
-        public static ModBoatEntity.Type byName(String pName) {
+        public static Type byName(String pName) {
             return CODEC.byName(pName, SUBSTILIUM);
         }
     }

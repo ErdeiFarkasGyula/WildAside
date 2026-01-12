@@ -43,22 +43,22 @@ public class BacillusBlobConsumption {
         invaderDna.deserializeNBT(dnaTag);
 
         WildAside.LOGGER.info("Invader DNA source: {}", invaderDna.getSource());
-        WildAside.LOGGER.info("Invader DNA loci count: {}", invaderDna.getLoci().size());
+        WildAside.LOGGER.info("Invader DNA loci count: {}", invaderDna.getGenomeLociView().size());
 
-        if (invaderDna.getLoci().isEmpty()) {
+        if (invaderDna.getGenomeLociView().isEmpty()) {
             WildAside.LOGGER.warn("Invader DNA has no loci after deserialization, consumption failed");
             return false;
         }
 
-        for (Map.Entry<Trait, List<GeneLocus>> entry : invaderDna.getLoci().entrySet()) {
+        for (Map.Entry<Trait, List<GeneLocus>> entry : invaderDna.getGenomeLociView().entrySet()) {
             WildAside.LOGGER.info("  Invader trait [{}]: {} loci", entry.getKey().getName(), entry.getValue().size());
         }
 
         final boolean[] success = {false};
 
         entity.getCapability(DnaCapability.INSTANCE).ifPresent(hostDna -> {
-            Map<Trait, List<GeneLocus>> hostLoci = hostDna.getLoci();
-            Map<Trait, List<GeneLocus>> invaderLoci = invaderDna.getLoci();
+            Map<Trait, List<GeneLocus>> hostLoci = hostDna.getGenomeLociView();
+            Map<Trait, List<GeneLocus>> invaderLoci = invaderDna.getGenomeLociView();
 
             WildAside.LOGGER.info("Host DNA loci count: {}", hostLoci.size());
             WildAside.LOGGER.info("Host stress before consumption: {}", hostDna.getStress());

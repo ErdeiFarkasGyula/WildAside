@@ -1,10 +1,9 @@
 package net.farkas.wildaside.capability.dna;
 
 import net.farkas.wildaside.WildAside;
+import net.farkas.wildaside.dna.chromosome.Genome;
+import net.farkas.wildaside.dna.expression.ExpressionContext;
 import net.farkas.wildaside.dna.locus.GeneLocus;
-import net.farkas.wildaside.dna.locus.LocusExpression;
-import net.farkas.wildaside.dna.allele.value.AlleleValue;
-import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
 import net.farkas.wildaside.dna.merge.PendingDnaIntegration;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitRegistry;
@@ -23,13 +22,19 @@ import java.util.*;
 
 public class DnaImplementation implements IDna {
     private @Nullable EntityType<?> source;
-    private Map<Trait, List<GeneLocus>> loci = new HashMap<>();
+    
+    private Genome genome;
+    
     private Map<Trait, List<GeneLocus>> invadingLoci = new HashMap<>();
-    private Map<Trait, AlleleValue> expressedCache = new HashMap<>();
+    
     private Map<Trait, TraitTransition> activeTransitions = new HashMap<>();
     private Map<Trait, Float> currentAppliedValues = new HashMap<>();
     private List<PendingDnaIntegration> pendingIntegrations = new ArrayList<>();
     private float stress = 0f;
+
+    public DnaImplementation() {
+        this.genome = new Genome(null);
+    }
 
     @Override
     public @Nullable EntityType<?> getSource() {
@@ -42,14 +47,30 @@ public class DnaImplementation implements IDna {
     }
 
     @Override
-    public Map<Trait, List<GeneLocus>> getLoci() {
-        return loci;
+    public Genome getGenome() {
+        return genome;
     }
 
     @Override
-    public void setLoci(Map<Trait, List<GeneLocus>> loci) {
-        this.loci = loci;
-        recomputeCache();
+    public void setGenome(Genome genome) {
+        this.genome = genome;
+        if (genome != null && genome.getEntityType() != null) {
+            this.source = genome.getEntityType();
+        }
+    }
+
+    @Override
+    public Map<Trait, List<GeneLocus>> getGenomeLociView() {
+        return net.farkas.wildaside.dna.DnaUtils.convertGenomeToLoci(genome);
+    }
+
+    @Override
+    public void setGenomeFromLoci(Map<Trait, List<GeneLocus>> loci) {
+        if (loci == null || loci.isEmpty()) {
+            genome = new Genome(source);
+            return;
+        }
+        genome = net.farkas.wildaside.dna.DnaUtils.convertLociToGenome(source, loci);
     }
 
     @Override
@@ -156,46 +177,40 @@ public class DnaImplementation implements IDna {
     @Override
     public void applyGenes(LivingEntity entity) {
         long currentTick = entity.level().getGameTime();
+        if (genome == null) return;
+        
+        ExpressionContext context = new ExpressionContext(entity);
 
-        for (Map.Entry<Trait, AlleleValue> entry : expressedCache.entrySet()) {
-            Trait trait = entry.getKey();
-            AlleleValue targetValue = entry.getValue();
-
-            if (!(targetValue instanceof FloatAlleleValue floatValue)) {
-                trait.apply(entity, targetValue);
-                continue;
-            }
-
-            float target = floatValue.get();
+        for (Trait trait : TraitRegistry.getAllTraits()) {
+            float targetValue = genome.getExpressedValue(trait, context);
 
             if (!currentAppliedValues.containsKey(trait)) {
-                trait.applyRaw(entity, target);
-                currentAppliedValues.put(trait, target);
+                trait.applyRaw(entity, targetValue);
+                currentAppliedValues.put(trait, targetValue);
                 continue;
             }
 
             float current = currentAppliedValues.get(trait);
 
-            if (Math.abs(target - current) < 0.001f) {
+            if (Math.abs(targetValue - current) < 0.001f) {
                 continue;
             }
 
             if (!hasActiveTransition(trait)) {
                 int duration = getTransitionDuration(trait);
-                TraitTransition transition = new TraitTransition(trait, current, target, currentTick, duration);
+                TraitTransition transition = new TraitTransition(trait, current, targetValue, currentTick, duration);
                 addTransition(transition);
                 WildAside.LOGGER.info("Started transition for [{}]: {} -> {} over {}t",
-                        trait.getName(), current, target, duration);
-            }
-            else {
+                        trait.getName(), current, targetValue, duration);
+            } else {
                 TraitTransition existing = activeTransitions.get(trait);
-                if (Math.abs(existing.getTargetValue() - target) > 0.001f) {
+                if (Math.abs(existing.getTargetValue() - targetValue) > 0.001f) {
                     float currentTransitionValue = existing.getCurrentValue();
                     int duration = getTransitionDuration(trait);
-                    TraitTransition newTransition = new TraitTransition(trait, currentTransitionValue, target, currentTick, duration);
+                    TraitTransition newTransition = new TraitTransition(trait, currentTransitionValue, targetValue, currentTick, duration);
                     addTransition(newTransition);
                     WildAside.LOGGER.info("Updated transition for [{}]: {} -> {} over {}t",
-                            trait.getName(), currentTransitionValue, target, duration);
+                            trait.getName(), currentTransitionValue, targetValue, duration);
                 }
             }
         }
@@ -239,22 +254,14 @@ public class DnaImplementation implements IDna {
 
     @Override
     public void removeGenes(LivingEntity entity) {
-        for (Trait t : loci.keySet()) {
+        for (Trait t : TraitRegistry.getAllTraits()) {
             t.remove(entity);
         }
     }
 
     @Override
     public void recomputeAndApply(LivingEntity entity) {
-        recomputeCache();
         applyGenes(entity);
-    }
-
-    private void recomputeCache() {
-        expressedCache.clear();
-        for (Map.Entry<Trait, List<GeneLocus>> e : loci.entrySet()) {
-            expressedCache.put(e.getKey(), LocusExpression.express(e.getKey(), e.getValue()));
-        }
     }
 
     @Override
@@ -263,15 +270,9 @@ public class DnaImplementation implements IDna {
         tag.putFloat("stress", stress);
         tag.putString("source", source == null ? "" : Objects.toString(ForgeRegistries.ENTITY_TYPES.getKey(source), ""));
 
-        ListTag lociTag = new ListTag();
-        for (Map.Entry<Trait, List<GeneLocus>> e : loci.entrySet()) {
-            for (GeneLocus gl : e.getValue()) {
-                CompoundTag ct = gl.serializeNBT();
-                ct.putString("Trait", e.getKey().getName());
-                lociTag.add(ct);
-            }
+        if (genome != null) {
+            tag.put("genome", genome.serializeNBT());
         }
-        tag.put("loci", lociTag);
 
         ListTag invadingTag = new ListTag();
         for (Map.Entry<Trait, List<GeneLocus>> e : invadingLoci.entrySet()) {
@@ -306,7 +307,6 @@ public class DnaImplementation implements IDna {
 
     @Override
     public void deserializeNBT(CompoundTag tag) {
-        loci.clear();
         invadingLoci.clear();
         pendingIntegrations.clear();
         activeTransitions.clear();
@@ -316,13 +316,29 @@ public class DnaImplementation implements IDna {
         String s = tag.getString("source");
         if (!s.isEmpty()) source = ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(s));
 
-        ListTag lociTag = tag.getList("loci", Tag.TAG_COMPOUND);
-        for (Tag t : lociTag) {
-            CompoundTag ct = (CompoundTag) t;
-            Trait trait = TraitRegistry.getByName(ct.getString("Trait"));
-            if (trait == null) continue;
-            GeneLocus gl = GeneLocus.deserializeNBT(ct);
-            loci.computeIfAbsent(trait, k -> new ArrayList<>()).add(gl);
+        if (tag.contains("genome")) {
+            genome = Genome.deserializeNBT(tag.getCompound("genome"));
+            if (genome.getEntityType() != null) {
+                source = genome.getEntityType();
+            }
+        } else if (tag.contains("loci")) {
+            Map<Trait, List<GeneLocus>> loadedLoci = new HashMap<>();
+            ListTag lociTag = tag.getList("loci", Tag.TAG_COMPOUND);
+            for (Tag t : lociTag) {
+                CompoundTag ct = (CompoundTag) t;
+                Trait trait = TraitRegistry.getByName(ct.getString("Trait"));
+                if (trait == null) continue;
+                GeneLocus gl = GeneLocus.deserializeNBT(ct);
+                loadedLoci.computeIfAbsent(trait, k -> new ArrayList<>()).add(gl);
+            }
+            
+            if (!loadedLoci.isEmpty()) {
+                genome = net.farkas.wildaside.dna.DnaUtils.convertLociToGenome(source, loadedLoci);
+            } else {
+                genome = new Genome(source);
+            }
+        } else {
+            genome = new Genome(source);
         }
 
         if (tag.contains("invadingLoci")) {
@@ -365,7 +381,5 @@ public class DnaImplementation implements IDna {
                 }
             }
         }
-
-        recomputeCache();
     }
 }

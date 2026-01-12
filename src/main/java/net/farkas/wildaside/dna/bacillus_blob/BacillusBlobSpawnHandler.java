@@ -97,15 +97,15 @@ public class BacillusBlobSpawnHandler {
             copiedLoci.put(entry.getKey(), new ArrayList<>(entry.getValue()));
         }
 
-        blobDna.setLoci(copiedLoci);
+        blobDna.setGenomeFromLoci(copiedLoci);
 
-        WildAside.LOGGER.info("Created DnaImplementation for blob with {} traits", blobDna.getLoci().size());
+        WildAside.LOGGER.info("Created DnaImplementation for blob with {} traits", blobDna.getGenomeLociView().size());
 
         blob.setCarriedDna(blobDna);
 
         WildAside.LOGGER.info("After setCarriedDna - blob. hasDna(): {}", blob.hasDna());
-        WildAside.LOGGER.info("After setCarriedDna - blob.getCarriedDna().getLoci().size(): {}",
-                blob.getCarriedDna().getLoci().size());
+        WildAside.LOGGER.info("After setCarriedDna - blob.getCarriedDna().getGenomeLociView().size(): {}",
+                blob.getCarriedDna().getGenomeLociView().size());
 
         int averageProgress = 0;
         if (pendingIntegrations != null && !pendingIntegrations.isEmpty()) {

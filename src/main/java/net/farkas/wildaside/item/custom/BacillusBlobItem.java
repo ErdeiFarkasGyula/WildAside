@@ -413,7 +413,7 @@ public class BacillusBlobItem extends Item {
         long seed = target.getUUID().getLeastSignificantBits() ^ System.currentTimeMillis();
         boolean modified = false;
 
-        for (Map.Entry<Trait, List<GeneLocus>> entry : dna.getLoci().entrySet()) {
+        for (Map.Entry<Trait, List<GeneLocus>> entry : dna.getGenomeLociView().entrySet()) {
             List<GeneLocus> loci = new ArrayList<>(entry.getValue());
 
             for (int i = 0; i < loci.size(); i++) {
@@ -661,8 +661,8 @@ public class BacillusBlobItem extends Item {
                         .withStyle(ChatFormatting.GRAY));
             }
 
-            int traitCount = dna.getLoci().size();
-            int lociCount = dna.getLoci().values().stream().mapToInt(List::size).sum();
+            int traitCount = dna.getGenomeLociView().size();
+            int lociCount = dna.getGenomeLociView().values().stream().mapToInt(List::size).sum();
             tooltip.add(Component.translatable("item.wildaside.bacillus_blob.traits", traitCount, lociCount)
                     .withStyle(ChatFormatting.DARK_GRAY));
 

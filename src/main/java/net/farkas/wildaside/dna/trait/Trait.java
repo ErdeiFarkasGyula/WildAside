@@ -91,6 +91,10 @@ public class Trait {
         return (float) instance.getBaseValue();
     }
 
+    public float getDefaultValue() {
+        return 0f;
+    }
+
     public void remove(LivingEntity entity) {
         Attribute attribute = getAttribute();
         if (attribute == null) return;

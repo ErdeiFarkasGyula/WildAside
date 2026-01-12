@@ -5,6 +5,7 @@ import net.farkas.wildaside.capability.bioengineering_skill.BioengineeringSkills
 import net.farkas.wildaside.capability.bioengineering_skill.IBioengineeringSkills;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.DnaConstants;
+import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkill;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillUtils;
 import net.farkas.wildaside.item.custom.DnaHolderItem;
@@ -137,7 +138,7 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
                 DnaImplementation dna = new DnaImplementation();
                 dna.deserializeNBT(dnaTag);
 
-                if (!dna.getLoci().isEmpty() && !tag.getBoolean(DnaConstants.SAMPLE_UNUSABLE) && tag.getBoolean(DnaConstants.REVEAL_TRAITS)) {
+                if (hasValidDna(dna) && !tag.getBoolean(DnaConstants.SAMPLE_UNUSABLE) && tag.getBoolean(DnaConstants.REVEAL_TRAITS)) {
                     guiGraphics.blit(BACKGROUND, x + 25, y + 12 + yOffset + i * 22, 0, 248, 8, 8);
                 }
             }
@@ -550,5 +551,12 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
 
     private static float yBot(float t) {
         return HELIX_Y0 - HELIX_AMPLITUDE * (float) Math.sin(t);
+    }
+
+    private boolean hasValidDna(DnaImplementation dna) {
+        if (dna.getGenome() != null && DnaUtils.hasGenomeSequences(dna.getGenome())) {
+            return true;
+        }
+        return !dna.getGenomeLociView().isEmpty();
     }
 }

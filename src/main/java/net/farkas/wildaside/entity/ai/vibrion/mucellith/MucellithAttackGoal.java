@@ -26,7 +26,7 @@ public class MucellithAttackGoal extends Goal {
         this.mob = entity;
         this.attackTimeMax = pAttackInterval;
         this.attackRadius = pAttackRadius;
-        this.setFlags(EnumSet.of(Goal.Flag.LOOK));
+        this.setFlags(EnumSet.of(Flag.LOOK));
     }
 
     @Override

@@ -30,7 +30,15 @@ public class UseAbilityPacket {
             if (player == null) return;
 
             player.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-                for (Map.Entry<Trait, List<GeneLocus>> entry : dna.getLoci().entrySet()) {
+                Map<Trait, List<GeneLocus>> loci;
+                
+                if (dna.getGenome() != null && hasGenomeSequences(dna.getGenome())) {
+                    loci = DnaUtils.convertGenomeToLoci(dna.getGenome());
+                } else {
+                    loci = dna.getGenomeLociView();
+                }
+                
+                for (Map.Entry<Trait, List<GeneLocus>> entry : loci.entrySet()) {
                     Trait trait = entry.getKey();
                     if (trait.getTraitType() != TraitType.ABILITY) continue;
 
@@ -61,5 +69,9 @@ public class UseAbilityPacket {
             });
         });
         ctx.get().setPacketHandled(true);
+    }
+
+    private static boolean hasGenomeSequences(net.farkas.wildaside.dna.chromosome.Genome genome) {
+        return DnaUtils.hasGenomeSequences(genome);
     }
 }

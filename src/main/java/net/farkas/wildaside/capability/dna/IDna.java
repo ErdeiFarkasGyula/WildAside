@@ -1,5 +1,6 @@
 package net.farkas.wildaside.capability.dna;
 
+import net.farkas.wildaside.dna.chromosome.Genome;
 import net.farkas.wildaside.dna.locus.GeneLocus;
 import net.farkas.wildaside.dna.merge.PendingDnaIntegration;
 import net.farkas.wildaside.dna.trait.Trait;
@@ -14,11 +15,14 @@ import java.util.List;
 import java.util.Map;
 
 public interface IDna extends INBTSerializable<CompoundTag> {
-    @Nullable EntityType<? > getSource();
+    @Nullable EntityType<?> getSource();
     void setSource(EntityType<?> source);
 
-    Map<Trait, List<GeneLocus>> getLoci();
-    void setLoci(Map<Trait, List<GeneLocus>> loci);
+    Genome getGenome();
+    void setGenome(Genome genome);
+
+    Map<Trait, List<GeneLocus>> getGenomeLociView();
+    void setGenomeFromLoci(Map<Trait, List<GeneLocus>> loci);
 
     Map<Trait, List<GeneLocus>> getInvadingLoci();
     void setInvadingLoci(Map<Trait, List<GeneLocus>> loci);

@@ -13,6 +13,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -262,7 +263,8 @@ public class DnaIntegrationHandler {
         GeneLocus locus = integration.getLocus();
         MergeOutcomeType outcome = integration.getOutcomeType();
 
-        List<GeneLocus> existingLoci = dna.getLoci().computeIfAbsent(trait, k -> new ArrayList<>());
+        Map<Trait, List<GeneLocus>> allLoci = new HashMap<>(dna.getGenomeLociView());
+        List<GeneLocus> existingLoci = allLoci.computeIfAbsent(trait, k -> new ArrayList<>());
 
         switch (outcome) {
             case INTEGRATED, TRANSIENT -> {
@@ -272,11 +274,11 @@ public class DnaIntegrationHandler {
                 }
             }
             case REPLACED -> {
-                if (! existingLoci.isEmpty()) {
+                if (!existingLoci.isEmpty()) {
                     existingLoci.removeIf(l -> l.getSource() != LocusSource.NATIVE);
                 }
                 existingLoci.add(locus);
-                WildAside. LOGGER.info("Replaced locus for trait {}", trait.getName());
+                WildAside.LOGGER.info("Replaced locus for trait {}", trait.getName());
             }
             case REJECTED -> {
                 if (existingLoci.size() < DnaMerger.MAX_LOCI_PER_TRAIT) {
@@ -285,10 +287,11 @@ public class DnaIntegrationHandler {
                 }
 
                 long seed = entity.getUUID().getLeastSignificantBits() ^ entity.level().getGameTime();
-                RejectionSideEffects. generateMutations(dna. getLoci(), 1, seed);
+                RejectionSideEffects.generateMutations(allLoci, 1, seed);
             }
         }
 
+        dna.setGenomeFromLoci(allLoci);
         removeFromInvadingLoci(dna, trait, locus);
     }
 
