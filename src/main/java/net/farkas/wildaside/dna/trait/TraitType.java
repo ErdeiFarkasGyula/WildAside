@@ -1,6 +1,7 @@
 package net.farkas.wildaside.dna.trait;
 
 import net.farkas.wildaside.dna.allele.dominance.DominanceExpression;
+import net.farkas.wildaside.dna.chromosome.ChromosomeType;
 import net.minecraft.ChatFormatting;
 
 public enum TraitType {
@@ -26,4 +27,13 @@ public enum TraitType {
     public ChatFormatting getHeaderColour() { return headerColour; }
     public ChatFormatting getEntryColour() { return entryColour; }
     public DominanceExpression getDominanceExpression() { return dominanceExpression; }
+
+    public ChromosomeType getChromosomeType() {
+        return switch (this) {
+            case CORE -> ChromosomeType.CORE;
+            case RESISTANCE -> ChromosomeType.RESISTANCE;
+            case ABILITY -> ChromosomeType.SPECIAL;
+            case APPEARANCE -> ChromosomeType.APPEARANCE;
+        };
+    }
 }

@@ -91,6 +91,11 @@ public class Trait {
         return (float) instance.getBaseValue();
     }
 
+    public float getDefaultValue() {
+        // Default value when no gene sequences are present
+        return 0f;
+    }
+
     public void remove(LivingEntity entity) {
         Attribute attribute = getAttribute();
         if (attribute == null) return;
