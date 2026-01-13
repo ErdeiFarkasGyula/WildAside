@@ -1271,7 +1271,7 @@ public class AdvancedGeneEditorScreen extends Screen {
         return false;
     }
 
-    private boolean hasGenomeSequences(net.farkas.wildaside.dna.chromosome.Genome genome) {
+    private boolean hasGenomeSequences(Genome genome) {
         return DnaUtils.hasGenomeSequences(genome);
     }
 
