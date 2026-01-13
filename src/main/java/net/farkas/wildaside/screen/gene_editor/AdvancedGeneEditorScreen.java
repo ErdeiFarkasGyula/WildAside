@@ -7,6 +7,7 @@ import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.allele.Allele;
 import net.farkas.wildaside.dna.allele.dominance.Dominance;
 import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
+import net.farkas.wildaside.dna.chromosome.Genome;
 import net.farkas.wildaside.dna.editor.GeneEditorOperation;
 import net.farkas.wildaside.dna.editor.GeneEditorOperations;
 import net.farkas.wildaside.dna.editor.GeneEditorResult;
