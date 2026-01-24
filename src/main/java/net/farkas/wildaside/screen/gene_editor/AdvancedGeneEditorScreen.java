@@ -3,6 +3,7 @@ package net.farkas.wildaside.screen.gene_editor;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
+import net.farkas.wildaside.capability.gene_editor.GeneEditorStateCapability;
 import net.farkas.wildaside.client.ModKeyMappings;
 import net.farkas.wildaside.dna.chromosome.ChromosomeSet;
 import net.farkas.wildaside.dna.chromosome.Genome;
@@ -12,6 +13,7 @@ import net.farkas.wildaside.dna.sequence.GeneSequence;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitRegistry;
 import net.farkas.wildaside.dna.trait.TraitType;
+import net.farkas.wildaside.network.NetworkHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -152,6 +154,42 @@ public class AdvancedGeneEditorScreen extends Screen {
                 this.allTraits.addAll(traits);
             }
         }
+
+        loadState();
+    }
+
+    private void loadState() {
+        player.getCapability(GeneEditorStateCapability.INSTANCE).ifPresent(state -> {
+            this.sidebarWidth = state.getSidebarWidth();
+            this.infoPanelWidth = state.getInfoPanelWidth();
+            this.targetScrollAMat = state.getScrollAMat();
+            this.targetScrollAPat = state.getScrollAPat();
+            this.targetScrollBMat = state.getScrollBMat();
+            this.targetScrollBPat = state.getScrollBPat();
+            this.scrollAMat = targetScrollAMat;
+            this.scrollAPat = targetScrollAPat;
+            this.scrollBMat = targetScrollBMat;
+            this.scrollBPat = targetScrollBPat;
+            this.lockGenomeA = state.isLockGenomeA();
+            this.lockGenomeB = state.isLockGenomeB();
+            this.lockPairs = state.isLockPairs();
+        });
+    }
+
+    private void saveState() {
+        player.getCapability(GeneEditorStateCapability.INSTANCE).ifPresent(state -> {
+            state.setSidebarWidth(this.sidebarWidth);
+            state.setInfoPanelWidth(this.infoPanelWidth);
+            state.setScrollAMat(this.targetScrollAMat);
+            state.setScrollAPat(this.targetScrollAPat);
+            state.setScrollBMat(this.targetScrollBMat);
+            state.setScrollBPat(this.targetScrollBPat);
+            state.setLockGenomeA(this.lockGenomeA);
+            state.setLockGenomeB(this.lockGenomeB);
+            state.setLockPairs(this.lockPairs);
+
+            NetworkHandler.sendSyncGeneEditorStatePacket(state.serializeNBT());
+        });
     }
 
     private boolean isTraitPresent(Trait trait) {
@@ -193,24 +231,46 @@ public class AdvancedGeneEditorScreen extends Screen {
 
         int btnX = stripStartX + stripWidth - 20;
         int btnY_A = (stripAY1 + stripAY2 + COMPONENT_SIZE) / 2 - 10;
-        addRenderableWidget(Button.builder(Component.literal(lockGenomeA ? "L" : "U"), b -> {
+        addRenderableWidget(Button.builder(Component.literal(lockGenomeA ? "\uD83D\uDD12" : "\uD83D\uDD13"), b -> {
             lockGenomeA = !lockGenomeA;
-            b.setMessage(Component.literal(lockGenomeA ? "L" : "U"));
+            b.setMessage(Component.literal(lockGenomeA ? "\uD83D\uDD12" : "\uD83D\uDD13"));
             updateLayout();
         }).pos(btnX, btnY_A).size(20, 20).tooltip(Tooltip.create(Component.translatable("gui.wildaside.gene_editor.lock_genome", lockGenomeA))).build());
 
         int btnY_B = (stripBY1 + stripBY2 + COMPONENT_SIZE) / 2 - 10;
-        addRenderableWidget(Button.builder(Component.literal(lockGenomeB ? "L" : "U"), b -> {
+        addRenderableWidget(Button.builder(Component.literal(lockGenomeB ? "\uD83D\uDD12" : "\uD83D\uDD13"), b -> {
             lockGenomeB = !lockGenomeB;
-            b.setMessage(Component.literal(lockGenomeB ? "L" : "U"));
+            b.setMessage(Component.literal(lockGenomeB ? "\uD83D\uDD12" : "\uD83D\uDD13"));
             updateLayout();
         }).pos(btnX, btnY_B).size(20, 20).tooltip(Tooltip.create(Component.translatable("gui.wildaside.gene_editor.lock_genome", lockGenomeB))).build());
 
-        addRenderableWidget(Button.builder(Component.literal(lockPairs ? "L" : "U"), b -> {
+        addRenderableWidget(Button.builder(Component.literal(lockPairs ? "\uD83D\uDD12" : "\uD83D\uDD13"), b -> {
             lockPairs = !lockPairs;
-            b.setMessage(Component.literal(lockPairs ? "L" : "U"));
+            b.setMessage(Component.literal(lockPairs ? "\uD83D\uDD12" : "\uD83D\uDD13"));
             updateLayout();
-        }).pos(width - 120, 2).size(20, 20).tooltip(Tooltip.create(Component.translatable("gui.wildaside.gene_editor.lock_pair", lockPairs))).build());
+        }).pos(width - 200, 2).size(20, 20).tooltip(Tooltip.create(Component.translatable("gui.wildaside.gene_editor.lock_pair", lockPairs))).build());
+
+        addRenderableWidget(Button.builder(Component.translatable("gui.wildaside.gene_editor.reset_layout"), b -> {
+            resetLayout();
+        }).pos(width - 170, 2).size(100, 20).build());
+    }
+
+    private void resetLayout() {
+        this.sidebarWidth = 150;
+        this.infoPanelWidth = 160;
+        this.targetScrollAMat = 0;
+        this.targetScrollAPat = 0;
+        this.targetScrollBMat = 0;
+        this.targetScrollBPat = 0;
+        this.scrollAMat = 0;
+        this.scrollAPat = 0;
+        this.scrollBMat = 0;
+        this.scrollBPat = 0;
+        this.lockGenomeA = true;
+        this.lockGenomeB = true;
+        this.lockPairs = true;
+        updateLayout();
+        saveState();
     }
 
     @Override
@@ -429,19 +489,10 @@ public class AdvancedGeneEditorScreen extends Screen {
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         int color = getComponentColor(comp);
 
-        if (comp instanceof CodingRegion) {
-            RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-        } else {
-            float r = ((color >> 16) & 0xFF) / 255f;
-            float g = ((color >> 8) & 0xFF) / 255f;
-            float b = (color & 0xFF) / 255f;
-            RenderSystem.setShaderColor(r, g, b, 1f);
-        }
-
         ResourceLocation texture = flipped ? GENE_TEXTURE_FLIPPED : GENE_TEXTURE;
         graphics.blit(texture, x, y, 0, 0, 16, 16, 16, 16);
 
-        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+        graphics.fill(x + 4, y + 16, x + 12, y + 17, color);
 
         boolean isSelected = (genomeA == (isGenomeA ? genomeA : genomeB) && selectedComponentA == comp) ||
                 (genomeB == (isGenomeA ? genomeA : genomeB) && selectedComponentB == comp);
@@ -634,17 +685,12 @@ public class AdvancedGeneEditorScreen extends Screen {
         if (draggedNode == null) return;
         int color = getComponentColor(draggedNode.component);
 
-        if (draggedNode.component instanceof CodingRegion) {
-            RenderSystem.setShaderColor(1f, 1f, 1f, 0.8f);
-        } else {
-            float r = ((color >> 16) & 0xFF) / 255f;
-            float g = ((color >> 8) & 0xFF) / 255f;
-            float b = (color & 0xFF) / 255f;
-            RenderSystem.setShaderColor(r, g, b, 0.8f);
-        }
+        RenderSystem.setShaderColor(1f, 1f, 1f, 0.8f);
 
         ResourceLocation texture = draggedNode.flipped ? GENE_TEXTURE_FLIPPED : GENE_TEXTURE;
         graphics.blit(texture, mouseX - 8, mouseY - 8, 0, 0, 16, 16, 16, 16);
+
+        graphics.fill(mouseX - 8 + 4, mouseY - 8 + 12, mouseX - 8 + 12, mouseY - 8 + 14, color);
 
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
     }
@@ -855,6 +901,7 @@ public class AdvancedGeneEditorScreen extends Screen {
             isDraggingSidebarScroll = false;
             isDraggingInfoScrollA = false;
             isDraggingInfoScrollB = false;
+            saveState();
         }
         return super.mouseReleased(mouseX, mouseY, button);
     }
@@ -905,32 +952,61 @@ public class AdvancedGeneEditorScreen extends Screen {
         if (isDraggingView && draggedNode == null) {
             double delta = dragX / (COMPONENT_SIZE + COMPONENT_SPACING);
 
-            if (lockPairs) {
-                targetScrollAMat -= delta;
-                targetScrollAPat -= delta;
-                targetScrollBMat -= delta;
-                targetScrollBPat -= delta;
+            boolean inA = mouseY < height / 2;
+            boolean isMaternal;
+            if (inA) {
+                isMaternal = mouseY < stripAY2;
             } else {
-                boolean draggingA = mouseY < height / 2;
+                isMaternal = mouseY < stripBY2;
+            }
 
-                if (draggingA) {
+            boolean moveMatA = false;
+            boolean movePatA = false;
+            boolean moveMatB = false;
+            boolean movePatB = false;
+
+            if (inA) {
+                if (isMaternal) moveMatA = true;
+                else movePatA = true;
+            } else {
+                if (isMaternal) moveMatB = true;
+                else movePatB = true;
+            }
+
+            if (!Screen.hasShiftDown()) {
+                if (inA) {
                     if (lockGenomeA) {
-                        targetScrollAMat -= delta;
-                        targetScrollAPat -= delta;
-                    } else {
-                        if (mouseY < stripAY2) targetScrollAMat -= delta;
-                        else targetScrollAPat -= delta;
+                        if (moveMatA) movePatA = true;
+                        if (movePatA) moveMatA = true;
+                    }
+                    if (lockPairs) {
+                        if (moveMatA) moveMatB = true;
+                        if (movePatA) movePatB = true;
+                    }
+                    if (lockGenomeB) {
+                        if (moveMatB) movePatB = true;
+                        if (movePatB) moveMatB = true;
                     }
                 } else {
                     if (lockGenomeB) {
-                        targetScrollBMat -= delta;
-                        targetScrollBPat -= delta;
-                    } else {
-                        if (mouseY < stripBY2) targetScrollBMat -= delta;
-                        else targetScrollBPat -= delta;
+                        if (moveMatB) movePatB = true;
+                        if (movePatB) moveMatB = true;
+                    }
+                    if (lockPairs) {
+                        if (moveMatB) moveMatA = true;
+                        if (movePatB) movePatA = true;
+                    }
+                    if (lockGenomeA) {
+                        if (moveMatA) movePatA = true;
+                        if (movePatA) moveMatA = true;
                     }
                 }
             }
+
+            if (moveMatA) targetScrollAMat -= delta;
+            if (movePatA) targetScrollAPat -= delta;
+            if (moveMatB) targetScrollBMat -= delta;
+            if (movePatB) targetScrollBPat -= delta;
 
             scrollAMat = targetScrollAMat;
             scrollAPat = targetScrollAPat;
@@ -967,31 +1043,64 @@ public class AdvancedGeneEditorScreen extends Screen {
             return true;
         }
 
-        if (lockPairs) {
-            targetScrollAMat -= delta * 2;
-            targetScrollAPat -= delta * 2;
-            targetScrollBMat -= delta * 2;
-            targetScrollBPat -= delta * 2;
+        boolean inA = mouseY < height / 2;
+        boolean isMaternal;
+        if (inA) {
+            isMaternal = mouseY < stripAY2;
         } else {
-            boolean inA = mouseY < height / 2;
+            isMaternal = mouseY < stripBY2;
+        }
+
+        boolean moveMatA = false;
+        boolean movePatA = false;
+        boolean moveMatB = false;
+        boolean movePatB = false;
+
+        if (inA) {
+            if (isMaternal) moveMatA = true;
+            else movePatA = true;
+        } else {
+            if (isMaternal) moveMatB = true;
+            else movePatB = true;
+        }
+
+        if (!Screen.hasShiftDown()) {
             if (inA) {
                 if (lockGenomeA) {
-                    targetScrollAMat -= delta * 2;
-                    targetScrollAPat -= delta * 2;
-                } else {
-                    if (mouseY < stripAY2) targetScrollAMat -= delta * 2;
-                    else targetScrollAPat -= delta * 2;
+                    if (moveMatA) movePatA = true;
+                    if (movePatA) moveMatA = true;
+                }
+                if (lockPairs) {
+                    if (moveMatA) moveMatB = true;
+                    if (movePatA) movePatB = true;
+                }
+                if (lockGenomeB) {
+                    if (moveMatB) movePatB = true;
+                    if (movePatB) moveMatB = true;
                 }
             } else {
                 if (lockGenomeB) {
-                    targetScrollBMat -= delta * 2;
-                    targetScrollBPat -= delta * 2;
-                } else {
-                    if (mouseY < stripBY2) targetScrollBMat -= delta * 2;
-                    else targetScrollBPat -= delta * 2;
+                    if (moveMatB) movePatB = true;
+                    if (movePatB) moveMatB = true;
+                }
+                if (lockPairs) {
+                    if (moveMatB) moveMatA = true;
+                    if (movePatB) movePatA = true;
+                }
+                if (lockGenomeA) {
+                    if (moveMatA) movePatA = true;
+                    if (movePatA) moveMatA = true;
                 }
             }
         }
+
+        double scrollDelta = delta * 2;
+        if (moveMatA) targetScrollAMat -= scrollDelta;
+        if (movePatA) targetScrollAPat -= scrollDelta;
+        if (moveMatB) targetScrollBMat -= scrollDelta;
+        if (movePatB) targetScrollBPat -= scrollDelta;
+
+        saveState();
         return true;
     }
 
@@ -999,6 +1108,7 @@ public class AdvancedGeneEditorScreen extends Screen {
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (ModKeyMappings.GENE_EDITOR_LOCK_SCROLL.matches(keyCode, scanCode)) {
             lockPairs = !lockPairs;
+            saveState();
             return true;
         }
         if (ModKeyMappings.GENE_EDITOR_RESET_SCROLL.matches(keyCode, scanCode)) {
@@ -1006,6 +1116,7 @@ public class AdvancedGeneEditorScreen extends Screen {
             targetScrollAPat = 0;
             targetScrollBMat = 0;
             targetScrollBPat = 0;
+            saveState();
             return true;
         }
         if (ModKeyMappings.GENE_EDITOR_EXECUTE.matches(keyCode, scanCode)) {
@@ -1016,11 +1127,16 @@ public class AdvancedGeneEditorScreen extends Screen {
             resetChanges();
             return true;
         }
+        if (ModKeyMappings.GENE_EDITOR_RESET_LAYOUT.matches(keyCode, scanCode)) {
+            resetLayout();
+            return true;
+        }
         if (keyCode == GLFW.GLFW_KEY_LEFT) {
             targetScrollAMat -= 2;
             targetScrollAPat -= 2;
             targetScrollBMat -= 2;
             targetScrollBPat -= 2;
+            saveState();
             return true;
         }
         if (keyCode == GLFW.GLFW_KEY_RIGHT) {
@@ -1028,6 +1144,7 @@ public class AdvancedGeneEditorScreen extends Screen {
             targetScrollAPat += 2;
             targetScrollBMat += 2;
             targetScrollBPat += 2;
+            saveState();
             return true;
         }
         return super.keyPressed(keyCode, scanCode, modifiers);
@@ -1048,12 +1165,12 @@ public class AdvancedGeneEditorScreen extends Screen {
     }
 
     private int getComponentColor(Object comp) {
-//        if (comp instanceof CodingRegion) return 0xFF4CAF50; //Green
-//        if (comp instanceof Activator) return 0xFF03A9F4; //Light Blue
-//        if (comp instanceof Enhancer) return 0xFFFFC107; //Material Amber
-//        if (comp instanceof Silencer) return 0xFFF44336; //Material Red
-//        if (comp instanceof Regulator) return 0xFF9C27B0; //Material Purple
-//        if (comp instanceof TraitDefiner) return 0xFFE91E63; //Material Pink
+        if (comp instanceof CodingRegion) return 0xFF4CAF50; //Green
+        if (comp instanceof Activator) return 0xFF03A9F4; //Light Blue
+        if (comp instanceof Enhancer) return 0xFFFFC107; //Material Amber
+        if (comp instanceof Silencer) return 0xFFF44336; //Material Red
+        if (comp instanceof Regulator) return 0xFF9C27B0; //Material Purple
+        if (comp instanceof TraitDefiner) return 0xFFE91E63; //Material Pink
 //        return 0xFF9E9E9E; //Grey 500
         return 0xFFFFFFFF;
     }

@@ -5,11 +5,15 @@
 
   "creativetab.wildaside_tab": "Wild Aside",
 
+  "key.categories.wildaside.general": "Wild Aside (Általános)",
+  "key.categories.wildaside.gene_editor": "Wild Aside (Gén szerkesztő)",
+
   "key.wildaside.use_ability": "Képesség használata",
   "key.wildaside.gene_editor.lock_scroll": "Görgetés zárolása",
   "key.wildaside.gene_editor.reset_scroll": "Görgetés visszaállítása",
   "key.wildaside.gene_editor.execute": "Végrehajtás",
   "key.wildaside.gene_editor.reset_changes": "Változtatások visszaállítása",
+  "key.wildaside.gene_editor.reset_layout": "Elrendezés visszaállítása",
 
   "item.wildaside.vibrion": "Vibrion",
   "item.wildaside.mucellith_jaw": "Mucellith állkapocs",
@@ -461,6 +465,7 @@
   "gui.wildaside.gene_editor.lock_genome": "Genom zárolása: %s",
   "gui.wildaside.gene_editor.lock_pair": "Pár zárolása: %s",
   "gui.wildaside.gene_editor.exit": "Kilépés",
+  "gui.wildaside.gene_editor.reset_layout": "Elrendezés visszaállítása",
   "gui.wildaside.gene_editor.genome_a": "Genom A",
   "gui.wildaside.gene_editor.genome_b": "Genom B",
   "gui.wildaside.gene_editor.genome_a_maternal": "Genom A (Anyai)",

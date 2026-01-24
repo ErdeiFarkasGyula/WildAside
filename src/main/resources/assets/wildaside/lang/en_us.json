@@ -5,11 +5,15 @@
 
   "creativetab.wildaside_tab": "Wild Aside",
 
+  "key.categories.wildaside.general": "Wild Aside (General)",
+  "key.categories.wildaside.gene_editor": "Wild Aside (Gene Editor)",
+
   "key.wildaside.use_ability": "Use ability",
   "key.wildaside.gene_editor.lock_scroll": "Lock scroll",
   "key.wildaside.gene_editor.reset_scroll": "Reset scroll",
   "key.wildaside.gene_editor.execute": "Execute",
   "key.wildaside.gene_editor.reset_changes": "Reset changes",
+  "key.wildaside.gene_editor.reset_layout": "Reset layout",
 
   "item.wildaside.vibrion": "Vibrion",
   "item.wildaside.mucellith_jaw": "Mucellith Jaw",
@@ -461,6 +465,7 @@
   "gui.wildaside.gene_editor.lock_genome": "Lock Genome: %s",
   "gui.wildaside.gene_editor.lock_pair": "Lock Pair: %s",
   "gui.wildaside.gene_editor.exit": "Exit",
+  "gui.wildaside.gene_editor.reset_layout": "Reset Layout",
   "gui.wildaside.gene_editor.genome_a": "Genome A",
   "gui.wildaside.gene_editor.genome_b": "Genome B",
   "gui.wildaside.gene_editor.genome_a_maternal": "Genome A (Maternal)",

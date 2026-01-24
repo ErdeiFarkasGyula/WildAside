@@ -11,7 +11,7 @@ public class ModKeyMappings {
             KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_G,
-            "mod.wildaside"
+            "key.categories.wildaside.general"
     );
     
     public static final KeyMapping GENE_EDITOR_LOCK_SCROLL = new KeyMapping(
@@ -19,15 +19,7 @@ public class ModKeyMappings {
             KeyConflictContext.GUI,
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_L,
-            "mod.wildaside"
-    );
-    
-    public static final KeyMapping GENE_EDITOR_RESET_SCROLL = new KeyMapping(
-            "key.wildaside.gene_editor.reset_scroll",
-            KeyConflictContext.GUI,
-            InputConstants.Type.KEYSYM,
-            GLFW.GLFW_KEY_R,
-            "mod.wildaside"
+            "key.categories.wildaside.gene_editor"
     );
     
     public static final KeyMapping GENE_EDITOR_EXECUTE = new KeyMapping(
@@ -35,14 +27,30 @@ public class ModKeyMappings {
             KeyConflictContext.GUI,
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_E,
-            "mod.wildaside"
+            "key.categories.wildaside.gene_editor"
     );
-    
+
+    public static final KeyMapping GENE_EDITOR_RESET_SCROLL = new KeyMapping(
+            "key.wildaside.gene_editor.reset_scroll",
+            KeyConflictContext.GUI,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_R,
+            "key.categories.wildaside.gene_editor"
+    );
+
     public static final KeyMapping GENE_EDITOR_RESET_CHANGES = new KeyMapping(
             "key.wildaside.gene_editor.reset_changes",
             KeyConflictContext.GUI,
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_X,
-            "mod.wildaside"
+            "key.categories.wildaside.gene_editor"
+    );
+
+    public static final KeyMapping GENE_EDITOR_RESET_LAYOUT = new KeyMapping(
+            "key.wildaside.gene_editor.reset_layout",
+            KeyConflictContext.GUI,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_T,
+            "key.categories.wildaside.gene_editor"
     );
 }

@@ -7,10 +7,12 @@ import net.farkas.wildaside.network.packet.*;
 import net.farkas.wildaside.network.packet.bioengineering_workstation.*;
 import net.farkas.wildaside.network.packet.gene_editor.GeneEditorUpdatePacket;
 import net.farkas.wildaside.network.packet.gene_editor.OpenAdvancedGeneEditorPacket;
+import net.farkas.wildaside.network.packet.gene_editor.SyncGeneEditorStatePacket;
 import net.farkas.wildaside.network.packet.incubator.SetIncubatorHeatLevelPacket;
 import net.farkas.wildaside.network.packet.incubator.ToggleIncubatorOpenPacket;
 import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationTab;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
@@ -125,6 +127,13 @@ public class NetworkHandler {
                 GeneEditorUpdatePacket::decode,
                 GeneEditorUpdatePacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
+
+        CHANNEL.registerMessage(id(),
+                SyncGeneEditorStatePacket.class,
+                SyncGeneEditorStatePacket::encode,
+                SyncGeneEditorStatePacket::decode,
+                SyncGeneEditorStatePacket::handle,
+                Optional.empty());
     }
 
     public static void sendWindUpdateToAll(Vec3 dir, float strength) {
@@ -219,5 +228,21 @@ public class NetworkHandler {
             return;
         }
         CHANNEL.send(PacketDistributor.SERVER.noArg(), new GeneEditorUpdatePacket(pos, genome));
+    }
+
+    public static void sendSyncGeneEditorStatePacket(CompoundTag stateTag) {
+        if (CHANNEL == null) {
+            WildAside.LOGGER.warn("Tried to send sync gene editor state packet before network init. Ignoring.");
+            return;
+        }
+        CHANNEL.send(PacketDistributor.SERVER.noArg(), new SyncGeneEditorStatePacket(stateTag));
+    }
+
+    public static void sendSyncGeneEditorStatePacketToClient(ServerPlayer player, CompoundTag stateTag) {
+        if (CHANNEL == null) {
+            WildAside.LOGGER.warn("Tried to send sync gene editor state packet to client before network init. Ignoring.");
+            return;
+        }
+        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new SyncGeneEditorStatePacket(stateTag));
     }
 }

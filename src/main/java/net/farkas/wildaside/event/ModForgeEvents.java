@@ -8,9 +8,12 @@ import net.farkas.wildaside.capability.bioengineering_skill.BioengineeringSkills
 import net.farkas.wildaside.capability.contamination.ContaminationCapability;
 import net.farkas.wildaside.capability.contamination.ContaminationProvider;
 import net.farkas.wildaside.capability.dna.DnaProvider;
+import net.farkas.wildaside.capability.gene_editor.GeneEditorStateCapability;
+import net.farkas.wildaside.capability.gene_editor.GeneEditorStateProvider;
 import net.farkas.wildaside.command.ModCommands;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillUtils;
 import net.farkas.wildaside.effect.ModMobEffects;
+import net.farkas.wildaside.network.NetworkHandler;
 import net.farkas.wildaside.network.WindSavedData;
 import net.farkas.wildaside.advancement.AdvancementUtils;
 import net.farkas.wildaside.util.ContaminationHandler;
@@ -53,9 +56,11 @@ public class ModForgeEvents {
         if (event.getObject() instanceof LivingEntity livingEntity) {
             event.addCapability(ContaminationProvider.IDENTIFIER, new ContaminationProvider());
             event.addCapability(DnaProvider.IDENTIFIER, new DnaProvider());
-        }
-        if (event.getObject() instanceof Player player) {
-            event.addCapability(BioengineeringSkillsProvider.IDENTIFIER, new BioengineeringSkillsProvider());
+
+            if (event.getObject() instanceof Player player) {
+                event.addCapability(BioengineeringSkillsProvider.IDENTIFIER, new BioengineeringSkillsProvider());
+                event.addCapability(GeneEditorStateProvider.IDENTIFIER, new GeneEditorStateProvider());
+            }
         }
     }
 
@@ -70,7 +75,20 @@ public class ModForgeEvents {
         if (event.getEntity() instanceof ServerPlayer player) {
             AdvancementUtils.givePlayerAdvancement(player, ModAdvancements.WILD_WILDER_WILDEST);
             BioengineeringSkillUtils.syncToClient(player);
+            
+            player.getCapability(GeneEditorStateCapability.INSTANCE).ifPresent(state -> {
+                NetworkHandler.sendSyncGeneEditorStatePacketToClient(player, state.serializeNBT());
+            });
         }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerClone(PlayerEvent.Clone event) {
+        event.getOriginal().getCapability(GeneEditorStateCapability.INSTANCE).ifPresent(oldStore -> {
+            event.getEntity().getCapability(GeneEditorStateCapability.INSTANCE).ifPresent(newStore -> {
+                newStore.deserializeNBT(oldStore.serializeNBT());
+            });
+        });
     }
 
     @SubscribeEvent

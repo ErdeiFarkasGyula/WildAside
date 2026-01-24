@@ -50,6 +50,7 @@ public class ModEventBusClientEvents {
         event.register(ModKeyMappings.GENE_EDITOR_RESET_SCROLL);
         event.register(ModKeyMappings.GENE_EDITOR_EXECUTE);
         event.register(ModKeyMappings.GENE_EDITOR_RESET_CHANGES);
+        event.register(ModKeyMappings.GENE_EDITOR_RESET_LAYOUT);
     }
 
     @SubscribeEvent

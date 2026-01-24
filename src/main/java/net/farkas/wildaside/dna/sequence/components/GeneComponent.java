@@ -26,6 +26,4 @@ public interface GeneComponent {
         SILENCER,
         REGULATOR
     }
-
-
 }
