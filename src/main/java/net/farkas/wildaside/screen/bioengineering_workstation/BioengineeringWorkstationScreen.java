@@ -244,6 +244,7 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
             clearWidgets();
             addTabButtons();
             addRecompileButton();
+            addAdvancedEditorButton();
         }
     }
 
