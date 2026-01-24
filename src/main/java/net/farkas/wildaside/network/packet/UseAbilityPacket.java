@@ -1,21 +1,19 @@
 package net.farkas.wildaside.network.packet;
 
 import net.farkas.wildaside.capability.dna.DnaCapability;
-import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
 import net.farkas.wildaside.dna.ability.AbilityRegistry;
 import net.farkas.wildaside.dna.ability.IAbility;
-import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
-import net.farkas.wildaside.dna.locus.GeneLocus;
-import net.farkas.wildaside.dna.locus.LocusFlag;
+import net.farkas.wildaside.dna.chromosome.Chromosome;
+import net.farkas.wildaside.dna.chromosome.Genome;
+import net.farkas.wildaside.dna.expression.ExpressionContext;
+import net.farkas.wildaside.dna.sequence.GeneSequence;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 
-import java.util.List;
-import java.util.Map;
 import java.util.function.Supplier;
 
 public class UseAbilityPacket {
@@ -30,38 +28,23 @@ public class UseAbilityPacket {
             if (player == null) return;
 
             player.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-                Map<Trait, List<GeneLocus>> loci;
-                
-                if (dna.getGenome() != null && hasGenomeSequences(dna.getGenome())) {
-                    loci = DnaUtils.convertGenomeToLoci(dna.getGenome());
-                } else {
-                    loci = dna.getGenomeLociView();
-                }
-                
-                for (Map.Entry<Trait, List<GeneLocus>> entry : loci.entrySet()) {
-                    Trait trait = entry.getKey();
-                    if (trait.getTraitType() != TraitType.ABILITY) continue;
+                Genome genome = dna.getGenome();
+                if (genome == null) return;
 
-                    boolean hasActivator = entry.getValue().stream().anyMatch(l -> l.getFlags().contains(LocusFlag.ACTIVATOR));
-                    if (hasActivator) {
-                        boolean activatorOn = entry.getValue().stream()
-                                .filter(l -> l.getFlags().contains(LocusFlag.ACTIVATOR))
-                                .map(GeneLocus::getExpressedValue)
-                                .anyMatch(v -> v instanceof FloatAlleleValue fv && fv.get() > 0f);
-                        if (!activatorOn) continue;
-                    }
+                ExpressionContext context = new ExpressionContext(player);
 
-                    Gene gene = DnaUtils.asGene(trait, entry.getValue());
-                    if (gene == null) continue;
+                for (Chromosome chromo : genome.getMaternal().getAllChromosomes()) {
+                    for (GeneSequence seq : chromo.getAllGeneSequences()) {
+                        Trait trait = seq.getTrait();
+                        if (trait.getTraitType() != TraitType.ABILITY) continue;
 
-                    if (gene.getExpressedValueHolder() instanceof FloatAlleleValue floatVal) {
+                        float value = genome.getExpressedValue(trait, context);
+                        if (value <= 0f) continue;
+
                         IAbility ability = AbilityRegistry.get(trait);
-                        if (ability != null && floatVal.get() > 0f) {
-                            ability.onUse(player, floatVal.get());
-
-
-                            boolean hasSide = entry.getValue().stream().anyMatch(l -> l.getFlags().contains(LocusFlag.SIDE_EFFECT));
-                            float stressGain = trait.getInstabilityModifier() * (hasSide ? 0.75f : 0.5f);
+                        if (ability != null) {
+                            ability.onUse(player, value);
+                            float stressGain = trait.getInstabilityModifier() * 0.5f;
                             dna.setStress(dna.getStress() + stressGain);
                         }
                     }
@@ -69,9 +52,5 @@ public class UseAbilityPacket {
             });
         });
         ctx.get().setPacketHandled(true);
-    }
-
-    private static boolean hasGenomeSequences(net.farkas.wildaside.dna.chromosome.Genome genome) {
-        return DnaUtils.hasGenomeSequences(genome);
     }
 }

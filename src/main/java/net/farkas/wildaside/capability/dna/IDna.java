@@ -1,7 +1,6 @@
 package net.farkas.wildaside.capability.dna;
 
 import net.farkas.wildaside.dna.chromosome.Genome;
-import net.farkas.wildaside.dna.locus.GeneLocus;
 import net.farkas.wildaside.dna.merge.PendingDnaIntegration;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitTransition;
@@ -13,6 +12,7 @@ import net.minecraftforge.common.util.INBTSerializable;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface IDna extends INBTSerializable<CompoundTag> {
     @Nullable EntityType<?> getSource();
@@ -21,17 +21,11 @@ public interface IDna extends INBTSerializable<CompoundTag> {
     Genome getGenome();
     void setGenome(Genome genome);
 
-    Map<Trait, List<GeneLocus>> getGenomeLociView();
-    void setGenomeFromLoci(Map<Trait, List<GeneLocus>> loci);
-
-    Map<Trait, List<GeneLocus>> getInvadingLoci();
-    void setInvadingLoci(Map<Trait, List<GeneLocus>> loci);
-    void addInvadingLoci(Map<Trait, List<GeneLocus>> loci);
-    void clearInvadingLoci();
-    boolean hasInvadingLoci();
-
     float getStress();
     void setStress(float stress);
+
+    boolean isActive();
+    void setActive(boolean active);
 
     List<PendingDnaIntegration> getPendingIntegrations();
     void addPendingIntegration(PendingDnaIntegration integration);
@@ -47,6 +41,9 @@ public interface IDna extends INBTSerializable<CompoundTag> {
     Map<Trait, Float> getCurrentAppliedValues();
     void setCurrentAppliedValue(Trait trait, float value);
     float getCurrentAppliedValue(Trait trait);
+
+    Set<Trait> getDynamicTraits();
+    void updateDynamicTraits(LivingEntity entity);
 
     void applyGenes(LivingEntity entity);
     void removeGenes(LivingEntity entity);

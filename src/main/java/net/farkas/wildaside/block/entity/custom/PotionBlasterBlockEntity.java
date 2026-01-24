@@ -5,7 +5,7 @@ import net.farkas.wildaside.block.custom.vibrion.PotionBlasterBlock;
 import net.farkas.wildaside.block.entity.ModBlockEntities;
 import net.farkas.wildaside.block.entity.OutputRestrictingItemHandler;
 import net.farkas.wildaside.screen.potion_blaster.PotionBlasterMenu;
-import net.farkas.wildaside.advancement.AdvancementHandler;
+import net.farkas.wildaside.advancement.AdvancementUtils;
 import net.farkas.wildaside.util.BlasterUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -167,7 +167,7 @@ public class PotionBlasterBlockEntity extends BlasterBlockEntity implements Menu
                             entity.getX(), entity.getY(), entity.getZ(), 1, direction.getStepX(), direction.getStepY(), direction.getStepZ(), 0.1
                     );
                     if (entity instanceof ServerPlayer player) {
-                        AdvancementHandler.givePlayerAdvancement(player, ModAdvancements.BREW_BARRAGE);
+                        AdvancementUtils.givePlayerAdvancement(player, ModAdvancements.BREW_BARRAGE);
                     }
                 }
             }

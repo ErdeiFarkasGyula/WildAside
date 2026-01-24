@@ -2,12 +2,10 @@ package net.farkas.wildaside.item.custom;
 
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.DnaUtils;
-import net.farkas.wildaside.dna.Gene;
-import net.farkas.wildaside.dna.allele.value.AlleleValue;
-import net.farkas.wildaside.dna.allele.value.EnumAlleleValue;
-import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
-import net.farkas.wildaside.dna.locus.GeneLocus;
+import net.farkas.wildaside.dna.chromosome.Genome;
+import net.farkas.wildaside.dna.expression.ExpressionContext;
 import net.farkas.wildaside.dna.trait.Trait;
+import net.farkas.wildaside.dna.trait.TraitRegistry;
 import net.farkas.wildaside.dna.trait.TraitType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -25,7 +23,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 import static net.farkas.wildaside.dna.DnaConstants.*;
 
@@ -86,16 +83,9 @@ public class DnaHolderItem extends AbstractDnaSampleItem {
     }
 
     private void displayGenesFromGenome(List<Component> tooltip, DnaImplementation dna) {
-        if (dna.getGenome() == null) {
-            Map<Trait, List<GeneLocus>> loci = dna.getGenomeLociView();
-            displayGenesSection(tooltip, loci, TraitType.CORE, getTranslatable(CORE_TRAITS));
-            displayGenesSection(tooltip, loci, TraitType.RESISTANCE, getTranslatable(RESISTANCES));
-            displayGenesSection(tooltip, loci, TraitType.ABILITY, getTranslatable(ABILITIES));
-            displayGenesSection(tooltip, loci, TraitType.APPEARANCE, getTranslatable(APPEARANCE));
-            return;
-        }
+        if (dna.getGenome() == null) return;
 
-        net.farkas.wildaside.dna.expression.ExpressionContext context = new net.farkas.wildaside.dna.expression.ExpressionContext(null);
+        ExpressionContext context = new ExpressionContext(null);
         
         displayGenomeSection(tooltip, dna, TraitType.CORE, getTranslatable(CORE_TRAITS), context);
         displayGenomeSection(tooltip, dna, TraitType.RESISTANCE, getTranslatable(RESISTANCES), context);
@@ -103,11 +93,14 @@ public class DnaHolderItem extends AbstractDnaSampleItem {
         displayGenomeSection(tooltip, dna, TraitType.APPEARANCE, getTranslatable(APPEARANCE), context);
     }
 
-    private void displayGenomeSection(List<Component> tooltip, DnaImplementation dna, TraitType type, MutableComponent title, net.farkas.wildaside.dna.expression.ExpressionContext context) {
-        var filtered = net.farkas.wildaside.dna.trait.TraitRegistry.getAllTraits().stream()
+    private void displayGenomeSection(List<Component> tooltip, DnaImplementation dna, TraitType type, MutableComponent title, ExpressionContext context) {
+        Genome genome = dna.getGenome();
+        if (genome == null) return;
+
+        var filtered = TraitRegistry.getAllTraits().stream()
                 .filter(trait -> trait.getTraitType() == type)
                 .filter(trait -> {
-                    float value = dna.getGenome().getExpressedValue(trait, context);
+                    float value = genome.getExpressedValue(trait, context);
                     return Math.abs(value) > 0.001f;
                 })
                 .sorted(Comparator.comparing(Trait::getName))
@@ -118,7 +111,7 @@ public class DnaHolderItem extends AbstractDnaSampleItem {
         tooltip.add(title.withStyle(type.getHeaderColour()));
 
         for (Trait trait : filtered) {
-            float value = dna.getGenome().getExpressedValue(trait, context);
+            float value = genome.getExpressedValue(trait, context);
             String valueStr = String.format("%.2f", value);
 
             if (type == TraitType.ABILITY) {
@@ -130,44 +123,6 @@ public class DnaHolderItem extends AbstractDnaSampleItem {
 
             tooltip.add(Component.literal("- ")
                     .append(Component.translatable("trait.wildaside." + trait.getName()))
-                    .append(": " + valueStr)
-                    .withStyle(type.getEntryColour()));
-        }
-    }
-
-    private void displayGenesSection(List<Component> tooltip, Map<Trait, List<GeneLocus>> loci, TraitType type, MutableComponent title) {
-        var filtered = loci.entrySet().stream()
-                .filter(e -> e.getKey().getTraitType() == type)
-                .sorted(Map.Entry.comparingByKey(Comparator.comparing(Trait::getName)))
-                .toList();
-
-        if (filtered.isEmpty()) return;
-
-        tooltip.add(title.withStyle(type.getHeaderColour()));
-
-        for (var entry : filtered) {
-            Gene gene = DnaUtils.asGene(entry.getKey(), entry.getValue());
-            if (gene == null) continue;
-            AlleleValue valueHolder = gene.getExpressedValueHolder();
-            String valueStr = valueHolder.format().getString();
-
-            if (valueHolder instanceof FloatAlleleValue floatAlleleValue && floatAlleleValue.get() == 0f) continue;
-
-            if (type == TraitType.ABILITY && valueHolder instanceof FloatAlleleValue fa) {
-                valueStr = String.format("%.2f", fa.get() / 20f) + "s";
-            }
-            else if (type == TraitType.RESISTANCE && valueHolder instanceof FloatAlleleValue fa) {
-                valueStr = String.format("%.2f", fa.get() * 100f) + "%";
-            }
-            else if (type == TraitType.APPEARANCE) {
-                if (valueHolder instanceof EnumAlleleValue<?> enumAlleleValue) {
-                    valueStr = enumAlleleValue.get().toString();
-                }
-                if (valueStr.startsWith("0")) continue;
-            }
-
-            tooltip.add(Component.literal("- ")
-                    .append(Component.translatable("trait.wildaside." + gene.getTrait().getName()))
                     .append(": " + valueStr)
                     .withStyle(type.getEntryColour()));
         }

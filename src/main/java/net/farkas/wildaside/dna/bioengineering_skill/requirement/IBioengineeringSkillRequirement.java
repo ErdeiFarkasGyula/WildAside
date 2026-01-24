@@ -10,11 +10,17 @@ import net.minecraft.world.entity.player.Player;
 import java.util.List;
 
 public abstract class IBioengineeringSkillRequirement {
-    public abstract boolean isSatisfied(ServerPlayer player);
+    public boolean isServerSatisfied(Player player) {
+        if (!isPlayerServer(player)) return false;
+        return isSatisfied(player);
+    }
 
     public boolean isClientSatisfied(Player player) {
-        return true;
+        if (isPlayerServer(player)) return false;
+        return isSatisfied(player);
     }
+
+    public abstract boolean isSatisfied(Player player);
 
     public void unlock(ServerPlayer player) {
     }
@@ -40,5 +46,9 @@ public abstract class IBioengineeringSkillRequirement {
     protected Component bullet(boolean satisfied) {
         return Component.literal(satisfied ? "✔ " : "✖ ")
                 .withStyle(satisfied ? ChatFormatting.GREEN : ChatFormatting.RED);
+    }
+
+    public boolean isPlayerServer(Player player) {
+        return player instanceof ServerPlayer;
     }
 }

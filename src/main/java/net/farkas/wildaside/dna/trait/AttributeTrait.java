@@ -1,8 +1,6 @@
 package net.farkas.wildaside.dna.trait;
 
 import net.farkas.wildaside.dna.DnaUtils;
-import net.farkas.wildaside.dna.allele.value.AlleleValue;
-import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -45,7 +43,7 @@ public class AttributeTrait extends Trait {
     }
 
     @Override
-    public void apply(LivingEntity entity, AlleleValue valueHolder) {
+    public void apply(LivingEntity entity, float value) {
         var attribute = ForgeRegistries.ATTRIBUTES.getValue(attributeRes);
         if (attribute == null) return;
         AttributeInstance instance = entity.getAttribute(attribute);
@@ -57,20 +55,16 @@ public class AttributeTrait extends Trait {
         double base = DnaUtils.getSafeBaseAttributeValue(entity, attribute);
         if (Double.isNaN(base) || base == 0.0) base = 1.0;
 
-        if (valueHolder instanceof FloatAlleleValue floatAlleleValue) {
-            float value = floatAlleleValue.get();
-            double modifierValue = value - base;
-            AttributeModifier.Operation op;
+        double modifierValue = value - base;
 
-            if (operation == AttributeModifier.Operation.MULTIPLY_BASE) {
-                modifierValue = (value / base) - 1.0;
-            }
-            else if (operation == AttributeModifier.Operation.ADDITION) {
-                modifierValue = value - base;
-            }
-            AttributeModifier modifier = new AttributeModifier(modifierUuid, DnaUtils.fullName(getName()), modifierValue, operation);
-            instance.addPermanentModifier(modifier);
+        if (operation == AttributeModifier.Operation.MULTIPLY_BASE) {
+            modifierValue = (value / base) - 1.0;
         }
+        else if (operation == AttributeModifier.Operation.ADDITION) {
+            modifierValue = value - base;
+        }
+        AttributeModifier modifier = new AttributeModifier(modifierUuid, DnaUtils.fullName(getName()), modifierValue, operation);
+        instance.addPermanentModifier(modifier);
     }
 
     @Override

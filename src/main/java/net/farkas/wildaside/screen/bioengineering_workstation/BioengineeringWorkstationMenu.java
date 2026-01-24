@@ -6,7 +6,8 @@ import net.farkas.wildaside.block.entity.custom.BioengineeringWorkstationBlockEn
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
-import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
+import net.farkas.wildaside.dna.chromosome.Genome;
+import net.farkas.wildaside.dna.expression.ExpressionContext;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.item.custom.DnaHolderItem;
@@ -120,20 +121,9 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
                     CompoundTag tag = pStack.getOrCreateTag();
                     DnaImplementation dna = new DnaImplementation();
                     dna.deserializeNBT(tag.getCompound(DNA_DATA));
-
-                    if (dna.getGenome() != null && hasGenomeSequences(dna.getGenome())) {
-                        return super.shouldGivePoint(pPlayer, pStack);
-                    }
-
-                    if (dna.getGenomeLociView().isEmpty()) {
-                        return false;
-                    }
-
-                    return super.shouldGivePoint(pPlayer, pStack);
-                }
-
-                private boolean hasGenomeSequences(net.farkas.wildaside.dna.chromosome.Genome genome) {
-                    return DnaUtils.hasGenomeSequences(genome);
+                    
+                    Genome genome = dna.getGenome();
+                    return genome != null && !genome.isEmpty();
                 }
             };
 
@@ -270,6 +260,10 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
                         geneStack.getOrCreateTag().putBoolean("latent", true);
                     }
 
+                    if (slotIndex % 2 != 0) {
+                        GeneItem.setFlipped(geneStack, true);
+                    }
+
                     if (i == EDITOR_INPUT_1) {
                         if (topGeneSlots.size() > slotIndex) {
                             topGeneSlots.get(slotIndex).set(geneStack);
@@ -287,10 +281,8 @@ public class BioengineeringWorkstationMenu extends AbstractContainerMenu {
     }
 
     public boolean isLatentGene(Gene gene) {
-        if (gene.getExpressedValueHolder() instanceof FloatAlleleValue floatAlleleValue) {
-            return floatAlleleValue.get() == 0.0f;
-        }
-        return false;
+        ExpressionContext context = new ExpressionContext(null);
+        return gene.getExpressedValue(context) == 0.0f;
     }
 
     public boolean isCrafting() {

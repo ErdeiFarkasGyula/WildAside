@@ -46,6 +46,10 @@ public class ModEventBusClientEvents {
     @SubscribeEvent
     public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
         event.register(ModKeyMappings.USE_ABILITY);
+        event.register(ModKeyMappings.GENE_EDITOR_LOCK_SCROLL);
+        event.register(ModKeyMappings.GENE_EDITOR_RESET_SCROLL);
+        event.register(ModKeyMappings.GENE_EDITOR_EXECUTE);
+        event.register(ModKeyMappings.GENE_EDITOR_RESET_CHANGES);
     }
 
     @SubscribeEvent

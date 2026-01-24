@@ -1,7 +1,7 @@
 package net.farkas.wildaside.dna.appearance;
 
-import net.farkas.wildaside.dna.locus.GeneLocus;
-import net.farkas.wildaside.dna.allele.Allele;
+import net.farkas.wildaside.dna.chromosome.Genome;
+import net.farkas.wildaside.dna.sequence.GeneSequence;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -10,23 +10,23 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.frog.Frog;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class FrogAppearanceExtractor implements IAppearanceGeneExtractor<Frog> {
     @Override public EntityType<Frog> type() { return EntityType.FROG; }
     @Override public Trait trait() { return TraitRegistry.FROG_VARIANT; }
 
     @Override
-    public void extract(Frog frog, Map<Trait, List<GeneLocus>> loci, long seed) {
-        ResourceLocation current = BuiltInRegistries.FROG_VARIANT.getKey(frog.getVariant());
+    public GeneSequence[] extract(Frog entity, Genome genome, long seed) {
+        ResourceLocation current = BuiltInRegistries.FROG_VARIANT.getKey(entity.getVariant());
         ResourceLocation other = pickOtherVariant(seed, current);
-        Allele a = AppearanceAlleleHelper.createVariantAllele(current, seed, "frog_var_a");
-        Allele b = AppearanceAlleleHelper.createVariantAllele(other, seed, "frog_var_b");
-        loci.put(TraitRegistry.FROG_VARIANT, List.of(
-                new GeneLocus("frog_variant", a, b, Set.of(), TraitRegistry.FROG_VARIANT.getInstabilityModifier())
-        ));
+
+        GeneSequence maternal = AppearanceUtils.createVariantSequence(trait(), current, seed, "frog_var_m");
+        GeneSequence paternal = AppearanceUtils.createVariantSequence(trait(), other, seed, "frog_var_p");
+        
+        genome.getMaternal().getChromosome(trait().getTraitType().getChromosomeType()).setGeneSequence(trait(), maternal);
+        genome.getPaternal().getChromosome(trait().getTraitType().getChromosomeType()).setGeneSequence(trait(), paternal);
+
+        return new GeneSequence[]{maternal, paternal};
     }
 
     private ResourceLocation pickOtherVariant(long seed, ResourceLocation exclude) {

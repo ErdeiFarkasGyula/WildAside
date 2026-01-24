@@ -4,6 +4,7 @@ import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.block.entity.custom.IncubatorBlockEntity;
 import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
+import net.farkas.wildaside.capability.dna.IDna;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.network.NetworkHandler;
 import net.farkas.wildaside.network.packet.SyringeDataPacket;
@@ -306,11 +307,14 @@ public class SyringeItem extends AbstractDnaSampleItem {
 
             var cap = target.getCapability(DnaCapability.INSTANCE).orElse(null);
 
-            if (cap.getGenome() == null || !hasGenomeSequences(cap)) {
+            if (!hasGenomeSequences(cap)) {
                 cap.setSource(target.getType());
                 cap.setGenome(DnaUtils.generateBaseGenome(target));
+                WildAside.LOGGER.info(cap.getGenome().serializeNBT().toString());
                 cap.setStress(0f);
             }
+
+            System.out.println(cap.serializeNBT().toString());
 
             tag.put(DNA_DATA, cap.serializeNBT());
 
@@ -599,7 +603,7 @@ public class SyringeItem extends AbstractDnaSampleItem {
         return 72000;
     }
 
-    private boolean hasGenomeSequences(net.farkas.wildaside.capability.dna.IDna cap) {
+    private boolean hasGenomeSequences(IDna cap) {
         return cap != null && cap.getGenome() != null && DnaUtils.hasGenomeSequences(cap.getGenome());
     }
 }

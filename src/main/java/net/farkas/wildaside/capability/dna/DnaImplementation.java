@@ -2,9 +2,14 @@ package net.farkas.wildaside.capability.dna;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.dna.chromosome.Genome;
+import net.farkas.wildaside.dna.expression.ActivationCondition;
 import net.farkas.wildaside.dna.expression.ExpressionContext;
-import net.farkas.wildaside.dna.locus.GeneLocus;
 import net.farkas.wildaside.dna.merge.PendingDnaIntegration;
+import net.farkas.wildaside.dna.sequence.GeneSequence;
+import net.farkas.wildaside.dna.sequence.components.Activator;
+import net.farkas.wildaside.dna.sequence.components.Enhancer;
+import net.farkas.wildaside.dna.sequence.components.GeneComponent;
+import net.farkas.wildaside.dna.sequence.components.Silencer;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitRegistry;
 import net.farkas.wildaside.dna.trait.TraitTransition;
@@ -25,12 +30,13 @@ public class DnaImplementation implements IDna {
     
     private Genome genome;
     
-    private Map<Trait, List<GeneLocus>> invadingLoci = new HashMap<>();
-    
     private Map<Trait, TraitTransition> activeTransitions = new HashMap<>();
     private Map<Trait, Float> currentAppliedValues = new HashMap<>();
     private List<PendingDnaIntegration> pendingIntegrations = new ArrayList<>();
     private float stress = 0f;
+
+    private boolean active = false;
+    private Set<Trait> dynamicTraits = new HashSet<>();
 
     public DnaImplementation() {
         this.genome = new Genome(null);
@@ -57,51 +63,7 @@ public class DnaImplementation implements IDna {
         if (genome != null && genome.getEntityType() != null) {
             this.source = genome.getEntityType();
         }
-    }
-
-    @Override
-    public Map<Trait, List<GeneLocus>> getGenomeLociView() {
-        return net.farkas.wildaside.dna.DnaUtils.convertGenomeToLoci(genome);
-    }
-
-    @Override
-    public void setGenomeFromLoci(Map<Trait, List<GeneLocus>> loci) {
-        if (loci == null || loci.isEmpty()) {
-            genome = new Genome(source);
-            return;
-        }
-        genome = net.farkas.wildaside.dna.DnaUtils.convertLociToGenome(source, loci);
-    }
-
-    @Override
-    public Map<Trait, List<GeneLocus>> getInvadingLoci() {
-        return invadingLoci;
-    }
-
-    @Override
-    public void setInvadingLoci(Map<Trait, List<GeneLocus>> loci) {
-        this.invadingLoci = loci != null ? new HashMap<>(loci) : new HashMap<>();
-    }
-
-    @Override
-    public void addInvadingLoci(Map<Trait, List<GeneLocus>> newLoci) {
-        if (newLoci == null || newLoci.isEmpty()) return;
-
-        for (Map.Entry<Trait, List<GeneLocus>> entry : newLoci.entrySet()) {
-            Trait trait = entry.getKey();
-            List<GeneLocus> lociToAdd = entry.getValue();
-            invadingLoci.computeIfAbsent(trait, k -> new ArrayList<>()).addAll(lociToAdd);
-        }
-    }
-
-    @Override
-    public void clearInvadingLoci() {
-        invadingLoci.clear();
-    }
-
-    @Override
-    public boolean hasInvadingLoci() {
-        return !invadingLoci.isEmpty();
+        analyzeDynamicTraits();
     }
 
     @Override
@@ -112,6 +74,16 @@ public class DnaImplementation implements IDna {
     @Override
     public void setStress(float stress) {
         this.stress = Math.max(0f, Math.min(100f, stress));
+    }
+
+    @Override
+    public boolean isActive() {
+        return active;
+    }
+
+    @Override
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     @Override
@@ -175,6 +147,74 @@ public class DnaImplementation implements IDna {
     }
 
     @Override
+    public Set<Trait> getDynamicTraits() {
+        return dynamicTraits;
+    }
+
+    private void analyzeDynamicTraits() {
+        dynamicTraits.clear();
+        if (genome == null) return;
+
+        for (Trait trait : TraitRegistry.getAllTraits()) {
+            if (isTraitDynamic(trait)) {
+                dynamicTraits.add(trait);
+            }
+        }
+    }
+
+    private boolean isTraitDynamic(Trait trait) {
+        if (genome == null) return false;
+        if (isSequenceDynamic(genome.getMaternal().getSequence(trait))) return true;
+        if (isSequenceDynamic(genome.getPaternal().getSequence(trait))) return true;
+        return false;
+    }
+
+    private boolean isSequenceDynamic(GeneSequence seq) {
+        if (seq == null) return false;
+        for (GeneComponent comp : seq.getComponents()) {
+            if (comp instanceof Activator act && isConditionDynamic(act.getCondition())) return true;
+            if (comp instanceof Enhancer enh && isConditionDynamic(enh.getCondition())) return true;
+            if (comp instanceof Silencer sil && isConditionDynamic(sil.getCondition())) return true;
+        }
+        return false;
+    }
+
+    private boolean isConditionDynamic(ActivationCondition condition) {
+        return condition != ActivationCondition.ALWAYS && condition != ActivationCondition.NEVER;
+    }
+
+    @Override
+    public void updateDynamicTraits(LivingEntity entity) {
+        if (!active || dynamicTraits.isEmpty()) return;
+
+        long currentTick = entity.level().getGameTime();
+        ExpressionContext context = new ExpressionContext(entity);
+
+        for (Trait trait : dynamicTraits) {
+            float targetValue = genome.getExpressedValue(trait, context);
+            float current = currentAppliedValues.getOrDefault(trait, 0f);
+
+            if (Math.abs(targetValue - current) < 0.001f) {
+                continue;
+            }
+
+            if (!hasActiveTransition(trait)) {
+                int duration = getTransitionDuration(trait);
+                TraitTransition transition = new TraitTransition(trait, current, targetValue, currentTick, duration);
+                addTransition(transition);
+            } else {
+                TraitTransition existing = activeTransitions.get(trait);
+                if (Math.abs(existing.getTargetValue() - targetValue) > 0.001f) {
+                    float currentTransitionValue = existing.getCurrentValue();
+                    int duration = getTransitionDuration(trait);
+                    TraitTransition newTransition = new TraitTransition(trait, currentTransitionValue, targetValue, currentTick, duration);
+                    addTransition(newTransition);
+                }
+            }
+        }
+    }
+
+    @Override
     public void applyGenes(LivingEntity entity) {
         long currentTick = entity.level().getGameTime();
         if (genome == null) return;
@@ -185,7 +225,7 @@ public class DnaImplementation implements IDna {
             float targetValue = genome.getExpressedValue(trait, context);
 
             if (!currentAppliedValues.containsKey(trait)) {
-                trait.applyRaw(entity, targetValue);
+                trait.apply(entity, targetValue);
                 currentAppliedValues.put(trait, targetValue);
                 continue;
             }
@@ -237,7 +277,7 @@ public class DnaImplementation implements IDna {
             TraitTransition transition = entry.getValue();
 
             float newValue = transition.tick(currentTick);
-            trait.applyRaw(entity, newValue);
+            trait.apply(entity, newValue);
             currentAppliedValues.put(trait, newValue);
 
             if (transition.isComplete()) {
@@ -269,20 +309,11 @@ public class DnaImplementation implements IDna {
         CompoundTag tag = new CompoundTag();
         tag.putFloat("stress", stress);
         tag.putString("source", source == null ? "" : Objects.toString(ForgeRegistries.ENTITY_TYPES.getKey(source), ""));
+        tag.putBoolean("active", active);
 
         if (genome != null) {
             tag.put("genome", genome.serializeNBT());
         }
-
-        ListTag invadingTag = new ListTag();
-        for (Map.Entry<Trait, List<GeneLocus>> e : invadingLoci.entrySet()) {
-            for (GeneLocus gl : e.getValue()) {
-                CompoundTag ct = gl.serializeNBT();
-                ct.putString("Trait", e.getKey().getName());
-                invadingTag.add(ct);
-            }
-        }
-        tag.put("invadingLoci", invadingTag);
 
         ListTag pendingTag = new ListTag();
         for (PendingDnaIntegration pending : pendingIntegrations) {
@@ -307,7 +338,6 @@ public class DnaImplementation implements IDna {
 
     @Override
     public void deserializeNBT(CompoundTag tag) {
-        invadingLoci.clear();
         pendingIntegrations.clear();
         activeTransitions.clear();
         currentAppliedValues.clear();
@@ -315,42 +345,17 @@ public class DnaImplementation implements IDna {
         stress = tag.getFloat("stress");
         String s = tag.getString("source");
         if (!s.isEmpty()) source = ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(s));
+        active = tag.getBoolean("active");
 
         if (tag.contains("genome")) {
             genome = Genome.deserializeNBT(tag.getCompound("genome"));
             if (genome.getEntityType() != null) {
                 source = genome.getEntityType();
             }
-        } else if (tag.contains("loci")) {
-            Map<Trait, List<GeneLocus>> loadedLoci = new HashMap<>();
-            ListTag lociTag = tag.getList("loci", Tag.TAG_COMPOUND);
-            for (Tag t : lociTag) {
-                CompoundTag ct = (CompoundTag) t;
-                Trait trait = TraitRegistry.getByName(ct.getString("Trait"));
-                if (trait == null) continue;
-                GeneLocus gl = GeneLocus.deserializeNBT(ct);
-                loadedLoci.computeIfAbsent(trait, k -> new ArrayList<>()).add(gl);
-            }
-            
-            if (!loadedLoci.isEmpty()) {
-                genome = net.farkas.wildaside.dna.DnaUtils.convertLociToGenome(source, loadedLoci);
-            } else {
-                genome = new Genome(source);
-            }
         } else {
             genome = new Genome(source);
         }
-
-        if (tag.contains("invadingLoci")) {
-            ListTag invadingTag = tag.getList("invadingLoci", Tag.TAG_COMPOUND);
-            for (Tag t : invadingTag) {
-                CompoundTag ct = (CompoundTag) t;
-                Trait trait = TraitRegistry.getByName(ct.getString("Trait"));
-                if (trait == null) continue;
-                GeneLocus gl = GeneLocus.deserializeNBT(ct);
-                invadingLoci.computeIfAbsent(trait, k -> new ArrayList<>()).add(gl);
-            }
-        }
+        analyzeDynamicTraits();
 
         if (tag.contains("pendingIntegrations")) {
             ListTag pendingTag = tag.getList("pendingIntegrations", Tag.TAG_COMPOUND);

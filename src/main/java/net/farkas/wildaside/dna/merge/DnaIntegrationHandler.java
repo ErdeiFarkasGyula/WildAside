@@ -3,8 +3,11 @@ package net.farkas.wildaside.dna.merge;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.capability.dna.IDna;
-import net.farkas.wildaside.dna.locus.GeneLocus;
-import net.farkas.wildaside.dna.locus.LocusSource;
+import net.farkas.wildaside.dna.chromosome.Chromosome;
+import net.farkas.wildaside.dna.chromosome.ChromosomeType;
+import net.farkas.wildaside.dna.chromosome.Genome;
+import net.farkas.wildaside.dna.sequence.GeneSequence;
+import net.farkas.wildaside.dna.sequence.GeneSource;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -13,9 +16,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class DnaIntegrationHandler {
     public static final int TICK_INTERVAL = 20;
@@ -260,53 +261,47 @@ public class DnaIntegrationHandler {
 
     private static void finalizeIntegration(LivingEntity entity, IDna dna, PendingDnaIntegration integration) {
         Trait trait = integration.getTrait();
-        GeneLocus locus = integration.getLocus();
+        GeneSequence sequence = integration.getSequence();
         MergeOutcomeType outcome = integration.getOutcomeType();
 
-        Map<Trait, List<GeneLocus>> allLoci = new HashMap<>(dna.getGenomeLociView());
-        List<GeneLocus> existingLoci = allLoci.computeIfAbsent(trait, k -> new ArrayList<>());
+        Genome genome = dna.getGenome();
+        ChromosomeType chromoType = trait.getTraitType().getChromosomeType();
+        Chromosome maternalChromo = genome.getMaternal().getChromosome(chromoType);
+        Chromosome paternalChromo = genome.getPaternal().getChromosome(chromoType);
 
-        switch (outcome) {
-            case INTEGRATED, TRANSIENT -> {
-                if (existingLoci.size() < DnaMerger.MAX_LOCI_PER_TRAIT) {
-                    existingLoci.add(locus);
-                    WildAside.LOGGER.info("Added {} locus for trait {}", outcome, trait.getName());
-                }
-            }
-            case REPLACED -> {
-                if (!existingLoci.isEmpty()) {
-                    existingLoci.removeIf(l -> l.getSource() != LocusSource.NATIVE);
-                }
-                existingLoci.add(locus);
-                WildAside.LOGGER.info("Replaced locus for trait {}", trait.getName());
-            }
-            case REJECTED -> {
-                if (existingLoci.size() < DnaMerger.MAX_LOCI_PER_TRAIT) {
-                    existingLoci.add(locus);
-                    WildAside.LOGGER.info("Added rejected locus for trait {} (will degrade)", trait.getName());
-                }
+        GeneSequence.Builder builder = GeneSequence.builder()
+                .trait(trait)
+                .codingRegion(sequence.getCodingRegions().get(0))
+                .dominance(sequence.getDominance())
+                .mutationRate(sequence.getMutationRate())
+                .stability(sequence.getStability());
 
-                long seed = entity.getUUID().getLeastSignificantBits() ^ entity.level().getGameTime();
-                RejectionSideEffects.generateMutations(allLoci, 1, seed);
-            }
+        sequence.getActivators().forEach(builder::activator);
+        sequence.getEnhancers().forEach(builder::enhancer);
+        sequence.getSilencers().forEach(builder::silencer);
+        sequence.getRegulators().forEach(builder::regulator);
+
+        GeneSource newSource = switch (outcome) {
+            case INTEGRATED, REPLACED -> GeneSource.INTEGRATED;
+            case TRANSIENT -> GeneSource.INTEGRATED;
+            case REJECTED -> GeneSource.MUTATED;
+        };
+
+        builder.source(GeneSource.INTEGRATED);
+
+        System.out.println("INTEGRATING");
+        GeneSequence finalSequence = builder.build();
+
+        maternalChromo.setGeneSequence(trait, finalSequence);
+        
+        WildAside.LOGGER.info("Finalized integration for trait {} with outcome {}", trait.getName(), outcome);
+
+        if (outcome == MergeOutcomeType.REJECTED) {
+             long seed = entity.getUUID().getLeastSignificantBits() ^ entity.level().getGameTime();
+             //RejectionSideEffects.generateMutations(genome, 1, seed);
         }
 
-        dna.setGenomeFromLoci(allLoci);
-        removeFromInvadingLoci(dna, trait, locus);
-    }
-
-    private static void removeFromInvadingLoci(IDna dna, Trait trait, GeneLocus locus) {
-        Map<Trait, List<GeneLocus>> invading = dna.getInvadingLoci();
-        List<GeneLocus> traitLoci = invading.get(trait);
-
-        if (traitLoci != null) {
-            traitLoci.removeIf(l -> l.getId().equals(locus.getId()));
-            if (traitLoci. isEmpty()) {
-                invading. remove(trait);
-            }
-            WildAside.LOGGER. debug("Removed locus {} from invading loci for trait {}",
-                    locus.getId(), trait.getName());
-        }
+        dna.setGenome(genome);
     }
 
     private static void sendCompletionFeedback(Player player, List<PendingDnaIntegration> completed) {

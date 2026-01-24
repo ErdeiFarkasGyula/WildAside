@@ -1,6 +1,7 @@
 package net.farkas.wildaside.dna.bioengineering_skill;
 
 import net.farkas.wildaside.WildAside;
+import net.farkas.wildaside.advancement.ModAdvancements;
 import net.farkas.wildaside.dna.bioengineering_skill.category.BioengineeringSkillCategoryRegistry;
 import net.farkas.wildaside.dna.bioengineering_skill.requirement.*;
 import net.farkas.wildaside.item.ModItems;
@@ -15,8 +16,8 @@ import java.util.Map;
 public class BioengineeringSkillRegistry {
     private static final Map<ResourceLocation, BioengineeringSkill> REGISTRY = new HashMap<>();
 
-    public static final BioengineeringSkill REVEAL_ALLELES = register(new BioengineeringSkill.Builder()
-            .name("reveal_alleles")
+    public static final BioengineeringSkill REVEAL_SEQUENCES = register(new BioengineeringSkill.Builder()
+            .name("reveal_sequences")
             .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
             .requirement(
                     new AllRequirements(
@@ -31,62 +32,79 @@ public class BioengineeringSkillRegistry {
                             )
                     )).build());
 
-    public static final BioengineeringSkill SWAP_ALLELES = register(new BioengineeringSkill. Builder()
-            .name("swap_alleles")
+    public static final BioengineeringSkill SWAP_SEQUENCES = register(new BioengineeringSkill.Builder()
+            .name("swap_sequences")
             .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
-            .requirement(new AllRequirements(List.of(
-                    new PointRequirement(20),
-                    new SkillRequirement(REVEAL_ALLELES. getId())
-            ))).build());
+            .requirement(
+                    new AllRequirements(
+                            List.of(
+                                    new PointRequirement(20),
+                                    new SkillRequirement(REVEAL_SEQUENCES.getId())
+                            ))).build());
 
-    public static final BioengineeringSkill MODIFY_DOMINANCE = register(new BioengineeringSkill. Builder()
+    public static final BioengineeringSkill ISOLATE_SEQUENCE = register(new BioengineeringSkill.Builder()
+            .name("isolate_sequence")
+            .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
+            .requirement(
+                    new AllRequirements(
+                            List.of(
+                                    new PointRequirement(40),
+                                    new SkillRequirement(SWAP_SEQUENCES.getId())
+                            ))).build());
+
+    public static final BioengineeringSkill MODIFY_DOMINANCE = register(new BioengineeringSkill.Builder()
             .name("modify_dominance")
             .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
-            .requirement(new AllRequirements(List.of(
-                    new PointRequirement(30),
-                    new SkillRequirement(SWAP_ALLELES.getId())
-            ))).build());
+            .requirement(
+                    new AllRequirements(
+                            List.of(
+                                    new PointRequirement(30),
+                                    new SkillRequirement(ISOLATE_SEQUENCE.getId()),
+                                    new AdvancementRequirement(ModAdvancements.BACTERIA_BRICKS)
+                            ))).build());
 
     public static final BioengineeringSkill STABILIZE_GENE = register(new BioengineeringSkill.Builder()
             .name("stabilize_gene")
-            .category(BioengineeringSkillCategoryRegistry. CATEGORY_1)
-            .requirement(new AllRequirements(List.of(
-                    new PointRequirement(25),
-                    new SkillRequirement(REVEAL_ALLELES.getId())
-            ))).build());
-
-    public static final BioengineeringSkill AMPLIFY_GENE = register(new BioengineeringSkill.Builder()
-            .name("amplify_gene")
             .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
-            .requirement(new AllRequirements(List. of(
-                    new PointRequirement(35),
-                    new SkillRequirement(MODIFY_DOMINANCE.getId())
-            ))).build());
+            .requirement(
+                    new AllRequirements(
+                            List.of(
+                                    new PointRequirement(25),
+                                    new SkillRequirement(REVEAL_SEQUENCES.getId())
+                            ))).build());
+
 
     public static final BioengineeringSkill SUPPRESS_GENE = register(new BioengineeringSkill.Builder()
             .name("suppress_gene")
             .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
-            .requirement(new AllRequirements(List.of(
-                    new PointRequirement(35),
-                    new SkillRequirement(MODIFY_DOMINANCE.getId())
-            ))).build());
+            .requirement(
+                    new AllRequirements(
+                            List.of(
+                                    new PointRequirement(35),
+                                    new SkillRequirement(MODIFY_DOMINANCE.getId())
+                            ))).build());
 
-    public static final BioengineeringSkill SPLICE_LOCUS = register(new BioengineeringSkill.Builder()
-            .name("splice_locus")
-            .category(BioengineeringSkillCategoryRegistry. CATEGORY_1)
-            .requirement(new AllRequirements(List.of(
-                    new PointRequirement(50),
-                    new SkillRequirement(AMPLIFY_GENE.getId()),
-                    new SkillRequirement(SUPPRESS_GENE.getId())
-            ))).build());
-
-    public static final BioengineeringSkill ISOLATE_ALLELE = register(new BioengineeringSkill.Builder()
-            .name("isolate_allele")
+    public static final BioengineeringSkill AMPLIFY_GENE = register(new BioengineeringSkill.Builder()
+            .name("amplify_gene")
             .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
-            .requirement(new AllRequirements(List.of(
-                    new PointRequirement(40),
-                    new SkillRequirement(SWAP_ALLELES.getId())
-            ))).build());
+            .requirement(
+                    new AllRequirements(
+                            List.of(
+                                    new PointRequirement(35),
+                                    new SkillRequirement(SUPPRESS_GENE.getId())
+                            ))).build());
+
+    public static final BioengineeringSkill SPLICE_SEQUENCE = register(new BioengineeringSkill.Builder()
+            .name("splice_sequence")
+            .category(BioengineeringSkillCategoryRegistry.CATEGORY_1)
+            .requirement(
+                    new AllRequirements(
+                            List.of(
+                                    new PointRequirement(50),
+                                    new SkillRequirement(AMPLIFY_GENE.getId()),
+                                    new SkillRequirement(SUPPRESS_GENE.getId())
+                            ))).build());
+
 
     public static BioengineeringSkill register(BioengineeringSkill skill) {
         REGISTRY.put(skill.getId(), skill);

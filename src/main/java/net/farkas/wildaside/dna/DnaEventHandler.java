@@ -5,9 +5,8 @@ import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.config.ModConfig;
 import net.farkas.wildaside.dna.ability.AbilityRegistry;
 import net.farkas.wildaside.dna.ability.IAbility;
-import net.farkas.wildaside.dna.allele.value.AlleleValue;
-import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
-import net.farkas.wildaside.dna.locus.GeneLocus;
+import net.farkas.wildaside.dna.chromosome.Genome;
+import net.farkas.wildaside.dna.expression.ExpressionContext;
 import net.farkas.wildaside.dna.merge.DnaDegradationHandler;
 import net.farkas.wildaside.dna.merge.DnaIntegrationHandler;
 import net.farkas.wildaside.dna.merge.RejectionSideEffects;
@@ -28,9 +27,6 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.List;
-import java.util.Map;
-
 @Mod.EventBusSubscriber(modid = WildAside.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class DnaEventHandler {
     private static final int TICK_CADENCE = 20;
@@ -38,18 +34,19 @@ public class DnaEventHandler {
 
     @SubscribeEvent
     public static void onEntityJoinLevel(EntityJoinLevelEvent event) {
-        if (event.getLevel().dimension() == ModDimensions.TEST_LEVEL || !(event.getLevel() instanceof ServerLevel)) return;
+        if (!(event.getLevel() instanceof ServerLevel) || event.getLevel().dimension() == ModDimensions.TEST_LEVEL) return;
         if (!ModConfig.WILD_MODE.get()) return;
-        if (!ModConfig.EXCLUDE_PLAYERS_FROM_WILD_MODE.get() && event.getEntity() instanceof Player) return;
+        if (event.getEntity() instanceof Player && !ModConfig.EXCLUDE_PLAYERS_FROM_WILD_MODE.get()) return;
 
         if (event.getEntity() instanceof LivingEntity living) {
             living.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
-                if (dna.getGenomeLociView().isEmpty()) {
+                if (dna.getGenome().isEmpty()) {
                     WildAside.LOGGER.debug("Generating base DNA for {}", living.getName().getString());
                     dna.setSource(living.getType());
-                    dna.setGenomeFromLoci(DnaUtils.generateBaseLoci(living));
+                    dna.setGenome(DnaUtils.generateBaseGenome(living));
                     dna.setStress(0f);
                 }
+                dna.setActive(true);
                 dna.recomputeAndApply(living);
             });
         }
@@ -96,20 +93,24 @@ public class DnaEventHandler {
             }
 
             if (trait != null) {
-                AlleleValue v = DnaUtils.getExpressed(dna.getGenomeLociView(), trait);
-                if (v instanceof FloatAlleleValue fv) {
-                    float resistance = fv.get();
-                    float originalDamage = event.getAmount();
-                    float reducedDamage = originalDamage * (1.0f - resistance);
+                Genome genome = dna.getGenome();
+                if (genome != null) {
+                    ExpressionContext context = new ExpressionContext(entity);
+                    float resistance = genome.getExpressedValue(trait, context);
+                    
+                    if (resistance > 0) {
+                        float originalDamage = event.getAmount();
+                        float reducedDamage = originalDamage * (1.0f - resistance);
 
-                    dna.setStress(dna.getStress() + (originalDamage * 0.25f));
-                    event.setAmount(reducedDamage);
+                        dna.setStress(dna.getStress() + (originalDamage * 0.25f));
+                        event.setAmount(reducedDamage);
 
-                    WildAside.LOGGER.debug("{} resistance {} reduced damage {} -> {}",
-                            trait.getName(),
-                            String.format("%.2f", resistance),
-                            String.format("%.2f", originalDamage),
-                            String.format("%.2f", reducedDamage));
+                        WildAside.LOGGER.debug("{} resistance {} reduced damage {} -> {}",
+                                trait.getName(),
+                                String.format("%.2f", resistance),
+                                String.format("%.2f", originalDamage),
+                                String.format("%.2f", reducedDamage));
+                    }
                 }
             }
         });
@@ -123,6 +124,10 @@ public class DnaEventHandler {
         long currentTick = entity.level().getGameTime();
 
         entity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
+            if (dna.isActive() && entity.tickCount % TICK_CADENCE == 0) {
+                dna.updateDynamicTraits(entity);
+            }
+
             if (!dna.getActiveTransitions().isEmpty()) {
                 dna.tickTransitions(entity, currentTick);
             }
@@ -161,7 +166,7 @@ public class DnaEventHandler {
     private static void tickSideEffects(LivingEntity entity) {
         entity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
             long seed = entity.getUUID().getLeastSignificantBits() ^ entity.tickCount;
-            RejectionSideEffects.tickSideEffects(entity, dna.getGenomeLociView(), seed);
+            //RejectionSideEffects.tickSideEffects(entity, dna.getGenome(), seed);
         });
     }
 
@@ -173,11 +178,15 @@ public class DnaEventHandler {
             if (cooldown > 0) {
                 entity.getPersistentData().putFloat(IAbility.COOLDOWN, cooldown - TICK_CADENCE);
             }
-            for (Map.Entry<Trait, List<GeneLocus>> e : dna.getGenomeLociView().entrySet()) {
-                if (e.getKey().getTraitType() == TraitType.ABILITY) {
-                    var gene = DnaUtils.asGene(e.getKey(), e.getValue());
-                    if (gene != null) {
-                        IAbility behavior = AbilityRegistry.get(e.getKey());
+            
+            Genome genome = dna.getGenome();
+            if (genome != null) {
+                for (Trait trait : TraitRegistry.getAllTraits()) {
+                    if (trait.getTraitType() == TraitType.ABILITY) {
+                        var expressionPair = genome.getGeneExpression(trait);
+                        Gene gene = new Gene(trait, expressionPair.getMaternal(), expressionPair.getPaternal());
+                        
+                        IAbility behavior = AbilityRegistry.get(trait);
                         if (behavior != null) behavior.onTick(entity, gene);
                     }
                 }

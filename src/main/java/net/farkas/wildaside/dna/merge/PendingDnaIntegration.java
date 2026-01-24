@@ -1,13 +1,13 @@
 package net.farkas.wildaside.dna.merge;
 
-import net.farkas.wildaside.dna.locus.GeneLocus;
+import net.farkas.wildaside.dna.sequence.GeneSequence;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitRegistry;
 import net.minecraft.nbt.CompoundTag;
 
 public class PendingDnaIntegration {
     private final Trait trait;
-    private final GeneLocus locus;
+    private final GeneSequence sequence;
     private final MergeOutcomeType outcomeType;
     private final long startTick;
     private final int dormantDuration;
@@ -21,9 +21,9 @@ public class PendingDnaIntegration {
     public static final int DURATION_TRANSIENT = 20 * 60;
     public static final int DURATION_REJECTED = 20 * 30;
 
-    public PendingDnaIntegration(Trait trait, GeneLocus locus, MergeOutcomeType outcomeType, long startTick) {
+    public PendingDnaIntegration(Trait trait, GeneSequence sequence, MergeOutcomeType outcomeType, long startTick) {
         this.trait = trait;
-        this.locus = locus;
+        this.sequence = sequence;
         this.outcomeType = outcomeType;
         this.startTick = startTick;
         this.currentProgress = 0;
@@ -38,9 +38,9 @@ public class PendingDnaIntegration {
         };
     }
 
-    public PendingDnaIntegration(Trait trait, GeneLocus locus, MergeOutcomeType outcomeType, long startTick, int dormantDuration, int integrationDuration, int currentProgress, boolean dormantPhaseComplete) {
+    public PendingDnaIntegration(Trait trait, GeneSequence sequence, MergeOutcomeType outcomeType, long startTick, int dormantDuration, int integrationDuration, int currentProgress, boolean dormantPhaseComplete) {
         this.trait = trait;
-        this.locus = locus;
+        this.sequence = sequence;
         this.outcomeType = outcomeType;
         this.startTick = startTick;
         this.dormantDuration = dormantDuration;
@@ -53,8 +53,8 @@ public class PendingDnaIntegration {
         return trait;
     }
 
-    public GeneLocus getLocus() {
-        return locus;
+    public GeneSequence getSequence() {
+        return sequence;
     }
 
     public MergeOutcomeType getOutcomeType() {
@@ -143,7 +143,7 @@ public class PendingDnaIntegration {
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
         tag.putString("Trait", trait.getName());
-        tag.put("Locus", locus.serializeNBT());
+        tag.put("Sequence", sequence.serializeNBT());
         tag.putString("OutcomeType", outcomeType.name());
         tag.putLong("StartTick", startTick);
         tag.putInt("DormantDuration", dormantDuration);
@@ -155,7 +155,7 @@ public class PendingDnaIntegration {
 
     public static PendingDnaIntegration deserializeNBT(CompoundTag tag) {
         Trait trait = TraitRegistry.getByName(tag.getString("Trait"));
-        GeneLocus locus = GeneLocus.deserializeNBT(tag.getCompound("Locus"));
+        GeneSequence sequence = GeneSequence.deserializeNBT(tag.getCompound("Sequence"), trait);
         MergeOutcomeType outcomeType = MergeOutcomeType.valueOf(tag.getString("OutcomeType"));
         long startTick = tag.getLong("StartTick");
         int dormantDuration = tag.contains("DormantDuration") ? tag.getInt("DormantDuration") : DORMANT_DURATION;
@@ -163,6 +163,6 @@ public class PendingDnaIntegration {
         int currentProgress = tag.getInt("CurrentProgress");
         boolean dormantPhaseComplete = tag.getBoolean("DormantPhaseComplete");
 
-        return new PendingDnaIntegration(trait, locus, outcomeType, startTick, dormantDuration, integrationDuration, currentProgress, dormantPhaseComplete);
+        return new PendingDnaIntegration(trait, sequence, outcomeType, startTick, dormantDuration, integrationDuration, currentProgress, dormantPhaseComplete);
     }
 }

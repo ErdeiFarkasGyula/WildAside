@@ -1,6 +1,6 @@
 package net.farkas.wildaside.screen.slot;
 
-import net.farkas.wildaside.advancement.AdvancementHandler;
+import net.farkas.wildaside.advancement.AdvancementUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -34,7 +34,7 @@ public class AdvancementGivingVisibleResultSlotItemHandler extends VisibleSlotIt
         super.onTake(pPlayer, pStack);
 
         if (advancement != null && player instanceof ServerPlayer serverPlayer) {
-            AdvancementHandler.givePlayerAdvancement(serverPlayer, advancement);
+            AdvancementUtils.givePlayerAdvancement(serverPlayer, advancement);
         }
     }
 }

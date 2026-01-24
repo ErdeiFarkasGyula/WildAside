@@ -1,7 +1,6 @@
 package net.farkas.wildaside.dna.trait;
 
-import net.farkas.wildaside.dna.allele.value.AlleleValue;
-import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -39,13 +38,11 @@ public class Trait {
         return modifierUuid;
     }
 
-    public void apply(LivingEntity entity, AlleleValue value) {
-        if (value instanceof FloatAlleleValue floatValue) {
-            applyRaw(entity, floatValue.get());
-        }
+    public void apply(LivingEntity entity, float value) {
+        applyValue(entity, value);
     }
 
-    public void applyRaw(LivingEntity entity, float value) {
+    public void applyValue(LivingEntity entity, float value) {
         Attribute attribute = getAttribute();
         if (attribute == null) return;
 
@@ -81,7 +78,7 @@ public class Trait {
         return (float) instance.getValue();
     }
 
-    public float getBaseValue(LivingEntity entity) {
+    public float getBaseAttributeValue(LivingEntity entity) {
         Attribute attribute = getAttribute();
         if (attribute == null) return 0f;
 
@@ -107,7 +104,7 @@ public class Trait {
 
     protected Attribute getAttribute() {
         return ForgeRegistries.ATTRIBUTES.getValue(
-                new net.minecraft.resources.ResourceLocation("minecraft", "generic." + name)
+                new ResourceLocation("minecraft", "generic." + name)
         );
     }
 }

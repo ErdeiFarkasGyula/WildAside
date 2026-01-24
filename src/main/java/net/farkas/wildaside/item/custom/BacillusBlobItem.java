@@ -5,8 +5,10 @@ import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.bacillus_blob.BacillusBlobConsumption;
 import net.farkas.wildaside.dna.DnaUtils;
-import net.farkas.wildaside.dna.locus.GeneLocus;
-import net.farkas.wildaside.dna.locus.LocusSource;
+import net.farkas.wildaside.dna.chromosome.Chromosome;
+import net.farkas.wildaside.dna.chromosome.Genome;
+import net.farkas.wildaside.dna.sequence.GeneSequence;
+import net.farkas.wildaside.dna.sequence.GeneSource;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -214,7 +216,7 @@ public class BacillusBlobItem extends Item {
             player.displayClientMessage(
                     Component.translatable("item.wildaside.bacillus_blob.expired")
                             .withStyle(ChatFormatting.DARK_RED),
-                    true
+                            true
             );
             return InteractionResult.FAIL;
         }
@@ -409,60 +411,47 @@ public class BacillusBlobItem extends Item {
 
         DnaImplementation dna = new DnaImplementation();
         dna.deserializeNBT(tag.getCompound(DNA_DATA));
+        Genome genome = dna.getGenome();
+        if (genome == null) return;
 
         long seed = target.getUUID().getLeastSignificantBits() ^ System.currentTimeMillis();
         boolean modified = false;
 
-        for (Map.Entry<Trait, List<GeneLocus>> entry : dna.getGenomeLociView().entrySet()) {
-            List<GeneLocus> loci = new ArrayList<>(entry.getValue());
+        List<Chromosome> chromosomes = new ArrayList<>();
+        chromosomes.addAll(genome.getMaternal().getAllChromosomes());
+        chromosomes.addAll(genome.getPaternal().getAllChromosomes());
 
-            for (int i = 0; i < loci.size(); i++) {
-                GeneLocus locus = loci.get(i);
-                GeneLocus newLocus = locus;
+        for (Chromosome chromosome : chromosomes) {
+            for (GeneSequence sequence : chromosome.getAllGeneSequences()) {
+                GeneSequence newSequence = sequence;
+                int i = sequence.getTrait().getName().hashCode();
 
                 switch (quality) {
                     case TERRIBLE -> {
-                        if (DnaUtils.hashToFloat(seed, locus.getId() + "_terrible", i) < 0.7f) {
-                            newLocus = new GeneLocus(
-                                    locus.getId(),
-                                    locus.getAlleleA(),
-                                    locus.getAlleleB(),
-                                    locus.getFlags(),
-                                    locus.getStability() * 0.5f,
-                                    LocusSource.REJECTED,
-                                    0,
-                                    0.3f
-                            );
+                        if (DnaUtils.hashToFloat(seed, sequence.getTrait().getName() + "_terrible", i) < 0.7f) {
+                            GeneSequence.Builder builder = rebuildSequenceBase(sequence);
+                            builder.stability(sequence.getStability() * 0.5f);
+                            builder.source(GeneSource.MUTATED);
+                            addComponents(builder, sequence);
+                            newSequence = builder.build();
                             modified = true;
                         }
                     }
                     case POOR -> {
-                        if (DnaUtils.hashToFloat(seed, locus.getId() + "_poor", i) < 0.5f) {
-                            newLocus = new GeneLocus(
-                                    locus.getId(),
-                                    locus.getAlleleA(),
-                                    locus.getAlleleB(),
-                                    locus.getFlags(),
-                                    locus.getStability() * 0.7f,
-                                    LocusSource.TRANSIENT,
-                                    0,
-                                    0.15f
-                            );
+                        if (DnaUtils.hashToFloat(seed, sequence.getTrait().getName() + "_poor", i) < 0.5f) {
+                            GeneSequence.Builder builder = rebuildSequenceBase(sequence);
+                            builder.stability(sequence.getStability() * 0.7f);
+                            addComponents(builder, sequence);
+                            newSequence = builder.build();
                             modified = true;
                         }
                     }
                     case SUBOPTIMAL -> {
-                        if (DnaUtils.hashToFloat(seed, locus.getId() + "_subopt", i) < 0.25f) {
-                            newLocus = new GeneLocus(
-                                    locus.getId(),
-                                    locus.getAlleleA(),
-                                    locus.getAlleleB(),
-                                    locus.getFlags(),
-                                    locus.getStability() * 0.85f,
-                                    LocusSource.TRANSIENT,
-                                    0,
-                                    0.05f
-                            );
+                        if (DnaUtils.hashToFloat(seed, sequence.getTrait().getName() + "_subopt", i) < 0.25f) {
+                            GeneSequence.Builder builder = rebuildSequenceBase(sequence);
+                            builder.stability(sequence.getStability() * 0.85f);
+                            addComponents(builder, sequence);
+                            newSequence = builder.build();
                             modified = true;
                         }
                     }
@@ -471,23 +460,24 @@ public class BacillusBlobItem extends Item {
                     }
                     case OVERHEATED -> {
                         float mutChance = mutationRisk / 1000f;
-                        if (DnaUtils.hashToFloat(seed, locus.getId() + "_heat", i) < mutChance) {
-                            newLocus = applyHeatMutation(locus, seed, i);
+                        if (DnaUtils.hashToFloat(seed, sequence.getTrait().getName() + "_heat", i) < mutChance) {
+                            newSequence = applyHeatMutation(sequence, seed, i);
                             modified = true;
                         }
                     }
                     case CRITICAL -> {
                         float mutChance = Math.min(0.9f, mutationRisk / 750f);
-                        if (DnaUtils.hashToFloat(seed, locus.getId() + "_critical", i) < mutChance) {
-                            newLocus = applySevereHeatMutation(locus, seed, i);
+                        if (DnaUtils.hashToFloat(seed, sequence.getTrait().getName() + "_critical", i) < mutChance) {
+                            newSequence = applySevereHeatMutation(sequence, seed, i);
                             modified = true;
                         }
                     }
                 }
 
-                loci.set(i, newLocus);
+                if (newSequence != sequence) {
+                    chromosome.setGeneSequence(sequence.getTrait(), newSequence);
+                }
             }
-            entry.setValue(loci);
         }
 
         if (modified) {
@@ -495,33 +485,39 @@ public class BacillusBlobItem extends Item {
             WildAside.LOGGER.info("DNA modified due to blob quality: {}", quality);
         }
     }
-
-    private GeneLocus applyHeatMutation(GeneLocus locus, long seed, int index) {
-        WildAside.LOGGER.debug("Applying heat mutation to locus [{}]", locus.getId());
-        return new GeneLocus(
-                locus.getId() + "_heat",
-                locus.getAlleleA(),
-                locus.getAlleleB(),
-                locus.getFlags(),
-                locus.getStability() * 0.75f,
-                LocusSource.TRANSIENT,
-                0,
-                0.1f
-        );
+    
+    private GeneSequence.Builder rebuildSequenceBase(GeneSequence sequence) {
+        return GeneSequence.builder()
+                .trait(sequence.getTrait())
+                .dominance(sequence.getDominance())
+                .mutationRate(sequence.getMutationRate())
+                .stability(sequence.getStability())
+                .source(sequence.getSource());
+    }
+    
+    private void addComponents(GeneSequence.Builder builder, GeneSequence sequence) {
+        sequence.getCodingRegions().forEach(builder::codingRegion);
+        sequence.getActivators().forEach(builder::activator);
+        sequence.getEnhancers().forEach(builder::enhancer);
+        sequence.getSilencers().forEach(builder::silencer);
+        sequence.getRegulators().forEach(builder::regulator);
     }
 
-    private GeneLocus applySevereHeatMutation(GeneLocus locus, long seed, int index) {
-        WildAside.LOGGER.debug("Applying SEVERE heat mutation to locus [{}]", locus.getId());
-        return new GeneLocus(
-                locus.getId() + "_burn",
-                locus.getAlleleA(),
-                locus.getAlleleB(),
-                locus.getFlags(),
-                locus.getStability() * 0.5f,
-                LocusSource.REJECTED,
-                0,
-                0.25f
-        );
+    private GeneSequence applyHeatMutation(GeneSequence sequence, long seed, int index) {
+        WildAside.LOGGER.debug("Applying heat mutation to sequence [{}]", sequence.getTrait().getName());
+        GeneSequence.Builder builder = rebuildSequenceBase(sequence);
+        builder.stability(sequence.getStability() * 0.75f);
+        addComponents(builder, sequence);
+        return builder.build();
+    }
+
+    private GeneSequence applySevereHeatMutation(GeneSequence sequence, long seed, int index) {
+        WildAside.LOGGER.debug("Applying SEVERE heat mutation to sequence [{}]", sequence.getTrait().getName());
+        GeneSequence.Builder builder = rebuildSequenceBase(sequence);
+        builder.stability(sequence.getStability() * 0.5f);
+        builder.source(GeneSource.MUTATED);
+        addComponents(builder, sequence);
+        return builder.build();
     }
 
     private Component getConsumptionMessage(BlobQuality quality) {
@@ -661,9 +657,15 @@ public class BacillusBlobItem extends Item {
                         .withStyle(ChatFormatting.GRAY));
             }
 
-            int traitCount = dna.getGenomeLociView().size();
-            int lociCount = dna.getGenomeLociView().values().stream().mapToInt(List::size).sum();
-            tooltip.add(Component.translatable("item.wildaside.bacillus_blob.traits", traitCount, lociCount)
+            int traitCount = 0;
+            int sequenceCount = 0;
+            if (dna.getGenome() != null) {
+                traitCount = dna.getGenome().getMaternal().getAllChromosomes().stream()
+                        .mapToInt(c -> c.getAllGeneSequences().size()).sum();
+                sequenceCount = traitCount * 2;
+            }
+            
+            tooltip.add(Component.translatable("item.wildaside.bacillus_blob.traits", traitCount, sequenceCount)
                     .withStyle(ChatFormatting.DARK_GRAY));
 
             tooltip.add(Component.translatable("item.wildaside.bacillus_blob.has_dna")

@@ -1,8 +1,9 @@
-package net.farkas.wildaside.dna.sequence;
+package net.farkas.wildaside.dna.sequence.components;
 
+import net.farkas.wildaside.dna.sequence.CombineMethod;
 import net.minecraft.nbt.CompoundTag;
 
-public class CodingRegion {
+public class CodingRegion implements GeneComponent {
     private final String id;
     private final float value;
     private final CombineMethod combineMethod;
@@ -23,8 +24,14 @@ public class CodingRegion {
         };
     }
 
+    @Override
     public String getId() {
         return id;
+    }
+
+    @Override
+    public ComponentType getType() {
+        return ComponentType.CODING_REGION;
     }
 
     public float getValue() {
@@ -35,6 +42,7 @@ public class CodingRegion {
         return combineMethod;
     }
 
+    @Override
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
         tag.putString("Id", id);

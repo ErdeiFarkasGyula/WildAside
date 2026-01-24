@@ -18,12 +18,7 @@ public class SkillRequirement extends IBioengineeringSkillRequirement {
     }
 
     @Override
-    public boolean isSatisfied(ServerPlayer player) {
-        return BioengineeringSkillUtils.hasSkill(player, requiredSkill);
-    }
-
-    @Override
-    public boolean isClientSatisfied(Player player) {
+    public boolean isSatisfied(Player player) {
         return BioengineeringSkillUtils.hasSkill(player, requiredSkill);
     }
 

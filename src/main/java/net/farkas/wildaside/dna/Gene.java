@@ -1,9 +1,9 @@
 package net.farkas.wildaside.dna;
 
-import net.farkas.wildaside.dna.allele.Allele;
-import net.farkas.wildaside.dna.allele.value.AlleleValue;
+import net.farkas.wildaside.dna.expression.ExpressionContext;
+import net.farkas.wildaside.dna.expression.GeneExpressionPair;
+import net.farkas.wildaside.dna.sequence.GeneSequence;
 import net.farkas.wildaside.dna.trait.Trait;
-import net.farkas.wildaside.dna.trait.TraitExpression;
 import net.farkas.wildaside.dna.trait.TraitRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
@@ -16,20 +16,20 @@ import static net.farkas.wildaside.dna.DnaConstants.*;
 public class Gene {
     private final UUID uuid;
     private final Trait trait;
-    private Allele alleleA;
-    private Allele alleleB;
+    private GeneSequence maternalSequence;
+    private GeneSequence paternalSequence;
 
-    public Gene(Trait trait, Allele alleleA, Allele alleleB) {
+    public Gene(Trait trait, GeneSequence maternalSequence, GeneSequence paternalSequence) {
         this.trait = trait;
-        this.alleleA = alleleA;
-        this.alleleB = alleleB;
+        this.maternalSequence = maternalSequence;
+        this.paternalSequence = paternalSequence;
         this.uuid = DnaUtils.generateUuid(trait.getName());
     }
 
-    public Gene(UUID uuid, Trait trait, Allele alleleA, Allele alleleB) {
+    public Gene(UUID uuid, Trait trait, GeneSequence maternalSequence, GeneSequence paternalSequence) {
         this.trait = trait;
-        this.alleleA = alleleA;
-        this.alleleB = alleleB;
+        this.maternalSequence = maternalSequence;
+        this.paternalSequence = paternalSequence;
         this.uuid = uuid;
     }
 
@@ -41,29 +41,34 @@ public class Gene {
         return trait;
     }
 
-    public Allele getAlleleA() {
-        return alleleA;
+    public GeneSequence getMaternalSequence() {
+        return maternalSequence;
     }
 
-    public void setAlleleA(Allele alleleA) {
-        this.alleleA = alleleA;
+    public void setMaternalSequence(GeneSequence sequence) {
+        this.maternalSequence = sequence;
     }
 
-    public Allele getAlleleB() {
-        return alleleB;
+    public GeneSequence getPaternalSequence() {
+        return paternalSequence;
     }
 
-    public void setAlleleB(Allele alleleB) {
-        this.alleleB = alleleB;
+    public void setPaternalSequence(GeneSequence sequence) {
+        this.paternalSequence = sequence;
     }
 
-    public AlleleValue getExpressedValueHolder() {
-        return TraitExpression.evaluate(alleleA, alleleB);
+    public GeneExpressionPair getExpressionPair() {
+        return new GeneExpressionPair(trait, maternalSequence, paternalSequence);
     }
 
-    public void apply(Entity entity) {
+    public float getExpressedValue(ExpressionContext context) {
+        return getExpressionPair().express(context);
+    }
+
+    public void apply(Entity entity, ExpressionContext context) {
         if (entity instanceof LivingEntity livingEntity) {
-            trait.apply(livingEntity, getExpressedValueHolder());
+            float expressedValue = getExpressedValue(context);
+            trait.applyValue(livingEntity, expressedValue);
         }
     }
 
@@ -75,22 +80,30 @@ public class Gene {
 
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
+
         tag.putUUID(UUID, uuid);
         tag.putString(TRAIT, trait.getName());
-        tag.put(ALLELE_A, alleleA.serializeNBT());
-        tag.put(ALLELE_B, alleleB.serializeNBT());
+        tag.put("MaternalSequence", maternalSequence.serializeNBT());
+        tag.put("PaternalSequence", paternalSequence.serializeNBT());
+
         return tag;
     }
 
     public static Gene deserializeNBT(CompoundTag tag) {
         Trait trait = TraitRegistry.getByName(tag.getString(TRAIT));
-        Allele alleleA = Allele.deserializeNBT(tag.getCompound(ALLELE_A));
-        Allele alleleB = Allele.deserializeNBT(tag.getCompound(ALLELE_B));
+        GeneSequence maternal = null;
+        if (tag.contains("MaternalSequence")) {
+            maternal = GeneSequence.deserializeNBT(tag.getCompound("MaternalSequence"), trait);
+        }
+        GeneSequence paternal = null;
+        if (tag.contains("PaternalSequence")) {
+            paternal = GeneSequence.deserializeNBT(tag.getCompound("PaternalSequence"), trait);
+        }
 
         UUID uuid = DnaUtils.generateUuid(trait.getName());
         if (tag.contains(UUID)) {
             uuid = tag.getUUID(UUID);
         }
-        return new Gene(uuid, trait, alleleA, alleleB);
+        return new Gene(uuid, trait, maternal, paternal);
     }
 }

@@ -16,13 +16,8 @@ public class AllRequirements extends IBioengineeringSkillRequirement {
     }
 
     @Override
-    public boolean isSatisfied(ServerPlayer player) {
+    public boolean isSatisfied(Player player) {
         return requirements.stream().allMatch(r -> r.isSatisfied(player));
-    }
-
-    @Override
-    public boolean isClientSatisfied(Player player) {
-        return requirements.stream().allMatch(r -> r.isClientSatisfied(player));
     }
 
     @Override

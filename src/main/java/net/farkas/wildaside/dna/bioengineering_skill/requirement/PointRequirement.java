@@ -16,13 +16,7 @@ public class PointRequirement extends IBioengineeringSkillRequirement {
     }
 
     @Override
-    public boolean isSatisfied(ServerPlayer player) {
-        var cap = player.getCapability(BioengineeringSkillsCapability.INSTANCE).orElse(null);
-        return cap != null && cap.getPoints() >= requiredPoints;
-    }
-
-    @Override
-    public boolean isClientSatisfied(Player player) {
+    public boolean isSatisfied(Player player) {
         var cap = player.getCapability(BioengineeringSkillsCapability.INSTANCE).orElse(null);
         return cap != null && cap.getPoints() >= requiredPoints;
     }

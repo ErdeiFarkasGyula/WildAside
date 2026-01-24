@@ -295,16 +295,17 @@ public class ModAdvancements implements AdvancementGenerator {
 
         private void rebuildDisplay() {
             if (!withDisplay) return;
-            builder.display(new DisplayInfo(
-                    new ItemStack(icon.asItem()),
-                    Component.translatable("advancements." + id.getPath() + ".title"),
-                    Component.translatable("advancements." + id.getPath() + ".descr"),
-                    background,
-                    frame,
-                    showToast,
-                    announce,
-                    hidden
-            ));
+            builder.display(
+                    new DisplayInfo(
+                            new ItemStack(icon.asItem()),
+                            Component.translatable("advancements." + id.getPath() + ".title"),
+                            Component.translatable("advancements." + id.getPath() + ".descr"),
+                            background,
+                            frame,
+                            showToast,
+                            announce,
+                            hidden
+                    ));
         }
 
         AdvancementBuilder parent(Advancement parent) {

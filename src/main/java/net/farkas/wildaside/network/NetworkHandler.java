@@ -2,6 +2,7 @@ package net.farkas.wildaside.network;
 
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
+import net.farkas.wildaside.dna.chromosome.Genome;
 import net.farkas.wildaside.network.packet.*;
 import net.farkas.wildaside.network.packet.bioengineering_workstation.*;
 import net.farkas.wildaside.network.packet.gene_editor.GeneEditorUpdatePacket;
@@ -212,11 +213,11 @@ public class NetworkHandler {
         CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new OpenAdvancedGeneEditorPacket(pos, dnaA, dnaB));
     }
 
-    public static void sendGeneEditorUpdatePacket(BlockPos pos, DnaImplementation dnaA, DnaImplementation dnaB) {
+    public static void sendGeneEditorUpdatePacket(BlockPos pos, Genome genome) {
         if (CHANNEL == null) {
             WildAside.LOGGER.warn("Tried to send gene editor update packet before network init. Ignoring.");
             return;
         }
-        CHANNEL.send(PacketDistributor.SERVER.noArg(), new GeneEditorUpdatePacket(pos, dnaA, dnaB));
+        CHANNEL.send(PacketDistributor.SERVER.noArg(), new GeneEditorUpdatePacket(pos, genome));
     }
 }

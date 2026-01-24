@@ -1,7 +1,7 @@
 package net.farkas.wildaside.dna.appearance;
 
-import net.farkas.wildaside.dna.locus.GeneLocus;
-import net.farkas.wildaside.dna.allele.Allele;
+import net.farkas.wildaside.dna.chromosome.Genome;
+import net.farkas.wildaside.dna.sequence.GeneSequence;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -10,29 +10,23 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Cat;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class CatAppearanceExtractor implements IAppearanceGeneExtractor<Cat> {
     @Override public EntityType<Cat> type() { return EntityType.CAT; }
     @Override public Trait trait() { return TraitRegistry.CAT_VARIANT; }
 
     @Override
-    public void extract(Cat cat, Map<Trait, List<GeneLocus>> loci, long seed) {
-        ResourceLocation current = BuiltInRegistries.CAT_VARIANT.getKey(cat.getVariant());
-        ResourceLocation other = pickOtherVariant(seed, current);
-        Allele a = AppearanceAlleleHelper.createVariantAllele(current, seed, "cat_var_a");
-        Allele b = AppearanceAlleleHelper.createVariantAllele(other, seed, "cat_var_b");
-        loci.put(TraitRegistry.CAT_VARIANT, List.of(
-                new GeneLocus("cat_variant", a, b, Set.of(), TraitRegistry.CAT_VARIANT.getInstabilityModifier())
-        ));
-    }
+    public GeneSequence[] extract(Cat entity, Genome genome, long seed) {
+        ResourceLocation current = BuiltInRegistries.CAT_VARIANT.getKey(entity.getVariant());
+        ResourceLocation other = AppearanceUtils.pickFromSeed(BuiltInRegistries.CAT_VARIANT, seed);
 
-    private ResourceLocation pickOtherVariant(long seed, ResourceLocation exclude) {
-        var all = BuiltInRegistries.CAT_VARIANT.keySet().stream().filter(v -> !v.equals(exclude)).toList();
-        int idx = (int) (Math.abs(seed * 17) % all.size());
-        return all.get(idx);
+        GeneSequence maternal = AppearanceUtils.createVariantSequence(trait(), current, seed, "cat_var_m");
+        GeneSequence paternal = AppearanceUtils.createVariantSequence(trait(), other, seed, "cat_var_p");
+        
+        genome.getMaternal().getChromosome(trait().getTraitType().getChromosomeType()).setGeneSequence(trait(), maternal);
+        genome.getPaternal().getChromosome(trait().getTraitType().getChromosomeType()).setGeneSequence(trait(), paternal);
+
+        return new GeneSequence[]{maternal, paternal};
     }
 
     @Override public Collection<String> getSuggestions() {

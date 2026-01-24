@@ -2,9 +2,9 @@ package net.farkas.wildaside.item.custom;
 
 import net.farkas.wildaside.capability.bioengineering_skill.BioengineeringSkillsCapability;
 import net.farkas.wildaside.dna.Gene;
-import net.farkas.wildaside.dna.allele.Allele;
-import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillRegistry;
+import net.farkas.wildaside.dna.expression.ExpressionContext;
+import net.farkas.wildaside.dna.sequence.GeneSequence;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.item.ModItems;
 import net.minecraft.ChatFormatting;
@@ -35,32 +35,39 @@ public class GeneItem extends Item {
         Trait trait = gene.getTrait();
 
         if (trait != null) {
-            Allele alleleA = gene.getAlleleA();
-            Allele alleleB = gene.getAlleleB();
+            GeneSequence maternal = gene.getMaternalSequence();
+            GeneSequence paternal = gene.getPaternalSequence();
 
             tooltip.add(Component.translatable("trait.wildaside." + trait.getName()).withStyle(trait.getTraitType().getHeaderColour()));
-            Component expressedValueString = gene.getExpressedValueHolder().format();
+            
+            ExpressionContext context = new ExpressionContext(null);
+            float expressedValue = gene.getExpressedValue(context);
+            String expressedValueString = String.format("%.2f", expressedValue);
 
-            if (gene.getExpressedValueHolder() instanceof FloatAlleleValue floatAlleleValue) {
-                expressedValueString = floatAlleleValue.format();
-            }
-
-            tooltip.add(Component.literal("- " + expressedValueString.getString()).withStyle(ChatFormatting.GREEN));
+            tooltip.add(Component.literal("- " + expressedValueString).withStyle(ChatFormatting.GREEN));
 
             Minecraft mc = Minecraft.getInstance();
             LocalPlayer player = mc.player;
 
             player.getCapability(BioengineeringSkillsCapability.INSTANCE).ifPresent(cap -> {
-                if (cap.hasSkill(BioengineeringSkillRegistry.REVEAL_ALLELES.getId())) {
+                if (cap.hasSkill(BioengineeringSkillRegistry.REVEAL_SEQUENCES.getId())) {
                     tooltip.add(Component.empty());
 
-                    tooltip.add(Component.translatable("dna.wildaside.alleleA").withStyle(ChatFormatting.AQUA));
-                    tooltip.add(Component.literal("- ").append(alleleA.getDominance().getComponent()));
-                    tooltip.add(Component.literal("- " + alleleA.getValueHolder().format().getString()));
+                    tooltip.add(Component.translatable("dna.wildaside.maternal").withStyle(ChatFormatting.AQUA));
+                    if (maternal != null) {
+                        tooltip.add(Component.literal("- ").append(Component.literal(maternal.getDominance().name())));
+                        tooltip.add(Component.literal("- " + String.format("%.2f", maternal.calculateBaseValue())));
+                    } else {
+                        tooltip.add(Component.literal("- Missing").withStyle(ChatFormatting.GRAY));
+                    }
 
-                    tooltip.add(Component.translatable("dna.wildaside.alleleB").withStyle(ChatFormatting.AQUA));
-                    tooltip.add(Component.literal("- ").append(alleleB.getDominance().getComponent()));
-                    tooltip.add(Component.literal("- " + alleleB.getValueHolder().format().getString()));
+                    tooltip.add(Component.translatable("dna.wildaside.paternal").withStyle(ChatFormatting.AQUA));
+                    if (paternal != null) {
+                        tooltip.add(Component.literal("- ").append(Component.literal(paternal.getDominance().name())));
+                        tooltip.add(Component.literal("- " + String.format("%.2f", paternal.calculateBaseValue())));
+                    } else {
+                        tooltip.add(Component.literal("- Missing").withStyle(ChatFormatting.GRAY));
+                    }
                 }
             });
 
@@ -86,5 +93,13 @@ public class GeneItem extends Item {
         CompoundTag tag = gene.serializeNBT();
         stack.setTag(tag);
         return stack;
+    }
+
+    public static boolean isFlipped(ItemStack stack) {
+        return stack.getOrCreateTag().getBoolean("flipped");
+    }
+
+    public static void setFlipped(ItemStack stack, boolean flipped) {
+        stack.getOrCreateTag().putBoolean("flipped", flipped);
     }
 }

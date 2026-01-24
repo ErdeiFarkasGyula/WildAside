@@ -2,9 +2,6 @@ package net.farkas.wildaside.dna.trait;
 
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
-import net.farkas.wildaside.dna.allele.value.AlleleValue;
-import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
-import net.farkas.wildaside.dna.allele.value.ResourceLocationAlleleValue;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -40,11 +37,16 @@ public class TraitRegistry {
     public static final Trait CAT_VARIANT =
             register(new AppearanceTrait<ResourceLocation>("cat_variant", 1.3f) {
                 @Override
-                public void apply(LivingEntity entity, AlleleValue valueHolder) {
-                    if (entity instanceof Cat cat && valueHolder instanceof ResourceLocationAlleleValue resourceLocationAlleleValue) {
-                        ResourceLocation resourceLocation = resourceLocationAlleleValue.get();
-                        if (BuiltInRegistries.CAT_VARIANT.containsKey(resourceLocation)) {
-                            cat.setVariant(BuiltInRegistries.CAT_VARIANT.get(resourceLocation));
+                public void apply(LivingEntity entity, float value) {
+                    if (entity instanceof Cat cat) {
+                        List<ResourceLocation> variants = BuiltInRegistries.CAT_VARIANT.keySet().stream().toList();
+                        if (variants.isEmpty()) return;
+
+                        int index = Math.abs((int) (value * 1000)) % variants.size();
+                        ResourceLocation variant = variants.get(index);
+                        
+                        if (BuiltInRegistries.CAT_VARIANT.containsKey(variant)) {
+                            cat.setVariant(BuiltInRegistries.CAT_VARIANT.get(variant));
                         }
                     }
                 }
@@ -53,11 +55,16 @@ public class TraitRegistry {
     public static final Trait FROG_VARIANT =
             register(new AppearanceTrait<ResourceLocation>("frog_variant", 1.2f) {
                 @Override
-                public void apply(LivingEntity entity, AlleleValue valueHolder) {
-                    if (entity instanceof Frog frog && valueHolder instanceof ResourceLocationAlleleValue resourceLocationAlleleValue) {
-                        ResourceLocation resourceLocation = resourceLocationAlleleValue.get();
-                        if (BuiltInRegistries.FROG_VARIANT.containsKey(resourceLocation)) {
-                            frog.setVariant(BuiltInRegistries.FROG_VARIANT.get(resourceLocation));
+                public void apply(LivingEntity entity, float value) {
+                    if (entity instanceof Frog frog) {
+                        List<ResourceLocation> variants = BuiltInRegistries.FROG_VARIANT.keySet().stream().toList();
+                        if (variants.isEmpty()) return;
+                        
+                        int index = Math.abs((int) (value * 1000)) % variants.size();
+                        ResourceLocation variant = variants.get(index);
+                        
+                        if (BuiltInRegistries.FROG_VARIANT.containsKey(variant)) {
+                            frog.setVariant(BuiltInRegistries.FROG_VARIANT.get(variant));
                         }
                     }
                 }
@@ -83,18 +90,7 @@ public class TraitRegistry {
         return MAX_HEALTH;
     }
 
-    public static AlleleValue getTraitValueHolder(Map<Trait, Gene> genes, Trait trait) {
-        if (trait == null || genes == null) return new FloatAlleleValue(0.0f);
-        Gene gene = genes.get(trait);
-        if (gene == null) return new FloatAlleleValue(0.0f);
-        return gene.getExpressedValueHolder();
-    }
-
     public static Component translatableTrait(Trait trait) {
         return Component.translatable("trait.wildaside." + trait.getName());
-    }
-
-    public static AlleleValue parseValue(AlleleValue oldValue, String rawInput) {
-        return oldValue.parse(rawInput);
     }
 }

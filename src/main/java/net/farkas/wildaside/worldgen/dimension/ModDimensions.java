@@ -81,7 +81,6 @@ public class ModDimensions {
                 false  // useLegacyRandomSource
         );
 
-        // Wrap in a Noise-based chunk generator
         NoiseBasedChunkGenerator generator = new NoiseBasedChunkGenerator(
                 new FixedBiomeSource(biomes.getOrThrow(Biomes.THE_VOID)),
                 Holder.direct(generatorSettings)

@@ -1,4 +1,4 @@
-package net.farkas.wildaside.dna.allele.dominance;
+package net.farkas.wildaside.dna.dominance;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;

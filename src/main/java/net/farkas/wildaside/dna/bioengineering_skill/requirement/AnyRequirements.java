@@ -16,19 +16,14 @@ public class AnyRequirements extends IBioengineeringSkillRequirement {
     }
 
     @Override
-    public boolean isSatisfied(ServerPlayer player) {
+    public boolean isSatisfied(Player player) {
         return requirements.stream().anyMatch(r -> r.isSatisfied(player));
-    }
-
-    @Override
-    public boolean isClientSatisfied(Player player) {
-        return requirements.stream().anyMatch(r -> r.isClientSatisfied(player));
     }
 
     @Override
     public void unlock(ServerPlayer player) {
         for (IBioengineeringSkillRequirement req : requirements) {
-            if (req.isSatisfied(player)) {
+            if (req.isServerSatisfied(player)) {
                 req.unlock(player);
                 return;
             }

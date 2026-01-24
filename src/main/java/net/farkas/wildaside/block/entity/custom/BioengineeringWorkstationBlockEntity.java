@@ -5,11 +5,13 @@ import net.farkas.wildaside.block.entity.ModBlockEntities;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
 import net.farkas.wildaside.dna.DnaUtils;
 import net.farkas.wildaside.dna.Gene;
+import net.farkas.wildaside.dna.chromosome.Chromosome;
 import net.farkas.wildaside.dna.chromosome.Genome;
-import net.farkas.wildaside.dna.locus.GeneLocus;
+import net.farkas.wildaside.dna.sequence.GeneSequence;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.item.custom.DnaHolderItem;
+import net.farkas.wildaside.item.custom.GeneItem;
 import net.farkas.wildaside.recipe.BioengineeringWorkstationRecipe;
 import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationMenu;
 import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationTab;
@@ -212,17 +214,21 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
     }
 
     public static Map<Trait, Gene> orderGenes(DnaImplementation dna) {
-        Map<Trait, List<GeneLocus>> loci;
-        
-        if (dna.getGenome() != null && hasGenomeSequences(dna.getGenome())) {
-            loci = DnaUtils.convertGenomeToLoci(dna.getGenome());
-        } else {
-            loci = dna.getGenomeLociView();
+        Genome genome = dna.getGenome();
+        if (genome == null) return new LinkedHashMap<>();
+
+        Map<Trait, Gene> genes = new LinkedHashMap<>();
+
+        for (Chromosome chromo : genome.getMaternal().getAllChromosomes()) {
+            for (GeneSequence seq : chromo.getAllGeneSequences()) {
+                Trait trait = seq.getTrait();
+                var expressionPair = genome.getGeneExpression(trait);
+                Gene gene = new Gene(trait, expressionPair.getMaternal(), expressionPair.getPaternal());
+                genes.put(trait, gene);
+            }
         }
         
-        return loci.entrySet().stream()
-                .map(e -> Map.entry(e.getKey(), DnaUtils.asGene(e.getKey(), e.getValue())))
-                .filter(e -> e.getValue() != null)
+        return genes.entrySet().stream()
                 .sorted(Map.Entry.comparingByKey(
                         Comparator.comparing(Trait::getTraitType)
                                 .thenComparing(Trait::getName)
@@ -233,10 +239,6 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
                         (a, b) -> a,
                         LinkedHashMap::new
                 ));
-    }
-
-    private static boolean hasGenomeSequences(Genome genome) {
-        return DnaUtils.hasGenomeSequences(genome);
     }
 
     public void analyseDna() {
@@ -290,24 +292,28 @@ public class BioengineeringWorkstationBlockEntity extends BlockEntity implements
         DnaImplementation dna = new DnaImplementation();
         if (!dnaTag.isEmpty()) dna.deserializeNBT(dnaTag);
 
-        Map<Trait, List<GeneLocus>> loci = new HashMap<>();
+        Genome genome = dna.getGenome();
+        if (genome == null) {
+            genome = new Genome(dna.getSource());
+        }
+
         for (int i = 0; i <= 12; i++) {
             ItemStack geneStack = itemHandler.getStackInSlot(i + geneStartIndex);
 
             if (geneStack.isEmpty()) continue;
             Gene gene = Gene.deserializeNBT(geneStack.getOrCreateTag());
             Trait trait = gene.getTrait();
-            GeneLocus gl = new GeneLocus(
-                    trait.getName(),
-                    gene.getAlleleA(),
-                    gene.getAlleleB(),
-                    Set.of(),
-                    trait.getInstabilityModifier()
-            );
-            loci.put(trait, List.of(gl));
+
+            if (gene.getMaternalSequence() != null) {
+                genome.getMaternal().getChromosome(trait.getTraitType().getChromosomeType())
+                        .setGeneSequence(trait, gene.getMaternalSequence());
+            }
+            if (gene.getPaternalSequence() != null) {
+                genome.getPaternal().getChromosome(trait.getTraitType().getChromosomeType())
+                        .setGeneSequence(trait, gene.getPaternalSequence());
+            }
         }
 
-        Genome genome = DnaUtils.convertLociToGenome(dna.getSource(), loci);
         dna.setGenome(genome);
         tag.put(DNA_DATA, dna.serializeNBT());
 

@@ -432,7 +432,7 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
             return;
         }
 
-        menu.player.playSound(SoundEvents.UI_BUTTON_CLICK.get());
+        menu.player.playSound(SoundEvents.UI_BUTTON_CLICK.get(), 0.5f, 1.0f);
 
         NetworkHandler.sendBioengineeringSkillUnlockRequestPacket(node.skill.getId());
     }
@@ -554,9 +554,6 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
     }
 
     private boolean hasValidDna(DnaImplementation dna) {
-        if (dna.getGenome() != null && DnaUtils.hasGenomeSequences(dna.getGenome())) {
-            return true;
-        }
-        return !dna.getGenomeLociView().isEmpty();
+        return dna.getGenome() != null && !dna.getGenome().isEmpty();
     }
 }

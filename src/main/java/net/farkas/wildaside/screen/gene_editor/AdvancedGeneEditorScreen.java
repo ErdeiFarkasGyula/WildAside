@@ -1,846 +1,691 @@
 package net.farkas.wildaside.screen.gene_editor;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
-import net.farkas.wildaside.dna.DnaUtils;
-import net.farkas.wildaside.dna.Gene;
-import net.farkas.wildaside.dna.allele.Allele;
-import net.farkas.wildaside.dna.allele.dominance.Dominance;
-import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
+import net.farkas.wildaside.client.ModKeyMappings;
+import net.farkas.wildaside.dna.chromosome.ChromosomeSet;
 import net.farkas.wildaside.dna.chromosome.Genome;
-import net.farkas.wildaside.dna.editor.GeneEditorOperation;
-import net.farkas.wildaside.dna.editor.GeneEditorOperations;
-import net.farkas.wildaside.dna.editor.GeneEditorResult;
-import net.farkas.wildaside.dna.editor.GeneEditorState;
-import net.farkas.wildaside.dna.locus.GeneLocus;
+import net.farkas.wildaside.dna.expression.*;
+import net.farkas.wildaside.dna.sequence.components.*;
+import net.farkas.wildaside.dna.sequence.GeneSequence;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.farkas.wildaside.dna.trait.TraitRegistry;
 import net.farkas.wildaside.dna.trait.TraitType;
-import net.farkas.wildaside.network.NetworkHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AdvancedGeneEditorScreen extends Screen {
-    private static final int SCREEN_MARGIN = 6;
-    private static final int OUTER_PADDING = 6;
-    private static final int INNER_PADDING = 4;
-    private static final int ELEMENT_SPACING = 2;
+    private static final ResourceLocation GENE_TEXTURE = new ResourceLocation(WildAside.MOD_ID, "textures/item/gene.png");
+    private static final ResourceLocation GENE_TEXTURE_FLIPPED = new ResourceLocation(WildAside.MOD_ID, "textures/item/gene_flipped.png");
 
-    private static final float DNA_PANEL_WIDTH_RATIO = 0.38f;
+    private static final int COL_BACKGROUND = 0xFF121212;
+    private static final int COL_PANEL_BG = 0xCC1E1E1E;
+    private static final int COL_BORDER = 0xFF2C2C2C;
+    private static final int COL_ACCENT = 0xFF00E5FF;
+    private static final int COL_TEXT_HEADER = 0xFFE0E0E0;
+    private static final int COL_TEXT_NORMAL = 0xFFAAAAAA;
+    private static final int COL_TEXT_VALUE = 0xFFFFFFFF;
 
-    private static final int SCROLLBAR_WIDTH = 6;
-    private static final int SCROLLBAR_MIN_THUMB_HEIGHT = 10;
+    private static final int HEADER_HEIGHT = 24;
+    private static final int FOOTER_HEIGHT = 24;
 
-    private static final int MAX_LOCI_DISPLAY = 3;
+    private static final int STRIP_HEIGHT = 24;
+    private static final int COMPONENT_SIZE = 16;
+    private static final int COMPONENT_SPACING = 0;
+
+    private int sidebarWidth = 150;
+    private int infoPanelWidth = 160;
 
     private final BlockPos workstationPos;
     private final Player player;
+    private final Genome genomeA;
+    private final Genome genomeB;
 
-    private DnaImplementation dnaA;
-    private DnaImplementation dnaB;
-    private Map<Trait, Gene> genesA = new LinkedHashMap<>();
-    private Map<Trait, Gene> genesB = new LinkedHashMap<>();
+    private final List<Trait> allTraits = new ArrayList<>();
+    private final Map<TraitType, List<Trait>> traitsByType = new LinkedHashMap<>();
 
-    private final GeneEditorState state = new GeneEditorState();
+    private double scrollAMat = 0;
+    private double scrollAPat = 0;
+    private double scrollBMat = 0;
+    private double scrollBPat = 0;
 
-    private int leftPos;
-    private int topPos;
-    private int screenWidth;
-    private int screenHeight;
+    private double targetScrollAMat = 0;
+    private double targetScrollAPat = 0;
+    private double targetScrollBMat = 0;
+    private double targetScrollBPat = 0;
 
-    private int headerHeight;
-    private int footerHeight;
+    private double sidebarScroll = 0;
+    private double targetSidebarScroll = 0;
+    private int sidebarContentHeight = 0;
 
-    private int dnaPanelWidth;
-    private int dnaPanelHeight;
-    private int detailPanelWidth;
-    private int detailPanelHeight;
+    private double infoScrollA = 0;
+    private double targetInfoScrollA = 0;
+    private int infoContentHeightA = 0;
 
-    private int dnaPanelHeaderHeight;
-    private int geneEntryHeight;
-    private int traitTypeHeaderHeight;
+    private double infoScrollB = 0;
+    private double targetInfoScrollB = 0;
+    private int infoContentHeightB = 0;
 
-    private int traitHeaderHeight;
-    private int alleleBoxHeight;
-    private int alleleLineHeight;
-    private int lociLineHeight;
-
-    private int opsHeaderHeight;
-    private int operationEntryHeight;
-
-    private int closeButtonSize;
-    private int actionButtonWidth;
-    private int actionButtonHeight;
-
-    private int statusBarHeight;
-
-    private int scrollOffsetA = 0;
-    private int scrollOffsetB = 0;
-    private int scrollOffsetOps = 0;
-    private int maxScrollA = 0;
-    private int maxScrollB = 0;
-    private int maxScrollOps = 0;
-    private boolean draggingScrollbarA = false;
-    private boolean draggingScrollbarB = false;
-    private boolean draggingScrollbarOps = false;
-    private double dragStartY = 0;
-    private int dragStartScroll = 0;
+    private boolean lockGenomeA = true;
+    private boolean lockGenomeB = true;
+    private boolean lockPairs = true;
 
     @Nullable
-    private GeneSelection selectionA = null;
+    private Object selectedComponentA = null;
     @Nullable
-    private GeneSelection selectionB = null;
+    private Object selectedComponentB = null;
+    @Nullable
+    private GeneSequence selectedSequenceA = null;
+    @Nullable
+    private GeneSequence selectedSequenceB = null;
+    @Nullable
+    private Trait selectedTraitA = null;
+    @Nullable
+    private Trait selectedTraitB = null;
+
+    private boolean selectedIsGenomeA = true;
+    private boolean selectedIsMaternal = true;
+
+    private boolean selectedIsMaternalA = true;
+    private boolean selectedIsMaternalB = true;
+
+    @Nullable
+    private Object draggedComponent = null;
+    private boolean isDraggingView = false;
+    private double lastMouseX;
+
+    private boolean isResizingSidebar = false;
+    private boolean isResizingInfoPanel = false;
+
+    private boolean isDraggingSidebarScroll = false;
+    private boolean isDraggingInfoScrollA = false;
+    private boolean isDraggingInfoScrollB = false;
+    private double scrollDragStartY;
+    private double scrollDragStartValue;
+
+    private int stripStartX;
+    private int stripWidth;
+    private int stripAY1, stripAY2;
+    private int stripBY1, stripBY2;
 
     private final List<Component> statusMessages = new ArrayList<>();
 
-    private int opsListX;
-    private int opsListY;
-    private int opsListWidth;
-    private int opsListHeight;
+    @Nullable
+    private GeneSequence hoveredSequence = null;
+    @Nullable
+    private Trait hoveredTrait = null;
 
     public AdvancedGeneEditorScreen(BlockPos workstationPos, DnaImplementation dnaA, DnaImplementation dnaB) {
         super(Component.translatable("gui.wildaside.advanced_gene_editor"));
         this.workstationPos = workstationPos;
         this.player = Minecraft.getInstance().player;
-        this.dnaA = dnaA;
-        this.dnaB = dnaB;
+
+        this.genomeA = (dnaA != null && dnaA.getGenome() != null) ? dnaA.getGenome() : new Genome(null);
+        this.genomeB = (dnaB != null && dnaB.getGenome() != null) ? dnaB.getGenome() : new Genome(null);
+
+        for (TraitType type : TraitType.values()) {
+            List<Trait> traits = TraitRegistry.getAllTraits().stream()
+                    .filter(t -> t.getTraitType() == type)
+                    .filter(this::isTraitPresent)
+                    .sorted(Comparator.comparing(Trait::getName))
+                    .collect(Collectors.toList());
+
+            if (!traits.isEmpty()) {
+                traitsByType.put(type, traits);
+                this.allTraits.addAll(traits);
+            }
+        }
+    }
+
+    private boolean isTraitPresent(Trait trait) {
+        return hasTrait(genomeA, trait) || hasTrait(genomeB, trait);
+    }
+
+    private boolean hasTrait(Genome genome, Trait trait) {
+        if (genome == null) return false;
+        if (genome.getMaternal() != null && genome.getMaternal().getSequence(trait) != null) return true;
+        if (genome.getPaternal() != null && genome.getPaternal().getSequence(trait) != null) return true;
+        return false;
     }
 
     @Override
     protected void init() {
         super.init();
-
-        calculateAllDimensions();
-        rebuildGenes();
-        calculateOperationsScroll();
-
-        initWidgets();
+        updateLayout();
     }
 
-    private void initWidgets() {
+    private void updateLayout() {
+        this.stripStartX = sidebarWidth + 10;
+        this.stripWidth = width - sidebarWidth - infoPanelWidth - 20;
+
+        int centerY = height / 2;
+        int spacing = 45;
+
+        this.stripAY1 = centerY - spacing - 28;
+        this.stripAY2 = centerY - 28;
+
+        this.stripBY1 = centerY + 28;
+        this.stripBY2 = centerY + spacing + 28;
+
         clearWidgets();
 
-        int closeBtnX = leftPos + screenWidth - closeButtonSize - OUTER_PADDING;
-        int closeBtnY = topPos + (headerHeight - closeButtonSize) / 2;
-        addRenderableWidget(Button.builder(Component.literal("×"), btn -> onClose())
-                .pos(closeBtnX, closeBtnY)
-                .size(closeButtonSize, closeButtonSize)
+        addRenderableWidget(Button.builder(Component.translatable("gui.wildaside.gene_editor.exit"), b -> onClose())
+                .pos(width - 60, 2)
+                .size(50, 20)
                 .build());
 
-        int footerContentY = topPos + screenHeight - footerHeight;
-        int buttonY = footerContentY + (footerHeight - actionButtonHeight) / 2;
+        int btnX = stripStartX + stripWidth - 20;
+        int btnY_A = (stripAY1 + stripAY2 + COMPONENT_SIZE) / 2 - 10;
+        addRenderableWidget(Button.builder(Component.literal(lockGenomeA ? "L" : "U"), b -> {
+            lockGenomeA = !lockGenomeA;
+            b.setMessage(Component.literal(lockGenomeA ? "L" : "U"));
+            updateLayout();
+        }).pos(btnX, btnY_A).size(20, 20).tooltip(Tooltip.create(Component.translatable("gui.wildaside.gene_editor.lock_genome", lockGenomeA))).build());
 
-        int totalButtonsWidth = actionButtonWidth * 2 + OUTER_PADDING;
-        int buttonsStartX = leftPos + screenWidth - OUTER_PADDING - totalButtonsWidth;
+        int btnY_B = (stripBY1 + stripBY2 + COMPONENT_SIZE) / 2 - 10;
+        addRenderableWidget(Button.builder(Component.literal(lockGenomeB ? "L" : "U"), b -> {
+            lockGenomeB = !lockGenomeB;
+            b.setMessage(Component.literal(lockGenomeB ? "L" : "U"));
+            updateLayout();
+        }).pos(btnX, btnY_B).size(20, 20).tooltip(Tooltip.create(Component.translatable("gui.wildaside.gene_editor.lock_genome", lockGenomeB))).build());
 
-        addRenderableWidget(Button.builder(Component.translatable("gui.wildaside.gene_editor.reset"), btn -> resetChanges())
-                .pos(buttonsStartX, buttonY)
-                .size(actionButtonWidth, actionButtonHeight)
-                .build());
-
-        addRenderableWidget(Button.builder(Component.translatable("gui.wildaside.gene_editor.execute"), btn -> executeOperation())
-                .pos(buttonsStartX + actionButtonWidth + OUTER_PADDING, buttonY)
-                .size(actionButtonWidth, actionButtonHeight)
-                .build());
-    }
-
-    private void calculateAllDimensions() {
-        int fontHeight = font.lineHeight;
-
-        geneEntryHeight = fontHeight + 3;
-        traitTypeHeaderHeight = fontHeight + 4;
-        operationEntryHeight = fontHeight + 4;
-        alleleLineHeight = fontHeight + 1;
-        lociLineHeight = fontHeight + 1;
-        traitHeaderHeight = fontHeight + 4;
-        opsHeaderHeight = fontHeight + 2;
-        dnaPanelHeaderHeight = fontHeight * 2 + INNER_PADDING + ELEMENT_SPACING;
-        alleleBoxHeight = alleleLineHeight * 4 + INNER_PADDING * 2;
-
-        headerHeight = fontHeight + OUTER_PADDING * 2;
-        footerHeight = fontHeight + OUTER_PADDING * 2 + 4;
-        statusBarHeight = fontHeight + 4;
-
-        closeButtonSize = fontHeight + 4;
-        actionButtonWidth = font.width("Execute") + 16;
-        actionButtonHeight = fontHeight + 6;
-
-        screenWidth = this.width - SCREEN_MARGIN * 2;
-        screenHeight = this.height - SCREEN_MARGIN * 2;
-
-        leftPos = SCREEN_MARGIN;
-        topPos = SCREEN_MARGIN;
-
-        int contentWidth = screenWidth - OUTER_PADDING * 3;
-        dnaPanelWidth = (int) (contentWidth * DNA_PANEL_WIDTH_RATIO);
-        detailPanelWidth = contentWidth - dnaPanelWidth;
-
-        int contentHeight = screenHeight - headerHeight - footerHeight - OUTER_PADDING * 2;
-        dnaPanelHeight = (contentHeight - OUTER_PADDING) / 2;
-        detailPanelHeight = dnaPanelHeight * 2 + OUTER_PADDING;
-    }
-
-    private void rebuildGenes() {
-        genesA = buildGeneMap(dnaA);
-        genesB = buildGeneMap(dnaB);
-
-        int totalEntriesA = calculateTotalEntries(genesA);
-        int totalEntriesB = calculateTotalEntries(genesB);
-
-        int contentHeight = getDnaPanelContentHeight();
-        int visibleEntries = Math.max(1, contentHeight / geneEntryHeight);
-
-        maxScrollA = Math.max(0, totalEntriesA - visibleEntries);
-        maxScrollB = Math.max(0, totalEntriesB - visibleEntries);
-
-        scrollOffsetA = Math.min(scrollOffsetA, maxScrollA);
-        scrollOffsetB = Math.min(scrollOffsetB, maxScrollB);
-    }
-
-    private int getDnaPanelContentHeight() {
-        return dnaPanelHeight - dnaPanelHeaderHeight - INNER_PADDING;
-    }
-
-    private void calculateOperationsScroll() {
-        if (opsListHeight <= 0) return;
-
-        int opsCount = GeneEditorOperation.values().length;
-        int opsContentHeight = getOpsContentHeight();
-        int visibleOps = Math.max(1, opsContentHeight / operationEntryHeight);
-
-        maxScrollOps = Math.max(0, opsCount - visibleOps);
-        scrollOffsetOps = Math.min(scrollOffsetOps, maxScrollOps);
-    }
-
-    private int getOpsContentHeight() {
-        return Math.max(1, opsListHeight - opsHeaderHeight - INNER_PADDING);
-    }
-
-    private Map<Trait, Gene> buildGeneMap(DnaImplementation dna) {
-        if (dna == null) return new LinkedHashMap<>();
-        
-        Map<Trait, List<GeneLocus>> loci;
-        if (dna.getGenome() != null && hasGenomeSequences(dna.getGenome())) {
-            loci = DnaUtils.convertGenomeToLoci(dna.getGenome());
-        } else {
-            loci = dna.getGenomeLociView();
-        }
-        
-        if (loci.isEmpty()) return new LinkedHashMap<>();
-
-        Map<Trait, Gene> result = new LinkedHashMap<>();
-
-        for (TraitType type : TraitType.values()) {
-            for (Map.Entry<Trait, List<GeneLocus>> entry : loci.entrySet()) {
-                if (entry.getKey().getTraitType() == type) {
-                    Gene gene = DnaUtils.asGene(entry.getKey(), entry.getValue());
-                    if (gene != null) {
-                        result.put(entry.getKey(), gene);
-                    }
-                }
-            }
-        }
-
-        return result;
-    }
-
-    private int calculateTotalEntries(Map<Trait, Gene> genes) {
-        if (genes.isEmpty()) return 0;
-
-        Set<TraitType> types = new HashSet<>();
-        for (Trait t : genes.keySet()) {
-            types.add(t.getTraitType());
-        }
-        return genes.size() + types.size();
-    }
-
-    @Override
-    public void resize(Minecraft minecraft, int width, int height) {
-        super.resize(minecraft, width, height);
-        init();
+        addRenderableWidget(Button.builder(Component.literal(lockPairs ? "L" : "U"), b -> {
+            lockPairs = !lockPairs;
+            b.setMessage(Component.literal(lockPairs ? "L" : "U"));
+            updateLayout();
+        }).pos(width - 120, 2).size(20, 20).tooltip(Tooltip.create(Component.translatable("gui.wildaside.gene_editor.lock_pair", lockPairs))).build());
     }
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         renderBackground(graphics);
 
-        renderMainBackground(graphics);
-        renderTitle(graphics);
+        double smoothFactor = 0.3;
+        scrollAMat = lerp(scrollAMat, targetScrollAMat, smoothFactor);
+        scrollAPat = lerp(scrollAPat, targetScrollAPat, smoothFactor);
+        scrollBMat = lerp(scrollBMat, targetScrollBMat, smoothFactor);
+        scrollBPat = lerp(scrollBPat, targetScrollBPat, smoothFactor);
 
-        int dnaPanelX = leftPos + OUTER_PADDING;
-        int dnaPanelAY = topPos + headerHeight + OUTER_PADDING;
-        int dnaPanelBY = dnaPanelAY + dnaPanelHeight + OUTER_PADDING;
+        if (!isDraggingSidebarScroll) sidebarScroll = lerp(sidebarScroll, targetSidebarScroll, smoothFactor);
+        if (!isDraggingInfoScrollA) infoScrollA = lerp(infoScrollA, targetInfoScrollA, smoothFactor);
+        if (!isDraggingInfoScrollB) infoScrollB = lerp(infoScrollB, targetInfoScrollB, smoothFactor);
 
-        renderDnaPanel(graphics, dnaPanelX, dnaPanelAY, dnaA, genesA, true, scrollOffsetA, mouseX, mouseY);
-        renderDnaPanel(graphics, dnaPanelX, dnaPanelBY, dnaB, genesB, false, scrollOffsetB, mouseX, mouseY);
+        updateHoveredSequence(mouseX, mouseY);
 
-        int detailPanelX = dnaPanelX + dnaPanelWidth + OUTER_PADDING;
-        int detailPanelY = topPos + headerHeight + OUTER_PADDING;
-        renderDetailPanel(graphics, detailPanelX, detailPanelY, mouseX, mouseY);
+        renderSidebar(graphics, mouseX, mouseY);
+
+        enableScissor(graphics, stripStartX, HEADER_HEIGHT, stripWidth - 25, height - HEADER_HEIGHT - FOOTER_HEIGHT);
+
+        String nameA = getEntityName(genomeA);
+        String nameB = getEntityName(genomeB);
+
+        renderGeneStrip(graphics, genomeA, true, stripAY1, scrollAMat, mouseX, mouseY, nameA, Component.translatable("gui.wildaside.gene_editor.maternal"));
+        renderGeneStrip(graphics, genomeA, false, stripAY2, scrollAPat, mouseX, mouseY, nameA, Component.translatable("gui.wildaside.gene_editor.paternal"));
+
+        renderGeneStrip(graphics, genomeB, true, stripBY1, scrollBMat, mouseX, mouseY, nameB, Component.translatable("gui.wildaside.gene_editor.maternal"));
+        renderGeneStrip(graphics, genomeB, false, stripBY2, scrollBPat, mouseX, mouseY, nameB, Component.translatable("gui.wildaside.gene_editor.paternal"));
+
+        disableScissor(graphics);
+
+        renderInfoPanel(graphics, mouseX, mouseY);
+
+        renderResizeHandles(graphics, mouseX, mouseY);
+
+        if (draggedNode != null) {
+            renderDraggedNode(graphics, mouseX, mouseY);
+        }
+
+        if (hoveredNode != null && draggedNode == null) {
+            renderNodeTooltip(graphics, hoveredNode, mouseX, mouseY);
+        }
 
         renderFooter(graphics);
 
         super.render(graphics, mouseX, mouseY, partialTick);
     }
 
-    private void renderMainBackground(GuiGraphics graphics) {
-        graphics.fill(leftPos, topPos, leftPos + screenWidth, topPos + screenHeight, 0xF0101020);
-        graphics.fill(leftPos + 1, topPos + 1, leftPos + screenWidth - 1, topPos + screenHeight - 1, 0xF01A1A2E);
-        graphics.renderOutline(leftPos, topPos, screenWidth, screenHeight, 0xFF4A4A7E);
-
-        graphics.fill(leftPos + 2, topPos + 2, leftPos + screenWidth - 2, topPos + headerHeight - 1, 0xFF252545);
-        graphics.hLine(leftPos + 2, leftPos + screenWidth - 3, topPos + headerHeight - 1, 0xFF4A4A7E);
-
-        int footerY = topPos + screenHeight - footerHeight;
-        graphics.hLine(leftPos + 2, leftPos + screenWidth - 3, footerY, 0xFF4A4A7E);
-        graphics.fill(leftPos + 2, footerY + 1, leftPos + screenWidth - 2, topPos + screenHeight - 2, 0xFF252545);
+    private double lerp(double start, double end, double delta) {
+        return start + (end - start) * delta;
     }
 
-    private void renderTitle(GuiGraphics graphics) {
-        Component title = Component.translatable("gui.wildaside.advanced_gene_editor")
-                .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD);
-        int titleY = topPos + (headerHeight - font.lineHeight) / 2;
-        graphics.drawString(font, title, leftPos + OUTER_PADDING, titleY, 0xFFFFFFFF, true);
+    private String getEntityName(Genome genome) {
+        if (genome == null || genome.getEntityType() == null) return "Unknown";
+        return genome.getEntityType().getDescription().getString();
+    }
+
+    private void renderResizeHandles(GuiGraphics graphics, int mouseX, int mouseY) {
+        int leftHandleX = sidebarWidth;
+        boolean hoverLeft = Math.abs(mouseX - leftHandleX) <= 2;
+        graphics.fill(leftHandleX - 1, HEADER_HEIGHT, leftHandleX + 1, height - FOOTER_HEIGHT, (hoverLeft || isResizingSidebar) ? COL_ACCENT : COL_BORDER);
+
+        int rightHandleX = width - infoPanelWidth;
+        boolean hoverRight = Math.abs(mouseX - rightHandleX) <= 2;
+        graphics.fill(rightHandleX - 1, HEADER_HEIGHT, rightHandleX + 1, height - FOOTER_HEIGHT, (hoverRight || isResizingInfoPanel) ? COL_ACCENT : COL_BORDER);
+    }
+
+    private void updateHoveredSequence(int mouseX, int mouseY) {
+        hoveredSequence = null;
+        hoveredNode = null;
+        hoveredTrait = null;
+
+        if (mouseX < stripStartX || mouseX > stripStartX + stripWidth) return;
+
+        if (mouseY >= stripAY1 && mouseY <= stripAY1 + STRIP_HEIGHT + COMPONENT_SIZE) {
+            checkHoverInGenome(genomeA, true, scrollAMat, mouseX, mouseY, stripAY1);
+        } else if (mouseY >= stripAY2 && mouseY <= stripAY2 + STRIP_HEIGHT + COMPONENT_SIZE) {
+            checkHoverInGenome(genomeA, false, scrollAPat, mouseX, mouseY, stripAY2);
+        } else if (mouseY >= stripBY1 && mouseY <= stripBY1 + STRIP_HEIGHT + COMPONENT_SIZE) {
+            checkHoverInGenome(genomeB, true, scrollBMat, mouseX, mouseY, stripBY1);
+        } else if (mouseY >= stripBY2 && mouseY <= stripBY2 + STRIP_HEIGHT + COMPONENT_SIZE) {
+            checkHoverInGenome(genomeB, false, scrollBPat, mouseX, mouseY, stripBY2);
+        }
+    }
+
+    private void checkHoverInGenome(Genome genome, boolean isMaternal, double scroll, int mouseX, int mouseY, int y) {
+        if (genome == null) return;
+
+        boolean checkRow = mouseY >= y && mouseY <= y + COMPONENT_SIZE;
+        if (!checkRow) return;
+
+        ChromosomeSet chromSet = isMaternal ? genome.getMaternal() : genome.getPaternal();
+        if (chromSet == null) return;
+
+        double currentX = 0;
+        int globalComponentIndex = 0;
+
+        for (Trait trait : allTraits) {
+            GeneSequence seq = chromSet.getSequence(trait);
+            if (seq == null) continue;
+
+            List<Object> components = getAllComponents(seq);
+            int width = components.size() * (COMPONENT_SIZE + COMPONENT_SPACING);
+
+            int xBase = (int) (stripStartX + currentX - scroll * (COMPONENT_SIZE + COMPONENT_SPACING));
+
+            int margin = 4;
+            if (mouseX >= xBase - margin && mouseX < xBase + width + margin) {
+                hoveredSequence = seq;
+                hoveredTrait = trait;
+
+                int index = (mouseX - xBase) / (COMPONENT_SIZE + COMPONENT_SPACING);
+                if (index >= 0 && index < components.size()) {
+                    Object comp = components.get(index);
+                    int nodeX = xBase + index * (COMPONENT_SIZE + COMPONENT_SPACING);
+                    boolean flipped = (globalComponentIndex + index) % 2 != 0;
+                    hoveredNode = new VisualNode(comp, trait, seq, isMaternal, genome == genomeA, nodeX, y, flipped);
+                }
+                return;
+            }
+
+            currentX += width;
+            globalComponentIndex += components.size();
+        }
+    }
+
+    private void renderSidebar(GuiGraphics graphics, int mouseX, int mouseY) {
+        graphics.fill(0, HEADER_HEIGHT, sidebarWidth, height - FOOTER_HEIGHT, COL_PANEL_BG);
+        graphics.vLine(sidebarWidth, HEADER_HEIGHT, height - FOOTER_HEIGHT, COL_BORDER);
+
+        int visibleHeight = height - HEADER_HEIGHT - FOOTER_HEIGHT;
+
+        enableScissor(graphics, 0, HEADER_HEIGHT, sidebarWidth, visibleHeight);
+
+        int y = (int) (HEADER_HEIGHT + 5 - sidebarScroll);
+        int startY = y;
+
+        for (Map.Entry<TraitType, List<Trait>> entry : traitsByType.entrySet()) {
+            graphics.drawString(font, Component.translatable("trait_type.wildaside." + entry.getKey().name().toLowerCase()), 5, y, entry.getKey().getHeaderColour().getColor(), false);
+            y += 14;
+
+            for (Trait trait : entry.getValue()) {
+                boolean isHovered = mouseX >= 0 && mouseX < sidebarWidth && mouseY >= y && mouseY < y + 12;
+                int color = COL_TEXT_NORMAL;
+                if (isHovered) color = 0xFFFFFFFF;
+                if (selectedTraitA == trait || selectedTraitB == trait) color = COL_ACCENT;
+
+                graphics.drawString(font, truncate(Component.translatable("trait.wildaside." + trait.getName()).getString(), sidebarWidth - 10), 10, y, color, false);
+                y += 14;
+            }
+            y += 8;
+        }
+
+        sidebarContentHeight = y - startY + (int) sidebarScroll;
+        disableScissor(graphics);
+
+        renderScrollbar(graphics, sidebarWidth - 4, HEADER_HEIGHT, visibleHeight, sidebarContentHeight, sidebarScroll);
+    }
+
+    private void renderGeneStrip(GuiGraphics graphics, Genome genome, boolean isMaternal, int y, double scroll, int mouseX, int mouseY, String entityName, Component suffix) {
+        Component label = Component.literal(entityName + " (").append(suffix).append(")");
+        graphics.drawString(font, label, stripStartX, y - 10, COL_TEXT_NORMAL, false);
+
+        graphics.fill(stripStartX, y, stripStartX + stripWidth - 25, y + STRIP_HEIGHT, 0xFF000000);
+        graphics.renderOutline(stripStartX - 1, y - 1, stripWidth - 25 + 2, STRIP_HEIGHT + 2, COL_BORDER);
+
+        if (genome == null) return;
+
+        ChromosomeSet chromSet = isMaternal ? genome.getMaternal() : genome.getPaternal();
+        if (chromSet == null) return;
+
+        double currentX = 0;
+        int globalComponentIndex = 0;
+
+        for (Trait trait : allTraits) {
+            GeneSequence seq = chromSet.getSequence(trait);
+            if (seq == null) continue;
+
+            List<Object> components = getAllComponents(seq);
+            int width = components.size() * (COMPONENT_SIZE + COMPONENT_SPACING);
+
+            int xBase = (int) (stripStartX + currentX - scroll * (COMPONENT_SIZE + COMPONENT_SPACING));
+
+            if (selectedTraitA == trait || selectedTraitB == trait) {
+                if (xBase + 6 >= stripStartX && xBase <= stripStartX + stripWidth) {
+                    graphics.fill(xBase, y + STRIP_HEIGHT + 2, xBase + 6, y + STRIP_HEIGHT + 4, COL_ACCENT);
+                }
+            }
+
+            if (hoveredSequence == seq && !components.isEmpty()) {
+                int seqWidth = components.size() * (COMPONENT_SIZE + COMPONENT_SPACING);
+                graphics.renderOutline(xBase - 1, y + 3, seqWidth + 2, COMPONENT_SIZE + 2, 0x88FFFFFF);
+            }
+
+            if (hoveredTrait == trait && seq != null && !components.isEmpty()) {
+                int seqWidth = components.size() * (COMPONENT_SIZE + COMPONENT_SPACING);
+                graphics.renderOutline(xBase - 1, y + 3, seqWidth + 2, COMPONENT_SIZE + 2, 0x44FFFFFF);
+            }
+
+            for (int i = 0; i < components.size(); i++) {
+                int x = xBase + i * (COMPONENT_SIZE + COMPONENT_SPACING);
+                if (x + COMPONENT_SIZE < stripStartX || x > stripStartX + stripWidth) continue;
+
+                Object comp = components.get(i);
+                renderComponentNode(graphics, x, y + 4, comp, trait, seq, isMaternal, genome == genomeA, mouseX, mouseY, (globalComponentIndex + i) % 2 != 0);
+            }
+
+            currentX += width;
+            globalComponentIndex += components.size();
+        }
+    }
+
+    private void renderComponentNode(GuiGraphics graphics, int x, int y, Object comp, Trait trait, GeneSequence seq, boolean isMaternal, boolean isGenomeA, int mouseX, int mouseY, boolean flipped) {
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+        int color = getComponentColor(comp);
+
+        if (comp instanceof CodingRegion) {
+            RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+        } else {
+            float r = ((color >> 16) & 0xFF) / 255f;
+            float g = ((color >> 8) & 0xFF) / 255f;
+            float b = (color & 0xFF) / 255f;
+            RenderSystem.setShaderColor(r, g, b, 1f);
+        }
+
+        ResourceLocation texture = flipped ? GENE_TEXTURE_FLIPPED : GENE_TEXTURE;
+        graphics.blit(texture, x, y, 0, 0, 16, 16, 16, 16);
+
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+
+        boolean isSelected = (genomeA == (isGenomeA ? genomeA : genomeB) && selectedComponentA == comp) ||
+                (genomeB == (isGenomeA ? genomeA : genomeB) && selectedComponentB == comp);
+
+        if (isSelected) {
+            graphics.renderOutline(x - 2, y - 2, COMPONENT_SIZE + 4, COMPONENT_SIZE + 4, COL_ACCENT);
+        }
+    }
+
+    private void renderInfoPanel(GuiGraphics graphics, int mouseX, int mouseY) {
+        int x = width - infoPanelWidth;
+        int top = HEADER_HEIGHT;
+        int bottom = height - FOOTER_HEIGHT;
+        int height = bottom - top;
+
+        graphics.fill(x, top, width, bottom, COL_PANEL_BG);
+        graphics.vLine(x, top, bottom, COL_BORDER);
+
+        if (selectedTraitA == null && selectedTraitB == null) {
+            graphics.drawWordWrap(font, Component.translatable("gui.wildaside.gene_editor.select_component"), x + 6, top + 20, infoPanelWidth - 12, COL_TEXT_NORMAL);
+            return;
+        }
+
+        int halfHeight = height / 2;
+        int splitY = top + halfHeight;
+
+        enableScissor(graphics, x, top, infoPanelWidth, halfHeight);
+        int yA = (int) (top + 10 - infoScrollA);
+        int startYA = yA;
+        int padding = 6;
+        int maxWidth = infoPanelWidth - 12;
+
+        if (selectedTraitA != null) {
+            graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.trait"), x + padding, yA, COL_TEXT_HEADER, false);
+            yA += 12;
+            Component traitName = Component.translatable("trait.wildaside." + selectedTraitA.getName()).withStyle(ChatFormatting.AQUA);
+            graphics.drawWordWrap(font, traitName, x + padding, yA, maxWidth, COL_TEXT_VALUE);
+            yA += font.wordWrapHeight(traitName, maxWidth) + 8;
+            graphics.hLine(x + padding, width - padding, yA, COL_BORDER);
+            yA += 8;
+
+            graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.genome_a"), x + padding, yA, 0xFFFFAA00, false);
+            yA += 12;
+            yA = renderGenomeInfo(graphics, genomeA, selectedTraitA, x + padding, yA, maxWidth, selectedComponentA, selectedIsMaternalA);
+        } else {
+            graphics.drawWordWrap(font, Component.translatable("gui.wildaside.gene_editor.select_component"), x + padding, yA, maxWidth, COL_TEXT_NORMAL);
+            yA += 20;
+        }
+
+        infoContentHeightA = yA - startYA + (int) infoScrollA;
+        disableScissor(graphics);
+        renderScrollbar(graphics, width - 4, top, halfHeight, infoContentHeightA, infoScrollA);
+
+        graphics.hLine(x, width, splitY, COL_BORDER);
+
+        enableScissor(graphics, x, splitY + 1, infoPanelWidth, height - halfHeight - 1);
+        int yB = (int) (splitY + 10 - infoScrollB);
+        int startYB = yB;
+
+        if (selectedTraitB != null) {
+            graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.trait"), x + padding, yB, COL_TEXT_HEADER, false);
+            yB += 12;
+            Component traitName = Component.translatable("trait.wildaside." + selectedTraitB.getName()).withStyle(ChatFormatting.AQUA);
+            graphics.drawWordWrap(font, traitName, x + padding, yB, maxWidth, COL_TEXT_VALUE);
+            yB += font.wordWrapHeight(traitName, maxWidth) + 8;
+            graphics.hLine(x + padding, width - padding, yB, COL_BORDER);
+            yB += 8;
+
+            graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.genome_b"), x + padding, yB, 0xFF00AAFF, false);
+            yB += 12;
+            yB = renderGenomeInfo(graphics, genomeB, selectedTraitB, x + padding, yB, maxWidth, selectedComponentB, selectedIsMaternalB);
+        } else {
+            graphics.drawWordWrap(font, Component.translatable("gui.wildaside.gene_editor.select_component"), x + padding, yB, maxWidth, COL_TEXT_NORMAL);
+            yB += 20;
+        }
+
+        infoContentHeightB = yB - startYB + (int) infoScrollB;
+        disableScissor(graphics);
+        renderScrollbar(graphics, width - 4, splitY + 1, height - halfHeight - 1, infoContentHeightB, infoScrollB);
+    }
+
+    private int renderGenomeInfo(GuiGraphics graphics, Genome genome, Trait trait, int x, int y, int maxWidth, Object selectedComponent, boolean isMaternal) {
+        if (genome == null) return y;
+
+        EntityType<?> type = genome.getEntityType();
+        String entityName = type != null ? type.getDescription().getString() : "Unknown";
+        graphics.drawString(font, entityName, x, y, COL_TEXT_NORMAL, false);
+        y += 12;
+
+        ExpressionContext context = new ExpressionContext(player);
+        float expressed = genome.getExpressedValue(trait, context);
+        graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.expressed", String.format("%.2f", expressed)), x, y, 0xFF55FF55, false);
+        y += 12;
+
+        if (trait != null) {
+            ChromosomeSet chromSet = isMaternal ? genome.getMaternal() : genome.getPaternal();
+            if (chromSet != null) {
+                GeneSequence seq = chromSet.getSequence(trait);
+                if (seq != null) {
+                    graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.base", String.format("%.2f", seq.calculateBaseValue())), x, y, COL_TEXT_VALUE, false);
+                    y += 10;
+                    graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.stability", String.format("%.2f", seq.getStability())), x, y, COL_TEXT_VALUE, false);
+                    y += 10;
+                    graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.dominance", seq.getDominance().getComponent().getString()), x, y, COL_TEXT_VALUE, false);
+                    y += 10;
+                    graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.mutation", String.format("%.2f", seq.getMutationRate())), x, y, COL_TEXT_VALUE, false);
+                    y += 10;
+                    graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.source", Component.translatable("source.wildaside." + seq.getSource().name().toLowerCase()).getString()), x, y, COL_TEXT_VALUE, false);
+                    y += 10;
+                } else {
+                    graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.no_sequence"), x, y, 0xFF888888, false);
+                    y += 10;
+                }
+            }
+        }
+
+        if (selectedComponent != null && trait == (genome == genomeA ? selectedTraitA : selectedTraitB)) {
+            y += 8;
+            graphics.fill(x - 2, y, x + maxWidth + 2, y + 1, COL_BORDER);
+            y += 5;
+
+            graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.component"), x, y, COL_TEXT_HEADER, false);
+            y += 12;
+            graphics.drawString(font, getComponentType(selectedComponent), x, y, getComponentColor(selectedComponent), false);
+            y += 12;
+
+            if (selectedComponent instanceof Regulator reg) {
+                graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.type", Component.translatable("regulation_type.wildaside." + reg.getRegulationType().name().toLowerCase()).getString()), x, y, COL_TEXT_VALUE, false);
+                y += 10;
+                graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.value", String.format("%.2f", reg.getValue())), x, y, COL_TEXT_VALUE, false);
+                y += 10;
+            } else if (selectedComponent instanceof CodingRegion cr) {
+                graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.method", Component.translatable("combine_method.wildaside." + cr.getCombineMethod().name().toLowerCase()).getString()), x, y, COL_TEXT_VALUE, false);
+                y += 10;
+                graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.value", String.format("%.2f", cr.getValue())), x, y, COL_TEXT_VALUE, false);
+                y += 10;
+            } else if (selectedComponent instanceof Activator act) {
+                graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.condition", Component.translatable("activation_condition.wildaside." + act.getCondition().name().toLowerCase()).getString()), x, y, COL_TEXT_VALUE, false);
+                y += 10;
+                graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.threshold", String.format("%.2f", act.getActivationThreshold())), x, y, COL_TEXT_VALUE, false);
+                y += 10;
+            } else if (selectedComponent instanceof Enhancer enh) {
+                graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.condition", Component.translatable("activation_condition.wildaside." + enh.getCondition().name().toLowerCase()).getString()), x, y, COL_TEXT_VALUE, false);
+                y += 10;
+                graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.threshold", String.format("%.2f", enh.getThreshold())), x, y, COL_TEXT_VALUE, false);
+                y += 10;
+                graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.multiplier", String.format("%.2f", enh.getMultiplier())), x, y, COL_TEXT_VALUE, false);
+                y += 10;
+                graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.flat_bonus", String.format("%.2f", enh.getFlatBonus())), x, y, COL_TEXT_VALUE, false);
+                y += 10;
+            } else if (selectedComponent instanceof Silencer sil) {
+                graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.condition", Component.translatable("activation_condition.wildaside." + sil.getCondition().name().toLowerCase()).getString()), x, y, COL_TEXT_VALUE, false);
+                y += 10;
+                graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.threshold", String.format("%.2f", sil.getThreshold())), x, y, COL_TEXT_VALUE, false);
+                y += 10;
+                graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.multiplier", String.format("%.2f", sil.getMultiplier())), x, y, COL_TEXT_VALUE, false);
+                y += 10;
+                graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.flat_penalty", String.format("%.2f", sil.getFlatPenalty())), x, y, COL_TEXT_VALUE, false);
+                y += 10;
+            } else if (selectedComponent instanceof TraitDefiner definer) {
+                graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.trait"), x, y, COL_TEXT_VALUE, false);
+                y += 10;
+                graphics.drawString(font, Component.translatable("trait.wildaside." + definer.getTrait().getName()).getString(), x, y, COL_TEXT_VALUE, false);
+                y += 10;
+            }
+        }
+        return y;
+    }
+
+    private void renderScrollbar(GuiGraphics graphics, int x, int y, int height, int contentHeight, double scroll) {
+        if (contentHeight <= height) return;
+
+        int barHeight = (int) ((float) height / contentHeight * height);
+        barHeight = Math.max(20, barHeight);
+
+        int barY = y + (int) ((scroll / (contentHeight - height)) * (height - barHeight));
+
+        graphics.fill(x, y, x + 2, y + height, 0xFF222222);
+
+        double mouseX = Minecraft.getInstance().mouseHandler.xpos() * Minecraft.getInstance().getWindow().getGuiScale() / Minecraft.getInstance().getWindow().getScreenWidth() * this.width;
+        double mouseY = Minecraft.getInstance().mouseHandler.ypos() * Minecraft.getInstance().getWindow().getGuiScale() / Minecraft.getInstance().getWindow().getScreenHeight() * this.height;
+
+        boolean isHovered = mouseX >= x - 2 && mouseX <= x + 4 && mouseY >= barY && mouseY <= barY + barHeight;
+        int color = isHovered ? 0xFF00FFFF : COL_ACCENT;
+
+        graphics.fill(x, barY, x + 2, barY + barHeight, color);
+    }
+
+    private void renderDraggedNode(GuiGraphics graphics, int mouseX, int mouseY) {
+        if (draggedNode == null) return;
+        int color = getComponentColor(draggedNode.component);
+
+        if (draggedNode.component instanceof CodingRegion) {
+            RenderSystem.setShaderColor(1f, 1f, 1f, 0.8f);
+        } else {
+            float r = ((color >> 16) & 0xFF) / 255f;
+            float g = ((color >> 8) & 0xFF) / 255f;
+            float b = (color & 0xFF) / 255f;
+            RenderSystem.setShaderColor(r, g, b, 0.8f);
+        }
+
+        ResourceLocation texture = draggedNode.flipped ? GENE_TEXTURE_FLIPPED : GENE_TEXTURE;
+        graphics.blit(texture, mouseX - 8, mouseY - 8, 0, 0, 16, 16, 16, 16);
+
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+    }
+
+    private void renderNodeTooltip(GuiGraphics graphics, VisualNode node, int mouseX, int mouseY) {
+        List<Component> tooltip = new ArrayList<>();
+        tooltip.add(getComponentType(node.component).copy().withStyle(ChatFormatting.GOLD));
+        tooltip.add(Component.translatable("trait.wildaside." + node.trait.getName()).withStyle(ChatFormatting.GRAY));
+
+        if (node.component instanceof CodingRegion cr) {
+            tooltip.add(Component.translatable("gui.wildaside.gene_editor.combine_method", Component.translatable("combine_method.wildaside." + cr.getCombineMethod().name().toLowerCase()).getString()).withStyle(ChatFormatting.GOLD));
+            tooltip.add(Component.translatable("gui.wildaside.gene_editor.value", String.format("%.2f", cr.getValue())).withStyle(ChatFormatting.GREEN));
+        } else if (node.component instanceof Activator act) {
+            tooltip.add(Component.translatable("gui.wildaside.gene_editor.activation_condition", Component.translatable("activation_condition.wildaside." + act.getCondition().name().toLowerCase()).getString()).withStyle(ChatFormatting.GOLD));
+            tooltip.add(Component.translatable("gui.wildaside.gene_editor.threshold", String.format("%.2f", act.getActivationThreshold())).withStyle(ChatFormatting.AQUA));
+        } else if (node.component instanceof Enhancer enh) {
+            tooltip.add(Component.translatable("gui.wildaside.gene_editor.condition", Component.translatable("activation_condition.wildaside." + enh.getCondition().name().toLowerCase()).getString()).withStyle(ChatFormatting.GOLD));
+            tooltip.add(Component.translatable("gui.wildaside.gene_editor.threshold", String.format("%.2f", enh.getThreshold())).withStyle(ChatFormatting.AQUA));
+            tooltip.add(Component.translatable("gui.wildaside.gene_editor.multiplier", String.format("%.2f", enh.getMultiplier())).withStyle(ChatFormatting.GREEN));
+            tooltip.add(Component.translatable("gui.wildaside.gene_editor.flat_bonus", String.format("%.2f", enh.getFlatBonus())).withStyle(ChatFormatting.BLUE));
+        } else if (node.component instanceof Silencer sil) {
+            tooltip.add(Component.translatable("gui.wildaside.gene_editor.condition", Component.translatable("activation_condition.wildaside." + sil.getCondition().name().toLowerCase()).getString()).withStyle(ChatFormatting.GOLD));
+            tooltip.add(Component.translatable("gui.wildaside.gene_editor.threshold", String.format("%.2f", sil.getThreshold())).withStyle(ChatFormatting.AQUA));
+            tooltip.add(Component.translatable("gui.wildaside.gene_editor.multiplier", String.format("%.2f", sil.getMultiplier())).withStyle(ChatFormatting.GREEN));
+            tooltip.add(Component.translatable("gui.wildaside.gene_editor.flat_penalty", String.format("%.2f", sil.getFlatPenalty())).withStyle(ChatFormatting.RED));
+        } else if (node.component instanceof Regulator reg) {
+            tooltip.add(Component.translatable("gui.wildaside.gene_editor.regulation_type", Component.translatable("regulation_type.wildaside." + reg.getRegulationType().name().toLowerCase()).getString()).withStyle(ChatFormatting.GOLD));
+            tooltip.add(Component.translatable("gui.wildaside.gene_editor.value", String.format("%.2f", reg.getValue())).withStyle(ChatFormatting.GREEN));
+        } else if (node.component instanceof TraitDefiner definer) {
+//            tooltip.add(Component.translatable("gui.wildaside.gene_editor.trait_2", Component.translatable("trait.wildaside." + definer.getTrait().getName()).getString()).withStyle(ChatFormatting.LIGHT_PURPLE));
+        }
+
+        graphics.renderComponentTooltip(font, tooltip, mouseX, mouseY);
     }
 
     private void renderFooter(GuiGraphics graphics) {
-        int footerY = topPos + screenHeight - footerHeight;
-        int statusBarY = footerY + (footerHeight - statusBarHeight) / 2;
-
-        int totalButtonsWidth = actionButtonWidth * 2 + OUTER_PADDING;
-        int statusBarWidth = screenWidth - OUTER_PADDING * 3 - totalButtonsWidth;
-        int statusBarX = leftPos + OUTER_PADDING;
-
-        graphics.fill(statusBarX, statusBarY, statusBarX + statusBarWidth, statusBarY + statusBarHeight, 0x66000000);
+        graphics.fill(0, height - FOOTER_HEIGHT, width, height, COL_BACKGROUND);
+        graphics.hLine(0, width, height - FOOTER_HEIGHT, COL_BORDER);
 
         if (!statusMessages.isEmpty()) {
-            Component lastMessage = statusMessages.get(statusMessages.size() - 1);
-            String msgStr = truncateToWidth(lastMessage.getString(), statusBarWidth - ELEMENT_SPACING * 2);
-            int textY = statusBarY + (statusBarHeight - font.lineHeight) / 2;
-            graphics.drawString(font, msgStr, statusBarX + ELEMENT_SPACING, textY, 0xFFFFFFFF, false);
-        }
-    }
-
-    private void renderDnaPanel(GuiGraphics graphics, int px, int py, DnaImplementation dna, Map<Trait, Gene> genes, boolean isTop, int scrollOffset, int mouseX, int mouseY) {
-        graphics.fill(px, py, px + dnaPanelWidth, py + dnaPanelHeight, 0xCC1E1E38);
-        graphics.renderOutline(px, py, dnaPanelWidth, dnaPanelHeight, 0xFF4A4AAA);
-
-        String label = isTop ? "DNA A" : "DNA B";
-        int labelColor = isTop ? 0xFF88AAFF : 0xFFFFAA88;
-        graphics.drawString(font, label, px + INNER_PADDING, py + INNER_PADDING, labelColor, false);
-
-        if (dna == null || genes.isEmpty()) {
-            graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.no_dna")
-                    .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC), px + INNER_PADDING, py + dnaPanelHeaderHeight, 0xFFAAAAAA, false);
-            return;
-        }
-
-        String sourceStr = dna.getSource().getDescription().getString();
-        int maxSourceWidth = dnaPanelWidth - INNER_PADDING * 2;
-        sourceStr = truncateToWidth(sourceStr, maxSourceWidth);
-        graphics.drawString(font, sourceStr, px + INNER_PADDING, py + INNER_PADDING + font.lineHeight + ELEMENT_SPACING, 0xFF888888, false);
-
-        int contentX = px + INNER_PADDING;
-        int contentY = py + dnaPanelHeaderHeight;
-        int contentWidth = dnaPanelWidth - INNER_PADDING * 2 - SCROLLBAR_WIDTH - 2;
-        int contentHeight = getDnaPanelContentHeight();
-
-        enableScissor(graphics, contentX, contentY, contentWidth, contentHeight);
-
-        int entryY = contentY - scrollOffset * geneEntryHeight;
-        TraitType currentType = null;
-
-        for (Map.Entry<Trait, Gene> entry : genes.entrySet()) {
-            Trait trait = entry.getKey();
-            Gene gene = entry.getValue();
-
-            if (trait.getTraitType() != currentType) {
-                currentType = trait.getTraitType();
-
-                int headerTop = entryY + 1;
-                int headerBottom = entryY + traitTypeHeaderHeight - 1;
-
-                if (headerBottom > contentY && headerTop < contentY + contentHeight) {
-                    int clippedTop = Math.max(contentY, headerTop);
-                    int clippedBottom = Math.min(contentY + contentHeight, headerBottom);
-                    graphics.fill(contentX, clippedTop, contentX + contentWidth, clippedBottom, 0x44FFFFFF);
-
-                    int textY = entryY + (traitTypeHeaderHeight - font.lineHeight) / 2;
-                    if (textY >= contentY && textY + font.lineHeight <= contentY + contentHeight) {
-                        graphics.drawString(font, currentType.name(), contentX + ELEMENT_SPACING, textY, currentType.getHeaderColour().getColor(), false);
-                    }
-                }
-                entryY += traitTypeHeaderHeight;
-            }
-
-            int entryTop = entryY;
-            int entryBottom = entryY + geneEntryHeight - 1;
-
-            if (entryBottom > contentY && entryTop < contentY + contentHeight) {
-                boolean selected = (isTop && selectionA != null && selectionA.trait.equals(trait)) ||
-                        (!isTop && selectionB != null && selectionB.trait.equals(trait));
-                boolean hovered = mouseX >= contentX && mouseX <= contentX + contentWidth &&
-                        mouseY >= Math.max(contentY, entryTop) && mouseY < Math.min(contentY + contentHeight, entryBottom);
-
-                int bgColor = selected ? 0x884444FF : (hovered ? 0x44FFFFFF : 0x00000000);
-                if (bgColor != 0) {
-                    int clippedTop = Math.max(contentY, entryTop);
-                    int clippedBottom = Math.min(contentY + contentHeight, entryBottom);
-                    graphics.fill(contentX, clippedTop, contentX + contentWidth, clippedBottom, bgColor);
-                }
-
-                int textY = entryY + (geneEntryHeight - font.lineHeight) / 2;
-                if (textY >= contentY && textY + font.lineHeight <= contentY + contentHeight) {
-                    String traitName = TraitRegistry.translatableTrait(trait).getString();
-                    String valueStr = formatGeneValue(gene);
-                    int valueWidth = font.width(valueStr);
-                    int maxTraitWidth = contentWidth - valueWidth - ELEMENT_SPACING * 3;
-                    traitName = truncateToWidth(traitName, maxTraitWidth);
-
-                    int textColor = selected ? 0xFFFFFF44 : 0xFFFFFFFF;
-                    graphics.drawString(font, traitName, contentX + ELEMENT_SPACING, textY, textColor, false);
-                    graphics.drawString(font, valueStr, contentX + contentWidth - valueWidth - ELEMENT_SPACING, textY, 0xFFAAFFAA, false);
-                }
-            }
-
-            entryY += geneEntryHeight;
-        }
-
-        disableScissor(graphics);
-
-        int maxScroll = isTop ? maxScrollA : maxScrollB;
-        int currentScroll = isTop ? scrollOffsetA : scrollOffsetB;
-        boolean dragging = isTop ? draggingScrollbarA : draggingScrollbarB;
-        int scrollbarX = px + dnaPanelWidth - SCROLLBAR_WIDTH - INNER_PADDING;
-        renderScrollbar(graphics, scrollbarX, contentY, SCROLLBAR_WIDTH, contentHeight, maxScroll, currentScroll, mouseX, mouseY, dragging, geneEntryHeight);
-    }
-
-    private void renderScrollbar(GuiGraphics graphics, int sx, int sy, int sw, int sh,
-                                 int maxScroll, int currentScroll, int mouseX, int mouseY, boolean dragging, int entryHeight) {
-        graphics.fill(sx, sy, sx + sw, sy + sh, 0x44000000);
-
-        if (maxScroll <= 0) return;
-
-        int totalContentHeight = maxScroll * entryHeight + sh;
-        int thumbHeight = Math.max(SCROLLBAR_MIN_THUMB_HEIGHT, sh * sh / totalContentHeight);
-        thumbHeight = Math.min(thumbHeight, sh - 4);
-
-        int scrollRange = sh - thumbHeight - 4;
-        int thumbY = sy + 2 + (maxScroll > 0 ? currentScroll * scrollRange / maxScroll : 0);
-
-        boolean hovered = mouseX >= sx && mouseX <= sx + sw && mouseY >= thumbY && mouseY <= thumbY + thumbHeight;
-
-        int thumbColor = dragging ? 0xFFAAAAFF : (hovered ? 0xFF8888DD : 0xFF6666AA);
-        graphics.fill(sx + 1, thumbY, sx + sw - 1, thumbY + thumbHeight, thumbColor);
-    }
-
-    private void renderDetailPanel(GuiGraphics graphics, int px, int py, int mouseX, int mouseY) {
-        graphics.fill(px, py, px + detailPanelWidth, py + detailPanelHeight, 0xCC1E1E38);
-        graphics.renderOutline(px, py, detailPanelWidth, detailPanelHeight, 0xFF4A4AAA);
-
-        graphics.drawString(font, "Details", px + INNER_PADDING, py + INNER_PADDING, 0xFFAAAAFF, false);
-
-        Gene selectedGene = null;
-        boolean fromTop = true;
-
-        if (selectionA != null) {
-            selectedGene = selectionA.gene;
-            fromTop = true;
-        } else if (selectionB != null) {
-            selectedGene = selectionB.gene;
-            fromTop = false;
-        }
-
-        int opsStartY;
-
-        if (selectedGene == null) {
-            int noSelectionY = py + INNER_PADDING + font.lineHeight + ELEMENT_SPACING * 2;
-            graphics.drawString(font, Component.translatable("gui.wildaside.gene_editor.select_gene")
-                    .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC), px + INNER_PADDING, noSelectionY, 0xFFAAAAAA, false);
-            opsStartY = noSelectionY + font.lineHeight + ELEMENT_SPACING * 2;
-        } else {
-            Trait trait = selectedGene.getTrait();
-
-            int traitHeaderY = py + INNER_PADDING + font.lineHeight + ELEMENT_SPACING;
-            graphics.fill(px + INNER_PADDING, traitHeaderY, px + detailPanelWidth - INNER_PADDING, traitHeaderY + traitHeaderHeight, 0x66000000);
-
-            int traitTextY = traitHeaderY + (traitHeaderHeight - font.lineHeight) / 2;
-            String traitName = TraitRegistry.translatableTrait(trait).getString();
-            String typeStr = trait.getTraitType().name();
-            int typeWidth = font.width(typeStr);
-            int maxTraitNameWidth = detailPanelWidth - INNER_PADDING * 2 - typeWidth - ELEMENT_SPACING * 3;
-            traitName = truncateToWidth(traitName, maxTraitNameWidth);
-
-            graphics.drawString(font, traitName, px + INNER_PADDING + ELEMENT_SPACING, traitTextY, 0xFFFFAA00, false);
-
-            int typeColor = trait.getTraitType().getHeaderColour().getColor();
-            graphics.drawString(font, typeStr, px + detailPanelWidth - INNER_PADDING - typeWidth - ELEMENT_SPACING, traitTextY, typeColor, false);
-
-            int infoY = traitHeaderY + traitHeaderHeight + ELEMENT_SPACING;
-            String expressedStr = "Value: " + formatGeneValue(selectedGene);
-            int maxExprWidth = detailPanelWidth - INNER_PADDING * 2;
-            expressedStr = truncateToWidth(expressedStr, maxExprWidth);
-            graphics.drawString(font, expressedStr, px + INNER_PADDING, infoY, 0xFFFFFFFF, false);
-
-            int alleleY = infoY + font.lineHeight + ELEMENT_SPACING;
-            int alleleBoxWidth = (detailPanelWidth - INNER_PADDING * 2 - ELEMENT_SPACING) / 2;
-
-            renderAlleleBox(graphics, px + INNER_PADDING, alleleY, alleleBoxWidth, alleleBoxHeight,
-                    "Allele A", selectedGene.getAlleleA(),
-                    state.getSelectedAllele() != null && state.isSelectedAlleleA(), mouseX, mouseY);
-
-            renderAlleleBox(graphics, px + INNER_PADDING + alleleBoxWidth + ELEMENT_SPACING, alleleY, alleleBoxWidth, alleleBoxHeight,
-                    "Allele B", selectedGene.getAlleleB(),
-                    state.getSelectedAllele() != null && !state.isSelectedAlleleA(), mouseX, mouseY);
-
-            int lociY = alleleY + alleleBoxHeight + ELEMENT_SPACING;
-            Map<Trait, List<GeneLocus>> lociMap;
-            if (fromTop) {
-                if (dnaA.getGenome() != null && hasGenomeSequences(dnaA.getGenome())) {
-                    lociMap = DnaUtils.convertGenomeToLoci(dnaA.getGenome());
-                } else {
-                    lociMap = dnaA.getGenomeLociView();
-                }
-            } else {
-                if (dnaB.getGenome() != null && hasGenomeSequences(dnaB.getGenome())) {
-                    lociMap = DnaUtils.convertGenomeToLoci(dnaB.getGenome());
-                } else {
-                    lociMap = dnaB.getGenomeLociView();
-                }
-            }
-            List<GeneLocus> loci = lociMap.get(trait);
-            if (loci != null && !loci.isEmpty()) {
-                graphics.drawString(font, "Loci (" + loci.size() + "):", px + INNER_PADDING, lociY, 0xFFAAAAFF, false);
-
-                int locusEntryY = lociY + font.lineHeight;
-                int displayCount = Math.min(loci.size(), MAX_LOCI_DISPLAY);
-                for (int i = 0; i < displayCount; i++) {
-                    GeneLocus locus = loci.get(i);
-                    String locusId = locus.getId();
-                    String sourceName = locus.getSource().name();
-                    if (sourceName.length() > 3) sourceName = sourceName.substring(0, 3);
-
-                    String locusInfo = String.format("• %s [%s] s=%.2f", locusId, sourceName, locus.getStability());
-                    int maxLocusWidth = detailPanelWidth - INNER_PADDING * 2 - ELEMENT_SPACING;
-                    locusInfo = truncateToWidth(locusInfo, maxLocusWidth);
-
-                    graphics.drawString(font, locusInfo, px + INNER_PADDING + ELEMENT_SPACING, locusEntryY, locus.getSource().getColor().getColor(), false);
-                    locusEntryY += lociLineHeight;
-                }
-                if (loci.size() > displayCount) {
-                    graphics.drawString(font, "+" + (loci.size() - displayCount) + " more", px + INNER_PADDING + ELEMENT_SPACING, locusEntryY, 0xFF888888, false);
-                    locusEntryY += lociLineHeight;
-                }
-                opsStartY = locusEntryY + ELEMENT_SPACING;
-            } else {
-                opsStartY = lociY + font.lineHeight + ELEMENT_SPACING;
-            }
-        }
-
-        opsListX = px + INNER_PADDING;
-        opsListY = opsStartY;
-        opsListWidth = detailPanelWidth - INNER_PADDING * 2;
-        int maxOpsListHeight = py + detailPanelHeight - opsStartY - INNER_PADDING;
-        opsListHeight = Math.max(operationEntryHeight * 2, maxOpsListHeight);
-
-        calculateOperationsScroll();
-        renderOperationsList(graphics, opsListX, opsListY, opsListWidth, opsListHeight, mouseX, mouseY);
-    }
-
-    private void renderAlleleBox(GuiGraphics graphics, int bx, int by, int bw, int bh, String label, Allele allele, boolean selected, int mouseX, int mouseY) {
-        boolean hovered = mouseX >= bx && mouseX <= bx + bw && mouseY >= by && mouseY <= by + bh;
-
-        int bgColor = selected ? 0xFF2A2A5E : (hovered ? 0xFF252550 : 0xFF1E1E40);
-        graphics.fill(bx, by, bx + bw, by + bh, bgColor);
-        graphics.renderOutline(bx, by, bw, bh, selected ? 0xFF8888FF : 0xFF444488);
-
-        int textX = bx + ELEMENT_SPACING;
-        int textWidth = bw - ELEMENT_SPACING * 2;
-        int currentY = by + ELEMENT_SPACING;
-
-        graphics.drawString(font, label, textX, currentY, 0xFFAAAAFF, false);
-        currentY += alleleLineHeight;
-
-        String valueStr;
-        if (allele.getValueHolder() instanceof FloatAlleleValue fav) {
-            valueStr = String.format("%.3f", fav.get());
-        } else {
-            valueStr = allele.getValueHolder().format().getString();
-        }
-        valueStr = truncateToWidth(valueStr, textWidth);
-        graphics.drawString(font, valueStr, textX, currentY, 0xFFFFFFFF, false);
-        currentY += alleleLineHeight;
-
-        Dominance dom = allele.getDominance();
-        int domColor = switch (dom) {
-            case DOMINANT -> 0xFF44FF44;
-            case RECESSIVE -> 0xFFFF4444;
-            case CO_DOMINANT -> 0xFFFFFF44;
-            case INCOMPLETE -> 0xFF44FFFF;
-        };
-
-        String domStr = truncateToWidth(dom.name(), textWidth);
-        graphics.drawString(font, domStr, textX, currentY, domColor, false);
-        currentY += alleleLineHeight;
-
-        String mutStr = String.format("M:  %.1f%%", allele.getMutationRate() * 100);
-        mutStr = truncateToWidth(mutStr, textWidth);
-        graphics.drawString(font, mutStr, textX, currentY, 0xFF888888, false);
-    }
-
-    private void renderOperationsList(GuiGraphics graphics, int ox, int oy, int ow, int oh, int mouseX, int mouseY) {
-        graphics.fill(ox, oy, ox + ow, oy + oh, 0x44000000);
-        graphics.renderOutline(ox, oy, ow, oh, 0xFF3A3A6A);
-
-        graphics.drawString(font, "Ops:", ox + ELEMENT_SPACING, oy + (opsHeaderHeight - font.lineHeight) / 2, 0xFFAAAAFF, false);
-
-        int contentX = ox + ELEMENT_SPACING;
-        int contentY = oy + opsHeaderHeight;
-        int contentWidth = ow - SCROLLBAR_WIDTH - 2 - ELEMENT_SPACING * 2;
-        int contentHeight = getOpsContentHeight();
-
-        if (contentHeight <= 0) return;
-
-        enableScissor(graphics, contentX, contentY, contentWidth, contentHeight);
-
-        int entryY = contentY - scrollOffsetOps * operationEntryHeight;
-
-        for (GeneEditorOperation op : GeneEditorOperation.values()) {
-            int entryTop = entryY;
-            int entryBottom = entryY + operationEntryHeight - 1;
-
-            if (entryBottom > contentY && entryTop < contentY + contentHeight) {
-                boolean canPerform = GeneEditorOperations.canPerformOperation(player, op);
-                boolean opSelected = state.getCurrentOperation() == op;
-                boolean opHovered = mouseX >= contentX && mouseX <= contentX + contentWidth &&
-                        mouseY >= Math.max(contentY, entryTop) && mouseY < Math.min(contentY + contentHeight, entryBottom);
-
-                int bgColor = !canPerform ? 0xFF151520 : (opSelected ? 0xFF3A3A8A : (opHovered ? 0xFF2A2A5A : 0xFF1E1E40));
-
-                int clippedTop = Math.max(contentY, entryTop);
-                int clippedBottom = Math.min(contentY + contentHeight, entryBottom);
-                graphics.fill(contentX, clippedTop, contentX + contentWidth, clippedBottom, bgColor);
-
-                if (opSelected && clippedBottom - clippedTop > 2) {
-                    graphics.renderOutline(contentX, clippedTop, contentWidth, clippedBottom - clippedTop, 0xFF6666FF);
-                }
-
-                int textY = entryY + (operationEntryHeight - font.lineHeight) / 2;
-                if (textY >= contentY && textY + font.lineHeight <= contentY + contentHeight) {
-                    int textColor = !canPerform ? 0xFF555555 : (opSelected ? 0xFFFFFF44 : 0xFFDDDDDD);
-                    int lockIconWidth = canPerform ? 0 : font.width("X") + ELEMENT_SPACING;
-                    int maxOpWidth = contentWidth - ELEMENT_SPACING * 2 - lockIconWidth;
-                    String opName = truncateToWidth(op.getDisplayName().getString(), maxOpWidth);
-                    graphics.drawString(font, opName, contentX + ELEMENT_SPACING, textY, textColor, false);
-
-                    if (!canPerform) {
-                        graphics.drawString(font, "X", contentX + contentWidth - font.width("X") - ELEMENT_SPACING, textY, 0xFFFF4444, false);
-                    }
-                }
-            }
-
-            entryY += operationEntryHeight;
-        }
-
-        disableScissor(graphics);
-
-        int scrollbarX = ox + ow - SCROLLBAR_WIDTH - ELEMENT_SPACING;
-        renderScrollbar(graphics, scrollbarX, contentY, SCROLLBAR_WIDTH, contentHeight, maxScrollOps, scrollOffsetOps, mouseX, mouseY, draggingScrollbarOps, operationEntryHeight);
-    }
-
-    private String truncateToWidth(String text, int maxWidth) {
-        if (maxWidth <= 0) return "";
-        if (font.width(text) <= maxWidth) return text;
-
-        String ellipsis = ".. ";
-        int ellipsisWidth = font.width(ellipsis);
-
-        if (maxWidth <= ellipsisWidth) {
-            return text.substring(0, Math.min(1, text.length()));
-        }
-
-        int targetWidth = maxWidth - ellipsisWidth;
-        StringBuilder sb = new StringBuilder();
-        for (char c : text.toCharArray()) {
-            if (font.width(sb.toString() + c) > targetWidth) break;
-            sb.append(c);
-        }
-        return sb + ellipsis;
-    }
-
-    private String formatGeneValue(Gene gene) {
-        if (gene.getExpressedValueHolder() instanceof FloatAlleleValue fav) {
-            return String.format("%.3f", fav.get());
-        }
-        return gene.getExpressedValueHolder().format().getString();
-    }
-
-    @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
-            onClose();
-            return true;
-        }
-
-        if (keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER) {
-            executeOperation();
-            return true;
-        }
-
-        if (keyCode == GLFW.GLFW_KEY_R && (modifiers & GLFW.GLFW_MOD_CONTROL) != 0) {
-            resetChanges();
-            return true;
-        }
-
-        if (keyCode == GLFW.GLFW_KEY_TAB) {
-            cycleSelection((modifiers & GLFW.GLFW_MOD_SHIFT) != 0);
-            return true;
-        }
-
-        if (keyCode == GLFW.GLFW_KEY_UP) {
-            navigateOperations(-1);
-            return true;
-        }
-
-        if (keyCode == GLFW.GLFW_KEY_DOWN) {
-            navigateOperations(1);
-            return true;
-        }
-
-        if (keyCode == GLFW.GLFW_KEY_A && (modifiers & GLFW.GLFW_MOD_CONTROL) != 0) {
-            selectAlleleA();
-            return true;
-        }
-
-        if (keyCode == GLFW.GLFW_KEY_B && (modifiers & GLFW.GLFW_MOD_CONTROL) != 0) {
-            selectAlleleB();
-            return true;
-        }
-
-        if (keyCode >= GLFW.GLFW_KEY_1 && keyCode <= GLFW.GLFW_KEY_9) {
-            int opIndex = keyCode - GLFW.GLFW_KEY_1;
-            selectOperationByIndex(opIndex);
-            return true;
-        }
-
-        return super.keyPressed(keyCode, scanCode, modifiers);
-    }
-
-    private void cycleSelection(boolean reverse) {
-        List<Map.Entry<Trait, Gene>> allGenesA = new ArrayList<>(genesA.entrySet());
-        List<Map.Entry<Trait, Gene>> allGenesB = new ArrayList<>(genesB.entrySet());
-
-        if (allGenesA.isEmpty() && allGenesB.isEmpty()) return;
-
-        if (selectionA == null && selectionB == null) {
-            if (!allGenesA.isEmpty()) {
-                Map.Entry<Trait, Gene> first = allGenesA.get(0);
-                selectionA = new GeneSelection(first.getKey(), first.getValue());
-                state.selectGeneTop(first.getValue(), 0);
-            }
-            return;
-        }
-
-        if (selectionA != null) {
-            int currentIndex = getGeneIndex(genesA, selectionA.trait);
-            int nextIndex = reverse ? currentIndex - 1 : currentIndex + 1;
-
-            if (nextIndex >= 0 && nextIndex < allGenesA.size()) {
-                Map.Entry<Trait, Gene> next = allGenesA.get(nextIndex);
-                selectionA = new GeneSelection(next.getKey(), next.getValue());
-                state.selectGeneTop(next.getValue(), nextIndex);
-            } else if (!reverse && !allGenesB.isEmpty()) {
-                selectionA = null;
-                Map.Entry<Trait, Gene> first = allGenesB.get(0);
-                selectionB = new GeneSelection(first.getKey(), first.getValue());
-                state.selectGeneBottom(first.getValue(), 0);
-            }
-        } else if (selectionB != null) {
-            int currentIndex = getGeneIndex(genesB, selectionB.trait);
-            int nextIndex = reverse ? currentIndex - 1 : currentIndex + 1;
-
-            if (nextIndex >= 0 && nextIndex < allGenesB.size()) {
-                Map.Entry<Trait, Gene> next = allGenesB.get(nextIndex);
-                selectionB = new GeneSelection(next.getKey(), next.getValue());
-                state.selectGeneBottom(next.getValue(), nextIndex);
-            } else if (reverse && !allGenesA.isEmpty()) {
-                selectionB = null;
-                Map.Entry<Trait, Gene> last = allGenesA.get(allGenesA.size() - 1);
-                selectionA = new GeneSelection(last.getKey(), last.getValue());
-                state.selectGeneTop(last.getValue(), allGenesA.size() - 1);
-            }
-        }
-
-        state.clearAlleleSelection();
-        player.playSound(SoundEvents.UI_BUTTON_CLICK.get(), 0.3f, 1.0f);
-    }
-
-    private void navigateOperations(int direction) {
-        GeneEditorOperation[] ops = GeneEditorOperation.values();
-        GeneEditorOperation current = state.getCurrentOperation();
-
-        int currentIndex = 0;
-        for (int i = 0; i < ops.length; i++) {
-            if (ops[i] == current) {
-                currentIndex = i;
-                break;
-            }
-        }
-
-        int newIndex = currentIndex + direction;
-        if (newIndex < 0) newIndex = ops.length - 1;
-        if (newIndex >= ops.length) newIndex = 0;
-
-        state.setCurrentOperation(ops[newIndex]);
-
-        int opsContentHeight = getOpsContentHeight();
-        int visibleOps = Math.max(1, opsContentHeight / operationEntryHeight);
-        if (newIndex < scrollOffsetOps) {
-            scrollOffsetOps = newIndex;
-        } else if (newIndex >= scrollOffsetOps + visibleOps) {
-            scrollOffsetOps = newIndex - visibleOps + 1;
-        }
-
-        player.playSound(SoundEvents.UI_BUTTON_CLICK.get(), 0.3f, 1.2f);
-    }
-
-    private void selectAlleleA() {
-        Gene selectedGene = selectionA != null ? selectionA.gene : (selectionB != null ? selectionB.gene : null);
-        if (selectedGene != null) {
-            state.selectAllele(selectedGene.getAlleleA(), true, selectionA != null);
-            player.playSound(SoundEvents.UI_BUTTON_CLICK.get(), 0.3f, 1.2f);
-        }
-    }
-
-    private void selectAlleleB() {
-        Gene selectedGene = selectionA != null ? selectionA.gene : (selectionB != null ? selectionB.gene : null);
-        if (selectedGene != null) {
-            state.selectAllele(selectedGene.getAlleleB(), false, selectionA != null);
-            player.playSound(SoundEvents.UI_BUTTON_CLICK.get(), 0.3f, 1.2f);
-        }
-    }
-
-    private void selectOperationByIndex(int index) {
-        GeneEditorOperation[] ops = GeneEditorOperation.values();
-        if (index >= 0 && index < ops.length) {
-            if (GeneEditorOperations.canPerformOperation(player, ops[index])) {
-                state.setCurrentOperation(ops[index]);
-                player.playSound(SoundEvents.UI_BUTTON_CLICK.get(), 0.3f, 1.0f);
-            } else {
-                addStatusMessage(Component.translatable("gui.wildaside.gene_editor.skill_required").withStyle(ChatFormatting.RED));
-                player.playSound(SoundEvents.VILLAGER_NO, 0.3f, 1.0f);
-            }
+            graphics.drawString(font, statusMessages.get(statusMessages.size() - 1), 10, height - 15, COL_TEXT_VALUE, false);
         }
     }
 
@@ -848,419 +693,396 @@ public class AdvancedGeneEditorScreen extends Screen {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (super.mouseClicked(mouseX, mouseY, button)) return true;
 
-        if (button == 0) {
-            if (handleScrollbarClick(mouseX, mouseY)) return true;
-
-            int dnaPanelX = leftPos + OUTER_PADDING;
-            int dnaPanelAY = topPos + headerHeight + OUTER_PADDING;
-            int dnaPanelBY = dnaPanelAY + dnaPanelHeight + OUTER_PADDING;
-
-            if (handleDnaPanelClick(mouseX, mouseY, dnaPanelX, dnaPanelAY, genesA, true)) return true;
-            if (handleDnaPanelClick(mouseX, mouseY, dnaPanelX, dnaPanelBY, genesB, false)) return true;
-            if (handleDetailPanelClick(mouseX, mouseY)) return true;
+        if (Math.abs(mouseX - sidebarWidth) <= 2) {
+            isResizingSidebar = true;
+            return true;
+        }
+        if (Math.abs(mouseX - (width - infoPanelWidth)) <= 2) {
+            isResizingInfoPanel = true;
+            return true;
         }
 
-        return false;
+        if (button == 0) {
+            if (mouseX >= sidebarWidth - 4 && mouseX <= sidebarWidth && mouseY >= HEADER_HEIGHT && mouseY <= height - FOOTER_HEIGHT) {
+                isDraggingSidebarScroll = true;
+                scrollDragStartY = mouseY;
+                scrollDragStartValue = targetSidebarScroll;
+                return true;
+            }
+
+            if (mouseX >= width - 4 && mouseX <= width) {
+                int top = HEADER_HEIGHT;
+                int bottom = height - FOOTER_HEIGHT;
+                int height = bottom - top;
+                int halfHeight = height / 2;
+
+                if (mouseY >= top && mouseY <= top + halfHeight) {
+                    isDraggingInfoScrollA = true;
+                    scrollDragStartY = mouseY;
+                    scrollDragStartValue = targetInfoScrollA;
+                    return true;
+                } else if (mouseY >= top + halfHeight + 1 && mouseY <= bottom) {
+                    isDraggingInfoScrollB = true;
+                    scrollDragStartY = mouseY;
+                    scrollDragStartValue = targetInfoScrollB;
+                    return true;
+                }
+            }
+        }
+
+        boolean clickedSomething = false;
+
+        if (mouseX < sidebarWidth && mouseY > HEADER_HEIGHT && mouseY < height - FOOTER_HEIGHT) {
+            int y = (int) (HEADER_HEIGHT + 5 - sidebarScroll);
+            for (Map.Entry<TraitType, List<Trait>> entry : traitsByType.entrySet()) {
+                y += 14;
+                for (Trait trait : entry.getValue()) {
+                    if (mouseY >= y && mouseY < y + 14) {
+                        double targetAMat = getTrackScrollForTrait(genomeA, true, trait);
+                        double targetAPat = getTrackScrollForTrait(genomeA, false, trait);
+                        double targetBMat = getTrackScrollForTrait(genomeB, true, trait);
+                        double targetBPat = getTrackScrollForTrait(genomeB, false, trait);
+
+                        double centerOffset = (stripWidth / (double) (COMPONENT_SIZE + COMPONENT_SPACING)) / 4.0;
+
+                        targetScrollAMat = targetAMat - centerOffset;
+                        targetScrollAPat = targetAPat - centerOffset;
+                        targetScrollBMat = targetBMat - centerOffset;
+                        targetScrollBPat = targetBPat - centerOffset;
+
+                        scrollAMat = targetScrollAMat;
+                        scrollAPat = targetScrollAPat;
+                        scrollBMat = targetScrollBMat;
+                        scrollBPat = targetScrollBPat;
+
+                        player.playSound(SoundEvents.UI_BUTTON_CLICK.get(), 1f, 1f);
+                        selectedTraitA = trait;
+                        selectedTraitB = trait;
+                        clickedSomething = true;
+                    }
+                    y += 14;
+                }
+                y += 8;
+            }
+        }
+
+        if (button == 0) {
+            if (hoveredNode != null) {
+                if (hoveredNode.isGenomeA) {
+                    selectedComponentA = hoveredNode.component;
+                    selectedSequenceA = hoveredNode.sequence;
+                    selectedIsMaternalA = hoveredNode.isMaternal;
+                    selectedTraitA = hoveredNode.trait;
+                } else {
+                    selectedComponentB = hoveredNode.component;
+                    selectedSequenceB = hoveredNode.sequence;
+                    selectedIsMaternalB = hoveredNode.isMaternal;
+                    selectedTraitB = hoveredNode.trait;
+                }
+
+                draggedNode = hoveredNode;
+                player.playSound(SoundEvents.UI_BUTTON_CLICK.get(), 1f, 1f);
+                clickedSomething = true;
+            } else if (hoveredSequence != null && hoveredTrait != null) {
+                if (mouseY >= stripAY1 && mouseY <= stripAY2 + STRIP_HEIGHT + COMPONENT_SIZE) {
+                    selectedSequenceA = hoveredSequence;
+                    selectedComponentA = null;
+                    selectedIsGenomeA = true;
+                    selectedIsMaternalA = (mouseY >= stripAY1 && mouseY <= stripAY1 + STRIP_HEIGHT + COMPONENT_SIZE);
+                    selectedTraitA = hoveredTrait;
+                } else {
+                    selectedSequenceB = hoveredSequence;
+                    selectedComponentB = null;
+                    selectedIsGenomeA = false;
+                    selectedIsMaternalB = (mouseY >= stripBY1 && mouseY <= stripBY1 + STRIP_HEIGHT + COMPONENT_SIZE);
+                    selectedTraitB = hoveredTrait;
+                }
+
+                player.playSound(SoundEvents.UI_BUTTON_CLICK.get(), 1f, 1f);
+                clickedSomething = true;
+            }
+        }
+
+        if (button == 0 && mouseX > sidebarWidth && mouseX < width - infoPanelWidth && !clickedSomething) {
+            isDraggingView = true;
+            lastMouseX = mouseX;
+            clickedSomething = true;
+        }
+
+        if (!clickedSomething && button == 0) {
+            if (mouseX > sidebarWidth && mouseX < width - infoPanelWidth) {
+                selectedComponentA = null;
+                selectedComponentB = null;
+                selectedSequenceA = null;
+                selectedSequenceB = null;
+                selectedTraitA = null;
+                selectedTraitB = null;
+                return true;
+            }
+        }
+
+        return clickedSomething;
     }
 
-    private boolean handleScrollbarClick(double mouseX, double mouseY) {
-        int dnaPanelX = leftPos + OUTER_PADDING;
-        int dnaPanelAY = topPos + headerHeight + OUTER_PADDING;
-        int dnaPanelBY = dnaPanelAY + dnaPanelHeight + OUTER_PADDING;
+    private double getTrackScrollForTrait(Genome genome, boolean isMaternal, Trait targetTrait) {
+        if (genome == null) return 0;
+        ChromosomeSet chromSet = isMaternal ? genome.getMaternal() : genome.getPaternal();
+        if (chromSet == null) return 0;
 
-        int scrollbarX = dnaPanelX + dnaPanelWidth - SCROLLBAR_WIDTH - INNER_PADDING;
-        int contentYOffset = dnaPanelHeaderHeight;
-        int contentHeight = getDnaPanelContentHeight();
+        double currentX = 0;
+        for (Trait trait : allTraits) {
+            if (trait == targetTrait) return currentX / (COMPONENT_SIZE + COMPONENT_SPACING);
 
-        if (mouseX >= scrollbarX && mouseX <= scrollbarX + SCROLLBAR_WIDTH) {
-            if (mouseY >= dnaPanelAY + contentYOffset && mouseY <= dnaPanelAY + contentYOffset + contentHeight && maxScrollA > 0) {
-                draggingScrollbarA = true;
-                dragStartY = mouseY;
-                dragStartScroll = scrollOffsetA;
-                return true;
-            }
-
-            if (mouseY >= dnaPanelBY + contentYOffset && mouseY <= dnaPanelBY + contentYOffset + contentHeight && maxScrollB > 0) {
-                draggingScrollbarB = true;
-                dragStartY = mouseY;
-                dragStartScroll = scrollOffsetB;
-                return true;
+            GeneSequence seq = chromSet.getSequence(trait);
+            if (seq != null) {
+                int size = getAllComponents(seq).size();
+                currentX += size * (COMPONENT_SIZE + COMPONENT_SPACING);
             }
         }
-
-        if (opsListWidth > 0 && opsListHeight > 0) {
-            int opsScrollbarX = opsListX + opsListWidth - SCROLLBAR_WIDTH - ELEMENT_SPACING;
-            int opsContentY = opsListY + opsHeaderHeight;
-            int opsContentHeight = getOpsContentHeight();
-
-            if (mouseX >= opsScrollbarX && mouseX <= opsScrollbarX + SCROLLBAR_WIDTH &&
-                    mouseY >= opsContentY && mouseY <= opsContentY + opsContentHeight && maxScrollOps > 0) {
-                draggingScrollbarOps = true;
-                dragStartY = mouseY;
-                dragStartScroll = scrollOffsetOps;
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-        if (button == 0) {
-            if (draggingScrollbarA && maxScrollA > 0) {
-                int contentHeight = getDnaPanelContentHeight();
-                int totalContentHeight = maxScrollA * geneEntryHeight + contentHeight;
-                int thumbHeight = Math.max(SCROLLBAR_MIN_THUMB_HEIGHT, contentHeight * contentHeight / totalContentHeight);
-                int scrollRange = contentHeight - thumbHeight - 4;
-
-                if (scrollRange > 0) {
-                    double deltaY = mouseY - dragStartY;
-                    int scrollDelta = (int) (deltaY * maxScrollA / scrollRange);
-                    scrollOffsetA = Math.max(0, Math.min(maxScrollA, dragStartScroll + scrollDelta));
-                }
-                return true;
-            }
-
-            if (draggingScrollbarB && maxScrollB > 0) {
-                int contentHeight = getDnaPanelContentHeight();
-                int totalContentHeight = maxScrollB * geneEntryHeight + contentHeight;
-                int thumbHeight = Math.max(SCROLLBAR_MIN_THUMB_HEIGHT, contentHeight * contentHeight / totalContentHeight);
-                int scrollRange = contentHeight - thumbHeight - 4;
-
-                if (scrollRange > 0) {
-                    double deltaY = mouseY - dragStartY;
-                    int scrollDelta = (int) (deltaY * maxScrollB / scrollRange);
-                    scrollOffsetB = Math.max(0, Math.min(maxScrollB, dragStartScroll + scrollDelta));
-                }
-                return true;
-            }
-
-            if (draggingScrollbarOps && maxScrollOps > 0) {
-                int contentHeight = getOpsContentHeight();
-                int totalContentHeight = maxScrollOps * operationEntryHeight + contentHeight;
-                int thumbHeight = Math.max(SCROLLBAR_MIN_THUMB_HEIGHT, contentHeight * contentHeight / totalContentHeight);
-                int scrollRange = contentHeight - thumbHeight - 4;
-
-                if (scrollRange > 0) {
-                    double deltaY = mouseY - dragStartY;
-                    int scrollDelta = (int) (deltaY * maxScrollOps / scrollRange);
-                    scrollOffsetOps = Math.max(0, Math.min(maxScrollOps, dragStartScroll + scrollDelta));
-                }
-                return true;
-            }
-        }
-
-        return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+        return 0;
     }
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
         if (button == 0) {
-            draggingScrollbarA = false;
-            draggingScrollbarB = false;
-            draggingScrollbarOps = false;
+            if (draggedNode != null) {
+                handleDrop(mouseX, mouseY);
+                draggedNode = null;
+            }
+            isDraggingView = false;
+            isResizingSidebar = false;
+            isResizingInfoPanel = false;
+            isDraggingSidebarScroll = false;
+            isDraggingInfoScrollA = false;
+            isDraggingInfoScrollB = false;
         }
         return super.mouseReleased(mouseX, mouseY, button);
     }
 
-    private boolean handleDnaPanelClick(double mouseX, double mouseY, int px, int py, Map<Trait, Gene> genes, boolean isTop) {
-        int contentX = px + INNER_PADDING;
-        int contentY = py + dnaPanelHeaderHeight;
-        int contentWidth = dnaPanelWidth - INNER_PADDING * 2 - SCROLLBAR_WIDTH - 2;
-        int contentHeight = getDnaPanelContentHeight();
-
-        if (mouseX < contentX || mouseX > contentX + contentWidth || mouseY < contentY || mouseY > contentY + contentHeight) {
-            return false;
-        }
-
-        int scrollOffset = isTop ? scrollOffsetA : scrollOffsetB;
-        int entryY = contentY - scrollOffset * geneEntryHeight;
-        TraitType currentType = null;
-
-        for (Map.Entry<Trait, Gene> entry : genes.entrySet()) {
-            Trait trait = entry.getKey();
-            Gene gene = entry.getValue();
-
-            if (trait.getTraitType() != currentType) {
-                currentType = trait.getTraitType();
-                entryY += traitTypeHeaderHeight;
-            }
-
-            int entryTop = Math.max(contentY, entryY);
-            int entryBottom = Math.min(contentY + contentHeight, entryY + geneEntryHeight);
-
-            if (mouseY >= entryTop && mouseY < entryBottom && entryBottom > entryTop) {
-                if (isTop) {
-                    selectionA = new GeneSelection(trait, gene);
-                    state.selectGeneTop(gene, getGeneIndex(genes, trait));
-                } else {
-                    selectionB = new GeneSelection(trait, gene);
-                    state.selectGeneBottom(gene, getGeneIndex(genes, trait));
-                }
-                state.clearAlleleSelection();
-                player.playSound(SoundEvents.UI_BUTTON_CLICK.get(), 0.5f, 1.0f);
-                return true;
-            }
-
-            entryY += geneEntryHeight;
-        }
-
-        return false;
+    private void handleDrop(double mouseX, double mouseY) {
+        addStatusMessage(Component.translatable("gui.wildaside.gene_editor.dropped_debug"));
+        //!
     }
 
-    private boolean handleDetailPanelClick(double mouseX, double mouseY) {
-        int px = leftPos + OUTER_PADDING + dnaPanelWidth + OUTER_PADDING;
-        int py = topPos + headerHeight + OUTER_PADDING;
-
-        Gene selectedGene = selectionA != null ? selectionA.gene : (selectionB != null ? selectionB.gene : null);
-
-        if (handleOperationsClick(mouseX, mouseY)) return true;
-
-        if (selectedGene == null) return false;
-
-        int traitHeaderY = py + INNER_PADDING + font.lineHeight + ELEMENT_SPACING;
-        int alleleY = traitHeaderY + traitHeaderHeight + ELEMENT_SPACING + font.lineHeight + ELEMENT_SPACING;
-        int alleleBoxWidth = (detailPanelWidth - INNER_PADDING * 2 - ELEMENT_SPACING) / 2;
-
-        int alleleAX = px + INNER_PADDING;
-        int alleleBX = px + INNER_PADDING + alleleBoxWidth + ELEMENT_SPACING;
-
-        if (mouseX >= alleleAX && mouseX <= alleleAX + alleleBoxWidth && mouseY >= alleleY && mouseY <= alleleY + alleleBoxHeight) {
-            state.selectAllele(selectedGene.getAlleleA(), true, selectionA != null);
-            player.playSound(SoundEvents.UI_BUTTON_CLICK.get(), 0.5f, 1.2f);
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
+        if (isResizingSidebar) {
+            sidebarWidth = (int) Math.max(50, Math.min(width / 2, mouseX));
+            updateLayout();
+            return true;
+        }
+        if (isResizingInfoPanel) {
+            infoPanelWidth = (int) Math.max(50, Math.min(width / 2, width - mouseX));
+            updateLayout();
             return true;
         }
 
-        if (mouseX >= alleleBX && mouseX <= alleleBX + alleleBoxWidth && mouseY >= alleleY && mouseY <= alleleY + alleleBoxHeight) {
-            state.selectAllele(selectedGene.getAlleleB(), false, selectionA != null);
-            player.playSound(SoundEvents.UI_BUTTON_CLICK.get(), 0.5f, 1.2f);
+        if (isDraggingSidebarScroll) {
+            int visibleHeight = height - HEADER_HEIGHT - FOOTER_HEIGHT;
+            double maxScroll = Math.max(0, sidebarContentHeight - visibleHeight);
+            double delta = (mouseY - scrollDragStartY) / (double) (visibleHeight - 20) * maxScroll;
+            targetSidebarScroll = Mth.clamp(scrollDragStartValue + delta, 0, maxScroll);
             return true;
         }
 
-        return false;
-    }
-
-    private boolean handleOperationsClick(double mouseX, double mouseY) {
-        if (opsListWidth <= 0 || opsListHeight <= 0) return false;
-
-        int contentX = opsListX + ELEMENT_SPACING;
-        int contentY = opsListY + opsHeaderHeight;
-        int contentWidth = opsListWidth - SCROLLBAR_WIDTH - 2 - ELEMENT_SPACING * 2;
-        int contentHeight = getOpsContentHeight();
-
-        if (mouseX < contentX || mouseX > contentX + contentWidth || mouseY < contentY || mouseY > contentY + contentHeight) {
-            return false;
+        if (isDraggingInfoScrollA) {
+            int visibleHeight = (height - HEADER_HEIGHT - FOOTER_HEIGHT) / 2;
+            double maxScroll = Math.max(0, infoContentHeightA - visibleHeight);
+            double delta = (mouseY - scrollDragStartY) / (double) (visibleHeight - 20) * maxScroll;
+            targetInfoScrollA = Mth.clamp(scrollDragStartValue + delta, 0, maxScroll);
+            return true;
         }
 
-        int entryY = contentY - scrollOffsetOps * operationEntryHeight;
+        if (isDraggingInfoScrollB) {
+            int totalHeight = height - HEADER_HEIGHT - FOOTER_HEIGHT;
+            int visibleHeight = totalHeight - (totalHeight / 2) - 1;
+            double maxScroll = Math.max(0, infoContentHeightB - visibleHeight);
+            double delta = (mouseY - scrollDragStartY) / (double) (visibleHeight - 20) * maxScroll;
+            targetInfoScrollB = Mth.clamp(scrollDragStartValue + delta, 0, maxScroll);
+            return true;
+        }
 
-        for (GeneEditorOperation op : GeneEditorOperation.values()) {
-            int entryTop = Math.max(contentY, entryY);
-            int entryBottom = Math.min(contentY + contentHeight, entryY + operationEntryHeight);
+        if (isDraggingView && draggedNode == null) {
+            double delta = dragX / (COMPONENT_SIZE + COMPONENT_SPACING);
 
-            if (mouseY >= entryTop && mouseY < entryBottom && entryBottom > entryTop) {
-                if (GeneEditorOperations.canPerformOperation(player, op)) {
-                    state.setCurrentOperation(op);
-                    player.playSound(SoundEvents.UI_BUTTON_CLICK.get(), 0.5f, 1.0f);
-                    return true;
+            if (lockPairs) {
+                targetScrollAMat -= delta;
+                targetScrollAPat -= delta;
+                targetScrollBMat -= delta;
+                targetScrollBPat -= delta;
+            } else {
+                boolean draggingA = mouseY < height / 2;
+
+                if (draggingA) {
+                    if (lockGenomeA) {
+                        targetScrollAMat -= delta;
+                        targetScrollAPat -= delta;
+                    } else {
+                        if (mouseY < stripAY2) targetScrollAMat -= delta;
+                        else targetScrollAPat -= delta;
+                    }
                 } else {
-                    addStatusMessage(Component.translatable("gui.wildaside.gene_editor.skill_required")
-                            .withStyle(ChatFormatting.RED));
-                    player.playSound(SoundEvents.VILLAGER_NO, 0.5f, 1.0f);
-                    return true;
+                    if (lockGenomeB) {
+                        targetScrollBMat -= delta;
+                        targetScrollBPat -= delta;
+                    } else {
+                        if (mouseY < stripBY2) targetScrollBMat -= delta;
+                        else targetScrollBPat -= delta;
+                    }
                 }
             }
-            entryY += operationEntryHeight;
-        }
 
-        return false;
+            scrollAMat = targetScrollAMat;
+            scrollAPat = targetScrollAPat;
+            scrollBMat = targetScrollBMat;
+            scrollBPat = targetScrollBPat;
+
+            return true;
+        }
+        return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
     }
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
-        int dnaPanelX = leftPos + OUTER_PADDING;
-        int dnaPanelAY = topPos + headerHeight + OUTER_PADDING;
-        int dnaPanelBY = dnaPanelAY + dnaPanelHeight + OUTER_PADDING;
-
-        if (mouseX >= dnaPanelX && mouseX <= dnaPanelX + dnaPanelWidth) {
-            if (mouseY >= dnaPanelAY && mouseY <= dnaPanelAY + dnaPanelHeight) {
-                scrollOffsetA = Math.max(0, Math.min(maxScrollA, scrollOffsetA - (int) delta));
-                return true;
-            }
-
-            if (mouseY >= dnaPanelBY && mouseY <= dnaPanelBY + dnaPanelHeight) {
-                scrollOffsetB = Math.max(0, Math.min(maxScrollB, scrollOffsetB - (int) delta));
-                return true;
-            }
-        }
-
-        if (opsListWidth > 0 && opsListHeight > 0 &&
-                mouseX >= opsListX && mouseX <= opsListX + opsListWidth &&
-                mouseY >= opsListY && mouseY <= opsListY + opsListHeight) {
-            scrollOffsetOps = Math.max(0, Math.min(maxScrollOps, scrollOffsetOps - (int) delta));
+        if (mouseX < sidebarWidth) {
+            targetSidebarScroll -= delta * 20;
+            int visibleHeight = height - HEADER_HEIGHT - FOOTER_HEIGHT;
+            targetSidebarScroll = Mth.clamp(targetSidebarScroll, 0, Math.max(0, sidebarContentHeight - visibleHeight));
             return true;
         }
 
-        return super.mouseScrolled(mouseX, mouseY, delta);
-    }
+        if (mouseX > width - infoPanelWidth) {
+            int top = HEADER_HEIGHT;
+            int bottom = height - FOOTER_HEIGHT;
+            int height = bottom - top;
+            int halfHeight = height / 2;
 
-    private void executeOperation() {
-        GeneEditorOperation op = state.getCurrentOperation();
-
-        if (dnaA == null && dnaB == null) {
-            addStatusMessage(Component.translatable("gui.wildaside.gene_editor.need_both_dna").withStyle(ChatFormatting.RED));
-            return;
-        }
-
-        if (!GeneEditorOperations.canPerformOperation(player, op)) {
-            addStatusMessage(Component.translatable("gui.wildaside.gene_editor.skill_required").withStyle(ChatFormatting.RED));
-            return;
-        }
-
-        GeneEditorResult result = null;
-
-        switch (op) {
-            case SWAP_TRAIT -> {
-                if (selectionA == null || selectionB == null) {
-                    addStatusMessage(Component.translatable("gui.wildaside.gene_editor.select_both").withStyle(ChatFormatting.YELLOW));
-                    return;
-                }
-                if (!selectionA.trait.equals(selectionB.trait)) {
-                    addStatusMessage(Component.translatable("gui.wildaside.gene_editor.traits_must_match").withStyle(ChatFormatting.RED));
-                    return;
-                }
-                result = GeneEditorOperations.swapTrait(dnaA, state.getSelectedGeneTopIndex(),
-                        dnaB, state.getSelectedGeneBottomIndex(),
-                        new ArrayList<>(genesA.values()), new ArrayList<>(genesB.values()));
-            }
-            case SWAP_ALLELE -> {
-                if (selectionA == null || selectionB == null || state.getSelectedAllele() == null) {
-                    addStatusMessage(Component.translatable("gui.wildaside.gene_editor.select_allele").withStyle(ChatFormatting.YELLOW));
-                    return;
-                }
-                if (!selectionA.trait.equals(selectionB.trait)) {
-                    addStatusMessage(Component.translatable("gui.wildaside.gene_editor.traits_must_match").withStyle(ChatFormatting.RED));
-                    return;
-                }
-                result = GeneEditorOperations.swapAllele(dnaA, selectionA.gene, state.isSelectedAlleleA(),
-                        dnaB, selectionB.gene, !state.isSelectedAlleleA());
-            }
-            case STABILIZE -> {
-                Gene target = selectionA != null ? selectionA.gene : selectionB.gene;
-                DnaImplementation targetDna = selectionA != null ? dnaA : dnaB;
-                if (target == null || targetDna == null) {
-                    addStatusMessage(Component.translatable("gui.wildaside.gene_editor.select_gene_first").withStyle(ChatFormatting.YELLOW));
-                    return;
-                }
-                result = GeneEditorOperations.stabilize(targetDna, target, 0.1f);
-            }
-            case AMPLIFY -> {
-                Gene target = selectionA != null ? selectionA.gene : selectionB.gene;
-                DnaImplementation targetDna = selectionA != null ? dnaA : dnaB;
-                if (target == null || targetDna == null) {
-                    addStatusMessage(Component.translatable("gui.wildaside.gene_editor.select_gene_first").withStyle(ChatFormatting.YELLOW));
-                    return;
-                }
-                result = GeneEditorOperations.amplify(targetDna, target, 1.2f);
-            }
-            case SUPPRESS -> {
-                Gene target = selectionA != null ? selectionA.gene : selectionB.gene;
-                DnaImplementation targetDna = selectionA != null ? dnaA : dnaB;
-                if (target == null || targetDna == null) {
-                    addStatusMessage(Component.translatable("gui.wildaside.gene_editor.select_gene_first").withStyle(ChatFormatting.YELLOW));
-                    return;
-                }
-                result = GeneEditorOperations.suppress(targetDna, target, 1.2f);
-            }
-            case MERGE_LOCI -> {
-                if (selectionA == null || selectionB == null) {
-                    addStatusMessage(Component.translatable("gui.wildaside.gene_editor.select_both").withStyle(ChatFormatting.YELLOW));
-                    return;
-                }
-                result = GeneEditorOperations.mergeLoci(dnaA, selectionA.gene, dnaB, selectionB.gene);
-            }
-            case MODIFY_DOMINANCE -> {
-                if (state.getSelectedAllele() == null) {
-                    addStatusMessage(Component.translatable("gui.wildaside.gene_editor.select_allele").withStyle(ChatFormatting.YELLOW));
-                    return;
-                }
-                Gene target = selectionA != null ? selectionA.gene : selectionB.gene;
-                DnaImplementation targetDna = selectionA != null ? dnaA : dnaB;
-                if (target == null || targetDna == null) {
-                    addStatusMessage(Component.translatable("gui.wildaside.gene_editor.select_gene_first").withStyle(ChatFormatting.YELLOW));
-                    return;
-                }
-                Dominance current = state.getSelectedAllele().getDominance();
-                Dominance next = getNextDominance(current);
-                result = GeneEditorOperations.modifyDominance(targetDna, target, state.isSelectedAlleleA(), next);
-            }
-            case ISOLATE_ALLELE -> {
-                addStatusMessage(Component.literal("Isolate not yet implemented").withStyle(ChatFormatting.YELLOW));
-                return;
-            }
-        }
-
-        if (result != null) {
-            if (result.isSuccess()) {
-                addStatusMessage(Component.literal(result.getMessage()).withStyle(ChatFormatting.GREEN));
-                player.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP, 0.5f, 1.0f);
-                rebuildGenes();
-
-                selectionA = null;
-                selectionB = null;
-                state.clearSelection();
-
-                NetworkHandler.sendGeneEditorUpdatePacket(workstationPos, dnaA, dnaB);
+            if (mouseY < top + halfHeight) {
+                targetInfoScrollA -= delta * 20;
+                targetInfoScrollA = Mth.clamp(targetInfoScrollA, 0, Math.max(0, infoContentHeightA - halfHeight));
             } else {
-                addStatusMessage(Component.literal(result.getMessage()).withStyle(ChatFormatting.RED));
-                player.playSound(SoundEvents.VILLAGER_NO, 0.5f, 1.0f);
+                targetInfoScrollB -= delta * 20;
+                targetInfoScrollB = Mth.clamp(targetInfoScrollB, 0, Math.max(0, infoContentHeightB - (height - halfHeight)));
+            }
+            return true;
+        }
+
+        if (lockPairs) {
+            targetScrollAMat -= delta * 2;
+            targetScrollAPat -= delta * 2;
+            targetScrollBMat -= delta * 2;
+            targetScrollBPat -= delta * 2;
+        } else {
+            boolean inA = mouseY < height / 2;
+            if (inA) {
+                if (lockGenomeA) {
+                    targetScrollAMat -= delta * 2;
+                    targetScrollAPat -= delta * 2;
+                } else {
+                    if (mouseY < stripAY2) targetScrollAMat -= delta * 2;
+                    else targetScrollAPat -= delta * 2;
+                }
+            } else {
+                if (lockGenomeB) {
+                    targetScrollBMat -= delta * 2;
+                    targetScrollBPat -= delta * 2;
+                } else {
+                    if (mouseY < stripBY2) targetScrollBMat -= delta * 2;
+                    else targetScrollBPat -= delta * 2;
+                }
             }
         }
+        return true;
     }
 
-    private Dominance getNextDominance(Dominance current) {
-        return switch (current) {
-            case DOMINANT -> Dominance.RECESSIVE;
-            case RECESSIVE -> Dominance.CO_DOMINANT;
-            case CO_DOMINANT -> Dominance.INCOMPLETE;
-            case INCOMPLETE -> Dominance.DOMINANT;
-        };
-    }
-
-    private void resetChanges() {
-        state.clearSelection();
-        selectionA = null;
-        selectionB = null;
-        scrollOffsetOps = 0;
-        statusMessages.clear();
-        addStatusMessage(Component.translatable("gui.wildaside.gene_editor.reset_done").withStyle(ChatFormatting.YELLOW));
-        player.playSound(SoundEvents.UI_BUTTON_CLICK.get(), 0.5f, 0.8f);
-    }
-
-    private void addStatusMessage(Component message) {
-        statusMessages.add(message);
-        if (statusMessages.size() > 5) {
-            statusMessages.remove(0);
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (ModKeyMappings.GENE_EDITOR_LOCK_SCROLL.matches(keyCode, scanCode)) {
+            lockPairs = !lockPairs;
+            return true;
         }
+        if (ModKeyMappings.GENE_EDITOR_RESET_SCROLL.matches(keyCode, scanCode)) {
+            targetScrollAMat = 0;
+            targetScrollAPat = 0;
+            targetScrollBMat = 0;
+            targetScrollBPat = 0;
+            return true;
+        }
+        if (ModKeyMappings.GENE_EDITOR_EXECUTE.matches(keyCode, scanCode)) {
+            executeOperation();
+            return true;
+        }
+        if (ModKeyMappings.GENE_EDITOR_RESET_CHANGES.matches(keyCode, scanCode)) {
+            resetChanges();
+            return true;
+        }
+        if (keyCode == GLFW.GLFW_KEY_LEFT) {
+            targetScrollAMat -= 2;
+            targetScrollAPat -= 2;
+            targetScrollBMat -= 2;
+            targetScrollBPat -= 2;
+            return true;
+        }
+        if (keyCode == GLFW.GLFW_KEY_RIGHT) {
+            targetScrollAMat += 2;
+            targetScrollAPat += 2;
+            targetScrollBMat += 2;
+            targetScrollBPat += 2;
+            return true;
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
-    private int getGeneIndex(Map<Trait, Gene> genes, Trait trait) {
-        int index = 0;
-        for (Trait t : genes.keySet()) {
-            if (t.equals(trait)) return index;
-            index++;
+    private List<Object> getAllComponents(GeneSequence seq) {
+        List<Object> list = new ArrayList<>();
+        if (!seq.getComponents().isEmpty() && seq.getComponents().get(0) instanceof TraitDefiner) {
+            list.add(seq.getComponents().get(0));
         }
-        return -1;
+
+        for (GeneComponent component : seq.getComponents()) {
+            if (!(component instanceof TraitDefiner)) {
+                list.add(component);
+            }
+        }
+        return list;
+    }
+
+    private int getComponentColor(Object comp) {
+//        if (comp instanceof CodingRegion) return 0xFF4CAF50; //Green
+//        if (comp instanceof Activator) return 0xFF03A9F4; //Light Blue
+//        if (comp instanceof Enhancer) return 0xFFFFC107; //Material Amber
+//        if (comp instanceof Silencer) return 0xFFF44336; //Material Red
+//        if (comp instanceof Regulator) return 0xFF9C27B0; //Material Purple
+//        if (comp instanceof TraitDefiner) return 0xFFE91E63; //Material Pink
+//        return 0xFF9E9E9E; //Grey 500
+        return 0xFFFFFFFF;
+    }
+
+    private Component getComponentType(Object comp) {
+        if (comp instanceof CodingRegion)
+            return Component.translatable("gui.wildaside.gene_editor.component.coding_region");
+        if (comp instanceof Activator) return Component.translatable("gui.wildaside.gene_editor.component.activator");
+        if (comp instanceof Enhancer) return Component.translatable("gui.wildaside.gene_editor.component.enhancer");
+        if (comp instanceof Silencer) return Component.translatable("gui.wildaside.gene_editor.component.silencer");
+        if (comp instanceof Regulator) return Component.translatable("gui.wildaside.gene_editor.component.regulator");
+        if (comp instanceof TraitDefiner)
+            return Component.translatable("gui.wildaside.gene_editor.component.trait_definer");
+        return Component.translatable("gui.wildaside.gene_editor.component.unknown");
+    }
+
+    private String truncate(String s, int width) {
+        if (font.width(s) <= width) return s;
+        return s.substring(0, Math.min(s.length(), 10)) + "...";
+    }
+
+    private void addStatusMessage(Component msg) {
+        statusMessages.add(msg);
+        if (statusMessages.size() > 5) statusMessages.remove(0);
     }
 
     private void enableScissor(GuiGraphics graphics, int x, int y, int width, int height) {
-        double guiScale = minecraft.getWindow().getGuiScale();
-        int sx = (int) (x * guiScale);
-        int sy = (int) ((this.height - (y + height)) * guiScale);
-        int sw = (int) (width * guiScale);
-        int sh = (int) (height * guiScale);
-        RenderSystem.enableScissor(sx, sy, sw, sh);
+        double scale = minecraft.getWindow().getGuiScale();
+        RenderSystem.enableScissor((int) (x * scale), (int) ((this.height - y - height) * scale), (int) (width * scale), (int) (height * scale));
     }
 
     private void disableScissor(GuiGraphics graphics) {
@@ -1272,10 +1094,48 @@ public class AdvancedGeneEditorScreen extends Screen {
         return false;
     }
 
-    private boolean hasGenomeSequences(Genome genome) {
-        return DnaUtils.hasGenomeSequences(genome);
+    public void onClose() {
+        this.minecraft.setScreen(null);
     }
 
-    private record GeneSelection(Trait trait, Gene gene) {
+    private void executeOperation() {
+        addStatusMessage(Component.translatable("gui.wildaside.gene_editor.execute"));
+        //!
     }
+
+    private void resetChanges() {
+        selectedComponentA = null;
+        selectedComponentB = null;
+        selectedSequenceA = null;
+        selectedSequenceB = null;
+        selectedTraitA = null;
+        selectedTraitB = null;
+        addStatusMessage(Component.translatable("gui.wildaside.gene_editor.reset_done"));
+    }
+
+    private static class VisualNode {
+        final Object component;
+        final Trait trait;
+        final GeneSequence sequence;
+        final boolean isMaternal;
+        final boolean isGenomeA;
+        final int x, y;
+        final boolean flipped;
+
+        VisualNode(Object component, Trait trait, GeneSequence sequence, boolean isMaternal, boolean isGenomeA, int x, int y, boolean flipped) {
+            this.component = component;
+            this.trait = trait;
+            this.sequence = sequence;
+            this.isMaternal = isMaternal;
+            this.isGenomeA = isGenomeA;
+            this.x = x;
+            this.y = y;
+            this.flipped = flipped;
+        }
+    }
+
+    @Nullable
+    private VisualNode draggedNode = null;
+    @Nullable
+    private VisualNode hoveredNode = null;
 }

@@ -306,6 +306,15 @@ public class WildAside {
                     return Mth.clamp(p / SyringeItem.DEFAULT_MAX_LOAD, 0f, 1f);
                 }
         );
+
+        ItemProperties.register(
+                ModItems.GENE.get(),
+                new ResourceLocation(WildAside.MOD_ID, "flipped"),
+                (stack, level, entity, seed) -> {
+                    if (!stack.hasTag()) return 0f;
+                    return stack.getTag().getBoolean("flipped") ? 1f : 0f;
+                }
+        );
     }
 
     @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.DEDICATED_SERVER)

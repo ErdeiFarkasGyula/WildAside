@@ -4,7 +4,7 @@ import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.advancement.ModAdvancements;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.particle.ModParticles;
-import net.farkas.wildaside.advancement.AdvancementHandler;
+import net.farkas.wildaside.advancement.AdvancementUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -80,7 +80,7 @@ class LifestealHandler {
             Task t = it.next();
 
             var attacker = t.level.getEntity(t.attackerId);
-            var target   = t.level.getEntity(t.targetId);
+            var target = t.level.getEntity(t.targetId);
 
             if (!(attacker instanceof LivingEntity a) || !(target instanceof LivingEntity b)) {
                 it.remove();
@@ -90,7 +90,7 @@ class LifestealHandler {
             double ax = a.getX(), ay = a.getY() + a.getBbHeight() * 0.5, az = a.getZ();
             double tx = b.getX(), ty = b.getY() + b.getBbHeight() * 0.5, tz = b.getZ();
 
-            double prog = (double)t.ticksElapsed / t.totalTicks;
+            double prog = (double) t.ticksElapsed / t.totalTicks;
             double px = Mth.lerp(prog, tx, ax);
             double py = Mth.lerp(prog, ty, ay);
             double pz = Mth.lerp(prog, tz, az);
@@ -100,7 +100,7 @@ class LifestealHandler {
             t.ticksElapsed++;
             if (t.ticksElapsed >= t.totalTicks) {
                 if (a instanceof ServerPlayer serverPlayer) {
-                    AdvancementHandler.givePlayerAdvancement(serverPlayer, ModAdvancements.LIFE_LEECH);
+                    AdvancementUtils.givePlayerAdvancement(serverPlayer, ModAdvancements.LIFE_LEECH);
                 }
                 a.heal(t.healAmount);
                 it.remove();

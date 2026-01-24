@@ -3,30 +3,32 @@ package net.farkas.wildaside.dna.bacillus_blob;
 import net.farkas.wildaside.WildAside;
 import net.farkas.wildaside.capability.dna.DnaCapability;
 import net.farkas.wildaside.capability.dna.DnaImplementation;
-import net.farkas.wildaside.dna.locus.GeneLocus;
-import net.farkas.wildaside.dna.locus.LocusSource;
-import net.farkas.wildaside.dna.merge.*;
+import net.farkas.wildaside.dna.DnaUtils;
+import net.farkas.wildaside.dna.chromosome.Chromosome;
+import net.farkas.wildaside.dna.chromosome.ChromosomeSet;
+import net.farkas.wildaside.dna.chromosome.Genome;
+import net.farkas.wildaside.dna.sequence.GeneSequence;
+import net.farkas.wildaside.dna.sequence.GeneSource;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Random;
 
 import static net.farkas.wildaside.dna.DnaConstants.DNA_DATA;
 
 public class BacillusBlobConsumption {
+    private static final float INTEGRATION_CHANCE = 0.4f;
+    private static final float REJECTION_CHANCE = 0.3f;
+    private static final float STRESS_PER_SEQUENCE = 2.0f;
+
     public static boolean consume(LivingEntity entity, CompoundTag blobTag) {
         WildAside.LOGGER.info("######################################");
-        WildAside.LOGGER.info("# BACILLUS BLOB CONSUMPTION START");
+        WildAside.LOGGER.info("# BACILLUS BLOB CONSUMPTION START (SEQUENCE-BASED)");
         WildAside.LOGGER.info("# Entity: {}", entity.getName().getString());
         WildAside.LOGGER.info("######################################");
-
-        WildAside.LOGGER.debug("Blob tag keys: {}", blobTag.getAllKeys());
 
         if (!blobTag.contains(DNA_DATA)) {
             WildAside.LOGGER.warn("Blob has no DNA_DATA key, consumption failed");
@@ -42,91 +44,95 @@ public class BacillusBlobConsumption {
         DnaImplementation invaderDna = new DnaImplementation();
         invaderDna.deserializeNBT(dnaTag);
 
-        WildAside.LOGGER.info("Invader DNA source: {}", invaderDna.getSource());
-        WildAside.LOGGER.info("Invader DNA loci count: {}", invaderDna.getGenomeLociView().size());
-
-        if (invaderDna.getGenomeLociView().isEmpty()) {
-            WildAside.LOGGER.warn("Invader DNA has no loci after deserialization, consumption failed");
+        Genome invaderGenome = invaderDna.getGenome();
+        if (invaderGenome == null || invaderGenome.getMaternal().getAllChromosomes().isEmpty()) {
+            WildAside.LOGGER.warn("Invader genome has no sequences, consumption failed");
             return false;
         }
 
-        for (Map.Entry<Trait, List<GeneLocus>> entry : invaderDna.getGenomeLociView().entrySet()) {
-            WildAside.LOGGER.info("  Invader trait [{}]: {} loci", entry.getKey().getName(), entry.getValue().size());
-        }
+        WildAside.LOGGER.info("Invader genome source: {}", invaderGenome.getEntityType());
+        WildAside.LOGGER.info("Invader maternal chromosomes: {}", 
+                invaderGenome.getMaternal().getAllChromosomes().size());
 
         final boolean[] success = {false};
 
         entity.getCapability(DnaCapability.INSTANCE).ifPresent(hostDna -> {
-            Map<Trait, List<GeneLocus>> hostLoci = hostDna.getGenomeLociView();
-            Map<Trait, List<GeneLocus>> invaderLoci = invaderDna.getGenomeLociView();
+            Genome hostGenome = hostDna.getGenome();
+            if (hostGenome == null) {
+                hostGenome = DnaUtils.generateBaseGenome(entity);
+                hostDna.setGenome(hostGenome);
+            }
 
-            WildAside.LOGGER.info("Host DNA loci count: {}", hostLoci.size());
+            WildAside.LOGGER.info("Host genome chromosomes: {}", 
+                    hostGenome.getMaternal().getAllChromosomes().size());
             WildAside.LOGGER.info("Host stress before consumption: {}", hostDna.getStress());
-            WildAside.LOGGER.info("Host pending integrations:  {}", hostDna.getPendingIntegrations().size());
-            WildAside.LOGGER.info("Host existing invading loci: {}", hostDna.getInvadingLoci().size());
 
             long currentTick = entity.level().getGameTime();
             long seed = entity.getUUID().getLeastSignificantBits() ^ currentTick;
+            Random random = new Random(seed);
 
-            MergeResult result = DnaMerger.merge(
-                    hostLoci,
-                    invaderLoci,
-                    hostDna.getStress(),
-                    currentTick,
-                    seed
-            );
+            int integrated = 0;
+            int transient_ = 0;
+            int rejected = 0;
+            float totalStress = 0f;
 
-            WildAside.LOGGER.info("Merge analysis complete:");
-            WildAside.LOGGER.info("  - Will integrate:  {}", result.getIntegratedCount());
-            WildAside.LOGGER.info("  - Will be transient: {}", result.getTransientCount());
-            WildAside.LOGGER.info("  - Will be rejected: {}", result.getRejectedCount());
-            WildAside.LOGGER.info("  - Estimated stress gain: {}", result.stressGain());
+            ChromosomeSet invaderMaternalSet = invaderGenome.getMaternal();
 
-            Map<Trait, List<GeneLocus>> newInvadingLoci = new HashMap<>();
+            for (Chromosome invaderChromosome : invaderMaternalSet.getAllChromosomes()) {
+                for (Trait trait : net.farkas.wildaside.dna.trait.TraitRegistry.getAllTraits()) {
+                    GeneSequence invaderSeq = invaderChromosome.getGeneSequence(trait);
+                    if (invaderSeq == null) continue;
 
-            int queued = 0;
-            for (MergeEvent event : result.events()) {
-                GeneLocus locusToIntegrate = event.invadingLocus();
-                MergeOutcomeType outcomeType = event.outcome().type();
+                    float roll = random.nextFloat();
+                    GeneSource newSource;
+                    
+                    if (roll < INTEGRATION_CHANCE) {
+                        newSource = GeneSource.INTEGRATED;
+                        integrated++;
+                        totalStress += STRESS_PER_SEQUENCE * 0.8f;
+                    } else if (roll < INTEGRATION_CHANCE + REJECTION_CHANCE) {
+                        newSource = GeneSource.MUTATED;
+                        rejected++;
+                        totalStress += STRESS_PER_SEQUENCE * 0.5f;
+                    } else {
+                        newSource = GeneSource.INTEGRATED;
+                        transient_++;
+                        totalStress += STRESS_PER_SEQUENCE;
+                    }
 
-                LocusSource source = switch (outcomeType) {
-                    case INTEGRATED, REPLACED -> LocusSource.INTEGRATED;
-                    case TRANSIENT -> LocusSource.TRANSIENT;
-                    case REJECTED -> LocusSource.REJECTED;
-                };
+                    GeneSequence.Builder builder = GeneSequence.builder()
+                            .trait(trait)
+                            .dominance(invaderSeq.getDominance())
+                            .mutationRate(invaderSeq.getMutationRate())
+                            .stability(invaderSeq.getStability())
+                            .source(newSource);
+                    
+                    invaderSeq.getCodingRegions().forEach(builder::codingRegion);
+                    invaderSeq.getActivators().forEach(builder::activator);
+                    invaderSeq.getEnhancers().forEach(builder::enhancer);
+                    invaderSeq.getSilencers().forEach(builder::silencer);
+                    invaderSeq.getRegulators().forEach(builder::regulator);
+                    
+                    GeneSequence taggedSeq = builder.build();
 
-                GeneLocus taggedLocus = locusToIntegrate.withSource(source, currentTick);
-
-                newInvadingLoci.computeIfAbsent(event.trait(), k -> new ArrayList<>()).add(taggedLocus);
-
-                PendingDnaIntegration pending = new PendingDnaIntegration(
-                        event.trait(),
-                        taggedLocus,
-                        outcomeType,
-                        currentTick
-                );
-
-                hostDna.addPendingIntegration(pending);
-                queued++;
-
-                WildAside.LOGGER.debug("Queued integration:  trait={}, outcome={}, duration={}t",
-                        event.trait().getName(), outcomeType, pending.getTotalDuration());
+                    if (newSource == GeneSource.INTEGRATED || newSource == GeneSource.MUTATED) {
+                        Chromosome hostMaternal = hostGenome.getMaternal().getChromosome(trait.getTraitType().getChromosomeType());
+                        hostMaternal.setGeneSequence(trait, taggedSeq);
+                        WildAside.LOGGER.debug("Integrated sequence for trait: {}", trait.getName());
+                    }
+                }
             }
 
-            hostDna.addInvadingLoci(newInvadingLoci);
+            hostDna.setStress(hostDna.getStress() + (totalStress * 0.3f));
 
-            WildAside.LOGGER.info("Stored {} invading loci for {} traits",
-                    newInvadingLoci.values().stream().mapToInt(List::size).sum(),
-                    newInvadingLoci.size());
-            WildAside.LOGGER.info("Queued {} loci for gradual integration", queued);
-
-            float initialStress = result.stressGain() * 0.3f;
-            hostDna.setStress(hostDna.getStress() + initialStress);
-
-            WildAside.LOGGER.info("Initial stress applied: {} (total: {})", initialStress, hostDna.getStress());
+            WildAside.LOGGER.info("Merge complete:");
+            WildAside.LOGGER.info("  - Integrated: {}", integrated);
+            WildAside.LOGGER.info("  - Transient: {}", transient_);
+            WildAside.LOGGER.info("  - Rejected: {}", rejected);
+            WildAside.LOGGER.info("  - Total stress added: {}", totalStress * 0.3f);
 
             if (entity instanceof Player player) {
-                sendConsumptionFeedback(player, result, queued);
+                sendConsumptionFeedback(player, integrated, transient_, rejected);
             }
 
             success[0] = true;
@@ -139,16 +145,13 @@ public class BacillusBlobConsumption {
         return success[0];
     }
 
-    private static void sendConsumptionFeedback(Player player, MergeResult result, int queued) {
+    private static void sendConsumptionFeedback(Player player, int integrated, int transient_, int rejected) {
+        int total = integrated + transient_ + rejected;
         player.displayClientMessage(
-                Component.translatable("dna.wildaside.blob.consumed", queued)
+                Component.translatable("dna.wildaside.blob.consumed", total)
                         .withStyle(s -> s.withColor(0x44FF44)),
                 true
         );
-
-        int integrated = result.getIntegratedCount();
-        int transient_ = result.getTransientCount();
-        int rejected = result.getRejectedCount();
 
         if (integrated > 0) {
             player.displayClientMessage(

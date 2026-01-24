@@ -77,7 +77,7 @@ public class JEIWildAsidePlugin implements IModPlugin {
 
             @Override
             public void onClick(IFocusFactory focusFactory, IRecipesGui recipesGui) {
-                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0f));
+                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK.get(), 1.0f));
                 recipesGui.showTypes(recipeTypesList);
             }
         };

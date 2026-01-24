@@ -12,7 +12,7 @@ import net.farkas.wildaside.command.ModCommands;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillUtils;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.network.WindSavedData;
-import net.farkas.wildaside.advancement.AdvancementHandler;
+import net.farkas.wildaside.advancement.AdvancementUtils;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.farkas.wildaside.util.WindManager;
 import net.minecraft.commands.CommandSourceStack;
@@ -68,7 +68,7 @@ public class ModForgeEvents {
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            AdvancementHandler.givePlayerAdvancement(player, ModAdvancements.WILD_WILDER_WILDEST);
+            AdvancementUtils.givePlayerAdvancement(player, ModAdvancements.WILD_WILDER_WILDEST);
             BioengineeringSkillUtils.syncToClient(player);
         }
     }
@@ -147,7 +147,7 @@ public class ModForgeEvents {
             ResourceKey<Biome> biomeKey = biomeHolder.unwrapKey().orElse(null);
 
             if (biomeKey != null && biomeKey.location().equals(GLOWING_HICKORY_FOREST)) {
-                AdvancementHandler.givePlayerAdvancement(player, ModAdvancements.GLOW_UP);
+                AdvancementUtils.givePlayerAdvancement(player, ModAdvancements.GLOW_UP);
             }
         }
     }
@@ -166,9 +166,9 @@ public class ModForgeEvents {
         Block block = level.getBlockState(blockPos).getBlock();
 
         if (block.equals(ModBlocks.OVERGROWN_ENTORIUM_ORE.get())) {
-            AdvancementHandler.givePlayerAdvancement(player, ModAdvancements.ITS_SHEARING_TIME);
+            AdvancementUtils.givePlayerAdvancement(player, ModAdvancements.ITS_SHEARING_TIME);
         } else if (block.equals(ModBlocks.SPORE_BLASTER.get()) && level.getBestNeighborSignal(blockPos) > 0) {
-            AdvancementHandler.givePlayerAdvancement(player, ModAdvancements.BACTERIA_BEACON);
+            AdvancementUtils.givePlayerAdvancement(player, ModAdvancements.BACTERIA_BEACON);
         }
     }
 
@@ -180,7 +180,7 @@ public class ModForgeEvents {
 
     public static void blasterBustedAdvancement(BlockEvent.BreakEvent event) {
         if (event.getLevel().getBlockState(event.getPos()).getBlock() == ModBlocks.NATURAL_SPORE_BLASTER.get()) {
-            AdvancementHandler.givePlayerAdvancement(event.getPlayer(), ModAdvancements.BLASTER_BUSTED);
+            AdvancementUtils.givePlayerAdvancement(event.getPlayer(), ModAdvancements.BLASTER_BUSTED);
         }
     }
 

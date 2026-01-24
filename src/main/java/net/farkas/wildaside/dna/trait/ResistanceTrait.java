@@ -1,7 +1,5 @@
 package net.farkas.wildaside.dna.trait;
 
-import net.farkas.wildaside.dna.allele.value.AlleleValue;
-import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
 import net.minecraft.world.entity.LivingEntity;
 
 public class ResistanceTrait extends Trait {
@@ -14,11 +12,8 @@ public class ResistanceTrait extends Trait {
     }
 
     @Override
-    public void apply(LivingEntity entity, AlleleValue valueHolder) {
-        if (valueHolder instanceof FloatAlleleValue floatAlleleValue) {
-            entity.getPersistentData().putFloat("trait_resistance_" + getName(), floatAlleleValue.get());
-
-        }
+    public void apply(LivingEntity entity, float value) {
+        entity.getPersistentData().putFloat("trait_resistance_" + getName(), value);
     }
 
     @Override

@@ -1,12 +1,10 @@
 package net.farkas.wildaside.dna.merge;
 
-import net.farkas.wildaside.dna.locus.GeneLocus;
-import net.farkas.wildaside.dna.trait.Trait;
+import net.farkas.wildaside.dna.chromosome.Genome;
 
 import java.util.List;
-import java.util.Map;
 
-public record MergeResult(Map<Trait, List<GeneLocus>> resultLoci, float stressGain, List<MergeEvent> events) {
+public record MergeResult(Genome resultGenome, float stressGain, List<MergeEvent> events) {
     public int getIntegratedCount() {
         return (int) events.stream()
                 .filter(e -> e.outcome().type() == MergeOutcomeType.INTEGRATED)

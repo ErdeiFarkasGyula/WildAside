@@ -4,7 +4,7 @@ import net.farkas.wildaside.advancement.ModAdvancements;
 import net.farkas.wildaside.entity.ModEntityTypes;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.particle.ModParticles;
-import net.farkas.wildaside.advancement.AdvancementHandler;
+import net.farkas.wildaside.advancement.AdvancementUtils;
 import net.farkas.wildaside.util.ContaminationHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -105,7 +105,7 @@ public class SporeBombEntity extends ThrowableItemProjectile {
         }
 
         if (entityCount >= 5) {
-            AdvancementHandler.givePlayerAdvancement(this.getOwner(), ModAdvancements.WEAPONS_OF_MASS_INFECTION);
+            AdvancementUtils.givePlayerAdvancement(this.getOwner(), ModAdvancements.WEAPONS_OF_MASS_INFECTION);
         }
     }
 }

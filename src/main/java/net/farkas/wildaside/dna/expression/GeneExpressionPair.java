@@ -1,6 +1,6 @@
 package net.farkas.wildaside.dna.expression;
 
-import net.farkas.wildaside.dna.allele.dominance.Dominance;
+import net.farkas.wildaside.dna.dominance.Dominance;
 import net.farkas.wildaside.dna.sequence.GeneSequence;
 import net.farkas.wildaside.dna.trait.Trait;
 

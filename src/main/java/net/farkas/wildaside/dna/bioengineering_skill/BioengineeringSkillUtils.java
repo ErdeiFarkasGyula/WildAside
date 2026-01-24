@@ -23,7 +23,7 @@ public class BioengineeringSkillUtils {
 
     public static boolean canUnlock(Player player, BioengineeringSkill skill) {
         if (player instanceof ServerPlayer serverPlayer) {
-            return skill.getRequirement().isSatisfied(serverPlayer);
+            return skill.getRequirement().isServerSatisfied(serverPlayer);
         }
 
         return skill.getRequirement().isClientSatisfied(player);

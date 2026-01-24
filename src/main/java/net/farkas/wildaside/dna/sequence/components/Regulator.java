@@ -1,8 +1,10 @@
-package net.farkas.wildaside.dna.expression;
+package net.farkas.wildaside.dna.sequence.components;
 
+import net.farkas.wildaside.dna.expression.ExpressionContext;
+import net.farkas.wildaside.dna.expression.RegulationType;
 import net.minecraft.nbt.CompoundTag;
 
-public class Regulator {
+public class Regulator implements GeneComponent {
     private final String id;
     private final RegulationType type;
     private final float value;
@@ -24,11 +26,17 @@ public class Regulator {
         };
     }
 
+    @Override
     public String getId() {
         return id;
     }
 
-    public RegulationType getType() {
+    @Override
+    public ComponentType getType() {
+        return ComponentType.REGULATOR;
+    }
+
+    public RegulationType getRegulationType() {
         return type;
     }
 
@@ -36,6 +44,7 @@ public class Regulator {
         return value;
     }
 
+    @Override
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
         tag.putString("Id", id);

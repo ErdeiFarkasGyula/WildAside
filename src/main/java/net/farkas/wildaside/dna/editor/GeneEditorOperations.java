@@ -1,24 +1,19 @@
 package net.farkas.wildaside.dna.editor;
 
 import net.farkas.wildaside.WildAside;
-import net.farkas.wildaside.capability.dna.DnaImplementation;
-import net.farkas.wildaside.dna.Gene;
-import net.farkas.wildaside.dna.allele.Allele;
-import net.farkas.wildaside.dna.allele.dominance.Dominance;
-import net.farkas.wildaside.dna.allele.value.AlleleValue;
-import net.farkas.wildaside.dna.allele.value.FloatAlleleValue;
 import net.farkas.wildaside.dna.bioengineering_skill.BioengineeringSkillUtils;
-import net.farkas.wildaside.dna.locus.GeneLocus;
-import net.farkas.wildaside.dna.locus.LocusSource;
+import net.farkas.wildaside.dna.chromosome.Chromosome;
+import net.farkas.wildaside.dna.chromosome.Genome;
+import net.farkas.wildaside.dna.sequence.components.CodingRegion;
+import net.farkas.wildaside.dna.sequence.CombineMethod;
+import net.farkas.wildaside.dna.sequence.GeneSequence;
+import net.farkas.wildaside.dna.sequence.GeneSource;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class GeneEditorOperations {
     public static boolean canPerformOperation(Player player, GeneEditorOperation operation) {
@@ -27,232 +22,191 @@ public class GeneEditorOperations {
         return BioengineeringSkillUtils.hasSkill(player, requiredSkill);
     }
 
-    public static GeneEditorResult swapTrait(DnaImplementation dnaA, int geneIndexA, DnaImplementation dnaB, int geneIndexB, List<Gene> genesA, List<Gene> genesB) {
-        if (geneIndexA < 0 || geneIndexA >= genesA.size()) {
-            return GeneEditorResult.failure("Invalid gene index A");
-        }
-        if (geneIndexB < 0 || geneIndexB >= genesB.size()) {
-            return GeneEditorResult.failure("Invalid gene index B");
-        }
-
-        Gene geneA = genesA.get(geneIndexA);
-        Gene geneB = genesB. get(geneIndexB);
-
-        if (!geneA.getTrait().equals(geneB.getTrait())) {
-            return GeneEditorResult.failure("Traits must match for swap");
-        }
-
-        Trait trait = geneA.getTrait();
-
-        List<GeneLocus> lociA = dnaA.getGenomeLociView().get(trait);
-        List<GeneLocus> lociB = dnaB.getGenomeLociView().get(trait);
-
-        if (lociA == null || lociB == null) {
-            return GeneEditorResult.failure("Missing loci data");
-        }
-
-        Map<Trait, List<GeneLocus>> allLociA = new HashMap<>(dnaA.getGenomeLociView());
-        Map<Trait, List<GeneLocus>> allLociB = new HashMap<>(dnaB.getGenomeLociView());
+    public static GeneEditorResult addCodingRegion(
+            Genome genome, Trait trait, boolean maternal, 
+            String id, float value, CombineMethod method) {
         
-        allLociA.put(trait, new ArrayList<>(lociB));
-        allLociB.put(trait, new ArrayList<>(lociA));
+        Chromosome chromosome = maternal ? 
+            genome.getMaternal().getChromosome(trait.getTraitType().getChromosomeType()) :
+            genome.getPaternal().getChromosome(trait.getTraitType().getChromosomeType());
         
-        dnaA.setGenomeFromLoci(allLociA);
-        dnaB.setGenomeFromLoci(allLociB);
-
-        WildAside.LOGGER.info("Swapped trait [{}] between DNAs", trait.getName());
-
-        return GeneEditorResult.success("Trait swapped successfully", 0f);
+        if (chromosome == null) {
+            return GeneEditorResult.failure("Chromosome not found for trait");
+        }
+        
+        GeneSequence sequence = chromosome.getGeneSequence(trait);
+        if (sequence == null) {
+            return GeneEditorResult.failure("Gene sequence not found");
+        }
+        
+        List<CodingRegion> newRegions = new ArrayList<>(sequence.getCodingRegions());
+        if (newRegions.size() >= 6) {
+            return GeneEditorResult.failure("Maximum coding regions reached (6)");
+        }
+        
+        CodingRegion newRegion = new CodingRegion(id, value, method);
+        newRegions.add(newRegion);
+        
+        GeneSequence.Builder builder = rebuildSequence(sequence);
+        newRegions.forEach(builder::codingRegion);
+        
+        chromosome.setGeneSequence(trait, builder.build());
+        
+        WildAside.LOGGER.info("Added coding region {} to {} chromosome for trait [{}]", 
+            id, maternal ? "maternal" : "paternal", trait.getName());
+        
+        return GeneEditorResult.success("Coding region added", 10f);
+    }
+    
+    public static GeneEditorResult removeCodingRegion(
+            Genome genome, Trait trait, boolean maternal, String componentId) {
+        
+        Chromosome chromosome = maternal ? 
+            genome.getMaternal().getChromosome(trait.getTraitType().getChromosomeType()) :
+            genome.getPaternal().getChromosome(trait.getTraitType().getChromosomeType());
+        
+        if (chromosome == null) {
+            return GeneEditorResult.failure("Chromosome not found");
+        }
+        
+        GeneSequence sequence = chromosome.getGeneSequence(trait);
+        if (sequence == null) {
+            return GeneEditorResult.failure("Gene sequence not found");
+        }
+        
+        List<CodingRegion> regions = new ArrayList<>(sequence.getCodingRegions());
+        boolean removed = regions.removeIf(r -> r.getId().equals(componentId));
+        
+        if (!removed) {
+            return GeneEditorResult.failure("Coding region not found");
+        }
+        
+        if (regions.isEmpty()) {
+            return GeneEditorResult.failure("Cannot remove last coding region");
+        }
+        
+        GeneSequence.Builder builder = rebuildSequence(sequence);
+        
+        builder = rebuildSequenceBase(sequence);
+        regions.forEach(builder::codingRegion);
+        sequence.getActivators().forEach(builder::activator);
+        sequence.getEnhancers().forEach(builder::enhancer);
+        sequence.getSilencers().forEach(builder::silencer);
+        sequence.getRegulators().forEach(builder::regulator);
+        
+        chromosome.setGeneSequence(trait, builder.build());
+        
+        WildAside.LOGGER.info("Removed coding region {} from trait [{}]", componentId, trait.getName());
+        return GeneEditorResult.success("Coding region removed", 15f);
     }
 
-    public static GeneEditorResult swapAllele(DnaImplementation dnaA, Gene geneA, boolean alleleAFromA, DnaImplementation dnaB, Gene geneB, boolean alleleAFromB) {
-        if (!geneA. getTrait().equals(geneB.getTrait())) {
-            return GeneEditorResult.failure("Traits must match for allele swap");
-        }
-
-        Trait trait = geneA. getTrait();
-
-        List<GeneLocus> lociA = dnaA.getGenomeLociView().get(trait);
-        List<GeneLocus> lociB = dnaB.getGenomeLociView().get(trait);
-
-        if (lociA == null || lociA.isEmpty() || lociB == null || lociB.isEmpty()) {
-            return GeneEditorResult.failure("Missing loci data");
-        }
-
-        GeneLocus locusA = lociA.get(0);
-        GeneLocus locusB = lociB.get(0);
-
-        Allele fromA = alleleAFromA ? locusA.getAlleleA() : locusA.getAlleleB();
-        Allele fromB = alleleAFromB ? locusB.getAlleleA() : locusB.getAlleleB();
-
-        GeneLocus newLocusA;
-        GeneLocus newLocusB;
-
-        if (alleleAFromA) {
-            newLocusA = locusA.withAlleleA(fromB);
-        } else {
-            newLocusA = locusA.withAlleleB(fromB);
-        }
-
-        if (alleleAFromB) {
-            newLocusB = locusB.withAlleleA(fromA);
-        } else {
-            newLocusB = locusB.withAlleleB(fromA);
-        }
-
-        lociA.set(0, newLocusA);
-        lociB.set(0, newLocusB);
-
-        float stabilityLoss = 0.05f;
-        lociA.set(0, newLocusA.withStability(newLocusA.getStability() - stabilityLoss));
-        lociB.set(0, newLocusB.withStability(newLocusB.getStability() - stabilityLoss));
-
-        WildAside.LOGGER.info("Swapped alleles for trait [{}]", trait.getName());
-
-        return GeneEditorResult.success("Alleles swapped", stabilityLoss * 10f);
+    private static GeneSequence.Builder rebuildSequenceBase(GeneSequence sequence) {
+        return GeneSequence.builder()
+                .trait(sequence.getTrait())
+                .dominance(sequence.getDominance())
+                .mutationRate(sequence.getMutationRate())
+                .stability(sequence.getStability())
+                .source(sequence.getSource());
     }
 
-    public static GeneEditorResult modifyDominance(
-            DnaImplementation dna, Gene gene, boolean modifyAlleleA, Dominance newDominance) {
-
-        Trait trait = gene.getTrait();
-        Map<Trait, List<GeneLocus>> allLoci = new HashMap<>(dna.getGenomeLociView());
-        List<GeneLocus> loci = allLoci.get(trait);
-
-        if (loci == null || loci.isEmpty()) {
-            return GeneEditorResult.failure("Missing loci data");
-        }
-
-        GeneLocus locus = loci.get(0);
-        Allele target = modifyAlleleA ? locus.getAlleleA() : locus.getAlleleB();
-        Allele modified = target.copyWithDominance(newDominance);
-
-        GeneLocus newLocus;
-        if (modifyAlleleA) {
-            newLocus = locus.withAlleleA(modified);
-        } else {
-            newLocus = locus.withAlleleB(modified);
-        }
-
-        float stabilityLoss = 0.1f;
-        newLocus = newLocus.withStability(newLocus.getStability() - stabilityLoss);
-
-        loci.set(0, newLocus);
-        dna.setGenomeFromLoci(allLoci);
-
-        WildAside.LOGGER.info("Modified dominance for trait [{}] allele {} to {}",
-                trait.getName(), modifyAlleleA ? "A" : "B", newDominance);
-
-        return GeneEditorResult.success("Dominance modified", stabilityLoss * 15f);
+    private static GeneSequence.Builder rebuildSequence(GeneSequence sequence) {
+        GeneSequence.Builder builder = rebuildSequenceBase(sequence);
+        return builder;
     }
-
-    public static GeneEditorResult stabilize(DnaImplementation dna, Gene gene, float amount) {
-        Trait trait = gene.getTrait();
-        Map<Trait, List<GeneLocus>> allLoci = new HashMap<>(dna.getGenomeLociView());
-        List<GeneLocus> loci = allLoci.get(trait);
-
-        if (loci == null || loci.isEmpty()) {
-            return GeneEditorResult.failure("Missing loci data");
+    
+    public static GeneEditorResult stabilizeSequence(
+            Genome genome, Trait trait, boolean maternal, float amount) {
+        
+        Chromosome chromosome = maternal ? 
+            genome.getMaternal().getChromosome(trait.getTraitType().getChromosomeType()) :
+            genome.getPaternal().getChromosome(trait.getTraitType().getChromosomeType());
+        
+        if (chromosome == null) {
+            return GeneEditorResult.failure("Chromosome not found");
         }
-
-        GeneLocus locus = loci.get(0);
-        float newStability = Math.min(1.0f, locus.getStability() + amount);
-        GeneLocus newLocus = locus.withStability(newStability);
-
-        if (locus.getSource() == LocusSource.TRANSIENT && newStability > 0.8f) {
-            newLocus = newLocus.withSource(LocusSource.INTEGRATED);
-            WildAside.LOGGER.info("Transient locus stabilized to Integrated for trait [{}]", trait.getName());
+        
+        GeneSequence sequence = chromosome.getGeneSequence(trait);
+        if (sequence == null) {
+            return GeneEditorResult.failure("Gene sequence not found");
         }
-
-        loci.set(0, newLocus);
-        dna.setGenomeFromLoci(allLoci);
-
-        WildAside.LOGGER.info("Stabilized trait [{}] by {} to {}", trait.getName(), amount, newStability);
-
-        return GeneEditorResult.success("Gene stabilized", 0f);
+        
+        float newStability = Math.min(1.0f, sequence.getStability() + amount);
+        
+        GeneSequence.Builder builder = rebuildSequenceBase(sequence);
+        builder.stability(newStability);
+        
+        sequence.getCodingRegions().forEach(builder::codingRegion);
+        sequence.getActivators().forEach(builder::activator);
+        sequence.getEnhancers().forEach(builder::enhancer);
+        sequence.getSilencers().forEach(builder::silencer);
+        sequence.getRegulators().forEach(builder::regulator);
+        
+        chromosome.setGeneSequence(trait, builder.build());
+        
+        WildAside.LOGGER.info("Stabilized gene sequence for trait [{}] to {}", trait.getName(), newStability);
+        return GeneEditorResult.success("Gene sequence stabilized", 5f);
     }
-
-    public static GeneEditorResult amplify(DnaImplementation dna, Gene gene, float multiplier) {
-        Trait trait = gene.getTrait();
-        Map<Trait, List<GeneLocus>> allLoci = new HashMap<>(dna.getGenomeLociView());
-        List<GeneLocus> loci = allLoci.get(trait);
-
-        if (loci == null || loci.isEmpty()) {
-            return GeneEditorResult.failure("Missing loci data");
+    
+    public static GeneEditorResult swapSequences(
+            Genome genome, Trait trait) {
+        
+        Chromosome maternalChrom = genome.getMaternal().getChromosome(trait.getTraitType().getChromosomeType());
+        Chromosome paternalChrom = genome.getPaternal().getChromosome(trait.getTraitType().getChromosomeType());
+        
+        if (maternalChrom == null || paternalChrom == null) {
+            return GeneEditorResult.failure("Chromosomes not found");
         }
-
-        GeneLocus locus = loci.get(0);
-
-        Allele alleleA = locus.getAlleleA();
-        Allele alleleB = locus.getAlleleB();
-
-        AlleleValue valueA = alleleA.getValueHolder();
-        AlleleValue valueB = alleleB.getValueHolder();
-
-        if (!(valueA instanceof FloatAlleleValue) || !(valueB instanceof FloatAlleleValue)) {
-            return GeneEditorResult.failure("Cannot amplify non-numeric genes");
+        
+        GeneSequence maternalSeq = maternalChrom.getGeneSequence(trait);
+        GeneSequence paternalSeq = paternalChrom.getGeneSequence(trait);
+        
+        if (maternalSeq == null || paternalSeq == null) {
+            return GeneEditorResult.failure("Gene sequences not found");
         }
-
-        float newValueA = ((FloatAlleleValue) valueA).get() * multiplier;
-        float newValueB = ((FloatAlleleValue) valueB).get() * multiplier;
-
-        Allele newAlleleA = alleleA.copyWithValue(new FloatAlleleValue(newValueA));
-        Allele newAlleleB = alleleB.copyWithValue(new FloatAlleleValue(newValueB));
-
-        GeneLocus newLocus = locus.withAlleleA(newAlleleA).withAlleleB(newAlleleB);
-
-        float stabilityLoss = (multiplier - 1.0f) * 0.2f;
-        newLocus = newLocus.withStability(Math.max(0.1f, newLocus.getStability() - stabilityLoss));
-
-        loci.set(0, newLocus);
-        dna.setGenomeFromLoci(allLoci);
-
-        WildAside.LOGGER.info("Amplified trait [{}] by {}x", trait.getName(), multiplier);
-
-        return GeneEditorResult.success("Gene amplified", stabilityLoss * 20f);
+        
+        maternalChrom.setGeneSequence(trait, paternalSeq);
+        paternalChrom.setGeneSequence(trait, maternalSeq);
+        
+        WildAside.LOGGER.info("Swapped maternal and paternal sequences for trait [{}]", trait.getName());
+        return GeneEditorResult.success("Sequences swapped", 12f);
     }
-
-    public static GeneEditorResult suppress(DnaImplementation dna, Gene gene, float multiplier) {
-        return amplify(dna, gene, 1.0f / multiplier);
-    }
-
-    public static GeneEditorResult mergeLoci(
-            DnaImplementation targetDna, Gene targetGene,
-            DnaImplementation sourceDna, Gene sourceGene) {
-
-        if (! targetGene.getTrait().equals(sourceGene.getTrait())) {
-            return GeneEditorResult.failure("Traits must match for merge");
+    
+    public static GeneEditorResult integrateSequence(
+            Genome genome, Trait trait, boolean maternal) {
+        
+        Chromosome chromosome = maternal ? 
+            genome.getMaternal().getChromosome(trait.getTraitType().getChromosomeType()) :
+            genome.getPaternal().getChromosome(trait.getTraitType().getChromosomeType());
+        
+        if (chromosome == null) {
+            return GeneEditorResult.failure("Chromosome not found");
         }
-
-        Trait trait = targetGene.getTrait();
-
-        List<GeneLocus> targetLoci = targetDna.getGenomeLociView().get(trait);
-        List<GeneLocus> sourceLoci = sourceDna.getGenomeLociView().get(trait);
-
-        if (targetLoci == null || sourceLoci == null || sourceLoci.isEmpty()) {
-            return GeneEditorResult.failure("Missing loci data");
+        
+        GeneSequence sequence = chromosome.getGeneSequence(trait);
+        if (sequence == null) {
+            return GeneEditorResult.failure("Gene sequence not found");
         }
-
-        if (targetLoci.size() >= 4) {
-            return GeneEditorResult.failure("Target already has maximum loci");
+        
+        if (sequence.getSource() == GeneSource.NATURAL) {
+             return GeneEditorResult.failure("Sequence is already natural");
         }
-
-        GeneLocus sourceLocus = sourceLoci.get(0);
-        GeneLocus copiedLocus = new GeneLocus(
-                sourceLocus.getId() + "_merged",
-                sourceLocus.getAlleleA().copy(),
-                sourceLocus.getAlleleB().copy(),
-                sourceLocus.getFlags(),
-                sourceLocus.getStability() * 0.8f,
-                LocusSource.INTEGRATED,
-                0,
-                0f
-        );
-
-        targetLoci.add(copiedLocus);
-
-        WildAside. LOGGER.info("Merged locus into trait [{}], now has {} loci", trait.getName(), targetLoci.size());
-
-        return GeneEditorResult. success("Locus merged", 15f);
+        
+        if (sequence.getStability() < 0.6f) {
+            return GeneEditorResult.failure("Stability too low for integration (need 0.6+)");
+        }
+        
+        GeneSequence.Builder builder = rebuildSequenceBase(sequence);
+        builder.source(GeneSource.INTEGRATED);
+        
+        sequence.getCodingRegions().forEach(builder::codingRegion);
+        sequence.getActivators().forEach(builder::activator);
+        sequence.getEnhancers().forEach(builder::enhancer);
+        sequence.getSilencers().forEach(builder::silencer);
+        sequence.getRegulators().forEach(builder::regulator);
+        
+        chromosome.setGeneSequence(trait, builder.build());
+        
+        WildAside.LOGGER.info("Integrated invading sequence for trait [{}]", trait.getName());
+        return GeneEditorResult.success("Sequence integrated", 25f);
     }
 }

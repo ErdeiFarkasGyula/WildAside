@@ -13,4 +13,36 @@ public class ModKeyMappings {
             GLFW.GLFW_KEY_G,
             "mod.wildaside"
     );
+    
+    public static final KeyMapping GENE_EDITOR_LOCK_SCROLL = new KeyMapping(
+            "key.wildaside.gene_editor.lock_scroll",
+            KeyConflictContext.GUI,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_L,
+            "mod.wildaside"
+    );
+    
+    public static final KeyMapping GENE_EDITOR_RESET_SCROLL = new KeyMapping(
+            "key.wildaside.gene_editor.reset_scroll",
+            KeyConflictContext.GUI,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_R,
+            "mod.wildaside"
+    );
+    
+    public static final KeyMapping GENE_EDITOR_EXECUTE = new KeyMapping(
+            "key.wildaside.gene_editor.execute",
+            KeyConflictContext.GUI,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_E,
+            "mod.wildaside"
+    );
+    
+    public static final KeyMapping GENE_EDITOR_RESET_CHANGES = new KeyMapping(
+            "key.wildaside.gene_editor.reset_changes",
+            KeyConflictContext.GUI,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_X,
+            "mod.wildaside"
+    );
 }

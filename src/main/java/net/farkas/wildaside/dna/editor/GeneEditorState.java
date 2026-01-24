@@ -1,101 +1,82 @@
 package net.farkas.wildaside.dna.editor;
 
-import net.farkas.wildaside.dna.Gene;
-import net.farkas.wildaside.dna.allele.Allele;
-import net.farkas.wildaside.dna.locus.GeneLocus;
+import net.farkas.wildaside.dna.sequence.GeneSequence;
 import net.farkas.wildaside.dna.trait.Trait;
+import net.farkas.wildaside.dna.trait.TraitRegistry;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class GeneEditorState {
-    private Gene selectedGeneTop = null;
-    private Gene selectedGeneBottom = null;
-    private int selectedGeneTopIndex = -1;
-    private int selectedGeneBottomIndex = -1;
-    private Allele selectedAllele = null;
-    private boolean selectedAlleleIsA = true;
-    private boolean selectedAlleleFromTop = true;
-    private GeneEditorOperation currentOperation = GeneEditorOperation.SWAP_TRAIT;
-    private int scrollOffsetTop = 0;
-    private int scrollOffsetBottom = 0;
-    private boolean detailPanelOpen = false;
-    private Gene detailPanelGene = null;
-    private boolean detailPanelFromTop = true;
-
-    public void selectGeneTop(Gene gene, int index) {
-        this.selectedGeneTop = gene;
-        this.selectedGeneTopIndex = index;
-        clearAlleleSelection();
+    private Trait selectedTrait = null;
+    private boolean selectedIsMaternal = true;
+    private GeneSequence selectedSequence = null;
+    private String selectedComponentId = null;
+    private ComponentType selectedComponentType = null;
+    private GeneEditorOperation currentOperation = GeneEditorOperation.ADD_CODING_REGION;
+    private int scrollOffsetTraits = 0;
+    private int scrollOffsetComponents = 0;
+    private boolean sequenceDetailOpen = false;
+    
+    public enum ComponentType {
+        CODING_REGION,
+        ACTIVATOR,
+        ENHANCER,
+        SILENCER,
+        REGULATOR
     }
 
-    public void selectGeneBottom(Gene gene, int index) {
-        this.selectedGeneBottom = gene;
-        this.selectedGeneBottomIndex = index;
-        clearAlleleSelection();
+    public void selectTrait(Trait trait, boolean isMaternal, GeneSequence sequence) {
+        this.selectedTrait = trait;
+        this.selectedIsMaternal = isMaternal;
+        this.selectedSequence = sequence;
+        clearComponentSelection();
     }
 
-    public void selectAllele(Allele allele, boolean isAlleleA, boolean fromTop) {
-        this.selectedAllele = allele;
-        this.selectedAlleleIsA = isAlleleA;
-        this.selectedAlleleFromTop = fromTop;
+    public void selectComponent(String componentId, ComponentType componentType) {
+        this.selectedComponentId = componentId;
+        this.selectedComponentType = componentType;
     }
 
-    public void clearAlleleSelection() {
-        this.selectedAllele = null;
+    public void clearComponentSelection() {
+        this.selectedComponentId = null;
+        this.selectedComponentType = null;
     }
 
     public void clearSelection() {
-        this.selectedGeneTop = null;
-        this.selectedGeneBottom = null;
-        this.selectedGeneTopIndex = -1;
-        this.selectedGeneBottomIndex = -1;
-        this.selectedAllele = null;
-        this.detailPanelOpen = false;
-        this.detailPanelGene = null;
+        this.selectedTrait = null;
+        this.selectedSequence = null;
+        this.selectedComponentId = null;
+        this.selectedComponentType = null;
+        this.sequenceDetailOpen = false;
     }
 
-    public void openDetailPanel(Gene gene, boolean fromTop) {
-        this.detailPanelOpen = true;
-        this.detailPanelGene = gene;
-        this.detailPanelFromTop = fromTop;
+    public void openSequenceDetail() {
+        this.sequenceDetailOpen = true;
     }
 
-    public void closeDetailPanel() {
-        this.detailPanelOpen = false;
-        this.detailPanelGene = null;
+    public void closeSequenceDetail() {
+        this.sequenceDetailOpen = false;
     }
 
-    public Gene getSelectedGeneTop() {
-        return selectedGeneTop;
+    public Trait getSelectedTrait() {
+        return selectedTrait;
     }
 
-    public Gene getSelectedGeneBottom() {
-        return selectedGeneBottom;
+    public boolean isSelectedMaternal() {
+        return selectedIsMaternal;
     }
 
-    public int getSelectedGeneTopIndex() {
-        return selectedGeneTopIndex;
+    public GeneSequence getSelectedSequence() {
+        return selectedSequence;
     }
 
-    public int getSelectedGeneBottomIndex() {
-        return selectedGeneBottomIndex;
+    public String getSelectedComponentId() {
+        return selectedComponentId;
     }
 
-    public Allele getSelectedAllele() {
-        return selectedAllele;
-    }
-
-    public boolean isSelectedAlleleA() {
-        return selectedAlleleIsA;
-    }
-
-    public boolean isSelectedAlleleFromTop() {
-        return selectedAlleleFromTop;
+    public ComponentType getSelectedComponentType() {
+        return selectedComponentType;
     }
 
     public GeneEditorOperation getCurrentOperation() {
@@ -106,40 +87,71 @@ public class GeneEditorState {
         this.currentOperation = op;
     }
 
-    public int getScrollOffsetTop() {
-        return scrollOffsetTop;
+    public int getScrollOffsetTraits() {
+        return scrollOffsetTraits;
     }
 
-    public int getScrollOffsetBottom() {
-        return scrollOffsetBottom;
+    public int getScrollOffsetComponents() {
+        return scrollOffsetComponents;
     }
 
-    public void setScrollOffsetTop(int offset) {
-        this.scrollOffsetTop = Math.max(0, offset);
+    public void setScrollOffsetTraits(int offset) {
+        this.scrollOffsetTraits = Math.max(0, offset);
     }
 
-    public void setScrollOffsetBottom(int offset) {
-        this.scrollOffsetBottom = Math.max(0, offset);
+    public void setScrollOffsetComponents(int offset) {
+        this.scrollOffsetComponents = Math.max(0, offset);
     }
 
-    public boolean isDetailPanelOpen() {
-        return detailPanelOpen;
+    public boolean isSequenceDetailOpen() {
+        return sequenceDetailOpen;
     }
 
-    public Gene getDetailPanelGene() {
-        return detailPanelGene;
+    public boolean hasValidSelection() {
+        return selectedTrait != null && selectedSequence != null;
     }
 
-    public boolean isDetailPanelFromTop() {
-        return detailPanelFromTop;
+    public boolean hasValidComponentSelection() {
+        return hasValidSelection() && selectedComponentId != null && selectedComponentType != null;
     }
 
-    public boolean hasValidSwapSelection() {
-        return selectedGeneTop != null && selectedGeneBottom != null &&
-                selectedGeneTop.getTrait().equals(selectedGeneBottom.getTrait());
+    public CompoundTag serialize() {
+        CompoundTag tag = new CompoundTag();
+        if (selectedTrait != null) {
+            tag.putString("trait", selectedTrait.getName());
+        }
+        tag.putBoolean("isMaternal", selectedIsMaternal);
+        if (selectedComponentId != null) {
+            tag.putString("componentId", selectedComponentId);
+        }
+        if (selectedComponentType != null) {
+            tag.putString("componentType", selectedComponentType.name());
+        }
+        tag.putString("operation", currentOperation.name());
+        tag.putInt("scrollTraits", scrollOffsetTraits);
+        tag.putInt("scrollComponents", scrollOffsetComponents);
+        tag.putBoolean("detailOpen", sequenceDetailOpen);
+        return tag;
     }
 
-    public boolean hasValidAlleleSwapSelection() {
-        return selectedGeneTop != null && selectedGeneBottom != null && selectedAllele != null;
+    public static GeneEditorState deserialize(CompoundTag tag) {
+        GeneEditorState state = new GeneEditorState();
+        if (tag.contains("trait")) {
+            state.selectedTrait = TraitRegistry.getByName(tag.getString("trait"));
+        }
+        state.selectedIsMaternal = tag.getBoolean("isMaternal");
+        if (tag.contains("componentId")) {
+            state.selectedComponentId = tag.getString("componentId");
+        }
+        if (tag.contains("componentType")) {
+            state.selectedComponentType = ComponentType.valueOf(tag.getString("componentType"));
+        }
+        if (tag.contains("operation")) {
+            state.currentOperation = GeneEditorOperation.valueOf(tag.getString("operation"));
+        }
+        state.scrollOffsetTraits = tag.getInt("scrollTraits");
+        state.scrollOffsetComponents = tag.getInt("scrollComponents");
+        state.sequenceDetailOpen = tag.getBoolean("detailOpen");
+        return state;
     }
 }

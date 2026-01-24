@@ -47,7 +47,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.SPORE_BOMB);
         simpleItem(ModItems.FERTILISER_BOMB);
 
-        simpleItem(ModItems.GENE);
+        geneItem(ModItems.GENE.get());
 
         simpleItem(ModItems.BACILLUS_BLOB);
 
@@ -215,6 +215,22 @@ public class ModItemModelProvider extends ItemModelProvider {
     public void trapdoorItem(RegistryObject<Block> block) {
         this.withExistingParent(ForgeRegistries.BLOCKS.getKey(block.get()).getPath(),
                 modLoc("block/" + ForgeRegistries.BLOCKS.getKey(block.get()).getPath() + "_bottom"));
+    }
+
+    private void geneItem(Item item) {
+        String baseName = ForgeRegistries.ITEMS.getKey(item).getPath();
+
+        getBuilder(baseName + "_flipped")
+                .parent(getExistingFile(mcLoc("item/generated")))
+                .texture("layer0", WildAside.MOD_ID + ":item/" + baseName + "_flipped");
+
+        getBuilder(baseName)
+                .parent(getExistingFile(mcLoc("item/generated")))
+                .texture("layer0", WildAside.MOD_ID + ":item/" + baseName)
+                .override()
+                .predicate(new ResourceLocation(WildAside.MOD_ID, "flipped"), 1.0f)
+                .model(getExistingFile(modLoc("item/" + baseName + "_flipped")))
+                .end();
     }
 
     private void dnaHolder(Item item) {

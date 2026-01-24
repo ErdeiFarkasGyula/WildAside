@@ -1,6 +1,5 @@
 package net.farkas.wildaside.dna.trait;
 
-import net.farkas.wildaside.dna.allele.value.AlleleValue;
 import net.minecraft.world.entity.LivingEntity;
 
 public class AppearanceTrait<T> extends Trait {
@@ -13,7 +12,7 @@ public class AppearanceTrait<T> extends Trait {
     }
 
     @Override
-    public void apply(LivingEntity entity, AlleleValue valueHolder) {
+    public void apply(LivingEntity entity, float value) {
 
     }
 

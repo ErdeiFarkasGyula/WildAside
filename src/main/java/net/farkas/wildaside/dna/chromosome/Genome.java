@@ -56,6 +56,10 @@ public class Genome {
         return entityType;
     }
 
+    public boolean isEmpty() {
+        return maternalSet.getAllChromosomes().isEmpty() && paternalSet.getAllChromosomes().isEmpty();
+    }
+
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
 

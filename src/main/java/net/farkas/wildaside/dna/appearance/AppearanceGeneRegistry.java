@@ -1,6 +1,7 @@
 package net.farkas.wildaside.dna.appearance;
 
-import net.farkas.wildaside.dna.locus.GeneLocus;
+import net.farkas.wildaside.dna.chromosome.Genome;
+import net.farkas.wildaside.dna.sequence.GeneSequence;
 import net.farkas.wildaside.dna.trait.Trait;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,9 +20,10 @@ public class AppearanceGeneRegistry {
         register(new FrogAppearanceExtractor());
     }
 
-    public static void extract(LivingEntity entity, Map<Trait, List<GeneLocus>> loci, long seed) {
+    public static GeneSequence[] extract(LivingEntity entity, Genome genome, long seed) {
         IAppearanceGeneExtractor extractor = EXTRACTORS.get(entity.getType());
-        if (extractor != null) extractor.extract(entity, loci, seed);
+        if (extractor != null) return extractor.extract(entity, genome, seed);
+        return new GeneSequence[0];
     }
 
     public static Collection<String> getSuggestions(LivingEntity entity, Trait trait) {
