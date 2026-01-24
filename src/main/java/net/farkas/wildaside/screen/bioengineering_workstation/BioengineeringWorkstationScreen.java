@@ -76,6 +76,7 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
 
         addTabButtons();
         addRecompileButton();
+        addAdvancedEditorButton();
     }
 
     @Override
