@@ -53,7 +53,7 @@ public class GeneItem extends Item {
                 if (cap.hasSkill(BioengineeringSkillRegistry.REVEAL_SEQUENCES.getId())) {
                     tooltip.add(Component.empty());
 
-                    tooltip.add(Component.translatable("dna.wildaside.maternal").withStyle(ChatFormatting.AQUA));
+                    tooltip.add(Component.translatable("gui.wildaside.gene_editor.maternal").withStyle(ChatFormatting.AQUA));
                     if (maternal != null) {
                         tooltip.add(Component.literal("- ").append(Component.literal(maternal.getDominance().name())));
                         tooltip.add(Component.literal("- " + String.format("%.2f", maternal.calculateBaseValue())));
@@ -61,7 +61,7 @@ public class GeneItem extends Item {
                         tooltip.add(Component.literal("- Missing").withStyle(ChatFormatting.GRAY));
                     }
 
-                    tooltip.add(Component.translatable("dna.wildaside.paternal").withStyle(ChatFormatting.AQUA));
+                    tooltip.add(Component.translatable("gui.wildaside.gene_editor.paternal").withStyle(ChatFormatting.AQUA));
                     if (paternal != null) {
                         tooltip.add(Component.literal("- ").append(Component.literal(paternal.getDominance().name())));
                         tooltip.add(Component.literal("- " + String.format("%.2f", paternal.calculateBaseValue())));

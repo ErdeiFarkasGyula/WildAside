@@ -230,14 +230,14 @@ public class AdvancedGeneEditorScreen extends Screen {
                 .build());
 
         int btnX = stripStartX + stripWidth - 20;
-        int btnY_A = (stripAY1 + stripAY2 + COMPONENT_SIZE) / 2 - 10;
+        int btnY_A = (stripAY1 + stripAY2 + COMPONENT_SIZE) / 2 - 5;
         addRenderableWidget(Button.builder(Component.literal(lockGenomeA ? "\uD83D\uDD12" : "\uD83D\uDD13"), b -> {
             lockGenomeA = !lockGenomeA;
             b.setMessage(Component.literal(lockGenomeA ? "\uD83D\uDD12" : "\uD83D\uDD13"));
             updateLayout();
         }).pos(btnX, btnY_A).size(20, 20).tooltip(Tooltip.create(Component.translatable("gui.wildaside.gene_editor.lock_genome", lockGenomeA))).build());
 
-        int btnY_B = (stripBY1 + stripBY2 + COMPONENT_SIZE) / 2 - 10;
+        int btnY_B = (stripBY1 + stripBY2 + COMPONENT_SIZE) / 2 - 5;
         addRenderableWidget(Button.builder(Component.literal(lockGenomeB ? "\uD83D\uDD12" : "\uD83D\uDD13"), b -> {
             lockGenomeB = !lockGenomeB;
             b.setMessage(Component.literal(lockGenomeB ? "\uD83D\uDD12" : "\uD83D\uDD13"));
