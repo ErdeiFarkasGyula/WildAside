@@ -995,8 +995,8 @@ public class ModCommands {
         }
 
         if (affected > 0) {
-            String entityString = affected > 1 ? "command.wildaside.contamination. entities" : "command.wildaside.contamination.entity";
-            String actionString = "command.wildaside.contamination. action." + action;
+            String entityString = affected > 1 ? "command.wildaside.contamination.entities" : "command.wildaside.contamination.entity";
+            String actionString = "command.wildaside.contamination.action." + action;
             applyContamination(ctx, actionString, affected, entityString);
         }
         else {
