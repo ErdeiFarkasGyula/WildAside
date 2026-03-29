@@ -250,18 +250,18 @@ public class BioengineeringWorkstationScreen extends AbstractContainerScreen<Bio
     }
 
     private void switchTab(BioengineeringWorkstationTab newTab) {
-        if (tab == newTab) return;
-        tab = newTab;
-
-        NetworkHandler.sendBioengineeringWorkstationTabPacket(newTab);
-
-        menu.setTab(newTab);
-        BACKGROUND = tab.getTexture();
-
-        clearWidgets();
-        addRecompileButton();
-        addTabButtons();
-        addAdvancedEditorButton();
+//        if (tab == newTab) return;
+//        tab = newTab;
+//
+//        NetworkHandler.sendBioengineeringWorkstationTabPacket(newTab);
+//
+//        menu.setTab(newTab);
+//        BACKGROUND = tab.getTexture();
+//
+//        clearWidgets();
+//        addRecompileButton();
+//        addTabButtons();
+//        addAdvancedEditorButton();
     }
 
     private void addAdvancedEditorButton() {

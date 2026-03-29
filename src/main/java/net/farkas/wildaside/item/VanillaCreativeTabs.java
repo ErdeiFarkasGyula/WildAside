@@ -68,12 +68,12 @@ public class VanillaCreativeTabs {
             event.accept(ModItems.BROWN_HICKORY_NUT_TRAIL_MIX);
             event.accept(ModItems.YELLOW_HICKORY_NUT_TRAIL_MIX);
             event.accept(ModItems.GREEN_HICKORY_NUT_TRAIL_MIX);
-            event.accept(ModItems.BACILLUS_BLOB);
+//            event.accept(ModItems.BACILLUS_BLOB);
         }
         if (tab == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
             event.accept(ModBlocks.BIOENGINEERING_WORKSTATION);
-            event.accept(ModBlocks.BIOFREEZER);
-            event.accept(ModBlocks.INCUBATOR);
+//            event.accept(ModBlocks.BIOFREEZER);
+//            event.accept(ModBlocks.INCUBATOR);
             event.accept(ModBlocks.SUBSTILIUM_SIGN);
             event.accept(ModBlocks.SUBSTILIUM_HANGING_SIGN);
             event.accept(ModBlocks.HICKORY_SIGN);
@@ -135,8 +135,8 @@ public class VanillaCreativeTabs {
             event.accept(ModItems.FERTILISER_BOMB);
             event.accept(ModItems.SPORE_BOMB);
             event.accept(ModItems.SPORE_ARROW);
-            event.accept(ModItems.DNA_HOLDER);
-            event.accept(ModItems.SYRINGE);
+//            event.accept(ModItems.DNA_HOLDER);
+//            event.accept(ModItems.SYRINGE);
         }
         if (tab == CreativeModeTabs.SPAWN_EGGS) {
             event.accept(ModItems.MUCELLITH_SPAWN_EGG);
