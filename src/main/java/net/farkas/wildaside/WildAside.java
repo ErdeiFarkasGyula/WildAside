@@ -107,7 +107,6 @@ public class WildAside {
         MinecraftForge.EVENT_BUS.register(this);
 
         modEventBus.addListener(this::commonSetup);
-        modEventBus.addListener(this::onConfigLoad);
         modEventBus.addListener(VanillaCreativeTabs::addCreative);
     }
 
@@ -124,13 +123,6 @@ public class WildAside {
         event.enqueueWork(() -> {
             addSurfaceRules();
         });
-    }
-
-    private void onConfigLoad(ModConfigEvent event) {
-        if (event.getConfig().getSpec() == ModConfig.SERVER_SPEC) {
-            validateConfig();
-            ModTerraBlenderAPI.registerRegions();
-        }
     }
 
     private static void addPottableBlocks() {
@@ -205,24 +197,6 @@ public class WildAside {
 
     private static void addSurfaceRules() {
         SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MOD_ID, ModSurfaceRules.makeRules());
-    }
-
-    private static void validateConfig() {
-        String currentVersion = ModList.get().getModContainerById("wildaside")
-                .map(mod -> mod.getModInfo().getVersion().toString())
-                .orElse("unknown");
-
-        String configVersion = ModConfig.configVersion;
-        if (configVersion == null) {
-            configVersion = ModConfig.CONFIG_VERSION.get();
-        }
-
-        if (!configVersion.equals(currentVersion)) {
-            WildAside.LOGGER.warn("Outdated config detected! Resetting to default...");
-            ModConfig.CONFIG_VERSION.set(currentVersion);
-
-            ModConfig.SERVER_SPEC.save();
-        }
     }
 
     @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
