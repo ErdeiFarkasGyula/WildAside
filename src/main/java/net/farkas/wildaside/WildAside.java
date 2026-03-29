@@ -213,17 +213,16 @@ public class WildAside {
                 .orElse("unknown");
 
         String configVersion = ModConfig.configVersion;
+        if (configVersion == null) {
+            configVersion = ModConfig.CONFIG_VERSION.get();
+        }
+
         if (!configVersion.equals(currentVersion)) {
             WildAside.LOGGER.warn("Outdated config detected! Resetting to default...");
             ModConfig.CONFIG_VERSION.set(currentVersion);
 
             ModConfig.SERVER_SPEC.save();
         }
-    }
-
-    @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) {
-
     }
 
     @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
@@ -318,10 +317,5 @@ public class WildAside {
                     return stack.getTag().getBoolean("flipped") ? 1f : 0f;
                 }
         );
-    }
-
-    @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.DEDICATED_SERVER)
-    public static class ServerModEvents {
-
     }
 }
