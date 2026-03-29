@@ -30,7 +30,7 @@ public class LargePatchNoiseModifier extends PlacementModifier {
 
     @Override
     public Stream<BlockPos> getPositions(PlacementContext context, RandomSource random, BlockPos pos) {
-        double scale = ModConfig.HICKORY_COLOUR_NOISE_SCALE.get();
+        double scale = ModConfig.hickoryColourNoiseScale;
         PerlinSimplexNoise NOISE = new PerlinSimplexNoise(RandomSource.create(ModConfig.HICKORY_COLOUR_NOISE_SEED.get()), List.of(0));
 
         double n = NOISE.getValue(pos.getX() * scale, pos.getZ() * scale, false);

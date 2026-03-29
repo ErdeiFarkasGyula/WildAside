@@ -42,7 +42,9 @@ public class MobSpeedTestManager {
 
     @SubscribeEvent
     public static void onWorldLoad(ServerStartedEvent event) {
-        if (!ModConfig.ACCURATE_DNA_MOVEMENT_SPEEDS.get()) return;
+        if (!ModConfig.enableDna) return;
+
+        if (!ModConfig.accurateDnaMovementSpeeds) return;
 
         if (event.getServer() != null) {
             MinecraftServer server = event.getServer();
@@ -66,11 +68,16 @@ public class MobSpeedTestManager {
 
     @SubscribeEvent
     public static void onServerStarting(ServerStartingEvent event) {
+        if (!ModConfig.enableDna) return;
+
+        if (!ModConfig.accurateDnaMovementSpeeds) return;
         loadTestLevelArea(event);
     }
 
     public static void loadTestLevelArea(ServerStartingEvent event) {
-        if (!ModConfig.ACCURATE_DNA_MOVEMENT_SPEEDS.get()) return;
+        if (!ModConfig.enableDna) return;
+
+        if (!ModConfig.accurateDnaMovementSpeeds) return;
 
         MinecraftServer server = event.getServer();
         ServerLevel level = server.getLevel(ModDimensions.TEST_LEVEL);
@@ -82,7 +89,9 @@ public class MobSpeedTestManager {
 
     @SubscribeEvent
     public static void onEntityLeftLevel(EntityLeaveLevelEvent event) {
-        if (!ModConfig.ACCURATE_DNA_WATER_MOVEMENT_SPEEDS.get() || event.getEntity().level().isClientSide()) return;
+        if (!ModConfig.enableDna) return;
+
+        if (!ModConfig.accurateDnaWaterMovementSpeeds || event.getEntity().level().isClientSide()) return;
 
         if (event.getEntity().level().dimension() == ModDimensions.TEST_LEVEL) {
             if (event.getEntity() instanceof Mob mob && (mob.isSensitiveToWater() || mob.getSpeed() == 0.0 || mob.getDeltaMovement() == Vec3.ZERO)) {

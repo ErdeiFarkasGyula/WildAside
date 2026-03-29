@@ -148,7 +148,7 @@ public class FallenHickoryLeavesBlock extends Block {
         super.tick(pState, pLevel, pPos, pRandom);
 
         if (pLevel.isClientSide() || pState.getValue(FallenHickoryLeavesBlock.FIXED_LIGHTING)
-                || pState.getValue(FallenHickoryLeavesBlock.COLOUR) == HickoryColour.HICKORY || !ModConfig.GLOWING_HICKORY_TICK.get()) return;
+                || pState.getValue(FallenHickoryLeavesBlock.COLOUR) == HickoryColour.HICKORY || !ModConfig.glowingHickoryTick) return;
 
         int maxLight = pState.getValue(COUNT);
         int time = (int)pLevel.dayTime();

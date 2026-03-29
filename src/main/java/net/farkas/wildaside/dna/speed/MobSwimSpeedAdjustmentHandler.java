@@ -22,7 +22,7 @@ public class MobSwimSpeedAdjustmentHandler {
 
     @SubscribeEvent
     public static void onLivingTick(LivingEvent.LivingTickEvent event) {
-        if (!ModConfig.ACCURATE_DNA_WATER_MOVEMENT_SPEEDS.get()) return;
+        if (!ModConfig.accurateDnaWaterMovementSpeeds) return;
 
         LivingEntity entity = event.getEntity();
         if (entity.level().isClientSide()) return;

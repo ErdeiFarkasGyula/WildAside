@@ -10,8 +10,8 @@ import terrablender.api.Regions;
 
 public class ModTerraBlenderAPI {
     public static void registerRegions() {
-        Regions.register(new HickoryForestRegion(new ResourceLocation(WildAside.MOD_ID, "hickory_forest"), ModConfig.HICKORY_FOREST_WEIGHT.get()));
-        Regions.register(new GlowingHickoryForestRegion(new ResourceLocation(WildAside.MOD_ID, "glowing_hickory_forest"), ModConfig.GLOWING_HICKORY_FOREST_WEIGHT.get()));
-        Regions.register(new VibrionHiveRegion(new ResourceLocation(WildAside.MOD_ID, "vibrion_hive"), ModConfig.VIBRION_HIVE_WEIGHT.get()));
+        Regions.register(new HickoryForestRegion(new ResourceLocation(WildAside.MOD_ID, "hickory_forest"), ModConfig.hickoryForestWeight));
+        Regions.register(new GlowingHickoryForestRegion(new ResourceLocation(WildAside.MOD_ID, "glowing_hickory_forest"), ModConfig.glowingHickoryForestWeight));
+        Regions.register(new VibrionHiveRegion(new ResourceLocation(WildAside.MOD_ID, "vibrion_hive"), ModConfig.vibrionHiveWeight));
     }
 }

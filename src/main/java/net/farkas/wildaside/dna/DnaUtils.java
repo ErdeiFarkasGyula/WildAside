@@ -57,7 +57,7 @@ public class DnaUtils {
         if (TraitRegistry.MOVEMENT_SPEED != null) {
             float baseValue = getSafeBaseAttributeValue(entity, ForgeRegistries.ATTRIBUTES.getValue(getAttributeRes("movement_speed")));
 
-            if (ModConfig.ACCURATE_DNA_MOVEMENT_SPEEDS.get()) {
+            if (ModConfig.accurateDnaMovementSpeeds) {
                 baseValue = (float) MobSpeedResultStorage.getSpeed(entity.getType(), "ground");
                 if (MobSpeedTesting.EXCLUDED_MOBS.contains(entity.getType())) {
                     baseValue = getSafeBaseAttributeValue(entity, ForgeRegistries.ATTRIBUTES.getValue(getAttributeRes("movement_speed")));

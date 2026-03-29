@@ -40,7 +40,7 @@ public class MobSpeedTesting {
 
     public static void spawnAllMobs(ServerLevel level, BlockPos start) {
         runTest(level, start, false);
-        if (ModConfig.ACCURATE_DNA_WATER_MOVEMENT_SPEEDS.get()) {
+        if (ModConfig.accurateDnaWaterMovementSpeeds) {
             runTest(level, start, true);
         }
     }

@@ -146,8 +146,12 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
+def getDate() {
+    return new Date().format('yyyyMMdd-HHmmss')
+}
+
 tasks.jar {
     archiveBaseName.set("wildaside")
     archiveVersion.set(mod_version)
-    archiveClassifier.set("forge-${minecraft_version}")
+    archiveClassifier.set("forge-${minecraft_version}-${getDate()}")
 }

@@ -67,6 +67,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -81,7 +82,7 @@ public class WildAside {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public WildAside(FMLJavaModLoadingContext context) {
-        context.registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, ModConfig.COMMON_SPEC);
+        context.registerConfig(net.minecraftforge.fml.config.ModConfig.Type.SERVER, ModConfig.SERVER_SPEC);
         context.registerConfig(net.minecraftforge.fml.config.ModConfig.Type.CLIENT, ModConfig.CLIENT_SPEC);
 
         IEventBus modEventBus = context.getModEventBus();
@@ -106,6 +107,7 @@ public class WildAside {
         MinecraftForge.EVENT_BUS.register(this);
 
         modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(this::onConfigLoad);
         modEventBus.addListener(VanillaCreativeTabs::addCreative);
     }
 
@@ -113,12 +115,6 @@ public class WildAside {
         NetworkHandler.init(event);
 
         event.enqueueWork(() -> {
-            validateConfig();
-        });
-
-        event.enqueueWork(() -> {
-            ModTerraBlenderAPI.registerRegions();
-
             addPottableBlocks();
             addDispenserBehaviours();
             addCompostables();
@@ -128,6 +124,13 @@ public class WildAside {
         event.enqueueWork(() -> {
             addSurfaceRules();
         });
+    }
+
+    private void onConfigLoad(ModConfigEvent event) {
+        if (event.getConfig().getSpec() == ModConfig.SERVER_SPEC) {
+            validateConfig();
+            ModTerraBlenderAPI.registerRegions();
+        }
     }
 
     private static void addPottableBlocks() {
@@ -209,12 +212,12 @@ public class WildAside {
                 .map(mod -> mod.getModInfo().getVersion().toString())
                 .orElse("unknown");
 
-        String configVersion = ModConfig.CONFIG_VERSION.get();
+        String configVersion = ModConfig.configVersion;
         if (!configVersion.equals(currentVersion)) {
             WildAside.LOGGER.warn("Outdated config detected! Resetting to default...");
             ModConfig.CONFIG_VERSION.set(currentVersion);
 
-            ModConfig.COMMON_SPEC.save();
+            ModConfig.SERVER_SPEC.save();
         }
     }
 

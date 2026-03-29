@@ -34,9 +34,11 @@ public class DnaEventHandler {
 
     @SubscribeEvent
     public static void onEntityJoinLevel(EntityJoinLevelEvent event) {
+        if (!ModConfig.enableDna) return;
+
         if (!(event.getLevel() instanceof ServerLevel) || event.getLevel().dimension() == ModDimensions.TEST_LEVEL) return;
-        if (!ModConfig.WILD_MODE.get()) return;
-        if (event.getEntity() instanceof Player && !ModConfig.EXCLUDE_PLAYERS_FROM_WILD_MODE.get()) return;
+        if (!ModConfig.wildMode) return;
+        if (event.getEntity() instanceof Player && !ModConfig.excludePlayersFromWildMode) return;
 
         if (event.getEntity() instanceof LivingEntity living) {
             living.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
@@ -54,12 +56,16 @@ public class DnaEventHandler {
 
     @SubscribeEvent
     public static void livingEntityHurt(LivingHurtEvent event) {
+        if (!ModConfig.enableDna) return;
+
         if (event.getEntity().level().isClientSide()) return;
         gainStressFromDamage(event);
         applyResistances(event);
     }
 
     private static void gainStressFromDamage(LivingHurtEvent event) {
+        if (!ModConfig.enableDna) return;
+
         LivingEntity entity = event.getEntity();
         float stressGain = event.getAmount() * 0.5f;
         entity.getCapability(DnaCapability.INSTANCE).ifPresent(dna -> {
@@ -118,6 +124,8 @@ public class DnaEventHandler {
 
     @SubscribeEvent
     public static void onLivingTick(LivingEvent.LivingTickEvent event) {
+        if (!ModConfig.enableDna) return;
+
         if (event.getEntity().level().isClientSide()) return;
 
         LivingEntity entity = event.getEntity();
