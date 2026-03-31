@@ -1,11 +1,11 @@
 package net.farkas.wildaside.network.packet.gene_editor;
 
 import net.farkas.wildaside.capability.dna.DnaImplementation;
+import net.farkas.wildaside.client.ClientHandler;
 import net.farkas.wildaside.screen.gene_editor.AdvancedGeneEditorScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
@@ -52,7 +52,9 @@ public class OpenAdvancedGeneEditorPacket {
                 if (!dnaATag.isEmpty()) dnaA.deserializeNBT(dnaATag);
                 if (!dnaBTag.isEmpty()) dnaB.deserializeNBT(dnaBTag);
 
-                Minecraft.getInstance().setScreen(new AdvancedGeneEditorScreen(pos, dnaA, dnaB));
+                DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+                    ClientHandler.openGeneEditor(pos, dnaA, dnaB);
+                });
             });
         });
         ctx.get().setPacketHandled(true);

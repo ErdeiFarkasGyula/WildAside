@@ -11,7 +11,10 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class IncubatorRenderer implements BlockEntityRenderer<IncubatorBlockEntity> {
     private static final ResourceLocation VIBRION_TEX = new ResourceLocation(WildAside.MOD_ID, "textures/item/vibrion.png");
     private static final RenderType LAYER = RenderType.entityTranslucent(VIBRION_TEX);

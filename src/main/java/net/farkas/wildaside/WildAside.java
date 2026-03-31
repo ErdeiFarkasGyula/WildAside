@@ -3,53 +3,31 @@ package net.farkas.wildaside;
 import com.mojang.logging.LogUtils;
 import net.farkas.wildaside.block.ModBlocks;
 import net.farkas.wildaside.block.entity.ModBlockEntities;
+import net.farkas.wildaside.client.WildAsideClient;
 import net.farkas.wildaside.config.ModConfig;
 import net.farkas.wildaside.effect.ModMobEffects;
 import net.farkas.wildaside.enchantment.ModEnchantments;
 import net.farkas.wildaside.entity.ModEntityTypes;
-import net.farkas.wildaside.entity.client.ModBoatRenderer;
-import net.farkas.wildaside.entity.client.vibrion.BacillusBlobEntityRenderer;
-import net.farkas.wildaside.entity.client.vibrion.ContaminatedCreeperRenderer;
-import net.farkas.wildaside.entity.client.vibrion.MucellithRenderer;
 import net.farkas.wildaside.entity.custom.vibrion.FertiliserBombEntity;
 import net.farkas.wildaside.entity.custom.vibrion.SporeArrowEntity;
 import net.farkas.wildaside.entity.custom.vibrion.SporeBombEntity;
 import net.farkas.wildaside.item.ModCreativeModeTabs;
 import net.farkas.wildaside.item.ModItems;
 import net.farkas.wildaside.item.VanillaCreativeTabs;
-import net.farkas.wildaside.item.custom.DnaHolderItem;
-import net.farkas.wildaside.item.custom.SyringeItem;
 import net.farkas.wildaside.network.NetworkHandler;
 import net.farkas.wildaside.particle.ModParticles;
 import net.farkas.wildaside.potion.BetterBrewingRecipe;
 import net.farkas.wildaside.potion.ModPotions;
 import net.farkas.wildaside.recipe.ModRecipes;
-import net.farkas.wildaside.screen.bioengineering_workstation.BioengineeringWorkstationScreen;
 import net.farkas.wildaside.screen.ModMenuTypes;
-import net.farkas.wildaside.screen.biofreezer.BiofreezerScreen;
-import net.farkas.wildaside.screen.incubator.IncubatorScreen;
-import net.farkas.wildaside.screen.potion_blaster.PotionBlasterScreen;
 import net.farkas.wildaside.sound.ModSounds;
-import net.farkas.wildaside.util.ModWoodTypes;
-import net.farkas.wildaside.worldgen.biome.ModTerraBlenderAPI;
 import net.farkas.wildaside.worldgen.biome.surface.ModSurfaceRules;
 import net.farkas.wildaside.worldgen.feature.ModFeatures;
 import net.farkas.wildaside.worldgen.feature.ModFoliagePlacers;
 import net.farkas.wildaside.worldgen.feature.decorator.ModTreeDecorators;
 import net.farkas.wildaside.worldgen.modifier.ModPlacementModifiers;
-import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.Sheets;
-import net.minecraft.client.renderer.entity.ArrowRenderer;
-import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.client.renderer.entity.ThrownItemRenderer;
-import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -62,19 +40,15 @@ import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
-import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 import terrablender.api.SurfaceRuleManager;
-
-import static net.farkas.wildaside.dna.DnaConstants.*;
 
 @Mod(WildAside.MOD_ID)
 public class WildAside {
@@ -203,93 +177,7 @@ public class WildAside {
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
-            registerWoodTypes();
-            registerEntityRenderers();
-            registerScreens();
-            setRenderTypes();
-            registerItemProperties();
+            WildAsideClient.init(event);
         }
-    }
-
-    private static void registerWoodTypes() {
-        Sheets.addWoodType(ModWoodTypes.SUBSTILIUM);
-        Sheets.addWoodType(ModWoodTypes.HICKORY);
-        Sheets.addWoodType(ModWoodTypes.CYPRESS);
-    }
-
-    private static void registerEntityRenderers() {
-        EntityRenderers.register(ModEntityTypes.MOD_BOAT.get(), pContext -> new ModBoatRenderer(pContext, false));
-        EntityRenderers.register(ModEntityTypes.MOD_CHEST_BOAT.get(), pContext -> new ModBoatRenderer(pContext, true));
-        EntityRenderers.register(ModEntityTypes.SPORE_BOMB.get(), ThrownItemRenderer::new);
-        EntityRenderers.register(ModEntityTypes.FERTILISER_BOMB.get(), ThrownItemRenderer::new);
-        EntityRenderers.register(ModEntityTypes.SPORE_ARROW.get(), pContext -> new ArrowRenderer<SporeArrowEntity>(pContext) {
-            @Override
-            public ResourceLocation getTextureLocation(SporeArrowEntity pEntity) {
-                return new ResourceLocation(WildAside.MOD_ID, "textures/entity/projectiles/spore_arrow.png");
-            }
-        });
-        EntityRenderers.register(ModEntityTypes.MUCELLITH.get(), MucellithRenderer::new);
-        EntityRenderers.register(ModEntityTypes.CONTAMINATED_CREEPER.get(), ContaminatedCreeperRenderer::new);
-        EntityRenderers.register(ModEntityTypes.BACILLUS_BLOB.get(), BacillusBlobEntityRenderer::new);
-    }
-
-    private static void registerScreens() {
-        MenuScreens.register(ModMenuTypes.BIOENGINEERING_WORKSTATION.get(), BioengineeringWorkstationScreen::new);
-        MenuScreens.register(ModMenuTypes.BIOFREEZER.get(), BiofreezerScreen::new);
-        MenuScreens.register(ModMenuTypes.INCUBATOR.get(), IncubatorScreen::new);
-        MenuScreens.register(ModMenuTypes.POTION_BLASTER.get(), PotionBlasterScreen::new);
-    }
-
-    private static void setRenderTypes() {
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.VIBRION_GLASS_PANE.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.LIT_VIBRION_GLASS_PANE.get(), RenderType.translucent());
-
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.FALLEN_HICKORY_LEAVES.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.HICKORY_ROOT_BUSH.get(), RenderType.cutout());
-    }
-
-    private static void registerItemProperties() {
-        ItemProperties.register(
-                ModItems.DNA_HOLDER.get(),
-                new ResourceLocation(MOD_ID, SAMPLE_PROGRESS),
-                (stack, level, entity, seed) -> {
-                    if (!stack.hasTag()) return 0f;
-                    CompoundTag tag = stack.getTag();
-                    if (tag.contains(SAMPLE_PROGRESS)) {
-                        int progress = tag.getInt(SAMPLE_PROGRESS);
-                        return Mth.clamp((float) progress / DnaHolderItem.DEFAULT_MAX_SAMPLES, 0f, 1f);
-                    }
-                    return 0f;
-                }
-        );
-
-        ItemProperties.register(
-                ModItems.SYRINGE.get(),
-                new ResourceLocation(WildAside.MOD_ID, SYRINGE_PROGRESS),
-                (stack, level, entity, seed) -> {
-                    if (!stack.hasTag()) return 0f;
-                    float p = stack.getTag().getFloat(SYRINGE_PROGRESS);
-                    return Mth.clamp(p / SyringeItem.DEFAULT_MAX_LOAD, 0f, 1f);
-                }
-        );
-
-        ItemProperties.register(
-                ModItems.SYRINGE.get(),
-                new ResourceLocation(WildAside.MOD_ID, FLUID_LEVEL),
-                (stack, level, entity, seed) -> {
-                    if (!stack.hasTag()) return 0f;
-                    float p = stack.getTag().getFloat(FLUID_LEVEL);
-                    return Mth.clamp(p / SyringeItem.DEFAULT_MAX_LOAD, 0f, 1f);
-                }
-        );
-
-        ItemProperties.register(
-                ModItems.GENE.get(),
-                new ResourceLocation(WildAside.MOD_ID, "flipped"),
-                (stack, level, entity, seed) -> {
-                    if (!stack.hasTag()) return 0f;
-                    return stack.getTag().getBoolean("flipped") ? 1f : 0f;
-                }
-        );
     }
 }
